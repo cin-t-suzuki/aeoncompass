@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>クライアント サイド スクリプト開発環境</title>
+<style>
+body { font-family:meiryo;font-size:12px;line-height:18px;width:640px; }
+h1 { font-size:24px;line-height:36px; }
+h2 { font-size:18px;line-height:27px;margin:24px 0 8px;padding-bottom:8px;border-bottom: 1px dotted #666; }
+h3 { font-size:14px;line-height:21px; }
+li { margin-top:1em;margin-bottom:1em; }
+li p { margin:0; }
+.path { font-family:'courier new'; }
+ol.tree { margin-top:0; }
+ol.tree li { clear:both;margin:0; }
+ol.tree li div.path { float:left;width:14em; }
+ol.tree li div.notes { margin-left:20em; }
+ol.tree li div.indent0 { padding-left:0em; }
+ol.tree li div.indent1 { padding-left:2em; }
+ol.tree li div.indent2 { padding-left:4em; }
+ol.tree li div.indent3 { padding-left:6em; }
+ul.annotation li { margin:0;list-style:none;text-indent:-1em; }
+pre { font-family:'courier new'; }
+pre .highlight { color:#900; }
+dl.history dd { margin:0; }
+</style>
+</head>
+<body>
+
+<h1>クライアント サイド スクリプト開発環境</h1>
+
+<p>ウェブページの表示スピードをあげるために必要なコンテンツを可能な限り小さくする手法があります。この手法をクライアント サイド スクリプトに適応するとメンテナンス性が著しく損なわれます。そのためサーバ サイドの他のプログラムとは異なる開発環境を整備しました。</p>
+
+
+<h2>ディレクトリとファイルの構成</h2>
+
+<div class="path">[project]/(trunk|blanches/no)/(public|protect)/app/[module]/statics/</div>
+<ol class="tree">
+  <li><div class="path indent0">js/</div>                   <div class="notes">【公開】スクリプトのルートディレクトリ</div></li>
+  <li><div class="path indent1">jquery.js</div>             <div class="notes">【公開】JQueryライブラリの実装ファイル</div></li>
+  <li><div class="path indent1">[script].js</div>           <div class="notes">【公開】スクリプトの実装ファイル</div></li>
+  <li><div class="path indent1">_source/</div>              <div class="notes">【非公開】開発環境のディレクトリ</div></li>
+  <li><div class="path indent2">[script].js/</div>          <div class="notes">【非公開】スクリプトのソースディレクトリ</div></li>
+  <li><div class="path indent3">[script.source].js</div>    <div class="notes">【非公開】ソースファイル</div></li>
+  <li><div class="path indent3">[script.source].js.log</div><div class="notes">【非公開】圧縮エラーログファイル</div></li>
+  <li><div class="path indent3">orderlist.txt</div>         <div class="notes">【非公開】ロード順序定義ファイル</div></li>
+  <li><div class="path indent2">jquery/</div>               <div class="notes">【非公開】JQueryライブラリのディレクトリ</div></li>
+  <li><div class="path indent2">tools/</div>                  <div class="notes">【非公開】ツールのディレクトリ</div></li>
+  <li><div class="path indent2">temp/</div>                 <div class="notes">【非公開】ツールの一時ディレクトリ</div></li>
+  <li><div class="path indent2">make.bat</div>              <div class="notes">【非公開】実装ファイル作成バッチファイル</div></li>
+  <li><div class="path indent2">switchjsload.bat</div>              <div class="notes">【非公開】設定ファイル変更バッチファイル</div></li>
+</ol>
+
+<h3>公開ディレクトリと公開ファイル</h3>
+
+<ol>
+
+  <li>
+    <div class="path">js/</div>
+    <div>
+      <p>スクリプトのルートディレクトリです。ソースツリーの適切な位置に配置します。</p>
+      <p><span class="path">http[s]://host.domain.tld/(branches/no/)js/</span>でアクセスされます。</p>
+    </div>
+  </li>
+
+  <li>
+    <div class="path">js/jquery.js</div>
+    <div>
+      <p>実際にクライアントに読み込まれる圧縮されたJQueryのライブラリです。基本のプラグインも含まれています。このファイルは直接編集を行いません。</p>
+    </div>
+  </li>
+
+  <li>
+    <div class="path">js/[script].js</div>
+    <div>
+      <p>実際にクライアントに圧縮されたスクリプトファイルです。このファイルは直接編集を行いません。</p>
+    </div>
+  </li>
+
+</ol>
+
+
+<h3>非公開ディレクトリと非公開ファイル</h3>
+
+<p>検証環境および開発環境にのみ配置します。セキュリティホールになり得るので本番環境には<strong>絶対に配置しない</strong>でください。</p>
+
+<ol>
+
+  <li value="4">
+    <div class="path">js/_source/</div>
+    <div>
+      <p>スクリプトの開発環境のディレクトリです。</p>
+    </div>
+  </li>
+
+  <li>
+    <div class="path">js/_source/[script].js/</div>
+    <div>
+      <p>実際に編集するスクリプトのソースファイルを配置するソースディレクトリです。</p>
+      <p>make処理で自動的に実装スクリプトファイルを生成するために実装スクリプトファイルと同じ名前（拡張子.js含む）にする必要があります。</p>
+    </div>
+  </li>
+
+  <li>
+    <div class="path">js/_source/[script].js/[script source].js</div>
+    <div>
+      <p>実際に編集するスクリプトのソースファイルです。
+      <p>文字コードはUTF-8、改行はLFの通常のスクリプトのファイルと同じようにコーディングします。</p>
+      <p>make処理を実行する上でファイルの名前に制限はありません。通常は名前空間（クラス）ごとにファイルを作成することになるので、名前空間に拡張子（.js）を付加した文字列がファイルの名前になります。</p></div>
+  </li>
+
+  <li>
+    <div class="path">js/_source/[script].js/[script source].js.log</div>
+    <div>
+      <p>make処理で圧縮を行ったときのエラーメッセージが出力されるディレクトリです。正常に圧縮が行われた場合はファイル自身存在しません。ソース管理の管理外となります。</p>
+    </div>
+  </li>
+
+
+  <li>
+    <div class="path">js/_source/[script].js/orderlist.txt</div>
+    <div>
+      <p>このディレクトリあるスクリプトのロード順序を定義します。</p>
+      <p>make処理では、このファイルに記載されている順序でファイルを読み込むように実装ファイルを作成します。したがってこのファイルに記載がないソースファイルは無視され実装されません。</p>
+    </div>
+  </li>
+
+  <li>
+    <div class="path">js/_source/jquery/</div>
+    <div>
+      <p>JQueryのライブラリのソースを配置します。このディレクトリを編集は許可されたスタッフだけに限定します。また、このディレクトリはmake処理の対象外です。</p>
+    </div>
+  </li>
+
+  <li>
+    <div class="path">js/_source/tools/</div>
+    <div>
+      <p>スクリプトの開発に必要なツール類の実行ファイルなどを配置します。</p>
+    </div>
+  </li>
+
+  <li>
+    <div class="path">js/_surce/temp/</div>
+    <div>
+      <p>スクリプトの開発に必要なツール類が実行時に一時ファイルを保存するディレクトリです。ツール類によって自動的に作成されます。ソース管理の管理外となります。</p>
+    </div>
+  </li>
+
+  <li>
+    <div class="path">js/_source/make.bat</div>
+    <div>
+      <p>実装スクリプトファイルを作成するmake処理を行うバッチファイルです。詳細は後述を参照してください。</p>
+    </div>
+  </li>
+
+  <li>
+    <div class="path">js/_source/switchjsload.bat</div>
+    <div>
+      <p>実装スクリプトをロードするのか、ソーススクリプトをロードするのかの設定を切り替えるバッチファイルです。詳細は後述を参考してください。</p>
+    </div>
+  </li>
+
+</ol>
+
+
+
+<h2>make処理</h2>
+
+<p>バッチファイル（<span class="path">js/_source/make.bat</span>）を実行することで実装スクリプトファイルが自動的に作成されます。</p>
+
+<p>make処理でスクリプトの圧縮が行われます。圧縮には<a href="http://yuilibrary.com/download/yuicompressor/" target="_blank">YUI Compressor</a>を採用しています。YUI Compressorの動作にはJAVAが必要です。したがってmake処理を実行するにはJAVAをインストールしてjava.exeにパスを通す必要があります。</p>
+
+<ul>
+  <li>バッチファイルが配置されているディレクトリで、名前が「.js」で終わるサブディレクトリが処理対象となります。</li>
+  <li>バッチファイルが配置されているディレクトリの親ディレクトリに、処理対象のディレクトリと同じ名前のファイルで実装スクリプトファイルを作成します。</li>
+  <li>処理対象のディレクトリにはロード順序定義ファイル（<span class="path">orderlist.txt</span>）が必要です。ロード順序定義ファイルは、文字セットはシフトJISで、ファイルの名前の区切りはCRLFで、スクリプトのソースファイルの名前だけをロード順に列挙します。</li>
+</ul>
+
+<p>次の場合は実装ファイルの作成・更新が行われません。</p>
+
+<ul>
+  <li>ロード順序定義ファイルが存在しない。</li>
+  <li>ロード順序定義ファイルに記載されているソースファイルが存在しない。</li>
+  <li>ソースファイルの圧縮が成功しなかった。<br />※圧縮時のエラーはソースファイルのディレクトリにソースファイルの名前（拡張子を含む）の新たな拡張子「.log」を付加したファイル名（<span class="path">js/_source/[script].js/[script source].js.log</span>）で出力されます。</li>
+</ul>
+
+<p>すでに実装ファイルが存在しているときは、ソース管理およびキャッシュ（サーバおよびブラウザ）を有効活用するために、以下のケースでは実装ファイルが更新されません。</p>
+
+<ul>
+  <li>すべてのソースファイルの更新日時が、実装ファイルの更新日時より古い。更新日時は年月日時分までしか考慮しません。秒は切り捨てて比較されます。</li>
+  <li>新しく作成された実装ファイルと、既存の実装ファイルの内容がまったく同じ。</li>
+</ul>
+
+
+
+<h2>スクリプトのロード先の変更</h2>
+
+<p>アプリケーションによって生成されるドキュメントが、実装スクリプトをロードするのか、ソーススクリプトをロードするのかを設定ファイルにてテンプレートに指示することが可能です。</p>
+
+<p>これにより、スクリプトを開発しているときはソーススクリプトをロード、スクリプトの開発をしていないときは実装スクリプトをロードというように状況に応じた環境を選択できます。</p>
+
+<dl>
+<dt>設定ファイル</dt><dd class="path">[project]/(trunk|blanches/no)/(public|protect)/app/[module]/config/config.xml</dd>
+<dt>設定要素</dt><dd class="path">/config/environment/jsload</dd>
+<dt>設定値</dt><dd>pack:実装スクリプト unpack:ソーススクリプト<br /></dd>
+</dl>
+
+<ul class="annotation">
+<li>※モジュールレベルの設定ファイルに記載します。アプリケーションレベルでも設定が可能ですが全モジュールに影響しますので推奨はしません。</li>
+<li>※通常は要素自体が存在しません。値がないときは規定値として「pack:実装スクリプト」が採用されます。</li>
+<li>※動作環境（<span class="path">/config/environment/status</span>）が本番（product）のときはいずれの値が設定されていたとしても「pack:実装スクリプト」と同じ挙動になります。</li>
+</ul>
+
+<h3>バッチファイル</h3>
+
+<p>バッチファイル（<span class="path">js/_source/switchjsload.bat</span>）を実行することで設定値を切り替えられます。</p>
+
+<p>実行するたびに「pack:実装スクリプト」（実際は未指定）と「unpack:ソーススクリプト」が入れ替わります。現在、どちらが設定されているのかは実行結果を確認してください。</p>
+
+<ul class="annotation">
+<li>※実行にはコマンドラインで動作するPHPにパスを通す必要があります。</li>
+</ul>
+
+<h2>付録：スクリプトを追加するときのワークフロー</h2>
+
+<p>実装スクリプト「brj.smart.js」にクラス「BRJ.Smart」「BRJ.Smart.OS」「BRJ.Smart.OS.iOS」「BRJ.Smart.OS.Android」を実装する場合を想定します。</p>
+
+<ol>
+  <li>
+    <p>スクリプトのソースディレクトリの作成</p>
+    <p>スクリプトのソースディレクトリ「<span class="path">js/_source/brj.smart.js/</span>」を作成します。</p>
+  </li>
+
+  <li>
+    <p>ソースファイルの作成</p>
+    <p>スクリプトのソースディレクトリにクラス単位のソースファイルを作成します。ソースファイルの中身は空でも問題ありません。</p>
+    <div style="margin-left:2em;">
+      <span class="path">js/_source/brj.smart.js/</span>
+      <ol class="tree" style="list-style:none;">
+        <li><span class="path">brj.smart.js</span></li>
+        <li><span class="path">brj.smart.os.js</span></li>
+        <li><span class="path">brj.smart.os.ios.js</span></li>
+        <li><span class="path">brj.smart.os.android.js</span></li>
+      </ol>
+    </div>
+  </li>
+
+  <li>
+    <p>ロード順序定義ファイルの作成</p>
+    <p>スクリプトのソースディレクトリにロード順序定義ファイル（<span class="path">orderlist.txt</span>）を作成して、ロード順にファイルの名前を記載します。今回の場合は上記のソースファイルの作成で記載されている順になります。</p>
+  </li>
+
+  <li>
+    <p>テンプレートの編集</p>
+    <p>ヘッダを出力するテンプレートで実装ファイルとソースファイルをロードする箇所に各ファイルを追加します。以下の赤色の部分が追加する内容になります。</p>
+    <pre>{if $v->config->environment->status != 'product' and $v->config->environment->jsload == 'unpack'}
+&lt;script type="text/javascript" src="{$v->env.root_path}js/_source/jquery/jquery.js">&lt;/script>
+&lt;script type="text/javascript" src="{$v->env.root_path}js/_source/jquery/jquery.cookies.2.2.0.min.js">&lt;/script>
+&lt;script type="text/javascript" src="{$v->env.root_path}js/_source/jquery/jquery.timer-1.2.min.js">&lt;/script>
+&lt;script type="text/javascript" src="{$v->env.root_path}js/_source/brj.js/brj.js">&lt;/script>
+&lt;script type="text/javascript" src="{$v->env.root_path}js/_source/brj.js/brj.ui.panel.js">&lt;/script>
+<span class="highlight">&lt;script type="text/javascript" src="{$v->env.root_path}js/_source/brj.smart.js/brj.smart.js">&lt;/script></span>
+<span class="highlight">&lt;script type="text/javascript" src="{$v->env.root_path}js/_source/brj.smart.js/brj.smart.os.js">&lt;/script></span>
+<span class="highlight">&lt;script type="text/javascript" src="{$v->env.root_path}js/_source/brj.smart.js/brj.smart.os.iocjs">&lt;/script></span>
+<span class="highlight">&lt;script type="text/javascript" src="{$v->env.root_path}js/_source/brj.smart.js/brj.smart.os.android.js">&lt;/script></span>
+{else}
+&lt;script type="text/javascript" src="{$v->env.root_path}js/jquery.js">&lt;/script>
+&lt;script type="text/javascript" src="{$v->env.root_path}js/brj.js">&lt;/script>
+<span class="highlight">&lt;script type="text/javascript" src="{$v->env.root_path}js/brj.smart.js">&lt;/script></span>
+{/if}</pre>
+  </li>
+
+  <li>
+    <p>設定ファイルの変更と動作確認</p>
+    <p>設定ファイルを変更してソースファイルをロードするようにします。</p>
+    <p>スクリプトのロード先の変更のバッチファイル（<span class="path">js/_source/switchjsload.bat</span>）を実行してメッセージ「<span class="path">[OK] load development (unpack) scripts</span>」が表示されることを確認してください。異なるメッセージ「<span class="path">[OK] load product (packed) scripts</span>」が表示されたらもう一度実行します。また、ブラウザでアプリケーションが生成するページを開いて、ページのソースでスクリプトのロード先を確認します。</p>
+  </li>
+
+  <li>
+    <p>スクリプトの開発</p>
+    <p>スクリプトのソースディレクトリに作成したソースファイルにプログラムを記述してブラウザで動作確認、デバッグします。</p>
+  </li>
+
+  <li>
+    <p>実装ファイルの作成</p>
+    <p>スクリプトの開発が終われば、実装ファイルを作成するためmake処理を行います。</p>
+    <p>make処理のバッチファイル（<span class="path">js/_source/make.bat</span>）を実行します。最後のメッセージが「complete」になるまで「[NG]」になった箇所を確認修正して再実行します。</p>
+    <p>実際に実装ファイル「<span class="path">js/brj.smart.js</span>が作成されているか更新日時がバッチファイルの実行日時と符合しているかを確認してください。</p>
+  </li>
+
+  <li>
+    <p>設定ファイルの変更と動作確認</p>
+    <p>スクリプトのロード先の変更のバッチファイル（<span class="path">js/_source/switchjsload.bat</span>）を実行してメッセージ「<span class="path">[OK] load product (packed) scripts</span>」表示されることを確認してください。異なるメッセージ「<span class="path">[OK] load development (unpack) script</span>」が表示されたらもう一度実行します。また、ブラウザでアプリケーションが生成するページを開いて、ページのソースでスクリプトのロード先を確認します。</p>
+    <p>ブラウザでアプリケーションおよびスクリプトの動作確認を行います。</p>
+  </li>
+
+  <li>
+    <p>リポジトリにコミット</p>
+    <p>ソース管理のリポジトリにコミットします。追加およびコミットの対象は次の通りです。</p>
+    <div style="margin-left:2em;">
+      <p>実装ファイル</p>
+      <ol class="tree" style="list-style:none;">
+        <li><span class="path">js/brj.smart.js/</span></li>
+      </ol>
+      <p>ソースディレクトリとソースファイルとロード順序定義ファイル</p>
+      <ol class="tree" style="list-style:none;">
+        <li><span class="path">js/_source/brj.smart.js/</span></li>
+        <li><span class="path">js/_source/brj.smart.js/brj.smart.js</span></li>
+        <li><span class="path">js/_source/brj.smart.js/brj.smart.os.js</span></li>
+        <li><span class="path">js/_source/brj.smart.js/brj.smart.os.ios.js</span></li>
+        <li><span class="path">js/_source/brj.smart.js/brj.smart.os.android.js</span></li>
+        <li><span class="path">js/_source/brj.smart.js/orderlist.txt</span></li>
+      </ol>
+      <p>ヘッダを出力するテンプレート</p>
+      <ol class="tree" style="list-style:none;">
+        <li><span class="path">../view/_common/_header.tpl</span>など</li>
+      </ol>
+    </div>
+  </li>
+
+</ol>
+
+<h2>変更履歴</h2>
+
+<dl class="history">
+  <dt>2013-03-27 高橋</dt>
+  <dd><ul>
+    <li>本ドキュメントの記述を変更しました。</li>
+  </ul></dd>
+
+  <dt>2012-10-23 高橋</dt>
+  <dd><ul>
+    <li>make処理にて新しく作成された実装ファイルと、既存の実装ファイルの内容を比較して判定するアルゴリズムのバグを修正しました。</li>
+    <li>スクリプトのロード先を変更する処理でメッセージが誤っていたのを修正しました。</li>
+  </ul></dd>
+  <dt>2012-10-03 高橋</dt>
+  <dd><ul>
+    <li>ベータリリース</li>
+  </ul></dd>
+</dl>
+
+</body>
+</html>

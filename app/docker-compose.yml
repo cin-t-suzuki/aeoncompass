@@ -1,0 +1,26 @@
+version: '3'
+services:
+  sv1:
+#  イメージ名：nginx
+    image: acapp
+    ports:
+      - 8080:80
+    # dockerfile
+    build: ./docker/app
+    container_name: ac_test
+    volumes:
+    volumes:
+     - ./src:/var/www/html
+
+# depends→Docker Compose の各サービスに対して設定できる項目です。 名前が示唆するとおりサービス間の依存関係を指定。sv1はphpに依存
+#    depends_on:
+#      - php
+
+#  php:
+#  イメージ名：docker_php
+#    image: docker_php:latest
+#    build: ./php
+#    volumes:
+#      - ./html:/var/www/html
+
+# https://laraweb.net/environment/8652/

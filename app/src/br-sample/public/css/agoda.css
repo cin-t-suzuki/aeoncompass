@@ -1,0 +1,60 @@
+.plan-caution {
+    text-align: end;
+    font-size: 9px;
+    color: #828282;
+}
+
+.agoda-box {
+    text-align: center;
+    font-size: 9px;
+    color: #828282;
+    background: #ffe57f;
+    height: 45px;
+}
+
+.agoda-box table {
+    height: inherit;
+}
+
+.agoda-box table td {
+    vertical-align: middle;
+}
+
+.agoda-gal-img {
+    width: inherit; 
+    height: inherit; 
+    object-fit: contain;
+}
+
+.agoda-gal-caution {
+    text-align: center;
+    font-size: 8px;
+    color: #828282;
+    height: 45px;
+}
+
+.agoda-caution {
+    font-weight: normal;
+    font-size: 10pt;
+    padding: 0 8px;
+}
+.agd-promotion {
+    width: 220px;
+    margin: 0 0 0 auto;
+    font-size: 11px;
+    cursor: default;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    color: #f04949;
+}
+.agoda-hotel-nm-right {
+    border: 1px solid #e2f9ff;
+    color: #e2f9ff;
+    font-size: 11px;
+    width: 80px;
+    height: 18px;
+    box-sizing: border-box;
+    text-align: center;
+    line-height: 18px;
+}
