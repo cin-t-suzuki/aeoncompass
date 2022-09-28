@@ -39,12 +39,12 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 	Route::controller(BrTopController::class)->prefix("brtop")->group(function(){
 		Route::get('/', 'index')->name('ctl.brtop.index');
 	});
-	
+
 	// ホテルトップ
 	Route::controller(HotelTopController::class)->prefix("htltop")->group(function(){
 		Route::get('/', 'index')->name('ctl.htltop.index');
 	});
-	
+
 	// 管理画面一覧
 	Route::controller(TopController::class)->prefix("top")->group(function(){
 		Route::get('/', 'index')->name('ctl.top.index');
@@ -100,7 +100,7 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 
 			Route::get('/index', 'index')->name('ctl.brhotel.index'); // 検索 初期表示
 			Route::post('/show', 'show')->name('ctl.brhotel.show'); // 詳細変更 施設各情報ハブ
-			
+
 			Route::get('/searchcity', 'searchcity')->name('ctl.brhotel.searchcity'); // 検索部品 市プルダウン
 			Route::get('/searchward', 'searchward')->name('ctl.brhotel.searchward'); // 検索部品 区プルダウン
 		});
@@ -109,7 +109,7 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 		Route::controller(BrhotelStatusController::class)->prefix("brhotelStatus")->group(function(){
 			Route::match(['get','post'],'/index', 'index')->name('ctl.brhotelStatus.index'); //表示
 			Route::post('/update', 'update')->name('ctl.brhotelStatus.update'); //更新処理
-		});		
+		});
 
 
 		//TODO 削除予定 料率マスタ
@@ -118,5 +118,8 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 			Route::post('/update', 'update')->name('ctl.brhotelRate.update'); //更新処理
 			Route::match(['get','post'],'/new', 'new')->name('ctl.brhotelRate.new');
 			Route::post('/destroy', 'destroy')->name('ctl.brhotelRate.destroy'); //更新処理
-		});		
+		});
+
+	//
+	Route::get('/brpartnercustomer/', 'BrPartnerCustomerController@search');
 });
