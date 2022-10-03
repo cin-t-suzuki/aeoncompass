@@ -17,6 +17,9 @@ libpng-dev \
 libpq-dev \
 && docker-php-ext-install pdo_mysql
 
+RUN bash -c '[[ -n "$(pecl list | grep xdebug)" ]]\
+  || (pecl install xdebug && docker-php-ext-enable xdebug)'
+
 # Laravelで必要になるmodRewriteを有効化する
 RUN mv /etc/apache2/mods-available/rewrite.load /etc/apache2/mods-enabled
 RUN /bin/sh -c a2enmod rewrite
