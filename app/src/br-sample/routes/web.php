@@ -119,4 +119,10 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 			Route::match(['get','post'],'/new', 'new')->name('ctl.brhotelRate.new');
 			Route::post('/destroy', 'destroy')->name('ctl.brhotelRate.destroy'); //更新処理
 		});		
+		
+		//supervisor
+		Route::controller(BrsupervisorController::class)->prefix("brsupervisor")->group(function(){
+			Route::get('/listhotel', 'listhotel')->name('ctl.brsupervisor.listhotel'); //表示
+		});		
+		
 });
