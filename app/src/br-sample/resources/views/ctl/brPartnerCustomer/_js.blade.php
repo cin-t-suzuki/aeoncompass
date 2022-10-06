@@ -13,4 +13,8 @@
         }
     }
     //-->
+    const help_buttons = document.getElementsByClassName('toggle_form_help');
+    for (let i = 0; i < help_buttons.length; i++) {
+        help_buttons[i].addEventListener('click', helpForm);
+    }
 </script>

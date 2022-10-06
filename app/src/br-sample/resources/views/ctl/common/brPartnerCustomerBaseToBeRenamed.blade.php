@@ -1,6 +1,25 @@
 {{-- ここから svn_trunk/public/app/ctl/view2/_common/_br_header2.tpl --}}
 {{-- TODO: なぞ xml <?xml version="1.0" encoding="UTF-8"?> --}}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">{{-- TODO: なぞ doctype 宣言 --}}
+@php
+    // TODO: 認証関連、環境変数関連
+    $v = new \stdClass;
+    $v->user = new \stdClass;
+    $v->user->operator = new \stdClass;
+    $v->user->operator->is_login = true;
+    $v->user->operator->is_staff = true;
+    $v->user->operator->staff_nm = 'staff_name_val';
+    $v->env = [
+        'controller'        => "brtop",
+        'action'            => "index",
+        'source_path'       => 'source_path_val',
+        'module'            => 'module_val',
+        'path_base_module'  => 'ctl/statics',
+    ];
+    $v->config = new \stdClass;
+    $v->config->environment = new \stdClass;
+    $v->config->environment->status = 'test';
+@endphp
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -81,6 +100,7 @@
             </div>
         </div>
         {{-- /提携先管理フッター --}}
+        @yield('footerScript')
     </body>
 </html>
 {{-- ここまで svn_trunk/public/app/ctl/view2/_common/_br_footer.tpl --}}

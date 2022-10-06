@@ -121,5 +121,11 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 		});
 
 	//
-	Route::get('/brpartnercustomer/', 'BrPartnerCustomerController@search');
+	Route::get('/brpartnercustomer/', 'BrPartnerCustomerController@index')->name('brpartnercustomer.index');
+	Route::post('/brpartnercustomer/search', 'BrPartnerCustomerController@search')->name('brpartnercustomer.search');
+
+	Route::post('/brpartnercustomer/edit', function() {return 'TODO:'; })->name('brpartnercustomer.edit');
+	Route::post('/brpartnercustomer/modify', function() {return 'TODO:'; })->name('brpartnercustomer.modify');
+
+	Route::post('/brpartnersite/search', function() {return 'TODO:'; })->name('brpartnersite.search');
 });
