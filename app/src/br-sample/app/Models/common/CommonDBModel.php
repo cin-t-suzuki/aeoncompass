@@ -76,7 +76,7 @@ abstract class CommonDBModel extends Model
 			// 整数のみかチェック（小数点NG、マイナスOK）
 			if($this->colmunArray[$key]->isIntOnly()){
 				if (strlen($val) != 0){
-					if(!(ceil($val) == $val)) {
+					if(!is_numeric($val) || !(ceil($val) == $val)) {
 						$rtnErrors[] = $this->colmunArray[$key]->getColumnName() . "に小数点以外の数値以外が含まれています";
 					}
 				}
@@ -85,7 +85,7 @@ abstract class CommonDBModel extends Model
 			// 整数のみかチェック（小数点NG、マイナスNG）
 			if($this->colmunArray[$key]->isCurrencyOnly()){
 				if (strlen($val) != 0){
-					if(!(ceil($val) == $val) || !(abs($val) == $val)) {
+					if(!is_numeric($val) || !(ceil($val) == $val) || !(abs($val) == $val)) {
 						$rtnErrors[] = $this->colmunArray[$key]->getColumnName() . "に数値以外が含まれています";
 					}
 				}
@@ -94,8 +94,8 @@ abstract class CommonDBModel extends Model
 			// 率かチェック
 			if($this->colmunArray[$key]->isRateOnly()){
 				if (strlen($val) != 0){
-					if(!(0 <= $val and $val <= 100)) {
-						$rtnErrors[] = $this->colmunArray[$key]->getColumnName() . "に数値以外が含まれています";
+					if(!is_numeric($val) || !(0 <= $val and $val <= 100)) {
+						$rtnErrors[] = $this->colmunArray[$key]->getColumnName() . "は1~100の範囲で指定してください";
 					}
 				}
 			}
@@ -124,7 +124,7 @@ abstract class CommonDBModel extends Model
 				if (strlen($val) != 0){
 					$dateUtil = new DateUtil();
 					if(!$dateUtil->check_date_ymd($val)){
-						$rtnErrors[] = $this->colmunArray[$key]->getColumnName() . "正しい日付でないか、「/」か「-」で区切られていません";
+						$rtnErrors[] = $this->colmunArray[$key]->getColumnName() . "は正しい日付でないか、「/」か「-」で区切られていません";
 					}
 				}
 			}
