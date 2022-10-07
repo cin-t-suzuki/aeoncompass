@@ -23,7 +23,9 @@ class BrPartnerCustomerController extends _commonController
         $params = $request->only(['keywords', 'partner_customer', 'customer_id', 'customer_off']);
 
         $model = new PartnerCustomer();
-        $customers = $model->getPartnerCustomers($params['keywords']);
+        // TODO: 暫定対処。 search_params を実装していないため、
+        // 編集画面から戻った時に Undefined array key "keywords" エラーになる。
+        $customers = $model->getPartnerCustomers($params['keywords'] ?? '');
 
         // TODO: これは何？（ビューで使われている）
         $search_params = [
@@ -32,7 +34,7 @@ class BrPartnerCustomerController extends _commonController
             'customer_id' => 'non_output',
         ];
         $form_params = [
-            'keywords' => $params['keywords'],
+            'keywords' => $params['keywords'] ?? '', // TODO: 暫定対処 search_params 未実装
         ];
 
         return view('ctl.brPartnerCustomer.search', [

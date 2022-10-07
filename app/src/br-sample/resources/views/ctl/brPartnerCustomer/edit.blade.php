@@ -18,8 +18,7 @@
     <hr class="contents-margin" />
 
     {{-- 入力フォーム --}}
-    {{ Form::open(['route' => 'brpartnercustomer.modify', 'method' => 'post'])}}
-    <form action="{$v->env.source_path}{$v->env.module}/brpartnercustomer/modify/" method="POST">
+    {{ Form::open(['route' => 'brpartnercustomer.modify', 'method' => 'post']) }}
 
         {{-- 精算先内容 --}}
         {include file='./_input_customer.tpl'}
@@ -34,26 +33,26 @@
 
         <input type="submit" value="更新">
 
-    </form>
     {{ Form::close() }}
 
     <hr class="contents-margin" />
 
     {{-- 一覧へ戻る --}}
-    <form action="{$v->env.source_path}{$v->env.module}/brpartnercustomer/search/" method="POST">
+    {{ Form::open(['route' => 'brpartnercustomer.search', 'method' => 'post']) }}
         <small>
+            {{-- TODO: CHECK: ここで、検索条件を保持して一覧画面に戻っている。 --}}
             {foreach from=$v->assign->search_params item=value key=key}
                 <input type="hidden" name="{$key}" value="{$value}" />
             {/foreach}
             <input type="submit" value="請求先一覧へ">
         </small>
-    </form>
+    {{ Form::close() }}
 
 
     <hr class="contents-margin" />
 
     {{-- 精算サイト一覧へ戻る --}}
-    <form action="{$v->env.source_path}{$v->env.module}/brpartnersite/search/" method="POST">
+    {{ Form::open(['route' => 'brpartnersite.search', 'method' => 'post']) }}
         <small>
             {foreach from=$v->assign->search_params item=value key=key}
                 <input type="hidden" name="{$key}" value="{$value}" />
@@ -61,7 +60,7 @@
 
             <input type="submit" value="精算サイト一覧へ">
         </small>
-    </form>
+    {{ Form::close() }}
 
     <hr class="contents-margin" />
 @endsection
