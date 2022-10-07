@@ -1,37 +1,5 @@
 {{-- 移植元: svn_trunk\public\app\ctl\view2\brpartnercustomer\_input_customer.tpl --}}
 
-@php
-$partner_customer = [
-    'customer_id' => '0000000001',
-    'customer_nm' => '顧客名',
-    'person_post' => '顧客役職',
-    'person_nm' => '担当者名',
-    'postal_cd' => '郵便番号',
-    'pref_id' => '5',
-    'address' => '住所',
-    'tel' => '電話番号',
-    'fax' => 'ファックス番号',
-    'email_decrypt' => 'メールアドレス（平文）',
-    'mail_send' => '1',
-    'cancel_status' => '0',
-    'detail_status' => '1',
-    'billpay_day' => '15',
-    'billpay_required_month' => '101100100101',
-    'billpay_charge_min' => 50234,
-    'custmer_id' => 1,
-];
-$mast_pref = [
-    'values' => [
-        ['pref_id' => 1, 'pref_nm' => '北海道'],
-        ['pref_id' => 2, 'pref_nm' => '青森'],
-        ['pref_id' => 3, 'pref_nm' => '岩手'],
-        ['pref_id' => 4, 'pref_nm' => '秋田'],
-        ['pref_id' => 5, 'pref_nm' => '宮城'],
-        ['pref_id' => 6, 'pref_nm' => '山形'],
-    ],
-];
-@endphp
-
 <table class="br-detail-list">
     <tr>
         <th>精算先ID</th>

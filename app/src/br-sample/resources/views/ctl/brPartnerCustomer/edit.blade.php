@@ -7,14 +7,6 @@
     @include('ctl.brPartnerCustomer._css')
 @endsection
 
-@php
-    $search_params = [
-    ];
-    $form_params = [
-        'customer_id' => '1',
-    ];
-@endphp
-
 @section('content')
 
     {{-- エラーメッセージ --}}
