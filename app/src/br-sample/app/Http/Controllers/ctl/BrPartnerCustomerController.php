@@ -41,4 +41,10 @@ class BrPartnerCustomerController extends _commonController
             'search_params' => $search_params,
         ]);
     }
+
+    public function edit(Request $request)
+    {
+        return view('ctl.brPartnerCustomer.edit');
+    }
+
 }
