@@ -62,7 +62,14 @@ class BrPartnerCustomerController extends _commonController
 
     public function modify(Request $request)
     {
-        return view('ctl.brPartnerCustomer.modify');
+        $search_params = [
+        ];
+        return view('ctl.brPartnerCustomer.modify', [
+            'partner_customer' => $this->dummyPartnerCustomer(),
+            'mast_pref' => $this->dummyMastPref(),
+            'search_params' => $search_params,
+
+        ]);
     }
 
     private function dummyPartnerCustomer()

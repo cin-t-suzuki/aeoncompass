@@ -1,34 +1,37 @@
-hello, modify blade
-{{-- TODO: smarty -> blade --}}
 
-{*  css  *}
-{include file='./_css.tpl'}
-{strip}
-  {* 提携先管理ヘッダー *}
-  {include file='../_common/_br_header2.tpl' title="精算先情報"}
+@extends('ctl.common.brPartnerCustomerBaseToBeRenamed')
 
-  <hr class="contents-margin" />
+@section('title', '精算先情報')
 
-  {include file=$v->env.module_root|cat:'/views/_common/_message.tpl'}
+@section('headScript')
+    @include('ctl.brPartnerCustomer._css')
+@endsection
 
-  <hr class="contents-margin" />
+@section('content')
 
-  {* 精算先情報表示 *}
-  {include file='./_info_customer.tpl'}
+    <hr class="contents-margin" />
 
-  <hr class="contents-margin" />
+    {{-- エラーメッセージ --}}
+    {{-- TODO: 外部ファイルどちらにするか判断 --}}
+    {{-- 移植元では、 views のものを埋め込んでいた。(edit では view2 なのに) --}}
+    @include('ctl.common.message', ['errors' => ["エラー view", "エラー2 view"], 'guides' =>["ガイド view"]])
+    @include('ctl.common.message2', ['errors' => ["エラー view2", "エラー2 view2"], 'guides' =>["ガイド view2"]])
 
-  {* 一覧に戻る *}
-  <form action="{$v->env.source_path}{$v->env.module}/brpartnercustomer/search/" method="POST">
-    <small>
-      {foreach from=$v->assign->search_params item=value key=key}
-        <input type="hidden" name="{$key}" value="{$value}" />
-      {/foreach}
-      <input type="submit" value="精算先請求先一覧へ">
-    </small>
-  </form>
+    <hr class="contents-margin" />
 
-  {* 提携先管理フッター *}
-  {include file='../_common/_br_footer.tpl'}
-  {* /提携先管理フッター *}
-{/strip}
+    {{-- 精算先情報表示 --}}
+    @include('ctl.brPartnerCustomer._input_customer')
+
+    <hr class="contents-margin" />
+
+    {{-- 一覧に戻る --}}
+    {{ Form::open(['route' => 'brpartnercustomer.search', 'method' => 'post']) }}
+        <small>
+            @foreach ($search_params as $key => $value)
+                <input type="hidden" name="{{ $key }}" value="{{ $value }}" />
+            @endforeach
+            <input type="submit" value="精算先請求先一覧へ">
+        </small>
+    {{ Form::close() }}
+
+@endsection

@@ -7,7 +7,7 @@
             <tr>
                 <th>キーワード</th>
                 <td>
-                    <input type="text" name="keywords" size="50" maxlength="20" value="{{ $form_params['keywords'] ?? '' }}" />{{-- TODO: XSS 考慮、sprit_tags 必要？ --}}
+                    <input type="text" name="keywords" size="50" maxlength="20" value="{{ strip_tags($form_params['keywords'] ?? '') }}" />
                     <br /><a href="#" class="toggle_form_help">キーワードのヘルプ</a>
                 </td>
             </tr>
