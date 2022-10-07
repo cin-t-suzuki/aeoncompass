@@ -125,7 +125,7 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 	Route::post('/brpartnercustomer/search', 'BrPartnerCustomerController@search')->name('brpartnercustomer.search');
 
 	Route::post('/brpartnercustomer/edit', 'BrPartnerCustomerController@edit')->name('brpartnercustomer.edit');
-	Route::post('/brpartnercustomer/modify', function() {return 'TODO: modify'; })->name('brpartnercustomer.modify');
+	Route::post('/brpartnercustomer/modify', 'BrPartnerCustomerController@modify')->name('brpartnercustomer.modify');
 
 	Route::post('/brpartnersite/search', function() {return 'TODO: search'; })->name('brpartnersite.search');
 });

@@ -60,6 +60,11 @@ class BrPartnerCustomerController extends _commonController
         ]);
     }
 
+    public function modify(Request $request)
+    {
+        return view('ctl.brPartnerCustomer.modify');
+    }
+
     private function dummyPartnerCustomer()
     {
         $partner_customer = [
