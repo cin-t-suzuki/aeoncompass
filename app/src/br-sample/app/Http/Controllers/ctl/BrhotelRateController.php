@@ -43,6 +43,7 @@ class BrhotelRateController extends _commonController
 
 		$this->addViewData("hotelrates", $hotelrateData); 
 		$this->addViewData("target_cd", $targetCd);
+		$this->addViewData("hotel_cd", "");//TODO 料率一覧（削除）/新規登録/更新画面では使用していない
 
 		// ビューを表示
 		return view("ctl.brhotelRate.list", $this->getViewData());
