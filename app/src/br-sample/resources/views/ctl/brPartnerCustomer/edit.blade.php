@@ -20,8 +20,8 @@
     {{-- エラーメッセージ --}}
     {{-- TODO: 外部ファイルどちらにするか判断 --}}
     {{-- 移植元では、 view2 のものを埋め込んでいた。 --}}
-    @include('ctl.common.message', ['errors' => ["エラー view"], 'guides' =>["ガイド view"]])
-    @include('ctl.common.message2', ['errors' => ["エラー view2"], 'guides' =>["ガイド view2"]])
+    @include('ctl.common.message', ['errors' => ["エラー view", "エラー2 view"], 'guides' =>["ガイド view"]])
+    @include('ctl.common.message2', ['errors' => ["エラー view2", "エラー2 view2"], 'guides' =>["ガイド view2"]])
 
     <hr class="contents-margin" />
 
