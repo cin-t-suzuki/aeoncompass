@@ -7,6 +7,14 @@
     @include('ctl.brPartnerCustomer._css')
 @endsection
 
+@php
+    $search_params = [
+    ];
+    $form_params = [
+        'customer_id' => '1',
+    ];
+@endphp
+
 @section('content')
 
     {{-- エラーメッセージ --}}
@@ -21,16 +29,17 @@
     {{ Form::open(['route' => 'brpartnercustomer.modify', 'method' => 'post']) }}
 
         {{-- 精算先内容 --}}
-        {include file='./_input_customer.tpl'}
         @include('ctl.brPartnerCustomer._input_customer')
 
         <hr class="contents-margin" />
 
         {{-- 引数 --}}
-        <input type="hidden" name="customer_id" value="{$v->helper->form->strip_tags($v->assign->form_params.customer_id)}" />
-        {foreach from=$v->assign->search_params item=value key=key}
-            {if ($key != 'customer_id')}<input type="hidden" name="{$key}" value="{$value}" />{/if}
-        {/foreach}
+        <input type="hidden" name="customer_id" value="{{ strip_tags($form_params['customer_id']) }}" />
+        @foreach ($search_params as $key => $values)
+            @if ($key != 'customer_id')
+                <input type="hidden" name="{{ $key }}" value="{{ $value }}" />
+            @endif
+        @endforeach
 
         <input type="submit" value="更新">
 
@@ -42,23 +51,21 @@
     {{ Form::open(['route' => 'brpartnercustomer.search', 'method' => 'post']) }}
         <small>
             {{-- TODO: CHECK: ここで、検索条件を保持して一覧画面に戻っている。 --}}
-            {foreach from=$v->assign->search_params item=value key=key}
-                <input type="hidden" name="{$key}" value="{$value}" />
-            {/foreach}
+            @foreach ($search_params as $key => $valuse)
+                <input type="hidden" name="{{ $key }}" value="{{ $value }}" />
+            @endforeach
             <input type="submit" value="請求先一覧へ">
         </small>
     {{ Form::close() }}
-
 
     <hr class="contents-margin" />
 
     {{-- 精算サイト一覧へ戻る --}}
     {{ Form::open(['route' => 'brpartnersite.search', 'method' => 'post']) }}
         <small>
-            {foreach from=$v->assign->search_params item=value key=key}
-                <input type="hidden" name="{$key}" value="{$value}" />
-            {/foreach}
-
+            @foreach ($search_params as $key => $valuse)
+                <input type="hidden" name="{{ $key }}" value="{{ $value }}" />
+            @endforeach
             <input type="submit" value="精算サイト一覧へ">
         </small>
     {{ Form::close() }}
