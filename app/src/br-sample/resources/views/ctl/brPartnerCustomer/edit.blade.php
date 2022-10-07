@@ -22,6 +22,7 @@
 
         {{-- 精算先内容 --}}
         {include file='./_input_customer.tpl'}
+        @include('ctl.brPartnerCustomer._input_customer')
 
         <hr class="contents-margin" />
 
