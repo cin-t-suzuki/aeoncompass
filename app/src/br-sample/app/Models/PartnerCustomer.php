@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Util\Models_Cipher;
 use Illuminate\Support\Facades\DB;
 
 class PartnerCustomer
@@ -217,15 +218,16 @@ class PartnerCustomer
         $result = DB::select($sql, $a_conditions);
 
         // メールアドレスを復号
+        $cipher = new Models_Cipher(config('settings.cipher_key'));
         foreach($result as $key => $value) {
-            $result[$key]->email_decrypt = $this->decrypt($value->email);
+            if (!empty($value->email)) {
+                $result[$key]->email_decrypt = $cipher->decrypt($value->email);
+            } else {
+                $result[$key]->email_decrypt = null; // TODO: 確認、空文字じゃダメ？
+            }
         }
 
         return $result;
     }
 
-    // TODO: 実装、共通化
-    private function decrypt($str) {
-        return $str;
-    }
 }
