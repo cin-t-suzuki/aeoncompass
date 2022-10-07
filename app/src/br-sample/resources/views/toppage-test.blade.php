@@ -22,7 +22,7 @@
 		<a href="{{ route('ctl.brhotel.edit', ['target_cd'=>'2015060001']) }}">施設情報更新</a><br>
 		<a href="{{ route('ctl.brhotelStatus.index', ['target_cd'=>'2015060001']) }}">施設情報変更（登録状態変更）</a><br>
 
-		<a href="{{ route('ctl.brhotelRate.index', ['target_cd'=>'2015060001']) }}">料率一覧 削除予定</a><br>
+		<a href="{{ route('ctl.brhotelRate.index', ['target_cd'=>'2015060001']) }}">料率一覧</a><br>
 
 	</body>
 

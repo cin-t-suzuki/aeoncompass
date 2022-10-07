@@ -111,14 +111,16 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 			Route::post('/update', 'update')->name('ctl.brhotelStatus.update'); //更新処理
 		});
 
-
-		//TODO 削除予定 料率マスタ
+		// 料率マスタ
 		Route::controller(BrhotelRateController::class)->prefix("brhotelRate")->group(function(){
 			Route::get('/index', 'index')->name('ctl.brhotelRate.index'); //表示
+			Route::match(['get','post'],'/edit', 'edit')->name('ctl.brhotelRate.edit'); //更新 表示
 			Route::post('/update', 'update')->name('ctl.brhotelRate.update'); //更新処理
-			Route::match(['get','post'],'/new', 'new')->name('ctl.brhotelRate.new');
-			Route::post('/destroy', 'destroy')->name('ctl.brhotelRate.destroy'); //更新処理
-		});
+			Route::match(['get','post'],'/new', 'new')->name('ctl.brhotelRate.new');	//新規 表示
+			Route::post('/create', 'create')->name('ctl.brhotelRate.create'); //新規処理
+			Route::post('/destroy', 'destroy')->name('ctl.brhotelRate.destroy'); //削除処理
+		});		
+
 
 	//
 	Route::get('/brpartnercustomer/', 'BrPartnerCustomerController@index')->name('brpartnercustomer.index');
