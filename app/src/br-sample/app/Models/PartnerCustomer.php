@@ -7,7 +7,8 @@ use Illuminate\Support\Facades\DB;
 
 class PartnerCustomer
 {
-    public function getPartnerCustomers($keywords = '') {
+    public function getPartnerCustomers($keywords = '')
+    {
 
         // keywords を分割し、単語ごとにフォーマットで検索対象カラムを判定
         $a_keywords = explode(' ', str_replace('　', ' ', $keywords));
@@ -81,6 +82,7 @@ class PartnerCustomer
         }
 
         // SQL の生成と実行
+        // HACK: SQL 直書きはどうにかしたい
         $sql = <<<SQL
             select
                 q1.customer_id,
@@ -197,7 +199,7 @@ class PartnerCustomer
                 and q1.customer_id in (
                     select
                         partner_customer.customer_id
-                    from 
+                    from
                         partner_customer
                         left outer join partner_customer_site
                             on partner_customer.customer_id = partner_customer_site.customer_id
@@ -230,4 +232,48 @@ class PartnerCustomer
         return $result;
     }
 
+    public function getPartnerCustomerById($customer_id)
+    {
+        // HACK: SQL 直書きはどうにかしたい
+        $sql = <<<SQL
+            select
+                customer_id,
+                customer_nm,
+                person_post,
+                person_nm,
+                postal_cd,
+                pref_id,
+                address,
+                tel,
+                fax,
+                email,
+                mail_send,
+                cancel_status,
+                detail_status,
+                billpay_day,
+                billpay_required_month,
+                billpay_charge_min
+                -- , custmer_id -- TODO: 確認
+            from
+                partner_customer
+            where
+                customer_id = :customer_id
+        SQL;
+        $result = DB::select($sql, ['customer_id' => $customer_id]);
+
+        // TODO: 1件だけでいい。もしくは共通化
+        $cipher = new Models_Cipher(config('settings.cipher_key'));
+        foreach($result as $key => $value) {
+            if (!empty($value->email)) {
+                $result[$key]->email_decrypt = $cipher->decrypt($value->email);
+            } else {
+                $result[$key]->email_decrypt = null; // TODO: 確認、空文字じゃダメ？
+            }
+        }
+
+        // TODO: 確認 custmer_id
+        $result[0]->custmer_id = 1;
+
+        return $result[0];
+    }
 }

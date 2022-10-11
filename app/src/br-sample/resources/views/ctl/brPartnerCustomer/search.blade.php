@@ -29,7 +29,9 @@
 
     <hr class="contents-margin" />
 
-    {{ Form::open(['route' => 'brpartnercustomer.edit', 'method' => 'post']) }}
+    {{-- TODO: post -> get と書き換えたので、search_params を session に引き上げ次第、a タグに書き換えたい --}}
+    {{-- TODO: 新規登録は、メソッドとルーティングを編集から分離する --}}
+    {{ Form::open(['route' => ['brpartnercustomer.edit', ['customer_id' => 0]], 'method' => 'get']) }}
         <small>
             <input type="submit" value="新規登録">
 
@@ -131,7 +133,8 @@
                 @endif
             </td>
             <td style="text-align:center;">
-                {{ Form::open(['route' => 'brpartnercustomer.edit', 'method' => 'post']) }}
+                {{-- TODO: post -> get と書き換えたので、search_params を session に引き上げ次第、a タグに書き換えたい --}}
+                {{ Form::open(['route' => ['brpartnercustomer.edit', ['customer_id' => $customer->customer_id]], 'method' => 'get']) }}
                     <input type="submit" value=" 表示 ">
                     <input type="hidden" name="customer_id" value="{{ $customer->customer_id }}" />
                     @foreach ($search_params as $key => $value)

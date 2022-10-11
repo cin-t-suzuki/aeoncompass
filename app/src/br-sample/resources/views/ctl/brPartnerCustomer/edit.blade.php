@@ -26,7 +26,9 @@
         <hr class="contents-margin" />
 
         {{-- 引数 --}}
-        <input type="hidden" name="customer_id" value="{{ strip_tags($form_params['customer_id']) }}" />
+        {{-- TODO: なぜ form_params を使っているのか？ --}}
+        {{-- <input type="hidden" name="customer_id" value="{{ strip_tags($form_params['customer_id']) }}" /> --}}
+        <input type="hidden" name="customer_id" value="{{ strip_tags($partner_customer->customer_id) }}" />
         @foreach ($search_params as $key => $values)
             @if ($key != 'customer_id')
                 <input type="hidden" name="{{ $key }}" value="{{ $value }}" />
