@@ -77,28 +77,17 @@ class BrhotelRateController extends _commonController
 
 	/** 施設情報の取得とView設定
 	 * 
-	 *
+	 * @param [type] $hotelCd
+	 * @param boolean $isRegistHotel
 	 * @return void
 	 */
-	public function setViewHotelInfo($hotelCd)
+	 public function setViewHotelInfo($hotelCd)
 	{
-		//施設情報 取得
-		$hotelModel = new Hotel();
-		$hoteldata = $hotelModel->selectByKey($hotelCd);
-		
-		//都道府県取得
-		$prefModel = new MastPref();
-		$mastPrefData = $prefModel->selectByKey($hoteldata['pref_id']);
 
-		//市取得
-		$cityModel = new MastCity();
-		$mastCityData = $cityModel->selectByKey($hoteldata['city_id']);
+		$hotelController = new BrhotelController();
+		$hotelController->getHotelInfo($hotelCd, $hotelData, $mastPrefData, $mastCityData, $mastWardData);
 
-		//区取得
-		$wardModel = new MastWard();
-		$mastWardData = $wardModel->selectByKey($hoteldata['ward_id']);
-
-		$this->addViewData("hotel", $hoteldata);
+		$this->addViewData("hotel", $hotelData);
 		$this->addViewData("mast_pref", $mastPrefData); 
 		$this->addViewData("mast_city", $mastCityData);
 		$this->addViewData("mast_ward", $mastWardData);
@@ -109,12 +98,12 @@ class BrhotelRateController extends _commonController
 	 */
 	public function create(){
 		$requestHotelRate    =  Request::input('HotelRate');
-
+		$targetCd = Request::input('target_cd');
 		// リクエストに設定？
-		$requestHotelRate['hotel_cd'] = Request::input('target_cd');
+		$requestHotelRate['hotel_cd'] = $targetCd;
 
 		//登録値をセット、枝番は一時ダミー
-		//$hotelRateData['branch_no'] = 99;//事前チェックするためにダミーの番号セット
+		//  事前チェックするためにダミーの番号セット
 		$hotelRateData = $this->getHotelRateData(Request::input('target_cd'), 99, $requestHotelRate);
 
 		$hotelRateModel = new HotelRate();
@@ -123,9 +112,9 @@ class BrhotelRateController extends _commonController
 
 		// 枝番発行後にチェック
 		if(count($errorList) == 0){
-			//TODO 枝番取得	$new_branch_no = $o_hotel->increment_counter('Hotel_Rate','branch_no');
-			$new_branch_no = 98;//TODO
-			$hotelRateData['branch_no'] = $new_branch_no;
+			// 枝番取得	
+			$hotelModel = new Hotel();
+			$hotelRateData['branch_no'] = $hotelModel->incrementCounter('Hotel_Rate','branch_no', $targetCd);
 			//枝番のチェックと日付の独自チェック
 			$errorList = $hotelRateModel->validation($hotelRateData);
 		}
@@ -163,7 +152,7 @@ class BrhotelRateController extends _commonController
 		}
 		$this->addGuideMessage("料率データの登録が完了しました。");
 
-		$this->addViewData("target_cd", Request::input('target_cd'));
+		$this->addViewData("target_cd", $targetCd);
 		return $this->index();
 	}
 
