@@ -42,7 +42,7 @@
     <hr class="contents-margin" />
 
     {{-- 一覧へ戻る --}}
-    {{ Form::open(['route' => 'brpartnercustomer.search', 'method' => 'post']) }}
+    {{ Form::open(['route' => 'brpartnercustomer.search', 'method' => 'get']) }}
         <small>
             {{-- TODO: CHECK: ここで、検索条件を保持して一覧画面に戻っている。 --}}
             @foreach ($search_params as $key => $valuse)

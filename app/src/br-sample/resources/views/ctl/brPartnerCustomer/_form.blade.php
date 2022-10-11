@@ -1,7 +1,7 @@
 {{-- 元ファイル: svn_trunk\public\app\ctl\view2\brpartnercustomer\_form.tpl --}}
 
 {{-- 検索フォーム --}}
-{{ Form::open(['route' => 'brpartnercustomer.search', 'method' => 'post']) }}
+{{ Form::open(['route' => 'brpartnercustomer.search', 'method' => 'get']) }}
     <p>
         <table class="br-detail-list">
             <tr>

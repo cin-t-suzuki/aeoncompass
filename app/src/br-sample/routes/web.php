@@ -124,7 +124,7 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 
 	//
 	Route::get('/brpartnercustomer/', 'BrPartnerCustomerController@index')->name('brpartnercustomer.index');
-	Route::post('/brpartnercustomer/search', 'BrPartnerCustomerController@search')->name('brpartnercustomer.search');
+	Route::get('/brpartnercustomer/search', 'BrPartnerCustomerController@search')->name('brpartnercustomer.search');
 
 	Route::get('/brpartnercustomer/edit/{customer_id}', 'BrPartnerCustomerController@edit')->name('brpartnercustomer.edit');
 	// TODO: post にしているのを、一部 get に書き換えた。問題なければ削除

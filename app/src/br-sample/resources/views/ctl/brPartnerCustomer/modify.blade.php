@@ -25,7 +25,7 @@
     <hr class="contents-margin" />
 
     {{-- 一覧に戻る --}}
-    {{ Form::open(['route' => 'brpartnercustomer.search', 'method' => 'post']) }}
+    {{ Form::open(['route' => 'brpartnercustomer.search', 'method' => 'get']) }}
         <small>
             @foreach ($search_params as $key => $value)
                 <input type="hidden" name="{{ $key }}" value="{{ $value }}" />
