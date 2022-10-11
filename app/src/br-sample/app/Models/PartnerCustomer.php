@@ -239,21 +239,21 @@ class PartnerCustomer
             select
                 customer_id,
                 customer_nm,
-                person_post,
-                person_nm,
                 postal_cd,
                 pref_id,
                 address,
                 tel,
                 fax,
                 email,
+                person_post,
+                person_nm,
                 mail_send,
                 cancel_status,
+                tax_unit,
                 detail_status,
                 billpay_day,
                 billpay_required_month,
                 billpay_charge_min
-                -- , custmer_id -- TODO: 確認
             from
                 partner_customer
             where
@@ -270,9 +270,6 @@ class PartnerCustomer
                 $result[$key]->email_decrypt = null; // TODO: 確認、空文字じゃダメ？
             }
         }
-
-        // TODO: 確認 custmer_id
-        $result[0]->custmer_id = 1;
 
         return $result[0];
     }

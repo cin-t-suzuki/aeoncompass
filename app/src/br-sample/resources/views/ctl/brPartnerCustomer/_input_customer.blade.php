@@ -121,5 +121,20 @@
         </td>
     </tr>
 </table>
+
 {{-- 消費税単位 --}}
-<input type="hidden" name="partner_customer[tax_unit]" value="{{ $partner_customer->custmer_id == "1" ? 2 : 1 }}" />{{-- 1:料率毎（一般） 2:在庫種類単位（NTA） --}}{{-- TODO: マジックナンバーを定数化したい --}}{{-- TODO: 要確認 custmer_id --}}
+{{-- 1:料率毎（一般） 2:在庫種類単位（NTA） --}}
+{{-- <input type="hidden" name="partner_customer[tax_unit]" value="{{ $partner_customer->custmer_id == "1" ? 2 : 1 }}" /> --}}
+<input type="hidden" name="partner_customer[tax_unit]" value="{{ $partner_customer->tax_unit }}" />
+{{--
+    1: 合計してから消費税を掛ける、 2: 消費税を掛けてから合計する
+    経緯：
+        移植元では、日本旅行の場合のみ 2、その他は 1 で運用していた。
+        （customer_id = 1 が 日本旅行であることを前提としたロジック）
+        custmer_id は単なるスペルミス。
+    対応：
+        デフォルトで 1 と仮定して実装を行う。
+        新規登録画面では、 1 を登録。
+        編集画面では、登録されている値をそのまま登録。
+--}}
+{{-- TODO: マジックナンバーを定数化したい --}}
