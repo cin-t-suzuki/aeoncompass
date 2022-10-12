@@ -5,6 +5,7 @@ namespace App\Http\Controllers\ctl;
 use App\Models\MastPref;
 use App\Models\PartnerCustomer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BrPartnerCustomerController extends _commonController
 {
@@ -60,8 +61,8 @@ class BrPartnerCustomerController extends _commonController
         $model = new PartnerCustomer();
         $partner_customer = $model->getPartnerCustomerById($customer_id);
 
-		$mastPref = new MastPref();
-		$mastPrefsData = $mastPref->getMastPrefs();
+        $mastPref = new MastPref();
+        $mastPrefsData = $mastPref->getMastPrefs();
 
         return view('ctl.brPartnerCustomer.edit', [
             'partner_customer' => $partner_customer,
@@ -73,18 +74,57 @@ class BrPartnerCustomerController extends _commonController
 
     public function modify(Request $request)
     {
+        $partner_customer = $request->input('partner_customer');
         // TODO: 更新処理
+
+        // 精算月のパラメータ調整
+        $partner_customer['billpay_required_month'] = null;
+        for($m = 1; $m <= 12; $m++) {
+            $field_nm = 'billpay_month' . sprintf("%02d", $m);
+            $partner_customer['billpay_required_month'] .= $partner_customer[$field_nm] ?? '0';
+            unset($partner_customer[$field_nm]);
+        }
+
+        // validation
+        $model = new PartnerCustomer();
+        $error_list = $model->validation($partner_customer);
+
+        if (count($error_list) > 0) {
+            $error_list[] = '更新できませんでした。';
+            // TODO: エラー処理、ここでうまいことやって、入力を保持して編集入力画面に返す。
+            return redirect()->route('brpartnercustomer.edit', ['customer_id' => $partner_customer['customer_id']]);
+        }
+
+        // 共通カラム値設定
+        $model->setUpdateCommonColumn($partner_customer, 'CtlPartnerCustomer/update.');
+
+        // コネクション
+        try {
+            $con = DB::connection('mysql');
+            $db_error = $con->transaction(function() use($con, $model, $partner_customer)
+            {
+                $model->updateByKey($con, $partner_customer);
+            });
+        } catch (\Exception $e) {
+            $error_list[] = '更新できませんでした。';
+        }
+
+        if (count($error_list) > 0 || !empty($db_error)) {
+            // TODO: エラー処理、同上（入力を保持して編集入力画面に返す。）
+            return redirect()->route('brpartnercustomer.edit', ['customer_id' => $partner_customer['customer_id']]);
+        }
+
         $search_params = [
         ];
 
-		$mastPref = new MastPref();
-		$mastPrefsData = $mastPref->getMastPrefs();
+        $mastPref = new MastPref();
+        $mastPrefsData = $mastPref->getMastPrefs();
 
         return view('ctl.brPartnerCustomer.modify', [
-            'partner_customer' => (new PartnerCustomer())->getPartnerCustomerById($request->get('customer_id')),
+            'partner_customer' => $model->getPartnerCustomerById($partner_customer['customer_id']),
             'mast_pref' => $mastPrefsData,
             'search_params' => $search_params,
-
+            'guides' => ['更新が完了いたしました。'],
         ]);
     }
 

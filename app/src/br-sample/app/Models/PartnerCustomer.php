@@ -2,11 +2,159 @@
 
 namespace App\Models;
 
+use App\Common\Traits;
+use App\Models\common\CommonDBModel;
+use App\Models\common\ValidationColumn;
 use App\Util\Models_Cipher;
 use Illuminate\Support\Facades\DB;
 
-class PartnerCustomer
+class PartnerCustomer extends CommonDBModel
 {
+    use Traits;
+    protected $table = 'partner_customer';
+    // カラム
+    // static のほうがよい？
+    public string $COL_CUSTOMER_ID              = 'customer_id';
+    public string $COL_CUSTOMER_NM              = 'customer_nm';
+    public string $COL_POSTAL_CD                = 'postal_cd';
+    public string $COL_PREF_ID                  = 'pref_id';
+    public string $COL_ADDRESS                  = 'address';
+    public string $COL_TEL                      = 'tel';
+    public string $COL_FAX                      = 'fax';
+    public string $COL_EMAIL                    = 'email';
+    public string $COL_PERSON_POST              = 'person_post';
+    public string $COL_PERSON_NM                = 'person_nm';
+    public string $COL_MAIL_SEND                = 'mail_send';
+    public string $COL_CANCEL_STATUS            = 'cancel_status';
+    public string $COL_TAX_UNIT                 = 'tax_unit';
+    public string $COL_DETAIL_STATUS            = 'detail_status';
+    public string $COL_BILLPAY_DAY              = 'billpay_day';
+    public string $COL_BILLPAY_REQUIRED_MONTH   = 'billpay_required_month';
+    public string $COL_BILLPAY_CHARGE_MIN       = 'billpay_charge_min';
+
+    function __construct()
+    {
+        // カラム情報の設定
+        $col_customer_id = new ValidationColumn();
+        $col_customer_id->setColumnName($this->COL_CUSTOMER_ID, '支払先ID');
+        $col_customer_nm = new ValidationColumn();
+        $col_customer_nm->setColumnName($this->COL_CUSTOMER_NM, '支払先名称');
+        $col_postal_cd = new ValidationColumn();
+        $col_postal_cd->setColumnName($this->COL_POSTAL_CD, '郵便番号');
+        $col_pref_id = new ValidationColumn();
+        $col_pref_id->setColumnName($this->COL_PREF_ID, '都道府県ID');
+        $col_address = new ValidationColumn();
+        $col_address->setColumnName($this->COL_ADDRESS, '住所');
+        $col_tel = new ValidationColumn();
+        $col_tel->setColumnName($this->COL_TEL, '電話番号');
+        $col_fax = new ValidationColumn();
+        $col_fax->setColumnName($this->COL_FAX, 'ファックス番号');
+        $col_email = new ValidationColumn();
+        $col_email->setColumnName($this->COL_EMAIL, 'チャネル合算支払先');
+        $col_person_post = new ValidationColumn();
+        $col_person_post->setColumnName($this->COL_PERSON_POST, '担当者役職');
+        $col_person_nm = new ValidationColumn();
+        $col_person_nm->setColumnName($this->COL_PERSON_NM, '担当者名称');
+        $col_mail_send = new ValidationColumn();
+        $col_mail_send->setColumnName($this->COL_MAIL_SEND, 'メール送信可否');
+        $col_cancel_status = new ValidationColumn();
+        $col_cancel_status->setColumnName($this->COL_CANCEL_STATUS, '精算キャンセル対象状態');
+        $col_tax_unit = new ValidationColumn();
+        $col_tax_unit->setColumnName($this->COL_TAX_UNIT, '消費税単位');
+        $col_detail_status = new ValidationColumn();
+        $col_detail_status->setColumnName($this->COL_DETAIL_STATUS, '明細書有無');
+        $col_billpay_day = new ValidationColumn();
+        $col_billpay_day->setColumnName($this->COL_BILLPAY_DAY, '精算日');
+        $col_billpay_required_month = new ValidationColumn();
+        $col_billpay_required_month->setColumnName($this->COL_BILLPAY_REQUIRED_MONTH, '精算必須月');
+        $col_billpay_charge_min = new ValidationColumn();
+        $col_billpay_charge_min->setColumnName($this->COL_BILLPAY_CHARGE_MIN, '精算最低金額');
+
+        // バリデーション追加
+        // HACK: メソッドチェーンにする。
+        // 支払先ID
+        $col_customer_id->require(); // 必須入力チェック
+        $col_customer_id->length(0, 10); // 長さチェック
+        $col_customer_id->intOnly(); // 数字：数値チェック
+
+        // 支払先名称
+        $col_customer_nm->notHalfKana(); // 半角カナチェック
+        $col_customer_nm->length(0, 50); // 長さチェック
+
+        // 郵便番号
+        $col_postal_cd->notHalfKana(); // 半角カナチェック
+        $col_postal_cd->postal(); // 郵便番号チェック
+        $col_postal_cd->length(0, 8); // 長さチェック
+
+        // 都道府県ID
+        $col_pref_id->length(0, 2); // 長さチェック
+        $col_pref_id->intOnly(); // 数字：数値チェック
+
+        // 住所
+        $col_address->require(); // 必須入力チェック
+        $col_address->notHalfKana(); // 半角カナチェック
+        $col_address->length(0, 100); // 長さチェック
+
+        // 電話番号
+        $col_tel->notHalfKana(); // 半角カナチェック
+        $col_tel->phoneNumber(); // 電話番号チェック
+        $col_tel->length(0, 15); // 長さチェック
+
+        // ファックス番号
+        $col_fax->notHalfKana(); // 半角カナチェック
+        $col_fax->phoneNumber(); // 電話番号チェック
+        $col_fax->length(0, 15); // 長さチェック
+
+        // チャネル合算支払先
+        $col_email->notHalfKana(); // 半角カナチェック
+        // TODO: メールアドレスのバリデーションを実装
+        // $this->validate_mails_of('email'); // メールアドレスチェック
+        $col_email->length(0, 200); // 長さチェック
+
+        // 担当者役職
+        $col_person_post->notHalfKana(); // 半角カナチェック
+        $col_person_post->length(0, 96); // 長さチェック
+
+        // 担当者名称
+        $col_person_nm->notHalfKana(); // 半角カナチェック
+        $col_person_nm->length(0, 32); // 長さチェック
+
+        // メール送信可否
+        $col_mail_send->length(0, 1); // 長さチェック
+        $col_mail_send->intOnly(); // 数字：数値チェック
+
+        // 精算キャンセル対象状態
+        $col_cancel_status->length(0, 1); // 長さチェック
+        $col_cancel_status->intOnly(); // 数字：数値チェック
+
+        // 消費税単位
+        $col_tax_unit->length(0, 9); // 長さチェック
+        $col_tax_unit->intOnly(); // 数字：数値チェック
+
+        // 明細書有無
+        $col_detail_status->length(0, 1); // 長さチェック
+        $col_detail_status->intOnly(); // 数字：数値チェック
+
+        // 精算日
+        $col_billpay_day->length(0, 2); // 長さチェック
+        $col_billpay_day->intOnly(); // 数字：数値チェック
+
+        // 精算必須月
+        $col_billpay_required_month->notHalfKana(); // 半角カナチェック
+        $col_billpay_required_month->length(0, 12); // 長さチェック
+
+        // 精算最低金額
+        $col_billpay_charge_min->length(0, 5); // 長さチェック
+        $col_billpay_charge_min->intOnly(); // 数字：数値チェック
+
+        parent::setColumnDataArray([
+            $col_customer_id           , $col_customer_nm       , $col_postal_cd, $col_pref_id      , $col_address,
+            $col_tel                   , $col_fax               , $col_email    , $col_person_post  , $col_person_nm,
+            $col_mail_send             , $col_cancel_status     , $col_tax_unit , $col_detail_status, $col_billpay_day,
+            $col_billpay_required_month, $col_billpay_charge_min,
+        ]);
+    }
+
     public function getPartnerCustomers($keywords = '')
     {
 
@@ -261,6 +409,10 @@ class PartnerCustomer
         SQL;
         $result = DB::select($sql, ['customer_id' => $customer_id]);
 
+        if (count($result) < 1) {
+            // TODO: error
+            return 'error';
+        }
         // TODO: 1件だけでいい。もしくは共通化
         $cipher = new Models_Cipher(config('settings.cipher_key'));
         foreach($result as $key => $value) {
@@ -273,4 +425,22 @@ class PartnerCustomer
 
         return $result[0];
     }
+
+    /**  キーで更新
+     *
+     * @param [type] $con
+     * @param [type] $data
+     * @return エラーメッセージ
+     */
+    public function updateByKey($con, $data)
+    {
+        $result = $con->table($this->table)
+                    ->where($this->COL_CUSTOMER_ID, $data[$this->COL_CUSTOMER_ID])
+                    ->update($data);
+        if (!$result) {
+            return "更新に失敗しました";
+        }
+        return "";
+    }
+
 }
