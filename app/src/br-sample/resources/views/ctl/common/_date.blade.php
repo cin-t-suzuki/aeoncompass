@@ -61,9 +61,12 @@
 		//assign var='day' value=$v->helper->date->to_format('Y年m月d日')|cat:'（'|cat:$v->helper->date->to_week('j')|cat:'）'
 		$day = $dateUtil->to_format('Y年m月d日') .'（'. $dateUtil->to_week('j'). '）';
 	}
-	/* Y年m月d日 
+	// Y年m月d日 
 	elseif ( $format == 'ymd' )
-	  assign var='day' value=$v->helper->date->to_format('Y年m月d日')*/
+	{
+	  //assign var='day' value=$v->helper->date->to_format('Y年m月d日')
+		$day = $dateUtil->to_format('Y年m月d日');
+	}
 	// Y年m月
 	elseif ( $format == 'ym' )
 	{

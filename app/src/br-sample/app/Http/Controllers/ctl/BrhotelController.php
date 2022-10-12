@@ -11,7 +11,9 @@ use App\Models\Hotel;
 use App\Models\MastPref;
 use App\Models\MastCity;
 use App\Models\MastWard;
+use App\Models\HotelRate;
 use App\Common\Traits;
+use App\Models\CustomerHotel;
 
 class BrhotelController extends _commonController
 {
@@ -64,13 +66,140 @@ class BrhotelController extends _commonController
 	}
 
 	/** 詳細変更 施設各情報ハブ
-	 * 
+	 * （ホテル情報詳細変更）
 	 *
 	 * @return void
 	 */
 	public function show(){
+		$a_hotel_staff_note = Request::input('Hotel_Staff_Note');
+		$hotelCd = Request::input('target_cd');
+		
+		// 料率の一覧データを配列で取得
+		$hotelRateModel = new HotelRate();
+		$hotelRateData = $hotelRateModel->selectByHotelCd($hotelCd);
+
+		$this->getHotelInfo($hotelCd, $hotelData, $mastPrefData, $mastCityData, $mastWardData);
+		$this->addViewData("hotel", $hotelData);
+		$this->addViewData("mast_pref", $mastPrefData); 
+		$this->addViewData("mast_city", $mastCityData);
+		$this->addViewData("mast_ward", $mastWardData);
+
+		if(count($hotelData) !=0 ){
+			$isRegistHotel = true;
+		}
+		$b_hotel_regist = $isRegistHotel; //TODO あとで消す
+		$hotelModel = new Hotel();
+
+		// 請求先 支払先関連施設
+		$customerHotel = new CustomerHotel();
+		$a_customer_hotel = $customerHotel->selectByKey($hotelCd);
+
+		// TODO施設情報取得
+		$a_hotel_account = [];
+		$a_hotel_person = [];
+		$a_hotel_status = [];
+		$b_hotel_management_regist = false;//登録有無
+		
+		$a_hotel_notify = [];
+		$a_hotel_control = [];
+		$b_hotel_state_regist = false;
+
+		$b_hotel_survey_regist = false;//登録有無
+		// TODO 特記事項
+		$a_hotel_staff_note = [];
+
+		// TODO ?
+		$hotel_msc_info = [];//TODO $o_models_hotel->get_msc_usage_situation($this->_request->getParam('target_cd'));
+
+		$this->addViewData("target_cd", $hotelCd); 
+		$this->addViewData("customer_hotel", $a_customer_hotel); 
+
+		$this->addViewData("hotel_regist", $b_hotel_regist); 
+		$this->addViewData("hotel_management_regist", $b_hotel_management_regist); 
+		$this->addViewData("hotel_state_regist", $b_hotel_state_regist);
+		$this->addViewData("hotel_survey_regist", $b_hotel_survey_regist); 
+
+		$this->addViewData("hotel_staff_note", $a_hotel_staff_note); 
+
+		$this->addViewData("hotel_msc_info", $hotel_msc_info); 
+		$this->addViewData("hotelrates", $hotelRateData); 
+
 		//TODO
+		return view("ctl.brhotel.show", $this->getViewData());
 	}
+/* 旧処理
+		//施設情報取得
+		$a_hotel_account = $o_hotel_account->find(array('hotel_cd' => $this->_request->getParam('target_cd')));
+		$a_hotel_person = $o_hotel_person->find(array('hotel_cd' => $this->_request->getParam('target_cd')));
+		$a_hotel_status = $o_hotel_status->find(array('hotel_cd' => $this->_request->getParam('target_cd')));
+
+		// 登録されているかの判断
+		if (count($a_hotel_account) != 0
+		||  count($a_hotel_person) != 0
+		||  count($a_hotel_status) != 0
+		){
+			$b_hotel_management_regist = true;
+		}
+
+		//施設情報取得
+		$a_hotel_notify = $o_hotel_notify->find(array('hotel_cd' => $this->_request->getParam('target_cd')));
+		$a_hotel_control = $o_hotel_control->find(array('hotel_cd' => $this->_request->getParam('target_cd')));
+
+		// 登録されているかの判断
+		if (count($a_hotel_notify) != 0
+		||  count($a_hotel_control) != 0
+		){
+			$b_hotel_state_regist = true;
+		}
+
+		$a_hotel_survey = $o_hotel_survey->find(array('hotel_cd' => $this->_request->getParam('target_cd')));
+
+		// 登録されているかの判断
+		if (count($a_hotel_survey) != 0
+		){
+			$b_hotel_survey_regist = true;
+		}
+
+		// リクエストに無ければDBから取得
+		if (is_empty($a_hotel_staff_note)){
+			// 特記事項
+			$a_hotel_staff_note = $o_hotel_staff_note->find(array('hotel_cd' => $this->_request->getParam('target_cd')));
+		}
+
+		//アサイン登録
+		$this->box->item->assign->hotel_msc_info          = $o_models_hotel->get_msc_usage_situation($this->_request->getParam('target_cd'));
+*/
+
+	/** 施設情報の取得とView設定
+	 * 
+	 * @param [type] $hotelCd
+	 * @param [type] $hotelData
+	 * @param [type] $mastPrefData
+	 * @param [type] $mastCityData
+	 * @param [type] $mastWardData
+	 * @return void
+	 */
+	public function getHotelInfo($hotelCd, &$hotelData,
+	&$mastPrefData, &$mastCityData, &$mastWardData)
+{
+	//施設情報 取得
+	$hotelModel = new Hotel();
+	$hotelData = $hotelModel->selectByKey($hotelCd);
+	
+	//都道府県取得
+	$prefModel = new MastPref();
+	$mastPrefData = $prefModel->selectByKey($hotelData['pref_id']);
+
+	//市取得
+	$cityModel = new MastCity();
+	$mastCityData = $cityModel->selectByKey($hotelData['city_id']);
+
+	//区取得
+	$wardModel = new MastWard();
+	$mastWardData = $wardModel->selectByKey($hotelData['ward_id']);
+
+}
+
 
 		/** 施設データをDBから取得
 	 *
