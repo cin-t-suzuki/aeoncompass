@@ -147,6 +147,15 @@ abstract class CommonDBModel extends Model
 				}
 			}
 
+            // メールアドレスチェック
+            if ($this->colmunArray[$key]->isEmails()) {
+                if (strlen(($val) != 0)) {
+                    if (!$this->is_mails($val)) {
+                        $rtnErrors[] = $this->colmunArray[$key]->getColumnName() . "を半角で正しく入力してください";
+                    }
+                }
+            }
+
 			// チェックイン アウト時刻の書式チェック
 			if($this->colmunArray[$key]->isCheckInOutTime()){
 				if (strlen($val) != 0){
@@ -212,5 +221,89 @@ abstract class CommonDBModel extends Model
 		$tblModel['modify_cd']                      = $action_cd;
 		$tblModel['modify_ts']                      = date("Y-m-d H:i:s");
 	}
+
+    // メールアドレスチェック
+    public function is_mails($emails)
+    {
+        if (strlen($emails) != 0) {
+            $values = explode(',', $emails);
+            $result = true;
+            foreach ($values as $value) {
+                $result = $result && $this->_is_mail($value);
+            }
+            return $result;
+        }
+    }
+    private function _is_mail($email)
+    {
+        // 『@』が複数ないか？
+        if (1 < substr_count($email, '@')) {
+            return false;
+        }
+
+        // 『@』が先頭と末尾にないか？
+        if (preg_match('/^@/', $email) or preg_match('/@$/', $email)) {
+            return false;
+        }
+        $s_account = substr($email, 0, strpos($email, '@'));
+        $s_domain  = substr($email, strrpos($email, '@') + 1 );
+        $a_domain  = explode('.', $s_domain);
+
+        // 『A-Z』『a-z』『0-9』『.』
+        // 『!』『#』『$』『%』『&』『'』
+        // 『*』『+』『-』『/』『=』『?』
+        // 『^』『_』『`』『{』『|』『}』『~』で構成されているか？
+        if (!(preg_match("|^[A-Za-z0-9\.!#\$%&'\*\+\-/=\?\^_`\{\|\}~]+$|", $s_account))) {
+            return false;
+        }
+
+        // アカウントは128文字以下か？
+        if (128 < strlen($s_account)) {
+            return false;
+        }
+
+        // アカウントの最後に『.』がないか？ Docomo Au を考慮して処理しない
+
+        // トップレベルドメインチェックしない
+
+
+        // 『A-Z』『a-z』『0-9』『.』『-』で構成されているか？
+        if (!(preg_match('|^[A-Za-z0-9\.\-]+$|', $s_domain))) {
+            return false;
+        }
+
+        // 末尾は『.』＋『２文字以上の英字』で構成されているか？
+        if (!(preg_match('/\.+[A-Za-z]{2,}$/', $s_domain))) {
+            return false;
+        }
+
+        // ドメイン全体で255文字以下か？
+        if (255 < strlen($s_domain)) {
+            return false;
+        }
+
+        // 『..』がないか？
+        if (preg_match('/.+\.\..+/', $s_domain)) {
+            return false;
+        }
+
+        // ドメインの最初と最後に『.』がないか？
+        if (preg_match('/^\./', $s_domain) or preg_match('/\.$/', $s_domain)) {
+            return false;
+        }
+
+        //
+        foreach ($a_domain as $val) {
+            if (63 < strlen($val)) {
+                return false;
+            }
+
+            if (preg_match('/^-/', $val) or preg_match('/-$/', $val)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
 }

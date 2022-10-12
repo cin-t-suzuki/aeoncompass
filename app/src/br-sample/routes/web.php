@@ -99,8 +99,8 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 			Route::post('/update', 'update')->name('ctl.brhotel.update'); //施設更新？
 
 			Route::get('/index', 'index')->name('ctl.brhotel.index'); // 検索 初期表示
-			Route::post('/show', 'show')->name('ctl.brhotel.show'); // 詳細変更 施設各情報ハブ
-
+			Route::match(['get','post'],'/show', 'show')->name('ctl.brhotel.show'); // 詳細変更 施設各情報ハブ
+			
 			Route::get('/searchcity', 'searchcity')->name('ctl.brhotel.searchcity'); // 検索部品 市プルダウン
 			Route::get('/searchward', 'searchward')->name('ctl.brhotel.searchward'); // 検索部品 区プルダウン
 		});
@@ -122,6 +122,7 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 		});		
 
 
+
 	//
 	Route::get('/brpartnercustomer/', 'BrPartnerCustomerController@index')->name('brpartnercustomer.index');
 	Route::get('/brpartnercustomer/search', 'BrPartnerCustomerController@search')->name('brpartnercustomer.search');
@@ -132,4 +133,5 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 	Route::post('/brpartnercustomer/modify', 'BrPartnerCustomerController@modify')->name('brpartnercustomer.modify');
 
 	Route::post('/brpartnersite/search', function() {return 'TODO: search'; })->name('brpartnersite.search');
+
 });

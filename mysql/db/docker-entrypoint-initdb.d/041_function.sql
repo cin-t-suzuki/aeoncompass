@@ -53,4 +53,34 @@ DELIMITER ;
 
 -- 不要get_bill_ymd;
 
+  -- シーケンス代替
+  DROP FUNCTION IF EXISTS `NextVal`;
+
+  DELIMITER //
+
+  CREATE 
+    FUNCTION `NextVal`(seq_name VARCHAR(50)) RETURNS bigint(15)
+  BEGIN
+    DECLARE val bigint(15);
+    DECLARE incval bigint(15);
+    
+    SET val = 0;
+    SET incval = 0;
+    
+    SELECT current_val,increment
+    INTO val,incval
+    FROM tbl_sequence
+    WHERE name = seq_name;
+
+    UPDATE TBL_SEQUENCE SET current_val = current_val + increment
+    WHERE name = seq_name;
+    
+    RETURN val + incval;
+  END;
+
+  //
+-- 終端文字列をデフォルトに戻す
+DELIMITER ;
+
+
 -- 不要/

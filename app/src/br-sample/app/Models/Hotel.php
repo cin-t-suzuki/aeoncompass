@@ -189,6 +189,57 @@ class Hotel extends CommonDBModel
 		return true;
 	}
 
+	/**  表示順序番号などを求めます
+	*   現在登録されている最大値 + 1 を取得します。
+	*
+	*  CoreHotel->hotel_cd 施設コード
+	*  as_table_name       テーブル名称
+	*/
+	public function incrementCounter($as_table_name, $as_column_nm, $hotelCd, $aa_conditions = array()){
+		try {
+//			$_oracle   = _Oracle::getInstance();
+
+			// テーブル名称
+			if ($this->is_empty($as_table_name)){
+				throw new \Exception('テーブルを設定してください。');
+			}
+
+			// カラム名称
+			if ($this->is_empty($as_column_nm)){
+				throw new \Exception('カラムを設定してください。');
+			}
+
+			$a_conditions['hotel_cd'] = $hotelCd;
+//			$aa_conditions['hotel_cd'] = $hotelCd;
+
+			// 条件
+			$s_where = "";
+			if (!($this->is_empty($aa_conditions))){
+				foreach ($aa_conditions as $key => $value){
+					$s_where .= '	and	' . $key . ' = :' . $key;
+					$a_conditions[$key] = $value;
+				}
+			}
+
+			$s_sql =<<< SQL
+				select	max({$as_column_nm}) as value
+				from	{$as_table_name}
+				where	hotel_cd = :hotel_cd
+				{$s_where}
+				SQL;
+
+			$a_row = DB::select($s_sql, $a_conditions);
+
+			if ($this->is_empty($a_row[0]->value)){
+				return 1;
+			}
+
+			return intval($a_row[0]->value) + 1;
+
+		} catch (\Exception $e) {
+				throw $e;
+		}
+	}
 
 	/** 施設を検索
 	 * ・keywordにより2種類の検索パターン
