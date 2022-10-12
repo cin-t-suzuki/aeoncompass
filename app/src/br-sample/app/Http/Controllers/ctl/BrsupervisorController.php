@@ -37,7 +37,7 @@
 			$id = Request::input('id');
 			$supervisor_cd = Request::input('supervisor_cd');
 			$brsupervisormodel = new HotelSupervisorHotel();
-			$a_hotel_supervisor_hotel = $brsupervisormodel->getHotelSupervisorHotel(array('supervisor_cd'=>$supervisor_cd));
+			$a_hotel_supervisor_hotel = $brsupervisormodel->getHotelSupervisorHotel(array('supervisor_cd'=>$supervisor_cd));//get~の処理に使う条件を配列で渡す。=supervisor_cdで絞込みしたいから。
 
 			//TODO 取得できなかった場合のエラーメッセージ表示する処理
 
