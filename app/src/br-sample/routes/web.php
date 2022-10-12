@@ -121,5 +121,8 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 			Route::post('/destroy', 'destroy')->name('ctl.brhotelRate.destroy'); //削除処理
 		});		
 
-
-	});
+		//パートナー管理画面
+		Route::controller(BrpartnerController::class)->prefix("brpartner")->group(function(){
+			Route::get('/searchlist', 'searchlist')->name('ctl.brpartner.searchlist'); //表示
+		});		
+});
