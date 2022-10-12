@@ -1,16 +1,12 @@
 @section('title', 'グループホテル一覧')
 @include('ctl.common.base')
 
-<table border="0" cellspacing="0" cellpadding="4">
-  <tr>
-    <form method="POST" action="{$v->env.source_path}{$v->env.module}/brsupervisor/newhotel/">
-      <td>
+
+{!! Form::open(['route' => ['ctl.brsupervisor.newhotel'], 'method' => 'post']) !!}
         <input type="submit" value="グループホテル登録">
-        <input type="hidden" name="supervisor_cd" value="{$v->helper->form->strip_tags($v->assign->supervisor_cd)}">
-      </td>
-    </form>
-  </tr>	
-</table>
+        <input type="hidden" name="supervisor_cd" value="{{$views->supervisor_cd}}">
+{!! Form::close() !!}
+
 
 <br>
 {{-- メッセージ --}}
@@ -18,7 +14,7 @@
 @include('ctl.common.message', $messages)
 
 {{-- グループホテル一覧表示 --}}
-@section('brhotelsupervisor')
+@section('brhotelsupervisor_listhotel')
 @include('ctl.brsupervisor._list_hotel',
     ['a_hotel_supervisor_hotel' => $views->a_hotel_supervisor_hotel
     ,'id' => $views->id

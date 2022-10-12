@@ -11,14 +11,9 @@ class HotelSupervisorHotel extends CommonDBModel
 {
 	use Traits;
 
-	protected $table = "hotel_supervisor_hotel";
-	// カラム
-	public string $COL_ID = "id";
-	public string $COL_SUPERVISOR_CD = "supervisor_cd";
-	public string $COL_HOTEL_CD = "hotel_cd";
 
 	/**
-	 * コンストラクタ
+	 * コンストラクタ TODOカラム情報の設定
 	 */
 	function __construct(){
 		// TODOカラム情報の設定
@@ -39,9 +34,15 @@ class HotelSupervisorHotel extends CommonDBModel
 
 		// parent::setColumnDataArray([$colPrefId, $colRegionId, $colPrefNm, $colPrefNs, $colOrderNo, $colPrefCd, $colDeleteYmd]);
 	}
-
-
-
+		
+	
+	// 統括ホテル一覧を取得
+	protected $table = "hotel_supervisor_hotel";
+	
+	// カラム
+	public string $COL_ID = "id";
+	public string $COL_SUPERVISOR_CD = "supervisor_cd";
+	public string $COL_HOTEL_CD = "hotel_cd";
 
 	public function getHotelSupervisorHotel($aa_conditions = array()){
 		

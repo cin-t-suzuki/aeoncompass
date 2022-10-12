@@ -7,10 +7,10 @@
         <td nowrap align="left" bgcolor="#EEFFEE" >削除</td>
       </tr>
 
-    @forelse($views->a_hotel_supervisor_hotel['values'] as $hotel_supervisor_hotellist)
+    @forelse($views->a_hotel_supervisor_hotel['values'] as $hotel_supervisor_hotel_listhotel)
       <tr>
-        <td style="width: 200px;display: table-cell;">{{$hotel_supervisor_hotellist['supervisor_cd']}}</td>
-        <td style="width: 500px;display: table-cell;">{{$hotel_supervisor_hotellist['hotel_nm']}}</td>
+        <td style="width: 200px;display: table-cell;">{{$hotel_supervisor_hotel_listhotel['hotel_cd']}}</td>
+        <td style="width: 500px;display: table-cell;">{{$hotel_supervisor_hotel_listhotel['hotel_nm']}}</td>
         <td><input type="submit" name="" value="削除"></td>
       </tr>
     @empty
