@@ -108,7 +108,7 @@ class PartnerCustomer extends CommonDBModel
         // チャネル合算支払先
         $col_email->notHalfKana(); // 半角カナチェック
         // TODO: メールアドレスのバリデーションを実装
-        // $this->validate_mails_of('email'); // メールアドレスチェック
+        $col_email->emails(); // メールアドレスチェック
         $col_email->length(0, 200); // 長さチェック
 
         // 担当者役職
