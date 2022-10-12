@@ -4,6 +4,7 @@ namespace App\Http\Controllers\ctl;
 
 use App\Models\MastPref;
 use App\Models\PartnerCustomer;
+use App\Util\Models_Cipher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -94,6 +95,10 @@ class BrPartnerCustomerController extends _commonController
             // TODO: エラー処理、ここでうまいことやって、入力を保持して編集入力画面に返す。
             return redirect()->route('brpartnercustomer.edit', ['customer_id' => $partner_customer['customer_id']]);
         }
+
+        // メールアドレス暗号化
+        $cipher = new Models_Cipher(config('settings.cipher_key'));
+        $partner_customer['email'] = $cipher->encrypt($partner_customer['email']);
 
         // 共通カラム値設定
         $model->setUpdateCommonColumn($partner_customer, 'CtlPartnerCustomer/update.');
