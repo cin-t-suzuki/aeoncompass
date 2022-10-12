@@ -15759,3 +15759,14 @@ USE ac_travel;
  
 
    ALTER TABLE `zap_room_plan_charge`  COMMENT '料金データ旧との互換性;新料金で複数の利用人数が登録された場合に旧部屋プランにプランを作成し料金を登録し関連性を保持';
+
+-- シーケンス用
+	CREATE TABLE `tbl_sequence` (
+		`id` int(11) NOT NULL AUTO_INCREMENT,
+		`name` varchar(50) NOT NULL COMMENT 'カラム名',
+		`current_val` bigint(15) NOT NULL DEFAULT '0' COMMENT '現在値',
+		`increment` int(11) NOT NULL DEFAULT '1' COMMENT '加算値',
+		PRIMARY KEY (`id`),
+		UNIQUE KEY `name` (`name`)
+	) ENGINE=InnoDB AUTO_INCREMENT=119 DEFAULT CHARSET=cp932;
+
