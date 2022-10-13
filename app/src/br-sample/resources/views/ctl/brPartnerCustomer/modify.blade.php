@@ -20,7 +20,7 @@
     <hr class="contents-margin" />
 
     {{-- 精算先情報表示 --}}
-    @include('ctl.brPartnerCustomer._input_customer')
+    @include('ctl.brPartnerCustomer._info_customer')
 
     <hr class="contents-margin" />
 
