@@ -411,7 +411,26 @@ class PartnerCustomer extends CommonDBModel
 
         if (count($result) < 1) {
             // TODO: error
-            return 'error';
+            // 暫定的に新規登録扱いとして実装している。
+            return (object)[
+                'customer_id' => $this->_get_sequence_no(),
+                'customer_nm' => '',
+                'postal_cd' => '',
+                'pref_id' => '',
+                'address' => '',
+                'tel' => '',
+                'fax' => '',
+                'email' => '',
+                'person_post' => '',
+                'person_nm' => '',
+                'mail_send' => '0',
+                'cancel_status' => '0',
+                'tax_unit' => '',
+                'detail_status' => '0',
+                'billpay_day' => '',
+                'billpay_required_month' => '000000000000',
+                'billpay_charge_min' => '',
+            ];
         }
         // TODO: 1件だけでいい。もしくは共通化
         $cipher = new Models_Cipher(config('settings.cipher_key'));
@@ -441,6 +460,16 @@ class PartnerCustomer extends CommonDBModel
             return "更新に失敗しました";
         }
         return "";
+    }
+
+    private function _get_sequence_no() {
+        $sql =
+        <<<SQL
+            select	ifnull((max(customer_id) + 1), 1) as customer_id
+            from	partner_customer
+        SQL;
+        $result = DB::select($sql);
+        return $result[0]->customer_id;
     }
 
 }
