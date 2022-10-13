@@ -42,7 +42,7 @@
     </tr>
     <tr>
         <th>E-Mail</th>
-        <td>{{ strip_tags($partner_customer->email_decrypt) }}</td>
+        <td>{{ strip_tags($partner_customer->email) }}</td>
     </tr>
     <tr>
         <th>通知方法</th>

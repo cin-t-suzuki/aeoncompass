@@ -12,8 +12,8 @@
     {{-- エラーメッセージ --}}
     {{-- TODO: 外部ファイルどちらにするか判断 --}}
     {{-- 移植元では、 view2 のものを埋め込んでいた。 --}}
-    @include('ctl.common.message', ['errors' => ["エラー view", "エラー2 view"], 'guides' =>["ガイド view"]])
-    @include('ctl.common.message2', ['errors' => ["エラー view2", "エラー2 view2"], 'guides' =>["ガイド view2"]])
+    {{-- @include('ctl.common.message') --}}
+    @include('ctl.common.message2')
 
     <hr class="contents-margin" />
 
@@ -28,7 +28,7 @@
         {{-- 引数 --}}
         {{-- TODO: なぜ form_params を使っているのか？ --}}
         {{-- <input type="hidden" name="customer_id" value="{{ strip_tags($form_params['customer_id']) }}" /> --}}
-        <input type="hidden" name="customer_id" value="{{ strip_tags($partner_customer->customer_id) }}" />
+        <input type="hidden" name="customer_id" value="{{ strip_tags($customer_id) }}" />
         @foreach ($search_params as $key => $values)
             @if ($key != 'customer_id')
                 <input type="hidden" name="{{ $key }}" value="{{ $value }}" />

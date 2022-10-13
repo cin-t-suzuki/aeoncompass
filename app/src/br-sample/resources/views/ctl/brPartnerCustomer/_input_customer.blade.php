@@ -47,17 +47,17 @@
     </tr>
     <tr>
         <th>E-Mail</th>
-        <td><input type="text" name="partner_customer[email]" SIZE="50" MAXLENGTH="50" value="{{ strip_tags($partner_customer->email_decrypt) }}"></td>
+        <td><input type="text" name="partner_customer[email]" SIZE="50" MAXLENGTH="50" value="{{ strip_tags($partner_customer->email) }}"></td>
     </tr>
     <tr>
         <th>通知方法</th>
         <td>
             <label for="mail_send_1">
-                <input type="radio" id="mail_send_1" name="partner_customer[mail_send]" value="0" {{ ($partner_customer->mail_send ?? 0) === 0 ? 'checked' : '' }} />
+                <input type="radio" id="mail_send_1" name="partner_customer[mail_send]" value="0" {{ (string)($partner_customer->mail_send ?? 0) === '0' ? 'checked' : '' }} />
                 郵送（手動印刷）
             </label>
             <label for="mail_send_0">
-                <input type="radio" id="mail_send_0" name="partner_customer[mail_send]" value="1" {{ $partner_customer->mail_send === 1 ? 'checked' : '' }} />
+                <input type="radio" id="mail_send_0" name="partner_customer[mail_send]" value="1" {{ (string)$partner_customer->mail_send === '1' ? 'checked' : '' }} />
                 メールで通知する
             </label>
         </td>
@@ -66,11 +66,11 @@
         <th>手数料キャンセル対象状態</th>
         <td>
             <label for="cancel_status_0">
-                <input type="radio" id="cancel_status_0" name="partner_customer[cancel_status]" value="0" {{ ($partner_customer->cancel_status ?? 0) === 0 ? 'checked' : '' }} />
+                <input type="radio" id="cancel_status_0" name="partner_customer[cancel_status]" value="0" {{ (string)($partner_customer->cancel_status ?? 0) === '0' ? 'checked' : '' }} />
                 予約のみ（キャンセル料金精算対象外）
             </label>
             <label for="cancel_status_1">
-                <input type="radio" id="cancel_status_1" name="partner_customer[cancel_status]" value="1" {{ $partner_customer->cancel_status === 1 ? 'checked' : '' }} />
+                <input type="radio" id="cancel_status_1" name="partner_customer[cancel_status]" value="1" {{ (string)$partner_customer->cancel_status === '1' ? 'checked' : '' }} />
                 キャンセル含む（キャンセル料金精算対象）
             </label>
         </td>
@@ -79,11 +79,11 @@
         <th>明細書の通知有無</th>
         <td>
             <label for="detail_status_0">
-                <input type="radio" id="detail_status_0" name="partner_customer[detail_status]" value="0" {{ ($partner_customer->detail_status ?? 0) === 0 ? 'checked' : '' }} />
+                <input type="radio" id="detail_status_0" name="partner_customer[detail_status]" value="0" {{ (string)($partner_customer->detail_status ?? 0) === '0' ? 'checked' : '' }} />
                 通知不用
             </label>
             <label for="detail_status_1">
-                <input type="radio" id="detail_status_1" name="partner_customer[detail_status]" value="1" {{ $partner_customer->detail_status === 1 ? 'checked' : '' }} />
+                <input type="radio" id="detail_status_1" name="partner_customer[detail_status]" value="1" {{ (string)$partner_customer->detail_status === '1' ? 'checked' : '' }} />
                 通知必要
             </label>
             <br />※ 精算書確認画面下部にあります「予約明細ダウンロード」からCSVファイルをダウンロードして必要に応じて加工して通知してください。

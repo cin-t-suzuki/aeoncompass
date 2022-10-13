@@ -417,9 +417,9 @@ class PartnerCustomer extends CommonDBModel
         $cipher = new Models_Cipher(config('settings.cipher_key'));
         foreach($result as $key => $value) {
             if (!empty($value->email)) {
-                $result[$key]->email_decrypt = $cipher->decrypt($value->email);
+                $result[$key]->email = $cipher->decrypt($value->email);
             } else {
-                $result[$key]->email_decrypt = null; // TODO: 確認、空文字じゃダメ？
+                $result[$key]->email = null; // TODO: 確認、空文字じゃダメ？
             }
         }
 

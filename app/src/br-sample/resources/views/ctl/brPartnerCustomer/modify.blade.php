@@ -14,9 +14,8 @@
     {{-- エラーメッセージ --}}
     {{-- TODO: 外部ファイルどちらにするか判断 --}}
     {{-- 移植元では、 views のものを埋め込んでいた。(edit では view2 なのに) --}}
-    @include('ctl.common.message', ['errors' => ["エラー view", "エラー2 view"], 'guides' => $guides])
-    @include('ctl.common.message2', ['errors' => ["エラー view2", "エラー2 view2"], 'guides' => $guides])
-
+    {{-- @include('ctl.common.message') --}}
+    @include('ctl.common.message2')
     <hr class="contents-margin" />
 
     {{-- 精算先情報表示 --}}

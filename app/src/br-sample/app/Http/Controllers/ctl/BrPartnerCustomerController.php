@@ -14,10 +14,12 @@ class BrPartnerCustomerController extends _commonController
     {
         $model = new PartnerCustomer();
         $customers = $model->getPartnerCustomers();
+        // TODO: リダイレクトでもよさそう
         return view('ctl.brPartnerCustomer.search', [
             'customers' => $customers,
             'form_params' => [],
             'search_params' => ['hoge' => 'fuga'],
+            'keywords' => '',
         ]);
     }
 
@@ -25,11 +27,14 @@ class BrPartnerCustomerController extends _commonController
     {
         // TODO: 確認 keywords 以外
         $params = $request->only(['keywords', 'partner_customer', 'customer_id', 'customer_off']);
+        if ($request->has('keywords')) {
+            $keywords = $request->input('keywords');
+        } else {
+            $keywords = $request->session()->pull('keywords', '');
+        }
 
         $model = new PartnerCustomer();
-        // TODO: 暫定対処。 search_params を実装していないため、
-        // 編集画面から戻った時に Undefined array key "keywords" エラーになる。
-        $customers = $model->getPartnerCustomers($params['keywords'] ?? '');
+        $customers = $model->getPartnerCustomers($keywords);
 
         // TODO: これは何？（ビューで使われている）
         $search_params = [
@@ -41,9 +46,10 @@ class BrPartnerCustomerController extends _commonController
             'keywords' => $params['keywords'] ?? '', // TODO: 暫定対処 search_params 未実装
         ];
 
+        $request->session()->put('keywords', $keywords);
         return view('ctl.brPartnerCustomer.search', [
             'customers' => $customers,
-            'form_params' => $form_params,
+            'keywords' => $keywords,
             'search_params' => $search_params,
         ]);
     }
@@ -58,9 +64,13 @@ class BrPartnerCustomerController extends _commonController
             'customer_id' => '1',
         ];
 
-        // 編集対象を、 $customer_id をもとに取得
-        $model = new PartnerCustomer();
-        $partner_customer = $model->getPartnerCustomerById($customer_id);
+        if ($request->session()->has('partner_customer')) {
+            $partner_customer = (object)$request->session()->pull('partner_customer');
+        } else {
+            // 編集対象を、 $customer_id をもとに取得
+            $model = new PartnerCustomer();
+            $partner_customer = $model->getPartnerCustomerById($customer_id);
+        }
 
         $mastPref = new MastPref();
         $mastPrefsData = $mastPref->getMastPrefs();
@@ -70,13 +80,14 @@ class BrPartnerCustomerController extends _commonController
             'mast_pref' => $mastPrefsData,
             'search_params' => $search_params,
             'form_params' => $form_params,
+            'customer_id' => $customer_id,
+            'errors' =>  $request->session()->pull('errors', []),
         ]);
     }
 
     public function modify(Request $request)
     {
         $partner_customer = $request->input('partner_customer');
-        // TODO: 更新処理
 
         // 精算月のパラメータ調整
         $partner_customer['billpay_required_month'] = null;
@@ -92,7 +103,9 @@ class BrPartnerCustomerController extends _commonController
 
         if (count($error_list) > 0) {
             $error_list[] = '更新できませんでした。';
-            // TODO: エラー処理、ここでうまいことやって、入力を保持して編集入力画面に返す。
+            // HACK: もっといい方法ありそう？
+            $request->session()->put('partner_customer', $partner_customer);
+            $request->session()->put('errors', $error_list);
             return redirect()->route('brpartnercustomer.edit', ['customer_id' => $partner_customer['customer_id']]);
         }
 
@@ -115,7 +128,9 @@ class BrPartnerCustomerController extends _commonController
         }
 
         if (count($error_list) > 0 || !empty($db_error)) {
-            // TODO: エラー処理、同上（入力を保持して編集入力画面に返す。）
+            // HACK: もっといい方法ありそう？
+            $request->session()->put('partner_customer', $partner_customer);
+            $request->session()->put('errors', $error_list);
             return redirect()->route('brpartnercustomer.edit', ['customer_id' => $partner_customer['customer_id']]);
         }
 
@@ -126,10 +141,11 @@ class BrPartnerCustomerController extends _commonController
         $mastPrefsData = $mastPref->getMastPrefs();
 
         return view('ctl.brPartnerCustomer.modify', [
-            'partner_customer' => $model->getPartnerCustomerById($partner_customer['customer_id']),
-            'mast_pref' => $mastPrefsData,
-            'search_params' => $search_params,
-            'guides' => ['更新が完了いたしました。'],
+            'partner_customer'  => $model->getPartnerCustomerById($partner_customer['customer_id']),
+            'mast_pref'         => $mastPrefsData,
+            'search_params'     => $search_params,
+            'guides'            => ['完了いたしました'],
+            'errors'            => $error_list, // unreachable!
         ]);
     }
 
