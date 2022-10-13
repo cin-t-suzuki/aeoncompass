@@ -17,7 +17,6 @@ class BrPartnerCustomerController extends _commonController
         // TODO: リダイレクトでもよさそう
         return view('ctl.brPartnerCustomer.search', [
             'customers' => $customers,
-            'form_params' => [],
             'search_params' => ['hoge' => 'fuga'],
             'keywords' => '',
         ]);
@@ -25,8 +24,6 @@ class BrPartnerCustomerController extends _commonController
 
     public function search(Request $request)
     {
-        // TODO: 確認 keywords 以外
-        $params = $request->only(['keywords', 'partner_customer', 'customer_id', 'customer_off']);
         if ($request->has('keywords')) {
             $keywords = $request->input('keywords');
         } else {
@@ -42,9 +39,6 @@ class BrPartnerCustomerController extends _commonController
             'key2' => 'item2',
             'customer_id' => 'non_output',
         ];
-        $form_params = [
-            'keywords' => $params['keywords'] ?? '', // TODO: 暫定対処 search_params 未実装
-        ];
 
         $request->session()->put('keywords', $keywords);
         return view('ctl.brPartnerCustomer.search', [
@@ -58,10 +52,6 @@ class BrPartnerCustomerController extends _commonController
     {
         // TODO: 何に使ってる？
         $search_params = [
-        ];
-        // TODO: 何に使ってる？
-        $form_params = [
-            'customer_id' => '1',
         ];
 
         if ($request->session()->has('partner_customer')) {
@@ -79,7 +69,6 @@ class BrPartnerCustomerController extends _commonController
             'partner_customer' => $partner_customer,
             'mast_pref' => $mastPrefsData,
             'search_params' => $search_params,
-            'form_params' => $form_params,
             'customer_id' => $customer_id,
             'errors' =>  $request->session()->pull('errors', []),
         ]);
