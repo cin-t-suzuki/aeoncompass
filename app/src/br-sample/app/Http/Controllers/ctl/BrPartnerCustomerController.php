@@ -17,7 +17,6 @@ class BrPartnerCustomerController extends _commonController
         // TODO: リダイレクトでもよさそう
         return view('ctl.brPartnerCustomer.search', [
             'customers' => $customers,
-            'search_params' => ['hoge' => 'fuga'],
             'keywords' => '',
         ]);
     }
@@ -33,27 +32,15 @@ class BrPartnerCustomerController extends _commonController
         $model = new PartnerCustomer();
         $customers = $model->getPartnerCustomers($keywords);
 
-        // TODO: これは何？（ビューで使われている）
-        $search_params = [
-            'key1' => 'item1',
-            'key2' => 'item2',
-            'customer_id' => 'non_output',
-        ];
-
         $request->session()->put('keywords', $keywords);
         return view('ctl.brPartnerCustomer.search', [
             'customers' => $customers,
             'keywords' => $keywords,
-            'search_params' => $search_params,
         ]);
     }
 
     public function edit(Request $request, $customer_id)
     {
-        // TODO: 何に使ってる？
-        $search_params = [
-        ];
-
         if ($request->session()->has('partner_customer')) {
             $partner_customer = (object)$request->session()->pull('partner_customer');
         } else {
@@ -68,7 +55,6 @@ class BrPartnerCustomerController extends _commonController
         return view('ctl.brPartnerCustomer.edit', [
             'partner_customer' => $partner_customer,
             'mast_pref' => $mastPrefsData,
-            'search_params' => $search_params,
             'customer_id' => $customer_id,
             'errors' =>  $request->session()->pull('errors', []),
         ]);
@@ -123,16 +109,12 @@ class BrPartnerCustomerController extends _commonController
             return redirect()->route('brpartnercustomer.edit', ['customer_id' => $partner_customer['customer_id']]);
         }
 
-        $search_params = [
-        ];
-
         $mastPref = new MastPref();
         $mastPrefsData = $mastPref->getMastPrefs();
 
         return view('ctl.brPartnerCustomer.modify', [
             'partner_customer'  => $model->getPartnerCustomerById($partner_customer['customer_id']),
             'mast_pref'         => $mastPrefsData,
-            'search_params'     => $search_params,
             'guides'            => ['完了いたしました'],
             'errors'            => $error_list, // unreachable!
         ]);

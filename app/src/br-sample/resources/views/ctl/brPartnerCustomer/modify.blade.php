@@ -26,9 +26,6 @@
     {{-- 一覧に戻る --}}
     {{ Form::open(['route' => 'brpartnercustomer.search', 'method' => 'get']) }}
         <small>
-            @foreach ($search_params as $key => $value)
-                <input type="hidden" name="{{ $key }}" value="{{ $value }}" />
-            @endforeach
             <input type="submit" value="精算先請求先一覧へ">
         </small>
     {{ Form::close() }}

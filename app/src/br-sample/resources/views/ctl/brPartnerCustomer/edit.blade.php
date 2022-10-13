@@ -27,11 +27,6 @@
 
         {{-- 引数 --}}
         <input type="hidden" name="customer_id" value="{{ strip_tags($customer_id) }}" />
-        @foreach ($search_params as $key => $values)
-            @if ($key != 'customer_id')
-                <input type="hidden" name="{{ $key }}" value="{{ $value }}" />
-            @endif
-        @endforeach
 
         <input type="submit" value="更新">
 
@@ -42,10 +37,6 @@
     {{-- 一覧へ戻る --}}
     {{ Form::open(['route' => 'brpartnercustomer.search', 'method' => 'get']) }}
         <small>
-            {{-- TODO: CHECK: ここで、検索条件を保持して一覧画面に戻っている。 --}}
-            @foreach ($search_params as $key => $valuse)
-                <input type="hidden" name="{{ $key }}" value="{{ $value }}" />
-            @endforeach
             <input type="submit" value="請求先一覧へ">
         </small>
     {{ Form::close() }}
@@ -55,9 +46,6 @@
     {{-- 精算サイト一覧へ戻る --}}
     {{ Form::open(['route' => 'brpartnersite.search', 'method' => 'post']) }}
         <small>
-            @foreach ($search_params as $key => $valuse)
-                <input type="hidden" name="{{ $key }}" value="{{ $value }}" />
-            @endforeach
             <input type="submit" value="精算サイト一覧へ">
         </small>
     {{ Form::close() }}

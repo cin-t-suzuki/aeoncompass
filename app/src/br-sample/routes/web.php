@@ -132,6 +132,6 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 	// Route::post('/brpartnercustomer/edit', 'BrPartnerCustomerController@edit')->name('brpartnercustomer.edit');
 	Route::post('/brpartnercustomer/modify', 'BrPartnerCustomerController@modify')->name('brpartnercustomer.modify');
 
-	Route::post('/brpartnersite/search', function() {return 'TODO: search'; })->name('brpartnersite.search');
+	Route::post('/brpartnersite/search', function() {return 'TODO: search, session.customer_off の forgot が必要なケースあり（？）'; })->name('brpartnersite.search');
 
 });

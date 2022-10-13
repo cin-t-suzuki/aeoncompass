@@ -29,17 +29,10 @@
 
     <hr class="contents-margin" />
 
-    {{-- TODO: post -> get と書き換えたので、search_params を session に引き上げ次第、a タグに書き換えたい --}}
     {{-- TODO: 新規登録は、メソッドとルーティングを編集から分離する --}}
     {{ Form::open(['route' => ['brpartnercustomer.edit', ['customer_id' => 0]], 'method' => 'get']) }}
         <small>
             <input type="submit" value="新規登録">
-
-            @foreach ($search_params as $key => $value)
-                @if ($key != 'customer_id')
-                    <input type="hidden" name="{{ $key }}" value="{{ $value }}" />
-                @endif
-            @endforeach
         </small>
     {{ Form::close() }}
 </div>
@@ -102,14 +95,9 @@
                 @if (empty($customer->site_cd))
                     対象サイトを設定してください。
                     {{ Form::open(['route' => 'brpartnersite.search', 'method' => 'post']) }}
+                        {{-- TODO: セッションに customer_off が含まれる場合、遷移先で forgot する必要あり(?) --}}
                         <input type="submit" value=" 設定 ">
                         <input type="hidden" name="customer_id" value="{{ $customer->customer_id }}" />
-
-                        @foreach ($search_params as $key => $value)
-                            @if ($key != 'customer_id' && $key != 'customer_off')
-                                <input type="hidden" name="{{ $key }}" value="{{ $value }}" />
-                            @endif
-                        @endforeach
                     {{ Form::close() }}
                 @else
                     @if (!empty($customer->partner_cd))
@@ -117,31 +105,19 @@
                     @elseif (!empty($customer->affiliate_cd))
                         アフィリエイト: {{ $customer->site_nm }}（{{ $customer->affiliate_cd }}）
                     @endif
-                    <br >
+                    <br />
                     @if ($customer->sales_cnt + $customer->stock_cnt > 1)
                         その他サイト {{ $customer->sales_cnt + $customer->stock_cnt - 1 }}件<br />
-              @endif
+                    @endif
                     {{ Form::open(['route' => 'brpartnersite.search', 'method' => 'post']) }}
                         <input type="submit" value=" サイト表示 ">
-                        <input type="hidden" name="customer_id"      value="{{ $customer->customer_id }}" />
-                        @foreach ($search_params as $key => $value)
-                            @if ($key != 'customer_id')
-                                <input type="hidden" name="{{ $key }}" value="{{ $value }}" />
-                            @endif
-                        @endforeach
+                        <input type="hidden" name="customer_id" value="{{ $customer->customer_id }}" />
                     {{ Form::close() }}
                 @endif
             </td>
             <td style="text-align:center;">
-                {{-- TODO: post -> get と書き換えたので、search_params を session に引き上げ次第、a タグに書き換えたい --}}
                 {{ Form::open(['route' => ['brpartnercustomer.edit', ['customer_id' => $customer->customer_id]], 'method' => 'get']) }}
                     <input type="submit" value=" 表示 ">
-                    <input type="hidden" name="customer_id" value="{{ $customer->customer_id }}" />
-                    @foreach ($search_params as $key => $value)
-                        @if ($key != 'customer_id')
-                            <input type="hidden" name="{{ $key }}" value="{{ $value }}" />
-                        @endif
-                    @endforeach
                 {{ Form::close() }}
             </td>
         </tr>
