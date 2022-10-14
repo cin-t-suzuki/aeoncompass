@@ -141,7 +141,7 @@ abstract class CommonDBModel extends Model
 			// 電話番号チェック
 			if($this->colmunArray[$key]->isPhoneNumber()){
 				if (strlen($val) != 0){
-					if(!preg_match( '/^0[0-9]{1,4}-[0-9]{1,4}-[0-9]{3,4}\z/', $val )){
+					if(!preg_match( '/(^0\d{1,4}?-\d{1,4}?-\d{1,4}$|^\d{9,12}$)/', $val )){
 						$rtnErrors[] = $this->colmunArray[$key]->getColumnName() . "は半角数字とハイフンの電話番号を入力してください";
 					}
 				}
