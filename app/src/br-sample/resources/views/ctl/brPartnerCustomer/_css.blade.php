@@ -1,6 +1,6 @@
 {{-- 元ファイル: svn_trunk\public\app\ctl\view2\brpartnercustomer\_css.tpl --}}
 
-{{-- TODO? .blade.php ではなく、.css にして　public/ に配置したほうがよい？ --}}
+{{-- TODO:? .blade.php ではなく、.css にして　public/ に配置したほうがよい？ --}}
 
 <style type="text/css">
     <!-- /* 謎の html コメントアウト 疑わしきは罰せず */

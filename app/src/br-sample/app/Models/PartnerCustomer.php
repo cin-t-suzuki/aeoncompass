@@ -157,6 +157,7 @@ class PartnerCustomer extends CommonDBModel
 
     public function getPartnerCustomers($keywords = '')
     {
+        // HACK: メソッドを適切な長さに分割したい。
 
         // keywords を分割し、単語ごとにフォーマットで検索対象カラムを判定
         $a_keywords = explode(' ', str_replace('　', ' ', $keywords));
