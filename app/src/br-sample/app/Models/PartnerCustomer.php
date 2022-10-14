@@ -7,6 +7,7 @@ use App\Models\common\CommonDBModel;
 use App\Models\common\ValidationColumn;
 use App\Util\Models_Cipher;
 use Illuminate\Support\Facades\DB;
+use stdClass;
 
 class PartnerCustomer extends CommonDBModel
 {
@@ -410,26 +411,7 @@ class PartnerCustomer extends CommonDBModel
 
         if (count($result) < 1) {
             // TODO: error
-            // 暫定的に新規登録扱いとして実装している。ダメ。
-            return (object)[
-                'customer_id' => $this->_get_sequence_no(),
-                'customer_nm' => '',
-                'postal_cd' => '',
-                'pref_id' => '',
-                'address' => '',
-                'tel' => '',
-                'fax' => '',
-                'email' => '',
-                'person_post' => '',
-                'person_nm' => '',
-                'mail_send' => '0',
-                'cancel_status' => '0',
-                'tax_unit' => '',
-                'detail_status' => '0',
-                'billpay_day' => '8',
-                'billpay_required_month' => '000000000000',
-                'billpay_charge_min' => '',
-            ];
+            return new stdClass();
         }
         // HACK: 1件だけでいい。もしくは共通化
         $cipher = new Models_Cipher(config('settings.cipher_key'));
@@ -461,7 +443,7 @@ class PartnerCustomer extends CommonDBModel
         return "";
     }
 
-    private function _get_sequence_no() {
+    public function _get_sequence_no() {
         $sql =
         <<<SQL
             select	ifnull((max(customer_id) + 1), 1) as customer_id

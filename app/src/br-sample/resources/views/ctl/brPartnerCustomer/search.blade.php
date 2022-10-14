@@ -30,7 +30,8 @@
     <hr class="contents-margin" />
 
     {{-- HACK: 新規登録は、メソッドとルーティングを編集から分離する？ --}}
-    {{ Form::open(['route' => ['brpartnercustomer.edit', ['customer_id' => 0]], 'method' => 'get']) }}
+    {{-- HACK: a タグで十分？ --}}
+    {{ Form::open(['route' => 'brpartnercustomer.create', 'method' => 'get']) }}
         <small>
             <input type="submit" value="新規登録">
         </small>

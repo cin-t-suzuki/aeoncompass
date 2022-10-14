@@ -12,6 +12,7 @@ class BrPartnerCustomerController extends _commonController
 {
     public function index(Request $request)
     {
+        $request->session()->forget('keywords');
         return redirect()->route('brpartnercustomer.search');
     }
 
@@ -31,6 +32,47 @@ class BrPartnerCustomerController extends _commonController
             'customers' => $customers,
             'keywords' => $keywords,
         ]);
+    }
+
+    public function create(Request $request)
+    {
+        $model = new PartnerCustomer();
+
+        $customer_id = $model->_get_sequence_no();
+        $partner_customer =  (object)[
+            'customer_id' => $customer_id,
+            'customer_nm' => '',
+            'postal_cd' => '',
+            'pref_id' => '',
+            'address' => '',
+            'tel' => '',
+            'fax' => '',
+            'email' => '',
+            'person_post' => '',
+            'person_nm' => '',
+            'mail_send' => '0',
+            'cancel_status' => '0',
+            'tax_unit' => '',
+            'detail_status' => '0',
+            'billpay_day' => '8',
+            'billpay_required_month' => '000000000000',
+            'billpay_charge_min' => '',
+        ];
+
+        $mastPref = new MastPref();
+        $mastPrefsData = $mastPref->getMastPrefs();
+
+        return view('ctl.brPartnerCustomer.create', [
+            'partner_customer'  => $partner_customer,
+            'mast_pref'         => $mastPrefsData,
+            'customer_id'       => $customer_id,
+            'errors'            =>  $request->session()->pull('errors', []),
+        ]);
+    }
+
+    public function register(Request $request)
+    {
+
     }
 
     public function edit(Request $request, $customer_id)
