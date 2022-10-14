@@ -125,4 +125,7 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 		Route::controller(BrpartnerController::class)->prefix("brpartner")->group(function(){
 			Route::get('/searchlist', 'searchlist')->name('ctl.brpartner.searchlist'); //表示
 		});		
+		Route::controller(BrpartnerController::class)->prefix("brpartner")->group(function(){
+			Route::get('/partnerconf', 'partnerconf')->name('ctl.brpartner.partnerconf'); //表示
+		});	
 });
