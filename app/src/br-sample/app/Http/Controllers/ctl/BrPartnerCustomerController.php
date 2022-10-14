@@ -117,6 +117,7 @@ class BrPartnerCustomerController extends _commonController
 
         if (count($error_list) > 0 || !empty($db_error)) {
             // HACK: もっといい方法ありそう？ withInput, withErrors
+            $partner_customer['mail'] = $cipher->decrypt($partner_customer['email']); // HACK: mail <=> mail_decrypt の扱いを整理したい。
             $request->session()->put('partner_customer', $partner_customer);
             $request->session()->put('errors', $error_list);
             return redirect()->route('brpartnercustomer.create');
@@ -127,7 +128,7 @@ class BrPartnerCustomerController extends _commonController
 
         // 登録完了と更新完了は共通 HACK: 共通であることがわかる命名
         return view('ctl.brPartnerCustomer.modify', [
-            'partner_customer' => $model->getPartnerCustomerById($partner_customer['customer_id']),
+            'partner_customer' => $model->getPartnerCustomersById($partner_customer['customer_id'])[0],
             'mast_pref'        => $mastPrefsData,
             'guides'           => ['完了いたしました'],
             'errors'           => $error_list, // unreachable!
@@ -139,12 +140,16 @@ class BrPartnerCustomerController extends _commonController
     {
         if ($request->session()->has('partner_customer')) {
             $partner_customer = (object)$request->session()->pull('partner_customer');
-            $cipher = new Models_Cipher(config('settings.cipher_key'));
-            $partner_customer->email = $cipher->decrypt($partner_customer->email);
         } else {
             // 編集対象を、 $customer_id をもとに取得
             $model = new PartnerCustomer();
-            $partner_customer = $model->getPartnerCustomerById($customer_id);
+            $partner_customers = $model->getPartnerCustomersById($customer_id);
+            if (count($partner_customers) > 0) {
+                $partner_customer = $partner_customers[0];
+            } else {
+                $request->session()->put('errors', ['対象となる精算先は見つかりませんでした']);
+                return redirect()->route('brpartnercustomer.create');
+            }
         }
 
         $mastPref = new MastPref();
@@ -202,6 +207,7 @@ class BrPartnerCustomerController extends _commonController
 
         if (count($error_list) > 0 || !empty($db_error)) {
             // HACK: もっといい方法ありそう？
+            $partner_customer['mail'] = $cipher->decrypt($partner_customer['email']); // HACK: mail <=> mail_decrypt の扱いを整理したい。
             $request->session()->put('partner_customer', $partner_customer);
             $request->session()->put('errors', $error_list);
             return redirect()->route('brpartnercustomer.edit', ['customer_id' => $partner_customer['customer_id']]);
@@ -211,7 +217,7 @@ class BrPartnerCustomerController extends _commonController
         $mastPrefsData = $mastPref->getMastPrefs();
 
         return view('ctl.brPartnerCustomer.modify', [
-            'partner_customer'  => $model->getPartnerCustomerById($partner_customer['customer_id']),
+            'partner_customer'  => $model->getPartnerCustomersById($partner_customer['customer_id'])[0],
             'mast_pref'         => $mastPrefsData,
             'guides'            => ['完了いたしました'],
             'errors'            => $error_list, // unreachable!

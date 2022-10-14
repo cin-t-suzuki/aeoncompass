@@ -381,7 +381,7 @@ class PartnerCustomer extends CommonDBModel
         return $result;
     }
 
-    public function getPartnerCustomerById($customer_id)
+    public function getPartnerCustomersById($customer_id)
     {
         // HACK: SQL 直書きはどうにかしたい
         $sql = <<<SQL
@@ -410,11 +410,6 @@ class PartnerCustomer extends CommonDBModel
         SQL;
         $result = DB::select($sql, ['customer_id' => $customer_id]);
 
-        if (count($result) < 1) {
-            // TODO: error
-            return new stdClass();
-        }
-        // HACK: 1件だけでいい。もしくは共通化
         $cipher = new Models_Cipher(config('settings.cipher_key'));
         foreach($result as $key => $value) {
             if (!empty($value->email)) {
@@ -424,7 +419,7 @@ class PartnerCustomer extends CommonDBModel
             }
         }
 
-        return $result[0];
+        return $result;
     }
 
     /**
