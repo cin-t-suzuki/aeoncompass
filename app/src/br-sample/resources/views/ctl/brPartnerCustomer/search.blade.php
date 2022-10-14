@@ -82,7 +82,7 @@
                 @elseif ($customer->billpay_required_month == '111111111111')
                     必須月：毎月
                 @else
-                    @for ($m = 1; $m <= 12; $m++) {{-- TODO: 移植元は 4月はじまり、合わせたほうがよい？ --}}
+                    @for ($m = 1; $m <= 12; $m++)
                         @if ($customer->billpay_required_month[$m - 1] == '1')
                             {{ $m . "月 " }}
                         @endif

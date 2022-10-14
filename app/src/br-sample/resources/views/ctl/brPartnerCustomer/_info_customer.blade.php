@@ -85,12 +85,18 @@
     <tr>
         <th>精算必須月</th>
         <td nowrap>
-            {{-- TODO: 相談、一覧画面と合わせて、「毎月」「指定なし」とやったほうがよい？ --}}
-            @for ($m = 1; $m <= 12; $m++) {{-- TODO: 移植元は 4月はじまり、合わせたほうがよい？ --}}
-                @if ($partner_customer->billpay_required_month[$m - 1] === '1')
-                    {{ $m . "月 " }}
-                @endif
-            @endfor
+            {{-- MEMO: 一覧画面に合わせて、移植元から変更 --}}
+            @if ($partner_customer->billpay_required_month == '000000000000')
+                指定なし
+            @elseif ($partner_customer->billpay_required_month == '111111111111')
+                毎月
+            @else
+                @for ($m = 1; $m <= 12; $m++)
+                    @if ($partner_customer->billpay_required_month[$m - 1] === '1')
+                        {{ $m . "月 " }}
+                    @endif
+                @endfor
+            @endif
         </td>
     </tr>
     <tr>

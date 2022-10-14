@@ -104,7 +104,6 @@
     <tr>
         <th>精算必須月</th>
         <td nowrap>
-            {{-- TODO: 移植元は 4月はじまり、必要？ --}}
             @for ($m = 1; $m <= 12; $m++)
                 <label for="billpay_month{{ sprintf("%02d", $m) }}">
                     <input type="checkbox" name="partner_customer[billpay_month{{ sprintf("%02d", $m) }}]" id="billpay_month{{ sprintf("%02d", $m) }}" value="1" {{ $partner_customer->billpay_required_month[$m - 1] == '1' ? 'checked' : '' }}>
