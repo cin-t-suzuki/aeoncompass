@@ -193,7 +193,7 @@ class PartnerCustomer extends CommonDBModel
         $s_partner_cd   = '';
 
         if (!empty($aa_conditions['customer_id'])) {
-			$s_customer_id = 'and partner_customer.customer_id = :customer_id';
+            $s_customer_id = 'and partner_customer.customer_id = :customer_id';
             $a_conditions['customer_id']    = $aa_conditions['customer_id'];
         }
 
@@ -426,7 +426,8 @@ class PartnerCustomer extends CommonDBModel
         return $result[0];
     }
 
-    /**  キーで更新
+    /**
+     * キーで更新
      *
      * @param [type] $con
      * @param [type] $data
@@ -439,6 +440,17 @@ class PartnerCustomer extends CommonDBModel
                     ->update($data);
         if (!$result) {
             return "更新に失敗しました";
+        }
+        return "";
+    }
+
+    /**
+     * 新規登録(1件)
+     */
+    public function singleInsert($con, $data){
+        $result = $con->table($this->table)->insert($data);
+        if(!$result){
+            return "登録に失敗しました";
         }
         return "";
     }

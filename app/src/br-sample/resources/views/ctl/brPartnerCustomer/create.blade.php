@@ -25,9 +25,6 @@
 
         <hr class="contents-margin" />
 
-        {{-- 引数 --}}
-        <input type="hidden" name="customer_id" value="{{ strip_tags($customer_id) }}" />
-
         <input type="submit" value="登録">
 
     {{ Form::close() }}
