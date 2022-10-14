@@ -12,13 +12,7 @@ class BrPartnerCustomerController extends _commonController
 {
     public function index(Request $request)
     {
-        $model = new PartnerCustomer();
-        $customers = $model->getPartnerCustomers();
-        // TODO: リダイレクトでもよさそう
-        return view('ctl.brPartnerCustomer.search', [
-            'customers' => $customers,
-            'keywords' => '',
-        ]);
+        return redirect()->route('brpartnercustomer.search');
     }
 
     public function search(Request $request)
