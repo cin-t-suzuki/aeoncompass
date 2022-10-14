@@ -72,7 +72,7 @@ class PartnerCustomer extends CommonDBModel
         $col_billpay_charge_min->setColumnName($this->COL_BILLPAY_CHARGE_MIN, '精算最低金額');
 
         // バリデーション追加
-        // HACK: メソッドチェーンにする。
+        // HACK: メソッドチェーンにしたほうが行数は減らせる。
         // 支払先ID
         $col_customer_id->require(); // 必須入力チェック
         $col_customer_id->length(0, 10); // 長さチェック
@@ -183,7 +183,7 @@ class PartnerCustomer extends CommonDBModel
         }
 
         // 検索対象カラム => 検索値 から、where 句に追加する条件と プレースホルダに代入する配列を生成
-        $a_conditions = []; // SQL へのプレースホルダに代入するもの HACK: naming
+        $a_conditions = []; // SQL へのプレースホルダに代入する値 HACK: naming
 
         $s_customer_nm  = '';
         $s_site_cd      = '';

@@ -29,7 +29,6 @@
 
     <hr class="contents-margin" />
 
-    {{-- HACK: 新規登録は、メソッドとルーティングを編集から分離する？ --}}
     {{-- HACK: a タグで十分？ --}}
     {{ Form::open(['route' => 'brpartnercustomer.create', 'method' => 'get']) }}
         <small>

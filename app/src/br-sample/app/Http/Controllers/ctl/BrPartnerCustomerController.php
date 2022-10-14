@@ -75,8 +75,10 @@ class BrPartnerCustomerController extends _commonController
     {
         $partner_customer = $request->input('partner_customer');
 
-        // 精算月のパラメータ調整
-        // HACK: 共通化？
+        // 精算必須月のパラメータ調整
+        // billpay_month01 ~ 12 までを、'0'と'1'からなる長さ12の文字列に変換
+        // i 月が必須月として指定されていたら、 i 番目の文字が '1'
+        // HACK: modify のものと共通化？
         $partner_customer['billpay_required_month'] = null;
         for($m = 1; $m <= 12; $m++) {
             $field_nm = 'billpay_month' . sprintf("%02d", $m);
@@ -91,7 +93,7 @@ class BrPartnerCustomerController extends _commonController
 
         if (count($error_list) > 0) {
             $error_list[] = '登録できませんでした。';
-            // HACK: もっといい方法ありそう？ withInput, withErrors
+            // HACK: もっと laravel ぽい書き方がありそう…？ withInput, withErrors
             $request->session()->put('partner_customer', $partner_customer);
             $request->session()->put('errors', $error_list);
             return redirect()->route('brpartnercustomer.create');
@@ -116,7 +118,7 @@ class BrPartnerCustomerController extends _commonController
         }
 
         if (count($error_list) > 0 || !empty($db_error)) {
-            // HACK: もっといい方法ありそう？ withInput, withErrors
+            // HACK: もっと laravel ぽい書き方がありそう…？ withInput, withErrors
             $partner_customer['mail'] = $cipher->decrypt($partner_customer['email']); // HACK: mail <=> mail_decrypt の扱いを整理したい。
             $request->session()->put('partner_customer', $partner_customer);
             $request->session()->put('errors', $error_list);
@@ -126,7 +128,7 @@ class BrPartnerCustomerController extends _commonController
         $mastPref = new MastPref();
         $mastPrefsData = $mastPref->getMastPrefs();
 
-        // 登録完了と更新完了は共通 HACK: 共通であることがわかる命名
+        // 登録完了と更新完了のビューは共通で使える HACK: 共通であることがわかる命名
         return view('ctl.brPartnerCustomer.modify', [
             'partner_customer' => $model->getPartnerCustomersById($partner_customer['customer_id'])[0],
             'mast_pref'        => $mastPrefsData,
@@ -181,7 +183,7 @@ class BrPartnerCustomerController extends _commonController
 
         if (count($error_list) > 0) {
             $error_list[] = '更新できませんでした。';
-            // HACK: もっといい方法ありそう？
+            // HACK: もっと laravel ぽい書き方がありそう…？
             $request->session()->put('partner_customer', $partner_customer);
             $request->session()->put('errors', $error_list);
             return redirect()->route('brpartnercustomer.edit', ['customer_id' => $partner_customer['customer_id']]);
@@ -206,7 +208,7 @@ class BrPartnerCustomerController extends _commonController
         }
 
         if (count($error_list) > 0 || !empty($db_error)) {
-            // HACK: もっといい方法ありそう？
+            // HACK: もっと laravel ぽい書き方がありそう…？
             $partner_customer['mail'] = $cipher->decrypt($partner_customer['email']); // HACK: mail <=> mail_decrypt の扱いを整理したい。
             $request->session()->put('partner_customer', $partner_customer);
             $request->session()->put('errors', $error_list);
