@@ -107,7 +107,6 @@ class PartnerCustomer extends CommonDBModel
 
         // チャネル合算支払先
         $col_email->notHalfKana(); // 半角カナチェック
-        // TODO: メールアドレスのバリデーションを実装
         $col_email->emails(); // メールアドレスチェック
         $col_email->length(0, 200); // 長さチェック
 
@@ -369,11 +368,11 @@ class PartnerCustomer extends CommonDBModel
 
         // メールアドレスを復号
         $cipher = new Models_Cipher(config('settings.cipher_key'));
-        foreach($result as $key => $value) {
+        foreach ($result as $key => $value) {
             if (!empty($value->email)) {
                 $result[$key]->email_decrypt = $cipher->decrypt($value->email);
             } else {
-                $result[$key]->email_decrypt = null; // TODO: 確認、空文字じゃダメ？
+                $result[$key]->email_decrypt = '';
             }
         }
 
@@ -411,7 +410,7 @@ class PartnerCustomer extends CommonDBModel
 
         if (count($result) < 1) {
             // TODO: error
-            // 暫定的に新規登録扱いとして実装している。
+            // 暫定的に新規登録扱いとして実装している。ダメ。
             return (object)[
                 'customer_id' => $this->_get_sequence_no(),
                 'customer_nm' => '',
@@ -427,18 +426,18 @@ class PartnerCustomer extends CommonDBModel
                 'cancel_status' => '0',
                 'tax_unit' => '',
                 'detail_status' => '0',
-                'billpay_day' => '',
+                'billpay_day' => '8',
                 'billpay_required_month' => '000000000000',
                 'billpay_charge_min' => '',
             ];
         }
-        // TODO: 1件だけでいい。もしくは共通化
+        // HACK: 1件だけでいい。もしくは共通化
         $cipher = new Models_Cipher(config('settings.cipher_key'));
         foreach($result as $key => $value) {
             if (!empty($value->email)) {
                 $result[$key]->email = $cipher->decrypt($value->email);
             } else {
-                $result[$key]->email = null; // TODO: 確認、空文字じゃダメ？
+                $result[$key]->email = '';
             }
         }
 

@@ -29,7 +29,7 @@
 
     <hr class="contents-margin" />
 
-    {{-- TODO: 新規登録は、メソッドとルーティングを編集から分離する --}}
+    {{-- HACK: 新規登録は、メソッドとルーティングを編集から分離する？ --}}
     {{ Form::open(['route' => ['brpartnercustomer.edit', ['customer_id' => 0]], 'method' => 'get']) }}
         <small>
             <input type="submit" value="新規登録">
