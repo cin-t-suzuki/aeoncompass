@@ -37,6 +37,8 @@ class BrPartnerCustomerController extends _commonController
     {
         if ($request->session()->has('partner_customer')) {
             $partner_customer = (object)$request->session()->pull('partner_customer');
+            $cipher = new Models_Cipher(config('settings.cipher_key'));
+            $partner_customer->email = $cipher->decrypt($partner_customer->email);
         } else {
             // 編集対象を、 $customer_id をもとに取得
             $model = new PartnerCustomer();
