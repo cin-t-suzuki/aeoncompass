@@ -26,9 +26,9 @@
         <form action="{$v->env.source_path}{$v->env.module}/brpartnersite/edit/" method="POST">
             <small>
                 <input type="submit" value="対象サイトの新規登録">
-                {foreach from=$v->assign->search_params item=value key=key}
+                {{-- {foreach from=$v->assign->search_params (TODO: ) item=value key=key}
                     <input type="hidden" name="{$key}" value="{$value}" />
-                {/foreach}
+                {/foreach} --}}
             </small>
         </form>
 
@@ -87,11 +87,11 @@
                         <form action="{$v->env.path_base_module}/brpartnercustomer/edit/" method="post">
                             <input type="submit" value=" 精算先表示 ">
                             <input type="hidden" name="customer_id"    value="{$site.sales_customer_id}" />
-                            {foreach from=$v->assign->search_params item=value key=key}
+                            {{-- {foreach from=$v->assign->search_params (TODO: ) item=value key=key}
                                 {if ($key!= 'customer_id')}
                                     <input type="hidden" name="{$key}" value="{$value}" />
                                 {/if}
-                            {/foreach}
+                            {/foreach} --}}
                         </form>
                     {/if}
                     {if !is_empty($site.sales_customer_id)}
@@ -102,11 +102,11 @@
                         <form action="{$v->env.path_base_module}/brpartnercustomer/edit/" method="post">
                             <input type="submit" value=" 精算先表示 ">
                             <input type="hidden" name="customer_id"    value="{$site.sales_customer_id}" />
-                            {foreach from=$v->assign->search_params item=value key=key}
+                            {{-- {foreach from=$v->assign->search_params (TODO: ) item=value key=key}
                                 {if ($key!= 'customer_id')}
                                     <input type="hidden" name="{$key}" value="{$value}" />
                                 {/if}
-                            {/foreach}
+                            {/foreach} --}}
                         </form>
                     {/if}
                 </td>
@@ -114,9 +114,9 @@
                     <form action="{$v->env.path_base_module}/brpartnersite/edit/" method="post">
                         <input type="submit" value=" 表示・編集 ">
                         <input type="hidden" name="site_cd" value="{$site.site_cd}" />
-                        {foreach from=$v->assign->search_params item=value key=key}
+                        {{-- {foreach from=$v->assign->search_params (TODO: ) item=value key=key}
                             <input type="hidden" name="{$key}" value="{$value}" />
-                        {/foreach}
+                        {/foreach} --}}
                     </form>
                 </td>
             </tr>
@@ -127,9 +127,9 @@
     {{-- 請求先一覧へ --}}
     <form action="{$v->env.source_path}{$v->env.module}/brpartnercustomer/search/" method="POST">
         <small>
-            {foreach from=$v->assign->search_params item=value key=key}
+            {{-- {foreach from=$v->assign->search_params (TODO: ) item=value key=key}
                 <input type="hidden" name="{$key}" value="{$value}" />
-            {/foreach}
+            {/foreach} --}}
 
             <input type="submit" value="請求先一覧へ">
         </small>
