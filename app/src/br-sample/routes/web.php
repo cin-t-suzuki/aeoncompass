@@ -123,5 +123,5 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 
 
 		Route::get('/brpartnersite/', 'BrPartnerSiteController@index');
-		Route::get('/brpartnersite', 'BrPartnerSiteController@search')->name('ctl.brPartnerSite.search');
+		Route::get('/brpartnersite/search', 'BrPartnerSiteController@search')->name('ctl.brPartnerSite.search');
 	});

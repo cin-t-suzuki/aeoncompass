@@ -22,7 +22,9 @@ class BrPartnerSiteController extends _commonController
      */
     public function search(Request $request)
     {
-        $sites = PartnerSite::all();
+        // $sites = PartnerSite::all();
+        $model = new PartnerSite();
+        $sites = $model->getPartnerSiteByKeywords();
         return view('ctl.brPartnerSite.search', ['sites' => $sites]);
     }
 }

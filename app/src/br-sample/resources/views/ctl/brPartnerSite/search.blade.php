@@ -22,6 +22,7 @@
         <hr class="contents-margin" />
 
         {{-- 新規登録 --}}
+        {{-- TODO: Form Facades --}}
         <form action="{$v->env.source_path}{$v->env.module}/brpartnersite/edit/" method="POST">
             <small>
                 <input type="submit" value="対象サイトの新規登録">
@@ -45,74 +46,88 @@
         </tr>
         @foreach ($sites as $site)
             <tr>
-                <td>{$site.site_cd}</td>
+                <td>{{ $site->site_cd }}</td>
                 <td>
-                    {$site.site_nm}
-                    {if !is_empty($site.person_post)}
-                        <br />{$site.person_post}
-                    {/if}
-                    {if !is_empty($site.person_nm)}
-                        <br />{$site.person_nm} 様
-                    {/if}
+                    {{ $site->site_nm }}
+                    @if (!empty($site->person_post))
+                        <br />{{ $site->person_post }}
+                    @endif
+                    @if (!empty($site->person_nm))
+                        <br />{{ $site->person_nm }} 様
+                    @endif
                 </td>
                 <td>
                     通知方法：
-                    {if ($site.mail_send==1)}
+                    @if ($site->mail_send == 1)
                         メールで通知する
-                    {else}
+                    @else
                         通知しない
-                    {/if}<br />
-                    email:{$site.email_decrypt|replace:',':'<br />'}<br />
+                    @endif
+                    <br />
+                    email:
+                    {{-- TODO: メール復号したら表示する --}}
+                    {{-- @foreach (explode(',', $customer->email_decrypt) as $email)
+                        {{ $email }}<br />
+                    @endforeach --}}
                 </td>
                 <td>
-                    {if !is_empty($site.partner_cd)}
-                        パートナー<br />{$site.partner_nm}（{$site.partner_cd}）
-                    {/if}
-                    {if !is_empty($site.affiliate_cd)}
-                        アフィリエイト<br />{$site.affiliate_nm}（{$site.affiliate_cd}）
-                    {/if}
+                    @if (!empty($site->partner_cd))
+                        パートナー<br />
+                        {{ $site->partner_nm }}
+                        （{{ $site->partner_cd }}）
+                    @endif
+                    @if (!empty($site->affiliate_cd))
+                        アフィリエイト<br />
+                        {{ $site->affiliate_nm }}
+                        （{{ $site->affiliate_cd }}）
+                    @endif
                 </td>
                 <td>
-                    {if is_empty($site.sales_customer_id) and is_empty($site.stock_customer_id)}
-                        {if !is_empty($site.partner_cd)}
+                    @if (empty($site->sales_customer_id) and empty($site->stock_customer_id))
+                        @if (!empty($site->partner_cd))
                             料率タイプを設定してください。
-                        {/if}
-                        {if !is_empty($site.affiliate_cd)}
+                        @endif
+                        @if (!empty($site->affiliate_cd))
                             指定なし
-                        {/if}
-                    {/if}
-                    {if !is_empty($site.stock_customer_id)}
-                        {$site.stock_customer_nm}（{$site.stock_customer_id}）
+                        @endif
+                    @endif
+                    @if (!empty($site->stock_customer_id))
+                        {{ $site->stock_customer_nm }}
+                        （{{ $site->stock_customer_id }}）
+                        {{-- TODO: Form Facades --}}
                         <form action="{$v->env.path_base_module}/brpartnercustomer/edit/" method="post">
                             <input type="submit" value=" 精算先表示 ">
-                            <input type="hidden" name="customer_id"    value="{$site.sales_customer_id}" />
+                            <input type="hidden" name="customer_id" value="{{ $site->sales_customer_id }}" />
                             {{-- {foreach from=$v->assign->search_params (TODO: ) item=value key=key}
                                 {if ($key!= 'customer_id')}
                                     <input type="hidden" name="{$key}" value="{$value}" />
                                 {/if}
                             {/foreach} --}}
                         </form>
-                    {/if}
-                    {if !is_empty($site.sales_customer_id)}
-                        {if !is_empty($site.stock_customer_id)}
+                    @endif
+                    @if (!empty($site->sales_customer_id))
+                        @if (!empty($site->stock_customer_id))
                             <hr />
-                        {/if}
-                        {$site.sales_customer_nm}（{$site.sales_customer_id}）
+                        @endif
+                        {{ $site->sales_customer_nm }}
+                        （{{ $site->sales_customer_id }}）
+                        {{-- TODO: Form Facades --}}
                         <form action="{$v->env.path_base_module}/brpartnercustomer/edit/" method="post">
                             <input type="submit" value=" 精算先表示 ">
-                            <input type="hidden" name="customer_id"    value="{$site.sales_customer_id}" />
+                            <input type="hidden" name="customer_id" value="{{ $site->sales_customer_id }}" />
                             {{-- {foreach from=$v->assign->search_params (TODO: ) item=value key=key}
                                 {if ($key!= 'customer_id')}
                                     <input type="hidden" name="{$key}" value="{$value}" />
                                 {/if}
                             {/foreach} --}}
                         </form>
-                    {/if}
+                    @endif
                 </td>
                 <td style="text-align:center;">
+                    {{-- TODO: Form Facades --}}
                     <form action="{$v->env.path_base_module}/brpartnersite/edit/" method="post">
                         <input type="submit" value=" 表示・編集 ">
-                        <input type="hidden" name="site_cd" value="{$site.site_cd}" />
+                        <input type="hidden" name="site_cd" value="{{ $site->site_cd }}" />
                         {{-- {foreach from=$v->assign->search_params (TODO: ) item=value key=key}
                             <input type="hidden" name="{$key}" value="{$value}" />
                         {/foreach} --}}
@@ -124,6 +139,7 @@
     <hr class="contents-margin" />
 
     {{-- 請求先一覧へ --}}
+    {{-- TODO: Form Facades --}}
     <form action="{$v->env.source_path}{$v->env.module}/brpartnercustomer/search/" method="POST">
         <small>
             {{-- {foreach from=$v->assign->search_params (TODO: ) item=value key=key}

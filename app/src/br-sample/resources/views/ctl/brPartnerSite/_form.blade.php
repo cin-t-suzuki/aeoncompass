@@ -1,22 +1,35 @@
 {{-- 移植元: svn_trunk\public\app\ctl\view2\brpartnersite\_form.tpl --}}
-<form action="{$v->env.path_base_module}/brpartnersite/search/" method="post">
+
+{{-- TODO: Form Facades --}}
+<form action="/ctl/brpartnersite/search/" method="get">
     <p>
+        {{-- TODO: セッションなどで保持してコントローラから渡す。 --}}
+        @php
+            $form_params = (object)[
+                'customer_id' => '1',
+                'customer_off' => '1',
+            ];
+            $customer = (object)[
+                'customer_nm' => '精算先名',
+            ];
+        @endphp
         <table class="br-detail-list">
-            {if !is_empty($v->assign->form_params.customer_id)}
+            @if (!empty($form_params->customer_id))
                 <tr>
                     <th>精算先</th>
                     <td>
-                        {$v->assign->customer.customer_nm}（{$v->assign->form_params.customer_id}）
+                        {{ $customer->customer_nm }}（{{ $form_params->customer_id }}）
                         <br />
-                        <input type="checkbox" name="customer_off" value="1" {if ($v->assign->form_params.customer_off)}checked="checked"{/if} /> 精算先を検索条件から外す
-                        <input type="hidden" name="customer_id" value="{$v->helper->form->strip_tags($v->assign->form_params.customer_id)}" />
+                        <input type="checkbox" name="customer_off" value="1" {{ $form_params->customer_off ? 'checked="checked"' : '' }} /> 精算先を検索条件から外す
+                        <input type="hidden" name="customer_id" value="{{ strip_tags($form_params->customer_id) }}" />
                     </td>
                 </tr>
-            {/if}
+            @endif
             <tr>
                 <th>キーワード</th>
                 <td>
-                    <input type="text" name="keywords" size="50" maxlength="20" value="{$v->helper->form->strip_tags($v->assign->form_params.keywords)}" />
+                    {{-- TODO: $keyword、 null 合体演算子を外す --}}
+                    <input type="text" name="keywords" size="50" maxlength="20" value="{{ strip_tags($keywords ?? '') }}" />
                     <br /><a href="" onclick="helpForm(); return false;">キーワードのヘルプ</a>
                 </td>
             </tr>
