@@ -3,13 +3,13 @@
 
 @section('title', 'パートナー精算サイト一覧')
 
-{{-- css --}}
-{{-- TODO: --}}
-{include file='./_css.tpl'}
+@section('headScript')
+    @include('ctl.brPartnerSite._css')
+@endsection
 
-{{-- js --}}
-{{-- TODO: --}}
-{include file='./_js.tpl'}
+@section('footerScript')
+    @include('ctl.brPartnerSite._js')
+@endsection
 
 @section('content')
     <hr class="contents-margin" />
