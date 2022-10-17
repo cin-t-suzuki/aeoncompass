@@ -21,6 +21,6 @@ class BrPartnerSiteController extends _commonController
      */
     public function search(Request $request)
     {
-        return 'hello search controller';
+        return view('ctl.brPartnerSite.search');
     }
 }
