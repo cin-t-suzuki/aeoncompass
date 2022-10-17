@@ -17,8 +17,6 @@
     <div style="text-align:left;">
 
         {{-- 検索フォーム --}}
-        {{-- TODO: --}}
-        {{-- {include file='./_form.tpl'} --}}
         @include('ctl.brPartnerSite._form')
 
         <hr class="contents-margin" />

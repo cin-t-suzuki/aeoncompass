@@ -10,6 +10,7 @@ function helpForm() {
     f.style.display = 'none';
   }
 }
+// TODO: addEventListener
 //-->
 // ↑ 意味があるのか不明なコメントアウト (js 内では効果なさそう)
 </script>
