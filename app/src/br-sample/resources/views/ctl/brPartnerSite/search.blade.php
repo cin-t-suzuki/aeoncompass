@@ -1,15 +1,23 @@
-{{-- css --}}
-{include file='./_css.tpl'}
-{{-- js --}}
-{include file='./_js.tpl'}
-{{-- 提携先管理ヘッダー --}}
-{include file='../_common/_br_header2.tpl' title="パートナー精算サイト一覧"}
+{{-- 提携先管理ヘッダー・フッター --}}
+@extends('ctl.common.basekarioki')
 
+@section('title', 'パートナー精算サイト一覧')
+
+{{-- css --}}
+{{-- TODO: --}}
+{include file='./_css.tpl'}
+
+{{-- js --}}
+{{-- TODO: --}}
+{include file='./_js.tpl'}
+
+@section('content')
     <hr class="contents-margin" />
 
     <div style="text-align:left;">
 
         {{-- 検索フォーム --}}
+        {{-- TODO: --}}
         {include file='./_form.tpl'}
 
         <hr class="contents-margin" />
@@ -129,6 +137,4 @@
 
     <hr class="contents-margin" />
 
-{{-- 提携先管理フッター --}}
-{include file='../_common/_br_footer.tpl'}
-{{-- /提携先管理フッター --}}
+@endsection

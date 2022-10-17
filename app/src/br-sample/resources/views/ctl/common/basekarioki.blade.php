@@ -33,8 +33,8 @@
         <title>
             STREAM社内管理 @yield('title')
         </title>
-        <link rel="stylesheet" href="{{ asset('css/style_base.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/style_br.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/style_base_karioki.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/style_br_karioki.css') }}">
         @yield('headScript')
         {{-- Googleアナリティクス --}}
             {{-- TODO: {{ include file=$v->env['module_root']|cat:'/views/_common/_google_analytics.tpl' }} --}}
@@ -42,7 +42,7 @@
     </head>
     <body>
         {{-- 環境表示 --}}
-        @include('ctl.common._env_info')
+        {{-- @include('ctl.common._env_info') --}}
         <div class="wrap{{ $v->config->environment->status }}">
             {{-- パートナー管理ヘッダー --}}
             <div class="header-br">
