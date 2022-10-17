@@ -43,7 +43,7 @@
             <th>精算先</th>
             <th></th>
         </tr>
-        { foreach from=$v->assign->sites item=site name=sites}
+        @foreach ($sites as $site)
             <tr>
                 <td>{$site.site_cd}</td>
                 <td>
@@ -119,7 +119,7 @@
                     </form>
                 </td>
             </tr>
-        { /foreach}
+        @endforeach
     </table>
     <hr class="contents-margin" />
 
