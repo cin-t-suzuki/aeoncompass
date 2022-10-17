@@ -1,3 +1,4 @@
+{{-- 移植元: svn_trunk\public\app\ctl\view2\brpartnersite\_form.tpl --}}
 <form action="{$v->env.path_base_module}/brpartnersite/search/" method="post">
 
     <p>
