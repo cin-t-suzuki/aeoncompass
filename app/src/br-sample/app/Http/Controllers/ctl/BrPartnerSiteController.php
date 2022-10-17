@@ -11,7 +11,16 @@ class BrPartnerSiteController extends _commonController
     /**
      * TODO: phpdoc
      */
-    public function index(Request $request) {
-        return 'hello controller';
+    public function index(Request $request)
+    {
+        return redirect()->route('ctl.brPartnerSite.search');
+    }
+
+    /**
+     * TODO: phpdoc
+     */
+    public function search(Request $request)
+    {
+        return 'hello search controller';
     }
 }
