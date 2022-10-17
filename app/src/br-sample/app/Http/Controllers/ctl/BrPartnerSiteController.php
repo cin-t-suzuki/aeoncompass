@@ -1,0 +1,17 @@
+<?php
+
+namespace App\Http\Controllers\ctl;
+
+use App\Http\Controllers\ctl\_commonController;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Controller as BaseController;
+
+class BrPartnerSiteController extends _commonController
+{
+    /**
+     * TODO: phpdoc
+     */
+    public function index(Request $request) {
+        return 'hello controller';
+    }
+}
