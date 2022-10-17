@@ -18,7 +18,8 @@
 
         {{-- 検索フォーム --}}
         {{-- TODO: --}}
-        {include file='./_form.tpl'}
+        {{-- {include file='./_form.tpl'} --}}
+        @include('ctl.brPartnerSite._form')
 
         <hr class="contents-margin" />
 
