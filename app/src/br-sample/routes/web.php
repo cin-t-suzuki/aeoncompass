@@ -122,4 +122,5 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 		});		
 
 
+		Route::get('/brpartnersite/', function() { return 'hello route'; }); // 'BrPartnerSite@index');
 	});
