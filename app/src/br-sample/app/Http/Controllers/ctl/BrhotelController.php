@@ -14,6 +14,14 @@ use App\Models\MastWard;
 use App\Models\HotelRate;
 use App\Common\Traits;
 use App\Models\CustomerHotel;
+use App\Models\HotelAccount;
+use App\Models\HotelControl;
+use App\Models\HotelMscLogin;
+use App\Models\HotelNotify;
+use App\Models\HotelPerson;
+use App\Models\HotelStaffNote;
+use App\Models\HotelStatus;
+use App\Models\HotelSurvey;
 
 class BrhotelController extends _commonController
 {
@@ -71,7 +79,7 @@ class BrhotelController extends _commonController
 	 * @return void
 	 */
 	public function show(){
-		$a_hotel_staff_note = Request::input('Hotel_Staff_Note');
+		$hotelStaffNoteData = Request::input('Hotel_Staff_Note');
 		$hotelCd = Request::input('target_cd');
 		
 		// 料率の一覧データを配列で取得
@@ -84,91 +92,69 @@ class BrhotelController extends _commonController
 		$this->addViewData("mast_city", $mastCityData);
 		$this->addViewData("mast_ward", $mastWardData);
 
+		$isRegistHotel = false;
 		if(count($hotelData) !=0 ){
 			$isRegistHotel = true;
 		}
-		$b_hotel_regist = $isRegistHotel; //TODO あとで消す
-		$hotelModel = new Hotel();
 
 		// 請求先 支払先関連施設
-		$customerHotel = new CustomerHotel();
-		$a_customer_hotel = $customerHotel->selectByKey($hotelCd);
+		$customerHotelModel = new CustomerHotel();
+		$customerHotelData = $customerHotelModel->getCustomer($hotelCd);
 
-		// TODO施設情報取得
-		$a_hotel_account = [];
-		$a_hotel_person = [];
-		$a_hotel_status = [];
-		$b_hotel_management_regist = false;//登録有無
+		// 登録されているかの判断
+		$isRegistHotelManagement = false;
+		// 施設情報取得
+		$hotelAccountData = (new HotelAccount())->selectByKey($hotelCd);
+		$hotelPersonData = (new HotelPerson())->selectByKey($hotelCd);
+		$hotelStatusData = (new HotelStatus())->selectByKey($hotelCd);		
+		if (count($hotelAccountData) != 0	||  count($hotelPersonData) != 0
+				||  count($hotelStatusData) != 0
+		){
+			$isRegistHotelManagement = true;
+		}
+
+		// 登録されているかの判断
+		$isRegistHotelState = false;
+		$hotelNotifyData = (new HotelNotify())->selectByKey($hotelCd);
+		$hotelControlData = (new HotelControl())->selectByKey($hotelCd);
+		if (count($hotelNotifyData) != 0	|| count($hotelControlData) != 0
+		){
+			$isRegistHotelState = true;
+		}
+
+		// 登録されているかの判断
+		$isRegistHotelSurvey = false;
+		$hotelSurveyData = (new HotelSurvey())->selectByKey($hotelCd);
+		if (count($hotelSurveyData) != 0
+		){
+			$isRegistHotelSurvey = true;
+		}
 		
-		$a_hotel_notify = [];
-		$a_hotel_control = [];
-		$b_hotel_state_regist = false;
+		// 特記事項 リクエストに無ければDBから取得
+		$hotelStaffNoteData = [];
+		if ($this->is_empty($hotelStaffNoteData)){
+			// 特記事項
+			$hotelStaffNoteData = (new HotelStaffNote())->selectByKey($hotelCd);
+		}
 
-		$b_hotel_survey_regist = false;//登録有無
-		// TODO 特記事項
-		$a_hotel_staff_note = [];
-
-		// TODO ?
-		$hotel_msc_info = [];//TODO $o_models_hotel->get_msc_usage_situation($this->_request->getParam('target_cd'));
+		// 
+		$hotelMscInfoData = (new HotelMscLogin)->getMscUsageSituation($hotelCd);
 
 		$this->addViewData("target_cd", $hotelCd); 
-		$this->addViewData("customer_hotel", $a_customer_hotel); 
+		$this->addViewData("customer_hotel", $customerHotelData['values'][0]); 
 
-		$this->addViewData("hotel_regist", $b_hotel_regist); 
-		$this->addViewData("hotel_management_regist", $b_hotel_management_regist); 
-		$this->addViewData("hotel_state_regist", $b_hotel_state_regist);
-		$this->addViewData("hotel_survey_regist", $b_hotel_survey_regist); 
+		$this->addViewData("hotel_regist", $isRegistHotel); 
+		$this->addViewData("hotel_management_regist", $isRegistHotelManagement); 
+		$this->addViewData("hotel_state_regist", $isRegistHotelState);
+		$this->addViewData("hotel_survey_regist", $isRegistHotelSurvey); 
 
-		$this->addViewData("hotel_staff_note", $a_hotel_staff_note); 
+		$this->addViewData("hotel_staff_note", $hotelStaffNoteData); 
 
-		$this->addViewData("hotel_msc_info", $hotel_msc_info); 
+		$this->addViewData("hotel_msc_info", $hotelMscInfoData); 
 		$this->addViewData("hotelrates", $hotelRateData); 
 
-		//TODO
 		return view("ctl.brhotel.show", $this->getViewData());
 	}
-/* 旧処理
-		//施設情報取得
-		$a_hotel_account = $o_hotel_account->find(array('hotel_cd' => $this->_request->getParam('target_cd')));
-		$a_hotel_person = $o_hotel_person->find(array('hotel_cd' => $this->_request->getParam('target_cd')));
-		$a_hotel_status = $o_hotel_status->find(array('hotel_cd' => $this->_request->getParam('target_cd')));
-
-		// 登録されているかの判断
-		if (count($a_hotel_account) != 0
-		||  count($a_hotel_person) != 0
-		||  count($a_hotel_status) != 0
-		){
-			$b_hotel_management_regist = true;
-		}
-
-		//施設情報取得
-		$a_hotel_notify = $o_hotel_notify->find(array('hotel_cd' => $this->_request->getParam('target_cd')));
-		$a_hotel_control = $o_hotel_control->find(array('hotel_cd' => $this->_request->getParam('target_cd')));
-
-		// 登録されているかの判断
-		if (count($a_hotel_notify) != 0
-		||  count($a_hotel_control) != 0
-		){
-			$b_hotel_state_regist = true;
-		}
-
-		$a_hotel_survey = $o_hotel_survey->find(array('hotel_cd' => $this->_request->getParam('target_cd')));
-
-		// 登録されているかの判断
-		if (count($a_hotel_survey) != 0
-		){
-			$b_hotel_survey_regist = true;
-		}
-
-		// リクエストに無ければDBから取得
-		if (is_empty($a_hotel_staff_note)){
-			// 特記事項
-			$a_hotel_staff_note = $o_hotel_staff_note->find(array('hotel_cd' => $this->_request->getParam('target_cd')));
-		}
-
-		//アサイン登録
-		$this->box->item->assign->hotel_msc_info          = $o_models_hotel->get_msc_usage_situation($this->_request->getParam('target_cd'));
-*/
 
 	/** 施設情報の取得とView設定
 	 * 
@@ -201,18 +187,6 @@ class BrhotelController extends _commonController
 }
 
 
-		/** 施設データをDBから取得
-	 *
-	 * @return void
-	 */
-	/*TODO 参考
-	private function setHotelDbData(&$hotelInfoData, $hotelCd)
-	{
-
-		$hotel = new HotelInfo();
-		$hotelInfoData = $hotel->selectByKey($hotelCd);
-		
-	}*/
 
 	/** 施設情報更新 編集画面 表示
 	 * 
@@ -299,7 +273,7 @@ class BrhotelController extends _commonController
 	public function searchward()
 	{
 		$city_id = Request::input("city_id");
-		// TODO↓
+
 		$this->setWardDataToView($city_id);
 
 		// ビューを表示
@@ -377,7 +351,7 @@ class BrhotelController extends _commonController
 		$requestHotel = Request::input('Hotel');
 		$hotelModel = new Hotel();
 
-		// 画面入力を変換 （TODO 入力でも使うはず）
+		// 画面入力を変換 
 		$errorList = $this->validateHotelFromScreen($hotelData, $requestHotel , $hotelModel);
 
 		if( count($errorList) > 0){

@@ -48,7 +48,14 @@ class HotelSurvey extends CommonDBModel
 
 		if(!is_null($data) && count($data) > 0){
 			return array(
-				$this->COL_HOTEL_CD => $data[0]->hotel_cd
+				$this->COL_HOTEL_CD => $data[0]->hotel_cd,
+				$this->COL_WGS_LAT => $data[0]->wgs_lat,
+				$this->COL_WGS_LNG => $data[0]->wgs_lng,
+				$this->COL_WGS_LAT_D => $data[0]->wgs_lat_d,
+				$this->COL_WGS_LNG_D => $data[0]->wgs_lng_d,
+				$this->COL_TD_LAT => $data[0]->td_lat,
+				$this->COL_TD_LAT_D => $data[0]->td_lat_d,
+				$this->COL_TD_LNG_D => $data[0]->td_lng_d
 			);
 		}
 		return null;
