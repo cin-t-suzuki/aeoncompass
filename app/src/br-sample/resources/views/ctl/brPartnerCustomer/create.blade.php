@@ -1,5 +1,5 @@
 {{-- HACK: edit とほとんど重複、 form の action(route) と、ボタンの登録・更新だけが違う。 --}}
-@extends('ctl.common.brPartnerCustomerBaseToBeRenamed')
+@extends('ctl.common.base2')
 
 @section('title', '精算先情報')
 

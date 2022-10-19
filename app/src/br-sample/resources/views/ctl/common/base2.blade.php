@@ -1,5 +1,7 @@
 {{-- ここから svn_trunk/public/app/ctl/view2/_common/_br_header2.tpl --}}
-{{-- TODO: どこで使われてるか整理して、ファイル名を適切なものに変更 --}}
+
+{{-- MEMO: 移植元にて新画面が追加された際のテンプレート。base1.blade.php が旧のもの --}}
+
 {{-- TODO: なぞ xml <?xml version="1.0" encoding="UTF-8"?> --}}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">{{-- TODO: なぞ doctype 宣言 --}}
 @php

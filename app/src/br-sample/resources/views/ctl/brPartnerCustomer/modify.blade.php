@@ -1,5 +1,5 @@
 
-@extends('ctl.common.brPartnerCustomerBaseToBeRenamed')
+@extends('ctl.common.base2')
 
 @section('title', '精算先情報')
 
