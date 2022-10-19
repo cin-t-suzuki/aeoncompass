@@ -10,14 +10,22 @@ use Illuminate\Support\Facades\DB;
 
 class BrPartnerCustomerController extends _commonController
 {
+    /**
+     * 初期表示
+     */
     public function index(Request $request)
     {
         $request->session()->forget('keywords');
         return redirect()->route('brpartnercustomer.search');
     }
 
+    /**
+     * 検索一覧画面表示
+     */
     public function search(Request $request)
     {
+        // 検索ワードが request に含まれればそれを適用する
+        // そうでなければ session を見て、あればそれを適用する
         if ($request->has('keywords')) {
             $keywords = $request->input('keywords');
         } else {
@@ -34,8 +42,13 @@ class BrPartnerCustomerController extends _commonController
         ]);
     }
 
+    /**
+     * 新規登録入力画面表示
+     */
     public function create(Request $request)
     {
+        // session に情報が含まれる場合は、入力を保持して表示
+        // そうでなければ初期化して表示
         if ($request->session()->has('partner_customer')) {
             $partner_customer = (object)$request->session()->pull('partner_customer');
             $partner_customer->customer_id = '－';
@@ -71,20 +84,14 @@ class BrPartnerCustomerController extends _commonController
         ]);
     }
 
+    /**
+     * 新規登録処理、完了画面表示
+     */
     public function register(Request $request)
     {
         $partner_customer = $request->input('partner_customer');
 
-        // 精算必須月のパラメータ調整
-        // billpay_month01 ~ 12 までを、'0'と'1'からなる長さ12の文字列に変換
-        // i 月が必須月として指定されていたら、 i 番目の文字が '1'
-        // HACK: modify のものと共通化？
-        $partner_customer['billpay_required_month'] = null;
-        for($m = 1; $m <= 12; $m++) {
-            $field_nm = 'billpay_month' . sprintf("%02d", $m);
-            $partner_customer['billpay_required_month'] .= $partner_customer[$field_nm] ?? '0';
-            unset($partner_customer[$field_nm]);
-        }
+        $this->convertBillpayRequiredMonth($partner_customer);
 
         // validation
         $model = new PartnerCustomer();
@@ -138,8 +145,13 @@ class BrPartnerCustomerController extends _commonController
 
     }
 
+    /**
+     * 編集入力画面表示
+     */
     public function edit(Request $request, $customer_id)
     {
+        // session に情報が含まれる場合は、入力を保持して表示
+        // そうでなければ DB から取得して表示
         if ($request->session()->has('partner_customer')) {
             $partner_customer = (object)$request->session()->pull('partner_customer');
         } else {
@@ -165,17 +177,14 @@ class BrPartnerCustomerController extends _commonController
         ]);
     }
 
+    /**
+     * 編集処理、完了画面表示
+     */
     public function modify(Request $request)
     {
         $partner_customer = $request->input('partner_customer');
 
-        // 精算月のパラメータ調整
-        $partner_customer['billpay_required_month'] = null;
-        for($m = 1; $m <= 12; $m++) {
-            $field_nm = 'billpay_month' . sprintf("%02d", $m);
-            $partner_customer['billpay_required_month'] .= $partner_customer[$field_nm] ?? '0';
-            unset($partner_customer[$field_nm]);
-        }
+        $this->convertBillpayRequiredMonth($partner_customer);
 
         // validation
         $model = new PartnerCustomer();
@@ -226,4 +235,25 @@ class BrPartnerCustomerController extends _commonController
         ]);
     }
 
+    /**
+     * 精算必須月のパラメータ調整（参照渡し）
+     *
+     * billpay_month01 ~ 12 までを、'0'と'1'からなる長さ12の文字列に変換
+     * i 月が必須月として指定されていたら、 i 番目の文字が '1' になる
+     *
+     * billpay_month01 ~ billpay_month12 を配列からクリア
+     * billpay_required_month を配列にセット
+     *
+     * @param array &$partner_customer
+     */
+    private function convertBillpayRequiredMonth(&$partner_customer)
+    {
+        $billpay_required_month = '';
+        for($m = 1; $m <= 12; $m++) {
+            $field_nm = 'billpay_month' . sprintf("%02d", $m);
+            $billpay_required_month .= $partner_customer[$field_nm] ?? '0';
+            unset($partner_customer[$field_nm]);
+        }
+        $partner_customer['billpay_required_month'] = $billpay_required_month;
+    }
 }

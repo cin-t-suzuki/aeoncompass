@@ -155,6 +155,13 @@ class PartnerCustomer extends CommonDBModel
         ]);
     }
 
+    /**
+     * パートナー精算先を検索 (検索ワード)
+     *
+     * @param string $keyword
+     *
+     * @return stdClass[]
+     */
     public function getPartnerCustomers($keywords = '')
     {
         // HACK: メソッドを適切な長さに分割したい。
@@ -381,6 +388,13 @@ class PartnerCustomer extends CommonDBModel
         return $result;
     }
 
+    /**
+     * パートナー精算先を検索 (id)
+     *
+     * @param string $customer_id
+     *
+     * @return stdClass[]
+     */
     public function getPartnerCustomersById($customer_id)
     {
         // HACK: SQL 直書きはどうにかしたい
@@ -451,6 +465,13 @@ class PartnerCustomer extends CommonDBModel
         return "";
     }
 
+    /**
+     * PK を取得
+     *
+     * その時点での PK の最大値 + 1 を取得する
+     *
+     * @return string
+     */
     public function _get_sequence_no() {
         $sql =
         <<<SQL
