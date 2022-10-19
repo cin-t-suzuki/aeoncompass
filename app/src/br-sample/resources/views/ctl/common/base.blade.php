@@ -1,3 +1,4 @@
+{{-- ここから svn_trunk\public\app\ctl\views\_common\_br_header.tpl --}}
 <HTML>
 <head>
     <meta http-equiv="Pragma" content="no-cache">
@@ -14,6 +15,7 @@
     <link type="text/css" rel="stylesheet" href="/styles/print.css" media="print">
     <link type="text/css" rel="stylesheet" href="/styles/screen.css" media="screen">
     @endif
+
     <script language="JavaScript" type="text/javascript">
     <!--
         if(navigator.platform){
@@ -21,14 +23,14 @@
                 u = navigator.userAgent;
                 if(u.indexOf("MSIE") > -1){
                     document.write('<style type="text/css"> body, td, th { font-size:80% } <'+'/style>');
-                }
-                else if(u.indexOf("Netscape6") > -1 || u.indexOf("Netscape/7") > -1 || u.indexOf("Firefox") > -1){
+                } else if(u.indexOf("Netscape6") > -1 || u.indexOf("Netscape/7") > -1 || u.indexOf("Firefox") > -1){
                     document.write('<style type="text/css"> body, td, th { font-size:10pt; font-family: sans-serif; } <'+'/style>');
                 }
             }
         }
     // -->
     </script>
+
     {{--  Googleアナリティクス  --}}
     {{-- include file=$v->env.module_root|cat:'/views/_common/_google_analytics.tpl' --}}
 </head>
@@ -45,7 +47,6 @@
     <div style="margin-left:-12px;padding:0.25em 0;background-color:#A63;color:#fff;font-weight:bold;width:6em;text-align:center;">環境不明</div>
 @endif
 
-
 @if(isset($no_print) && $no_print)
     <div class="noprint">
 @endif
@@ -59,19 +60,16 @@
             <td align="right" WIDTH="70%">
                 <small>
                     {!! Form::open(['route' => ['ctl.index'], 'method' => 'get']) !!}
-                        <input type="submit" value="メインメニュー">
-                        担当：{{ staff_nm }}
+                        <input type="submit" value="メインメニュー">担当：{{ staff_nm }}
                     {!! Form::close() !!}
                 </small>
             </td>
             @endif
         </tr>
     </table>
-
 @if(isset($no_print) && $no_print)
     </div>
 @endif
-
 @if(isset($no_print_title) && $no_print_title)
     <div class="noprint">
 @endif
@@ -83,9 +81,7 @@
     <table border="3" cellpadding="2" cellspacing="0">
         <tr>
             <td align="center" bgcolor="#EEFFEE">
-                <big>
-                    {{ !isset($menu_title) ? $title : $menu_title }}
-                </big>
+                <big>{{ !isset($menu_title) ? $title : $menu_title }}</big>
             </td>
         </tr>
     </table>
@@ -95,12 +91,14 @@
 @if(isset($no_print_title) && $no_print_title)
     </div>
 @endif
-
+{{-- ここまで svn_trunk\public\app\ctl\views\_common\_br_header.tpl --}}
 
 {{-- blade --}}
 @yield('page_blade')
 
 
+
+{{-- ここから svn_trunk\public\app\ctl\views\_common\_br_footer.tpl --}}
 @if(isset($no_print) && $no_print)
 <div class="noprint">
 @endif
@@ -137,3 +135,4 @@
 
 </body>
 </HTML>
+{{-- ここまで svn_trunk\public\app\ctl\views\_common\_br_footer.tpl --}}

@@ -79,9 +79,7 @@ class HotelStatus extends CommonDBModel
 	 */
 	public function updateByKey($con, $data){
 		$result = $con->table($this->table)->where($this->COL_HOTEL_CD, $data[$this->COL_HOTEL_CD])->update($data);
-/*TODO  件数を返すので不要？		if(!$result){
-				return $result;//"更新に失敗しました";
-		}*/
+
 		return $result;
 }
 

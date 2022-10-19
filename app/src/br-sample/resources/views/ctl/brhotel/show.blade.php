@@ -10,7 +10,6 @@
 <table border="0" cellspacing="0" cellpadding="4">
 	<td valign="top">
 		{{-- 施設情報詳細 --}}
-		{{-- TODO include file=$v->env.module_root|cat:'/views/brhotel/_hotel_info.tpl'--}}
 		@section('hotel_info')
 		@include('ctl.brhotel._hotel_info',
 			["hotel" => $views->hotel,
@@ -27,15 +26,15 @@
 						施設情報
 						</td>
 					@if ($views->hotel_regist == true)
-						<form method="POST" action="{$v->env.source_path}{$v->env.module}/brhotel/edit/">
+						{!! Form::open(['route' => ['ctl.brhotel.edit'], 'method' => 'post']) !!}
 						<td nowrap><input type="submit" value=" 変更 "></td>
-						<input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($views->target_cd)}">
-						</form>
+						<input type="hidden" name="target_cd" value="{{strip_tags($views->target_cd)}}">
+						{!! Form::close() !!}
 					@else
-						<form method="POST" action="{$v->env.source_path}{$v->env.module}/brhotel/new/">
+						{!! Form::open(['route' => ['ctl.brhotel.new'], 'method' => 'post']) !!}
 						<td nowrap><input type="submit" value=" 登録"></td>
 						<input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($views->target_cd)}">
-						</form>
+						{!! Form::close() !!}
 					@endif
 					</tr>
 
@@ -129,26 +128,16 @@
 						施設画像情報
 						</td>
 					@if ($views->hotel_state_regist == true)
-						{{--TODO バージョン
-						@if(     $v->user->hotel_system_version.version == 1)
-							<form method="POST" action="{$v->env.source_path}{$v->env.module}/htlmedia/">
-						@elseif( $v->user->hotel_system_version.version == 2)
-							<form method="POST" action="{$v->env.source_path}{$v->env.module}/htlsmedia/">
-						@endif
-						--}}
+						{{--新バージョンのみ（htlmedia不使用）--}}
+						<form method="POST" action="{$v->env.source_path}{$v->env.module}/htlsmedia/">
 						<td nowrap><input type="submit" value=" 変更 "></td>
 						<input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($views->target_cd)}">
 						</form>
 					@elseif ($views->hotel_regist != true)
 						<td nowrap colspan="2" width="90%">施設画像情報 <font color="red">※</font>施設を登録してください。</td>
 					@else
-						{{--TODO バージョン
-						@if(     $v->user->hotel_system_version.version == 1)
-							<form method="POST" action="{$v->env.source_path}{$v->env.module}/htlmedia/">
-						@elseif( $v->user->hotel_system_version.version == 2)
-							<form method="POST" action="{$v->env.source_path}{$v->env.module}/htlsmedia/">
-						@endif
-						--}}
+						{{--新バージョンのみ（htlmedia不使用）--}}
+						<form method="POST" action="{$v->env.source_path}{$v->env.module}/htlsmedia/">
 						<td nowrap><input type="submit" value=" 登録 "></td>
 						<input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($views->target_cd)}">
 						</form>
@@ -170,20 +159,20 @@
 						<td bgcolor="#EEFFEE">MSC利用状況</td>
 						<td>
 							@forelse ($views->hotel_msc_info as $msc_usage_situation) {{--name=loop_hotel_msc--}}
-								{if $smarty.foreach.loop_hotel_msc.first}
+								@if ($loop->first)
 									<table border="1" cellspacing="0" cellpadding="2">
 										<tr style="background-color:#eee;">
 											<td style="padding: 4px;">MSC名称</td>
 											<td style="padding: 4px;">最終更新日時</td>
 										</tr>
-								{/if}
+								@endif
 								<tr>
-									<td style="padding: 4px;">{$msc_usage_situation.msc_nm}</td>
-									<td style="padding: 4px;">{$msc_usage_situation.login_dtm|date_format:'%Y'}年{$msc_usage_situation.login_dtm|date_format:'%m'}月{$msc_usage_situation.login_dtm|date_format:'%d'}日&nbsp;{$msc_usage_situation.login_dtm|date_format:'%H:%M'}</td>
+									<td style="padding: 4px;">{{$msc_usage_situation['msc_nm']}}</td>
+									<td style="padding: 4px;">{{\Carbon\Carbon::createFromTimeString($msc_usage_situation['login_dtm'])->format('Y年m月d日 h:i')}}</td>
 								</tr>
-								{if $smarty.foreach.loop_hotel_msc.last}
+								@if ($loop->last)
 									</table>
-								{/if}
+								@endif
 							@empty
 								利用なし
 							@endforelse
@@ -210,7 +199,7 @@
 				</form>
 				<td>
 					@if (!($service->is_empty($views->customer_hotel)))
-						{$views->customer_hotel.customer_id}&nbsp;({$views->customer_hotel.customer_nm})
+						{{$views->customer_hotel['customer_id']}}&nbsp;({{$views->customer_hotel['customer_nm']}})
 					@else
 						(未登録)
 					@endif
@@ -220,12 +209,12 @@
 				<td bgcolor="#EEFFEE">
 				料率
 				</td>
-				<form action="{$v->env.source_path}{$v->env.module}/brhotelrate/list/" method="post">
+				{!! Form::open(['route' => ['ctl.brhotelRate.index'], 'method' => 'post']) !!}
 				<td>
 					<input type="submit" name="RateBtn" value="設定">
 				</td>
-				<input type="hidden" name="target_cd" value="{strip_tags($views->target_cd)}">
-				</form>
+				<input type="hidden" name="target_cd" value="{{strip_tags($views->target_cd)}}">
+				{!! Form::close() !!}
 				<td>
 					<table border="1" cellspacing="0" cellpadding="2">
 						<tr style="background-color:#eee;">
@@ -234,31 +223,22 @@
 							<td>ベストリザーブサイト料率</td>
 							<td>その他サイト料率</td>
 						</tr>
-					{assign var="i" value="0"}
-					{assign var="j" value="-1"}
-					@for ($i = 0; $i <= count($views->hotelrates); $i++)
+
+						@for ($i = 0; $i < count($views->hotelrates); $i++)
 						<tr>
 							<td>
-								{if $v->helper->date->set($views->hotelrates.values.$i.accept_s_ymd*1)}{/if}
-								{strip_tags($v->helper->date->to_format('Y年m月d日'))} ～
-								{{--$views->hotelrates.values.$i.accept_s_ymd--}}
+								{{\Carbon\Carbon::createFromTimeString($views->hotelrates[$i]['accept_s_ymd'])->format('Y年m月d日～')}}
 							</td>
 							<td>
-								{if $v->helper->date->set($views->hotelrates.values.$j.accept_s_ymd*1)}{/if}
-								{strip_tags($v->helper->date->add('d', -1))}
-								{if $views->hotelrates.values.$j.accept_s_ymd != ""}
-									{strip_tags($v->helper->date->to_format('Y年m月d日'))}
-								{else}
-									&nbsp;
-								{/if}
+								@if ($i != 0)
+									{{\Carbon\Carbon::createFromTimeString($views->hotelrates[$i-1]['accept_s_ymd'])->modify('-1 day')->format('Y年m月d日')}}
+								@endif
 							</td>
 							<td align="right">
-								{strip_tags($views->hotelrates.values.$i.system_rate)}%
+								{{strip_tags($views->hotelrates[$i]['system_rate'])}}%
 							</td>
-							<td align="right">{strip_tags($views->hotelrates.values.$i.system_rate_out)}%</td>
+							<td align="right">{{strip_tags($views->hotelrates[$i]['system_rate_out'])}}%</td>
 						</tr>
-						{assign var="i" value=$i+1}
-						{assign var="j" value=$j+1}
 					@endfor
 					</table>
 					<div style="margin-top:1em;">
@@ -269,7 +249,8 @@
 			</tr>
 		</table>
 		<br />
-		{if $v->user->hotel_control.stock_type == 1}
+		{{-- TODO クーポンは不要である想定
+			if $v->user->hotel_control.stock_type == 1}
 			<table border="2" cellspacing="0" cellpadding="4">
 				クーポン関連
 				<tr>
@@ -284,18 +265,19 @@
 					</form>
 				</tr>
 			</table>
-		{/if}
+		{/if--}}
 
 	</td>
 
 	<td><br/></td>
 
 	<td valign="top">
-		@if (count($views->hotel_staff_note) == 0)
-			<form method="POST" action="{$v->env.source_path}{$v->env.module}/brhotel/createnote/">
-		@else
-			<form method="POST" action="{$v->env.source_path}{$v->env.module}/brhotel/updatenote/">
-		@endif
+{{-- 未設定の時のチェック		@if (count($views->hotel_staff_note) == 0)--}}
+	@if ( $service->is_empty($views->hotel_staff_note)) 
+		{!! Form::open(['route' => ['ctl.brhotel.createnote'], 'method' => 'post']) !!}{{--TODO 処理未作成--}}
+	@else
+		{!! Form::open(['route' => ['ctl.brhotel.updatenote'], 'method' => 'post']) !!}{{--TODO 処理未作成--}}
+	@endif
 			施設管理特記事項
 			<table border="2" cellspacing="0" cellpadding="4">
 				<tr>
@@ -306,24 +288,24 @@
 				</tr>
 			</table>
 
-			@if (count($views->hotel_staff_note) == 0)
+			@if ($service->is_empty($views->hotel_staff_note))
 				<input type="submit" value=" 登録 ">
 			@else
 				<input type="submit" value=" 変更 ">
 			@endif
 			<input type="hidden" name="target_cd" value="{{strip_tags($views->target_cd)}}">
-		</form>
+		{!! Form::close() !!}
 	</td>
 </table>
 
 <div style="float:right">
-<FORM ACTION="{$v->env.source_path}{$v->env.module}/htlhotel/staticupdate/" METHOD="POST" target="page_test">
-情報ページHTML
-<small>
-<INPUT TYPE="submit" VALUE="更新する">
-<input type="hidden" name="target_cd" value="{{strip_tags($views->target_cd)}}">
-<input type="hidden" name="redirect_url" value="http://{$v->config->system->rsv_host_name}/hotel/{$v->helper->form->strip_tags($views->target_cd)}/">
-</small>
+	<FORM ACTION="{$v->env.source_path}{$v->env.module}/htlhotel/staticupdate/" METHOD="POST" target="page_test">
+	情報ページHTML
+	<small>
+	<INPUT TYPE="submit" VALUE="更新する">
+	<input type="hidden" name="target_cd" value="{{strip_tags($views->target_cd)}}">
+	<input type="hidden" name="redirect_url" value="http://{$v->config->system->rsv_host_name}/hotel/{$v->helper->form->strip_tags($views->target_cd)}/">
+	</small>
 </div>
 
 @section('title', 'footer')
