@@ -5,10 +5,6 @@
     <p>
         {{-- TODO: セッションなどで保持してコントローラから渡す。 --}}
         @php
-            $form_params = (object)[
-                'customer_id' => '1',
-                'customer_off' => '1',
-            ];
             $customer = (object)[
                 'customer_nm' => '精算先名',
             ];
@@ -28,8 +24,7 @@
             <tr>
                 <th>キーワード</th>
                 <td>
-                    {{-- TODO: $keyword、 null 合体演算子を外す --}}
-                    <input type="text" name="keywords" size="50" maxlength="20" value="{{ strip_tags($keywords ?? '') }}" />
+                    <input type="text" name="keywords" size="50" maxlength="20" value="{{ strip_tags($keywords) }}" />
                     <br /><a href="" onclick="helpForm(); return false;">キーワードのヘルプ</a>
                 </td>
             </tr>

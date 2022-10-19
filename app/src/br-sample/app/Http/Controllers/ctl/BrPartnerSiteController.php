@@ -30,13 +30,20 @@ class BrPartnerSiteController extends _commonController
             $keywords = $request->session()->pull('keywords', '');
         }
 
+        $customer_id = $request->input('customer_id', '');
+        $customer_off = $request->input('customer_off', '');
+
         $model = new PartnerSite();
-        $sites = $model->getPartnerSiteByKeywords($keywords);
+        $sites = $model->getPartnerSiteByKeywords($keywords, $customer_id, $customer_off);
 
         $request->session()->put('keywords', $keywords);
         return view('ctl.brPartnerSite.search', [
             'sites' => $sites,
             'keywords' => $keywords,
+            'form_params' => [
+                'customer_id' => $customer_id,
+                'customer_off' => $customer_off,
+            ],
         ]);
     }
 }

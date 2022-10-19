@@ -34,31 +34,37 @@ class PartnerSite extends Model
 
     /**
      * TODO: phpdoc
+     *
+     * @param string $keyword
+     * @param string $customer_id
+     * @param $customer_off // HACK: Naming (customer_exclude seems better)
      */
-    public function getPartnerSiteByKeywords($keywords)
+    public function getPartnerSiteByKeywords($keywords, $customer_id, $customer_off)
     {
         // keywords を分割し、単語ごとにフォーマットで検索対象カラムを判定
         $a_keywords = explode(' ', str_replace('　', ' ', $keywords));
         $a_conditions = [];
         foreach ($a_keywords as $keyword) {
-            if (!empty($keywords)) {
-                if (preg_match('/[A-Z0-9][0-9]{9}/', $keywords)) {
-                    $a_conditions['partner_cd'] = $keywords;
-                    $a_conditions['affiliate_cd'] = $keywords;
+            if (!empty($keyword)) {
+                if (preg_match('/[A-Z0-9][0-9]{9}/', $keyword)) {
+                    $a_conditions['partner_cd'] = $keyword;
+                    $a_conditions['affiliate_cd'] = $keyword;
                 }
-                if (preg_match('/[0-9]{10}/', $keywords)) {
-                    $a_conditions['site_cd'] = $keywords;
+                if (preg_match('/[0-9]{10}/', $keyword)) {
+                    $a_conditions['site_cd'] = $keyword;
                 }
-                if (is_numeric($keywords)) {
-                    if (strlen($keywords) < 10) {
-                        $a_conditions['customer_id'] = $keywords;
+                if (is_numeric($keyword)) {
+                    if (strlen($keyword) < 10) {
+                        $a_conditions['customer_id'] = $keyword;
                     }
                 } else {
-                    $a_conditions['customer_nm'] = $keywords;
-                    $a_conditions['site_nm'] = $keywords;
+                    $a_conditions['customer_nm'] = $keyword;
+                    $a_conditions['site_nm'] = $keyword;
                 }
             }
-
+        }
+        if (!empty($customer_id) && empty($customer_off)) {
+            $a_conditions['customer_id'] = $customer_id;
         }
 
         return $this->_get_sites($a_conditions);
