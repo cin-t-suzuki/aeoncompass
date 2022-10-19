@@ -22,9 +22,21 @@ class BrPartnerSiteController extends _commonController
      */
     public function search(Request $request)
     {
-        // $sites = PartnerSite::all();
+        // 検索ワードが request に含まれればそれを適用する
+        // そうでなければ session を見て、あればそれを適用する
+        if ($request->has('keywords')) {
+            $keywords = $request->input('keywords');
+        } else {
+            $keywords = $request->session()->pull('keywords', '');
+        }
+
         $model = new PartnerSite();
-        $sites = $model->getPartnerSiteByKeywords();
-        return view('ctl.brPartnerSite.search', ['sites' => $sites]);
+        $sites = $model->getPartnerSiteByKeywords($keywords);
+
+        $request->session()->put('keywords', $keywords);
+        return view('ctl.brPartnerSite.search', [
+            'sites' => $sites,
+            'keywords' => $keywords,
+        ]);
     }
 }

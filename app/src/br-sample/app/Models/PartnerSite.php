@@ -24,7 +24,7 @@ class PartnerSite extends Model
      * @var string
      */
     protected $primaryKey = 'flight_id';
-    
+
     /**
      * モデルのIDを自動増分するか
      *
@@ -35,17 +35,89 @@ class PartnerSite extends Model
     /**
      * TODO: phpdoc
      */
-    public function getPartnerSiteByKeywords()
+    public function getPartnerSiteByKeywords($keywords)
     {
-        $s_customer_id = '';
-        $s_customer_nm = '';
-        $s_nm = '';
-        $s_site_cd = '';
-        $s_site_nm = '';
-        $s_partner_cd = '';
+        // keywords を分割し、単語ごとにフォーマットで検索対象カラムを判定
+        $a_keywords = explode(' ', str_replace('　', ' ', $keywords));
+        $a_conditions = [];
+        foreach ($a_keywords as $keyword) {
+            if (!empty($keywords)) {
+                if (preg_match('/[A-Z0-9][0-9]{9}/', $keywords)) {
+                    $a_conditions['partner_cd'] = $keywords;
+                    $a_conditions['affiliate_cd'] = $keywords;
+                }
+                if (preg_match('/[0-9]{10}/', $keywords)) {
+                    $a_conditions['site_cd'] = $keywords;
+                }
+                if (is_numeric($keywords)) {
+                    if (strlen($keywords) < 10) {
+                        $a_conditions['customer_id'] = $keywords;
+                    }
+                } else {
+                    $a_conditions['customer_nm'] = $keywords;
+                    $a_conditions['site_nm'] = $keywords;
+                }
+            }
+
+        }
+
+        return $this->_get_sites($a_conditions);
+    }
+
+    /**
+     * TODO: phpdoc
+     */
+    private function _get_sites($aa_conditions)
+    {
+        $s_customer_id  = '';
+        $s_customer_nm  = '';
+        $s_nm           = '';
+        $s_site_cd      = '';
+        $s_site_nm      = '';
+        $s_partner_cd   = '';
         $s_affiliate_cd = '';
 
-        // HACK: sql 直書きはどうにかしたい
+        // バインドパラメータ設定
+        $a_conditions = [];
+        if (!empty($aa_conditions['customer_id'])) {
+            $s_customer_id = 'and partner_customer.customer_id = :customer_id';
+            $a_conditions['customer_id'] = $aa_conditions['customer_id'];
+        }
+
+        if (!empty($aa_conditions['customer_nm']) && !empty($aa_conditions['site_nm'])) {
+            $s_nm = 'and (partner_customer.customer_nm like concat(\'%\', :customer_nm, \'%\') or partner_site.site_nm like concat(\'%\', :site_nm, \'%\'))';
+            $a_conditions['customer_nm']    = $aa_conditions['customer_nm'];
+            $a_conditions['site_nm']        = $aa_conditions['site_nm'];
+        }elseif (!empty($aa_conditions['customer_nm'])) {
+            $s_customer_nm = 'and partner_customer.customer_nm like concat(\'%\', :customer_nm, \'%\')';
+            $a_conditions['customer_nm']    = $aa_conditions['customer_nm'];
+        }elseif (!empty($aa_conditions['site_nm'])) {
+            $s_site_nm = 'and partner_site.site_nm like concat(\'%\', :site_nm, \'%\')';
+            $a_conditions['site_nm']        = $aa_conditions['site_nm'];
+        }
+
+        if (!empty($aa_conditions['partner_cd']) && !empty($aa_conditions['affiliate_cd']) && !empty($aa_conditions['site_cd'])) {
+            $s_partner_cd = 'and (partner_site.partner_cd = :partner_cd or partner_site.affiliate_cd = :affiliate_cd or partner_site.site_cd = :site_cd)';
+            $a_conditions['partner_cd']     = $aa_conditions['partner_cd'];
+            $a_conditions['affiliate_cd']   = $aa_conditions['affiliate_cd'];
+            $a_conditions['site_cd']        = $aa_conditions['site_cd'];
+        }elseif (!empty($aa_conditions['partner_cd']) && !empty($aa_conditions['affiliate_cd'])) {
+            $s_partner_cd = 'and (partner_site.partner_cd = :partner_cd or partner_site.affiliate_cd = :affiliate_cd)';
+            $a_conditions['partner_cd']     = $aa_conditions['partner_cd'];
+            $a_conditions['affiliate_cd']   = $aa_conditions['affiliate_cd'];
+        }elseif (!empty($aa_conditions['partner_cd'])) {
+            $s_affiliate_cd = 'and partner_site.partner_cd = :partner_cd';
+            $a_conditions['partner_cd']     = $aa_conditions['partner_cd'];
+        }elseif (!empty($aa_conditions['affiliate_cd'])) {
+            $s_affiliate_cd = 'and partner_site.affiliate_cd = :affiliate_cd';
+            $a_conditions['affiliate_cd']   = $aa_conditions['affiliate_cd'];
+        }elseif (!empty($aa_conditions['site_cd'])) {
+            $s_site_cd = 'and partner_site.site_cd = :site_cd';
+            $a_conditions['site_cd']        = $aa_conditions['site_cd'];
+        }
+
+
+        // HACK: sql 直書きはどうにかしたい？
         $sql = <<<SQL
             select
                 site_cd,
@@ -126,7 +198,7 @@ class PartnerSite extends Model
                 ifnull(partner_cd, affiliate_cd)
         SQL;
 
-        $result = DB::select($sql);
+        $result = DB::select($sql, $a_conditions);
 
         $cipher = new Models_Cipher(config('settings.cipher_key'));
         foreach($result as $key => $value) {
