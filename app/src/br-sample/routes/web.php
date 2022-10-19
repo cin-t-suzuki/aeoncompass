@@ -103,6 +103,10 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 			
 			Route::get('/searchcity', 'searchcity')->name('ctl.brhotel.searchcity'); // 検索部品 市プルダウン
 			Route::get('/searchward', 'searchward')->name('ctl.brhotel.searchward'); // 検索部品 区プルダウン
+
+			Route::post('/createnote', 'createnote')->name('ctl.brhotel.createnote'); //施設管理特記事項
+			Route::post('/updatenote', 'updatenote')->name('ctl.brhotel.updatenote'); //
+
 		});
 
 		// 施設情報変更 登録状態変更
@@ -113,7 +117,7 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 
 		// 料率マスタ
 		Route::controller(BrhotelRateController::class)->prefix("brhotelRate")->group(function(){
-			Route::get('/index', 'index')->name('ctl.brhotelRate.index'); //表示
+			Route::match(['get','post'],'/index', 'index')->name('ctl.brhotelRate.index'); //表示
 			Route::match(['get','post'],'/edit', 'edit')->name('ctl.brhotelRate.edit'); //更新 表示
 			Route::post('/update', 'update')->name('ctl.brhotelRate.update'); //更新処理
 			Route::match(['get','post'],'/new', 'new')->name('ctl.brhotelRate.new');	//新規 表示
