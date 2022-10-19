@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Util\Models_Cipher;
 // use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -126,6 +127,16 @@ class PartnerSite extends Model
         SQL;
 
         $result = DB::select($sql);
+
+        $cipher = new Models_Cipher(config('settings.cipher_key'));
+        foreach($result as $key => $value) {
+            if (!empty($value->email)) {
+                $result[$key]->email_decrypt = $cipher->decrypt($value->email);
+            } else {
+                $result[$key]->email_decrypt = '';
+            }
+        }
+
         return $result;
     }
 }

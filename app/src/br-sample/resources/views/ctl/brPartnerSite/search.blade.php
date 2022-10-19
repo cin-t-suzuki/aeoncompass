@@ -65,10 +65,9 @@
                     @endif
                     <br />
                     email:
-                    {{-- TODO: メール復号したら表示する --}}
-                    {{-- @foreach (explode(',', $customer->email_decrypt) as $email)
+                    @foreach (explode(',', $site->email_decrypt) as $email)
                         {{ $email }}<br />
-                    @endforeach --}}
+                    @endforeach
                 </td>
                 <td>
                     @if (!empty($site->partner_cd))
