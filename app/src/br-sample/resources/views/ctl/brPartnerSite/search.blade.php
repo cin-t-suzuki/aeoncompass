@@ -1,5 +1,5 @@
 {{-- 提携先管理ヘッダー・フッター --}}
-@extends('ctl.common.basekarioki')
+@extends('ctl.common.brPartnerCustomerBaseToBeRenamed')
 
 @section('title', 'パートナー精算サイト一覧')
 
