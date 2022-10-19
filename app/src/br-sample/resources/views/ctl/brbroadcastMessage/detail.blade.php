@@ -25,8 +25,6 @@
      </div>
      <div style="clear:both;"></div>
   <h2 style="color:#444">施設管理TOPお知らせ情報詳細画面</h2>
-
-  {{--TODO $views->broadcastMessageDetail["header_message"] --}}
   
 {{-- 登録内容 --}}
 @section('detail')
@@ -39,6 +37,3 @@
 <!--hr class="contents-margin" /> 
   <hr class="contents-margin" /-->
   
-
-
-

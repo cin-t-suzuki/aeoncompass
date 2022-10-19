@@ -235,7 +235,6 @@ SQL;
 						and	secure_license.license_limit_dtm > sysdate()
 					SQL;
 
-//TODO					$a_rows = $_oracle->find_by_sql($s_sql, $a_conditions);
 				$a_rows = DB::select($s_sql);
 
 				if(!empty($a_rows) && count($a_rows) > 0){

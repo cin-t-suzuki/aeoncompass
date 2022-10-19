@@ -41,4 +41,28 @@ class HotelStaffNote extends CommonDBModel
 		return null;
 	}
 
+	/** 新規登録(1件)
+	 */
+	public function singleInsert($con, $data){
+
+		$result = $con->table($this->table)->insert($data);
+		if(!$result){
+			return "登録に失敗しました";
+		}
+		return "";
+	}
+
+	/**  キーで更新
+	 *
+	 * @param [type] $con
+	 * @param [type] $data
+	 * @return エラーメッセージ
+	 */
+	public function updateByKey($con, $data){
+		$result = $con->table($this->table)
+			->where(array($this->COL_HOTEL_CD=>$data[$this->COL_HOTEL_CD]))->update($data);
+		return $result;
+	}
+
+
 }
