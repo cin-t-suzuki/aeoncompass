@@ -1,18 +1,28 @@
-{{-- css --}}
-{include file='./_css.tpl'}
-{{-- 提携先管理ヘッダー --}}
-{include file='../_common/_br_header2.tpl' title="精算サイト情報"}
+{{-- 提携先管理ヘッダー・フッター --}}
+@extends('ctl.common.base2')
+
+@section('title', '精算サイト情報')
+
+@section('headScript')
+    @include('ctl.brPartnerSite._css')
+@endsection
+
+@section('content')
 
 {{-- エラーメッセージ --}}
-{include file='../_common/_message.tpl'}
+{{-- TODO: 外部ファイルどちらにするか判断 --}}
+{{-- 移植元では、 view2 のものを埋め込んでいた。 --}}
+{{-- @include('ctl.common.message') --}}
+@include('ctl.common.message2')
 
 <hr class="contents-margin" />
 
 {{-- 入力フォーム --}}
+{{-- TODO: Form Facades --}}
 <form action="{$v->env.source_path}{$v->env.module}/brpartnersite/modify/" method="POST">
 
     {{-- 精算先内容 --}}
-    {include file='./_input_site.tpl'}
+    @include('ctl.brPartnerSite._input_site')
 
     <hr class="contents-margin" />
 
@@ -27,16 +37,17 @@
 </form>
 
 {{-- 料率表示 --}}
-{include file='./_info_rate.tpl'}
+@include('ctl.brPartnerSite._info_rate')
 
 <hr class="contents-margin" />
 
 {{-- 一覧へ戻る --}}
+{{-- TODO: Form Facades --}}
 <form action="{$v->env.source_path}{$v->env.module}/brpartnersite/search/" method="POST">
     <small>
-    {foreach from=$v->assign->search_params item=value key=key}
-        <input type="hidden" name="{$key}" value="{$value}" />
-    {/foreach}
+        {foreach from=$v->assign->search_params item=value key=key}
+            <input type="hidden" name="{$key}" value="{$value}" />
+        {/foreach}
 
         <input type="submit" value="精算サイト一覧へ">
     </small>
@@ -44,6 +55,4 @@
 
 <hr class="contents-margin" />
 
-{{-- 提携先管理フッター --}}
-{include file='../_common/_br_footer.tpl'}
-{{-- /提携先管理フッター --}}
+@endsection

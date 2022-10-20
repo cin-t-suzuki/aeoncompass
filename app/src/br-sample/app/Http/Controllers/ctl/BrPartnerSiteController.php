@@ -53,7 +53,9 @@ class BrPartnerSiteController extends _commonController
     public function edit(Request $request)
     {
         return view('ctl.brPartnerSite.edit', [
-            
+            'errors' => [
+                'dummy error',
+            ],
         ]);
     }
 }
