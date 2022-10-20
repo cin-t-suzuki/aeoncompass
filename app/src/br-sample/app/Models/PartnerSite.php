@@ -73,7 +73,7 @@ class PartnerSite extends Model
     /**
      * TODO: phpdoc
      */
-    private function _get_sites($aa_conditions)
+    public function _get_sites($aa_conditions)
     {
         $s_customer_id  = '';
         $s_customer_nm  = '';
@@ -217,4 +217,32 @@ class PartnerSite extends Model
 
         return $result;
     }
+
+    /**
+     * PK を取得
+     *
+     * yyyymm0000 の形式。
+     * 各月 yyyymm0001 からはじめて1ずつ増やす。
+     *
+     * @return string
+     */
+    public function _get_sequence_no(){
+        $ym = date('Ym');
+
+        $sql = <<<SQL
+            select	max(site_cd) as site_cd
+            from	partner_site
+            where	site_cd >= concat(:ym, '0000')
+        SQL;
+
+        $result = DB::select($sql, ['ym' => $ym]);
+
+        if (count($result) === 0) {
+            $new_site_cd = sprintf('%s%04d', $ym, 1);
+        } else {
+            $new_site_cd = sprintf('%s%04d', $ym, (int)substr($result[0]->site_cd, 6, 4) + 1);
+        }
+        return $new_site_cd;
+    }
+
 }

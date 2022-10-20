@@ -52,6 +52,39 @@ class BrPartnerSiteController extends _commonController
      */
     public function edit(Request $request)
     {
+		// 精算先登録情報設定
+        $model = new PartnerSite();
+        if ($request->has('partner_site')) {
+            // リクエストから指定されている場合は、それを利用
+            $partner_site = (object)$request->input('partner_site');
+        } else {
+            if ($request->has('site_cd')) {
+                // リクエストから指定されていない場合は DB から取得
+                $partner_sites = $model->_get_sites(['site_cd' => $request->input('site_cd')]);
+
+                if (count($partner_sites) < 1) {
+                    // TODO: error
+                } else {
+                    $partner_site = $partner_sites[0];
+                }
+            } else {
+                // サイトコードが未指定の場合は、新規登録とする
+                $partner_site = (object)[
+                    'site_cd' => $model->_get_sequence_no(),
+                    'site_nm' => '',
+                    'person_post' => '',
+                    'person_nm' => '',
+                    'email_decrypt' => '',
+                    'mail_send' => 0,
+                    'partner_cd' => '',
+                    'partner_nm' => '',
+                    'affiliate_cd' => '',
+                    'affiliate_nm' => '',
+                ];
+            }
+        }
+
+
         // TODO:
         $form_params = [];
         $form_params['site_cd'] = $request->input('site_cd', '');
@@ -59,14 +92,10 @@ class BrPartnerSiteController extends _commonController
         // TODO:
         $search_params = [];
 
-        $model = new PartnerSite();
-        // TODO:
-        $partner_site = $model->getPartnerSiteByKeywords('', '', '')[0];
-
 
         // TODO:
         $partner_site_rate = (object)[
-            'select_rate_index' => 1,
+            'select_rate_index' => 0,
             'accept_s_ymd' => '',
         ];
 

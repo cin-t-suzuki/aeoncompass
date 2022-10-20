@@ -26,11 +26,11 @@
         <th>通知方法</th>
         <td>
             <label for="mail_send_1">
-                <input type="radio" id="mail_send_1" name="partner_site[mail_send]" value="0" {{ ($partner_site->mail_send ?? '0') === '0' ? 'checked' : '' }} />
+                <input type="radio" id="mail_send_1" name="partner_site[mail_send]" value="0" {{ (string)$partner_site->mail_send === '0' ? 'checked' : '' }} />
                 通知しない
             </label>
             <label for="mail_send_0">
-                <input type="radio" id="mail_send_0" name="partner_site[mail_send]" value="1" {{ $partner_site->mail_send === "1" ? 'checked' : '' }} />
+                <input type="radio" id="mail_send_0" name="partner_site[mail_send]" value="1" {{ (string)$partner_site->mail_send === "1" ? 'checked' : '' }} />
                 メールで通知する
             </label>
             <br />※ 精算先「株式会社日本旅行（1）」の場合のみ有効
