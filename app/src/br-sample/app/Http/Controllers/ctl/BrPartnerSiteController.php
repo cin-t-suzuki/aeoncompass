@@ -7,6 +7,8 @@ use App\Models\PartnerSite;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 
+use function PHPUnit\Framework\isNull;
+
 class BrPartnerSiteController extends _commonController
 {
     /**
@@ -52,7 +54,7 @@ class BrPartnerSiteController extends _commonController
      */
     public function edit(Request $request)
     {
-		// 精算先登録情報設定
+        // 精算先登録情報設定
         $model = new PartnerSite();
         if ($request->has('partner_site')) {
             // リクエストから指定されている場合は、それを利用
@@ -69,21 +71,24 @@ class BrPartnerSiteController extends _commonController
                 }
             } else {
                 // サイトコードが未指定の場合は、新規登録とする
+                // HACK: オブジェクトをうまく初期化する方法がありそう。
                 $partner_site = (object)[
-                    'site_cd' => $model->_get_sequence_no(),
-                    'site_nm' => '',
-                    'person_post' => '',
-                    'person_nm' => '',
+                    'site_cd'       => $model->_get_sequence_no(),
+                    'site_nm'       => '',
+                    'person_post'   => '',
+                    'person_nm'     => '',
                     'email_decrypt' => '',
-                    'mail_send' => 0,
-                    'partner_cd' => '',
-                    'partner_nm' => '',
-                    'affiliate_cd' => '',
-                    'affiliate_nm' => '',
+                    'mail_send'     => 0,
+                    'partner_cd'    => '',
+                    'partner_nm'    => '',
+                    'affiliate_cd'  => '',
+                    'affiliate_nm'  => '',
                 ];
             }
         }
 
+        // 手数料率設定
+        $rates = $model->_get_rates(['site_cd' => $partner_site->site_cd]);
 
         // TODO:
         $form_params = [];
@@ -92,28 +97,32 @@ class BrPartnerSiteController extends _commonController
         // TODO:
         $search_params = [];
 
+        // 料率設定
+        $partner_site_rate = [];
+        if (count($rates) > 0) {
+            $partner_site_rate['rate_type']         = $rates[0]->rate_type;
+            $partner_site_rate['select_rate_index'] = $rates[0]->select_rate_index;
+            $partner_site_rate['accept_s_ymd']      = $rates[0]->accept_s_ymd;
+        } else {
+            $partner_site_rate['rate_type']         = null;
+            $partner_site_rate['select_rate_index'] = null;
+            $partner_site_rate['accept_s_ymd']      = null;
+        }
 
-        // TODO:
-        $partner_site_rate = (object)[
-            'select_rate_index' => 0,
-            'accept_s_ymd' => '',
-        ];
+        // 精算先情報設定
+        $partner_customer_site = [];
+        $partner_customer_site['customer_id'] = $partner_site->sales_customer_id;
+        $partner_customer_site['customer_nm'] = $partner_site->sales_customer_nm;
+        // サイトコードが未指定で精算先が指定されてきていて、精算先が確定してない場合は、指定されてきたIDを初期値として設定
+        if (
+                is_null($partner_customer_site['customer_id'])
+            and $request->has('customer_id')
+            and $request->input('customer_id') != 1
+            and !$request->has('site_cd')
+        ) {
+            $partner_customer_site['customer_id'] = $request->input('customer_id');
+        }
 
-        // TODO:
-        $partner_customer_site = (object)[
-            'customer_id' => '',
-            'customer_nm' => '',
-        ];
-
-        // TODO:
-        $rates = [
-            (object)[
-                'accept_s_ymd' => '',
-            ],
-            (object)[
-                'accept_s_ymd' => '',
-            ],
-        ];
 
         return view('ctl.brPartnerSite.edit', [
             'errors' => [
@@ -125,7 +134,6 @@ class BrPartnerSiteController extends _commonController
             'partner_site_rate'     => $partner_site_rate,
             'partner_customer_site' => $partner_customer_site,
             'rates'                 => $rates,
-
         ]);
     }
 

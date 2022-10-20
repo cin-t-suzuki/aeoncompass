@@ -55,7 +55,7 @@
         <td>
             <select size="1" name="partner_site_rate[rate_type]">
                 @for ($i = 0; $i < 11; $i++)
-                    <option value="{{ $i }}" {{ ($partner_site_rate->select_rate_index == $i) ? 'selected' : '' }}>
+                    <option value="{{ $i }}" {{ ($partner_site_rate['select_rate_index'] == $i) ? 'selected' : '' }}>
                         @if ($i == 1)
                             1:特別提携    0% ベストリザーブオリジナルサイト・光通信等
                         @elseif ($i == 2)
@@ -89,15 +89,15 @@
     <tr>
         <th>料率開始年月日（直近）</th>
         <td>
-            <input type="text" size="15" maxlength="10" name="partner_site_rate[accept_s_ymd]" value="{{ $partner_site_rate->accept_s_ymd }}" />
+            <input type="text" size="15" maxlength="10" name="partner_site_rate[accept_s_ymd]" value="{{ $partner_site_rate['accept_s_ymd'] }}" />
              ～（例：yyyy-mm-dd）
         </td>
     </tr>
     <tr>
         <th>精算先ID<br /> 手数料タイプ「1:販売」用</th>
         <td>
-            <input type="text" size="5" maxlength="20" name="partner_customer_site[customer_id]" value="{{ strip_tags($partner_customer_site->customer_id) }}" />
-            {{ $partner_customer_site->customer_nm }}
+            <input type="text" size="5" maxlength="20" name="partner_customer_site[customer_id]" value="{{ strip_tags($partner_customer_site['customer_id']) }}" />
+            {{ $partner_customer_site['customer_nm'] }}
             <br />※ 料率タイプが「6～9」のNTA用の場合は、「1:販売」の精算が発生しませんので登録できません。
         </td>
     </tr>

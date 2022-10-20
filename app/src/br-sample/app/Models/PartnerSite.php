@@ -219,6 +219,91 @@ class PartnerSite extends Model
     }
 
     /**
+     * パートナー精算サイト手数料率検索
+     *
+     * TODO: phpdoc
+     */
+    public function _get_rates($aa_conditions)
+    {
+        // バインドパラメータ設定
+        $sql_parameters = [];
+        $s_site_cd = 'and site_cd = :site_cd';
+        $sql_parameters['site_cd'] = $aa_conditions['site_cd'];
+
+        // HACK: かなりのハードコーディング？を含んでいて、危なっかしく感じられる
+        $sql = <<<SQL
+            select
+                site_cd,
+                date_format(accept_s_ymd, '%Y-%m-%d') as accept_s_ymd,
+                case
+                    when sales_1_rate = 0 and stock_1_rate = 0                      then '1:BR 0%'
+                    when sales_1_rate = 1 and stock_1_rate = 0 and stock_2_rate = 1 then '2:BR 1%'
+                    when sales_1_rate = 2 and stock_1_rate = 0 and stock_5_rate = 3 then '3:BR 2%'
+                    when sales_1_rate = 2 and stock_1_rate = 0 and stock_5_rate = 1 then '4:BTM'
+                    when stock_4_rate = 1.95                                        then '5:Yahoo!トラベル'
+                    when stock_4_rate = 1.8                                         then '5:Yahoo!トラベル'
+                    when stock_1_rate = 2                                           then '6:NTA 2%'
+                    when stock_1_rate = 3                                           then '7:NTA 3% MSD等'
+                    when stock_1_rate = 4                                           then '8:NTA 4% JRおでかけネット'
+                    when stock_2_rate = 2 and stock_3_rate = 3 and stock_4_rate = 5 then '9:NTA リロクラブ'
+                    when sales_1_rate = 1 and stock_1_rate = 0 and stock_2_rate = 0 then '10:GBTNTA 1%'
+                end as rate_type,
+                case
+                    when sales_1_rate = 0 and stock_1_rate = 0                      then 1
+                    when sales_1_rate = 1 and stock_1_rate = 0 and stock_2_rate = 1 then 2
+                    when sales_1_rate = 2 and stock_1_rate = 0 and stock_5_rate = 3 then 3
+                    when sales_1_rate = 2 and stock_1_rate = 0 and stock_5_rate = 1 then 4
+                    when stock_4_rate = 1.95                                        then 5
+                    when stock_4_rate = 1.8                                         then 5
+                    when stock_1_rate = 2                                           then 6
+                    when stock_1_rate = 3                                           then 7
+                    when stock_1_rate = 4                                           then 8
+                    when stock_2_rate = 2 and stock_3_rate = 3 and stock_4_rate = 5 then 9
+                    when sales_1_rate = 1 and stock_1_rate = 0 and stock_2_rate = 0 then 10
+                end as select_rate_index,
+                sales_1_rate, -- 一般ネット在庫
+                sales_2_rate, -- 連動在庫一般
+                sales_3_rate, -- 連動在庫ヴィジュアル
+                sales_4_rate, -- 連動在庫プレミアム
+                sales_5_rate, -- 東横イン在庫
+                stock_1_rate, -- 一般ネット在庫
+                stock_2_rate, -- 連動在庫一般
+                stock_3_rate, -- 連動在庫ヴィジュアル
+                stock_4_rate, -- 連動在庫プレミアム
+                stock_5_rate -- 東横イン在庫
+            from
+                (
+                    select
+                        site_cd,
+                        accept_s_ymd,
+                        max(case when fee_type = 1 and stock_class = 1 then rate else null end) as sales_1_rate, -- 一般ネット在庫
+                        max(case when fee_type = 1 and stock_class = 2 then rate else null end) as sales_2_rate, -- 連動在庫一般
+                        max(case when fee_type = 1 and stock_class = 3 then rate else null end) as sales_3_rate, -- 連動在庫ヴィジュアル
+                        max(case when fee_type = 1 and stock_class = 4 then rate else null end) as sales_4_rate, -- 連動在庫プレミアム
+                        max(case when fee_type = 1 and stock_class = 5 then rate else null end) as sales_5_rate, -- 東横イン在庫
+                        max(case when fee_type = 2 and stock_class = 1 then rate else null end) as stock_1_rate, -- 一般ネット在庫
+                        max(case when fee_type = 2 and stock_class = 2 then rate else null end) as stock_2_rate, -- 連動在庫一般
+                        max(case when fee_type = 2 and stock_class = 3 then rate else null end) as stock_3_rate, -- 連動在庫ヴィジュアル
+                        max(case when fee_type = 2 and stock_class = 4 then rate else null end) as stock_4_rate, -- 連動在庫プレミアム
+                        max(case when fee_type = 2 and stock_class = 5 then rate else null end) as stock_5_rate -- 東横イン在庫
+                    from
+                        partner_site_rate
+                    where 1 = 1
+                        {$s_site_cd}
+                    group by
+                        site_cd,
+                        accept_s_ymd
+                ) q
+            order by
+                site_cd,
+                accept_s_ymd desc
+        SQL;
+
+        $result = DB::select($sql, $sql_parameters);
+        return $result;
+    }
+
+    /**
      * PK を取得
      *
      * yyyymm0000 の形式。
