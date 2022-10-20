@@ -52,10 +52,23 @@ class BrPartnerSiteController extends _commonController
      */
     public function edit(Request $request)
     {
+        $form_params = [];
+        $form_params['site_cd'] = $request->input('site_cd', '');
+        $search_params = [];
         return view('ctl.brPartnerSite.edit', [
             'errors' => [
                 'dummy error',
             ],
+            'form_params' => $form_params,
+            'search_params' => $search_params,
         ]);
+    }
+
+    /**
+     * TODO: phpdoc
+     */
+    public function modify(Request $request)
+    {
+        return 'TODO: modify controller';
     }
 }

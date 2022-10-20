@@ -142,4 +142,6 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 	Route::get('/brpartnersite/', 'BrPartnerSiteController@index');
 	Route::get('/brpartnersite/search', 'BrPartnerSiteController@search')->name('ctl.brPartnerSite.search');
 	Route::get('/brpartnersite/edit', 'BrPartnerSiteController@edit')->name('ctl.brPartnerSite.edit');
+	Route::post('/brpartnersite/modify', 'BrPartnerSiteController@modify')->name('ctl.brPartnerSite.modify');
+
 });
