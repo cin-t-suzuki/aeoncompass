@@ -52,15 +52,51 @@ class BrPartnerSiteController extends _commonController
      */
     public function edit(Request $request)
     {
+        // TODO:
         $form_params = [];
         $form_params['site_cd'] = $request->input('site_cd', '');
+
+        // TODO:
         $search_params = [];
+
+        $model = new PartnerSite();
+        // TODO:
+        $partner_site = $model->getPartnerSiteByKeywords('', '', '')[0];
+
+
+        // TODO:
+        $partner_site_rate = (object)[
+            'select_rate_index' => 1,
+            'accept_s_ymd' => '',
+        ];
+
+        // TODO:
+        $partner_customer_site = (object)[
+            'customer_id' => '',
+            'customer_nm' => '',
+        ];
+
+        // TODO:
+        $rates = [
+            (object)[
+                'accept_s_ymd' => '',
+            ],
+            (object)[
+                'accept_s_ymd' => '',
+            ],
+        ];
+
         return view('ctl.brPartnerSite.edit', [
             'errors' => [
                 'dummy error',
             ],
-            'form_params' => $form_params,
-            'search_params' => $search_params,
+            'form_params'           => $form_params,
+            'search_params'         => $search_params,
+            'partner_site'          => $partner_site,
+            'partner_site_rate'     => $partner_site_rate,
+            'partner_customer_site' => $partner_customer_site,
+            'rates'                 => $rates,
+
         ]);
     }
 
