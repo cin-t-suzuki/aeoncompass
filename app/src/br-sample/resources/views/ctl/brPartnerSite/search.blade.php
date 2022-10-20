@@ -11,6 +11,10 @@
     @include('ctl.brPartnerSite._js')
 @endsection
 
+@php
+    $customer_id = '1'; // TODO: dummy
+@endphp
+
 @section('content')
     <hr class="contents-margin" />
 
@@ -22,16 +26,14 @@
         <hr class="contents-margin" />
 
         {{-- 新規登録 --}}
-        {{-- TODO: Form Facades --}}
-        <form action="{$v->env.source_path}{$v->env.module}/brpartnersite/edit/" method="POST">
+        {{ Form::open(['route' => 'ctl.brPartnerSite.edit', 'method' => 'get']) }}
             <small>
                 <input type="submit" value="対象サイトの新規登録">
                 {{-- {foreach from=$v->assign->search_params (TODO: ) item=value key=key}
                     <input type="hidden" name="{$key}" value="{$value}" />
                 {/foreach} --}}
             </small>
-        </form>
-
+        {{ Form::close() }}
     </div>
 
     {{-- 一覧表示 --}}
@@ -93,8 +95,7 @@
                     @if (!empty($site->stock_customer_id))
                         {{ $site->stock_customer_nm }}
                         （{{ $site->stock_customer_id }}）
-                        {{-- TODO: Form Facades --}}
-                        <form action="{$v->env.path_base_module}/brpartnercustomer/edit/" method="post">
+                        {{ Form::open(['route' => ['brpartnercustomer.edit', ['customer_id' => $customer_id]], 'method' => 'get']) }}
                             <input type="submit" value=" 精算先表示 ">
                             <input type="hidden" name="customer_id" value="{{ $site->sales_customer_id }}" />
                             {{-- {foreach from=$v->assign->search_params (TODO: ) item=value key=key}
@@ -102,7 +103,7 @@
                                     <input type="hidden" name="{$key}" value="{$value}" />
                                 {/if}
                             {/foreach} --}}
-                        </form>
+                        {{ Form::close() }}
                     @endif
                     @if (!empty($site->sales_customer_id))
                         @if (!empty($site->stock_customer_id))
@@ -110,8 +111,7 @@
                         @endif
                         {{ $site->sales_customer_nm }}
                         （{{ $site->sales_customer_id }}）
-                        {{-- TODO: Form Facades --}}
-                        <form action="{$v->env.path_base_module}/brpartnercustomer/edit/" method="post">
+                        {{ Form::open(['route' => ['brpartnercustomer.edit', ['customer_id' => $customer_id]], 'method' => 'get']) }}
                             <input type="submit" value=" 精算先表示 ">
                             <input type="hidden" name="customer_id" value="{{ $site->sales_customer_id }}" />
                             {{-- {foreach from=$v->assign->search_params (TODO: ) item=value key=key}
@@ -119,18 +119,17 @@
                                     <input type="hidden" name="{$key}" value="{$value}" />
                                 {/if}
                             {/foreach} --}}
-                        </form>
+                        {{ Form::close() }}
                     @endif
                 </td>
                 <td style="text-align:center;">
-                    {{-- TODO: Form Facades --}}
-                    <form action="{$v->env.path_base_module}/brpartnersite/edit/" method="post">
+                    {{ Form::open(['route' => 'ctl.brPartnerSite.edit', 'method' => 'get']) }}
                         <input type="submit" value=" 表示・編集 ">
                         <input type="hidden" name="site_cd" value="{{ $site->site_cd }}" />
                         {{-- {foreach from=$v->assign->search_params (TODO: ) item=value key=key}
                             <input type="hidden" name="{$key}" value="{$value}" />
                         {/foreach} --}}
-                    </form>
+                    {{ Form::close() }}
                 </td>
             </tr>
         @endforeach
@@ -138,8 +137,7 @@
     <hr class="contents-margin" />
 
     {{-- 請求先一覧へ --}}
-    {{-- TODO: Form Facades --}}
-    <form action="{$v->env.source_path}{$v->env.module}/brpartnercustomer/search/" method="POST">
+    {{ Form::open(['route' => 'brpartnercustomer.search', 'method' => 'get']) }}
         <small>
             {{-- {foreach from=$v->assign->search_params (TODO: ) item=value key=key}
                 <input type="hidden" name="{$key}" value="{$value}" />
@@ -147,7 +145,7 @@
 
             <input type="submit" value="請求先一覧へ">
         </small>
-    </form>
+    {{ Form::close() }}
 
     <hr class="contents-margin" />
 
