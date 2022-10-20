@@ -46,4 +46,14 @@ class BrPartnerSiteController extends _commonController
             ],
         ]);
     }
+
+    /**
+     * TODO: phpdoc
+     */
+    public function edit(Request $request)
+    {
+        return view('ctl.brPartnerSite.edit', [
+            
+        ]);
+    }
 }

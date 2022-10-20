@@ -138,8 +138,8 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 
 	Route::post('/brpartnersite/search', function() {return 'TODO: search, session.customer_off の forgot が必要なケースあり（？）'; })->name('brpartnersite.search');
 
-	
+	// 精算サイト
 	Route::get('/brpartnersite/', 'BrPartnerSiteController@index');
 	Route::get('/brpartnersite/search', 'BrPartnerSiteController@search')->name('ctl.brPartnerSite.search');
-
+	Route::get('/brpartnersite/edit', 'BrPartnerSiteController@edit')->name('ctl.brPartnerSite.edit');
 });
