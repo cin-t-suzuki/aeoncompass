@@ -9,8 +9,8 @@
 				<td bgcolor="#EEFFEE" nowrap rowspan="2">施設コード<br>施設名</td>
 				<td bgcolor="#EEFFEE" nowrap rowspan="2">登録状態</td>
 				<td bgcolor="#EEFFEE" nowrap rowspan="2">詳細変更</td>
+				<!--td bgcolor="#EEFFEE" nowrap rowspan="2">旧部屋総合</td-->
 				<td bgcolor="#EEFFEE" nowrap rowspan="2">部屋総合</td>
-				<td bgcolor="#EEFFEE" nowrap rowspan="2">新部屋総合</td>
 				<td bgcolor="#EEFFEE" nowrap rowspan="2">簡単増返室</td>
 				<td bgcolor="#EEFFEE" nowrap colspan="3" align="center">ストリーム</td>
 				<td bgcolor="#EEFFEE" nowrap rowspan="2">キャンペーン</td>
@@ -108,12 +108,13 @@
 				<input type="hidden" name="target_cd" value="{{$hotel_list->hotel_cd}}" />
 			{!! Form::close() !!}
 		</td>
-		<td nowrap align="middle">
+		<!--旧レイアウトを除去-->
+		<!--td nowrap align="middle">
 			<form action="{$v->env.source_path}{$v->env.module}/htlstock/" method="post" target="_blank">
 				<input type="submit" value="設定">
 				<input type="hidden" name="target_cd" value="{{$hotel_list->hotel_cd}}" />
 			</form>
-		</td>
+		</td-->
 		<td nowrap align="middle">
 			<form action="{$v->env.source_path}{$v->env.module}/htlsroomoffer/" method="post" target="_blank">
 				<input type="submit" value="設定">

@@ -1,8 +1,8 @@
 @section('title', '料率マスタ')
 @include('ctl.common.base')
 
-{{--TODO サブメニュー --}}
-<a href="{$v->env.source_path}{$v->env.module}/brhotel/show/target_cd/{$views->target_cd}">詳細変更</a>&nbsp;&gt;&nbsp;料率一覧
+{{--サブメニュー --}}
+<a href="{{ route('ctl.brhotel.show', ['target_cd'=>$views->target_cd]) }}">詳細変更</a>&nbsp;&gt;&nbsp;料率一覧
 <br>
 @section('message')
 @include('ctl.common.message', $messages)
@@ -19,7 +19,6 @@
 <br>
 
 {{-- 料率 新規登録--}}
-<!--form action="{$v->env.source_path}{$v->env.module}/brhotelrate/new/" method="post"-->
 {!! Form::open(['route' => ['ctl.brhotelRate.new'], 'method' => 'post']) !!}
 	<input type="submit" value="新規登録" name="sinki">
 	<input type="hidden" value="{{strip_tags($views->target_cd)}}" name="target_cd">

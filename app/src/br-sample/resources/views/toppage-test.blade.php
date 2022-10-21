@@ -24,6 +24,8 @@
 
 		<a href="{{ route('ctl.brhotelRate.index', ['target_cd'=>'2015060001']) }}">料率一覧</a><br>
 
+		<a href="{{ route('ctl.brhotel.show', ['target_cd'=>'2015060001']) }}">詳細変更 施設各情報ハブ		</a><br>
+
 	</body>
 
 </html>

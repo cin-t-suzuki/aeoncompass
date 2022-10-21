@@ -80,7 +80,7 @@ class BroadcastMessage extends CommonDBModel
 	{
 		
 		$data = $this->selectByKey($brbroadcast_id);
-		//        Log::info("デバッグgetDetail".$data[0]->id);//TODO =145
+
 		return array(
 			"brbroadcast_id" => $data[0]->id,
 			"header_message" => $data[0]->header_message,

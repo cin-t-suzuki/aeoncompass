@@ -55,8 +55,7 @@ class HotelRate extends CommonDBModel
 			return $errorList;
 		}
 
-		//TODO DBに同じ日がないこと
-			// 開始日が既に登録されているかのチェック
+		// DBに同じ日がないこと 開始日が既に登録されているかのチェック
 			if ($method == $this->METHOD_SAVE){
 
 				$s_sql =<<<SQL
@@ -148,10 +147,11 @@ class HotelRate extends CommonDBModel
 		return $result;
 	}
 
-	/** ホテルコードで取得
+	/** システム利用料一覧を取得
+	 *  開始日の昇順でソート
 	 */
 	public function selectByHotelCd($hotelCd){
-		$data = $this->where($this->COL_HOTEL_CD, $hotelCd)->get();
+		$data = $this->where($this->COL_HOTEL_CD, $hotelCd)->orderBy($this->COL_ACCEPT_S_YMD,'desc')->get();
 
 		$result = null;
 
@@ -170,5 +170,4 @@ class HotelRate extends CommonDBModel
 	}
 
 
-	
 }

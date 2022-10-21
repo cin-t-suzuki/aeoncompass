@@ -56,7 +56,11 @@ class BrbroadcastMessageController extends _commonController
 			return view("ctl.brbroadcastMessage.detail", $this->getViewData());
 		}
 
-		/** 詳細データをDBから取得する
+		/** 詳細データをDBから取得する（参照渡し）
+		 *
+		 * @param [type] $broadcastMessageDetailData
+		 * @param [type] $brbroadcast_id
+		 * @return void
 		 */
 		private function getDetailDbData(&$broadcastMessageDetailData, $brbroadcast_id)
 		{
@@ -226,7 +230,7 @@ class BrbroadcastMessageController extends _commonController
 				$con = DB::connection('mysql');
 				$dbErr = $con->transaction(function() use($con, $broadcastMessage, $broadcastMessageData, $hotelList) 
 				{
-					$broadcastMessage->setInsertCommonColumn($broadcastMessageData, 'BrbroadcastMessage/create.');
+					$broadcastMessage->setInsertCommonColumn($broadcastMessageData);
 					$broadcastMessage->singleInsert($con, $broadcastMessageData);
 
 					// 不要となった
@@ -321,12 +325,19 @@ class BrbroadcastMessageController extends _commonController
 				return $errorArr;
 			}
 			
-			$broadcastMessagesHotel->setInsertCommonColumn($broadcastMessagesHotelData ,'BrbroadcastMessageHotel/update.');
+			$broadcastMessagesHotel->setInsertCommonColumn($broadcastMessagesHotelData);
 			return $errorArr;
 		}*/
 		//↑不要
 
-		/** 登録/変更画面の入力値 お知らせを取得する。
+
+		/** 登録/変更画面の入力値 お知らせを取得する。（参照渡し）
+		 *
+		 * @param [type] $broadcastMessageData
+		 * @param [type] $hotelList
+		 * @param [type] $form_params
+		 * @param [type] $broadcast_message_id
+		 * @return void
 		 */
 		private function setBroadcastMessageFromScreen(&$broadcastMessageData, &$hotelList, $form_params, $broadcast_message_id)
 		{
@@ -455,7 +466,7 @@ class BrbroadcastMessageController extends _commonController
 				$con = DB::connection('mysql');
 				$dbErr = $con->transaction(function() use($con, $broadcastMessage, $broadcastMessageData, $hotelList) 
 				{
-					$broadcastMessage->setUpdateCommonColumn($broadcastMessageData, 'BrbroadcastMessage/update.');
+					$broadcastMessage->setUpdateCommonColumn($broadcastMessageData);
 					// 変更処理 
 					$broadcastMessage->singleUpdate($con, $broadcastMessageData);
 
@@ -532,7 +543,7 @@ class BrbroadcastMessageController extends _commonController
 				$con = DB::connection('mysql');
 				$dbErr = $con->transaction(function() use($con, $bMModel, $broadcastMessageData) 
 				{
-					$bMModel->setUpdateCommonColumn($broadcastMessageData, 'BrbroadcastMessage/destroy.');
+					$bMModel->setUpdateCommonColumn($broadcastMessageData);
 					// 変更処理
 					$bMModel->singleUpdate($con, $broadcastMessageData);
 

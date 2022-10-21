@@ -43,7 +43,7 @@ class HtlhotelInfoController extends _commonController
 		return view("ctl.htlhotelInfo.show", $this->getViewData());
 	}
 
-	/** 施設データをDBから取得
+	/** 施設データをDBから取得（参照渡し）
 	 *
 	 * @return void
 	 */
@@ -84,7 +84,13 @@ class HtlhotelInfoController extends _commonController
 
 	}
 
-	// 施設情報の画面の値を取得、変換、バリデーションを行う
+	/** 施設情報の画面の値を取得、変換、バリデーションを行う（参照渡し）
+	 *
+	 * @param [type] $hotelInfoData
+	 * @param [type] $input
+	 * @param [type] $hotelInfo
+	 * @return array
+	 */
 	private function validateHotelInfoFromScreen(&$hotelInfoData, $input, $hotelInfo)
 	{
 		$hotelInfoData['hotel_cd'] = $input['hotel_cd'];
@@ -118,7 +124,7 @@ class HtlhotelInfoController extends _commonController
 				->with(['errorMessageArr'=>$errorList]);
 		}
 		// 共通カラム値設定
-		$hotelInfo->setUpdateCommonColumn($hotelInfoData, 'HtlhotelInfo/update.');
+		$hotelInfo->setUpdateCommonColumn($hotelInfoData);
 		// コネクション
 
 		try{
