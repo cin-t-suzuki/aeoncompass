@@ -1,21 +1,31 @@
 {{-- 移植元: svn_trunk\public\app\ctl\view2\brpartnersite\modify.tpl --}}
-{{-- css --}}
-{include file='./_css.tpl'}
-{strip}
-    {{-- 提携先管理ヘッダー --}}
-    {include file='../_common/_br_header2.tpl' title="精算サイト情報"}
 
+{{-- 提携先管理ヘッダー・フッター --}}
+@extends('ctl.common.base2')
+
+@section('title', '精算サイト情報')
+
+@section('headScript')
+    @include('ctl.brPartnerSite._css')
+@endsection
+
+@section('content')
     <hr class="contents-margin" />
 
-    {include file=$v->env.module_root|cat:'/views/_common/_message.tpl'}
+    {{-- エラーメッセージ --}}
+    {{-- TODO: 外部ファイルどちらにするか判断 --}}
+    {{-- 移植元では、 view2 のものを埋め込んでいた。 --}}
+    {{-- @include('ctl.common.message') --}}
+    @include('ctl.common.message2')
 
     <hr class="contents-margin" />
 
     {{-- 精算先情報表示 --}}
-    {include file='./_info_site.tpl'}
+    @include('ctl.brPartnerSite._info_site')
 
     {{-- 料率表示 --}}
-    {include file='./_info_rate.tpl'}
+    @include('ctl.brPartnerSite._info_rate')
+
 
     <hr class="contents-margin" />
 
@@ -43,8 +53,4 @@
             </small>
         </form>
     </p>
-
-    {{-- 提携先管理フッター --}}
-    {include file='../_common/_br_footer.tpl'}
-    {{-- /提携先管理フッター --}}
-{/strip}
+@endsection

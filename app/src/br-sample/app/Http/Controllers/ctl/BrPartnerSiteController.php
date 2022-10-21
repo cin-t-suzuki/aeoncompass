@@ -168,6 +168,8 @@ class BrPartnerSiteController extends _commonController
      */
     public function modify(Request $request)
     {
-        return 'TODO: modify controller';
+        return view('ctl.brPartnerSite.modify', [
+
+        ]);
     }
 }
