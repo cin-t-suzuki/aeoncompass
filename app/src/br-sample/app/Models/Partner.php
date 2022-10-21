@@ -40,22 +40,21 @@ class Partner extends CommonDBModel
 	 */
 	function __construct(){
 		// // カラム情報の設定
-		// $colPrefId = new ValidationColumn();
-		// $colPrefId->setColumnName($this->COL_PREF_ID, "都道府県ID")->require()->length(0,2)->intOnly();
-		// $colRegionId = new ValidationColumn();
-		// $colRegionId->setColumnName($this->COL_REGION_ID, "地方ID")->require()->length(0,2)->intOnly();
-		// $colPrefNm = new ValidationColumn();
-		// $colPrefNm->setColumnName($this->COL_PREF_NM, "都道府県名称")->require()->length(0,5)->notHalfKana();//TODO 独自チェック追加
-		// $colPrefNs = new ValidationColumn();
-		// $colPrefNs->setColumnName($this->COL_PREF_NS, "都道府県略称")->length(0,3)->notHalfKana();
-		// $colOrderNo = new ValidationColumn();
-		// $colOrderNo->setColumnName($this->COL_ORDER_NO, "都道府県表示順序")->length(0,2)->intOnly();
-		// $colPrefCd = new ValidationColumn();
-		// $colPrefCd->setColumnName($this->COL_PREF_CD, "都道府県コード")->length(0,2);
-		// $colDeleteYmd = new ValidationColumn();
-		// $colDeleteYmd->setColumnName($this->COL_DELETE_YMD, "削除日")->correctDate();
-
-		// parent::setColumnDataArray([$colPrefId, $colRegionId, $colPrefNm, $colPrefNs, $colOrderNo, $colPrefCd, $colDeleteYmd]);
+		$colPartnerCd= (new ValidationColumn())->setColumnName($this->COL_PARTNER_CD, "提携先コード")->require()->length(0,10)->notHalfKana();
+		$colPartnerNm= (new ValidationColumn())->setColumnName($this->COL_PARTNER_NM, "提携先名称")->require()->length(0,65)->notHalfKana();
+		$colSystemNm= (new ValidationColumn())->setColumnName($this->COL_SYSTEM_NM, "システム名称")->require()->length(0,65)->notHalfKana();
+		$colPartnerNs= (new ValidationColumn())->setColumnName($this->COL_PARTNER_NS, "提携先略称")->require()->length(0,20)->notHalfKana();
+		$colUrl= (new ValidationColumn())->setColumnName($this->COL_URL, "ウェブサイトアドレス")->require()->length(0,128)->notHalfKana(); //urlチェック要追加
+		$colPostalCd= (new ValidationColumn())->setColumnName($this->COL_POSTAL_CD, "郵便番号")->require()->length(0,8)->notHalfKana()->postal(); 
+		$colAddress= (new ValidationColumn())->setColumnName($this->COL_ADDRESS, "住所")->require()->length(0,100)->notHalfKana();
+		$colTel= (new ValidationColumn())->setColumnName($this->COL_TEL, "電話番号")->require()->length(0,15)->notHalfKana()->phoneNumber();
+		$colFax= (new ValidationColumn())->setColumnName($this->COL_FAX, "ファックス番号")->require()->length(0,15)->notHalfKana()->phoneNumber();
+		$colPersonPost= (new ValidationColumn())->setColumnName($this->COL_PERSON_POST, "担当者役職")->require()->length(0,32)->notHalfKana();
+		$colPersonNm= (new ValidationColumn())->setColumnName($this->COL_PERSON_NM, "担当者名称")->require()->length(0,32)->notHalfKana();
+		$colPersonKn= (new ValidationColumn())->setColumnName($this->COL_PERSON_KN, "担当者かな名称")->require()->length(0,64)->notHalfKana();//ひらがなのみチェック要追加
+		$colPersonEmail= (new ValidationColumn())->setColumnName($this->COL_PERSON_EMAIL, "担当者電子メールアドレス")->require()->length(0,128)->notHalfKana()->emails();
+		$colOpenYmd= (new ValidationColumn())->setColumnName($this->COL_OPEN_YMD, "公開日")->require()->correctDate();
+		parent::setColumnDataArray([$colPartnerCd,$colPartnerNm,$colSystemNm,$colPartnerNs,$colUrl,$colPostalCd,$colAddress,$colTel,$colFax,$colPersonPost,$colPersonNm,$colPersonKn,$colPersonEmail,$colOpenYmd]);
 	}
 
 	// 提携先一覧の取得
@@ -150,14 +149,38 @@ SQL;
 		return array('values' => $result);
 	}
 
+	//ブレードでの日付フォーマット化のために追記
+	protected $dates = [
+        'open_ymd',
+    ];
 
-// 提携先グループ一覧の取得
-//
-//  aa_conditions
-//    partner_group_nm 提携先グループ名称 like
-//    partner_group_id 提携先グループid
-//    hotel_cd         施設コード
-// →一旦割愛
-
-
+	//パートナーCDでの提携先情報取得
+	public function selectByKey($partnerCd){
+		$data = $this->where(array($this->COL_PARTNER_CD=>$partnerCd))->get();
+		if(!is_null($data) && count($data) > 0){
+			return array(
+				$this->COL_PARTNER_CD => $data[0]->partner_cd,
+				$this->COL_PARTNER_NM => $data[0]->partner_nm,
+				$this->COL_SYSTEM_NM => $data[0]->system_nm,
+				$this->COL_PARTNER_NS => $data[0]->partner_ns,
+				$this->COL_TIEUP_YMD => $data[0]->tieup_ymd,
+				$this->COL_URL => $data[0]->url, 
+				$this->COL_POSTAL_CD => $data[0]->postal_cd, 
+				$this->COL_ADDRESS => $data[0]->address, 
+				$this->COL_TEL => $data[0]->tel, 
+				$this->COL_FAX => $data[0]->fax, 
+				$this->COL_PERSON_POST => $data[0]->person_post,
+				$this->COL_PERSON_NM => $data[0]->person_nm,
+				$this->COL_PERSON_KN => $data[0]->person_kn, 
+				$this->COL_PERSON_EMAIL => $data[0]->person_email,
+				$this->COL_OPEN_YMD => $data[0]->open_ymd, 
+				$this->COL_TIEUP_YMD => $data[0]->tieup_ymd, 
+				$this->COL_ENTRY_CD => $data[0]->entry_cd, 
+				$this->COL_ENTRY_TS => $data[0]->entry_ts,
+				$this->COL_MODIFY_CD => $data[0]->modify_cd, 
+				$this->COL_MODIFY_TS => $data[0]->modify_ts
+			);
+		}
+		return [];
+	}
 }
