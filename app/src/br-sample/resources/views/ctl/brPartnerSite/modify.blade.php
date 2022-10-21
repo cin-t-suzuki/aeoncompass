@@ -31,7 +31,7 @@
 
     {{-- 入力画面を表示 --}}
     <p>
-        <form action="{$v->env.source_path}{$v->env.module}/brpartnersite/edit/" method="POST">
+        {{ Form::open(['route' => 'ctl.brPartnerSite.edit', 'method' => 'get']) }}
             <small>
                 <input type="hidden" name="site_cd" value="{$v->assign->partner_site.site_cd}" />
                 {foreach from=$v->assign->search_params item=value key=key}
@@ -39,18 +39,18 @@
                 {/foreach}
                 <input type="submit" value="精算サイト情報の表示・編集へ">
             </small>
-        </form>
+        {{ Form::close() }}
     </p>
 
     {{-- 一覧に戻る --}}
     <p>
-        <form action="{$v->env.source_path}{$v->env.module}/brpartnersite/search/" method="POST">
+        {{ Form::open(['route' => 'ctl.brPartnerSite.search', 'method' => 'get']) }}
             <small>
                 {foreach from=$v->assign->search_params item=value key=key}
                     <input type="hidden" name="{$key}" value="{$value}" />
                 {/foreach}
                 <input type="submit" value="精算サイト一覧へ">
             </small>
-        </form>
+        {{ Form::close() }}
     </p>
 @endsection
