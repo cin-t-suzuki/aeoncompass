@@ -8,7 +8,7 @@
     <tr>
       <td nowrap bgcolor="#EEFFEE" >施設コード</td>
       <td nowrap>
-        <input type="text" name="Hotel_Supervisor_Hotel[hotel_cd]" value="{$v->helper->form->strip_tags($v->assign->hotel_supervisor.supervisor_nm)}" size="12" maxlength="10"><br>
+        <input type="text" name="hotel_cd" value="{{strip_tags($a_hotel_supervisor_hotel['supervisor_nm'] ??null )}}" size="12" maxlength="10"><br>
       </td>
     </tr>
   </table>

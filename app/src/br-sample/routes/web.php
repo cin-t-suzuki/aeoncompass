@@ -132,7 +132,7 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 			Route::get('/listhotel', 'listhotel')->name('ctl.brsupervisor.listhotel'); //表示
 			Route::get('/list', 'list')->name('ctl.brsupervisor.list'); //list
 			Route::post('/newhotel', 'newhotel')->name('ctl.brsupervisor.newhotel'); //newhotel
-			Route::get('/newhotel', 'newhotel')->name('ctl.brsupervisor.newhotel'); //newhotel
+			Route::post('/createhotel', 'createhotel')->name('ctl.brsupervisor.createhotel'); //新規処理
 
 		});		
 

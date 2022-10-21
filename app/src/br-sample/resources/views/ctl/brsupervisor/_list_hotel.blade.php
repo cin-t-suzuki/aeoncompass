@@ -1,5 +1,3 @@
-@inject('service', 'App\Http\Controllers\ctl\BrsupervisorController')
-
 <table border="1" cellspacing="0" cellpadding="4">
       <tr>
         <td nowrap align="left" bgcolor="#EEFFEE" >施設コード</td>

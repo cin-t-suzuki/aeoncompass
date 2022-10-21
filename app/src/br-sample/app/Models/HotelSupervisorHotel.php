@@ -12,37 +12,38 @@ class HotelSupervisorHotel extends CommonDBModel
 	use Traits;
 
 
-	/**
-	 * コンストラクタ TODOカラム情報の設定
-	 */
-	function __construct(){
-		// TODOカラム情報の設定
-		// $colPrefId = new ValidationColumn();
-		// $colPrefId->setColumnName($this->COL_PREF_ID, "都道府県ID")->require()->length(0,2)->intOnly();
-		// $colRegionId = new ValidationColumn();
-		// $colRegionId->setColumnName($this->COL_REGION_ID, "地方ID")->require()->length(0,2)->intOnly();
-		// $colPrefNm = new ValidationColumn();
-		// $colPrefNm->setColumnName($this->COL_PREF_NM, "都道府県名称")->require()->length(0,5)->notHalfKana();//TODO 独自チェック追加
-		// $colPrefNs = new ValidationColumn();
-		// $colPrefNs->setColumnName($this->COL_PREF_NS, "都道府県略称")->length(0,3)->notHalfKana();
-		// $colOrderNo = new ValidationColumn();
-		// $colOrderNo->setColumnName($this->COL_ORDER_NO, "都道府県表示順序")->length(0,2)->intOnly();
-		// $colPrefCd = new ValidationColumn();
-		// $colPrefCd->setColumnName($this->COL_PREF_CD, "都道府県コード")->length(0,2);
-		// $colDeleteYmd = new ValidationColumn();
-		// $colDeleteYmd->setColumnName($this->COL_DELETE_YMD, "削除日")->correctDate();
-
-		// parent::setColumnDataArray([$colPrefId, $colRegionId, $colPrefNm, $colPrefNs, $colOrderNo, $colPrefCd, $colDeleteYmd]);
-	}
-		
-	
-	// 統括ホテル一覧を取得
 	protected $table = "hotel_supervisor_hotel";
-	
 	// カラム
 	public string $COL_ID = "id";
 	public string $COL_SUPERVISOR_CD = "supervisor_cd";
 	public string $COL_HOTEL_CD = "hotel_cd";
+	public string $COL_ORDER_NUMBER = "order_number";
+	
+	public string $METHOD_SAVE = "save";
+	public string $METHOD_UPDATE = "update";
+
+	/**
+	 * コンストラクタ TODOカラム情報の設定
+	 */
+	function __construct(){
+
+			//　↓ 旧ソース
+			// // 施設コード
+			// $this->validate_presence_of(array('hotel_cd'));                                    // 必須入力チェック
+			// $this->validate_kana_of(array('hotel_cd'));                                        // 半角カナチェック
+			// $this->validate_length_of('hotel_cd', array(0, 10));                               // 長さチェック
+			// $this->validate_method_of('hotel_cd', array('hotel_cd_validate'));            // 独自チェック TODO
+			
+			$colId = (new ValidationColumn())->setColumnName($this->COL_ID, "ID")->require()->length(0, 8)->intOnly();
+			$colSupervisorCd = (new ValidationColumn())->setColumnName($this->COL_SUPERVISOR_CD, "施設統括コード")->require()->length(0, 10)->notHalfKana();
+			$colHotelCd = (new ValidationColumn())->setColumnName($this->COL_HOTEL_CD, "施設コード")->require()->length(0, 10)->notHalfKana()->currencyOnly(); //TODO 独自チェック
+			$colOrderNumber = (new ValidationColumn())->setColumnName($this->COL_ORDER_NUMBER, "並び順")->length(0, 5)->intOnly();
+
+			parent::setColumnDataArray([$colId, $colSupervisorCd, $colHotelCd, $colOrderNumber]);
+		}
+		
+	
+	// 統括ホテル一覧を取得
 
 	public function getHotelSupervisorHotel($aa_conditions = array()){
 		
@@ -92,18 +93,30 @@ class HotelSupervisorHotel extends CommonDBModel
 						$this->COL_ID => $row->id,
 						$this->COL_SUPERVISOR_CD => $row->supervisor_cd,
 						$this->COL_HOTEL_CD => $row->hotel_cd,
-						'hotel_nm' => $row->hotel_nm //hotel_nm はthisに入ってこないので直接書いて取得
+						'hotel_nm' => $row->hotel_nm, //直接書いて取得
+						'pref_nm' => $row->pref_nm //直接書いて取得
+
 					);
 				}
 			}
 			return array('values' => $result);
 
 	}
+	
+
+	/** 新規登録(1件)
+	 */
+	public function singleInsert($con, $data){
+
+		$result = $con->table($this->table)->insert($data);
+		if(!$result){
+			return "登録に失敗しました";
+		}
+		return "";
+	}
+
+
+
+
 }
-
-
-
-
-
-
 ?>

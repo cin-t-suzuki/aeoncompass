@@ -534,4 +534,15 @@ SQL;
 
 	}
 
+
+			// シングルトンインスタンスを実装 10/13追記
+			private static $_o_instance = null;
+			public static function getInstance()
+			{
+				if (null === self::$_o_instance)
+				 {self::$_o_instance = new self();}
+				return self::$_o_instance;
+			}
+	
+
 }
