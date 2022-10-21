@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\common\ValidationColumn;
 use App\Util\Models_Cipher;
 // use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -31,6 +32,77 @@ class PartnerSite extends Model
      * @var bool
      */
     public $incrementing = false;
+
+    // カラム
+    const COL_SITE_CD       = 'site_cd';
+    const COL_SITE_NM       = 'site_nm';
+    const COL_EMAIL         = 'email';
+    const COL_PERSON_POST   = 'person_post';
+    const COL_PERSON_NM     = 'person_nm';
+    const COL_MAIL_SEND     = 'mail_send';
+    const COL_PARTNER_CD    = 'partner_cd';
+    const COL_AFFILIATE_CD  = 'affiliate_cd';
+
+    function __construct()
+    {
+        // カラム情報の設定
+        $col_site_cd = new ValidationColumn();
+        $col_site_cd->setColumnName(self::COL_SITE_CD, 'サイトコード');
+        $col_site_nm = new ValidationColumn();
+        $col_site_nm->setColumnName(self::COL_SITE_NM, '提携先サイト名称');
+        $col_email = new ValidationColumn();
+        $col_email->setColumnName(self::COL_EMAIL, 'チャネル別支払先');
+        $col_person_post = new ValidationColumn();
+        $col_person_post->setColumnName(self::COL_PERSON_POST, '担当者役職');
+        $col_person_nm = new ValidationColumn();
+        $col_person_nm->setColumnName(self::COL_PERSON_NM, '担当者名称');
+        $col_mail_send = new ValidationColumn();
+        $col_mail_send->setColumnName(self::COL_MAIL_SEND, 'メール送信可否');
+        $col_partner_cd = new ValidationColumn();
+        $col_partner_cd->setColumnName(self::COL_PARTNER_CD, '提携先コード');
+        $col_affiliate_cd = new ValidationColumn();
+        $col_affiliate_cd->setColumnName(self::COL_AFFILIATE_CD, 'アフィリエイトコード');
+
+        // バリデーション追加
+        // サイトコード
+        $col_site_cd->require(); // 必須入力チェック
+        $col_site_cd->notHalfKana(); // 半角カナチェック
+        $col_site_cd->length(0, 10); // 長さチェック
+
+        // 提携先サイト名称
+        $col_site_nm->notHalfKana(); // 半角カナチェック
+        $col_site_nm->length(0, 65); // 長さチェック
+
+        // チャネル別支払先
+        $col_email->notHalfKana(); // 半角カナチェック
+        $col_email->emails(); // メールアドレスチェック
+        $col_email->length(0, 200); // 長さチェック
+
+        // 担当者役職
+        $col_person_post->notHalfKana(); // 半角カナチェック
+        $col_person_post->length(0, 96); // 長さチェック
+
+        // 担当者名称
+        $col_person_nm->notHalfKana(); // 半角カナチェック
+        $col_person_nm->length(0, 32); // 長さチェック
+
+        // メール送信可否
+        $col_mail_send->length(0, 1); // 長さチェック
+        $col_mail_send->intOnly(); // 数字：数値チェック
+
+        // 提携先コード
+        $col_partner_cd->notHalfKana(); // 半角カナチェック
+        $col_partner_cd->length(0, 10); // 長さチェック
+
+        // アフィリエイトコード
+        $col_affiliate_cd->notHalfKana(); // 半角カナチェック
+        $col_affiliate_cd->length(0, 10); // 長さチェック
+
+        parent::setColumnDataArray([
+            $col_site_cd  , $col_site_nm   , $col_email       , $col_person_post, $col_person_nm,
+            $col_mail_send, $col_partner_cd, $col_affiliate_cd,
+        ]);
+    }
 
     /**
      * TODO: phpdoc

@@ -33,4 +33,5 @@ class AffiliateProgram extends Model
      */
     public $incrementing = false;
 
+    // TODO: implement __construct
 }
