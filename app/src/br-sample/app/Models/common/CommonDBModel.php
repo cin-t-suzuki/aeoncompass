@@ -3,9 +3,10 @@
 namespace App\Models\common;
 use Illuminate\Database\Eloquent\Model;
 use App\Common\DateUtil;
-
+use Exception;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\DB;
 
 /**
  * DBモデルの共通クラス
@@ -241,6 +242,28 @@ abstract class CommonDBModel extends Model
 		$action_cd = $controllerName."/".$actionName.".".$userId;
 
 		return $action_cd;
+	}
+
+	/** 	シーケンス取得
+	 *
+	 * @param [type] $sequenceName
+	 * @return int
+	 */
+	public function incrementSequence($sequenceName){
+
+		if(isset($sequenceName)){
+			return "シーケンス名が指定されていません";
+		}
+
+		$a_conditions['sequence_name'] = $sequenceName;
+
+		$s_sql = <<<SQL
+			SELECT  NextVal(:sequence_name) as val
+		SQL;
+
+		$data = DB::select($s_sql, $a_conditions);
+
+		return $data[0];
 	}
 
 		// メールアドレスチェック

@@ -44,7 +44,7 @@ class BrhotelController extends _commonController
 
 	// 
 	/** 宿泊施設検索（HTML） 
-	 * info XML版は使われていないかもしれない
+	 * info 別の関数のXML版は使われていないかもしれない
 	 *
 	 * @return void
 	 */
