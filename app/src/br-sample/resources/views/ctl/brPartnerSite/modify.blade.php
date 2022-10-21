@@ -34,9 +34,9 @@
         {{ Form::open(['route' => 'ctl.brPartnerSite.edit', 'method' => 'get']) }}
             <small>
                 <input type="hidden" name="site_cd" value="{$v->assign->partner_site.site_cd}" />
-                {foreach from=$v->assign->search_params item=value key=key}
-                    <input type="hidden" name="{$key}" value="{$value}" />
-                {/foreach}
+                @foreach ($search_params as $key => $value)
+                    <input type="hidden" name="{{ $key }}" value="{{ $value }}" />
+                @endforeach
                 <input type="submit" value="精算サイト情報の表示・編集へ">
             </small>
         {{ Form::close() }}
@@ -46,9 +46,9 @@
     <p>
         {{ Form::open(['route' => 'ctl.brPartnerSite.search', 'method' => 'get']) }}
             <small>
-                {foreach from=$v->assign->search_params item=value key=key}
-                    <input type="hidden" name="{$key}" value="{$value}" />
-                {/foreach}
+                @foreach ($search_params as $key => $value)
+                    <input type="hidden" name="{{ $key }}" value="{{ $value }}" />
+                @endforeach
                 <input type="submit" value="精算サイト一覧へ">
             </small>
         {{ Form::close() }}

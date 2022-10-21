@@ -168,7 +168,45 @@ class BrPartnerSiteController extends _commonController
      */
     public function modify(Request $request)
     {
+        // TODO: 本実装
+        $partner_site = $request->input('partner_site');
+        $partner_site['email_decrypt'] = $partner_site['email'];
+        $partner_site['partner_nm'] = '';
+        $partner_site['affiliate_nm'] = '';
+        $partner_site['affiliate_nm'] = '';
+        $partner_site['affiliate_nm'] = '';
+        $partner_site['affiliate_nm'] = '';
+        $partner_site['affiliate_nm'] = '';
+        $partner_site['affiliate_nm'] = '';
+
+        // TODO: 本実装
+        $partner_site_rate = $request->input('partner_site_rate');
+        $partner_customer_site = $request->input('partner_customer_site');
+
+        // TODO: 本実装
+        $partner_customer_site['customer_nm'] = '';
+
+
+        // TODO: 本実装
+        // MEMO: 検索条件の引き回し HACK: session で管理したい
+        $search_params = [];
+        if ($request->has('customer_id')) {
+            $search_params['customer_id'] = $request->input('customer_id');
+        }
+        if ($request->has('customer_off')) {
+            $search_params['customer_off'] = $request->input('customer_off');
+        }
+        if ($request->has('keywords')) {
+            $search_params['keywords'] = $request->input('keywords');
+        }
+
+
         return view('ctl.brPartnerSite.modify', [
+            'partner_site' => (object)$partner_site,
+            'partner_site_rate' => (object)$partner_site_rate,
+            'partner_customer_site' => (object)$partner_customer_site,
+            'search_params'         => $search_params,
+
 
         ]);
     }
