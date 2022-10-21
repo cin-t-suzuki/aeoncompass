@@ -221,6 +221,8 @@ class PartnerSite extends Model
     /**
      * パートナー精算サイト手数料率検索
      *
+     * TODO: テーブルごとに分かれるなら、 partner_site_rate に対応するモデルクラスにあるほうが適切に思われる
+     *
      * TODO: phpdoc
      */
     public function _get_rates($aa_conditions)

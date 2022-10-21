@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers\ctl;
 
+use App\Common\Traits;
 use App\Http\Controllers\ctl\_commonController;
 use App\Models\PartnerSite;
+use App\Models\Partner;
+use App\Models\PartnerCustomer;
+use App\Models\AffiliateProgram;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 
@@ -11,6 +15,8 @@ use function PHPUnit\Framework\isNull;
 
 class BrPartnerSiteController extends _commonController
 {
+    use Traits;
+
     /**
      * TODO: phpdoc
      */
@@ -168,15 +174,64 @@ class BrPartnerSiteController extends _commonController
      */
     public function modify(Request $request)
     {
+
+        // HACK: validation の責務は、コントローラが負うほうが適切に思われる（要調査）。
+
+        $model = new PartnerSite();
+
+        // 精算サイト登録情報設定
+        $a_site          = $request->input('partner_site');
+        $a_site_rate     = $request->input('partner_site_rate');
+        $a_customer_site = $request->input('partner_customer_site');
+        $a_rate = $model->_get_rates(['site_cd' => $a_site['site_cd']]);
+
+        // 料率タイプがNTA向けの場合は、販売向けの精算先の登録なし。
+        //10(GBTNTA)は販売のみなので、↓の処理を通らないようにする。
+        // HACK: Magic Number
+        if ($a_site_rate['rate_type'] >= 6 && $a_site_rate['rate_type'] != 10) {
+            $a_customer_site['customer_id'] = null;
+        }
+
+        // // 精算サイト登録
+        // // TODO: implement _insert_site
+        // if ($this->_insert_site($a_site)) {
+        //     // 精算先・サイト関連の登録
+        //     // TODO: implement _insert_customer_site
+        //     $this->_insert_customer_site($a_site['site_cd'], $a_customer_site['customer_id']);
+
+        //     // 精算サイトの情報取得
+        //     $a_sites = $this->_get_sites(array('site_cd' => $a_site['site_cd']));
+        //     $a_site  = $a_sites[0];
+        //     $a_customer_site['customer_nm'] = $a_site['sales_customer_nm'];
+
+        // // 登録失敗した場合、表示ように変更予定のパートナーとアフィリエイトの名称を設定する。
+        // } 
+        // // TODO: implement
+        // else {
+        //     // パートナー
+        //     if (!$this->is_empty($a_site['parner_cd'])) {
+        //         $o_partner      = Partner::getInstance();
+        //         $a_partner = $o_partner->find(array('partner_cd' => $a_site['parner_cd']));
+        //         $a_site['partner_nm'] = $a_partner['system_nm'];
+        //     }
+        //     // アフィリエイト
+        //     if (!$this->is_empty($a_site['affiliate_cd'])) {
+        //         $o_affiliate = AffiliateProgram::getInstance();
+        //         $a_affiliate = $o_affiliate->find(array('affiliate_cd' => $a_site['affiliate_cd']));
+        //         $a_site['affiliate_nm'] = $a_affiliate['program_nm'];
+        //     }
+        //     // 精算先
+        //     if (!$this->is_empty($a_customer_site['customer_id'])) {
+        //         $o_customer = PartnerCustomer::getInstance();
+        //         $a_customer = $o_customer->find(array('customer_id' => $a_customer_site['customer_id']));
+        //         $a_customer_site['customer_nm'] = $a_customer['customer_nm'];
+        //     }
+        // }
+
         // TODO: 本実装
         $partner_site = $request->input('partner_site');
         $partner_site['email_decrypt'] = $partner_site['email'];
         $partner_site['partner_nm'] = '';
-        $partner_site['affiliate_nm'] = '';
-        $partner_site['affiliate_nm'] = '';
-        $partner_site['affiliate_nm'] = '';
-        $partner_site['affiliate_nm'] = '';
-        $partner_site['affiliate_nm'] = '';
         $partner_site['affiliate_nm'] = '';
 
         // TODO: 本実装
@@ -202,8 +257,8 @@ class BrPartnerSiteController extends _commonController
 
 
         return view('ctl.brPartnerSite.modify', [
-            'partner_site' => (object)$partner_site,
-            'partner_site_rate' => (object)$partner_site_rate,
+            'partner_site'          => (object)$partner_site,
+            'partner_site_rate'     => (object)$partner_site_rate,
             'partner_customer_site' => (object)$partner_customer_site,
             'search_params'         => $search_params,
 
