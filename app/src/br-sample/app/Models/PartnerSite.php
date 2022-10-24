@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\common\CommonDBModel;
 use App\Models\common\ValidationColumn;
 use App\Util\Models_Cipher;
 // use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class PartnerSite extends Model
+class PartnerSite extends CommonDBModel
 {
     // use HasFactory;
 
@@ -24,7 +25,7 @@ class PartnerSite extends Model
      *
      * @var string
      */
-    protected $primaryKey = 'flight_id';
+    protected $primaryKey = 'site_cd';
 
     /**
      * モデルのIDを自動増分するか
