@@ -11,10 +11,6 @@
     @include('ctl.brPartnerSite._js')
 @endsection
 
-@php
-    $customer_id = '1'; // TODO: dummy
-@endphp
-
 @section('content')
     <hr class="contents-margin" />
 
@@ -29,9 +25,9 @@
         {{ Form::open(['route' => 'ctl.brPartnerSite.edit', 'method' => 'get']) }}
             <small>
                 <input type="submit" value="対象サイトの新規登録">
-                {{-- {foreach from=$v->assign->search_params (TODO: ) item=value key=key}
-                    <input type="hidden" name="{$key}" value="{$value}" />
-                {/foreach} --}}
+                @foreach ($search_params as $key => $value)
+                    <input type="hidden" name="{{ $key }}" value="{{ $value }}" />
+                @endforeach
             </small>
         {{ Form::close() }}
     </div>
@@ -95,14 +91,14 @@
                     @if (!empty($site->stock_customer_id))
                         {{ $site->stock_customer_nm }}
                         （{{ $site->stock_customer_id }}）
-                        {{ Form::open(['route' => ['brpartnercustomer.edit', ['customer_id' => $customer_id]], 'method' => 'get']) }}
+                        {{ Form::open(['route' => ['brpartnercustomer.edit', ['customer_id' => $site->sales_customer_id]], 'method' => 'get']) }}
                             <input type="submit" value=" 精算先表示 ">
                             <input type="hidden" name="customer_id" value="{{ $site->sales_customer_id }}" />
-                            {{-- {foreach from=$v->assign->search_params (TODO: ) item=value key=key}
-                                {if ($key!= 'customer_id')}
-                                    <input type="hidden" name="{$key}" value="{$value}" />
-                                {/if}
-                            {/foreach} --}}
+                            @foreach ($search_params as $key => $value)
+                                @if ($key != 'customer_id')
+                                    <input type="hidden" name="{{ $key }}" value="{{ $value }}" />
+                                @endif
+                            @endforeach
                         {{ Form::close() }}
                     @endif
                     @if (!empty($site->sales_customer_id))
@@ -111,14 +107,14 @@
                         @endif
                         {{ $site->sales_customer_nm }}
                         （{{ $site->sales_customer_id }}）
-                        {{ Form::open(['route' => ['brpartnercustomer.edit', ['customer_id' => $customer_id]], 'method' => 'get']) }}
+                        {{ Form::open(['route' => ['brpartnercustomer.edit', ['customer_id' => $site->sales_customer_id]], 'method' => 'get']) }}
                             <input type="submit" value=" 精算先表示 ">
                             <input type="hidden" name="customer_id" value="{{ $site->sales_customer_id }}" />
-                            {{-- {foreach from=$v->assign->search_params (TODO: ) item=value key=key}
-                                {if ($key!= 'customer_id')}
-                                    <input type="hidden" name="{$key}" value="{$value}" />
-                                {/if}
-                            {/foreach} --}}
+                            @foreach ($search_params as $key => $value)
+                                @if ($key != 'customer_id')
+                                    <input type="hidden" name="{{ $key }}" value="{{ $value }}" />
+                                @endif
+                            @endforeach
                         {{ Form::close() }}
                     @endif
                 </td>
@@ -126,9 +122,9 @@
                     {{ Form::open(['route' => 'ctl.brPartnerSite.edit', 'method' => 'get']) }}
                         <input type="submit" value=" 表示・編集 ">
                         <input type="hidden" name="site_cd" value="{{ $site->site_cd }}" />
-                        {{-- {foreach from=$v->assign->search_params (TODO: ) item=value key=key}
-                            <input type="hidden" name="{$key}" value="{$value}" />
-                        {/foreach} --}}
+                        @foreach ($search_params as $key => $value)
+                            <input type="hidden" name="{{ $key }}" value="{{ $value }}" />
+                        @endforeach
                     {{ Form::close() }}
                 </td>
             </tr>
@@ -139,9 +135,9 @@
     {{-- 請求先一覧へ --}}
     {{ Form::open(['route' => 'brpartnercustomer.search', 'method' => 'get']) }}
         <small>
-            {{-- {foreach from=$v->assign->search_params (TODO: ) item=value key=key}
-                <input type="hidden" name="{$key}" value="{$value}" />
-            {/foreach} --}}
+            @foreach ($search_params as $key => $value)
+                <input type="hidden" name="{{ $key }}" value="{{ $value }}" />
+            @endforeach
 
             <input type="submit" value="請求先一覧へ">
         </small>

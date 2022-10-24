@@ -3,21 +3,15 @@
 {{-- TODO: Form Facades --}}
 <form action="/ctl/brpartnersite/search/" method="get">
     <p>
-        {{-- TODO: セッションなどで保持してコントローラから渡す。 --}}
-        @php
-            $customer = (object)[
-                'customer_nm' => '精算先名',
-            ];
-        @endphp
         <table class="br-detail-list">
-            @if (!empty($form_params->customer_id))
+            @if (array_key_exists('customer_id', $form_params))
                 <tr>
                     <th>精算先</th>
                     <td>
-                        {{ $customer->customer_nm }}（{{ $form_params->customer_id }}）
+                        {{ $customer['customer_nm'] }}（{{ $form_params['customer_id'] }}）
                         <br />
-                        <input type="checkbox" name="customer_off" value="1" {{ $form_params->customer_off ? 'checked="checked"' : '' }} /> 精算先を検索条件から外す
-                        <input type="hidden" name="customer_id" value="{{ strip_tags($form_params->customer_id) }}" />
+                        <input type="checkbox" name="customer_off" value="1" {{ array_key_exists('customer_off', $form_params) && $form_params['customer_off'] ? 'checked="checked"' : '' }} /> 精算先を検索条件から外す
+                        <input type="hidden" name="customer_id" value="{{ strip_tags($form_params['customer_id']) }}" />
                     </td>
                 </tr>
             @endif

@@ -30,28 +30,50 @@ class BrPartnerSiteController extends _commonController
      */
     public function search(Request $request)
     {
-        // 検索ワードが request に含まれればそれを適用する
-        // そうでなければ session を見て、あればそれを適用する
-        if ($request->has('keywords')) {
-            $keywords = $request->input('keywords');
-        } else {
-            $keywords = $request->session()->pull('keywords', '');
-        }
+        $keywords = $request->input('keywords');
 
-        $customer_id = $request->input('customer_id', '');
-        $customer_off = $request->input('customer_off', '');
+        $customer_id  = $request->input('customer_id');
+        $customer_off = $request->input('customer_off');
+        $site_cd      = $request->input('site_cd');
 
         $model = new PartnerSite();
-        $sites = $model->getPartnerSiteByKeywords($keywords, $customer_id, $customer_off);
+        $sites = $model->getPartnerSiteByKeywords($keywords, $customer_id, $customer_off, $site_cd);
+
+        $form_params = $request->input();
+
+        // MEMO: 検索条件の引き回し HACK: session で管理したい？
+        $search_params = [];
+        if ($request->has('customer_id')) {
+            $search_params['customer_id'] = $request->input('customer_id');
+        }
+        if ($request->has('customer_off')) {
+            $search_params['customer_off'] = $request->input('customer_off');
+        }
+        if ($request->has('keywords')) {
+            $search_params['keywords'] = $request->input('keywords');
+        }
+
+        // 精算先名称を検索内容用に設定
+        $customer = [];
+        if ($request->has('customer_id')) {
+            // HACK: DB から取得しているデータに含まれていればそれを使い、なければ DB から取得
+            if ($request->input('customer_id') == $sites[0]->stock_customer_id) {
+                $customer['customer_nm'] = $sites[0]->stock_customer_nm;
+            } else if ($request->input('customer_id') == $sites[0]->sales_customer_id) {
+                $customer['customer_nm'] = $sites[0]->sales_customer_nm;
+            } else {
+                $partnerCustomer = PartnerCustomer::findOrFail($request->input('customer_id'));
+                $customer['customer_nm'] = $partnerCustomer->customer_nm;
+            }
+        }
 
         $request->session()->put('keywords', $keywords);
         return view('ctl.brPartnerSite.search', [
-            'sites' => $sites,
-            'keywords' => $keywords,
-            'form_params' => [
-                'customer_id' => $customer_id,
-                'customer_off' => $customer_off,
-            ],
+            'sites'         => $sites,
+            'keywords'      => $keywords,
+            'form_params'   => $form_params,
+            'search_params' => $search_params,
+            'customer'      => $customer,
         ]);
     }
 

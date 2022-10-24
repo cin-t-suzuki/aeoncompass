@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Common\Traits;
 use App\Models\common\CommonDBModel;
 use App\Models\common\ValidationColumn;
 use App\Util\Models_Cipher;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 
 class PartnerSite extends CommonDBModel
 {
+    use Traits;
     // use HasFactory;
 
     /**
@@ -108,17 +110,19 @@ class PartnerSite extends CommonDBModel
     /**
      * TODO: phpdoc
      *
-     * @param string $keyword
-     * @param string $customer_id
-     * @param $customer_off // HACK: Naming (customer_exclude seems better)
+     * @param string? $keyword
+     * @param string? $customer_id
+     * @param string? $customer_off // HACK: Naming (customer_exclude seems better)
+     * @param string? $site_cd
      */
-    public function getPartnerSiteByKeywords($keywords, $customer_id, $customer_off)
+    public function getPartnerSiteByKeywords($keywords, $customer_id, $customer_off, $site_cd)
     {
         // keywords を分割し、単語ごとにフォーマットで検索対象カラムを判定
         $a_keywords = explode(' ', str_replace('　', ' ', $keywords));
+
         $a_conditions = [];
         foreach ($a_keywords as $keyword) {
-            if (!empty($keyword)) {
+            if (!$this->is_empty($keyword)) {
                 if (preg_match('/[A-Z0-9][0-9]{9}/', $keyword)) {
                     $a_conditions['partner_cd'] = $keyword;
                     $a_conditions['affiliate_cd'] = $keyword;
@@ -136,7 +140,7 @@ class PartnerSite extends CommonDBModel
                 }
             }
         }
-        if (!empty($customer_id) && empty($customer_off)) {
+        if (!is_null($customer_id) && is_null($customer_off)) {
             $a_conditions['customer_id'] = $customer_id;
         }
 
@@ -148,6 +152,26 @@ class PartnerSite extends CommonDBModel
      */
     public function _get_sites($aa_conditions)
     {
+        // キーが存在しない場合に初期化
+        if (!array_key_exists('customer_id', $aa_conditions)) {
+            $aa_conditions['customer_id'] = '';
+        }
+        if (!array_key_exists('customer_nm', $aa_conditions)) {
+            $aa_conditions['customer_nm'] = '';
+        }
+        if (!array_key_exists('site_cd', $aa_conditions)) {
+            $aa_conditions['site_cd'] = '';
+        }
+        if (!array_key_exists('site_nm', $aa_conditions)) {
+            $aa_conditions['site_nm'] = '';
+        }
+        if (!array_key_exists('partner_cd', $aa_conditions)) {
+            $aa_conditions['partner_cd'] = '';
+        }
+        if (!array_key_exists('affiliate_cd', $aa_conditions)) {
+            $aa_conditions['affiliate_cd'] = '';
+        }
+
         $s_customer_id  = '';
         $s_customer_nm  = '';
         $s_nm           = '';
@@ -158,39 +182,39 @@ class PartnerSite extends CommonDBModel
 
         // バインドパラメータ設定
         $a_conditions = [];
-        if (!empty($aa_conditions['customer_id'])) {
+        if (!$this->is_empty($aa_conditions['customer_id'])) {
             $s_customer_id = 'and partner_customer.customer_id = :customer_id';
             $a_conditions['customer_id'] = $aa_conditions['customer_id'];
         }
 
-        if (!empty($aa_conditions['customer_nm']) && !empty($aa_conditions['site_nm'])) {
+        if (!$this->is_empty($aa_conditions['customer_nm']) && !$this->is_empty($aa_conditions['site_nm'])) {
             $s_nm = 'and (partner_customer.customer_nm like concat(\'%\', :customer_nm, \'%\') or partner_site.site_nm like concat(\'%\', :site_nm, \'%\'))';
             $a_conditions['customer_nm']    = $aa_conditions['customer_nm'];
             $a_conditions['site_nm']        = $aa_conditions['site_nm'];
-        }elseif (!empty($aa_conditions['customer_nm'])) {
+        }elseif (!$this->is_empty($aa_conditions['customer_nm'])) {
             $s_customer_nm = 'and partner_customer.customer_nm like concat(\'%\', :customer_nm, \'%\')';
             $a_conditions['customer_nm']    = $aa_conditions['customer_nm'];
-        }elseif (!empty($aa_conditions['site_nm'])) {
+        }elseif (!$this->is_empty($aa_conditions['site_nm'])) {
             $s_site_nm = 'and partner_site.site_nm like concat(\'%\', :site_nm, \'%\')';
             $a_conditions['site_nm']        = $aa_conditions['site_nm'];
         }
 
-        if (!empty($aa_conditions['partner_cd']) && !empty($aa_conditions['affiliate_cd']) && !empty($aa_conditions['site_cd'])) {
+        if (!$this->is_empty($aa_conditions['partner_cd']) && !$this->is_empty($aa_conditions['affiliate_cd']) && !$this->is_empty($aa_conditions['site_cd'])) {
             $s_partner_cd = 'and (partner_site.partner_cd = :partner_cd or partner_site.affiliate_cd = :affiliate_cd or partner_site.site_cd = :site_cd)';
             $a_conditions['partner_cd']     = $aa_conditions['partner_cd'];
             $a_conditions['affiliate_cd']   = $aa_conditions['affiliate_cd'];
             $a_conditions['site_cd']        = $aa_conditions['site_cd'];
-        }elseif (!empty($aa_conditions['partner_cd']) && !empty($aa_conditions['affiliate_cd'])) {
+        }elseif (!$this->is_empty($aa_conditions['partner_cd']) && !$this->is_empty($aa_conditions['affiliate_cd'])) {
             $s_partner_cd = 'and (partner_site.partner_cd = :partner_cd or partner_site.affiliate_cd = :affiliate_cd)';
             $a_conditions['partner_cd']     = $aa_conditions['partner_cd'];
             $a_conditions['affiliate_cd']   = $aa_conditions['affiliate_cd'];
-        }elseif (!empty($aa_conditions['partner_cd'])) {
+        }elseif (!$this->is_empty($aa_conditions['partner_cd'])) {
             $s_affiliate_cd = 'and partner_site.partner_cd = :partner_cd';
             $a_conditions['partner_cd']     = $aa_conditions['partner_cd'];
-        }elseif (!empty($aa_conditions['affiliate_cd'])) {
+        }elseif (!$this->is_empty($aa_conditions['affiliate_cd'])) {
             $s_affiliate_cd = 'and partner_site.affiliate_cd = :affiliate_cd';
             $a_conditions['affiliate_cd']   = $aa_conditions['affiliate_cd'];
-        }elseif (!empty($aa_conditions['site_cd'])) {
+        }elseif (!$this->is_empty($aa_conditions['site_cd'])) {
             $s_site_cd = 'and partner_site.site_cd = :site_cd';
             $a_conditions['site_cd']        = $aa_conditions['site_cd'];
         }
@@ -281,7 +305,7 @@ class PartnerSite extends CommonDBModel
 
         $cipher = new Models_Cipher(config('settings.cipher_key'));
         foreach($result as $key => $value) {
-            if (!empty($value->email)) {
+            if (!$this->is_empty($value->email)) {
                 $result[$key]->email_decrypt = $cipher->decrypt($value->email);
             } else {
                 $result[$key]->email_decrypt = '';

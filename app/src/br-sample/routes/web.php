@@ -133,7 +133,8 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 	Route::get('/brpartnercustomer/create', 'BrPartnerCustomerController@create')->name('brpartnercustomer.create');
 	Route::post('/brpartnercustomer/register', 'BrPartnerCustomerController@register')->name('brpartnercustomer.register');
 
-	Route::get('/brpartnercustomer/edit/{customer_id}', 'BrPartnerCustomerController@edit')->name('brpartnercustomer.edit');
+	// TODO: 要調査 クエリパラメータに ? をつけて任意にしないとレンダリングが通らなくなっている…
+	Route::get('/brpartnercustomer/edit/{customer_id?}', 'BrPartnerCustomerController@edit')->name('brpartnercustomer.edit');
 	Route::post('/brpartnercustomer/modify', 'BrPartnerCustomerController@modify')->name('brpartnercustomer.modify');
 
 
