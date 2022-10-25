@@ -251,7 +251,7 @@ abstract class CommonDBModel extends Model
 	 */
 	public function incrementSequence($sequenceName){
 
-		if(isset($sequenceName)){
+		if(!isset($sequenceName)){
 			return "シーケンス名が指定されていません";
 		}
 
