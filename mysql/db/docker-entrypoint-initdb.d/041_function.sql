@@ -61,8 +61,8 @@ DELIMITER ;
   DELIMITER //
 
   CREATE 
-    FUNCTION `NextVal`(seq_name VARCHAR(50)) RETURNS bigint(15)
-    RETURNS bigint
+    FUNCTION `NextVal`(seq_name VARCHAR(50)) 
+    RETURNS bigint(15)
   BEGIN
     DECLARE val bigint(15);
     DECLARE incval bigint(15);
