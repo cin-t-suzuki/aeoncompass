@@ -5,6 +5,7 @@ use App\Models\common\CommonDBModel;
 use App\Models\common\ValidationColumn;
 use Illuminate\Support\Facades\DB;
 use App\Common\Traits;
+
 use Exception;
 
 class HotelSupervisorHotel extends CommonDBModel
@@ -25,26 +26,52 @@ class HotelSupervisorHotel extends CommonDBModel
 	/**
 	 * コンストラクタ TODOカラム情報の設定
 	 */
-	function __construct(){
+	function __construct(){	
+		$colId = (new ValidationColumn())->setColumnName($this->COL_ID, "ID")->require()->length(0, 8)->intOnly();
+		$colSupervisorCd = (new ValidationColumn())->setColumnName($this->COL_SUPERVISOR_CD, "施設統括コード")->require()->length(0, 10)->notHalfKana();
+		$colHotelCd = (new ValidationColumn())->setColumnName($this->COL_HOTEL_CD, "施設コード")->require()->length(0, 10)->notHalfKana(); //独自チェック hotelCdValidate
+		$colOrderNumber = (new ValidationColumn())->setColumnName($this->COL_ORDER_NUMBER, "並び順")->length(0, 5)->intOnly();
 
-			//　↓ 旧ソース
-			// // 施設コード
-			// $this->validate_presence_of(array('hotel_cd'));                                    // 必須入力チェック
-			// $this->validate_kana_of(array('hotel_cd'));                                        // 半角カナチェック
-			// $this->validate_length_of('hotel_cd', array(0, 10));                               // 長さチェック
-			// $this->validate_method_of('hotel_cd', array('hotel_cd_validate'));            // 独自チェック TODO
-			
-			$colId = (new ValidationColumn())->setColumnName($this->COL_ID, "ID")->require()->length(0, 8)->intOnly();
-			$colSupervisorCd = (new ValidationColumn())->setColumnName($this->COL_SUPERVISOR_CD, "施設統括コード")->require()->length(0, 10)->notHalfKana();
-			$colHotelCd = (new ValidationColumn())->setColumnName($this->COL_HOTEL_CD, "施設コード")->require()->length(0, 10)->notHalfKana()->currencyOnly(); //TODO 独自チェック
-			$colOrderNumber = (new ValidationColumn())->setColumnName($this->COL_ORDER_NUMBER, "並び順")->length(0, 5)->intOnly();
-
-			parent::setColumnDataArray([$colId, $colSupervisorCd, $colHotelCd, $colOrderNumber]);
-		}
+		parent::setColumnDataArray([$colId, $colSupervisorCd, $colHotelCd, $colOrderNumber]);
+	}
 		
+	/** 独自のバリデーション
+	* @param [type] $errorList
+	* @param [type] $hotelSupervisorHotelData
+	* @param [type] $method
+	* @return List
+	*/
+	// 施設コード
+	public function hotelCdValidate(&$errorList, $hotelSupervisorHotelData, $method){
+
+		// 重複チェック
+		$a_conditions = array();
+
+		// インサート
+	if ($method == $this->METHOD_SAVE){
+
+		$s_sql =
+<<<SQL
+			select	hotel_cd
+			from	hotel_supervisor_hotel
+			where	null is null
+				and	supervisor_cd  = :supervisor_cd
+				and	hotel_cd  = :hotel_cd
+SQL;
+			$a_conditions['supervisor_cd'] = $hotelSupervisorHotelData['supervisor_cd'];
+			$a_conditions['hotel_cd']      = $hotelSupervisorHotelData['hotel_cd'];
+
+			// データの取得
+			$data = DB::select($s_sql, $a_conditions);
+
+			if (count($data) > 0){
+				$errorList[] = '入力した施設コードは既に登録されています';
+			return $errorList;
+			}
+		}
+	}
 	
 	// 統括ホテル一覧を取得
-
 	public function getHotelSupervisorHotel($aa_conditions = array()){
 		
 			$a_conditions = array();
@@ -103,6 +130,10 @@ class HotelSupervisorHotel extends CommonDBModel
 
 	}
 	
+	//10/24追記
+	public function getSequence(){
+		return $this->incrementSequence('id@hotel_supervisor_hotel');
+	}
 
 	/** 新規登録(1件)
 	 */

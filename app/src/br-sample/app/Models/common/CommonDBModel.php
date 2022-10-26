@@ -263,7 +263,7 @@ abstract class CommonDBModel extends Model
 
 		$data = DB::select($s_sql, $a_conditions);
 
-		return $data[0];
+		return $data[0]->val;
 	}
 
 		// メールアドレスチェック

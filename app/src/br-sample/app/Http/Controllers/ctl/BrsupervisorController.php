@@ -9,7 +9,9 @@
 	use App\Models\CommonDBModel;
 	use Illuminate\Support\Facades\DB;
 	use Illuminate\Support\Facades\Log;
+	
 	use Exception;
+	use stdClass;
 
 	use App\Common\Traits;
 
@@ -80,34 +82,48 @@
 		$supervisor_cd = Request::input('supervisor_cd');
 		$hotel_cd = Request::input('hotel_cd');
 
-
-		$HotelSupervisorHotelData = $this->getHotelSupervisorHotelData($supervisor_cd, $hotel_cd);
-		
 		// モデルの取得
-		$HotelSupervisorHotelModel = new HotelSupervisorHotel();
+		$hotelSupervisorHotelModel = new HotelSupervisorHotel();
 
-
+		//連番idの採番
+		$hotelSupervisorHotelId = $hotelSupervisorHotelModel->getSequence();
+		$hotelSupervisorHotelData = $this->getHotelSupervisorHotelData($supervisor_cd,$hotel_cd,$hotelSupervisorHotelId);
+		
 		//発行前に事前チェック
-		$errorList = $HotelSupervisorHotelModel->validation($HotelSupervisorHotelData);
-	
+		$errorList = $hotelSupervisorHotelModel->validation($hotelSupervisorHotelData);
+		//TODO エラーリストの件数チェック、0件なら独自チェック実行
+		if(count($errorList) == 0){
+			$hotelSupervisorHotelModel->hotelCdValidate($errorList, $hotelSupervisorHotelData, $hotelSupervisorHotelModel->METHOD_SAVE);
+		}
+		//TODO エラーリストが1件以上ならエラー表示をし処理中断
+		if (count($errorList) > 0){
+			$errorList[] = "";
+			return $this->viewAgainNewScreen($errorList, $hotelSupervisorHotelData);
+		}
+
 		// 施設統括施設登録処理
 		// 共通カラムをセット
-		$HotelSupervisorHotelModel->SetInsertCommonColumn($HotelSupervisorHotelData, 'Brsupervisor/createhotel.');
+		$hotelSupervisorHotelModel->SetInsertCommonColumn($hotelSupervisorHotelData, 'Brsupervisor/createhotel.');
 
 		try{
 			$con = DB::connection('mysql');
-			$dbErr = $con->transaction(function()use($con,$HotelSupervisorHotelModel,$HotelSupervisorHotelData)
+			$dbErr = $con->transaction(function()use($con,$hotelSupervisorHotelModel,$hotelSupervisorHotelData)
 			{
-				$HotelSupervisorHotelModel->singleInsert($con, $HotelSupervisorHotelData);
+				$hotelSupervisorHotelModel->singleInsert($con, $hotelSupervisorHotelData);
 			});
 		}catch(Exception $e){
 			Log::error($e);
 			$errorList[] = "グループホテル登録処理でエラーが発生しました。";
 		}
 
+		//DBエラーを確認
+		if(!empty($dbErr)){
+			$errorList[] = $dbErr;
+		}
+
 		if (count($errorList) > 0){
 			$errorList[] = "ご希望のデータを登録できませんでした";
-			return $this->viewAgainNewScreen($errorList, $HotelSupervisorHotelData);
+			return $this->viewAgainNewScreen($errorList, $hotelSupervisorHotelData);
 		}
 		$this->addGuideMessage("グループホテルの登録が完了しました。");
 
@@ -115,13 +131,13 @@
 	}
 		
 	// 画面の値をモデルにセットする
-	private function getHotelSupervisorHotelData($supervisor_cd, $hotel_cd){
-		$HotelSupervisorHotelData = [];
-		$HotelSupervisorHotelData['supervisor_cd'] = $supervisor_cd;
-		$HotelSupervisorHotelData['hotel_cd'] = $hotel_cd;
-		$HotelSupervisorHotelData['id'] = 90000;//TODOシーケンス取得。insert用に仮でIDを指定。
+	private function getHotelSupervisorHotelData($supervisor_cd, $hotel_cd,$hotelSupervisorHotelId){
+		$hotelSupervisorHotelData = [];
+		$hotelSupervisorHotelData['id'] = $hotelSupervisorHotelId;
+		$hotelSupervisorHotelData['supervisor_cd'] = $supervisor_cd;
+		$hotelSupervisorHotelData['hotel_cd'] = $hotel_cd;
 
-		return $HotelSupervisorHotelData;
+		return $hotelSupervisorHotelData;
 	}
 
 	/** エラー時にnew画面を表示する 
@@ -130,15 +146,14 @@
 	 * @param [type] $hotelStatusData
 	 * @return view
 	 */
-	private function viewAgainNewScreen($errorList, $HotelSupervisorHotelData){
+	private function viewAgainNewScreen($errorList, $hotelSupervisorHotelData){
 		$this->addErrorMessageArray($errorList);
-		$supervisor_cd = $HotelSupervisorHotelData['supervisor_cd'];
-		$this->addViewData("hotel_cd", $HotelSupervisorHotelData);
+		// $supervisor_cd = $hotelSupervisorHotelData['supervisor_cd'];
+		$this->addViewData("hotel_cd", $hotelSupervisorHotelData);
 		// ビューを表示
 		return $this->newhotel();
 	}
 
-	
-	
+
 }
 ?>
