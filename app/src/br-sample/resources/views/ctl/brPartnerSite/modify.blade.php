@@ -33,7 +33,7 @@
     <p>
         {{ Form::open(['route' => 'ctl.brPartnerSite.edit', 'method' => 'get']) }}
             <small>
-                <input type="hidden" name="site_cd" value="{$v->assign->partner_site.site_cd}" />
+                <input type="hidden" name="site_cd" value="{{ $partner_site->site_cd }}" />
                 @foreach ($search_params as $key => $value)
                     <input type="hidden" name="{{ $key }}" value="{{ $value }}" />
                 @endforeach
