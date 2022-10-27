@@ -44,7 +44,10 @@ class BrPartnerSiteController extends _commonController
     const STOCK_CLASS_TOYOKO_INN_STOCK     = 5; // 東横イン在庫
 
     /**
-     * TODO: phpdoc
+     * 初期表示
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
@@ -52,7 +55,10 @@ class BrPartnerSiteController extends _commonController
     }
 
     /**
-     * TODO: phpdoc
+     * パートナー精算先サイト一覧表示
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
      */
     public function search(Request $request)
     {
@@ -104,7 +110,10 @@ class BrPartnerSiteController extends _commonController
     }
 
     /**
-     * TODO: phpdoc
+     * 精算先サイトの情報を取得し編集画面を表示
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
      */
     public function edit(Request $request)
     {
@@ -218,10 +227,10 @@ class BrPartnerSiteController extends _commonController
     }
 
     /**
-     * TODO: Undocumented function
+     * 更新・登録を実行し、編集画面または結果画面を表示
      *
-     * @param Request $request
-     * @return void
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
      */
     public function modify(Request $request)
     {

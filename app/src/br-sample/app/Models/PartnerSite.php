@@ -139,12 +139,14 @@ class PartnerSite extends CommonDBModel
     }
 
     /**
-     * TODO: phpdoc
+     * パートナー精算先サイトを検索 (検索ワード)
      *
      * @param string? $keyword
      * @param string? $customer_id
      * @param string? $customer_off // HACK: Naming (customer_exclude seems better)
-     * @param string? $site_cd
+     * @param string? $site_cd // HACK: unused
+     * 
+     * @return stdClass[]
      */
     public function getPartnerSiteByKeywords($keywords, $customer_id, $customer_off, $site_cd)
     {
@@ -179,7 +181,10 @@ class PartnerSite extends CommonDBModel
     }
 
     /**
-     * TODO: phpdoc
+     * パートナー精算サイト 検索
+     *
+     * @param array $aa_conditions
+     * @return stdClass[]
      */
     public function _get_sites($aa_conditions)
     {
@@ -348,17 +353,18 @@ class PartnerSite extends CommonDBModel
 
     /**
      * パートナー精算サイト手数料率検索
+     * 
+     * TODO: テーブルごとに分けるなら、 partner_site_rate に対応するモデルクラスにあるほうが適切に思われる
      *
-     * TODO: テーブルごとに分かれるなら、 partner_site_rate に対応するモデルクラスにあるほうが適切に思われる
-     *
-     * TODO: phpdoc
+     * @param  array $aa_conditions
+     * @return stdClass[]
      */
     public function _get_rates($aa_conditions)
     {
         // バインドパラメータ設定
-        $sql_parameters = [];
-        $s_site_cd = 'and site_cd = :site_cd';
-        $sql_parameters['site_cd'] = $aa_conditions['site_cd'];
+        $parameters = [];
+        $whereSql = 'and site_cd = :site_cd';
+        $parameters['site_cd'] = $aa_conditions['site_cd'];
 
         // HACK: かなりのハードコーディング？を含んでいて、危なっかしく感じられる
         $sql = <<<SQL
@@ -419,7 +425,7 @@ class PartnerSite extends CommonDBModel
                     from
                         partner_site_rate
                     where 1 = 1
-                        {$s_site_cd}
+                        {$whereSql}
                     group by
                         site_cd,
                         accept_s_ymd
@@ -429,7 +435,7 @@ class PartnerSite extends CommonDBModel
                 accept_s_ymd desc
         SQL;
 
-        $result = DB::select($sql, $sql_parameters);
+        $result = DB::select($sql, $parameters);
         return $result;
     }
 
