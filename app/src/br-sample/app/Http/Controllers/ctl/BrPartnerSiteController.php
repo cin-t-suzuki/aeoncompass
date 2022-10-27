@@ -225,9 +225,6 @@ class BrPartnerSiteController extends _commonController
      */
     public function modify(Request $request)
     {
-        // TODO: transaction
-        // TODO: エラー時、入力を保存して edit 画面に戻す
-
         // HACK: validation の責務は、コントローラが負うほうが適切に思われる（要調査）。
 
         $modelPartnerSite = new PartnerSite();
@@ -257,87 +254,87 @@ class BrPartnerSiteController extends _commonController
         try {
             DB::beginTransaction();
 
-        // 精算サイト登録
-        $errorList = $this->_insert_partner_site($partnerSite);
-        if (count($errorList) === 0) {
-            // 精算先・サイト関連の登録
-            $this->_insert_partner_customer_site($partnerSite['site_cd'], $a_customer_site['customer_id']);
+            // 精算サイト登録
+            $errorList = $this->_insert_partner_site($partnerSite);
+            if (count($errorList) === 0) {
+                // 精算先・サイト関連の登録
+                $this->_insert_partner_customer_site($partnerSite['site_cd'], $a_customer_site['customer_id']);
 
-            // 精算サイトの情報取得
-            $a_sites = $modelPartnerSite->_get_sites(['site_cd' => $partnerSite['site_cd']]);
-            $partnerSite = $a_sites[0];
-            $a_customer_site['customer_nm'] = $partnerSite['sales_customer_nm'];
-        } else {
-            // キーの初期値を設定
-            $partnerSite['partner_nm'] = null;
-            $partnerSite['affiliate_nm'] = null;
-
-            // 登録失敗した場合、画面表示用に変更予定のパートナーとアフィリエイトの名称を設定
-            if (!is_null($partnerSite['partner_cd'])) {
-                // TODO: Partner モデルの取り込み待ち
-                // $partnerSite['partner_nm'] = Partner::find($partnerSite['partner_cd'])->system_nm;
-            }
-            if (!is_null($partnerSite['affiliate_cd'])) {
-                $affiliateProgram = AffiliateProgram::where('affiliate_cd', $partnerSite['affiliate_cd'])->first();
-                if (!is_null($affiliateProgram)) {
-                    $partnerSite['affiliate_nm'] = $affiliateProgram->program_nm;
-                }
-            }
-            if (!is_null($a_customer_site['customer_id'])) {
-                $partnerCustomer = PartnerCustomer::find($a_customer_site['customer_id']);
-                if (!is_null($partnerCustomer)) {
-                    $a_customer_site['customer_nm'] = $partnerCustomer->customer_nm;
-                }
-            }
-        }
-
-        // 料率登録 手数料率タイプ・開始年月日が変更されたときに登録する
-        $a_rate = $modelPartnerSite->_get_rates(['site_cd' => $partnerSite['site_cd']]);
-        // TODO: 取得結果が0件の場合、 undefined array key exception になる。
-        // 0件の場合は登録？ input の値が null の場合は？
-        if (count($a_rate) === 0 || $a_rate[0]->select_rate_index != $a_site_rate['rate_type'] || $a_rate[0]->accept_s_ymd != $a_site_rate['accept_s_ymd']) {
-            $partnerSiteRateErrorList = $this->_insert_partner_site_rate($partnerSite['site_cd'], $a_site_rate['rate_type'], $a_site_rate['accept_s_ymd']);
-            if (count($partnerSiteRateErrorList) === 0) {
-                $a_rate = $modelPartnerSite->_get_rates(['site_cd' => $partnerSite['site_cd']]);
+                // 精算サイトの情報取得
+                $a_sites = $modelPartnerSite->_get_sites(['site_cd' => $partnerSite['site_cd']]);
+                $partnerSite = $a_sites[0];
+                $a_customer_site['customer_nm'] = $partnerSite['sales_customer_nm'];
             } else {
-                $errorList = array_merge($errorList, $partnerSiteRateErrorList);
-            }
-        }
+                // キーの初期値を設定
+                $partnerSite['partner_nm'] = null;
+                $partnerSite['affiliate_nm'] = null;
 
-        // パートナー存在確認
-        if (!$this->is_empty($partnerSite['partner_cd'])) {
-            if ((!array_key_exists('partner_nm', $partnerSite) || $this->is_empty($partnerSite['partner_nm']))) {
-                $errorList[] = 'TODO: InputError';
+                // 登録失敗した場合、画面表示用に変更予定のパートナーとアフィリエイトの名称を設定
+                if (!is_null($partnerSite['partner_cd'])) {
+                    // TODO: Partner モデルの取り込み待ち
+                    // $partnerSite['partner_nm'] = Partner::find($partnerSite['partner_cd'])->system_nm;
+                }
+                if (!is_null($partnerSite['affiliate_cd'])) {
+                    $affiliateProgram = AffiliateProgram::where('affiliate_cd', $partnerSite['affiliate_cd'])->first();
+                    if (!is_null($affiliateProgram)) {
+                        $partnerSite['affiliate_nm'] = $affiliateProgram->program_nm;
+                    }
+                }
+                if (!is_null($a_customer_site['customer_id'])) {
+                    $partnerCustomer = PartnerCustomer::find($a_customer_site['customer_id']);
+                    if (!is_null($partnerCustomer)) {
+                        $a_customer_site['customer_nm'] = $partnerCustomer->customer_nm;
+                    }
+                }
             }
-        }
-        // アフィリエイト存在確認
-        if (!$this->is_empty($partnerSite['affiliate_cd'])) {
-            if ((!array_key_exists('affiliate_nm', $partnerSite) || $this->is_empty($partnerSite['affiliate_nm']))) {
-                $errorList[] = 'TODO: InputError';
-            }
-        }
 
-        // 精算先存在確認
-        if (!$this->is_empty($a_customer_site['customer_id'])) {
-            if (!array_key_exists('customer_nm', $a_customer_site) || $this->is_empty($a_customer_site['customer_nm'])) {
-                $errorList[] = 'TODO: InputError';
+            // 料率登録 手数料率タイプ・開始年月日が変更されたときに登録する
+            $a_rate = $modelPartnerSite->_get_rates(['site_cd' => $partnerSite['site_cd']]);
+            // TODO: 取得結果が0件の場合、 undefined array key exception になる。
+            // 0件の場合は登録？ input の値が null の場合は？
+            if (count($a_rate) === 0 || $a_rate[0]->select_rate_index != $a_site_rate['rate_type'] || $a_rate[0]->accept_s_ymd != $a_site_rate['accept_s_ymd']) {
+                $partnerSiteRateErrorList = $this->_insert_partner_site_rate($partnerSite['site_cd'], $a_site_rate['rate_type'], $a_site_rate['accept_s_ymd']);
+                if (count($partnerSiteRateErrorList) === 0) {
+                    $a_rate = $modelPartnerSite->_get_rates(['site_cd' => $partnerSite['site_cd']]);
+                } else {
+                    $errorList = array_merge($errorList, $partnerSiteRateErrorList);
+                }
             }
-        }
 
-        // パートナー・アフィリエイトの在庫料率重複登録確認
-        if (!$this->is_empty($partnerSite['partner_cd']) || !$this->is_empty($partnerSite['affiliate_cd'])) {
-            if ($this->_exists_rate($partnerSite)) {
-                $errorList[] = 'TODO: RateInputError';
-                $errorList[] = '指定されたパートナーまたはアフィリエイトは、すでに他のサイトで使用されているため[2:在庫]の手数料率の登録ができません、パートナーまたはアフィリエイトをご確認ください。';
+            // パートナー存在確認
+            if (!$this->is_empty($partnerSite['partner_cd'])) {
+                if ((!array_key_exists('partner_nm', $partnerSite) || $this->is_empty($partnerSite['partner_nm']))) {
+                    $errorList[] = 'TODO: InputError';
+                }
             }
-        }
+            // アフィリエイト存在確認
+            if (!$this->is_empty($partnerSite['affiliate_cd'])) {
+                if ((!array_key_exists('affiliate_nm', $partnerSite) || $this->is_empty($partnerSite['affiliate_nm']))) {
+                    $errorList[] = 'TODO: InputError';
+                }
+            }
 
-        if (!is_null($partnerSite['email'])) {
-            $cipher = new Models_Cipher(config('settings.cipher_key'));
-            $partnerSite['email_decrypt'] = $cipher->decrypt($partnerSite['email']);
-        } else {
-            $partnerSite['email_decrypt'] = null;
-        }
+            // 精算先存在確認
+            if (!$this->is_empty($a_customer_site['customer_id'])) {
+                if (!array_key_exists('customer_nm', $a_customer_site) || $this->is_empty($a_customer_site['customer_nm'])) {
+                    $errorList[] = 'TODO: InputError';
+                }
+            }
+
+            // パートナー・アフィリエイトの在庫料率重複登録確認
+            if (!$this->is_empty($partnerSite['partner_cd']) || !$this->is_empty($partnerSite['affiliate_cd'])) {
+                if ($this->_exists_rate($partnerSite)) {
+                    $errorList[] = 'TODO: RateInputError';
+                    $errorList[] = '指定されたパートナーまたはアフィリエイトは、すでに他のサイトで使用されているため[2:在庫]の手数料率の登録ができません、パートナーまたはアフィリエイトをご確認ください。';
+                }
+            }
+
+            if (!is_null($partnerSite['email'])) {
+                $cipher = new Models_Cipher(config('settings.cipher_key'));
+                $partnerSite['email_decrypt'] = $cipher->decrypt($partnerSite['email']);
+            } else {
+                $partnerSite['email_decrypt'] = null;
+            }
 
             if (count($errorList) > 0) {
                 DB::rollBack();
