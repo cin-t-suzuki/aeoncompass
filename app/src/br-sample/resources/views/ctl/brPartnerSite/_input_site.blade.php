@@ -26,7 +26,7 @@
         <th>通知方法</th>
         <td>
             <label for="mail_send_1">
-                <input type="radio" id="mail_send_1" name="partner_site[mail_send]" value="0" {{ (string)$partner_site->mail_send === '0' ? 'checked' : '' }} />
+                <input type="radio" id="mail_send_1" name="partner_site[mail_send]" value="0" {{ (string)$partner_site->mail_send !== '1' ? 'checked' : '' }} />
                 通知しない
             </label>
             <label for="mail_send_0">

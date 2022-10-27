@@ -35,6 +35,37 @@ class PartnerSite extends CommonDBModel
      * @var bool
      */
     public $incrementing = false;
+    /**
+     * モデルにタイムスタンプを付けるか
+     *
+     * MEMO: 独自実装でタイムスタンプを設定しているため、Laravel 側では設定しない。
+     * HACK: Laravel の機能を使ったほうがよいと思われる。
+     *
+     * @var bool
+     */
+    public $timestamps = false;
+    const CREATED_AT = 'entry_ts';
+    const UPDATED_AT = 'modify_ts';
+
+    /**
+     * 複数代入可能な属性
+     *
+     * @var array
+     */
+    protected $fillable = [
+        self::COL_SITE_CD,
+        self::COL_SITE_NM,
+        self::COL_EMAIL,
+        self::COL_PERSON_POST,
+        self::COL_PERSON_NM,
+        self::COL_MAIL_SEND,
+        self::COL_PARTNER_CD,
+        self::COL_AFFILIATE_CD,
+        'entry_cd',
+        'entry_ts',
+        'modify_cd',
+        'modify_ts',
+    ];
 
     // カラム
     const COL_SITE_CD       = 'site_cd';
@@ -46,7 +77,7 @@ class PartnerSite extends CommonDBModel
     const COL_PARTNER_CD    = 'partner_cd';
     const COL_AFFILIATE_CD  = 'affiliate_cd';
 
-    function __construct()
+    public function __construct()
     {
         // カラム情報の設定
         $col_site_cd = new ValidationColumn();
@@ -68,38 +99,38 @@ class PartnerSite extends CommonDBModel
 
         // バリデーション追加
         // サイトコード
-        $col_site_cd->require(); // 必須入力チェック
-        $col_site_cd->notHalfKana(); // 半角カナチェック
-        $col_site_cd->length(0, 10); // 長さチェック
+        $col_site_cd->require();            // 必須入力チェック
+        $col_site_cd->notHalfKana();        // 半角カナチェック
+        $col_site_cd->length(0, 10);        // 長さチェック
 
         // 提携先サイト名称
-        $col_site_nm->notHalfKana(); // 半角カナチェック
-        $col_site_nm->length(0, 65); // 長さチェック
+        $col_site_nm->notHalfKana();        // 半角カナチェック
+        $col_site_nm->length(0, 65);        // 長さチェック
 
         // チャネル別支払先
-        $col_email->notHalfKana(); // 半角カナチェック
-        $col_email->emails(); // メールアドレスチェック
-        $col_email->length(0, 200); // 長さチェック
+        $col_email->notHalfKana();          // 半角カナチェック
+        $col_email->emails();               // メールアドレスチェック
+        $col_email->length(0, 200);         // 長さチェック
 
         // 担当者役職
-        $col_person_post->notHalfKana(); // 半角カナチェック
-        $col_person_post->length(0, 96); // 長さチェック
+        $col_person_post->notHalfKana();    // 半角カナチェック
+        $col_person_post->length(0, 96);    // 長さチェック
 
         // 担当者名称
-        $col_person_nm->notHalfKana(); // 半角カナチェック
-        $col_person_nm->length(0, 32); // 長さチェック
+        $col_person_nm->notHalfKana();      // 半角カナチェック
+        $col_person_nm->length(0, 32);      // 長さチェック
 
         // メール送信可否
-        $col_mail_send->length(0, 1); // 長さチェック
-        $col_mail_send->intOnly(); // 数字：数値チェック
+        $col_mail_send->length(0, 1);       // 長さチェック
+        $col_mail_send->intOnly();          // 数字：数値チェック
 
         // 提携先コード
-        $col_partner_cd->notHalfKana(); // 半角カナチェック
-        $col_partner_cd->length(0, 10); // 長さチェック
+        $col_partner_cd->notHalfKana();     // 半角カナチェック
+        $col_partner_cd->length(0, 10);     // 長さチェック
 
         // アフィリエイトコード
-        $col_affiliate_cd->notHalfKana(); // 半角カナチェック
-        $col_affiliate_cd->length(0, 10); // 長さチェック
+        $col_affiliate_cd->notHalfKana();   // 半角カナチェック
+        $col_affiliate_cd->length(0, 10);   // 長さチェック
 
         parent::setColumnDataArray([
             $col_site_cd  , $col_site_nm   , $col_email       , $col_person_post, $col_person_nm,
@@ -410,7 +441,8 @@ class PartnerSite extends CommonDBModel
      *
      * @return string
      */
-    public function _get_sequence_no(){
+    public function _get_sequence_no()
+    {
         $ym = date('Ym');
 
         $sql = <<<SQL
