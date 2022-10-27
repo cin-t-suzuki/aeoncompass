@@ -108,16 +108,16 @@ class BrPartnerSiteController extends _commonController
      */
     public function edit(Request $request)
     {
-        $errors = [];
+        $errors = $request->session()->pull('errors', []);
 
         // MEMO: 検索条件の引き回し HACK: session で管理したい
         $form_params = $request->input();
 
         // 精算先登録情報設定
         $model = new PartnerSite();
-        if ($request->has('partner_site')) {
+        if ($request->session()->has('partner_site')) {
             // リクエストから指定されている場合は、それを利用
-            $partner_site = (object)$request->input('partner_site');
+            $partner_site = (object)$request->session()->pull('partner_site');
         } else {
             if ($request->has('site_cd')) {
                 // リクエストから指定されていない場合は DB から取得
@@ -263,6 +263,8 @@ class BrPartnerSiteController extends _commonController
                 // 精算サイトの情報取得
                 $a_sites = $modelPartnerSite->_get_sites(['site_cd' => $partnerSite['site_cd']]);
                 $partnerSite = $a_sites[0];
+
+                // TODO: 右辺は stdClass なので、連想配列として参照するときにエラーが出る
                 $a_customer_site['customer_nm'] = $partnerSite['sales_customer_nm'];
             } else {
                 // キーの初期値を設定
@@ -289,6 +291,7 @@ class BrPartnerSiteController extends _commonController
             }
 
             // 料率登録 手数料率タイプ・開始年月日が変更されたときに登録する
+            // TODO: $partnerSite は、上の if-else どちらを通ったかで、 array|stdClass になっている。統一が必要。
             $a_rate = $modelPartnerSite->_get_rates(['site_cd' => $partnerSite['site_cd']]);
             // TODO: 取得結果が0件の場合、 undefined array key exception になる。
             // 0件の場合は登録？ input の値が null の場合は？
@@ -339,6 +342,12 @@ class BrPartnerSiteController extends _commonController
             if (count($errorList) > 0) {
                 DB::rollBack();
                 // TODO: redirect to edit
+
+                // MEMO: sql べた書きのメソッドからはカラムで取得できるが、フォームの name="customer_site" には含まれないので、ここで設定する。
+                // HACK: コードがもっとちゃんとすれば、これは必要なくできそう。
+                $partnerSite['sales_customer_id'] = $a_customer_site['customer_id'];
+                $partnerSite['sales_customer_nm'] = $a_customer_site['customer_nm'];
+
                 $request->session()->put('partner_site', $partnerSite);
                 $request->session()->put('errors', $errorList);
                 return redirect()->route('ctl.brPartnerSite.edit');
@@ -347,6 +356,7 @@ class BrPartnerSiteController extends _commonController
             }
         } catch (\Exception $e) {
             DB::rollBack();
+            throw $e;
         }
 
         // MEMO: 検索条件の引き回し HACK: session で管理したい
@@ -408,7 +418,7 @@ class BrPartnerSiteController extends _commonController
             $partnerSite
         );
         if ($alreadyExists) {
-            if (!$result->wasChanged) {
+            if (!$result->wasChanged()) {
                 $errorList[] = '更新に失敗しました。';
             }
         } else {
@@ -430,6 +440,7 @@ class BrPartnerSiteController extends _commonController
      */
     private function _insert_partner_customer_site($inputSiteCd, $inputCustomerId)
     {
+        $errorList = [];
         // 料率パターン
         // MEMO: 1 は日本旅行の customer_id を表している。
         // TODO: 要確認：「販売」「在庫」は両方必要？
@@ -487,7 +498,7 @@ class BrPartnerSiteController extends _commonController
                 $partnerCustomerSite
             );
             if ($alreadyExists) {
-                if (!$result->wasChanged) {
+                if (!$result->wasChanged()) {
                     $errorList[] = '更新に失敗しました。';
                 }
             } else {
@@ -742,7 +753,7 @@ class BrPartnerSiteController extends _commonController
                     $partnerSiteRate
                 );
                 if ($alreadyExists) {
-                    if (!$result->wasChanged) {
+                    if (!$result->wasChanged()) {
                         $errorList[] = '更新に失敗しました。';
                     }
                 } else {

@@ -26,7 +26,8 @@
         <hr class="contents-margin" />
 
         {{-- 引数 --}}
-        <input type="hidden" name="site_cd" value="{{ strip_tags($form_params['site_cd']) }}" />
+        {{-- HACK: modify 空エラーで戻った時に form_params['site_cd'] が存在しなくなるので、Null 合体を使っている。全体を整理して必要なくしたい --}}
+        <input type="hidden" name="site_cd" value="{{ strip_tags($form_params['site_cd'] ?? $partner_site->site_cd) }}" />
         @foreach ($search_params as $key => $value)
             <input type="hidden" name="{{ $key }}" value="{{ $value }}" />
         @endforeach
