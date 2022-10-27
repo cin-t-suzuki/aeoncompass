@@ -254,6 +254,9 @@ class BrPartnerSiteController extends _commonController
             $a_customer_site['customer_id'] = null;
         }
 
+        try {
+            DB::beginTransaction();
+
         // 精算サイト登録
         $errorList = $this->_insert_partner_site($partnerSite);
         if (count($errorList) === 0) {
@@ -296,6 +299,8 @@ class BrPartnerSiteController extends _commonController
             $partnerSiteRateErrorList = $this->_insert_partner_site_rate($partnerSite['site_cd'], $a_site_rate['rate_type'], $a_site_rate['accept_s_ymd']);
             if (count($partnerSiteRateErrorList) === 0) {
                 $a_rate = $modelPartnerSite->_get_rates(['site_cd' => $partnerSite['site_cd']]);
+            } else {
+                $errorList = array_merge($errorList, $partnerSiteRateErrorList);
             }
         }
 
@@ -334,8 +339,19 @@ class BrPartnerSiteController extends _commonController
             $partnerSite['email_decrypt'] = null;
         }
 
+            if (count($errorList) > 0) {
+                DB::rollBack();
+                // TODO: redirect to edit
+                $request->session()->put('partner_site', $partnerSite);
+                $request->session()->put('errors', $errorList);
+                return redirect()->route('ctl.brPartnerSite.edit');
+            } else {
+                DB::commit();
+            }
+        } catch (\Exception $e) {
+            DB::rollBack();
+        }
 
-        // TODO: 本実装
         // MEMO: 検索条件の引き回し HACK: session で管理したい
         $search_params = [];
         if ($request->has('customer_id')) {
