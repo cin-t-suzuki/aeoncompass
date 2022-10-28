@@ -287,8 +287,10 @@ class BrPartnerSiteController extends _commonController
 
                 // 登録失敗した場合、画面表示用に変更予定のパートナーとアフィリエイトの名称を設定
                 if (!is_null($partnerSite['partner_cd'])) {
-                    // TODO: Partner モデルの取り込み待ち
-                    // $partnerSite['partner_nm'] = Partner::find($partnerSite['partner_cd'])->system_nm;
+                    $partner = Partner::find($partnerSite['partner_cd']);
+                    if (!is_null($partner)) {
+                        $partnerSite['partner_nm'] = $partner->system_nm;
+                    }
                 }
                 if (!is_null($partnerSite['affiliate_cd'])) {
                     $affiliateProgram = AffiliateProgram::where('affiliate_cd', $partnerSite['affiliate_cd'])->first();
