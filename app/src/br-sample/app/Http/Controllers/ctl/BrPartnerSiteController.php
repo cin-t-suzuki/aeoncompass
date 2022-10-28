@@ -324,7 +324,7 @@ class BrPartnerSiteController extends _commonController
                 // もともと登録されていれば partner_nm が存在するはず
                 // 新たに登録された partner_cd であれば、処理中で partner_nm が設定されているはず
                 if ((!array_key_exists('partner_nm', $partnerSite) || $this->is_empty($partnerSite['partner_nm']))) {
-                    $errorList[] = 'TODO: InputError';
+                    $errorList[] = '指定されたパートナーはありませんでした。';
                 }
             }
             // アフィリエイト存在確認
@@ -333,7 +333,7 @@ class BrPartnerSiteController extends _commonController
                 // もともと登録されていれば affiliate_nm が存在するはず
                 // 新たに登録された affiliate_cd であれば、処理中で affiliate_nm が設定されているはず
                 if ((!array_key_exists('affiliate_nm', $partnerSite) || $this->is_empty($partnerSite['affiliate_nm']))) {
-                    $errorList[] = 'TODO: InputError';
+                    $errorList[] = '指定されたアフィリエイトはありませんでした。';
                 }
             }
 
@@ -343,14 +343,13 @@ class BrPartnerSiteController extends _commonController
                 // もともと登録されていれば customer_nm が存在するはず
                 // 新たに登録された customer_id であれば、処理中で customer_nm が設定されているはず
                 if (!array_key_exists('customer_nm', $partnerCustomerSite) || $this->is_empty($partnerCustomerSite['customer_nm'])) {
-                    $errorList[] = 'TODO: InputError';
+                    $errorList[] = '指定されたパートナー精算先はありませんでした。';
                 }
             }
 
             // パートナー・アフィリエイトの在庫料率重複登録確認
             if (!$this->is_empty($partnerSite['partner_cd']) || !$this->is_empty($partnerSite['affiliate_cd'])) {
                 if ($this->_exists_rate($partnerSite)) {
-                    $errorList[] = 'TODO: RateInputError';
                     $errorList[] = '指定されたパートナーまたはアフィリエイトは、すでに他のサイトで使用されているため[2:在庫]の手数料率の登録ができません、パートナーまたはアフィリエイトをご確認ください。';
                 }
             }
