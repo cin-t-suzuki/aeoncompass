@@ -737,7 +737,11 @@ class BrPartnerSiteController extends _commonController
         // 当該データ登録
         foreach ($ratePattern[$inputRatePattern] as $feeType => $stockRatePattern) {
             foreach ($stockRatePattern as $stockClass => $rate) {
-                $existingPartnerSiteRate = PartnerSiteRate::where('site_cd', $inputSiteCd)->where('accept_s_ymd', $inputAcceptSYmd)->where('fee_type', $feeType)->where('stock_class', $stockClass)->first();
+                $existingPartnerSiteRate = PartnerSiteRate::where('site_cd', $inputSiteCd)
+                    ->where('accept_s_ymd', $inputAcceptSYmd)
+                    ->where('fee_type', $feeType)
+                    ->where('stock_class', $stockClass)
+                    ->first();
                 $alreadyExists = !is_null($existingPartnerSiteRate);
 
                 // 販売手数料で料率がヌル値の場合は精算対象ではないので登録しない。
@@ -773,7 +777,12 @@ class BrPartnerSiteController extends _commonController
                 }
 
                 $result = PartnerSiteRate::updateOrCreate(
-                    ['site_cd' => $partnerSiteRate['site_cd']],
+                    [
+                        'site_cd'       => $partnerSiteRate['site_cd'],
+                        'accept_s_ymd'  => $partnerSiteRate['accept_s_ymd'],
+                        'fee_type'      => $partnerSiteRate['fee_type'],
+                        'stock_class'   => $partnerSiteRate['stock_class'],
+                    ],
                     $partnerSiteRate
                 );
                 if ($alreadyExists) {

@@ -39,7 +39,7 @@ class PartnerSite extends CommonDBModel
      * モデルにタイムスタンプを付けるか
      *
      * MEMO: 独自実装でタイムスタンプを設定しているため、Laravel 側では設定しない。
-     * HACK: Laravel の機能を使ったほうがよいと思われる。
+     * HACK: Laravel の機能を使ったほうがよい気もする。
      *
      * @var bool
      */
