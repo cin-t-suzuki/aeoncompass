@@ -299,8 +299,9 @@ class BrPartnerSiteController extends _commonController
                 }
             }
 
-            // 料率登録 手数料率タイプ・開始年月日が変更されたときに登録する
             // TODO: $partnerSite は、上の if-else どちらを通ったかで、 array|stdClass になっている。統一が必要。
+
+            // 料率登録 手数料率タイプ・開始年月日が変更されたときに登録する
             $a_rate = $modelPartnerSite->_get_rates(['site_cd' => $partnerSite['site_cd']]);
             // TODO: 取得結果が0件の場合、 undefined array key exception になる。
             // 0件の場合は登録？ input の値が null の場合は？
@@ -314,20 +315,29 @@ class BrPartnerSiteController extends _commonController
             }
 
             // パートナー存在確認
+            // 提携先 (partner) に存在する、正しい提携先コード (partner_cd) が入力されたかを確認
             if (!$this->is_empty($partnerSite['partner_cd'])) {
+                // もともと登録されていれば partner_nm が存在するはず
+                // 新たに登録された partner_cd であれば、処理中で partner_nm が設定されているはず
                 if ((!array_key_exists('partner_nm', $partnerSite) || $this->is_empty($partnerSite['partner_nm']))) {
                     $errorList[] = 'TODO: InputError';
                 }
             }
             // アフィリエイト存在確認
+            // アフィリエイトプログラム (affiliate_program) に存在する、正しいアフィリエイトコード (affiliate_cd) が入力されたかを確認
             if (!$this->is_empty($partnerSite['affiliate_cd'])) {
+                // もともと登録されていれば affiliate_nm が存在するはず
+                // 新たに登録された affiliate_cd であれば、処理中で affiliate_nm が設定されているはず
                 if ((!array_key_exists('affiliate_nm', $partnerSite) || $this->is_empty($partnerSite['affiliate_nm']))) {
                     $errorList[] = 'TODO: InputError';
                 }
             }
 
             // 精算先存在確認
+            // 精算先 (partner_customer) に存在する、正しい精算先ID (customer_id) が入力されたかを確認
             if (!$this->is_empty($partnerCustomerSite['customer_id'])) {
+                // もともと登録されていれば customer_nm が存在するはず
+                // 新たに登録された customer_id であれば、処理中で customer_nm が設定されているはず
                 if (!array_key_exists('customer_nm', $partnerCustomerSite) || $this->is_empty($partnerCustomerSite['customer_nm'])) {
                     $errorList[] = 'TODO: InputError';
                 }
@@ -341,6 +351,7 @@ class BrPartnerSiteController extends _commonController
                 }
             }
 
+            // メールアドレス復号
             if (!is_null($partnerSite['email'])) {
                 $cipher = new Models_Cipher(config('settings.cipher_key'));
                 $partnerSite['email_decrypt'] = $cipher->decrypt($partnerSite['email']);
@@ -795,7 +806,7 @@ class BrPartnerSiteController extends _commonController
             $parameters['partner_cd'] = $partnerSite['partner_cd'];
             $whereSql .= ' and partner_site.partner_cd = :partner_cd';
         }
-        if (array_key_exists('partner_cd', $partnerSite) && !is_null($partnerSite['partner_cd']) && strlen($partnerSite['affiliate_cd']) > 0) {
+        if (array_key_exists('affiliate_cd', $partnerSite) && !is_null($partnerSite['affiliate_cd']) && strlen($partnerSite['affiliate_cd']) > 0) {
             $parameters['affiliate_cd'] = $partnerSite['affiliate_cd'];
             $whereSql .= ' and partner_site.affiliate_cd = :affiliate_cd';
         }
