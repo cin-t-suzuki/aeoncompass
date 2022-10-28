@@ -1,6 +1,8 @@
 {{-- 提携先管理ヘッダー・フッター --}}
 @extends('ctl.common.base2')
 
+@inject('service', 'App\Http\Controllers\ctl\BrPartnerSiteController')
+
 @section('title', 'パートナー精算サイト一覧')
 
 @section('headScript')
@@ -47,10 +49,10 @@
                 <td>{{ $site->site_cd }}</td>
                 <td>
                     {{ $site->site_nm }}
-                    @if (!empty($site->person_post))
+                    @if (!$service->is_empty($site->person_post))
                         <br />{{ $site->person_post }}
                     @endif
-                    @if (!empty($site->person_nm))
+                    @if (!$service->is_empty($site->person_nm))
                         <br />{{ $site->person_nm }} 様
                     @endif
                 </td>
@@ -68,27 +70,27 @@
                     @endforeach
                 </td>
                 <td>
-                    @if (!empty($site->partner_cd))
+                    @if (!$service->is_empty($site->partner_cd))
                         パートナー<br />
                         {{ $site->partner_nm }}
                         （{{ $site->partner_cd }}）
                     @endif
-                    @if (!empty($site->affiliate_cd))
+                    @if (!$service->is_empty($site->affiliate_cd))
                         アフィリエイト<br />
                         {{ $site->affiliate_nm }}
                         （{{ $site->affiliate_cd }}）
                     @endif
                 </td>
                 <td>
-                    @if (empty($site->sales_customer_id) and empty($site->stock_customer_id))
-                        @if (!empty($site->partner_cd))
+                    @if ($service->is_empty($site->sales_customer_id) and $service->is_empty($site->stock_customer_id))
+                        @if (!$service->is_empty($site->partner_cd))
                             料率タイプを設定してください。
                         @endif
-                        @if (!empty($site->affiliate_cd))
+                        @if (!$service->is_empty($site->affiliate_cd))
                             指定なし
                         @endif
                     @endif
-                    @if (!empty($site->stock_customer_id))
+                    @if (!$service->is_empty($site->stock_customer_id))
                         {{ $site->stock_customer_nm }}
                         （{{ $site->stock_customer_id }}）
                         {{ Form::open(['route' => ['brpartnercustomer.edit', ['customer_id' => $site->sales_customer_id]], 'method' => 'get']) }}
@@ -101,8 +103,8 @@
                             @endforeach
                         {{ Form::close() }}
                     @endif
-                    @if (!empty($site->sales_customer_id))
-                        @if (!empty($site->stock_customer_id))
+                    @if (!$service->is_empty($site->sales_customer_id))
+                        @if (!$service->is_empty($site->stock_customer_id))
                             <hr />
                         @endif
                         {{ $site->sales_customer_nm }}

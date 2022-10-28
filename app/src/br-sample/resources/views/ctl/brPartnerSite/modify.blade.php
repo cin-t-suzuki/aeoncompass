@@ -3,6 +3,8 @@
 {{-- 提携先管理ヘッダー・フッター --}}
 @extends('ctl.common.base2')
 
+@inject('service', 'App\Http\Controllers\ctl\BrPartnerSiteController')
+
 @section('title', '精算サイト情報')
 
 @section('headScript')

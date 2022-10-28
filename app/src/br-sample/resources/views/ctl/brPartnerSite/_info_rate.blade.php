@@ -1,4 +1,4 @@
-@if (!empty($rates))
+@if (!$service->is_empty($rates))
     <p>
         <div style="text-align:left;">
             ■ 手数料率の登録状態
@@ -21,35 +21,35 @@
                         <td rowspan="2">{{ $rate->accept_s_ymd }}～</td>
                         <td>1:販売</td>
                         <td class="charge">
-                            @if (empty($rate->sales_1_rate))
+                            @if ($service->is_empty($rate->sales_1_rate))
                                 -
                             @else
                                 {{ $rate->sales_1_rate }}%
                             @endif
                         </td>
                         <td class="charge">
-                            @if (empty($rate->sales_2_rate))
+                            @if ($service->is_empty($rate->sales_2_rate))
                                 -
                             @else
                                 {{ $rate->sales_2_rate }}%
                             @endif
                         </td>
                         <td class="charge">
-                            @if (empty($rate->sales_3_rate))
+                            @if ($service->is_empty($rate->sales_3_rate))
                                 -
                             @else
                                 {{ $rate->sales_3_rate }}%
                             @endif
                         </td>
                         <td class="charge">
-                            @if (empty($rate->sales_4_rate))
+                            @if ($service->is_empty($rate->sales_4_rate))
                                 -
                             @else
                                 {{ $rate->sales_4_rate }}%
                             @endif
                         </td>
                         <td class="charge">
-                            @if (empty($rate->sales_5_rate))
+                            @if ($service->is_empty($rate->sales_5_rate))
                                 -
                             @else
                                 {{ $rate->sales_5_rate }}%
@@ -57,15 +57,15 @@
                         </td>
                         <td>
                             @if (($loop->first))
-                                @if (!empty($partner_site->sales_customer_id))
+                                @if (!$service->is_empty($partner_site->sales_customer_id))
                                     {{ $partner_site->sales_customer_nm }}
                                     （{{ $partner_site->sales_customer_id }}）
                                 @elseif (
-                                        !empty($rate->sales_1_rate)
-                                    or !empty($rate->sales_2_rate)
-                                    or !empty($rate->sales_3_rate)
-                                    or !empty($rate->sales_4_rate)
-                                    or !empty($rate->sales_5_rate)
+                                        !$service->is_empty($rate->sales_1_rate)
+                                    or !$service->is_empty($rate->sales_2_rate)
+                                    or !$service->is_empty($rate->sales_3_rate)
+                                    or !$service->is_empty($rate->sales_4_rate)
+                                    or !$service->is_empty($rate->sales_5_rate)
                                 )
                                     -
                                 @endif
@@ -77,42 +77,42 @@
                     <tr>
                         <td>2:在庫</td>
                         <td class="charge">
-                            @if (empty($rate->stock_1_rate))
+                            @if ($service->is_empty($rate->stock_1_rate))
                                 -
                             @else
                                 {{ $rate->stock_1_rate }}%
                             @endif
                         </td>
                         <td class="charge">
-                            @if (empty($rate->stock_2_rate))
+                            @if ($service->is_empty($rate->stock_2_rate))
                                 -
                             @else
                                 {{ $rate->stock_2_rate }}%
                             @endif
                         </td>
                         <td class="charge">
-                            @if (empty($rate->stock_3_rate))
+                            @if ($service->is_empty($rate->stock_3_rate))
                                 -
                             @else
                                 {{ $rate->stock_3_rate }}%
                             @endif
                         </td>
                         <td class="charge">
-                            @if (empty($rate->stock_4_rate))
+                            @if ($service->is_empty($rate->stock_4_rate))
                                 -
                             @else
                                 {{ $rate->stock_4_rate }}%
                             @endif
                         </td>
                         <td class="charge">
-                            @if (empty($rate->stock_5_rate))
+                            @if ($service->is_empty($rate->stock_5_rate))
                                 -
                             @else
                                 {{ $rate->stock_5_rate }}%
                             @endif
                         </td>
                         <td>
-                            @if (!empty($partner_site->stock_customer_id))
+                            @if (!$service->is_empty($partner_site->stock_customer_id))
                                 {{ $partner_site->stock_customer_nm }}
                                 （{{ $partner_site->stock_customer_id }}）
                             @endif

@@ -399,6 +399,7 @@ class BrPartnerSiteController extends _commonController
             'partner_site_rate'     => (object)$partnerSiteRate,
             'partner_customer_site' => (object)$partnerCustomerSite,
             'search_params'         => $search_params,
+            'rates'                 => $a_rate,
         ]);
     }
 
