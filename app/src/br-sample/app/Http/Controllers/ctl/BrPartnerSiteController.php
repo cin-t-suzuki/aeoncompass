@@ -271,9 +271,9 @@ class BrPartnerSiteController extends _commonController
 
                 // 精算サイトの情報取得
                 $a_sites = $modelPartnerSite->_get_sites(['site_cd' => $partnerSite['site_cd']]);
-                $partnerSite = $a_sites[0];
+                // HACK: array として処理を進めるために、 ctdClass から型キャストで array に変換する（ごまかし的措置）
+                $partnerSite = (array)$a_sites[0];
 
-                // TODO: 右辺は stdClass なので、連想配列として参照するときにエラーが出る
                 $partnerCustomerSite['customer_nm'] = $partnerSite['sales_customer_nm'];
             } else {
                 // キーの初期値を設定
@@ -298,8 +298,6 @@ class BrPartnerSiteController extends _commonController
                     }
                 }
             }
-
-            // TODO: $partnerSite は、上の if-else どちらを通ったかで、 array|stdClass になっている。統一が必要。
 
             // 料率登録 手数料率タイプ・開始年月日が変更されたときに登録する
             $a_rate = $modelPartnerSite->_get_rates(['site_cd' => $partnerSite['site_cd']]);
