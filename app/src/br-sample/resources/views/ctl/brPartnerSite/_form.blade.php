@@ -1,7 +1,6 @@
 {{-- 移植元: svn_trunk\public\app\ctl\view2\brpartnersite\_form.tpl --}}
 
-{{-- TODO: Form Facades --}}
-<form action="/ctl/brpartnersite/search/" method="get">
+{{ Form::open(['route' => 'ctl.brPartnerSite.search', 'method' => 'get']) }}
     <p>
         <table class="br-detail-list">
             @if (array_key_exists('customer_id', $form_params))
@@ -27,7 +26,7 @@
     <p>
         <input type="submit" value="　検索　" />
     </p>
-</form>
+{{ Form::close() }}
 {{-- キーワード検索のヘルプ --}}
 @include('ctl.brPartnerSite._form_help')
     

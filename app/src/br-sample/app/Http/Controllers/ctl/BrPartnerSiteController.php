@@ -140,8 +140,7 @@ class BrPartnerSiteController extends _commonController
                 if (count($partner_sites) > 0) {
                     $partner_site = $partner_sites[0];
                 } else {
-                    // TODO: error (redirect to search?)
-                    // 現行に合わせるのであれば、すべてが空のフォームを表示（site_cd 必須バリデーションに引っかかるので、戻らざるを得ない）
+                    // MEMO: 現行ママ (すべてが空のフォームを表示、site_cd 必須バリデーションに引っかかる)
                     $errors[] = '指定された精算サイトはありませんでした。';
                     $partner_site = (object)[
                         'site_cd'       => '', //$model->_get_sequence_no(),
@@ -188,7 +187,7 @@ class BrPartnerSiteController extends _commonController
         $partner_customer_site['customer_nm'] = $partner_site->sales_customer_nm;
         // サイトコードが未指定で精算先が指定されてきていて、精算先が確定してない場合は、指定されてきたIDを初期値として設定
         if (
-                is_null($partner_customer_site['customer_id']) // TODO: 要確認（現行では is_empty() で判定）
+                $this->is_empty($partner_customer_site['customer_id'])
             && $request->has('customer_id')
             && $request->input('customer_id') != 1
             && !$request->has('site_cd')
@@ -306,9 +305,8 @@ class BrPartnerSiteController extends _commonController
             }
 
             // 料率登録 手数料率タイプ・開始年月日が変更されたときに登録する
+            // 料率が未設定（取得件数0）の場合も新たに設定する（移植元からの追加）
             $a_rate = $modelPartnerSite->_get_rates(['site_cd' => $partnerSite['site_cd']]);
-            // TODO: 取得結果が0件の場合、 undefined array key exception になる。
-            // 0件の場合は登録？ input の値が null の場合は？
             if (count($a_rate) === 0 || $a_rate[0]->select_rate_index != $partnerSiteRate['rate_type'] || $a_rate[0]->accept_s_ymd != $partnerSiteRate['accept_s_ymd']) {
                 $partnerSiteRateErrorList = $this->_insert_partner_site_rate($partnerSite['site_cd'], $partnerSiteRate['rate_type'], $partnerSiteRate['accept_s_ymd']);
                 if (count($partnerSiteRateErrorList) === 0) {
@@ -364,9 +362,9 @@ class BrPartnerSiteController extends _commonController
 
             if (count($errorList) > 0) {
                 DB::rollBack();
-                // TODO: redirect to edit
 
-                // MEMO: sql べた書きのメソッドからはカラムで取得できるが、フォームの name="customer_site" には含まれないので、ここで設定する。
+                // 編集入力画面にリダイレクト
+                // MEMO: sql べた書きの _get_site メソッドからはカラムで取得できるが、フォームの name="customer_site" には含まれないので、ここで設定する。
                 // HACK: コードがもっとちゃんとすれば、これは必要なくできそう。
                 $partnerSite['sales_customer_id'] = $partnerCustomerSite['customer_id'];
                 $partnerSite['sales_customer_nm'] = $partnerCustomerSite['customer_nm'];
@@ -566,8 +564,6 @@ class BrPartnerSiteController extends _commonController
             $errorList[] = '料率タイプを設定している場合は、必ず開始年月日を入力してください。';
             return $errorList;
         }
-        // TODO: 開始日が入力されて料率パターンが入力されないケースはある？
-        // セレクトリストだから大丈夫そう？
 
         // 料率パターン
         // 1:BR 0%

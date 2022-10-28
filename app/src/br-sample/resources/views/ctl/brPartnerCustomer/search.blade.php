@@ -95,7 +95,6 @@
                 @if (empty($customer->site_cd))
                     対象サイトを設定してください。
                     {{ Form::open(['route' => 'ctl.brPartnerSite.search', 'method' => 'get']) }}
-                        {{-- TODO: セッションに customer_off が含まれる場合、遷移先で forgot する必要あり(?) --}}
                         <input type="submit" value=" 設定 ">
                         <input type="hidden" name="customer_id" value="{{ $customer->customer_id }}" />
                     {{ Form::close() }}
