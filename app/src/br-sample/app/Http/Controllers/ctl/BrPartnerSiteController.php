@@ -62,6 +62,7 @@ class BrPartnerSiteController extends _commonController
      */
     public function search(Request $request)
     {
+        $errorList = [];
         $keywords = $request->input('keywords');
 
         $customer_id  = $request->input('customer_id');
@@ -70,6 +71,9 @@ class BrPartnerSiteController extends _commonController
 
         $model = new PartnerSite();
         $sites = $model->getPartnerSiteByKeywords($keywords, $customer_id, $customer_off, $site_cd);
+        if (count($sites) === 0) {
+            $errorList[] = '指定された精算サイトはありませんでした。';
+        }
 
         $form_params = $request->input();
 
@@ -106,6 +110,7 @@ class BrPartnerSiteController extends _commonController
             'form_params'   => $form_params,
             'search_params' => $search_params,
             'customer'      => $customer,
+            'errors'        => $errorList,
         ]);
     }
 
@@ -137,7 +142,7 @@ class BrPartnerSiteController extends _commonController
                 } else {
                     // TODO: error (redirect to search?)
                     // 現行に合わせるのであれば、すべてが空のフォームを表示（site_cd 必須バリデーションに引っかかるので、戻らざるを得ない）
-                    $errors[] = '対象となる精算サイトは見つかりませんでした。';
+                    $errors[] = '指定された精算サイトはありませんでした。';
                     $partner_site = (object)[
                         'site_cd'       => '', //$model->_get_sequence_no(),
                         'site_nm'       => '',
@@ -267,7 +272,8 @@ class BrPartnerSiteController extends _commonController
             $errorList = $this->_insert_partner_site($partnerSite);
             if (count($errorList) === 0) {
                 // 精算先・サイト関連の登録
-                $this->_insert_partner_customer_site($partnerSite['site_cd'], $partnerCustomerSite['customer_id']);
+                $errors = $this->_insert_partner_customer_site($partnerSite['site_cd'], $partnerCustomerSite['customer_id']);
+                $errorList = array_merge($errorList, $errors);
 
                 // 精算サイトの情報取得
                 $a_sites = $modelPartnerSite->_get_sites(['site_cd' => $partnerSite['site_cd']]);
