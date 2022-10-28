@@ -33,15 +33,22 @@
     </tr>
     <tr>
         <th>パートナーコード</th>
-        <td>{{ $partner_site->partner_cd }} {{ $partner_site->partner_nm }}</td>
+        <td>
+            {{ $partner_site->partner_cd }}
+            {{ $partner_site->partner_nm }}
+        </td>
     </tr>
     <tr>
         <th>アフィリエイトコード</th>
-        <td>{{ $partner_site->affiliate_cd }} {{ $partner_site->affiliate_nm }}</td>
+        <td>
+            {{ $partner_site->affiliate_cd }}
+            {{ $partner_site->affiliate_nm }}
+        </td>
     </tr>
     <tr>
         <th>料率タイプ</th>
         <td>
+            {{-- TODO:? PartnerSiteRate モデルに定数としてまとめたい --}}
             @if ($partner_site_rate->rate_type == 1)
                 1:特別提携    0% ベストリザーブオリジナルサイト・光通信等
             @elseif ($partner_site_rate->rate_type == 2)
@@ -73,6 +80,9 @@
     </tr>
     <tr>
         <th>精算先ID<br /> 手数料タイプ「1:販売」用</th>
-        <td>{{ $partner_customer_site->customer_id }} {{ $partner_customer_site->customer_nm }}</td>
+        <td>
+            {{ $partner_customer_site->customer_id }}
+            {{ $partner_customer_site->customer_nm }}
+        </td>
     </tr>
 </table>

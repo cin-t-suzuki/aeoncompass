@@ -132,7 +132,9 @@ class BrPartnerSiteController extends _commonController
                 // リクエストから指定されていない場合は DB から取得
                 $partner_sites = $model->_get_sites(['site_cd' => $request->input('site_cd')]);
 
-                if (count($partner_sites) < 1) {
+                if (count($partner_sites) > 0) {
+                    $partner_site = $partner_sites[0];
+                } else {
                     // TODO: error (redirect to search?)
                     // 現行に合わせるのであれば、すべてが空のフォームを表示（site_cd 必須バリデーションに引っかかるので、戻らざるを得ない）
                     $errors[] = '対象となる精算サイトは見つかりませんでした。';
@@ -150,8 +152,6 @@ class BrPartnerSiteController extends _commonController
                         'sales_customer_id' => '',
                         'sales_customer_nm' => '',
                     ];
-                } else {
-                    $partner_site = $partner_sites[0];
                 }
             } else {
                 // サイトコードが未指定の場合は、新規登録とする
@@ -239,12 +239,12 @@ class BrPartnerSiteController extends _commonController
         $modelPartnerSite = new PartnerSite();
 
         // 精算サイト登録情報設定
-        $partnerSite     = $request->input('partner_site');
-        $a_site_rate     = $request->input('partner_site_rate');
-        $a_customer_site = $request->input('partner_customer_site');
+        $partnerSite         = $request->input('partner_site');
+        $partnerSiteRate     = $request->input('partner_site_rate');
+        $partnerCustomerSite = $request->input('partner_customer_site');
 
         // キーの初期値を設定
-        $a_customer_site['customer_nm'] = null;
+        $partnerCustomerSite['customer_nm'] = null;
 
         // 料率タイプがNTA向けの場合は、販売向けの精算先の登録なし。
         // ただし、10(GBTNTA)は販売のみなので例外
@@ -256,8 +256,8 @@ class BrPartnerSiteController extends _commonController
             self::RATE_PATTERN_NTA_4_PERCENT,
             self::RATE_PATTERN_NTA_RELO_CLUB,
         ];
-        if (in_array($a_site_rate['rate_type'], $stockOnly)) {
-            $a_customer_site['customer_id'] = null;
+        if (in_array($partnerSiteRate['rate_type'], $stockOnly)) {
+            $partnerCustomerSite['customer_id'] = null;
         }
 
         try {
@@ -267,14 +267,14 @@ class BrPartnerSiteController extends _commonController
             $errorList = $this->_insert_partner_site($partnerSite);
             if (count($errorList) === 0) {
                 // 精算先・サイト関連の登録
-                $this->_insert_partner_customer_site($partnerSite['site_cd'], $a_customer_site['customer_id']);
+                $this->_insert_partner_customer_site($partnerSite['site_cd'], $partnerCustomerSite['customer_id']);
 
                 // 精算サイトの情報取得
                 $a_sites = $modelPartnerSite->_get_sites(['site_cd' => $partnerSite['site_cd']]);
                 $partnerSite = $a_sites[0];
 
                 // TODO: 右辺は stdClass なので、連想配列として参照するときにエラーが出る
-                $a_customer_site['customer_nm'] = $partnerSite['sales_customer_nm'];
+                $partnerCustomerSite['customer_nm'] = $partnerSite['sales_customer_nm'];
             } else {
                 // キーの初期値を設定
                 $partnerSite['partner_nm'] = null;
@@ -291,10 +291,10 @@ class BrPartnerSiteController extends _commonController
                         $partnerSite['affiliate_nm'] = $affiliateProgram->program_nm;
                     }
                 }
-                if (!is_null($a_customer_site['customer_id'])) {
-                    $partnerCustomer = PartnerCustomer::find($a_customer_site['customer_id']);
+                if (!is_null($partnerCustomerSite['customer_id'])) {
+                    $partnerCustomer = PartnerCustomer::find($partnerCustomerSite['customer_id']);
                     if (!is_null($partnerCustomer)) {
-                        $a_customer_site['customer_nm'] = $partnerCustomer->customer_nm;
+                        $partnerCustomerSite['customer_nm'] = $partnerCustomer->customer_nm;
                     }
                 }
             }
@@ -304,8 +304,8 @@ class BrPartnerSiteController extends _commonController
             $a_rate = $modelPartnerSite->_get_rates(['site_cd' => $partnerSite['site_cd']]);
             // TODO: 取得結果が0件の場合、 undefined array key exception になる。
             // 0件の場合は登録？ input の値が null の場合は？
-            if (count($a_rate) === 0 || $a_rate[0]->select_rate_index != $a_site_rate['rate_type'] || $a_rate[0]->accept_s_ymd != $a_site_rate['accept_s_ymd']) {
-                $partnerSiteRateErrorList = $this->_insert_partner_site_rate($partnerSite['site_cd'], $a_site_rate['rate_type'], $a_site_rate['accept_s_ymd']);
+            if (count($a_rate) === 0 || $a_rate[0]->select_rate_index != $partnerSiteRate['rate_type'] || $a_rate[0]->accept_s_ymd != $partnerSiteRate['accept_s_ymd']) {
+                $partnerSiteRateErrorList = $this->_insert_partner_site_rate($partnerSite['site_cd'], $partnerSiteRate['rate_type'], $partnerSiteRate['accept_s_ymd']);
                 if (count($partnerSiteRateErrorList) === 0) {
                     $a_rate = $modelPartnerSite->_get_rates(['site_cd' => $partnerSite['site_cd']]);
                 } else {
@@ -327,8 +327,8 @@ class BrPartnerSiteController extends _commonController
             }
 
             // 精算先存在確認
-            if (!$this->is_empty($a_customer_site['customer_id'])) {
-                if (!array_key_exists('customer_nm', $a_customer_site) || $this->is_empty($a_customer_site['customer_nm'])) {
+            if (!$this->is_empty($partnerCustomerSite['customer_id'])) {
+                if (!array_key_exists('customer_nm', $partnerCustomerSite) || $this->is_empty($partnerCustomerSite['customer_nm'])) {
                     $errorList[] = 'TODO: InputError';
                 }
             }
@@ -354,8 +354,8 @@ class BrPartnerSiteController extends _commonController
 
                 // MEMO: sql べた書きのメソッドからはカラムで取得できるが、フォームの name="customer_site" には含まれないので、ここで設定する。
                 // HACK: コードがもっとちゃんとすれば、これは必要なくできそう。
-                $partnerSite['sales_customer_id'] = $a_customer_site['customer_id'];
-                $partnerSite['sales_customer_nm'] = $a_customer_site['customer_nm'];
+                $partnerSite['sales_customer_id'] = $partnerCustomerSite['customer_id'];
+                $partnerSite['sales_customer_nm'] = $partnerCustomerSite['customer_nm'];
 
                 $request->session()->put('partner_site', $partnerSite);
                 $request->session()->put('errors', $errorList);
@@ -382,8 +382,8 @@ class BrPartnerSiteController extends _commonController
 
         return view('ctl.brPartnerSite.modify', [
             'partner_site'          => (object)$partnerSite,
-            'partner_site_rate'     => (object)$a_site_rate,
-            'partner_customer_site' => (object)$a_customer_site,
+            'partner_site_rate'     => (object)$partnerSiteRate,
+            'partner_customer_site' => (object)$partnerCustomerSite,
             'search_params'         => $search_params,
         ]);
     }
