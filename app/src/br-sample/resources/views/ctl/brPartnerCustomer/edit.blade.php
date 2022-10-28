@@ -43,9 +43,10 @@
 
     <hr class="contents-margin" />
 
-    {{-- 精算サイト一覧へ戻る --}}
+    {{-- 精算サイト一覧へ --}}
     {{ Form::open(['route' => 'ctl.brPartnerSite.search', 'method' => 'get']) }}
         <small>
+            <input type="hidden" name="customer_id" value="{{ $customer_id }}">
             <input type="submit" value="精算サイト一覧へ">
         </small>
     {{ Form::close() }}
