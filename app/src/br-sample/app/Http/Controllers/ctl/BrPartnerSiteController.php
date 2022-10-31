@@ -5,16 +5,15 @@ namespace App\Http\Controllers\ctl;
 use App\Common\Traits;
 use App\Http\Controllers\ctl\_commonController;
 use App\Models\AffiliateProgram;
-use App\Models\PartnerSite;
 use App\Models\Partner;
 use App\Models\PartnerCustomer;
 use App\Models\PartnerCustomerSite;
+use App\Models\PartnerSite;
 use App\Models\PartnerSiteRate;
 use App\Util\Models_Cipher;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\DB;
-
 
 // HACK: fat controller, Service クラスを導入したほうがよさそう。
 class BrPartnerSiteController extends _commonController
@@ -162,7 +161,7 @@ class BrPartnerSiteController extends _commonController
                 $form_params['site_cd'] = null; // MEMO: HACK: 現行仕様に合わせているが未定義だと Warning が発生する。
                 // HACK: オブジェクトをうまく初期化する方法がありそう。
                 $partner_site = (object)[
-                    'site_cd'       => $model->_get_sequence_no(),
+                    'site_cd'       => $model->_get_sequence_no(), // HACK: 新規登録が同時に発生しないことを前提としている。
                     'site_nm'       => '',
                     'person_post'   => '',
                     'person_nm'     => '',
