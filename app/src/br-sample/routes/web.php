@@ -126,14 +126,15 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 		});		
 
 
-	//
+	// パートナー精算先
 	Route::get('/brpartnercustomer/', 'BrPartnerCustomerController@index')->name('brpartnercustomer.index');
 	Route::get('/brpartnercustomer/search', 'BrPartnerCustomerController@search')->name('brpartnercustomer.search');
 
 	Route::get('/brpartnercustomer/create', 'BrPartnerCustomerController@create')->name('brpartnercustomer.create');
 	Route::post('/brpartnercustomer/register', 'BrPartnerCustomerController@register')->name('brpartnercustomer.register');
 
-	// TODO: 要調査 クエリパラメータに ? をつけて任意にしないとレンダリングが通らなくなっている…
+	// TODO: 要調査 クエリパラメータに ? をつけて任意にしないとレンダリングが通らなくなっている。
+	// ルートパラメータではなく通常のクエリパラメータにしたほうがスッキリするように思われる。
 	Route::get('/brpartnercustomer/edit/{customer_id?}', 'BrPartnerCustomerController@edit')->name('brpartnercustomer.edit');
 	Route::post('/brpartnercustomer/modify', 'BrPartnerCustomerController@modify')->name('brpartnercustomer.modify');
 

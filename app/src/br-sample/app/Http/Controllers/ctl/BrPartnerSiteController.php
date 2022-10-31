@@ -15,13 +15,13 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\DB;
 
-use function PHPUnit\Framework\isNull;
 
+// HACK: fat controller, Service クラスを導入したほうがよさそう。
 class BrPartnerSiteController extends _commonController
 {
     use Traits;
 
-    // TODO: 定数定義箇所、要検討
+    // HACK: 定数定義箇所。partner_site_rate のモデルに定義するのが自然に思われる。
     const RATE_PATTERN_UNSPECIFIED                 = 0;  // 0:指定なし
     const RATE_PATTERN_SPECIAL_ALLIANCE_0_PERCENT  = 1;  // 1:特別提携    0% ベストリザーブオリジナルサイト・光通信等
     const RATE_PATTERN_NORMAL_ALLIANCE_1_PERCENT   = 2;  // 2:通常提携    1%
@@ -253,7 +253,7 @@ class BrPartnerSiteController extends _commonController
         // 料率タイプがNTA向けの場合は、販売向けの精算先の登録なし。
         // ただし、10(GBTNTA)は販売のみなので例外
         // HACK: hardcoding business logic
-        // MEMO: rate_type (0 ~ 10) に応じて、 partner_site_rate の fee_type, stock_class, rate のパターンが決まる
+        // MEMO: rate_type (0 ~ 10) に応じて、 partner_site_rate の (fee_type, stock_class) の 2*5 パターンそれぞれに対する rate の値が設定されている ($ratePattern 参照)
         $stockOnly = [
             self::RATE_PATTERN_NTA_2_PERCENT,
             self::RATE_PATTERN_NTA_3_PERCENT,
@@ -567,8 +567,9 @@ class BrPartnerSiteController extends _commonController
             return $errorList;
         }
 
-        // 料率パターン
-        // 1:BR 0%
+        // 料率パターンテーブル
+        // 画面で選択された料率タイプから、 (fee_type, stock_class) の 2*5 パターンそれぞれに対応する rate の値をもっている。
+        // HACK: ここで定義するより、 partner_site_rate のモデルで定義するほうが自然かもしれない。
         $ratePattern = [
             self::RATE_PATTERN_SPECIAL_ALLIANCE_0_PERCENT => [
                 self::FEE_TYPE_SALE  => [

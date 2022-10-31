@@ -48,7 +48,7 @@
     <tr>
         <th>料率タイプ</th>
         <td>
-            {{-- TODO:? PartnerSiteRate モデルに定数としてまとめたい --}}
+            {{-- HACK: PartnerSiteRate モデルに定数としてまとめたい --}}
             @if ($partner_site_rate->rate_type == 1)
                 1:特別提携    0% ベストリザーブオリジナルサイト・光通信等
             @elseif ($partner_site_rate->rate_type == 2)

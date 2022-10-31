@@ -2,7 +2,11 @@
 
 {{-- キーワード検索のヘルプ --}}
 <div id="help" style="border: 1px solid rgb(0, 0, 0); display: none; position: absolute; background-color: rgb(255, 255, 255);" align="left">
-    <div style="margin: 2px 4px; text-align: right;"><a href="#" class="toggle_form_help"><nobr>×閉じる</nobr></a></div>
+    <div style="margin: 2px 4px; text-align: right;">
+        <a href="#" class="toggle_form_help">
+            <nobr>×閉じる</nobr>
+        </a>
+    </div>
     <div style="font-size:10px;margin-top:8px">
         半角スペース区切りで 複数キーワード設定可能です。
     </div>

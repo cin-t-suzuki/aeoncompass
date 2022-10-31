@@ -54,7 +54,7 @@
         <th>料率タイプ</th>
         <td>
             <select size="1" name="partner_site_rate[rate_type]">
-                {{-- TODO:? PartnerSiteRate モデルに定数としてまとめたい --}}
+                {{-- HACK: PartnerSiteRate モデルに定数としてまとめたい --}}
                 @for ($i = 0; $i < 11; $i++)
                     <option value="{{ $i }}" {{ ($partner_site_rate['select_rate_index'] == $i) ? 'selected' : '' }}>
                         @if ($i == 1)

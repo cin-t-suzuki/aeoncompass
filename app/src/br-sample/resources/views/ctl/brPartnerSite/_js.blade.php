@@ -10,7 +10,10 @@ function helpForm() {
     f.style.display = 'none';
   }
 }
-// TODO: addEventListener
 //-->
 // ↑ 意味があるのか不明なコメントアウト (js 内では効果なさそう)
+const help_buttons = document.getElementsByClassName('toggle_form_help');
+for (let i = 0; i < help_buttons.length; i++) {
+    help_buttons[i].addEventListener('click', helpForm);
+}
 </script>

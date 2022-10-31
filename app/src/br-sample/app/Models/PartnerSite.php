@@ -354,7 +354,7 @@ class PartnerSite extends CommonDBModel
     /**
      * パートナー精算サイト手数料率検索
      * 
-     * TODO: テーブルごとに分けるなら、 partner_site_rate に対応するモデルクラスにあるほうが適切に思われる
+     * HACK: テーブルごとに分けるなら、 partner_site_rate のモデルか、PartnerSite の Service クラスにあるほうが適切か
      *
      * @param  array $aa_conditions
      * @return stdClass[]
