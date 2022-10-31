@@ -249,34 +249,17 @@
 			</tr>
 		</table>
 		<br />
-		{{-- TODO クーポンは不要である想定
-			if $v->user->hotel_control.stock_type == 1}
-			<table border="2" cellspacing="0" cellpadding="4">
-				クーポン関連
-				<tr>
-					<td bgcolor="#EEFFEE">
-					クーポンの管理
-					</td>
-					<form action="{$v->env.source_path}{$v->env.module}/brcoupon/" method="post">
-					<td>
-						<input type="submit" value="設定">
-					</td>
-					<input type="hidden" name="target_cd" value="{strip_tags($views->target_cd)}">
-					</form>
-				</tr>
-			</table>
-		{/if--}}
 
 	</td>
 
 	<td><br/></td>
 
 	<td valign="top">
-{{-- 未設定の時のチェック		@if (count($views->hotel_staff_note) == 0)--}}
+{{-- 未設定かどうかのチェック		@if (count($views->hotel_staff_note) == 0)--}}
 	@if ( $service->is_empty($views->hotel_staff_note)) 
-		{!! Form::open(['route' => ['ctl.brhotel.createnote'], 'method' => 'post']) !!}{{--TODO 処理未作成--}}
+		{!! Form::open(['route' => ['ctl.brhotel.createnote'], 'method' => 'post']) !!}
 	@else
-		{!! Form::open(['route' => ['ctl.brhotel.updatenote'], 'method' => 'post']) !!}{{--TODO 処理未作成--}}
+		{!! Form::open(['route' => ['ctl.brhotel.updatenote'], 'method' => 'post']) !!}
 	@endif
 			施設管理特記事項
 			<table border="2" cellspacing="0" cellpadding="4">
