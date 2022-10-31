@@ -126,13 +126,15 @@
 {{-- <input type="hidden" name="partner_customer[tax_unit]" value="{{ $partner_customer->custmer_id == "1" ? 2 : 1 }}" /> --}}
 <input type="hidden" name="partner_customer[tax_unit]" value="{{ $partner_customer->tax_unit }}" />
 {{--
-    1: 合計してから消費税を掛ける、 2: 消費税を掛けてから合計する
+       現行ソースの comment , DB の column comment  , BR 開発者から聞いた説明
+    1: 料率毎（一般）       , サイト単位             , (合計してから消費税を掛ける)、
+    2: 在庫種類単位（NTA）  , 手数料率単位（NTA精算用), (消費税を掛けてから合計する)
     経緯：
         移植元では、日本旅行の場合のみ 2、その他は 1 で運用していた。
         （customer_id = 1 が 日本旅行であることを前提としたロジック）
         custmer_id は単なるスペルミス。
     対応：
-        デフォルトで 1 と仮定して実装を行う。
+        デフォルトで 1 と仮定して実装を行う(新規登録画面表示時 の実装を参照)。 TODO: 要確認
         新規登録画面では、 1 を登録。
         編集画面では、登録されている値をそのまま登録。
 --}}

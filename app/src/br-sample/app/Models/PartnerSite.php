@@ -39,7 +39,7 @@ class PartnerSite extends CommonDBModel
      * モデルにタイムスタンプを付けるか
      *
      * MEMO: 独自実装でタイムスタンプを設定しているため、Laravel 側では設定しない。
-     * HACK: Laravel の機能を使ったほうがよい気もする。
+     * HACK: (工数次第) Laravel の機能を使ったほうがよい気もする。
      *
      * @var bool
      */
@@ -256,7 +256,8 @@ class PartnerSite extends CommonDBModel
         }
 
 
-        // HACK: sql 直書きはどうにかしたい？
+        // MEMO: sql 直書きはどうにかしたい？
+        //  → 大きな SQL を読み解くほどの工数はないので、そのまま移植する方針とする。
         $sql = <<<SQL
             select
                 site_cd,
@@ -348,94 +349,6 @@ class PartnerSite extends CommonDBModel
             }
         }
 
-        return $result;
-    }
-
-    /**
-     * パートナー精算サイト手数料率検索
-     * 
-     * HACK: テーブルごとに分けるなら、 partner_site_rate のモデルか、PartnerSite の Service クラスにあるほうが適切か
-     *
-     * @param  array $aa_conditions
-     * @return stdClass[]
-     */
-    public function _get_rates($aa_conditions)
-    {
-        // バインドパラメータ設定
-        $parameters = [];
-        $whereSql = 'and site_cd = :site_cd';
-        $parameters['site_cd'] = $aa_conditions['site_cd'];
-
-        // HACK: かなりのハードコーディング？を含んでいて、危なっかしく感じられる
-        $sql = <<<SQL
-            select
-                site_cd,
-                date_format(accept_s_ymd, '%Y-%m-%d') as accept_s_ymd,
-                case
-                    when sales_1_rate = 0 and stock_1_rate = 0                      then '1:BR 0%'
-                    when sales_1_rate = 1 and stock_1_rate = 0 and stock_2_rate = 1 then '2:BR 1%'
-                    when sales_1_rate = 2 and stock_1_rate = 0 and stock_5_rate = 3 then '3:BR 2%'
-                    when sales_1_rate = 2 and stock_1_rate = 0 and stock_5_rate = 1 then '4:BTM'
-                    when stock_4_rate = 1.95                                        then '5:Yahoo!トラベル'
-                    when stock_4_rate = 1.8                                         then '5:Yahoo!トラベル'
-                    when stock_1_rate = 2                                           then '6:NTA 2%'
-                    when stock_1_rate = 3                                           then '7:NTA 3% MSD等'
-                    when stock_1_rate = 4                                           then '8:NTA 4% JRおでかけネット'
-                    when stock_2_rate = 2 and stock_3_rate = 3 and stock_4_rate = 5 then '9:NTA リロクラブ'
-                    when sales_1_rate = 1 and stock_1_rate = 0 and stock_2_rate = 0 then '10:GBTNTA 1%'
-                end as rate_type,
-                case
-                    when sales_1_rate = 0 and stock_1_rate = 0                      then 1
-                    when sales_1_rate = 1 and stock_1_rate = 0 and stock_2_rate = 1 then 2
-                    when sales_1_rate = 2 and stock_1_rate = 0 and stock_5_rate = 3 then 3
-                    when sales_1_rate = 2 and stock_1_rate = 0 and stock_5_rate = 1 then 4
-                    when stock_4_rate = 1.95                                        then 5
-                    when stock_4_rate = 1.8                                         then 5
-                    when stock_1_rate = 2                                           then 6
-                    when stock_1_rate = 3                                           then 7
-                    when stock_1_rate = 4                                           then 8
-                    when stock_2_rate = 2 and stock_3_rate = 3 and stock_4_rate = 5 then 9
-                    when sales_1_rate = 1 and stock_1_rate = 0 and stock_2_rate = 0 then 10
-                end as select_rate_index,
-                sales_1_rate, -- 一般ネット在庫
-                sales_2_rate, -- 連動在庫一般
-                sales_3_rate, -- 連動在庫ヴィジュアル
-                sales_4_rate, -- 連動在庫プレミアム
-                sales_5_rate, -- 東横イン在庫
-                stock_1_rate, -- 一般ネット在庫
-                stock_2_rate, -- 連動在庫一般
-                stock_3_rate, -- 連動在庫ヴィジュアル
-                stock_4_rate, -- 連動在庫プレミアム
-                stock_5_rate -- 東横イン在庫
-            from
-                (
-                    select
-                        site_cd,
-                        accept_s_ymd,
-                        max(case when fee_type = 1 and stock_class = 1 then rate else null end) as sales_1_rate, -- 一般ネット在庫
-                        max(case when fee_type = 1 and stock_class = 2 then rate else null end) as sales_2_rate, -- 連動在庫一般
-                        max(case when fee_type = 1 and stock_class = 3 then rate else null end) as sales_3_rate, -- 連動在庫ヴィジュアル
-                        max(case when fee_type = 1 and stock_class = 4 then rate else null end) as sales_4_rate, -- 連動在庫プレミアム
-                        max(case when fee_type = 1 and stock_class = 5 then rate else null end) as sales_5_rate, -- 東横イン在庫
-                        max(case when fee_type = 2 and stock_class = 1 then rate else null end) as stock_1_rate, -- 一般ネット在庫
-                        max(case when fee_type = 2 and stock_class = 2 then rate else null end) as stock_2_rate, -- 連動在庫一般
-                        max(case when fee_type = 2 and stock_class = 3 then rate else null end) as stock_3_rate, -- 連動在庫ヴィジュアル
-                        max(case when fee_type = 2 and stock_class = 4 then rate else null end) as stock_4_rate, -- 連動在庫プレミアム
-                        max(case when fee_type = 2 and stock_class = 5 then rate else null end) as stock_5_rate -- 東横イン在庫
-                    from
-                        partner_site_rate
-                    where 1 = 1
-                        {$whereSql}
-                    group by
-                        site_cd,
-                        accept_s_ymd
-                ) q
-            order by
-                site_cd,
-                accept_s_ymd desc
-        SQL;
-
-        $result = DB::select($sql, $parameters);
         return $result;
     }
 

@@ -15,32 +15,10 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\DB;
 
-// HACK: fat controller, Service クラスを導入したほうがよさそう。
+// HACK: fat controller, Service クラスを導入したほうがよさそうか。
 class BrPartnerSiteController extends _commonController
 {
     use Traits;
-
-    // HACK: 定数定義箇所。partner_site_rate のモデルに定義するのが自然に思われる。
-    const RATE_PATTERN_UNSPECIFIED                 = 0;  // 0:指定なし
-    const RATE_PATTERN_SPECIAL_ALLIANCE_0_PERCENT  = 1;  // 1:特別提携    0% ベストリザーブオリジナルサイト・光通信等
-    const RATE_PATTERN_NORMAL_ALLIANCE_1_PERCENT   = 2;  // 2:通常提携    1%
-    const RATE_PATTERN_SPECIAL_ALLIANCE_2_PERCENT  = 3;  // 3:特別提携    2% アークスリー等
-    const RATE_PATTERN_NTA_BTM                     = 4;  // 4:日本旅行ビジネストラベルマネージメント（BTM）
-    const RATE_PATTERN_YAHOO_TRAVEL                = 5;  // 5:Yahoo!トラベル
-    const RATE_PATTERN_NTA_2_PERCENT               = 6;  // 6:日本旅行    2%
-    const RATE_PATTERN_NTA_3_PERCENT               = 7;  // 7:日本旅行    3% MSD等
-    const RATE_PATTERN_NTA_4_PERCENT               = 8;  // 8:日本旅行    4% JRおでかけネット
-    const RATE_PATTERN_NTA_RELO_CLUB               = 9;  // 9:日本旅行    リロクラブ
-    const RATE_PATTERN_GBTNTA                      = 10; // 10:GBTNTA 1%(在庫手数料0%)
-
-    const FEE_TYPE_SALE  = 1;
-    const FEE_TYPE_STOCK = 2;
-
-    const STOCK_CLASS_GENERAL_ONLINE_STOCK = 1; // 一般ネット在庫
-    const STOCK_CLASS_LINKED_STOCK_NORMAL  = 2; // 連動在庫（通常）
-    const STOCK_CLASS_LINKED_STOCK_VISUAL  = 3; // 連動在庫（ヴィジュアル）
-    const STOCK_CLASS_LINKED_STOCK_PREMIUM = 4; // 連動在庫（プレミアム）
-    const STOCK_CLASS_TOYOKO_INN_STOCK     = 5; // 東横イン在庫
 
     /**
      * 初期表示
@@ -76,7 +54,8 @@ class BrPartnerSiteController extends _commonController
 
         $form_params = $request->input();
 
-        // MEMO: 検索条件の引き回し HACK: session で管理したい？
+        // MEMO: 検索条件の引き回し
+        // HACK: (工数次第) session で管理したい?
         $search_params = [];
         if ($request->has('customer_id')) {
             $search_params['customer_id'] = $request->input('customer_id');
@@ -123,7 +102,8 @@ class BrPartnerSiteController extends _commonController
     {
         $errors = $request->session()->pull('errors', []);
 
-        // MEMO: 検索条件の引き回し HACK: session で管理したい
+        // MEMO: 検索条件の引き回し
+        // HACK: (工数次第) session で管理したい?
         $form_params = $request->input();
 
         // 精算先登録情報設定
@@ -139,7 +119,7 @@ class BrPartnerSiteController extends _commonController
                 if (count($partner_sites) > 0) {
                     $partner_site = $partner_sites[0];
                 } else {
-                    // MEMO: 現行ママ (すべてが空のフォームを表示、site_cd 必須バリデーションに引っかかる)
+                    // MEMO: 現行仕様 (すべてが空のフォームを表示、site_cd 必須バリデーションに引っかかる)
                     $errors[] = '指定された精算サイトはありませんでした。';
                     $partner_site = (object)[
                         'site_cd'       => '', //$model->_get_sequence_no(),
@@ -161,7 +141,7 @@ class BrPartnerSiteController extends _commonController
                 $form_params['site_cd'] = null; // MEMO: HACK: 現行仕様に合わせているが未定義だと Warning が発生する。
                 // HACK: オブジェクトをうまく初期化する方法がありそう。
                 $partner_site = (object)[
-                    'site_cd'       => $model->_get_sequence_no(), // HACK: 新規登録が同時に発生しないことを前提としている。
+                    'site_cd'       => $model->_get_sequence_no(), // MEMO: 現行仕様 (おそらく、新規登録が同時に発生しないことを前提としている。）
                     'site_nm'       => '',
                     'person_post'   => '',
                     'person_nm'     => '',
@@ -178,7 +158,8 @@ class BrPartnerSiteController extends _commonController
         }
 
         // 手数料率設定
-        $rates = $model->_get_rates(['site_cd' => $partner_site->site_cd]);
+        $modelPartnerSiteRate = new PartnerSiteRate();
+        $rates = $modelPartnerSiteRate->_get_rates(['site_cd' => $partner_site->site_cd]);
 
         // 精算先情報設定
         $partner_customer_site = [];
@@ -206,7 +187,8 @@ class BrPartnerSiteController extends _commonController
             $partner_site_rate['accept_s_ymd']      = null;
         }
 
-        // MEMO: 検索条件の引き回し HACK: session で管理したい
+        // MEMO: 検索条件の引き回し
+        // HACK: (工数次第) session で管理したい?
         $search_params = [];
         if ($request->has('customer_id')) {
             $search_params['customer_id'] = $request->input('customer_id');
@@ -254,10 +236,10 @@ class BrPartnerSiteController extends _commonController
         // HACK: hardcoding business logic
         // MEMO: rate_type (0 ~ 10) に応じて、 partner_site_rate の (fee_type, stock_class) の 2*5 パターンそれぞれに対する rate の値が設定されている ($ratePattern 参照)
         $stockOnly = [
-            self::RATE_PATTERN_NTA_2_PERCENT,
-            self::RATE_PATTERN_NTA_3_PERCENT,
-            self::RATE_PATTERN_NTA_4_PERCENT,
-            self::RATE_PATTERN_NTA_RELO_CLUB,
+            PartnerSiteRate::RATE_TYPE_NTA_2_PERCENT,
+            PartnerSiteRate::RATE_TYPE_NTA_3_PERCENT,
+            PartnerSiteRate::RATE_TYPE_NTA_4_PERCENT,
+            PartnerSiteRate::RATE_TYPE_NTA_RELO_CLUB,
         ];
         if (in_array($partnerSiteRate['rate_type'], $stockOnly)) {
             $partnerCustomerSite['customer_id'] = null;
@@ -307,11 +289,12 @@ class BrPartnerSiteController extends _commonController
 
             // 料率登録 手数料率タイプ・開始年月日が変更されたときに登録する
             // 料率が未設定（取得件数0）の場合も新たに設定する（移植元からの追加）
-            $a_rate = $modelPartnerSite->_get_rates(['site_cd' => $partnerSite['site_cd']]);
+            $modelPartnerSiteRate = new PartnerSiteRate();
+            $a_rate = $modelPartnerSiteRate->_get_rates(['site_cd' => $partnerSite['site_cd']]);
             if (count($a_rate) === 0 || $a_rate[0]->select_rate_index != $partnerSiteRate['rate_type'] || $a_rate[0]->accept_s_ymd != $partnerSiteRate['accept_s_ymd']) {
                 $partnerSiteRateErrorList = $this->_insert_partner_site_rate($partnerSite['site_cd'], $partnerSiteRate['rate_type'], $partnerSiteRate['accept_s_ymd']);
                 if (count($partnerSiteRateErrorList) === 0) {
-                    $a_rate = $modelPartnerSite->_get_rates(['site_cd' => $partnerSite['site_cd']]);
+                    $a_rate = $modelPartnerSiteRate->_get_rates(['site_cd' => $partnerSite['site_cd']]);
                 } else {
                     $errorList = array_merge($errorList, $partnerSiteRateErrorList);
                 }
@@ -348,7 +331,7 @@ class BrPartnerSiteController extends _commonController
 
             // パートナー・アフィリエイトの在庫料率重複登録確認
             if (!$this->is_empty($partnerSite['partner_cd']) || !$this->is_empty($partnerSite['affiliate_cd'])) {
-                if ($this->_exists_rate($partnerSite)) {
+                if ($modelPartnerSiteRate->_exists_rate($partnerSite)) {
                     $errorList[] = '指定されたパートナーまたはアフィリエイトは、すでに他のサイトで使用されているため[2:在庫]の手数料率の登録ができません、パートナーまたはアフィリエイトをご確認ください。';
                 }
             }
@@ -381,7 +364,8 @@ class BrPartnerSiteController extends _commonController
             throw $e;
         }
 
-        // MEMO: 検索条件の引き回し HACK: session で管理したい
+        // MEMO: 検索条件の引き回し
+        // HACK: (工数次第) session で管理したい?
         $search_params = [];
         if ($request->has('customer_id')) {
             $search_params['customer_id'] = $request->input('customer_id');
@@ -468,8 +452,8 @@ class BrPartnerSiteController extends _commonController
         // MEMO: 1 は日本旅行の customer_id を表している。
         // TODO: 要確認：「販売」「在庫」は両方必要？
         $a_row = [
-            self::FEE_TYPE_SALE  => $inputCustomerId,
-            self::FEE_TYPE_STOCK => 1,
+            PartnerSiteRate::FEE_TYPE_SALE  => $inputCustomerId,
+            PartnerSiteRate::FEE_TYPE_STOCK => 1,
         ];
 
         foreach ($a_row as $feeType => $customerId) {
@@ -567,173 +551,10 @@ class BrPartnerSiteController extends _commonController
         }
 
         // 料率パターンテーブル
-        // 画面で選択された料率タイプから、 (fee_type, stock_class) の 2*5 パターンそれぞれに対応する rate の値をもっている。
-        // HACK: ここで定義するより、 partner_site_rate のモデルで定義するほうが自然かもしれない。
-        $ratePattern = [
-            self::RATE_PATTERN_SPECIAL_ALLIANCE_0_PERCENT => [
-                self::FEE_TYPE_SALE  => [
-                    self::STOCK_CLASS_GENERAL_ONLINE_STOCK => 0,
-                    self::STOCK_CLASS_LINKED_STOCK_NORMAL  => 0,
-                    self::STOCK_CLASS_LINKED_STOCK_VISUAL  => 0,
-                    self::STOCK_CLASS_LINKED_STOCK_PREMIUM => 0,
-                    self::STOCK_CLASS_TOYOKO_INN_STOCK     => 0,
-                ],
-                self::FEE_TYPE_STOCK => [
-                    self::STOCK_CLASS_GENERAL_ONLINE_STOCK => 0,
-                    self::STOCK_CLASS_LINKED_STOCK_NORMAL  => 1,
-                    self::STOCK_CLASS_LINKED_STOCK_VISUAL  => 2,
-                    self::STOCK_CLASS_LINKED_STOCK_PREMIUM => 2,
-                    self::STOCK_CLASS_TOYOKO_INN_STOCK     => 3,
-                ],
-            ],
-            self::RATE_PATTERN_NORMAL_ALLIANCE_1_PERCENT => [
-                self::FEE_TYPE_SALE  => [
-                    self::STOCK_CLASS_GENERAL_ONLINE_STOCK => 1,
-                    self::STOCK_CLASS_LINKED_STOCK_NORMAL  => 1,
-                    self::STOCK_CLASS_LINKED_STOCK_VISUAL  => 1,
-                    self::STOCK_CLASS_LINKED_STOCK_PREMIUM => 1,
-                    self::STOCK_CLASS_TOYOKO_INN_STOCK     => 1,
-                ],
-                self::FEE_TYPE_STOCK => [
-                    self::STOCK_CLASS_GENERAL_ONLINE_STOCK => 0,
-                    self::STOCK_CLASS_LINKED_STOCK_NORMAL  => 1,
-                    self::STOCK_CLASS_LINKED_STOCK_VISUAL  => 2,
-                    self::STOCK_CLASS_LINKED_STOCK_PREMIUM => 2,
-                    self::STOCK_CLASS_TOYOKO_INN_STOCK     => 3,
-                ],
-            ],
-            self::RATE_PATTERN_SPECIAL_ALLIANCE_2_PERCENT => [
-                self::FEE_TYPE_SALE  => [
-                    self::STOCK_CLASS_GENERAL_ONLINE_STOCK => 2,
-                    self::STOCK_CLASS_LINKED_STOCK_NORMAL  => 2,
-                    self::STOCK_CLASS_LINKED_STOCK_VISUAL  => 2,
-                    self::STOCK_CLASS_LINKED_STOCK_PREMIUM => 2,
-                    self::STOCK_CLASS_TOYOKO_INN_STOCK     => 2,
-                ],
-                self::FEE_TYPE_STOCK => [
-                    self::STOCK_CLASS_GENERAL_ONLINE_STOCK => 0,
-                    self::STOCK_CLASS_LINKED_STOCK_NORMAL  => 1,
-                    self::STOCK_CLASS_LINKED_STOCK_VISUAL  => 2,
-                    self::STOCK_CLASS_LINKED_STOCK_PREMIUM => 2,
-                    self::STOCK_CLASS_TOYOKO_INN_STOCK     => 3,
-                ],
-            ],
-            self::RATE_PATTERN_NTA_BTM => [
-                self::FEE_TYPE_SALE  => [
-                    self::STOCK_CLASS_GENERAL_ONLINE_STOCK => 2,
-                    self::STOCK_CLASS_LINKED_STOCK_NORMAL  => 1,
-                    self::STOCK_CLASS_LINKED_STOCK_VISUAL  => 2,
-                    self::STOCK_CLASS_LINKED_STOCK_PREMIUM => 2,
-                    self::STOCK_CLASS_TOYOKO_INN_STOCK     => 2,
-                ],
-                self::FEE_TYPE_STOCK => [
-                    self::STOCK_CLASS_GENERAL_ONLINE_STOCK => 0,
-                    self::STOCK_CLASS_LINKED_STOCK_NORMAL  => 0,
-                    self::STOCK_CLASS_LINKED_STOCK_VISUAL  => 0,
-                    self::STOCK_CLASS_LINKED_STOCK_PREMIUM => 0,
-                    self::STOCK_CLASS_TOYOKO_INN_STOCK     => 1,
-                ],
-            ],
-            self::RATE_PATTERN_YAHOO_TRAVEL => [
-                self::FEE_TYPE_SALE  => [
-                    self::STOCK_CLASS_GENERAL_ONLINE_STOCK => 0,
-                    self::STOCK_CLASS_LINKED_STOCK_NORMAL  => 0,
-                    self::STOCK_CLASS_LINKED_STOCK_VISUAL  => 0,
-                    self::STOCK_CLASS_LINKED_STOCK_PREMIUM => 0,
-                    self::STOCK_CLASS_TOYOKO_INN_STOCK     => 0,
-                ],
-                self::FEE_TYPE_STOCK => [
-                    self::STOCK_CLASS_GENERAL_ONLINE_STOCK => 0,
-                    self::STOCK_CLASS_LINKED_STOCK_NORMAL  => 0.3,
-                    self::STOCK_CLASS_LINKED_STOCK_VISUAL  => 1.3,
-                    self::STOCK_CLASS_LINKED_STOCK_PREMIUM => 1.8,
-                    self::STOCK_CLASS_TOYOKO_INN_STOCK     => 2,
-                ],
-            ],
-            self::RATE_PATTERN_NTA_2_PERCENT => [
-                self::FEE_TYPE_SALE  => [
-                    self::STOCK_CLASS_GENERAL_ONLINE_STOCK => null,
-                    self::STOCK_CLASS_LINKED_STOCK_NORMAL  => null,
-                    self::STOCK_CLASS_LINKED_STOCK_VISUAL  => null,
-                    self::STOCK_CLASS_LINKED_STOCK_PREMIUM => null,
-                    self::STOCK_CLASS_TOYOKO_INN_STOCK     => null,
-                ],
-                self::FEE_TYPE_STOCK => [
-                    self::STOCK_CLASS_GENERAL_ONLINE_STOCK => 2,
-                    self::STOCK_CLASS_LINKED_STOCK_NORMAL  => 1,
-                    self::STOCK_CLASS_LINKED_STOCK_VISUAL  => 2,
-                    self::STOCK_CLASS_LINKED_STOCK_PREMIUM => 2,
-                    self::STOCK_CLASS_TOYOKO_INN_STOCK     => 3,
-                ],
-            ],
-            self::RATE_PATTERN_NTA_3_PERCENT => [
-                self::FEE_TYPE_SALE  => [
-                    self::STOCK_CLASS_GENERAL_ONLINE_STOCK => null,
-                    self::STOCK_CLASS_LINKED_STOCK_NORMAL  => null,
-                    self::STOCK_CLASS_LINKED_STOCK_VISUAL  => null,
-                    self::STOCK_CLASS_LINKED_STOCK_PREMIUM => null,
-                    self::STOCK_CLASS_TOYOKO_INN_STOCK     => null,
-                ],
-                self::FEE_TYPE_STOCK => [
-                    self::STOCK_CLASS_GENERAL_ONLINE_STOCK => 3,
-                    self::STOCK_CLASS_LINKED_STOCK_NORMAL  => 2,
-                    self::STOCK_CLASS_LINKED_STOCK_VISUAL  => 3,
-                    self::STOCK_CLASS_LINKED_STOCK_PREMIUM => 3,
-                    self::STOCK_CLASS_TOYOKO_INN_STOCK     => 3,
-                ],
-            ],
-            self::RATE_PATTERN_NTA_4_PERCENT => [
-                self::FEE_TYPE_SALE  => [
-                    self::STOCK_CLASS_GENERAL_ONLINE_STOCK => null,
-                    self::STOCK_CLASS_LINKED_STOCK_NORMAL  => null,
-                    self::STOCK_CLASS_LINKED_STOCK_VISUAL  => null,
-                    self::STOCK_CLASS_LINKED_STOCK_PREMIUM => null,
-                    self::STOCK_CLASS_TOYOKO_INN_STOCK     => null,
-                ],
-                self::FEE_TYPE_STOCK => [
-                    self::STOCK_CLASS_GENERAL_ONLINE_STOCK => 4,
-                    self::STOCK_CLASS_LINKED_STOCK_NORMAL  => 3,
-                    self::STOCK_CLASS_LINKED_STOCK_VISUAL  => 4,
-                    self::STOCK_CLASS_LINKED_STOCK_PREMIUM => 4,
-                    self::STOCK_CLASS_TOYOKO_INN_STOCK     => 3,
-                ],
-            ],
-            self::RATE_PATTERN_NTA_RELO_CLUB => [
-                self::FEE_TYPE_SALE  => [
-                    self::STOCK_CLASS_GENERAL_ONLINE_STOCK => null,
-                    self::STOCK_CLASS_LINKED_STOCK_NORMAL  => null,
-                    self::STOCK_CLASS_LINKED_STOCK_VISUAL  => null,
-                    self::STOCK_CLASS_LINKED_STOCK_PREMIUM => null,
-                    self::STOCK_CLASS_TOYOKO_INN_STOCK     => null,
-                ],
-                self::FEE_TYPE_STOCK => [
-                    self::STOCK_CLASS_GENERAL_ONLINE_STOCK => null,
-                    self::STOCK_CLASS_LINKED_STOCK_NORMAL  => 2,
-                    self::STOCK_CLASS_LINKED_STOCK_VISUAL  => 3,
-                    self::STOCK_CLASS_LINKED_STOCK_PREMIUM => 5,
-                    self::STOCK_CLASS_TOYOKO_INN_STOCK     => null,
-                ],
-            ],
-            self::RATE_PATTERN_GBTNTA => [
-                self::FEE_TYPE_SALE  => [
-                    self::STOCK_CLASS_GENERAL_ONLINE_STOCK => 1,
-                    self::STOCK_CLASS_LINKED_STOCK_NORMAL  => 1,
-                    self::STOCK_CLASS_LINKED_STOCK_VISUAL  => 1,
-                    self::STOCK_CLASS_LINKED_STOCK_PREMIUM => 1,
-                    self::STOCK_CLASS_TOYOKO_INN_STOCK     => 1,
-                ],
-                self::FEE_TYPE_STOCK => [
-                    self::STOCK_CLASS_GENERAL_ONLINE_STOCK => 0,
-                    self::STOCK_CLASS_LINKED_STOCK_NORMAL  => 0,
-                    self::STOCK_CLASS_LINKED_STOCK_VISUAL  => 0,
-                    self::STOCK_CLASS_LINKED_STOCK_PREMIUM => 0,
-                    self::STOCK_CLASS_TOYOKO_INN_STOCK     => 0,
-                ],
-            ],
-        ];
+        $ratePatternTable = PartnerSiteRate::RATE_PATTERN_TABLE;
 
         // 当該データ登録
-        foreach ($ratePattern[$inputRatePattern] as $feeType => $stockRatePattern) {
+        foreach ($ratePatternTable[$inputRatePattern] as $feeType => $stockRatePattern) {
             foreach ($stockRatePattern as $stockClass => $rate) {
                 $existingPartnerSiteRate = PartnerSiteRate::where('site_cd', $inputSiteCd)
                     ->where('accept_s_ymd', $inputAcceptSYmd)
@@ -743,7 +564,7 @@ class BrPartnerSiteController extends _commonController
                 $alreadyExists = !is_null($existingPartnerSiteRate);
 
                 // 販売手数料で料率がヌル値の場合は精算対象ではないので登録しない。
-                if ($feeType == self::FEE_TYPE_SALE && is_null($rate)) {
+                if ($feeType == PartnerSiteRate::FEE_TYPE_SALE && is_null($rate)) {
                     if ($alreadyExists) {
                         $existingPartnerSiteRate->delete();
                     }
@@ -799,45 +620,5 @@ class BrPartnerSiteController extends _commonController
             }
         }
         return $errorList;
-    }
-
-    /**
-     * パートナー精算サイト手数料率重複確認
-     *
-     * @param array $partnerSite
-     * @return bool
-     */
-    private function _exists_rate($partnerSite)
-    {
-        // バインドパラメータ設定
-        $whereSql = '';
-        $parameters = [];
-        $parameters['site_cd'] = $partnerSite['site_cd'];
-        if (array_key_exists('partner_cd', $partnerSite) && !is_null($partnerSite['partner_cd']) && strlen($partnerSite['partner_cd']) > 0) {
-            $parameters['partner_cd'] = $partnerSite['partner_cd'];
-            $whereSql .= ' and partner_site.partner_cd = :partner_cd';
-        }
-        if (array_key_exists('affiliate_cd', $partnerSite) && !is_null($partnerSite['affiliate_cd']) && strlen($partnerSite['affiliate_cd']) > 0) {
-            $parameters['affiliate_cd'] = $partnerSite['affiliate_cd'];
-            $whereSql .= ' and partner_site.affiliate_cd = :affiliate_cd';
-        }
-
-        $sql = <<<SQL
-            select distinct
-                partner_site.site_cd,
-                partner_site.site_nm
-            from
-                partner_site_rate
-                inner join partner_site
-                    on partner_site_rate.site_cd = partner_site.site_cd
-            where 1 = 1
-                and partner_site_rate.site_cd != :site_cd
-                and partner_site_rate.fee_type = 2 -- self::FEE_TYPE_STOCK
-                {$whereSql}
-        SQL;
-
-        $result = DB::select($sql, $parameters);
-
-        return count($result) > 0;
     }
 }
