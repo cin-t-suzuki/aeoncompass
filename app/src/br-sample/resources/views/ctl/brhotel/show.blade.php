@@ -40,21 +40,25 @@
 
 					<tr>
 						<td bgcolor="#EEFFEE" nowrap>
-						施設管理情報
+							施設管理情報
 						</td>
-					@if ($views->hotel_management_regist == true)
-						<form method="POST" action="{$v->env.source_path}{$v->env.module}/brhotel/editmanagement/">
-						<td nowrap><input type="submit" value=" 変更 "></td>
-						<input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($views->target_cd)}">
-						</form>
-					@elseif ($views->hotel_regist != true)
-						<td nowrap colspan="2" width="90%">施設管理情報 <font color="red">※</font>施設を登録してください。</td>
-					@else
-						<form method="POST" action="{$v->env.source_path}{$v->env.module}/brhotel/management/">
-						<td nowrap><input type="submit" value=" 登録 "></td>
-						<input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($views->target_cd)}">
-						</form>
-					@endif
+                        @if ($views->hotel_management_regist == true)
+                            <form method="POST" action="{$v->env.source_path}{$v->env.module}/brhotel/editmanagement/">
+                                <td nowrap><input type="submit" value=" 変更 "></td>
+                                <input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($views->target_cd)}">
+                            </form>
+                        @elseif ($views->hotel_regist != true)
+                            <td nowrap colspan="2" width="90%">
+                                施設管理情報
+                                <font color="red">※</font>
+                                施設を登録してください。
+                            </td>
+                        @else
+                            <form method="POST" action="{$v->env.source_path}{$v->env.module}/brhotel/management/">
+                                <td nowrap><input type="submit" value=" 登録 "></td>
+                                <input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($views->target_cd)}">
+                            </form>
+                        @endif
 					</tr>
 
 					<tr>
