@@ -1,3 +1,4 @@
+{{-- MEMO: 移植元 svn_trunk\public\app\ctl\views\brhotel\editmanagement.tpl --}}
 
 @section('title', '施設管理情報更新')
 @include('ctl.common.base')
@@ -20,17 +21,17 @@
 
 <FORM method="POST" action="{$v->env.source_path}{$v->env.module}/brhotel/updatemanagement/">
 
-    {include file=$v->env.module_root|cat:'/views/brhotel/_input_management_form.tpl'}
+    @include('ctl.brhotel._input_management_form')
 
     <INPUT TYPE="submit" VALUE="施設管理情報更新">
     ※は必須です。
 
 </FORM>
 
-{include file=$v->env.module_root|cat:'/views/brhotel/_hotel_top_form.tpl'}
+@include('ctl.brhotel._hotel_top_form', ["target_cd" => $views->target_cd])
 
 <br>
 
-{include file=$v->env.module_root|cat:'/views/brhotel/_log_hotel_person_form.tpl'}
+@include('ctl.brhotel._log_hotel_person_form')
 
 <br>

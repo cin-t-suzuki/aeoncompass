@@ -563,6 +563,7 @@ class BrhotelController extends _commonController
         return view('ctl.brhotel.edit-management', [
             'messages' => [],
             'views' => (object)[
+                'target_cd' => Request::input('target_cd'),
                 'hotel' => [
                     'hotel_cd' => Request::input('target_cd'),
                     'hotel_nm' => 'dummy hotel name',
