@@ -558,4 +558,8 @@ class BrhotelController extends _commonController
 		return view("ctl.brhotel.update", $this->getViewData());
 	}
 
+    public function editManagement(Request $request)
+    {
+        return '施設管理情報更新 (controller)';
+    }
 }

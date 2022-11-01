@@ -43,10 +43,10 @@
 							施設管理情報
 						</td>
                         @if ($views->hotel_management_regist == true)
-                            <form method="POST" action="{$v->env.source_path}{$v->env.module}/brhotel/editmanagement/">
+                            {{ Form::open(['route' => 'ctl.br_hotel.edit_management', 'method' => 'get']) }}
                                 <td nowrap><input type="submit" value=" 変更 "></td>
-                                <input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($views->target_cd)}">
-                            </form>
+                                <input type="hidden" name="target_cd" value="{{ strip_tags($views->target_cd) }}">
+                            {{ Form::close() }}
                         @elseif ($views->hotel_regist != true)
                             <td nowrap colspan="2" width="90%">
                                 施設管理情報
