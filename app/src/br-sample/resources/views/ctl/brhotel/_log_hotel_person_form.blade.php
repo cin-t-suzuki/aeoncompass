@@ -1,4 +1,6 @@
 {{-- MEMO: 移植元 svn_trunk\public\app\ctl\views\brhotel\_log_hotel_person_form.tpl --}}
+{{-- MEMO: strip_tags() は移植元に従って実装しているが、過剰なものが含まれている可能性はある --}}
+
 <hr size="1">
 
 <h4>施設担当者更新履歴</h4>
@@ -24,27 +26,27 @@
             更新日時
         </td>
     </tr>
-    {foreach from=$v->assign->log_hotel_person item=hotel_person}
+    @foreach ($log_hotel_person as $hotel_person)
         <tr>
             <td nowrap>
-                {$v->helper->form->strip_tags($hotel_person.person_post)}
+                {{ strip_tags($hotel_person->person_post) }}
             </td>
             <td nowrap>
-                {$v->helper->form->strip_tags($hotel_person.person_nm)}
+                {{ strip_tags($hotel_person->person_nm) }}
             </td>
             <td nowrap>
-                {$v->helper->form->strip_tags($hotel_person.person_tel)}
+                {{ strip_tags($hotel_person->person_tel) }}
             </td>
             <td nowrap>
-                {$v->helper->form->strip_tags($hotel_person.person_fax)}
+                {{ strip_tags($hotel_person->person_fax) }}
             </td>
             <td nowrap>
-                {$v->helper->form->strip_tags($hotel_person.person_email)}
+                {{ strip_tags($hotel_person->person_email) }}
             </td>
             <td nowrap>
-                {$hotel_person.modify_ts|date_format:"%Y/%m/%d %H:%M:%S"}
+                {{ date("Y/m/d H:i:s", $hotel_person->modify_ts) }}
             </td>
         </tr>
-    {/foreach}
+    @endforeach
 </table>
 <br />

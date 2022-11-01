@@ -3,6 +3,8 @@
 @section('title', '施設管理情報更新')
 @include('ctl.common.base')
 
+@inject('service', 'App\Http\Controllers\ctl\BrhotelController')
+
 {{-- メッセージ --}}
 @include('ctl.common.message', $messages)
 

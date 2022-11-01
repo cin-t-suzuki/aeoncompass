@@ -568,17 +568,42 @@ class BrhotelController extends _commonController
                     'hotel_cd' => Request::input('target_cd'),
                     'hotel_nm' => 'dummy hotel name',
                 ],
-                'mast_pref' => [
-                    'pref_nm' => 'dummy pref',
-                ],
-                'mast_city' => [
-                    'city_nm' => 'dummy city',
-                ],
-                'mast_ward' => [
-                    'ward_nm' => 'dummy ward',
+                'mast_pref' => null,
+                'mast_city' => null,
+                'mast_ward' => null,
+            ],
+            'log_hotel_person' => [
+                (object)[
+                    'person_post'   => 'dummy person post',
+                    'person_nm'     => 'dummy person name',
+                    'person_tel'    => 'dummy person tel',
+                    'person_fax'    => 'dummy person fax',
+                    'person_email'  => 'dummy person email',
+                    'modify_ts'     => strtotime('2022-10-14 23:40:20'),
                 ],
             ],
-
+            'target_cd' => Request::input('target_cd'),
+            'hotel_account' => (object)[
+                'account_id_begin' => 'dummy account_id_begin',
+                'accept_status' => 'dummy accept status',
+                'password' => 'dummy password',
+            ],
+            'disp' => null,
+            'hotel_person' => (object)[
+                'person_post' => 'dummy hotel person post',
+                'person_nm' => 'dummy hotel person name',
+                'person_tel' => 'dummy hotel person tel',
+                'person_fax' => 'dummy hotel person fax',
+                'person_email' => 'dummy hotel person email',
+            ],
+            'status' => 'dummy status',
+            'new_flg' => 1,
+            'hotel_status' => (object)[
+                'close_dtm' => strtotime('2010-10-11 12:31:22'),
+                'contract_ymd' => 'dummy contact ymd',
+                'open_ymd' => 'dummy omen ymd',
+            ],
+            'target_stock_type' => 'dummy target stock type',
         ]);
     }
 }
