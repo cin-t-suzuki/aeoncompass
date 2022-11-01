@@ -19,14 +19,14 @@
 
 <br>
 
-<FORM method="POST" action="{$v->env.source_path}{$v->env.module}/brhotel/updatemanagement/">
+<form method="post" action="{$v->env.source_path}{$v->env.module}/brhotel/updatemanagement/">
 
     @include('ctl.brhotel._input_management_form')
 
-    <INPUT TYPE="submit" VALUE="施設管理情報更新">
+    <input type="submit" value="施設管理情報更新">
     ※は必須です。
 
-</FORM>
+</form>
 
 @include('ctl.brhotel._hotel_top_form', ["target_cd" => $views->target_cd])
 

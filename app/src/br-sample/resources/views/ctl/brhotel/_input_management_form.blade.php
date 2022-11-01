@@ -11,7 +11,7 @@
     <tr>
         <td bgcolor="#EEFFEE">アカウントID※</td>
         <td>
-            <INPUT TYPE="text" NAME="Hotel_Account[account_id_begin]" value="{$v->helper->form->strip_tags($v->assign->hotel_account.account_id_begin)}" SIZE="15" MAXLENGTH="10">
+            <input type="text" name="Hotel_Account[account_id_begin]" value="{$v->helper->form->strip_tags($v->assign->hotel_account.account_id_begin)}" size="15" maxlength="10">
         </td>
         <td><small>10文字<font color="#0000ff">（必須）</font></small></td>
     </tr>
@@ -20,7 +20,7 @@
         <td bgcolor="#EEFFEE">パスワード※</td>
         <td>
             {if is_empty($v->assign->disp)}
-                <INPUT TYPE="text" NAME="Hotel_Account[password]" value="{$v->helper->form->strip_tags($v->assign->hotel_account.password)}" SIZE="15" MAXLENGTH="10">
+                <input type="text" name="Hotel_Account[password]" value="{$v->helper->form->strip_tags($v->assign->hotel_account.password)}" size="15" maxlength="10">
             {else}
             <span nowrap style="float: left;">**********</span>
             <span nowrap style="float: right;">
@@ -36,14 +36,14 @@
     <tr>
         <td bgcolor="#EEFFEE">ステータス</td>
         <td>
-            <INPUT TYPE="radio" NAME="Hotel_Account[accept_status]" VALUE="1" {if $v->assign->hotel_account.accept_status == 1 || is_empty($v->assign->hotel_account.accept_status)} CHECKED {/if} id="i2">
-            <LABEL for="i2">
+            <input type="radio" name="Hotel_Account[accept_status]" value="1" {if $v->assign->hotel_account.accept_status == 1 || is_empty($v->assign->hotel_account.accept_status)} checked {/if} id="i2">
+            <label for="i2">
                 利用可
-            </LABEL>
-            <INPUT TYPE="radio" NAME="Hotel_Account[accept_status]" VALUE="0" {if $v->assign->hotel_account.accept_status == 0 && !is_empty($v->assign->hotel_account.accept_status)} CHECKED {/if} id="i1">
-            <LABEL for="i1">
+            </label>
+            <input type="radio" name="Hotel_Account[accept_status]" value="0" {if $v->assign->hotel_account.accept_status == 0 && !is_empty($v->assign->hotel_account.accept_status)} checked {/if} id="i1">
+            <label for="i1">
                 利用不可
-            </LABEL>
+            </label>
         </td>
         <td><small>選択</small></td>
     </tr>
@@ -51,7 +51,7 @@
     <tr>
         <td bgcolor="#EEFFEE">担当者役職</td>
         <td>
-            <INPUT TYPE="text" NAME="Hotel_Person[person_post]" value="{$v->helper->form->strip_tags($v->assign->hotel_person.person_post)}" SIZE="50" MAXLENGTH="32">
+            <input type="text" name="Hotel_Person[person_post]" value="{$v->helper->form->strip_tags($v->assign->hotel_person.person_post)}" size="50" maxlength="32">
         </td>
         <td><small>32文字</small></td>
     </tr>
@@ -59,7 +59,7 @@
     <tr>
         <td bgcolor="#EEFFEE">担当者名称※</td>
         <td>
-            <INPUT TYPE="text" NAME="Hotel_Person[person_nm]" value="{$v->helper->form->strip_tags($v->assign->hotel_person.person_nm)}" SIZE="50" MAXLENGTH="32">
+            <input type="text" name="Hotel_Person[person_nm]" value="{$v->helper->form->strip_tags($v->assign->hotel_person.person_nm)}" size="50" maxlength="32">
         </td>
         <td><small>32文字<font color="#0000ff">（必須）</font></small></td>
     </tr>
@@ -67,7 +67,7 @@
     <tr>
         <td bgcolor="#EEFFEE">担当者電話番号※</td>
         <td>
-            <INPUT TYPE="text" NAME="Hotel_Person[person_tel]" value="{if $v->assign->status == 'new' && is_empty($v->helper->form->strip_tags($v->assign->hotel_person.person_tel))}{$v->helper->form->strip_tags($v->assign->hotel.tel)}{else}{$v->helper->form->strip_tags($v->assign->hotel_person.person_tel)}{/if}" SIZE="20" MAXLENGTH="15">
+            <input type="text" name="Hotel_Person[person_tel]" value="{if $v->assign->status == 'new' && is_empty($v->helper->form->strip_tags($v->assign->hotel_person.person_tel))}{$v->helper->form->strip_tags($v->assign->hotel.tel)}{else}{$v->helper->form->strip_tags($v->assign->hotel_person.person_tel)}{/if}" size="20" maxlength="15">
         </td>
         <td><small>xxxx-xxxx-xxxx<font color="#0000ff">（必須）</font></small></td>
     </tr>
@@ -75,7 +75,7 @@
     <tr>
         <td bgcolor="#EEFFEE">担当者ファックス番号</td>
         <td>
-            <INPUT TYPE="text" NAME="Hotel_Person[person_fax]" value="{if $v->assign->status == 'new' && is_empty($v->helper->form->strip_tags($v->assign->hotel_person.person_fax))}{$v->helper->form->strip_tags($v->assign->hotel.fax)}{else}{$v->helper->form->strip_tags($v->assign->hotel_person.person_fax)}{/if}" SIZE="20" MAXLENGTH="15">
+            <input type="text" name="Hotel_Person[person_fax]" value="{if $v->assign->status == 'new' && is_empty($v->helper->form->strip_tags($v->assign->hotel_person.person_fax))}{$v->helper->form->strip_tags($v->assign->hotel.fax)}{else}{$v->helper->form->strip_tags($v->assign->hotel_person.person_fax)}{/if}" size="20" maxlength="15">
         </td>
         <td><small>xxxx-xxxx-xxxx</small></td>
     </tr>
@@ -83,7 +83,7 @@
     <tr>
         <td bgcolor="#EEFFEE">担当者電子メールアドレス</td>
         <td>
-            <INPUT TYPE="text" NAME="Hotel_Person[person_email]" value="{$v->helper->form->strip_tags($v->assign->hotel_person.person_email)}" SIZE="50" MAXLENGTH="50">
+            <input type="text" name="Hotel_Person[person_email]" value="{$v->helper->form->strip_tags($v->assign->hotel_person.person_email)}" size="50" maxlength="50">
         </td>
         <td><br /></td>
     </tr>
@@ -93,23 +93,23 @@
         <td bgcolor="#EEFFEE">登録状態</td>
         {if $new_flg == 1}
             <td>
-                <INPUT TYPE="hidden" NAME="Hotel_Status[entry_status]" VALUE="1" />
+                <input type="hidden" name="Hotel_Status[entry_status]" value="1" />
                 登録作業中
             </td>
         {else}
             <td>
                 <label>
-                    <INPUT TYPE="radio" NAME="Hotel_Status[entry_status]" VALUE="0" {if $v->assign->hotel_status.entry_status == 0} CHECKED {/if} id="k1" {if !$v->assign->rate_chk} disabled {/if}>
-                    <LABEL for="k1">
+                    <input type="radio" name="Hotel_Status[entry_status]" value="0" {if $v->assign->hotel_status.entry_status == 0} checked {/if} id="k1" {if !$v->assign->rate_chk} disabled {/if}>
+                    <label for="k1">
                         公開中
-                    </LABEL>
+                    </label>
                 </label>
-                <INPUT TYPE="radio" NAME="Hotel_Status[entry_status]" VALUE="1" {if $v->assign->hotel_status.entry_status == 1} CHECKED {/if} id="k2">
-                <LABEL for="k2">
+                <input type="radio" name="Hotel_Status[entry_status]" value="1" {if $v->assign->hotel_status.entry_status == 1} checked {/if} id="k2">
+                <label for="k2">
                     登録作業中
                 </label>
-                <INPUT TYPE="radio" NAME="Hotel_Status[entry_status]" VALUE="2" {if $v->assign->hotel_status.entry_status == 2} CHECKED {/if} id="k3">
-                <LABEL for="k3">
+                <input type="radio" name="Hotel_Status[entry_status]" value="2" {if $v->assign->hotel_status.entry_status == 2} checked {/if} id="k3">
+                <label for="k3">
                     解約
                 </label>
             </td>
@@ -122,7 +122,7 @@
     <tr>
         <td bgcolor="#EEFFEE">契約日</td>
         <td>
-            <INPUT TYPE="text" NAME="Hotel_Status[contract_ymd]" value="{$v->helper->form->strip_tags($v->assign->hotel_status.contract_ymd)}" SIZE="20" MAXLENGTH="15">
+            <input type="text" name="Hotel_Status[contract_ymd]" value="{$v->helper->form->strip_tags($v->assign->hotel_status.contract_ymd)}" size="20" maxlength="15">
         </td>
         <td>YYYY/MM/DD <small>又は</small> YYYY-MM-DD</td>
     </tr>
@@ -130,7 +130,7 @@
     <tr>
         <td bgcolor="#EEFFEE">公開日</td>
         <td>
-            <INPUT TYPE="text" NAME="Hotel_Status[open_ymd]" value="{$v->helper->form->strip_tags($v->assign->hotel_status.open_ymd)}" SIZE="20" MAXLENGTH="15">
+            <input type="text" name="Hotel_Status[open_ymd]" value="{$v->helper->form->strip_tags($v->assign->hotel_status.open_ymd)}" size="20" maxlength="15">
         </td>
         <td>YYYY/MM/DD <small>又は</small> YYYY-MM-DD</td>
     </tr>

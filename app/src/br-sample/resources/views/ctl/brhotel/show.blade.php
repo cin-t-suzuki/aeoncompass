@@ -54,7 +54,7 @@
                                 施設を登録してください。
                             </td>
                         @else
-                            <form method="POST" action="{$v->env.source_path}{$v->env.module}/brhotel/management/">
+                            <form method="post" action="{$v->env.source_path}{$v->env.module}/brhotel/management/">
                                 <td nowrap><input type="submit" value=" 登録 "></td>
                                 <input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($views->target_cd)}">
                             </form>
@@ -66,14 +66,14 @@
 						施設状態情報
 						</td>
 					@if ($views->hotel_state_regist == true)
-						<form method="POST" action="{$v->env.source_path}{$v->env.module}/brhotel/editstate/">
+						<form method="post" action="{$v->env.source_path}{$v->env.module}/brhotel/editstate/">
 						<td nowrap><input type="submit" value=" 変更 "></td>
 						<input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($views->target_cd)}">
 						</form>
 					@elseif ($views->hotel_regist != true)
 						<td nowrap colspan="2" width="90%">施設状態情報 <font color="red">※</font>施設を登録してください。</td>
 					@else
-						<form method="POST" action="{$v->env.source_path}{$v->env.module}/brhotel/state/">
+						<form method="post" action="{$v->env.source_path}{$v->env.module}/brhotel/state/">
 						<td nowrap><input type="submit" value=" 登録 "></td>
 						<input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($views->target_cd)}">
 						</form>
@@ -85,14 +85,14 @@
 						施設測地情報
 						</td>
 					@if ($views->hotel_survey_regist == true)
-						<form method="POST" action="{$v->env.source_path}{$v->env.module}/brhotel/editsurvey/">
+						<form method="post" action="{$v->env.source_path}{$v->env.module}/brhotel/editsurvey/">
 						<td nowrap><input type="submit" value=" 変更 "></td>
 						<input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($views->target_cd)}">
 						</form>
 					@elseif ($views->hotel_regist != true)
 						<td nowrap colspan="2" width="90%">施設測地情報 <font color="red">※</font>施設を登録してください。</td>
 					@else
-						<form method="POST" action="{$v->env.source_path}{$v->env.module}/brhotel/survey/">
+						<form method="post" action="{$v->env.source_path}{$v->env.module}/brhotel/survey/">
 						<td nowrap><input type="submit" value=" 登録 "></td>
 						<input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($views->target_cd)}">
 						</form>
@@ -119,7 +119,7 @@
 						施設情報詳細
 						</td>
 					@if ($views->hotel_regist == true)
-						<form method="POST" action="{$v->env.source_path}{$v->env.module}/htlhotel/show/">
+						<form method="post" action="{$v->env.source_path}{$v->env.module}/htlhotel/show/">
 						<td nowrap><input type="submit" value=" 詳細 "></td>
 						<input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($views->target_cd)}">
 						</form>
@@ -133,7 +133,7 @@
 						</td>
 					@if ($views->hotel_state_regist == true)
 						{{--新バージョンのみ（htlmedia不使用）--}}
-						<form method="POST" action="{$v->env.source_path}{$v->env.module}/htlsmedia/">
+						<form method="post" action="{$v->env.source_path}{$v->env.module}/htlsmedia/">
 						<td nowrap><input type="submit" value=" 変更 "></td>
 						<input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($views->target_cd)}">
 						</form>
@@ -141,7 +141,7 @@
 						<td nowrap colspan="2" width="90%">施設画像情報 <font color="red">※</font>施設を登録してください。</td>
 					@else
 						{{--新バージョンのみ（htlmedia不使用）--}}
-						<form method="POST" action="{$v->env.source_path}{$v->env.module}/htlsmedia/">
+						<form method="post" action="{$v->env.source_path}{$v->env.module}/htlsmedia/">
 						<td nowrap><input type="submit" value=" 登録 "></td>
 						<input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($views->target_cd)}">
 						</form>
@@ -149,7 +149,7 @@
 					</tr>
 				 <tr>
 					 <td bgcolor="EEEEFF">予約受付状態の変更</td>
-					 <form action="{$v->env.source_path}{$v->env.module}/htlacceptance/edit/" method="POST">
+					 <form action="{$v->env.source_path}{$v->env.module}/htlacceptance/edit/" method="post">
 					 <input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($views->target_cd)}" />
 					 <td><input type="submit" value=" 変更 ">
 					 </td>
@@ -270,7 +270,7 @@
 				<tr>
 					<td  bgcolor="#EEFFEE" >特記事項</td>
 					<td>
-						<textarea NAME="Hotel_Staff_Note[staff_note]" cols=40 rows=20>{{strip_tags($views->hotel_staff_note['staff_note']??'')}}</textarea>
+						<textarea name="Hotel_Staff_Note[staff_note]" cols=40 rows=20>{{strip_tags($views->hotel_staff_note['staff_note']??'')}}</textarea>
 					</td>
 				</tr>
 			</table>
@@ -286,10 +286,10 @@
 </table>
 
 <div style="float:right">
-	<FORM ACTION="{$v->env.source_path}{$v->env.module}/htlhotel/staticupdate/" METHOD="POST" target="page_test">
+	<form action="{$v->env.source_path}{$v->env.module}/htlhotel/staticupdate/" method="post" target="page_test">
 	情報ページHTML
 	<small>
-	<INPUT TYPE="submit" VALUE="更新する">
+	<input type="submit" value="更新する">
 	<input type="hidden" name="target_cd" value="{{strip_tags($views->target_cd)}}">
 	<input type="hidden" name="redirect_url" value="http://{$v->config->system->rsv_host_name}/hotel/{$v->helper->form->strip_tags($views->target_cd)}/">
 	</small>
