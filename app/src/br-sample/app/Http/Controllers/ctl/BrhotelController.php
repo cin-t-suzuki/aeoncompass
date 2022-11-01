@@ -560,6 +560,6 @@ class BrhotelController extends _commonController
 
     public function editManagement(Request $request)
     {
-        return '施設管理情報更新 (controller)';
+        return view('ctl.brhotel.edit-management');
     }
 }
