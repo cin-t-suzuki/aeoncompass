@@ -21,7 +21,10 @@
         都道府県
         </td>
         <td>
-          {{strip_tags($mast_pref['pref_nm'])}}  {{strip_tags($mast_city['city_nm'])}} {{strip_tags($mast_ward['ward_nm'])}}<br />
+            {{-- MEMO: 移植元ソースでは sprit_tags() を通しているが、マスタデータの表示なので必要ないと判断した。 --}}
+            {{ !is_null($mast_pref) ? $mast_pref['pref_nm'] : '' }}
+            {{ !is_null($mast_city) ? $mast_city['city_nm'] : '' }}
+            {{ !is_null($mast_ward) ? $mast_ward['ward_nm'] : '' }}
         </td>
       </tr>
     </table>
