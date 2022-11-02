@@ -559,15 +559,15 @@ class BrhotelController extends _commonController
 	}
 
     /**
-     * Undocumented function
+     * 施設管理情報更新
      *
-     * @return void
+     * @return \Illuminate\Http\Response
      */
     public function editManagement()
     {
         $a_hotel_account    = Request::input('Hotel_Account'); // array
-        $a_hotel_person     = Request::input('Hotel_Person');
-        $a_hotel_status     = Request::input('Hotel_Status');
+        $a_hotel_person     = Request::input('Hotel_Person'); // array
+        $a_hotel_status     = Request::input('Hotel_Status'); // array
 
         $target_cd = Request::input('target_cd');
 
@@ -576,16 +576,18 @@ class BrhotelController extends _commonController
         // 登録情報の取得
         if (is_null($a_hotel_account)) {
             $a_hotel_account = HotelAccount::find($target_cd); // object
+        } else {
+            $a_hotel_account = (object)$a_hotel_account;
         }
         if (is_null($a_hotel_person)) {
             $a_hotel_person = HotelPerson::find($target_cd); // object
+        } else {
+            $a_hotel_person = (object)$a_hotel_person;
         }
 
         /** @var App\Models\HotelStatus */
         $a_find_hotel_status = HotelStatus::find($target_cd); // object
 
-        // TODO: 用途解析
-        // $o_models_date = new Br_Models_Date();
         if (is_null($a_hotel_status)) {
             $a_hotel_status = $a_find_hotel_status;
             if (!$this->is_empty($a_find_hotel_status->contract_ymd)) {
@@ -613,8 +615,7 @@ class BrhotelController extends _commonController
         $rate_chk = true;
         if ($a_hotel_control->stock_type != 1) {
             $a_hotel_rate = HotelRate::where('hotel_cd', $target_cd)->get();
-            // TODO: 要確認 Collection の空判定に対応できている？
-            if ($this->is_empty($a_hotel_rate)) {
+            if (count($a_hotel_rate) === 0) {
                 $rate_chk = false;
             }
         }
@@ -657,55 +658,30 @@ class BrhotelController extends _commonController
             }
         }
 
-
-        // TODO:
         return view('ctl.brhotel.edit-management', [
             'views' => (object)[
-                'hotel' => [
-                    'hotel_cd' => Request::input('target_cd'),
-                    'hotel_nm' => 'dummy hotel name',
-                ],
-                'target_cd' => Request::input('target_cd'),
-                'mast_pref' => null,
-                'mast_city' => null,
-                'mast_ward' => null,
+                'hotel'     => $hotelData,
+                'target_cd' => $target_cd,
+                'mast_pref' => $mastPrefData,
+                'mast_city' => $mastCityData,
+                'mast_ward' => $mastWardData,
             ],
-            'messages' => [],
+            'messages'          => [],
 
-            'target_cd' => Request::input('target_cd'),
+            'target_cd'         => $target_cd,
 
-            'disp' => $disp,
-            'hotel_account' => (object)[
-                'account_id_begin' => 'dummy account_id_begin',
-                'accept_status' => 'dummy accept status',
-                'password' => 'dummy password',
-            ],
-            'hotel_person' => (object)[
-                'person_post' => 'dummy hotel person post',
-                'person_nm' => 'dummy hotel person name',
-                'person_tel' => 'dummy hotel person tel',
-                'person_fax' => 'dummy hotel person fax',
-                'person_email' => 'dummy hotel person email',
-            ],
-            'hotel_status' => (object)[
-                'close_dtm' => strtotime('2010-10-11 12:31:22'),
-                'contract_ymd' => 'dummy contact ymd',
-                'open_ymd' => 'dummy omen ymd',
-            ],
-            'log_hotel_person' => [
-                (object)[
-                    'person_post'   => 'dummy person post',
-                    'person_nm'     => 'dummy person name',
-                    'person_tel'    => 'dummy person tel',
-                    'person_fax'    => 'dummy person fax',
-                    'person_email'  => 'dummy person email',
-                    'modify_ts'     => strtotime('2022-10-14 23:40:20'),
-                ],
-            ],
+            'disp'              => $disp,
+            'hotel_account'     => $a_hotel_account,
+            'hotel_person'      => $a_hotel_person,
+            'hotel_status'      => $a_hotel_status,
+            'log_hotel_person'  => $a_log_hotel_person,
+            'rate_chk'          => $rate_chk,
 
-            'status' => 'dummy status',
-            'new_flg' => 'dummy',
-            'target_stock_type' => 'dummy target stock type',
+            // MEMO: 移植元では、登録の場合のみ設定されている値。
+            // 未定義だと動作しないため、干渉しない値であろうを設定している。
+            'status' => null,
+            'new_flg' => 0,
+            'target_stock_type' => null,
         ]);
     }
 }
