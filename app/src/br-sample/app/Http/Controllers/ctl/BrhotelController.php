@@ -1,27 +1,27 @@
 <?php
 namespace App\Http\Controllers\ctl;
-use App\Http\Controllers\ctl\_commonController;
 
-use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Facades\DB;
-use Exception;
-use Illuminate\Support\Facades\Log;
-
-use App\Models\Hotel;
-use App\Models\MastPref;
-use App\Models\MastCity;
-use App\Models\MastWard;
-use App\Models\HotelRate;
 use App\Common\Traits;
+use App\Http\Controllers\ctl\_commonController;
 use App\Models\CustomerHotel;
+use App\Models\Hotel;
 use App\Models\HotelAccount;
 use App\Models\HotelControl;
 use App\Models\HotelMscLogin;
 use App\Models\HotelNotify;
 use App\Models\HotelPerson;
+use App\Models\HotelRate;
 use App\Models\HotelStaffNote;
 use App\Models\HotelStatus;
 use App\Models\HotelSurvey;
+use App\Models\MastPref;
+use App\Models\MastCity;
+use App\Models\MastWard;
+use App\Util\Models_Cipher;
+use Exception;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class BrhotelController extends _commonController
 {
@@ -558,19 +558,139 @@ class BrhotelController extends _commonController
 		return view("ctl.brhotel.update", $this->getViewData());
 	}
 
-    public function editManagement(Request $request)
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
+    public function editManagement()
     {
+        $a_hotel_account    = Request::input('Hotel_Account'); // array
+        $a_hotel_person     = Request::input('Hotel_Person');
+        $a_hotel_status     = Request::input('Hotel_Status');
+
+        $target_cd = Request::input('target_cd');
+
+        $disp = 'edit';
+
+        // 登録情報の取得
+        if (is_null($a_hotel_account)) {
+            $a_hotel_account = HotelAccount::find($target_cd); // object
+        }
+        if (is_null($a_hotel_person)) {
+            $a_hotel_person = HotelPerson::find($target_cd); // object
+        }
+
+        /** @var App\Models\HotelStatus */
+        $a_find_hotel_status = HotelStatus::find($target_cd); // object
+
+        // TODO: 用途解析
+        // $o_models_date = new Br_Models_Date();
+        if (is_null($a_hotel_status)) {
+            $a_hotel_status = $a_find_hotel_status;
+            if (!$this->is_empty($a_find_hotel_status->contract_ymd)) {
+                var_dump(gettype($a_find_hotel_status->contract_ymd));
+                var_dump($a_find_hotel_status->contract_ymd);
+                $a_hotel_status->contract_ymd = date('Y/m/d', strtotime($a_find_hotel_status->contract_ymd));
+            }
+            if (!$this->is_empty($a_find_hotel_status->open_ymd)) {
+                $a_hotel_status->open_ymd = date('Y/m/d', strtotime($a_find_hotel_status->open_ymd));
+            }
+            if (!$this->is_empty($a_find_hotel_status->close_dtm)) {
+                $a_hotel_status->close_dtm = date('Y/m/d H:i:s', strtotime($a_find_hotel_status->close_dtm));
+            }
+        } else {
+            if (!$this->is_empty($a_find_hotel_status->close_dtm)) {
+                // TODO: array|object の問題。
+                // ここで、object にしておくことはできるが、あとで insert するときに不都合はないか？
+                $a_hotel_status = (object)$a_hotel_status;
+                $a_hotel_status->close_dtm = date('Y/m/d H:i:s', strtotime($a_find_hotel_status->close_dtm));
+            }
+        }
+
+        $a_hotel_control = HotelControl::find($target_cd);
+        // 買取販売以外は料率のチェックを行う。
+        $rate_chk = true;
+        if ($a_hotel_control->stock_type != 1) {
+            $a_hotel_rate = HotelRate::where('hotel_cd', $target_cd)->get();
+            // TODO: 要確認 Collection の空判定に対応できている？
+            if ($this->is_empty($a_hotel_rate)) {
+                $rate_chk = false;
+            }
+        }
+
+        // 表示用データの取得
+
+        // 施設情報取得
+        // 都道府県取得
+        $this->getHotelInfo($target_cd, $hotelData, $mastPrefData, $mastCityData, $mastWardData);
+
+        // 施設担当者変更履歴
+        $sql = <<<SQL
+            select
+                p.branch_no,
+                p.person_post,
+                p.person_nm,
+                p.person_tel,
+                p.person_fax,
+                p.person_email,
+                date_format(p.entry_ts, '%Y/%m/%d %H:%i:%s') as entry_ts,
+                date_format(p.modify_ts, '%Y/%m/%d %H:%i:%s') as modify_ts
+            from
+                log_hotel_person p
+            where
+                p.hotel_cd = :hotel_cd
+            order by
+                p.modify_ts desc
+        SQL;
+
+        $a_log_hotel_person = DB::select($sql, ['hotel_cd' => $target_cd]);
+
+        $cipher = new Models_Cipher(config('settings.cipher_key'));
+        foreach ($a_log_hotel_person as $key => $value) {
+            if (!$this->is_empty($a_find_hotel_status[$key]->person_email)) {
+                try {
+                    $a_log_hotel_person[$key]->person_email = $cipher->decrypt($a_log_hotel_person[$key]->person_email);
+                } catch (Exception $ignored) {
+                    // 復号できないものが混じっている可能性があるため、例外を握りつぶす
+                }
+            }
+        }
+
+
+        // TODO:
         return view('ctl.brhotel.edit-management', [
-            'messages' => [],
             'views' => (object)[
-                'target_cd' => Request::input('target_cd'),
                 'hotel' => [
                     'hotel_cd' => Request::input('target_cd'),
                     'hotel_nm' => 'dummy hotel name',
                 ],
+                'target_cd' => Request::input('target_cd'),
                 'mast_pref' => null,
                 'mast_city' => null,
                 'mast_ward' => null,
+            ],
+            'messages' => [],
+
+            'target_cd' => Request::input('target_cd'),
+
+            'disp' => $disp,
+            'hotel_account' => (object)[
+                'account_id_begin' => 'dummy account_id_begin',
+                'accept_status' => 'dummy accept status',
+                'password' => 'dummy password',
+            ],
+            'hotel_person' => (object)[
+                'person_post' => 'dummy hotel person post',
+                'person_nm' => 'dummy hotel person name',
+                'person_tel' => 'dummy hotel person tel',
+                'person_fax' => 'dummy hotel person fax',
+                'person_email' => 'dummy hotel person email',
+            ],
+            'hotel_status' => (object)[
+                'close_dtm' => strtotime('2010-10-11 12:31:22'),
+                'contract_ymd' => 'dummy contact ymd',
+                'open_ymd' => 'dummy omen ymd',
             ],
             'log_hotel_person' => [
                 (object)[
@@ -582,27 +702,9 @@ class BrhotelController extends _commonController
                     'modify_ts'     => strtotime('2022-10-14 23:40:20'),
                 ],
             ],
-            'target_cd' => Request::input('target_cd'),
-            'hotel_account' => (object)[
-                'account_id_begin' => 'dummy account_id_begin',
-                'accept_status' => 'dummy accept status',
-                'password' => 'dummy password',
-            ],
-            'disp' => null,
-            'hotel_person' => (object)[
-                'person_post' => 'dummy hotel person post',
-                'person_nm' => 'dummy hotel person name',
-                'person_tel' => 'dummy hotel person tel',
-                'person_fax' => 'dummy hotel person fax',
-                'person_email' => 'dummy hotel person email',
-            ],
+
             'status' => 'dummy status',
-            'new_flg' => 1,
-            'hotel_status' => (object)[
-                'close_dtm' => strtotime('2010-10-11 12:31:22'),
-                'contract_ymd' => 'dummy contact ymd',
-                'open_ymd' => 'dummy omen ymd',
-            ],
+            'new_flg' => 'dummy',
             'target_stock_type' => 'dummy target stock type',
         ]);
     }

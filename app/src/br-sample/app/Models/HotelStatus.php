@@ -16,6 +16,19 @@ class HotelStatus extends CommonDBModel
 	use Traits;
 
 	protected $table = "hotel_status";
+    /**
+     * テーブルに関連付ける主キー
+     *
+     * @var string
+     */
+    protected $primaryKey = 'hotel_cd';
+    /**
+     * モデルのIDを自動増分するか
+     *
+     * @var bool
+     */
+    public $incrementing = false;
+
 	// カラム
 	public string $COL_HOTEL_CD = "hotel_cd";
 	public string $COL_ENTRY_STATUS = "entry_status";
