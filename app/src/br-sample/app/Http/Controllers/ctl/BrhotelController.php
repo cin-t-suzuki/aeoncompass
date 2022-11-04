@@ -615,6 +615,7 @@ class BrhotelController extends _commonController
         $rate_chk = true;
         if ($a_hotel_control->stock_type != 1) {
             $a_hotel_rate = HotelRate::where('hotel_cd', $target_cd)->get();
+            // TODO: count() で大丈夫か？
             if (count($a_hotel_rate) === 0) {
                 $rate_chk = false;
             }
@@ -692,7 +693,23 @@ class BrhotelController extends _commonController
      */
     public function updateManagement()
     {
-        $target_cd = 2015060001;
+
+        // TODO:
+        $target_cd = Request::input('target_cd');
+        $disp = 'edit';
+        $a_hotel_account = HotelAccount::find($target_cd);  // object
+        $a_hotel_person = HotelPerson::find($target_cd);    // object
+        $a_hotel_status = HotelStatus::find($target_cd);    // object
+        if (!$this->is_empty($a_hotel_status->contract_ymd)) {
+            $a_hotel_status->contract_ymd = date('Y/m/d', strtotime($a_hotel_status->contract_ymd));
+        }
+        if (!$this->is_empty($a_hotel_status->open_ymd)) {
+            $a_hotel_status->open_ymd = date('Y/m/d', strtotime($a_hotel_status->open_ymd));
+        }
+        if (!$this->is_empty($a_hotel_status->close_dtm)) {
+            $a_hotel_status->close_dtm = date('Y/m/d H:i:s', strtotime($a_hotel_status->close_dtm));
+        }
+
         $this->getHotelInfo($target_cd, $hotelData, $mastPrefData, $mastCityData, $mastWardData);
         return view('ctl.brhotel.update-management', [
             'messages' => [],
@@ -704,6 +721,17 @@ class BrhotelController extends _commonController
                 'mast_ward' => $mastWardData,
             ],
             'target_cd' => $target_cd,
+
+            'disp'           => $disp,
+            'hotel_account'  => $a_hotel_account,
+            'hotel_person'   => $a_hotel_person,
+            'hotel_status'   => $a_hotel_status,
+
+            // MEMO: 移植元では、登録の場合のみ設定されている値。
+            // 未定義だと動作しないため、干渉しない値であろうを設定している。
+            // 'status' => null,
+            // 'new_flg' => 0,
+            'target_stock_type' => null,
         ]);
     }
 }
