@@ -197,7 +197,6 @@ class Hotel extends CommonDBModel
 	*/
 	public function incrementCounter($as_table_name, $as_column_nm, $hotelCd, $aa_conditions = array()){
 		try {
-//			$_oracle   = _Oracle::getInstance();
 
 			// テーブル名称
 			if ($this->is_empty($as_table_name)){
@@ -210,7 +209,6 @@ class Hotel extends CommonDBModel
 			}
 
 			$a_conditions['hotel_cd'] = $hotelCd;
-//			$aa_conditions['hotel_cd'] = $hotelCd;
 
 			// 条件
 			$s_where = "";

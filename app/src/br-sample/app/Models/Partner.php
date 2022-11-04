@@ -3,6 +3,7 @@
 namespace App\Models;
 use App\Models\common\CommonDBModel;
 use App\Models\common\ValidationColumn;
+use App\Util\Models_Cipher;
 use Illuminate\Support\Facades\DB;
 use App\Common\Traits;
 
@@ -14,6 +15,7 @@ class Partner extends CommonDBModel
 	use Traits;
 
 	protected $table = "partner";
+
 	// カラム
 	public string $COL_PARTNER_CD = "partner_cd";
 	public string $COL_PARTNER_NM = "partner_nm";
@@ -36,7 +38,7 @@ class Partner extends CommonDBModel
 	public string $COL_MODIFY_TS = "modify_ts";
 
 	/**
-	 * コンストラクタ  いじっていない
+	 * コンストラクタ
 	 */
 	function __construct(){
 		// // カラム情報の設定
@@ -44,14 +46,14 @@ class Partner extends CommonDBModel
 		$colPartnerNm= (new ValidationColumn())->setColumnName($this->COL_PARTNER_NM, "提携先名称")->require()->length(0,65)->notHalfKana();
 		$colSystemNm= (new ValidationColumn())->setColumnName($this->COL_SYSTEM_NM, "システム名称")->require()->length(0,65)->notHalfKana();
 		$colPartnerNs= (new ValidationColumn())->setColumnName($this->COL_PARTNER_NS, "提携先略称")->require()->length(0,20)->notHalfKana();
-		$colUrl= (new ValidationColumn())->setColumnName($this->COL_URL, "ウェブサイトアドレス")->require()->length(0,128)->notHalfKana(); //urlチェック要追加
+		$colUrl= (new ValidationColumn())->setColumnName($this->COL_URL, "ウェブサイトアドレス")->require()->length(0,128)->notHalfKana()->url();
 		$colPostalCd= (new ValidationColumn())->setColumnName($this->COL_POSTAL_CD, "郵便番号")->require()->length(0,8)->notHalfKana()->postal(); 
 		$colAddress= (new ValidationColumn())->setColumnName($this->COL_ADDRESS, "住所")->require()->length(0,100)->notHalfKana();
 		$colTel= (new ValidationColumn())->setColumnName($this->COL_TEL, "電話番号")->require()->length(0,15)->notHalfKana()->phoneNumber();
 		$colFax= (new ValidationColumn())->setColumnName($this->COL_FAX, "ファックス番号")->require()->length(0,15)->notHalfKana()->phoneNumber();
 		$colPersonPost= (new ValidationColumn())->setColumnName($this->COL_PERSON_POST, "担当者役職")->require()->length(0,32)->notHalfKana();
 		$colPersonNm= (new ValidationColumn())->setColumnName($this->COL_PERSON_NM, "担当者名称")->require()->length(0,32)->notHalfKana();
-		$colPersonKn= (new ValidationColumn())->setColumnName($this->COL_PERSON_KN, "担当者かな名称")->require()->length(0,64)->notHalfKana();//ひらがなのみチェック要追加
+		$colPersonKn= (new ValidationColumn())->setColumnName($this->COL_PERSON_KN, "担当者かな名称")->require()->length(0,64)->notHalfKana()->HiraganaOnly();
 		$colPersonEmail= (new ValidationColumn())->setColumnName($this->COL_PERSON_EMAIL, "担当者電子メールアドレス")->require()->length(0,128)->notHalfKana()->emails();
 		$colOpenYmd= (new ValidationColumn())->setColumnName($this->COL_OPEN_YMD, "公開日")->require()->correctDate();
 		parent::setColumnDataArray([$colPartnerCd,$colPartnerNm,$colSystemNm,$colPartnerNs,$colUrl,$colPostalCd,$colAddress,$colTel,$colFax,$colPersonPost,$colPersonNm,$colPersonKn,$colPersonEmail,$colOpenYmd]);
@@ -149,14 +151,19 @@ SQL;
 		return array('values' => $result);
 	}
 
-	//ブレードでの日付フォーマット化のために追記
-	protected $dates = [
-        'open_ymd',
-    ];
 
 	//パートナーCDでの提携先情報取得
 	public function selectByKey($partnerCd){
 		$data = $this->where(array($this->COL_PARTNER_CD=>$partnerCd))->get();
+		
+		// メールアドレスを復号 DB取得方法が違うので下記のように書き換えたが問題ないか、元々登録のものはデコードすると文字化けし空白になる
+		$cipher = new Models_Cipher(config('settings.cipher_key'));
+			if (!empty($data[0]->person_email)) {
+				$data[0]->email_decrypt = $cipher->decrypt($data[0]->person_email);
+			} else {
+				$data[0]->email_decrypt = '';
+			}
+
 		if(!is_null($data) && count($data) > 0){
 			return array(
 				$this->COL_PARTNER_CD => $data[0]->partner_cd,
@@ -172,15 +179,87 @@ SQL;
 				$this->COL_PERSON_POST => $data[0]->person_post,
 				$this->COL_PERSON_NM => $data[0]->person_nm,
 				$this->COL_PERSON_KN => $data[0]->person_kn, 
-				$this->COL_PERSON_EMAIL => $data[0]->person_email,
+				$this->COL_PERSON_EMAIL => $data[0]->email_decrypt, //上で復号化したものを渡す
 				$this->COL_OPEN_YMD => $data[0]->open_ymd, 
 				$this->COL_TIEUP_YMD => $data[0]->tieup_ymd, 
 				$this->COL_ENTRY_CD => $data[0]->entry_cd, 
 				$this->COL_ENTRY_TS => $data[0]->entry_ts,
 				$this->COL_MODIFY_CD => $data[0]->modify_cd, 
-				$this->COL_MODIFY_TS => $data[0]->modify_ts
+				$this->COL_MODIFY_TS => $data[0]->modify_ts,
 			);
 		}
 		return [];
+	
 	}
+	
+	/**  キーで更新
+	 *
+	 * @param [type] $con
+	 * @param [type] $data
+	 * @return エラーメッセージ
+	 */
+	public function updateByKey($con, $data){
+		$result = $con->table($this->table)->where($this->COL_PARTNER_CD, $data[$this->COL_PARTNER_CD])->update($data);
+		return  $result;
+	}
+
+	//======================================================================
+	// 接続形態一覧の取得
+	//======================================================================
+	public function get_connect_cls_list()
+	{
+		// 初期化
+		$a_return = array();
+
+		$s_sql =
+<<< SQL
+			select distinct
+					connect_cls
+			from	partner_control
+			order by	connect_cls
+SQL;
+		$a_rows = DB::select($s_sql, array());
+
+		// 整形
+		foreach ( ($a_rows ?? array()) as $a_row ) {   //nvl($a_rows, array())空の書き換え合っている？
+			// 接続形態がnullのものは弾く
+			if ( !$this->is_empty($a_row->connect_cls) ) {
+				$a_return[$a_row->connect_cls] = strtoupper($a_row->connect_cls);
+			}
+		}
+
+		return $a_return;
+	}
+
+	//======================================================================
+	// 接続形態（詳細）一覧の取得
+	//======================================================================
+	public function get_connect_type_list()
+	{
+		// 初期化
+		$a_return = array();
+
+		$s_sql =
+<<< SQL
+			select distinct
+					connect_type
+			from	partner_control
+			order by	connect_type
+SQL;
+		$a_rows = DB::select($s_sql, array());
+
+		// 整形
+		foreach ( ($a_rows ?? array()) as $a_row ) {   //nvl($a_rows, array())空の書き換え合っている？
+			// 接続形態がnullのものは弾く
+			if ( !$this->is_empty($a_row->connect_type) ) {
+				$a_return[$a_row->connect_type] = strtoupper($a_row->connect_type);
+			}
+		}
+
+		return $a_return;
+	}
+
+
+
 }
+

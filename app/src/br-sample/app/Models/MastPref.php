@@ -123,7 +123,7 @@ class MastPref extends CommonDBModel
 			$s_not_in_by_pref_id .= ')';
 			unset($aa_conditions['not_in_by_pref_id']);
 		}
-		//TODO 					to_char(mast_pref.delete_ymd, 'YYYY-MM-DD') as delete_ymd
+
 		$s_sql =	<<<SQL
 			select	mast_pref.pref_id,
 					mast_pref.region_id,

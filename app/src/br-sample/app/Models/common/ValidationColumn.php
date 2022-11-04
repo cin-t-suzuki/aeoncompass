@@ -15,6 +15,7 @@ class ValidationColumn
 	private $requireCheck = false;         // 必須チェック対象
 	private $notHalfKanaCheck = false;     // 半角カナチェック対象
 	private $kanaOnlyCheck = false;     // カナのみかチェック対象
+	private $hiraganaOnlyCheck = false;     // カナのみかチェック対象
 	private $intOnlyCheck = false;         // 数値のみかチェック対象
 	private $currencyOnlyCheck = false;         // 数値のみかチェック対象
 	private $rateOnlyCheck = false;         // 数値のみかチェック対象
@@ -23,6 +24,7 @@ class ValidationColumn
 	private $postalCheck = false;          //郵便番号の妥当性チェック対象
 	private $phoneNumberCheck = false;          //電話番号の妥当性チェック対象
 	private $emailsCheck = false;               // メールアドレスの妥当性チェック対象 (カンマ区切りで列挙可)
+	private $urlCheck = false;               // URLチェック対象
 	private $checkInOutTimeCheck = false;          //チェックインとアウトの時刻書式のチェック対象
 
 	private $inputTypeCheck = false;       // 入力チェック対象
@@ -72,6 +74,15 @@ class ValidationColumn
 		return $this;
 	}
 	public function isKanaOnly(){ return $this->kanaOnlyCheck; }
+
+	/**
+	 * ひらがなのみかチェック
+	 */
+	public function HiraganaOnly(){
+		$this->hiraganaOnlyCheck = true;
+		return $this;
+	}
+	public function isHiraganaOnly(){ return $this->hiraganaOnlyCheck; }
 
 	/**
 	 * 数字形式である（小数点NG、マイナスOK）。only_integer
@@ -144,6 +155,15 @@ class ValidationColumn
         return $this;
     }
     public function isEmails() { return $this->emailsCheck; }
+
+	/**
+     * URLチェック
+     */
+    public function url() {
+        $this->urlCheck = true;
+        return $this;
+    }
+    public function isUrl() { return $this->urlCheck; }
 
 	/**
 	 * チェックインとアウトの時刻書式チェック

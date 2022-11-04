@@ -141,19 +141,19 @@
           <td>@include ('ctl.common._date',['timestamp' => $partners["tieup_ymd"] , 'format' => 'ymd'])</td>
         @endif
         @if ($views->params["partner_disply_4"] ?? null == 1)
-          {!! Form::open(['route' => ['ctl.brpartner.partnerconf'], 'method' => 'get']) !!} <!-- ↓postからgetへ変更している -->
+          {!! Form::open(['route' => ['ctl.brpartner.partnerconf'], 'method' => 'post']) !!} 
             <td align="center">
               <INPUT TYPE="submit" VALUE="変更">
               <input type="hidden" name="partner_cd" value="{{$partners["partner_cd"]}}" />
             </td>
           {!! Form::close() !!}
-          <form action="{$v->env.source_path}{$v->env.module}/brpartner/partnercontroledt/" method="post">
+          {!! Form::open(['route' => ['ctl.brpartner.partnercontroledt'], 'method' => 'post']) !!} 
             <td align="center">
               <INPUT TYPE="submit" VALUE="変更">
-              <input type="hidden" name="partner_cd" value="{$v->helper->form->strip_tags($partner.partner_cd)}" />
-              <input type="hidden" name="partner_nm" value="{$v->helper->form->strip_tags($partner.partner_nm)}" />
+              <input type="hidden" name="partner_cd" value="{{$partners["partner_cd"]}}" />
+              <input type="hidden" name="partner_nm" value="{{$partners["partner_nm"]}}" />
             </td>
-          </form>
+          {!! Form::close() !!}
           <form action="{$v->env.source_path}{$v->env.module}/brpartnersection/" method="post">
             <td align="center">
               <input type="submit" value="変更">

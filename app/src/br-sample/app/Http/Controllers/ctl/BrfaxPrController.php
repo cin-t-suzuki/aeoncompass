@@ -64,7 +64,7 @@ use Exception;
 
 			if( count($errorList) == 0){
 				//共通項目設定
-				$faxPr->setUpdateCommonColumn($faxPrData, 'BrfaxPr/update.');
+				$faxPr->setUpdateCommonColumn($faxPrData);
 				try{
 					$con = DB::connection('mysql');
 					$dbErr = $con->transaction(function() use($con, $faxPr, $faxPrData) 
