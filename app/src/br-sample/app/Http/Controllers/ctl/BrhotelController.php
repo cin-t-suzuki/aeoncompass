@@ -692,6 +692,17 @@ class BrhotelController extends _commonController
      */
     public function updateManagement()
     {
-        return 'updateManagement controller';
+        $target_cd = 2015060001;
+        $this->getHotelInfo($target_cd, $hotelData, $mastPrefData, $mastCityData, $mastWardData);
+        return view('ctl.brhotel.update-management', [
+            'messages' => [],
+            'views' => (object)[
+                'hotel'     => $hotelData,
+                'target_cd' => $target_cd,
+                'mast_pref' => $mastPrefData,
+                'mast_city' => $mastCityData,
+                'mast_ward' => $mastWardData,
+            ],
+        ]);
     }
 }

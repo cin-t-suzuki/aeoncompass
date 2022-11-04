@@ -1,27 +1,34 @@
 {{-- MEMO: 移植元 svn_trunk\public\app\ctl\views\brhotel\updatemanagement.tpl --}}
-{* header start *}
-	{include file=$v->env.module_root|cat:'/views/_common/_br_header.tpl' title="施設管理更新情報"}
-{* header end *}
 
-{* メッセージ *}
-{include file=$v->env.module_root|cat:'/views/_common/_message.tpl'}
+@extends('ctl.common.base')
+@section('title', '施設管理情報更新')
 
-{* 施設情報詳細 *}
-{include file=$v->env.module_root|cat:'/views/brhotel/_hotel_info.tpl'}
+@section('page_blade')
+
+{{-- メッセージ --}}
+@include('ctl.common.message', $messages)
+
+{{-- 施設情報詳細 --}}
+@include('ctl.brhotel._hotel_info', [
+    "hotel" => $views->hotel,
+    "mast_pref" => $views->mast_pref,
+    "mast_city" => $views->mast_city,
+    "mast_ward" => $views->mast_ward
+])
+
 <br>
 
 <FORM method="POST" action="{$v->env.source_path}{$v->env.module}/brhotel/show/">
 
-  {include file=$v->env.module_root|cat:'/views/brhotel/_info_management_form.tpl'}
+    @include('ctl.brhotel._info_management_form')
 
-<INPUT TYPE="submit" VALUE="詳細変更へ">
-
+    <INPUT TYPE="submit" VALUE="詳細変更へ">
 </FORM>
 
-{include file=$v->env.module_root|cat:'/views/brhotel/_hotel_top_form.tpl'}
+@include('ctl.brhotel._hotel_top_form', [
+    "target_cd" => $views->target_cd
+])
 
 <br>
 
-{* footer start *}
-	{include file=$v->env.module_root|cat:'/views/_common/_br_footer.tpl'}
-{* footer end *}
+@endsection
