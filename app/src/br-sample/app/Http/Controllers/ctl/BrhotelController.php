@@ -684,4 +684,14 @@ class BrhotelController extends _commonController
             'target_stock_type' => null,
         ]);
     }
+
+    /**
+     * TODO: Undocumented function
+     *
+     * @return void
+     */
+    public function updateManagement()
+    {
+        return 'updateManagement controller';
+    }
 }
