@@ -703,6 +703,7 @@ class BrhotelController extends _commonController
                 'mast_city' => $mastCityData,
                 'mast_ward' => $mastWardData,
             ],
+            'target_cd' => $target_cd,
         ]);
     }
 }

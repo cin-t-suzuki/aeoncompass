@@ -107,6 +107,6 @@
         </td>
     </tr>
 
-    <input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($v->assign->target_cd)}">
+    <input type="hidden" name="target_cd" value="{{ strip_tags($target_cd) }}">
     <input type="hidden" name="target_stock_type" value="{$v->helper->form->strip_tags($v->assign->target_stock_type)}">
 </table>

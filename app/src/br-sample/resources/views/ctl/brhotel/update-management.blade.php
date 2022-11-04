@@ -18,10 +18,11 @@
 
     <br>
 
-    <FORM method="POST" action="{$v->env.source_path}{$v->env.module}/brhotel/show/">
+    {{-- TODO: 要確認 移植元は post だが、 get でよさそう --}}
+    {{ Form::open(['route' => 'ctl.brhotel.show', 'method' => 'post']) }}
         @include('ctl.brhotel._info_management_form')
         <INPUT TYPE="submit" VALUE="詳細変更へ">
-    </FORM>
+    {{ Form::close() }}
 
     @include('ctl.brhotel._hotel_top_form', [
         "target_cd" => $views->target_cd
