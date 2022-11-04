@@ -1,39 +1,41 @@
 {{-- MEMO: 移植元 svn_trunk\public\app\ctl\views\brhotel\editmanagement.tpl --}}
 
+@extends('ctl.common.base')
 @section('title', '施設管理情報更新')
-@include('ctl.common.base')
 
 @inject('service', 'App\Http\Controllers\ctl\BrhotelController')
 
-{{-- メッセージ --}}
-@include('ctl.common.message', $messages)
+@section('page_blade')
+    {{-- メッセージ --}}
+    @include('ctl.common.message', $messages)
 
-{{-- 施設情報詳細 --}}
-@include(
-    'ctl.brhotel._hotel_info'
-    , [
-        "hotel" => $views->hotel,
-        "mast_pref" => $views->mast_pref,
-        "mast_city" => $views->mast_city,
-        "mast_ward" => $views->mast_ward
-    ]
-)
+    {{-- 施設情報詳細 --}}
+    @include(
+        'ctl.brhotel._hotel_info'
+        , [
+            "hotel" => $views->hotel,
+            "mast_pref" => $views->mast_pref,
+            "mast_city" => $views->mast_city,
+            "mast_ward" => $views->mast_ward
+        ]
+    )
 
-<br>
+    <br>
 
-{{ Form::open(['route' => 'ctl.br_hotel.update_management', 'method' => 'post']) }}
+    {{ Form::open(['route' => 'ctl.br_hotel.update_management', 'method' => 'post']) }}
 
-    @include('ctl.brhotel._input_management_form')
+        @include('ctl.brhotel._input_management_form')
 
-    <input type="submit" value="施設管理情報更新">
-    ※は必須です。
+        <input type="submit" value="施設管理情報更新">
+        ※は必須です。
 
-{{ Form::close() }}
+    {{ Form::close() }}
 
-@include('ctl.brhotel._hotel_top_form', ["target_cd" => $views->target_cd])
+    @include('ctl.brhotel._hotel_top_form', ["target_cd" => $views->target_cd])
 
-<br>
+    <br>
 
-@include('ctl.brhotel._log_hotel_person_form')
+    @include('ctl.brhotel._log_hotel_person_form')
 
-<br>
+    <br>
+@endsection
