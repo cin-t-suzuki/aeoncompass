@@ -12,7 +12,7 @@
     <tr>
         <td bgcolor="#EEFFEE">アカウントID</td>
         <td>
-            {{ strip_tags($hotel_account->account_id_begin) }}<br>
+            {{ strip_tags($hotel_account->account_id_begin) }}
         </td>
     </tr>
 
@@ -37,42 +37,42 @@
                 利用不可
             @elseif ($hotel_account->accept_status == 1)
                 利用可
-            @endif<br>
+            @endif
         </td>
     </tr>
 
     <tr>
         <td bgcolor="#EEFFEE">担当者役職</td>
         <td>
-            {{ strip_tags($hotel_person->person_post) }}<br>
+            {{ strip_tags($hotel_person->person_post) }}
         </td>
     </tr>
 
     <tr>
         <td bgcolor="#EEFFEE">担当者名称</td>
         <td>
-            {{ strip_tags($hotel_person->person_nm) }}<br>
+            {{ strip_tags($hotel_person->person_nm) }}
         </td>
     </tr>
 
     <tr>
         <td bgcolor="#EEFFEE">担当者電話番号</td>
         <td>
-            {{ strip_tags($hotel_person->person_tel) }}<br>
+            {{ strip_tags($hotel_person->person_tel) }}
         </td>
     </tr>
 
     <tr>
         <td bgcolor="#EEFFEE">担当者ファックス番号</td>
         <td>
-            {{ strip_tags($hotel_person->person_fax) }}<br>
+            {{ strip_tags($hotel_person->person_fax) }}
         </td>
     </tr>
 
     <tr>
         <td bgcolor="#EEFFEE">担当者電子メールアドレス</td>
         <td>
-            {{ strip_tags($hotel_person->person_email) }}<br>
+            {{ strip_tags($hotel_person->person_email) }}
         </td>
     </tr>
 
@@ -85,28 +85,28 @@
                 登録作業中
             @elseif ($hotel_status->entry_status == 2)
                 解約
-            @endif<br>
+            @endif
         </td>
     </tr>
 
     <tr>
         <td bgcolor="#EEFFEE">契約日</td>
         <td>
-            {{ strip_tags($hotel_status->contract_ymd) }}<br>
+            {{ strip_tags($hotel_status->contract_ymd) }}
         </td>
     </tr>
 
     <tr>
         <td bgcolor="#EEFFEE">公開日</td>
         <td>
-            {{ strip_tags($hotel_status->open_ymd) }}<br>
+            {{ strip_tags($hotel_status->open_ymd) }}
         </td>
     </tr>
 
     <tr>
         <td bgcolor="#EEFFEE">解約日時</td>
         <td>
-            {{ strip_tags($hotel_status->close_dtm) }}<br>
+            {{ strip_tags($hotel_status->close_dtm) }}
         </td>
     </tr>
 
