@@ -1,5 +1,5 @@
 {{-- MEMO: 移植元 svn_trunk\public\app\ctl\views\brhotel\_log_hotel_person_form.tpl --}}
-{{-- MEMO: strip_tags() は移植元に従って実装しているが、過剰なものが含まれている可能性はある --}}
+{{-- MEMO: strip_tags() は移植元に従って実装しているが、過剰なものが含まれている可能性はありそう？ --}}
 
 <table border="1" cellspacing="0" cellpadding="3">
     <tr>
