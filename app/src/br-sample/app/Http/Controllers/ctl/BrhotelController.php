@@ -568,9 +568,9 @@ class BrhotelController extends _commonController
     public function editManagement()
     {
         $errors             = Session::pull('errors');
-        $a_hotel_account    = Session::pull('Hotel_Account'); // array
-        $a_hotel_person     = Session::pull('Hotel_Person'); // array
-        $a_hotel_status     = Session::pull('Hotel_Status'); // array
+        $a_hotel_account    = Session::pull('Hotel_Account');
+        $a_hotel_person     = Session::pull('Hotel_Person');
+        $a_hotel_status     = Session::pull('Hotel_Status');
 
         $target_cd = Request::input('target_cd');
 
@@ -578,17 +578,17 @@ class BrhotelController extends _commonController
 
         // 登録情報の取得
         if (is_null($a_hotel_account)) {
-            $a_hotel_account = HotelAccount::find($target_cd); // object
+            $a_hotel_account = HotelAccount::find($target_cd);
         } else {
             $a_hotel_account = (object)$a_hotel_account;
         }
         if (is_null($a_hotel_person)) {
-            $a_hotel_person = HotelPerson::find($target_cd); // object
+            $a_hotel_person = HotelPerson::find($target_cd);
         } else {
             $a_hotel_person = (object)$a_hotel_person;
         }
 
-        $a_find_hotel_status = HotelStatus::find($target_cd); // object
+        $a_find_hotel_status = HotelStatus::find($target_cd);
 
         if (is_null($a_hotel_status)) {
             $a_hotel_status = $a_find_hotel_status;
@@ -620,7 +620,7 @@ class BrhotelController extends _commonController
         if ($a_hotel_control->stock_type != HotelControl::STOCK_TYPE_PURCHASE_SALE) {
             $a_hotel_rate = HotelRate::where('hotel_cd', $target_cd)->get();
             // TODO: count() で大丈夫か？
-            if (count($a_hotel_rate) === 0) {
+            if ($this->is_empty($a_hotel_rate)) {
                 $rate_chk = false;
             }
         }
@@ -705,31 +705,7 @@ class BrhotelController extends _commonController
         $a_hotel_status  = Request::input('Hotel_Status');
 
         // 日付のフォーマットをチェック
-        // MEMO: 移植元ソースではここで処理されているが、 validation() メソッドと処理が重複しているため、こちらは使用しない。
-        // TODO: 削除してもよさそう
-        // $dateUtil = new DateUtil();
-        // if (!$this->is_empty($a_hotel_status['contract_ymd'])) {
-        //     // ハイフン又はマイナスの記号で区切ってあるか、日付が正しいかのチェック
-        //     if (!$dateUtil->check_date_ymd($a_hotel_status['contract_ymd'])) {
-        //         $errorList[] = '契約日を正しく入力して下さい。';
-        //     }
-        // }
-        // if (!$this->is_empty($a_hotel_status['open_ymd'])){
-        //     // ハイフン又はマイナスの記号で区切ってあるか、日付が正しいかのチェック
-        //     if (!$dateUtil->check_date_ymd($a_hotel_status['open_ymd'])){
-        //         $errorList[] = '公開日を正しく入力して下さい。';
-        //     }
-        // }
-        // if (count($errorList) > 0) {
-        //     編集画面へ
-        //     return redirect()->route('ctl.br_hotel.edit_management', ['target_cd' => $target_cd])
-        //     ->with([
-        //         'errors'        => $errorList,
-        //         'Hotel_Account' => $a_hotel_account,
-        //         'Hotel_Person'  => $a_hotel_person,
-        //         'Hotel_Status'  => $a_hotel_status,
-        //     ]);
-        // }
+        // MEMO: 移植元のソースでは日付のフォーマットをチェックしているが、 validation() メソッドと処理が重複しているため削除した。
 
         // MEMO: 移植元ソースに倣っている
         $display = 'edit';
@@ -837,9 +813,9 @@ class BrhotelController extends _commonController
         $guides[] = '施設情報の更新が完了いたしました。';
 
         // 登録情報の取得
-        $a_hotel_account = HotelAccount::find($target_cd);  // object
-        $a_hotel_person  = HotelPerson::find($target_cd);   // object
-        $a_hotel_status  = HotelStatus::find($target_cd);   // object
+        $a_hotel_account = HotelAccount::find($target_cd);
+        $a_hotel_person  = HotelPerson::find($target_cd);
+        $a_hotel_status  = HotelStatus::find($target_cd);
         $a_hotel_person->person_email = $cipher->decrypt($a_hotel_person->person_email);
 
         // 日付の整形
