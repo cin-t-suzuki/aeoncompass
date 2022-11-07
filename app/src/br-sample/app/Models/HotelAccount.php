@@ -38,7 +38,6 @@ class HotelAccount extends CommonDBModel
     const CREATED_AT = 'entry_ts';
     const UPDATED_AT = 'modify_ts';
 
-    // TODO: fillable 確認
     /**
      * 複数代入可能な属性
      *

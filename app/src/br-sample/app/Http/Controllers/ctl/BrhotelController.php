@@ -593,8 +593,6 @@ class BrhotelController extends _commonController
         if (is_null($a_hotel_status)) {
             $a_hotel_status = $a_find_hotel_status;
             if (!$this->is_empty($a_find_hotel_status->contract_ymd)) {
-                var_dump(gettype($a_find_hotel_status->contract_ymd));
-                var_dump($a_find_hotel_status->contract_ymd);
                 $a_hotel_status->contract_ymd = date('Y/m/d', strtotime($a_find_hotel_status->contract_ymd));
             }
             if (!$this->is_empty($a_find_hotel_status->open_ymd)) {
@@ -609,8 +607,6 @@ class BrhotelController extends _commonController
             } else {
                 $a_hotel_status['close_dtm'] = null;
             }
-            // TODO: array|object の問題。
-            // ここで、object にしておくことはできるが、あとで insert するときに不都合はないか？
             $a_hotel_status = (object)$a_hotel_status;
         }
 
@@ -619,8 +615,7 @@ class BrhotelController extends _commonController
         $rate_chk = true;
         if ($a_hotel_control->stock_type != HotelControl::STOCK_TYPE_PURCHASE_SALE) {
             $a_hotel_rate = HotelRate::where('hotel_cd', $target_cd)->get();
-            // TODO: count() で大丈夫か？
-            if ($this->is_empty($a_hotel_rate)) {
+            if ($a_hotel_rate->isEmpty()) {
                 $rate_chk = false;
             }
         }
@@ -727,9 +722,7 @@ class BrhotelController extends _commonController
             // 買取販売以外は料率のチェックを行う。
             if ($a_hotel_control->stock_type != HotelControl::STOCK_TYPE_PURCHASE_SALE) {
                 $a_hotel_rate = HotelRate::where('hotel_cd', $target_cd)->get();
-                // TODO: countable? 要素数 0 のときに、空として判定されることをチェック
-                // 要素数1以上のときに、空じゃないとして判定されることは確認済み
-                if ($this->is_empty($a_hotel_rate)) {
+                if ($a_hotel_rate->isEmpty()) {
                     $errorList[] = '施設の料率情報が存在していない為、登録状態:公開中で更新できません。';
                     DB::rollBack();
                     // 編集画面へ
