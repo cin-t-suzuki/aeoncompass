@@ -567,56 +567,56 @@ class BrhotelController extends _commonController
      */
     public function editManagement()
     {
-        $errors             = Session::pull('errors');
-        $a_hotel_account    = Session::pull('Hotel_Account');
-        $a_hotel_person     = Session::pull('Hotel_Person');
-        $a_hotel_status     = Session::pull('Hotel_Status');
+        $errors       = Session::pull('errors');
+        $hotelAccount = Session::pull('Hotel_Account');
+        $hotelPerson  = Session::pull('Hotel_Person');
+        $hotelStatus  = Session::pull('Hotel_Status');
 
-        $target_cd = Request::input('target_cd');
+        $targetCd = Request::input('target_cd');
 
-        $disp = 'edit';
+        $display = 'edit';
 
         // 登録情報の取得
-        if (is_null($a_hotel_account)) {
-            $a_hotel_account = HotelAccount::find($target_cd);
+        if (is_null($hotelAccount)) {
+            $hotelAccount = HotelAccount::find($targetCd);
         } else {
-            $a_hotel_account = (object)$a_hotel_account;
+            $hotelAccount = (object)$hotelAccount;
         }
-        if (is_null($a_hotel_person)) {
-            $a_hotel_person = HotelPerson::find($target_cd);
+        if (is_null($hotelPerson)) {
+            $hotelPerson = HotelPerson::find($targetCd);
         } else {
-            $a_hotel_person = (object)$a_hotel_person;
+            $hotelPerson = (object)$hotelPerson;
         }
 
-        $a_find_hotel_status = HotelStatus::find($target_cd);
+        $existingHotelStatus = HotelStatus::find($targetCd);
 
-        if (is_null($a_hotel_status)) {
-            $a_hotel_status = $a_find_hotel_status;
-            if (!$this->is_empty($a_find_hotel_status->contract_ymd)) {
-                $a_hotel_status->contract_ymd = date('Y/m/d', strtotime($a_find_hotel_status->contract_ymd));
+        if (is_null($hotelStatus)) {
+            $hotelStatus = $existingHotelStatus;
+            if (!$this->is_empty($existingHotelStatus->contract_ymd)) {
+                $hotelStatus->contract_ymd = date('Y/m/d', strtotime($existingHotelStatus->contract_ymd));
             }
-            if (!$this->is_empty($a_find_hotel_status->open_ymd)) {
-                $a_hotel_status->open_ymd = date('Y/m/d', strtotime($a_find_hotel_status->open_ymd));
+            if (!$this->is_empty($existingHotelStatus->open_ymd)) {
+                $hotelStatus->open_ymd = date('Y/m/d', strtotime($existingHotelStatus->open_ymd));
             }
-            if (!$this->is_empty($a_find_hotel_status->close_dtm)) {
-                $a_hotel_status->close_dtm = date('Y/m/d H:i:s', strtotime($a_find_hotel_status->close_dtm));
+            if (!$this->is_empty($existingHotelStatus->close_dtm)) {
+                $hotelStatus->close_dtm = date('Y/m/d H:i:s', strtotime($existingHotelStatus->close_dtm));
             }
         } else {
-            if (!$this->is_empty($a_find_hotel_status->close_dtm)) {
-                $a_hotel_status['close_dtm'] = date('Y/m/d H:i:s', strtotime($a_find_hotel_status->close_dtm));
+            if (!$this->is_empty($existingHotelStatus->close_dtm)) {
+                $hotelStatus['close_dtm'] = date('Y/m/d H:i:s', strtotime($existingHotelStatus->close_dtm));
             } else {
-                $a_hotel_status['close_dtm'] = null;
+                $hotelStatus['close_dtm'] = null;
             }
-            $a_hotel_status = (object)$a_hotel_status;
+            $hotelStatus = (object)$hotelStatus;
         }
 
-        $a_hotel_control = HotelControl::find($target_cd);
+        $hotelControl = HotelControl::find($targetCd);
         // 買取販売以外は料率のチェックを行う。
-        $rate_chk = true;
-        if ($a_hotel_control->stock_type != HotelControl::STOCK_TYPE_PURCHASE_SALE) {
-            $a_hotel_rate = HotelRate::where('hotel_cd', $target_cd)->get();
-            if ($a_hotel_rate->isEmpty()) {
-                $rate_chk = false;
+        $rateChk = true;
+        if ($hotelControl->stock_type != HotelControl::STOCK_TYPE_PURCHASE_SALE) {
+            $hotelRates = HotelRate::where('hotel_cd', $targetCd)->get();
+            if ($hotelRates->isEmpty()) {
+                $rateChk = false;
             }
         }
 
@@ -624,7 +624,7 @@ class BrhotelController extends _commonController
 
         // 施設情報取得
         // 都道府県取得
-        $this->getHotelInfo($target_cd, $hotelData, $mastPrefData, $mastCityData, $mastWardData);
+        $this->getHotelInfo($targetCd, $hotelData, $mastPrefData, $mastCityData, $mastWardData);
 
         // 施設担当者変更履歴
         $sql = <<<SQL
@@ -645,15 +645,16 @@ class BrhotelController extends _commonController
                 p.modify_ts desc
         SQL;
 
-        $a_log_hotel_person = DB::select($sql, ['hotel_cd' => $target_cd]);
+        // ホテル担当者の変更履歴
+        $logHotelPersons = DB::select($sql, ['hotel_cd' => $targetCd]);
 
         // メール復号
         $cipher = new Models_Cipher(config('settings.cipher_key'));
-        $a_hotel_person->person_email = $cipher->decrypt($a_hotel_person->person_email);
-        foreach ($a_log_hotel_person as $key => $value) {
-            if (!$this->is_empty($a_find_hotel_status[$key]->person_email)) {
+        $hotelPerson->person_email = $cipher->decrypt($hotelPerson->person_email);
+        foreach ($logHotelPersons as $key => $value) {
+            if (!$this->is_empty($logHotelPersons[$key]->person_email)) {
                 try {
-                    $a_log_hotel_person[$key]->person_email = $cipher->decrypt($a_log_hotel_person[$key]->person_email);
+                    $logHotelPersons[$key]->person_email = $cipher->decrypt($logHotelPersons[$key]->person_email);
                 } catch (Exception $ignored) {
                     // 復号できないものが混じっている可能性があるため、例外を握りつぶす
                 }
@@ -661,26 +662,26 @@ class BrhotelController extends _commonController
         }
 
         return view('ctl.brhotel.edit-management', [
-            'errors' => $errors,
+            'errors'            => $errors,
 
-            'hotel'     => $hotelData,
-            'mast_pref' => $mastPrefData,
-            'mast_city' => $mastCityData,
-            'mast_ward' => $mastWardData,
+            'hotel'             => $hotelData,
+            'mast_pref'         => $mastPrefData,
+            'mast_city'         => $mastCityData,
+            'mast_ward'         => $mastWardData,
 
-            'target_cd'         => $target_cd,
+            'target_cd'         => $targetCd,
 
-            'disp'              => $disp,
-            'hotel_account'     => $a_hotel_account,
-            'hotel_person'      => $a_hotel_person,
-            'hotel_status'      => $a_hotel_status,
-            'log_hotel_person'  => $a_log_hotel_person,
-            'rate_chk'          => $rate_chk,
+            'disp'              => $display,
+            'hotel_account'     => $hotelAccount,
+            'hotel_person'      => $hotelPerson,
+            'hotel_status'      => $hotelStatus,
+            'log_hotel_person'  => $logHotelPersons,
+            'rate_chk'          => $rateChk,
 
             // MEMO: 移植元では、登録の場合のみ設定されている値。
             // 未定義だと動作しないため、干渉しない値であろうを設定している。
-            'status' => null,
-            'new_flg' => 0,
+            'status'            => null,
+            'new_flg'           => 0,
             'target_stock_type' => null,
         ]);
     }
@@ -694,10 +695,10 @@ class BrhotelController extends _commonController
     {
         $errorList = [];
 
-        $target_cd       = Request::input('target_cd');
-        $a_hotel_account = Request::input('Hotel_Account');
-        $a_hotel_person  = Request::input('Hotel_Person');
-        $a_hotel_status  = Request::input('Hotel_Status');
+        $targetCd          = Request::input('target_cd');
+        $inputHotelAccount = Request::input('Hotel_Account');
+        $inputHotelPerson  = Request::input('Hotel_Person');
+        $inputHotelStatus  = Request::input('Hotel_Status');
 
         // 日付のフォーマットをチェック
         // MEMO: 移植元のソースでは日付のフォーマットをチェックしているが、 validation() メソッドと処理が重複しているため削除した。
@@ -709,29 +710,28 @@ class BrhotelController extends _commonController
         DB::beginTransaction();
 
         // 情報のセット
-        /** @var \App\Models\Hotel */
-        $a_hotel = Hotel::find($target_cd);
+        $hotel = Hotel::find($targetCd);
 
         // 選択された登録状態が公開中でなく、ホテルの受付状態が停止中でない場合、停止中へ
-        if ($a_hotel_status['entry_status'] != HotelStatus::ENTRY_STATUS_PUBLIC && $a_hotel->accept_status != Hotel::ACCEPT_STATUS_STOPPING) {
-            $a_hotel->accept_status = Hotel::ACCEPT_STATUS_STOPPING;
+        if ($inputHotelStatus['entry_status'] != HotelStatus::ENTRY_STATUS_PUBLIC && $hotel->accept_status != Hotel::ACCEPT_STATUS_STOPPING) {
+            $hotel->accept_status = Hotel::ACCEPT_STATUS_STOPPING;
         }
 
-        if ($a_hotel_status['entry_status'] == HotelStatus::ENTRY_STATUS_PUBLIC) {
-            $a_hotel_control = HotelControl::find($target_cd);
+        if ($inputHotelStatus['entry_status'] == HotelStatus::ENTRY_STATUS_PUBLIC) {
+            $hotelControl = HotelControl::find($targetCd);
             // 買取販売以外は料率のチェックを行う。
-            if ($a_hotel_control->stock_type != HotelControl::STOCK_TYPE_PURCHASE_SALE) {
-                $a_hotel_rate = HotelRate::where('hotel_cd', $target_cd)->get();
-                if ($a_hotel_rate->isEmpty()) {
+            if ($hotelControl->stock_type != HotelControl::STOCK_TYPE_PURCHASE_SALE) {
+                $hotelRates = HotelRate::where('hotel_cd', $targetCd)->get();
+                if ($hotelRates->isEmpty()) {
                     $errorList[] = '施設の料率情報が存在していない為、登録状態:公開中で更新できません。';
                     DB::rollBack();
                     // 編集画面へ
-                    return redirect()->route('ctl.br_hotel.edit_management', ['target_cd' => $target_cd])
+                    return redirect()->route('ctl.br_hotel.edit_management', ['target_cd' => $targetCd])
                         ->with([
                             'errors'        => $errorList,
-                            'Hotel_Account' => $a_hotel_account,
-                            'Hotel_Person'  => $a_hotel_person,
-                            'Hotel_Status'  => $a_hotel_status,
+                            'Hotel_Account' => $inputHotelAccount,
+                            'Hotel_Person'  => $inputHotelPerson,
+                            'Hotel_Status'  => $inputHotelStatus,
                         ]);
                 }
             }
@@ -742,60 +742,60 @@ class BrhotelController extends _commonController
         $hotelStatusModel = new HotelStatus();
 
         // validation
-        $errorList = array_merge($errorList, $hotelAccountModel->validation($a_hotel_account));
-        $errorList = array_merge($errorList, $hotelPersonModel->validation($a_hotel_person));
-        $errorList = array_merge($errorList, $hotelStatusModel->validation($a_hotel_status));
+        $errorList = array_merge($errorList, $hotelAccountModel->validation($inputHotelAccount));
+        $errorList = array_merge($errorList, $hotelPersonModel->validation($inputHotelPerson));
+        $errorList = array_merge($errorList, $hotelStatusModel->validation($inputHotelStatus));
         if (count($errorList) > 0) {
             DB::rollback();
             // 編集画面へ
-            return redirect()->route('ctl.br_hotel.edit_management', ['target_cd' => $target_cd])
+            return redirect()->route('ctl.br_hotel.edit_management', ['target_cd' => $targetCd])
                 ->with([
                     'errors'        => $errorList,
-                    'Hotel_Account' => $a_hotel_account,
-                    'Hotel_Person'  => $a_hotel_person,
-                    'Hotel_Status'  => $a_hotel_status,
+                    'Hotel_Account' => $inputHotelAccount,
+                    'Hotel_Person'  => $inputHotelPerson,
+                    'Hotel_Status'  => $inputHotelStatus,
                 ]);
         }
 
         // メール暗号化
         $cipher = new Models_Cipher(config('settings.cipher_key'));
-        $a_hotel_person['person_email'] = $cipher->encrypt($a_hotel_person['person_email']);
+        $inputHotelPerson['person_email'] = $cipher->encrypt($inputHotelPerson['person_email']);
 
         // 共通カラム設定
-        $hotelAccountModel->setUpdateCommonColumn($a_hotel_account);
-        $hotelStatusModel->setUpdateCommonColumn($a_hotel_status);
-        $hotelPersonModel->setUpdateCommonColumn($a_hotel_person);
+        $hotelAccountModel->setUpdateCommonColumn($inputHotelAccount);
+        $hotelStatusModel->setUpdateCommonColumn($inputHotelStatus);
+        $hotelPersonModel->setUpdateCommonColumn($inputHotelPerson);
 
         // 変更対象インスタンス取得
-        $m_hotelAccount = HotelAccount::find($target_cd);
-        $m_hotelPerson  = HotelPerson::find($target_cd);
-        $m_hotelStatus  = HotelStatus::find($target_cd);
+        $hotelAccount = HotelAccount::find($targetCd);
+        $hotelPerson  = HotelPerson::find($targetCd);
+        $hotelStatus  = HotelStatus::find($targetCd);
 
         // 値をセット
-        $m_hotelAccount->fill([
-            'accept_status'    => $a_hotel_account['accept_status'],
-            'account_id_begin' => $a_hotel_account['account_id_begin'],
-            'account_id'       => strtoupper($a_hotel_account['account_id_begin']),
-            'modify_cd'        => $a_hotel_account['modify_cd'],
-            'modify_ts'        => $a_hotel_account['modify_ts'],
+        $hotelAccount->fill([
+            'accept_status'    => $inputHotelAccount['accept_status'],
+            'account_id_begin' => $inputHotelAccount['account_id_begin'],
+            'account_id'       => strtoupper($inputHotelAccount['account_id_begin']),
+            'modify_cd'        => $inputHotelAccount['modify_cd'],
+            'modify_ts'        => $inputHotelAccount['modify_ts'],
         ]);
-        $m_hotelPerson->fill($a_hotel_person);
-        $m_hotelStatus->fill($a_hotel_status);
-        if ($a_hotel_status['entry_status'] == HotelStatus::ENTRY_STATUS_CANCELLED) {
-            $m_hotelStatus->close_dtm = date('Y/m/d');
+        $hotelPerson->fill($inputHotelPerson);
+        $hotelStatus->fill($inputHotelStatus);
+        if ($inputHotelStatus['entry_status'] == HotelStatus::ENTRY_STATUS_CANCELLED) {
+            $hotelStatus->close_dtm = date('Y/m/d');
         }
 
         // 更新実行
-        if (!$m_hotelAccount->save() || !$m_hotelPerson->save() || !$m_hotelStatus->save() || !$a_hotel->save()) {
+        if (!$hotelAccount->save() || !$hotelPerson->save() || !$hotelStatus->save() || !$hotel->save()) {
             DB::rollBack();
             $errorList[] = '施設管理情報の更新ができませんでした。';
             // 編集画面へ
-            return redirect()->route('ctl.br_hotel.edit_management', ['target_cd' => $target_cd])
+            return redirect()->route('ctl.br_hotel.edit_management', ['target_cd' => $targetCd])
                 ->with([
                     'errors'        => $errorList,
-                    'Hotel_Account' => $a_hotel_account,
-                    'Hotel_Person'  => $a_hotel_person,
-                    'Hotel_Status'  => $a_hotel_status,
+                    'Hotel_Account' => $inputHotelAccount,
+                    'Hotel_Person'  => $inputHotelPerson,
+                    'Hotel_Status'  => $inputHotelStatus,
                 ]);
         }
 
@@ -806,24 +806,26 @@ class BrhotelController extends _commonController
         $guides[] = '施設情報の更新が完了いたしました。';
 
         // 登録情報の取得
-        $a_hotel_account = HotelAccount::find($target_cd);
-        $a_hotel_person  = HotelPerson::find($target_cd);
-        $a_hotel_status  = HotelStatus::find($target_cd);
-        $a_hotel_person->person_email = $cipher->decrypt($a_hotel_person->person_email);
+        $hotelAccount = HotelAccount::find($targetCd);
+        $hotelPerson  = HotelPerson::find($targetCd);
+        $hotelStatus  = HotelStatus::find($targetCd);
+
+        // メール復号
+        $hotelPerson->person_email = $cipher->decrypt($hotelPerson->person_email);
 
         // 日付の整形
-        if (!$this->is_empty($a_hotel_status->contract_ymd)) {
-            $a_hotel_status->contract_ymd = date('Y/m/d', strtotime($a_hotel_status->contract_ymd));
+        if (!$this->is_empty($hotelStatus->contract_ymd)) {
+            $hotelStatus->contract_ymd = date('Y/m/d', strtotime($hotelStatus->contract_ymd));
         }
-        if (!$this->is_empty($a_hotel_status->open_ymd)) {
-            $a_hotel_status->open_ymd = date('Y/m/d', strtotime($a_hotel_status->open_ymd));
+        if (!$this->is_empty($hotelStatus->open_ymd)) {
+            $hotelStatus->open_ymd = date('Y/m/d', strtotime($hotelStatus->open_ymd));
         }
-        if (!$this->is_empty($a_hotel_status->close_dtm)) {
-            $a_hotel_status->close_dtm = date('Y/m/d H:i:s', strtotime($a_hotel_status->close_dtm));
+        if (!$this->is_empty($hotelStatus->close_dtm)) {
+            $hotelStatus->close_dtm = date('Y/m/d H:i:s', strtotime($hotelStatus->close_dtm));
         }
 
         // 表示用データの取得
-        $this->getHotelInfo($target_cd, $hotelData, $mastPrefData, $mastCityData, $mastWardData);
+        $this->getHotelInfo($targetCd, $hotelData, $mastPrefData, $mastCityData, $mastWardData);
 
         return view('ctl.brhotel.update-management', [
             'guides'        => $guides,
@@ -833,12 +835,12 @@ class BrhotelController extends _commonController
             'mast_city'     => $mastCityData,
             'mast_ward'     => $mastWardData,
 
-            'target_cd'     => $target_cd,
+            'target_cd'     => $targetCd,
 
             'disp'          => $display,
-            'hotel_account' => $a_hotel_account,
-            'hotel_person'  => $a_hotel_person,
-            'hotel_status'  => $a_hotel_status,
+            'hotel_account' => $hotelAccount,
+            'hotel_person'  => $hotelPerson,
+            'hotel_status'  => $hotelStatus,
 
             // MEMO: 移植元では、登録の場合のみ設定されている値。
             // 未定義だと動作しないため、干渉しない値であろうを設定している。
