@@ -661,14 +661,10 @@ class BrhotelController extends _commonController
         }
 
         return view('ctl.brhotel.edit-management', [
-            'views' => (object)[
-                'hotel'     => $hotelData,
-                'target_cd' => $target_cd,
-                'mast_pref' => $mastPrefData,
-                'mast_city' => $mastCityData,
-                'mast_ward' => $mastWardData,
-            ],
-            'messages'          => [],
+            'hotel'     => $hotelData,
+            'mast_pref' => $mastPrefData,
+            'mast_city' => $mastCityData,
+            'mast_ward' => $mastWardData,
 
             'target_cd'         => $target_cd,
 
