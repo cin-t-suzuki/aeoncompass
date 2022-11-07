@@ -649,7 +649,9 @@ class BrhotelController extends _commonController
 
         $a_log_hotel_person = DB::select($sql, ['hotel_cd' => $target_cd]);
 
+        // メール復号
         $cipher = new Models_Cipher(config('settings.cipher_key'));
+        $a_hotel_person->person_email = $cipher->decrypt($a_hotel_person->person_email);
         foreach ($a_log_hotel_person as $key => $value) {
             if (!$this->is_empty($a_find_hotel_status[$key]->person_email)) {
                 try {
@@ -764,6 +766,10 @@ class BrhotelController extends _commonController
             return redirect()->route('ctl.br_hotel.edit_management');
         }
 
+        // メール暗号化
+        $cipher = new Models_Cipher(config('settings.cipher_key'));
+        $a_hotel_person['person_email'] = $cipher->encrypt($a_hotel_person['person_email']);
+
         // 共通カラム設定
         $hotelAccountModel->setUpdateCommonColumn($a_hotel_account);
         $hotelStatusModel->setUpdateCommonColumn($a_hotel_status);
@@ -805,6 +811,7 @@ class BrhotelController extends _commonController
         $a_hotel_account = HotelAccount::find($target_cd);  // object
         $a_hotel_person  = HotelPerson::find($target_cd);   // object
         $a_hotel_status  = HotelStatus::find($target_cd);   // object
+        $a_hotel_person->person_email = $cipher->decrypt($a_hotel_person->person_email);
 
         // 日付の整形
         if (!$this->is_empty($a_hotel_status->contract_ymd)) {
