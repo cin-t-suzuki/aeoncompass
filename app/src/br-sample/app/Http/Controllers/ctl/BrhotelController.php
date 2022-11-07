@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\ctl;
 
 use App\Common\Traits;
+use App\Common\DateUtil;
 use App\Http\Controllers\ctl\_commonController;
 use App\Models\CustomerHotel;
 use App\Models\Hotel;
@@ -687,19 +688,132 @@ class BrhotelController extends _commonController
     }
 
     /**
-     * TODO: Undocumented function
+     * 施設管理情報更新処理・結果画面
      *
-     * @return void
+     * @return \Illuminate\Http\Response
      */
     public function updateManagement()
     {
+        $errorList = [];
 
-        // TODO:
-        $target_cd = Request::input('target_cd');
-        $disp = 'edit';
+        $target_cd       = Request::input('target_cd');
+        $a_hotel_account = Request::input('Hotel_Account');
+        $a_hotel_person  = Request::input('Hotel_Person');
+        $a_hotel_status  = Request::input('Hotel_Status');
+
+        // 日付のフォーマットをチェック
+        // HACK: バリデーションチェックにしたほうがよさそう（工数次第）
+        $dateUtil = new DateUtil();
+        if (!$this->is_empty($a_hotel_status['contract_ymd'])) {
+            // ハイフン又はマイナスの記号で区切ってあるか、日付が正しいかのチェック
+            if (!$dateUtil->check_date_ymd($a_hotel_status['contract_ymd'])) {
+                $errorList[] = '契約日を正しく入力して下さい。';
+
+                // TODO: 編集画面にリダイレクト
+                return redirect()->route('ctl.br_hotel.edit_management');
+            }
+        }
+        if (!$this->is_empty($a_hotel_status['open_ymd'])){
+            // ハイフン又はマイナスの記号で区切ってあるか、日付が正しいかのチェック
+            if (!$dateUtil->check_date_ymd($a_hotel_status['open_ymd'])){
+                $errorList[] = '公開日を正しく入力して下さい。';
+
+                // TODO: 編集画面にリダイレクト
+                return redirect()->route('ctl.br_hotel.edit_management');
+            }
+        }
+
+        // MEMO: 移植元ソース通り
+        $display = 'edit';
+
+        // トランザクション開始
+        DB::beginTransaction();
+
+        // 情報のセット
+        /** @var \App\Models\Hotel */
+        $a_hotel = Hotel::find($target_cd);
+
+        // 登録状態が公開中でなくホテルが受付状態が受付中で無い場合、停止中へ
+        // entry_status     0:公開中 1:登録作業中 2:解約
+        // accept_status    0:停止中 1:受付中
+        // TODO: magic number
+       if ($a_hotel->accept_status != 0 && $a_hotel_status['entry_status'] != 0) {
+            $a_hotel->accept_status = 0;
+        }
+
+        if ($a_hotel_status['entry_status'] == 0) {
+            $a_hotel_control = HotelControl::find($target_cd);
+            // 買取販売以外は料率のチェックを行う。
+            if ($a_hotel_control->stock_type != 1) {
+                $a_hotel_rate = HotelRate::where('hotel_cd', $target_cd)->get();
+                // TODO: countable? 要素数 0 のときに、空として判定されることをチェック
+                // 要素数1以上のときに、空じゃないとして判定されることは確認済み
+                if ($this->is_empty($a_hotel_rate)) {
+                    $errorList[] = '施設の料率情報が存在していない為、登録状態:公開中で更新できません。';
+                    DB::rollBack();
+                    // TODO エラー処理、編集画面へ
+                    return redirect()->route('ctl.br_hotel.edit_management');
+                }
+            }
+        }
+
+        $hotelAccountModel = new HotelAccount();
+        $hotelPersonModel = new HotelPerson();
+        $hotelStatusModel = new HotelStatus();
+
+        // validation
+        $errorList = array_merge($errorList, $hotelAccountModel->validation($a_hotel_account));
+        $errorList = array_merge($errorList, $hotelPersonModel->validation($a_hotel_person));
+        $errorList = array_merge($errorList, $hotelStatusModel->validation($a_hotel_status));
+        if (count($errorList) > 0) {
+            // TODO: 戻す
+            DB::rollback();
+            return redirect()->route('ctl.br_hotel.edit_management');
+        }
+
+        // 共通カラム設定
+        $hotelAccountModel->setUpdateCommonColumn($a_hotel_account);
+        $hotelStatusModel->setUpdateCommonColumn($a_hotel_status);
+        $hotelPersonModel->setUpdateCommonColumn($a_hotel_person);
+
+        // 変更対象インスタンス取得
+        $m_hotelAccount = HotelAccount::find($target_cd);
+        $m_hotelPerson  = HotelPerson::find($target_cd);
+        $m_hotelStatus  = HotelStatus::find($target_cd);
+
+        // 値をセット
+        $m_hotelAccount->fill([
+            'accept_status'    => $a_hotel_account['accept_status'],
+            'account_id_begin' => $a_hotel_account['account_id_begin'],
+            'account_id'       => strtoupper($a_hotel_account['account_id_begin']),
+            'modify_cd'        => $a_hotel_account['modify_cd'],
+            'modify_ts'        => $a_hotel_account['modify_ts'],
+        ]);
+        $m_hotelPerson->fill($a_hotel_person);
+        $m_hotelStatus->fill($a_hotel_status);
+        if ($a_hotel_status['entry_status'] == 2) {
+            $m_hotelStatus->close_dtm = date('Y/m/d');
+        }
+
+        // 更新実行
+        if (!$m_hotelAccount->save() || !$m_hotelPerson->save() || !$m_hotelStatus->save() || !$a_hotel->save()) {
+            // TODO: error
+            DB::rollBack();
+            return redirect()->route('ctl.br_hotel.edit_management');
+        }
+
+        // コミット
+        DB::commit();
+
+        // 完了メッセージ
+        $guides[] = '施設情報の更新が完了いたしました。';
+
+        // 登録情報の取得
         $a_hotel_account = HotelAccount::find($target_cd);  // object
-        $a_hotel_person = HotelPerson::find($target_cd);    // object
-        $a_hotel_status = HotelStatus::find($target_cd);    // object
+        $a_hotel_person  = HotelPerson::find($target_cd);   // object
+        $a_hotel_status  = HotelStatus::find($target_cd);   // object
+
+        // 日付の整形
         if (!$this->is_empty($a_hotel_status->contract_ymd)) {
             $a_hotel_status->contract_ymd = date('Y/m/d', strtotime($a_hotel_status->contract_ymd));
         }
@@ -710,22 +824,24 @@ class BrhotelController extends _commonController
             $a_hotel_status->close_dtm = date('Y/m/d H:i:s', strtotime($a_hotel_status->close_dtm));
         }
 
+        // 表示用データの取得
         $this->getHotelInfo($target_cd, $hotelData, $mastPrefData, $mastCityData, $mastWardData);
-        return view('ctl.brhotel.update-management', [
-            'messages' => [],
-            'views' => (object)[
-                'hotel'     => $hotelData,
-                'target_cd' => $target_cd,
-                'mast_pref' => $mastPrefData,
-                'mast_city' => $mastCityData,
-                'mast_ward' => $mastWardData,
-            ],
-            'target_cd' => $target_cd,
 
-            'disp'           => $disp,
-            'hotel_account'  => $a_hotel_account,
-            'hotel_person'   => $a_hotel_person,
-            'hotel_status'   => $a_hotel_status,
+        return view('ctl.brhotel.update-management', [
+            'guides'        => null, // TODO:
+            'errors'        => null, // TODO:
+
+            'hotel'         => $hotelData,
+            'mast_pref'     => $mastPrefData,
+            'mast_city'     => $mastCityData,
+            'mast_ward'     => $mastWardData,
+
+            'target_cd'     => $target_cd,
+
+            'disp'          => $display,
+            'hotel_account' => $a_hotel_account,
+            'hotel_person'  => $a_hotel_person,
+            'hotel_status'  => $a_hotel_status,
 
             // MEMO: 移植元では、登録の場合のみ設定されている値。
             // 未定義だと動作しないため、干渉しない値であろうを設定している。

@@ -26,6 +26,35 @@ class HotelPerson extends CommonDBModel
      * @var bool
      */
     public $incrementing = false;
+    /**
+     * モデルにタイムスタンプを付けるか
+     *
+     * MEMO: 独自実装でタイムスタンプを設定しているため、Laravel 側では設定しない。
+     * HACK: (工数次第) Laravel の機能を使ったほうがよい気もする。
+     *
+     * @var bool
+     */
+    public $timestamps = false;
+    const CREATED_AT = 'entry_ts';
+    const UPDATED_AT = 'modify_ts';
+
+    // TODO: fillable 確認
+    /**
+     * 複数代入可能な属性
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'person_post',
+        'person_nm',
+        'person_tel',
+        'person_fax',
+        'person_email',
+        'entry_cd',
+        'entry_ts',
+        'modify_cd',
+        'modify_ts',
+    ];
 
 	// カラム
 	public string $COL_HOTEL_CD = "hotel_cd";
@@ -42,9 +71,9 @@ class HotelPerson extends CommonDBModel
 		$colHotelCd = (new ValidationColumn())->setColumnName($this->COL_HOTEL_CD, "施設コード")->require()->length(0, 10)->notHalfKana(); //TODO 独自チェック
 		$colPersonPost = (new ValidationColumn())->setColumnName($this->COL_PERSON_POST, "担当者役職");//TODO チェック
 		$colPersonNm = (new ValidationColumn())->setColumnName($this->COL_PERSON_NM, "担当者名称"); //TODO チェック
-		$colPersonTel = (new ValidationColumn())->setColumnName($this->COL_person_tel, "担当者電話番号"); //TODO チェック
-		$colPersonFax = (new ValidationColumn())->setColumnName($this->COL_person_fax, "担当者ファックス番号"); //TODO チェック
-		$colPersonEmail = (new ValidationColumn())->setColumnName($this->COL_person_email, "担当者電子メールアドレス"); //TODO チェック
+        $colPersonTel = (new ValidationColumn())->setColumnName($this->COL_PERSON_TEL, "担当者電話番号"); //TODO チェック
+        $colPersonFax = (new ValidationColumn())->setColumnName($this->COL_PERSON_FAX, "担当者ファックス番号"); //TODO チェック
+        $colPersonEmail = (new ValidationColumn())->setColumnName($this->COL_PERSON_EMAIL, "担当者電子メールアドレス"); //TODO チェック
 
 		parent::setColumnDataArray([$colHotelCd, $colPersonPost, $colPersonNm, $colPersonTel, $colPersonFax, $colPersonEmail]);
 	}

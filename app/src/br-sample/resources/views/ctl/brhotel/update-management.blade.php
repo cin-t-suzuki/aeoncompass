@@ -6,15 +6,10 @@
 @section('page_blade')
 
     {{-- メッセージ --}}
-    @include('ctl.common.message', $messages)
+    @include('ctl.common.message')
 
     {{-- 施設情報詳細 --}}
-    @include('ctl.brhotel._hotel_info', [
-        "hotel" => $views->hotel,
-        "mast_pref" => $views->mast_pref,
-        "mast_city" => $views->mast_city,
-        "mast_ward" => $views->mast_ward
-    ])
+    @include('ctl.brhotel._hotel_info')
 
     <br>
 
@@ -24,9 +19,7 @@
         <INPUT TYPE="submit" VALUE="詳細変更へ">
     {{ Form::close() }}
 
-    @include('ctl.brhotel._hotel_top_form', [
-        "target_cd" => $views->target_cd
-    ])
+    @include('ctl.brhotel._hotel_top_form')
 
     <br>
 

@@ -26,6 +26,33 @@ class HotelAccount extends CommonDBModel
      * @var bool
      */
     public $incrementing = false;
+    /**
+     * モデルにタイムスタンプを付けるか
+     *
+     * MEMO: 独自実装でタイムスタンプを設定しているため、Laravel 側では設定しない。
+     * HACK: (工数次第) Laravel の機能を使ったほうがよい気もする。
+     *
+     * @var bool
+     */
+    public $timestamps = false;
+    const CREATED_AT = 'entry_ts';
+    const UPDATED_AT = 'modify_ts';
+
+    // TODO: fillable 確認
+    /**
+     * 複数代入可能な属性
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'account_id',
+        'account_id_begin',
+        'accept_status',
+        'entry_cd',
+        'entry_ts',
+        'modify_cd',
+        'modify_ts',
+    ];
 
 	// カラム
 	public string $COL_HOTEL_CD = "hotel_cd";
