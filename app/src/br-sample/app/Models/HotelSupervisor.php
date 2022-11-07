@@ -10,15 +10,6 @@ use Exception;
 class HotelSupervisor extends CommonDBModel
 {
 	use Traits;
-
-
-	/**
-	 * コンストラクタ
-	 */
-	function __construct(){
-		// TODOカラム情報の設定
-	}
-		
 	
 	// 統括一覧を取得
 	protected $table = "hotel_supervisor";
@@ -26,6 +17,22 @@ class HotelSupervisor extends CommonDBModel
 	// カラム
 	public string $COL_SUPERVISOR_CD = "supervisor_cd";
 	public string $COL_SUPERVISOR_NM = "supervisor_nm";
+	public string $COL_MODIFY_CD = "modify_cd";
+	public string $COL_MODIFY_TS = "modify_ts";
+
+	public string $METHOD_SAVE = "save";
+	public string $METHOD_UPDATE = "update";
+
+	/**
+	 * コンストラクタ
+	 */
+	function __construct(){
+		// TODOカラム情報の設定
+		$colSupervisorCd = (new ValidationColumn())->setColumnName($this->COL_SUPERVISOR_CD, "supervisor_cd")->require()->length(0, 10)->notHalfKana();
+		$colSupervisorNm = (new ValidationColumn())->setColumnName($this->COL_SUPERVISOR_NM, "supervisor_nm")->require()->length(0, 42)->notHalfKana();
+
+		parent::setColumnDataArray([$colSupervisorCd, $colSupervisorNm]);
+	}
 
 	public function getHotelSupervisor($aa_conditions = array()){
 		
@@ -70,5 +77,47 @@ SQL;
 		return array('values' => $result);
 
 	}
+
+
+	/** 主キーで取得
+	 */
+	public function selectByKey($supervisorCd){
+		$data = $this->where($this->COL_SUPERVISOR_CD, $supervisorCd)->get();
+		if(!is_null($data) && count($data) > 0){
+			return array(
+				$this->COL_SUPERVISOR_CD => $data[0]->supervisor_cd,
+				$this->COL_SUPERVISOR_NM => $data[0]->supervisor_nm,
+			);
+		}
+		return [];
+	}
+
+	/**  キーで更新
+	 */ 
+    public function updateByKey($con, $data)
+    {
+        $result = $con->table($this->table)
+                    ->where(array($this->COL_SUPERVISOR_CD=>$data[$this->COL_SUPERVISOR_CD]))
+					->update($data);
+		if($result){
+			return $result;
+		}elseif(!$result){
+			return false;
+		}
+	}
+	
+	/** 新規登録(1件)
+	 */
+	public function singleInsert($con, $data){
+
+		$result = $con->table($this->table)->insert($data);
+		if(!$result){
+			return "登録に失敗しました";
+		}
+		return "";
+	}
+
+			
+
 }
 ?>

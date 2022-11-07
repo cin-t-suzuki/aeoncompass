@@ -128,7 +128,7 @@ class Hotel extends CommonDBModel
 				$this->COL_ACCEPT_DTM => $data[0]->accept_dtm
 			);
 		}
-		return null;
+		return false;
 	}
 
 	/**  キーで更新

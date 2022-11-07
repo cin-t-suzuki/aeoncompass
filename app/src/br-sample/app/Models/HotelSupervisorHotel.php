@@ -24,12 +24,12 @@ class HotelSupervisorHotel extends CommonDBModel
 	public string $METHOD_UPDATE = "update";
 
 	/**
-	 * コンストラクタ TODOカラム情報の設定
+	 * コンストラクタ カラム情報の設定
 	 */
 	function __construct(){	
 		$colId = (new ValidationColumn())->setColumnName($this->COL_ID, "ID")->require()->length(0, 8)->intOnly();
 		$colSupervisorCd = (new ValidationColumn())->setColumnName($this->COL_SUPERVISOR_CD, "施設統括コード")->require()->length(0, 10)->notHalfKana();
-		$colHotelCd = (new ValidationColumn())->setColumnName($this->COL_HOTEL_CD, "施設コード")->require()->length(0, 10)->notHalfKana(); //独自チェック hotelCdValidate
+		$colHotelCd = (new ValidationColumn())->setColumnName($this->COL_HOTEL_CD, "施設コード")->require()->length(0, 10)->notHalfKana(); //独自チェックはhotelCdValidateで実施
 		$colOrderNumber = (new ValidationColumn())->setColumnName($this->COL_ORDER_NUMBER, "並び順")->length(0, 5)->intOnly();
 
 		parent::setColumnDataArray([$colId, $colSupervisorCd, $colHotelCd, $colOrderNumber]);
@@ -130,10 +130,39 @@ SQL;
 
 	}
 	
-	//10/24追記
+	/** キーで取得
+	 * 
+	 * @return array
+	 */
+	public function selectByKey($hotelCd){
+		$data = $this->where(array($this->COL_HOTEL_CD=>$hotelCd))->get();
+		if(!is_null($data) && count($data) > 0){
+			return array(
+				$this->COL_HOTEL_CD => $data[0]->hotel_cd,
+			);
+		}
+		return [];
+	}
+
+	/** キーで削除
+	 * 
+	 * @param [type] $con
+	 * @param [type] $hotelCd
+	 * @return void
+	 */
+	public function deleteByKey($con, $hotelCd){
+		$result = $con->table($this->table)->where(array($this->COL_HOTEL_CD=>$hotelCd))->delete();
+		return $result;
+	}
+
+	
+
+
+	//id自動採番
 	public function getSequence(){
 		return $this->incrementSequence('id@hotel_supervisor_hotel');
 	}
+
 
 	/** 新規登録(1件)
 	 */

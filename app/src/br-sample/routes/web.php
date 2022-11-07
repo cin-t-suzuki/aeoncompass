@@ -129,10 +129,16 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 		
 		//supervisor
 		Route::controller(BrsupervisorController::class)->prefix("brsupervisor")->group(function(){
-			Route::get('/listhotel', 'listhotel')->name('ctl.brsupervisor.listhotel'); //表示
-			Route::get('/list', 'list')->name('ctl.brsupervisor.list'); //list
-			Route::post('/newhotel', 'newhotel')->name('ctl.brsupervisor.newhotel'); //newhotel
-			Route::post('/createhotel', 'createhotel')->name('ctl.brsupervisor.createhotel'); //新規処理
+			Route::post('/list', 'list')->name('ctl.brsupervisor.list'); //施設統括(hotel_supervisor)表示
+			Route::post('/update', 'update')->name('ctl.brsupervisor.update'); 
+			Route::post('/new', 'new')->name('ctl.brsupervisor.new'); 
+			Route::post('/create', 'create')->name('ctl.brsupervisor.create'); 
+			Route::post('/listhotel', 'listhotel')->name('ctl.brsupervisor.listhotel'); //施設統括施設(hotel_supervisor_hotel)表示
+			Route::post('/newhotel', 'newhotel')->name('ctl.brsupervisor.newhotel'); //施設コードで追加対象を検索
+			Route::post('/cnfhotel', 'cnfhotel')->name('ctl.brsupervisor.cnfhotel'); //施設統括ホテル確認
+			Route::post('/createhotel', 'createhotel')->name('ctl.brsupervisor.createhotel'); //施設統括ホテル登録
+			Route::post('/deletehotel', 'deletehotel')->name('ctl.brsupervisor.deletehotel'); //施設統括ホテル削除
+			Route::post('/edit', 'edit')->name('ctl.brsupervisor.edit'); //施設統括変更
 
 		});		
 

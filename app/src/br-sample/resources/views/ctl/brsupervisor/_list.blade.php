@@ -11,10 +11,23 @@
 
     @forelse($views->a_hotel_supervisor['values'] as $hotel_supervisor_list)
       <tr>
-        <td style ="text-align:center"><input type="submit" name="" value="詳細"></td>
+        {!! Form::open(['route' => ['ctl.brsupervisor.edit'], 'method' => 'post']) !!}
+        <td style ="text-align:center">
+          <input type="submit" name="" value="詳細">
+          <input type="hidden" name="supervisor_cd" value="{{strip_tags($hotel_supervisor_list['supervisor_cd'] ??null )}}">
+          <input type="hidden" name="supervisor_nm" value="{{strip_tags($hotel_supervisor_list['supervisor_nm'] ??null )}}">
+        </td>
+        {!! Form::close() !!}
         <td style="width: 200px;display: table-cell;">{{$hotel_supervisor_list['supervisor_cd']}}</td>
         <td style="width: 500px;display: table-cell;">{{$hotel_supervisor_list['supervisor_nm']}}</td>
-        <td style ="text-align:center"><input type="submit" name="" value="一覧"></td>
+        
+        {!! Form::open(['route' => ['ctl.brsupervisor.listhotel'], 'method' => 'post']) !!}
+          <td style ="text-align:center">
+            <input type="submit" value="表示">
+            <input type="hidden" name="supervisor_cd" value="{{strip_tags($hotel_supervisor_list['supervisor_cd'] ??null )}}">
+          </td>
+        {!! Form::close() !!}
+
       </tr>
     @empty
         <div style="border-style:solid;border-color:#f00;border-width:1px;padding:6px;background-color:#fee; margin-top:1em;">条件に該当する施設はありませんでした。</div>

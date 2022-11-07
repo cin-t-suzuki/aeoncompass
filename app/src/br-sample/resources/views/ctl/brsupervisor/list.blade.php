@@ -3,11 +3,11 @@
 
 <table border="0" cellspacing="0" cellpadding="4">
   <tr>
-    <form method="POST" action="{$v->env.source_path}{$v->env.module}/brsupervisor/new/">
+    {!! Form::open(['route' => ['ctl.brsupervisor.new'], 'method' => 'post']) !!}
       <td>
         <input type="submit" value="グループ登録">
       </td>
-    </form>
+    {!! Form::close() !!}
   </tr>	
 </table>
 

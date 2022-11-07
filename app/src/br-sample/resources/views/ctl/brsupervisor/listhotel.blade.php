@@ -7,7 +7,6 @@
         <input type="hidden" name="supervisor_cd" value="{{$views->supervisor_cd}}">
 {!! Form::close() !!}
 
-
 <br>
 {{-- メッセージ --}}
 @section('message')
@@ -23,10 +22,10 @@
 
 <div align="right">
   <small>
-    <form method="POST" action="{$v->env.source_path}{$v->env.module}/brsupervisor/list/">
+    {!! Form::open(['route' => ['ctl.brsupervisor.list'], 'method' => 'post']) !!}
       <input type="submit" value="グループ一覧へ">
-      <input type="hidden" name="supervisor_cd" value="{$v->helper->form->strip_tags($v->assign->supervisor_cd)}">
-    </form>
+      <input type="hidden" name="supervisor_cd" value="{{strip_tags($views->supervisor_cd ??null )}}">
+    {!! Form::close() !!}
   </small>
 </div>
 

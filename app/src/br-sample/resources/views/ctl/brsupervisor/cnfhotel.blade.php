@@ -1,24 +1,21 @@
-@section('title', 'グループホテル一覧')
+@section('title', 'グループホテル登録')
 @include('ctl.common.base')
-
 
 {{-- メッセージ --}}
 @section('message')
 @include('ctl.common.message', $messages)
 
-{{-- 入力フォーム --}}
-{!! Form::open(['route' => ['ctl.brsupervisor.cnfhotel'], 'method' => 'post']) !!}
-
-@section('brhotelsupervisor_input_new_hotel')
-@include('ctl.brsupervisor._input_new_hotel',
-    ['a_hotel_supervisor_hotel' => $views->a_hotel_supervisor_hotel
+{!! Form::open(['route' => ['ctl.brsupervisor.createhotel'], 'method' => 'post']) !!}
+@section('brhotelsupervisor_info_hotel')
+@include('ctl.brsupervisor._info_hotel',
+    ['hotelData' => $views->hotelData
+    ,'a_hotel_supervisor_hotel' => $views->a_hotel_supervisor_hotel
     ,'supervisor_cd' => $views->supervisor_cd
     ])
 
-  <input type="submit" value="確認">
+  <input type="submit" value="登録">
   <input type="hidden" name="supervisor_cd" value="{{strip_tags($views->supervisor_cd ??null )}}">
-
-
+  <input type="hidden" name="hotel_cd" value="{{strip_tags($views->hotelData['hotel_cd'] ??null )}}">
 {!! Form::close() !!}
 
 
