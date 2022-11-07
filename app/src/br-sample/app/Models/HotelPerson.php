@@ -102,7 +102,7 @@ class HotelPerson extends CommonDBModel
 
         // 担当者電子メールアドレス
         $colPersonEmail->notHalfKana(); // 半角カナチェック
-        // TODO: 単体メールアドレスチェック
+        // TODO: 単体メールアドレスチェック (精算サイト画面で実装されている複数メールアドレスチェックが取り込まれてから、これを参考に実装する)
         // $colPersonEmail->email();    // メールアドレスチェック
         $colPersonEmail->length(0, 128); // 長さチェック
 

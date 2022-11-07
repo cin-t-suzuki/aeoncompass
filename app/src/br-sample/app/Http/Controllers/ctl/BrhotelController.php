@@ -20,9 +20,10 @@ use App\Models\MastCity;
 use App\Models\MastWard;
 use App\Util\Models_Cipher;
 use Exception;
-use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Session;
 
 class BrhotelController extends _commonController
 {
@@ -566,9 +567,10 @@ class BrhotelController extends _commonController
      */
     public function editManagement()
     {
-        $a_hotel_account    = Request::input('Hotel_Account'); // array
-        $a_hotel_person     = Request::input('Hotel_Person'); // array
-        $a_hotel_status     = Request::input('Hotel_Status'); // array
+        $errors             = Session::pull('errors');
+        $a_hotel_account    = Session::pull('Hotel_Account'); // array
+        $a_hotel_person     = Session::pull('Hotel_Person'); // array
+        $a_hotel_status     = Session::pull('Hotel_Status'); // array
 
         $target_cd = Request::input('target_cd');
 
@@ -586,7 +588,6 @@ class BrhotelController extends _commonController
             $a_hotel_person = (object)$a_hotel_person;
         }
 
-        /** @var App\Models\HotelStatus */
         $a_find_hotel_status = HotelStatus::find($target_cd); // object
 
         if (is_null($a_hotel_status)) {
@@ -604,11 +605,13 @@ class BrhotelController extends _commonController
             }
         } else {
             if (!$this->is_empty($a_find_hotel_status->close_dtm)) {
-                // TODO: array|object の問題。
-                // ここで、object にしておくことはできるが、あとで insert するときに不都合はないか？
-                $a_hotel_status = (object)$a_hotel_status;
-                $a_hotel_status->close_dtm = date('Y/m/d H:i:s', strtotime($a_find_hotel_status->close_dtm));
+                $a_hotel_status['close_dtm'] = date('Y/m/d H:i:s', strtotime($a_find_hotel_status->close_dtm));
+            } else {
+                $a_hotel_status['close_dtm'] = null;
             }
+            // TODO: array|object の問題。
+            // ここで、object にしておくことはできるが、あとで insert するときに不都合はないか？
+            $a_hotel_status = (object)$a_hotel_status;
         }
 
         $a_hotel_control = HotelControl::find($target_cd);
@@ -663,6 +666,8 @@ class BrhotelController extends _commonController
         }
 
         return view('ctl.brhotel.edit-management', [
+            'errors' => $errors,
+
             'hotel'     => $hotelData,
             'mast_pref' => $mastPrefData,
             'mast_city' => $mastCityData,
@@ -700,28 +705,33 @@ class BrhotelController extends _commonController
         $a_hotel_status  = Request::input('Hotel_Status');
 
         // 日付のフォーマットをチェック
-        // HACK: バリデーションチェックにしたほうがよさそう（工数次第）
-        $dateUtil = new DateUtil();
-        if (!$this->is_empty($a_hotel_status['contract_ymd'])) {
-            // ハイフン又はマイナスの記号で区切ってあるか、日付が正しいかのチェック
-            if (!$dateUtil->check_date_ymd($a_hotel_status['contract_ymd'])) {
-                $errorList[] = '契約日を正しく入力して下さい。';
+        // MEMO: 移植元ソースではここで処理されているが、 validation() メソッドと処理が重複しているため、こちらは使用しない。
+        // TODO: 削除してもよさそう
+        // $dateUtil = new DateUtil();
+        // if (!$this->is_empty($a_hotel_status['contract_ymd'])) {
+        //     // ハイフン又はマイナスの記号で区切ってあるか、日付が正しいかのチェック
+        //     if (!$dateUtil->check_date_ymd($a_hotel_status['contract_ymd'])) {
+        //         $errorList[] = '契約日を正しく入力して下さい。';
+        //     }
+        // }
+        // if (!$this->is_empty($a_hotel_status['open_ymd'])){
+        //     // ハイフン又はマイナスの記号で区切ってあるか、日付が正しいかのチェック
+        //     if (!$dateUtil->check_date_ymd($a_hotel_status['open_ymd'])){
+        //         $errorList[] = '公開日を正しく入力して下さい。';
+        //     }
+        // }
+        // if (count($errorList) > 0) {
+        //     編集画面へ
+        //     return redirect()->route('ctl.br_hotel.edit_management', ['target_cd' => $target_cd])
+        //     ->with([
+        //         'errors'        => $errorList,
+        //         'Hotel_Account' => $a_hotel_account,
+        //         'Hotel_Person'  => $a_hotel_person,
+        //         'Hotel_Status'  => $a_hotel_status,
+        //     ]);
+        // }
 
-                // TODO: 編集画面にリダイレクト
-                return redirect()->route('ctl.br_hotel.edit_management');
-            }
-        }
-        if (!$this->is_empty($a_hotel_status['open_ymd'])){
-            // ハイフン又はマイナスの記号で区切ってあるか、日付が正しいかのチェック
-            if (!$dateUtil->check_date_ymd($a_hotel_status['open_ymd'])){
-                $errorList[] = '公開日を正しく入力して下さい。';
-
-                // TODO: 編集画面にリダイレクト
-                return redirect()->route('ctl.br_hotel.edit_management');
-            }
-        }
-
-        // MEMO: 移植元ソース通り
+        // MEMO: 移植元ソースに倣っている
         $display = 'edit';
 
         // トランザクション開始
@@ -746,8 +756,14 @@ class BrhotelController extends _commonController
                 if ($this->is_empty($a_hotel_rate)) {
                     $errorList[] = '施設の料率情報が存在していない為、登録状態:公開中で更新できません。';
                     DB::rollBack();
-                    // TODO エラー処理、編集画面へ
-                    return redirect()->route('ctl.br_hotel.edit_management');
+                    // 編集画面へ
+                    return redirect()->route('ctl.br_hotel.edit_management', ['target_cd' => $target_cd])
+                        ->with([
+                            'errors'        => $errorList,
+                            'Hotel_Account' => $a_hotel_account,
+                            'Hotel_Person'  => $a_hotel_person,
+                            'Hotel_Status'  => $a_hotel_status,
+                        ]);
                 }
             }
         }
@@ -761,9 +777,15 @@ class BrhotelController extends _commonController
         $errorList = array_merge($errorList, $hotelPersonModel->validation($a_hotel_person));
         $errorList = array_merge($errorList, $hotelStatusModel->validation($a_hotel_status));
         if (count($errorList) > 0) {
-            // TODO: 戻す
             DB::rollback();
-            return redirect()->route('ctl.br_hotel.edit_management');
+            // 編集画面へ
+            return redirect()->route('ctl.br_hotel.edit_management', ['target_cd' => $target_cd])
+                ->with([
+                    'errors'        => $errorList,
+                    'Hotel_Account' => $a_hotel_account,
+                    'Hotel_Person'  => $a_hotel_person,
+                    'Hotel_Status'  => $a_hotel_status,
+                ]);
         }
 
         // メール暗号化
@@ -796,9 +818,16 @@ class BrhotelController extends _commonController
 
         // 更新実行
         if (!$m_hotelAccount->save() || !$m_hotelPerson->save() || !$m_hotelStatus->save() || !$a_hotel->save()) {
-            // TODO: error
             DB::rollBack();
-            return redirect()->route('ctl.br_hotel.edit_management');
+            $errorList[] = '施設管理情報の更新ができませんでした。';
+            // 編集画面へ
+            return redirect()->route('ctl.br_hotel.edit_management', ['target_cd' => $target_cd])
+                ->with([
+                    'errors'        => $errorList,
+                    'Hotel_Account' => $a_hotel_account,
+                    'Hotel_Person'  => $a_hotel_person,
+                    'Hotel_Status'  => $a_hotel_status,
+                ]);
         }
 
         // コミット
@@ -828,8 +857,7 @@ class BrhotelController extends _commonController
         $this->getHotelInfo($target_cd, $hotelData, $mastPrefData, $mastCityData, $mastWardData);
 
         return view('ctl.brhotel.update-management', [
-            'guides'        => null, // TODO:
-            'errors'        => null, // TODO:
+            'guides'        => $guides,
 
             'hotel'         => $hotelData,
             'mast_pref'     => $mastPrefData,
