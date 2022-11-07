@@ -614,7 +614,7 @@ class BrhotelController extends _commonController
         $a_hotel_control = HotelControl::find($target_cd);
         // 買取販売以外は料率のチェックを行う。
         $rate_chk = true;
-        if ($a_hotel_control->stock_type != 1) {
+        if ($a_hotel_control->stock_type != HotelControl::STOCK_TYPE_PURCHASE_SALE) {
             $a_hotel_rate = HotelRate::where('hotel_cd', $target_cd)->get();
             // TODO: count() で大丈夫か？
             if (count($a_hotel_rate) === 0) {
@@ -729,18 +729,15 @@ class BrhotelController extends _commonController
         /** @var \App\Models\Hotel */
         $a_hotel = Hotel::find($target_cd);
 
-        // 登録状態が公開中でなくホテルが受付状態が受付中で無い場合、停止中へ
-        // entry_status     0:公開中 1:登録作業中 2:解約
-        // accept_status    0:停止中 1:受付中
-        // TODO: magic number
-       if ($a_hotel->accept_status != 0 && $a_hotel_status['entry_status'] != 0) {
-            $a_hotel->accept_status = 0;
+        // 選択された登録状態が公開中でなく、ホテルの受付状態が停止中でない場合、停止中へ
+        if ($a_hotel_status['entry_status'] != HotelStatus::ENTRY_STATUS_PUBLIC && $a_hotel->accept_status != Hotel::ACCEPT_STATUS_STOPPING) {
+            $a_hotel->accept_status = Hotel::ACCEPT_STATUS_STOPPING;
         }
 
-        if ($a_hotel_status['entry_status'] == 0) {
+        if ($a_hotel_status['entry_status'] == HotelStatus::ENTRY_STATUS_PUBLIC) {
             $a_hotel_control = HotelControl::find($target_cd);
             // 買取販売以外は料率のチェックを行う。
-            if ($a_hotel_control->stock_type != 1) {
+            if ($a_hotel_control->stock_type != HotelControl::STOCK_TYPE_PURCHASE_SALE) {
                 $a_hotel_rate = HotelRate::where('hotel_cd', $target_cd)->get();
                 // TODO: countable? 要素数 0 のときに、空として判定されることをチェック
                 // 要素数1以上のときに、空じゃないとして判定されることは確認済み
@@ -787,7 +784,7 @@ class BrhotelController extends _commonController
         ]);
         $m_hotelPerson->fill($a_hotel_person);
         $m_hotelStatus->fill($a_hotel_status);
-        if ($a_hotel_status['entry_status'] == 2) {
+        if ($a_hotel_status['entry_status'] == HotelStatus::ENTRY_STATUS_CANCELLED) {
             $m_hotelStatus->close_dtm = date('Y/m/d');
         }
 

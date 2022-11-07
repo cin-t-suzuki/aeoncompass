@@ -66,6 +66,12 @@ class HotelStatus extends CommonDBModel
 
 	public string $COL_ENTRY_TS = "entry_ts";
 
+
+    // カラム定数
+    const ENTRY_STATUS_PUBLIC       = 0; // 公開中
+    const ENTRY_STATUS_REGISTERING  = 1; // 登録作業中
+    const ENTRY_STATUS_CANCELLED    = 2; // 解約
+
 	/** コンストラクタ
 	 */
 	function __construct(){
