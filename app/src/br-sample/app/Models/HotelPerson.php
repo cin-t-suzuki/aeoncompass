@@ -75,6 +75,37 @@ class HotelPerson extends CommonDBModel
         $colPersonFax = (new ValidationColumn())->setColumnName($this->COL_PERSON_FAX, "担当者ファックス番号"); //TODO チェック
         $colPersonEmail = (new ValidationColumn())->setColumnName($this->COL_PERSON_EMAIL, "担当者電子メールアドレス"); //TODO チェック
 
+        // 施設コード
+        $colHotelCd->require();         // 必須入力チェック
+        $colHotelCd->notHalfKana();     // 半角カナチェック
+        $colHotelCd->length(0, 10);     // 長さチェック
+
+        // 担当者役職
+        $colPersonPost->notHalfKana();  // 半角カナチェック
+        $colPersonPost->length(0, 32);  // 長さチェック
+
+        // 担当者名称
+        $colPersonNm->require();        // 必須入力チェック
+        $colPersonNm->notHalfKana();    // 半角カナチェック
+        $colPersonNm->length(0, 32);    // 長さチェック
+
+        // 担当者電話番号
+        $colPersonTel->require();       // 必須入力チェック
+        $colPersonTel->notHalfKana();   // 半角カナチェック
+        $colPersonTel->phoneNumber();   // 電話番号チェック
+        $colPersonTel->length(0, 15);   // 長さチェック
+
+        // 担当者ファックス番号
+        $colPersonFax->notHalfKana();   // 半角カナチェック
+        $colPersonFax->phoneNumber();   // 電話番号チェック
+        $colPersonFax->length(0, 15);   // 長さチェック
+
+        // 担当者電子メールアドレス
+        $colPersonEmail->notHalfKana(); // 半角カナチェック
+        // TODO: 単体メールアドレスチェック
+        // $colPersonEmail->email();    // メールアドレスチェック
+        $colPersonEmail->length(0, 128); // 長さチェック
+
 		parent::setColumnDataArray([$colHotelCd, $colPersonPost, $colPersonNm, $colPersonTel, $colPersonFax, $colPersonEmail]);
 	}
 
