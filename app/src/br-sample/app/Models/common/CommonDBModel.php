@@ -147,9 +147,18 @@ abstract class CommonDBModel extends Model
 				}
 			}
 
+            // メールアドレスチェック（単体）
+            if ($this->colmunArray[$key]->isEmail()) {
+                if (strlen($val) != 0) {
+                    if (!$this->is_mail($val)) {
+                        $rtnErrors[] = $this->colmunArray[$key]->getColumnName() . "を半角で正しく入力してください";
+                    }
+                }
+            }
+
             // メールアドレスチェック
             if ($this->colmunArray[$key]->isEmails()) {
-                if (strlen(($val) != 0)) {
+                if (strlen($val) != 0) {
                     if (!$this->is_mails($val)) {
                         $rtnErrors[] = $this->colmunArray[$key]->getColumnName() . "を半角で正しく入力してください";
                     }
@@ -222,6 +231,13 @@ abstract class CommonDBModel extends Model
 		$tblModel['modify_ts']                      = date("Y-m-d H:i:s");
 	}
 
+    // メールアドレスチェック（単体）
+    public function is_mail($email)
+    {
+        if (strlen($email) != 0) {
+            return $this->_is_mail($email);
+        }
+    }
     // メールアドレスチェック
     public function is_mails($emails)
     {
