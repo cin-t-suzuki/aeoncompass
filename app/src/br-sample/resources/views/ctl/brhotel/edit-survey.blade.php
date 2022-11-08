@@ -5,21 +5,21 @@
 
 @section('page_blade')
 
-{{-- メッセージ --}}
-@include('ctl.common.message')
+    {{-- メッセージ --}}
+    @include('ctl.common.message')
 
-{{-- 施設情報詳細 --}}
-@include('ctl.brhotel._hotel_info')
-<br>
+    {{-- 施設情報詳細 --}}
+    @include('ctl.brhotel._hotel_info')
 
-{{ Form::open(['route' => 'ctl.br_hotel.update_survey', 'method' => 'post']) }}
+    <br>
 
-  @include('ctl.brhotel._input_survey_form')
+    {{ Form::open(['route' => 'ctl.br_hotel.update_survey', 'method' => 'post']) }}
+        @include('ctl.brhotel._input_survey_form')
+        <INPUT TYPE="submit" VALUE="施設測地更新">
+    {{ Form::close() }}
 
-<INPUT TYPE="submit" VALUE="施設測地更新">
-{{ Form::close() }}
+    @include('ctl.brhotel._hotel_top_form')
 
-@include('ctl.brhotel._hotel_top_form')
-<br>
+    <br>
 
 @endsection
