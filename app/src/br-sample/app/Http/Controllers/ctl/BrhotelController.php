@@ -558,4 +558,26 @@ class BrhotelController extends _commonController
 		return view("ctl.brhotel.update", $this->getViewData());
 	}
 
+
+    public function editSurvey()
+    {
+        return view('ctl.brhotel.edit-survey', [
+
+        ]);
+    }
+
+    public function updateSurvey()
+    {
+        $targetCd = Request::input('target_cd');
+        if (0) {
+            return redirect()->route('ctl.br_hotel.edit_survey', ['target_cd' => $targetCd])
+                ->with([
+
+                ]);
+        }
+
+        return view('ctl.brhotel.update-survey', [
+
+        ]);
+    }
 }
