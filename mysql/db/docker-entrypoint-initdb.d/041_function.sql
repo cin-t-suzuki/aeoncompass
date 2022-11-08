@@ -54,12 +54,15 @@ DELIMITER ;
 -- 不要get_bill_ymd;
 
   -- シーケンス代替
+  --   RETURNS bigint の部分はDBからSQL生成すると定義が見えなくなる？
+  --   A5で個別にcreateする場合 プロシージャモードで実行。
   DROP FUNCTION IF EXISTS `NextVal`;
 
   DELIMITER //
 
   CREATE 
-    FUNCTION `NextVal`(seq_name VARCHAR(50)) RETURNS bigint(15)
+    FUNCTION `NextVal`(seq_name VARCHAR(50)) 
+    RETURNS bigint(15)
   BEGIN
     DECLARE val bigint(15);
     DECLARE incval bigint(15);
