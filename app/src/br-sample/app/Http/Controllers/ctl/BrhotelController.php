@@ -164,26 +164,25 @@ class BrhotelController extends _commonController
 	 * @param [type] $mastWardData
 	 * @return void
 	 */
-	public function getHotelInfo($hotelCd, &$hotelData,
-	&$mastPrefData, &$mastCityData, &$mastWardData)
-{
-	//施設情報 取得
-	$hotelModel = new Hotel();
-	$hotelData = $hotelModel->selectByKey($hotelCd);
-	
-	//都道府県取得
-	$prefModel = new MastPref();
-	$mastPrefData = $prefModel->selectByKey($hotelData['pref_id']);
+	public function getHotelInfo($hotelCd, &$hotelData, &$mastPrefData, &$mastCityData, &$mastWardData)
+    {
+        //施設情報 取得
+        $hotelModel = new Hotel();
+        $hotelData = $hotelModel->selectByKey($hotelCd);
 
-	//市取得
-	$cityModel = new MastCity();
-	$mastCityData = $cityModel->selectByKey($hotelData['city_id']);
+        //都道府県取得
+        $prefModel = new MastPref();
+        $mastPrefData = $prefModel->selectByKey($hotelData['pref_id']);
 
-	//区取得
-	$wardModel = new MastWard();
-	$mastWardData = $wardModel->selectByKey($hotelData['ward_id']);
+        //市取得
+        $cityModel = new MastCity();
+        $mastCityData = $cityModel->selectByKey($hotelData['city_id']);
 
-}
+        //区取得
+        $wardModel = new MastWard();
+        $mastWardData = $wardModel->selectByKey($hotelData['ward_id']);
+
+    }
 
 	/** 施設管理 特記事項登録
 	 *
@@ -560,4 +559,3 @@ class BrhotelController extends _commonController
 	}
 
 }
-?>
