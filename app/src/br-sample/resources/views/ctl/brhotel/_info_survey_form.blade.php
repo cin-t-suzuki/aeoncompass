@@ -4,58 +4,42 @@
 
     <tr>
         <td bgcolor="#EEFFEE">世界測地系-度-緯度</td>
-        <td>
-            {$v->helper->form->strip_tags($v->assign->hotel_survey.wgs_lat_d)}
-        </td>
+        <td>{{ strip_tags($hotel_survey->wgs_lat_d) }}</td>
     </tr>
 
     <tr>
         <td bgcolor="#EEFFEE">世界測地系-度-経度</td>
-        <td>
-            {$v->helper->form->strip_tags($v->assign->hotel_survey.wgs_lng_d)}
-        </td>
+        <td>{{ strip_tags($hotel_survey->wgs_lng_d) }}</td>
     </tr>
 
     <tr>
         <td bgcolor="#EEFFEE">世界測地系-度分秒-緯度</td>
-        <td>
-            {$v->helper->form->strip_tags($v->assign->hotel_survey.wgs_lat)}
-        </td>
+        <td>{{ strip_tags($hotel_survey->wgs_lat) }}</td>
     </tr>
 
     <tr>
         <td bgcolor="#EEFFEE">世界測地系-度分秒-経度</td>
-        <td>
-            {$v->helper->form->strip_tags($v->assign->hotel_survey.wgs_lng)}
-        </td>
+        <td>{{ strip_tags($hotel_survey->wgs_lng) }}</td>
     </tr>
 
     <tr>
         <td bgcolor="#EEFFEE">東京測地系-度-緯度</td>
-        <td>
-            {$v->helper->form->strip_tags($v->assign->hotel_survey.td_lat_d)}
-        </td>
+        <td>{{ strip_tags($hotel_survey->td_lat_d) }}</td>
     </tr>
 
     <tr>
         <td bgcolor="#EEFFEE">東京測地系-度-経度</td>
-        <td>
-            {$v->helper->form->strip_tags($v->assign->hotel_survey.td_lng_d)}
-        </td>
+        <td>{{ strip_tags($hotel_survey->td_lng_d) }}</td>
     </tr>
 
     <tr>
         <td bgcolor="#EEFFEE">東京測地系-度分秒-緯度</td>
-        <td>
-            {$v->helper->form->strip_tags($v->assign->hotel_survey.td_lat)}
-        </td>
+        <td>{{ strip_tags($hotel_survey->td_lat) }}</td>
     </tr>
 
     <tr>
         <td bgcolor="#EEFFEE">東京測地系-度分秒-経度</td>
-        <td>
-            {$v->helper->form->strip_tags($v->assign->hotel_survey.td_lng)}
-        </td>
+        <td>{{ strip_tags($hotel_survey->td_lng) }}</td>
     </tr>
 
     {{ Form::hidden('target_cd', $target_cd) }}

@@ -15,7 +15,7 @@
 
     {{ Form::open(['route' => 'ctl.brhotel.show', 'method' => 'post']) }}
         @include('ctl.brhotel._info_survey_form')
-        <INPUT TYPE="submit" VALUE="詳細変更へ">
+        <input type="submit" value="詳細変更へ">
     {{ Form::close() }}
 
     @include('ctl.brhotel._hotel_top_form')

@@ -15,7 +15,7 @@
 
     {{ Form::open(['route' => 'ctl.br_hotel.update_survey', 'method' => 'post']) }}
         @include('ctl.brhotel._input_survey_form')
-        <INPUT TYPE="submit" VALUE="施設測地更新">
+        <input type="submit" value="施設測地更新">
     {{ Form::close() }}
 
     @include('ctl.brhotel._hotel_top_form')

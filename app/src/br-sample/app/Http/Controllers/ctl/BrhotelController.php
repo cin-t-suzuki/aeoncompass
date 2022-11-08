@@ -23,6 +23,8 @@ use App\Models\HotelStaffNote;
 use App\Models\HotelStatus;
 use App\Models\HotelSurvey;
 
+use Illuminate\Support\Facades\Session;
+
 class BrhotelController extends _commonController
 {
 	use Traits;
@@ -561,17 +563,24 @@ class BrhotelController extends _commonController
 
     public function editSurvey()
     {
+        $errorList = Session::get('errors', []);
         $targetCd = Request::input('target_cd');
 
         // TODO: session に 'hotel_status' を持っていたら、 update からの error での戻りなので、その入力を表示する。
         // session に 'hotel_status' が無ければ、画面表示のためのデータを取得
-        $hotelSurvey = HotelSurvey::find($targetCd);
+        if (Session::has('hotel_survey')) {
+            $hotelSurvey = (object)Session::get('hotel_survey');
+        } else {
+            $hotelSurvey = HotelSurvey::find($targetCd);
+        }
 
         //施設情報取得
         //都道府県取得
         $this->getHotelInfo($targetCd, $hotelData, $mastPrefData, $mastCityData, $mastWardData);
 
         return view('ctl.brhotel.edit-survey', [
+            'errors'    => $errorList,
+
             'target_cd' => $targetCd,
 
             'hotel'     => $hotelData,
@@ -584,21 +593,40 @@ class BrhotelController extends _commonController
 
     public function updateSurvey()
     {
+        $errorList = ['dummy error'];
         $targetCd = Request::input('target_cd');
-        if (0) {
+        $inputHotelSurvey = Request::input('Hotel_Survey');
+        if (rand(0,9) < 8) {
             return redirect()->route('ctl.br_hotel.edit_survey', ['target_cd' => $targetCd])
                 ->with([
-
+                    'errors'       => $errorList,
+                    'hotel_survey' => $inputHotelSurvey,
                 ]);
         }
 
+        
+        // 完了メッセージ
+        $guides[] = "施設測地の更新が完了いたしました。 ";
+
+        // 表示用データの取得
+        $hotelSurvey = HotelSurvey::find($targetCd);
+
+        //施設情報取得
+        //都道府県取得
+        $this->getHotelInfo($targetCd, $hotelData, $mastPrefData, $mastCityData, $mastWardData);
+
+
         $this->getHotelInfo($targetCd, $hotelData, $mastPrefData, $mastCityData, $mastWardData);
         return view('ctl.brhotel.update-survey', [
+            'guides'    => $guides,
+
+            'target_cd' => $targetCd,
+
             'hotel'     => $hotelData,
             'mast_pref' => $mastPrefData,
             'mast_city' => $mastCityData,
             'mast_ward' => $mastWardData,
-            'target_cd' => $targetCd,
+            'hotel_survey' => $hotelSurvey,
 
         ]);
     }
