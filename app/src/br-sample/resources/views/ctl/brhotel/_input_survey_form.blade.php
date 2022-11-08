@@ -56,7 +56,7 @@
     <tr>
         <td bgcolor="#EEFFEE">世界測地系-度-緯度</td>
         <td>
-            <input type="text" name="Hotel_Survey[wgs_lat_d]" value="{{ strip_tags($hotel_survey->wgs_lat_d) }}" size="20" maxlength="16" />
+            {{ Form::text('Hotel_Survey[wgs_lat_d]', strip_tags($hotel_survey->wgs_lat_d), ['size' => '20', 'maxlength' => '16',]) }}
         </td>
         <td><small>16桁</small></td>
     </tr>
@@ -64,7 +64,7 @@
     <tr>
         <td bgcolor="#EEFFEE">世界測地系-度-経度</td>
         <td>
-            <input type="text" name="Hotel_Survey[wgs_lng_d]" value="{{ strip_tags($hotel_survey->wgs_lng_d) }}" size="20" maxlength="16" />
+            {{ Form::text('Hotel_Survey[wgs_lng_d]', strip_tags($hotel_survey->wgs_lng_d), ['size' => '20', 'maxlength' => '16',]) }}
         </td>
         <td><small>16桁</small></td>
     </tr>
@@ -72,7 +72,7 @@
     <tr>
         <td bgcolor="#EEFFEE">世界測地系-度分秒-緯度</td>
         <td>
-            <input type="text" name="Hotel_Survey[wgs_lat]" value="{{ strip_tags($hotel_survey->wgs_lat) }}" size="20" maxlength="16" id="jqs-wgs-lat" />
+            {{ Form::text('Hotel_Survey[wgs_lat]', strip_tags($hotel_survey->wgs_lat), ['size' => '20', 'maxlength' => '16', 'id' => 'jqs-wgs-lat',]) }}
         </td>
         <td><small>16桁</small></td>
     </tr>
@@ -80,7 +80,7 @@
     <tr>
         <td bgcolor="#EEFFEE">世界測地系-度分秒-経度</td>
         <td>
-            <input type="text" name="Hotel_Survey[wgs_lng]" value="{{ strip_tags($hotel_survey->wgs_lng) }}" size="20" maxlength="16" id="jqs-wgs-lng" />
+            {{ Form::text('Hotel_Survey[wgs_lng]', strip_tags($hotel_survey->wgs_lng), ['size' => '20', 'maxlength' => '16', 'id' => 'jqs-wgs-lng',]) }}
         </td>
         <td><small>16桁</small></td>
     </tr>
@@ -88,7 +88,7 @@
     <tr>
         <td bgcolor="#EEFFEE">東京測地系-度-緯度</td>
         <td>
-            <input type="text" name="Hotel_Survey[td_lat_d]" value="{{ strip_tags($hotel_survey->td_lat_d) }}" size="20" maxlength="16" id="jqs-td-lat-d" />
+            {{ Form::text('Hotel_Survey[td_lat_d]', strip_tags($hotel_survey->td_lat_d), ['size' => '20', 'maxlength' => '16', 'id' => 'jqs-td-lat-d',]) }}
         </td>
         <td><small>16桁</small></td>
     </tr>
@@ -96,7 +96,7 @@
     <tr>
         <td bgcolor="#EEFFEE">東京測地系-度-経度</td>
         <td>
-            <input type="text" name="Hotel_Survey[td_lng_d]" value="{{ strip_tags($hotel_survey->td_lng_d) }}" size="20" maxlength="16" id="jqs-td-lng-d" />
+            {{ Form::text('Hotel_Survey[td_lng_d]', strip_tags($hotel_survey->td_lng_d), ['size' => '20', 'maxlength' => '16', 'id' => 'jqs-td-lng-d',]) }}
         </td>
         <td><small>16桁</small></td>
     </tr>
@@ -104,7 +104,7 @@
     <tr>
         <td bgcolor="#EEFFEE">東京測地系-度分秒-緯度</td>
         <td>
-            <input type="text" name="Hotel_Survey[td_lat]" value="{{ strip_tags($hotel_survey->td_lat) }}" size="20" maxlength="16" id="jqs-td-lat" />
+            {{ Form::text('Hotel_Survey[td_lat]', strip_tags($hotel_survey->td_lat), ['size' => '20', 'maxlength' => '16', 'id' => 'jqs-td-lat',]) }}
         </td>
         <td><small>16桁</small></td>
     </tr>
@@ -112,7 +112,7 @@
     <tr>
         <td bgcolor="#EEFFEE">東京測地系-度分秒-経度</td>
         <td>
-            <input type="text" name="Hotel_Survey[td_lng]" value="{{ strip_tags($hotel_survey->td_lng) }}" size="20" maxlength="16" id="jqs-td-lng" />
+            {{ Form::text('Hotel_Survey[td_lng]', strip_tags($hotel_survey->td_lng), ['size' => '20', 'maxlength' => '16', 'id' => 'jqs-td-lng',]) }}
         </td>
         <td><small>16桁</small></td>
     </tr>

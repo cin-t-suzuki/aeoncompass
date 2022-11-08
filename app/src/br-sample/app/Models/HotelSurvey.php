@@ -67,7 +67,7 @@ class HotelSurvey extends CommonDBModel
 		$colHotelCd = new ValidationColumn();
 		$colHotelCd->setColumnName($this->COL_HOTEL_CD, "施設コード")->require()->length(0, 10)->notHalfKana();
 
-		//TODO 登録機能を作るときに項目のバリデーション作成
+		// TODO: 登録機能を作るときに項目のバリデーション作成
 
 		parent::setColumnDataArray([$colHotelCd]);
 	}

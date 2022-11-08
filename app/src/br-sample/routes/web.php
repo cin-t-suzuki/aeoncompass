@@ -109,7 +109,7 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 
 
         Route::get('/editSurvey', 'editSurvey')->name('ctl.br_hotel.edit_survey'); // 施設測地情報更新
-        Route::post('/updateSurvey', 'updateSurvey')->name('ctl.br_hotel.update_survey'); // 施設測地情報更新
+        Route::post('/updateSurvey', 'updateSurvey')->name('ctl.br_hotel.update_survey'); // 施設測地情報更新 処理後結果
     });
 
     // 施設情報変更 登録状態変更
