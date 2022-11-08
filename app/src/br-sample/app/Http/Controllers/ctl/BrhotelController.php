@@ -563,16 +563,22 @@ class BrhotelController extends _commonController
     {
         $targetCd = Request::input('target_cd');
 
-        // ここに処理
+        // TODO: session に 'hotel_status' を持っていたら、 update からの error での戻りなので、その入力を表示する。
+        // session に 'hotel_status' が無ければ、画面表示のためのデータを取得
+        $hotelSurvey = HotelSurvey::find($targetCd);
 
+        //施設情報取得
+        //都道府県取得
         $this->getHotelInfo($targetCd, $hotelData, $mastPrefData, $mastCityData, $mastWardData);
+
         return view('ctl.brhotel.edit-survey', [
+            'target_cd' => $targetCd,
+
             'hotel'     => $hotelData,
             'mast_pref' => $mastPrefData,
             'mast_city' => $mastCityData,
             'mast_ward' => $mastWardData,
-            'target_cd' => $targetCd,
-
+            'hotel_survey' => $hotelSurvey,
         ]);
     }
 

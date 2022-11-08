@@ -18,6 +18,37 @@ class HotelSurvey extends CommonDBModel
 	use Traits;
 
 	protected $table = "hotel_survey";
+
+    /**
+     * テーブルに関連付ける主キー
+     *
+     * @var string
+     *
+     * (site_cd, accept_s_ymd, fee_type, stock_class) で PK になっているが、
+     * Laravel では複合キーに対応していない
+     */
+    protected $primaryKey = 'hotel_cd';
+
+    /**
+     * モデルのIDを自動増分するか
+     *
+     * @var bool
+     */
+    public $incrementing = false;
+
+    /**
+     * モデルにタイムスタンプを付けるか
+     *
+     * MEMO: 独自実装でタイムスタンプを設定しているため、Laravel 側では設定しない。
+     * HACK: (工数次第) Laravel の機能を使ったほうがよい気もする。
+     *
+     * @var bool
+     */
+    public $timestamps = false;
+    const CREATED_AT = 'entry_ts';
+    const UPDATED_AT = 'modify_ts';
+
+
 	// カラム
 	public string $COL_HOTEL_CD = "hotel_cd";
 	public string $COL_WGS_LAT = "wgs_lat";
