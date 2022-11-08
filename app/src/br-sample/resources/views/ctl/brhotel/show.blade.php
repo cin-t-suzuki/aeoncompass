@@ -81,10 +81,14 @@
 						施設測地情報
 						</td>
 					@if ($views->hotel_survey_regist == true)
-						<form method="POST" action="{$v->env.source_path}{$v->env.module}/brhotel/editsurvey/">
+						{{ Form::open(['route' => 'ctl.br_hotel.edit_survey', 'method' => 'get']) }}
+						{{-- <form method="POST" action="{$v->env.source_path}{$v->env.module}/brhotel/editsurvey/"> --}}
 						<td nowrap><input type="submit" value=" 変更 "></td>
-						<input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($views->target_cd)}">
+						{{-- <input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($views->target_cd)}"> --}}
+			  			{{ Form::hidden('target_cd', strip_tags($views->target_cd)) }}
+
 						</form>
+						{{ Form::close() }}
 					@elseif ($views->hotel_regist != true)
 						<td nowrap colspan="2" width="90%">施設測地情報 <font color="red">※</font>施設を登録してください。</td>
 					@else

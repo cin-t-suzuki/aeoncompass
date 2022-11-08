@@ -1,27 +1,25 @@
 {{-- MEMO: 移植元 svn_trunk\public\app\ctl\views\brhotel\editsurvey.tpl --}}
 
-{* header start *}
-	{include file=$v->env.module_root|cat:'/views/_common/_br_header.tpl' title="施設測地更新"}
-{* header end *}
+@extends('ctl.common.base')
+@section('title', '施設測地更新')
 
-{* メッセージ *}
-{include file=$v->env.module_root|cat:'/views/_common/_message.tpl'}
+@section('page_blade')
 
-{* 施設情報詳細 *}
-{include file=$v->env.module_root|cat:'/views/brhotel/_hotel_info.tpl'}
+{{-- メッセージ --}}
+@include('ctl.common.message')
+
+{{-- 施設情報詳細 --}}
+@include('ctl.brhotel._hotel_info')
 <br>
 
-<FORM method="POST" action="{$v->env.source_path}{$v->env.module}/brhotel/updatesurvey/">
+{{ Form::open(['route' => 'ctl.br_hotel.update_survey', 'method' => 'post']) }}
 
-  {include file=$v->env.module_root|cat:'/views/brhotel/_input_survey_form.tpl'}
+  @include('ctl.brhotel._input_survey_form')
 
 <INPUT TYPE="submit" VALUE="施設測地更新">
+{{ Form::close() }}
 
-</FORM>
-
-{include file=$v->env.module_root|cat:'/views/brhotel/_hotel_top_form.tpl'}
+@include('ctl.brhotel._hotel_top_form')
 <br>
 
-{* footer start *}
-	{include file=$v->env.module_root|cat:'/views/_common/_br_footer.tpl'}
-{* footer end *}
+@endsection

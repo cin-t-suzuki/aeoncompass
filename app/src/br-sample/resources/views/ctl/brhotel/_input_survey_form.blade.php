@@ -1,7 +1,6 @@
 {{-- MEMO: 移植元 svn_trunk\public\app\ctl\views\brhotel\_input_survey_form.tpl --}}
 
-{literal}
-  <script type="text/javascript" src="{/literal}{$v->env.path_base_module}{literal}/js/jquery.js"></script>
+  <script type="text/javascript" src="{$v->env.path_base_module}/js/jquery.js"></script>
   <script type="text/javascript">
       <!--
         $(document).ready(function () {
@@ -51,7 +50,6 @@
         });
       -->
     </script>
-{/literal}
 
 <table border="1" cellspacing="0" cellpadding="3">
   <tr>
@@ -118,7 +116,8 @@
     <td><small>16桁</small></td>
   </tr>
   
-  <input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($v->assign->target_cd)}">
+  {{-- <input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($v->assign->target_cd)}"> --}}
+  {{ Form::hidden('target_cd', $target_cd) }}
 </table>
 
 <p><input id="input-auto" type="button" value="自動入力" />&nbsp;※世界測地系-度-緯度・経度から残りの項目を自動計算します。</p>

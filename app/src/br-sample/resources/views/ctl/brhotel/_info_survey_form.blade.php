@@ -58,5 +58,6 @@
       </td>
     </tr>
     
-    <input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($v->assign->target_cd)}">
+    {{-- <input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($v->assign->target_cd)}"> --}}
+    {{ Form::hidden('target_cd', $target_cd) }}
   </table>

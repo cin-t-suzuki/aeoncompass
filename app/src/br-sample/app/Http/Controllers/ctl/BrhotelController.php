@@ -561,7 +561,17 @@ class BrhotelController extends _commonController
 
     public function editSurvey()
     {
+        $targetCd = Request::input('target_cd');
+
+        // ここに処理
+
+        $this->getHotelInfo($targetCd, $hotelData, $mastPrefData, $mastCityData, $mastWardData);
         return view('ctl.brhotel.edit-survey', [
+            'hotel'     => $hotelData,
+            'mast_pref' => $mastPrefData,
+            'mast_city' => $mastCityData,
+            'mast_ward' => $mastWardData,
+            'target_cd' => $targetCd,
 
         ]);
     }
@@ -576,7 +586,13 @@ class BrhotelController extends _commonController
                 ]);
         }
 
+        $this->getHotelInfo($targetCd, $hotelData, $mastPrefData, $mastCityData, $mastWardData);
         return view('ctl.brhotel.update-survey', [
+            'hotel'     => $hotelData,
+            'mast_pref' => $mastPrefData,
+            'mast_city' => $mastCityData,
+            'mast_ward' => $mastWardData,
+            'target_cd' => $targetCd,
 
         ]);
     }
