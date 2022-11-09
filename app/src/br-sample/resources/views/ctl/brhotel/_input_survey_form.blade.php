@@ -1,6 +1,5 @@
 {{-- MEMO: 移植元 svn_trunk\public\app\ctl\views\brhotel\_input_survey_form.tpl --}}
 
-{{-- <script type="text/javascript" src="{$v->env.path_base_module}/js/jquery.js"></script> --}}
 <script type="text/javascript">
     // ↓ MEMO: js を理解できないブラウザに対する配慮（？）
     <!--

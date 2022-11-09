@@ -572,16 +572,16 @@ class BrhotelController extends _commonController
         $errorList = Session::pull('errors', []);
         $targetCd = Request::input('target_cd');
 
-        // session に 'hotel_status' を持っていたら、 update からの error での戻りなので、その入力を表示する。
-        // session に 'hotel_status' が無ければ、画面表示のためのデータを取得
+        // session に 'hotel_status' があれば、 update からの error での戻りなので、その入力を表示
+        // なければ、画面表示のためのデータを DB から取得
         if (Session::has('hotel_survey')) {
             $hotelSurvey = (object)Session::pull('hotel_survey');
         } else {
             $hotelSurvey = HotelSurvey::find($targetCd);
         }
 
-        //施設情報取得
-        //都道府県取得
+        // 施設情報取得
+        // 都道府県取得
         $this->getHotelInfo($targetCd, $hotelData, $mastPrefData, $mastCityData, $mastWardData);
 
         return view('ctl.brhotel.edit-survey', [
@@ -604,7 +604,7 @@ class BrhotelController extends _commonController
      */
     public function updateSurvey()
     {
-        $errorList = ['dummy error'];
+        $errorList = [];
         $targetCd = Request::input('target_cd');
         $inputHotelSurvey = Request::input('Hotel_Survey');
 
@@ -642,12 +642,10 @@ class BrhotelController extends _commonController
         // 表示用データの取得
         $hotelSurvey = HotelSurvey::find($targetCd);
 
-        //施設情報取得
-        //都道府県取得
+        // 施設情報取得
+        // 都道府県取得
         $this->getHotelInfo($targetCd, $hotelData, $mastPrefData, $mastCityData, $mastWardData);
 
-
-        $this->getHotelInfo($targetCd, $hotelData, $mastPrefData, $mastCityData, $mastWardData);
         return view('ctl.brhotel.update-survey', [
             'guides'    => $guides,
 
@@ -658,7 +656,6 @@ class BrhotelController extends _commonController
             'mast_city' => $mastCityData,
             'mast_ward' => $mastWardData,
             'hotel_survey' => $hotelSurvey,
-
         ]);
     }
 }

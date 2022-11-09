@@ -23,9 +23,6 @@ class HotelSurvey extends CommonDBModel
      * テーブルに関連付ける主キー
      *
      * @var string
-     *
-     * (site_cd, accept_s_ymd, fee_type, stock_class) で PK になっているが、
-     * Laravel では複合キーに対応していない
      */
     protected $primaryKey = 'hotel_cd';
 
@@ -104,19 +101,19 @@ class HotelSurvey extends CommonDBModel
         // バリデーションルール
         // PEND: 保留 数字・小数点以外の文字が登録できてしまう。
         // 施設コード
-        $colHotelCd->require();      // 必須入力チェック
-        $colHotelCd->notHalfKana();  // 半角カナチェック
-        $colHotelCd->length(0, 10);  // 長さチェック
+        $colHotelCd->require();     // 必須入力チェック
+        $colHotelCd->notHalfKana(); // 半角カナチェック
+        $colHotelCd->length(0, 10); // 長さチェック
 
         // 世界測地系-度分秒-緯度
-        $colWgsLat->notHalfKana();   // 半角カナチェック
-        $colWgsLat->length(0, 16);   // 長さチェック
-        $colWgsLat->require();       // 必須入力チェック
+        $colWgsLat->notHalfKana();  // 半角カナチェック
+        $colWgsLat->length(0, 16);  // 長さチェック
+        $colWgsLat->require();      // 必須入力チェック
 
         // 世界測地系-度分秒-経度
-        $colWgsLng->notHalfKana();   // 半角カナチェック
-        $colWgsLng->length(0, 16);   // 長さチェック
-        $colWgsLng->require();       // 必須入力チェック
+        $colWgsLng->notHalfKana();  // 半角カナチェック
+        $colWgsLng->length(0, 16);  // 長さチェック
+        $colWgsLng->require();      // 必須入力チェック
 
         // 世界測地系-度-緯度
         $colWgsLatD->notHalfKana(); // 半角カナチェック
@@ -129,14 +126,14 @@ class HotelSurvey extends CommonDBModel
         $colWgsLngD->require();     // 必須入力チェック
 
         // 東京測地系-度分秒-緯度
-        $colTdLat->notHalfKana();    // 半角カナチェック
-        $colTdLat->length(0, 16);    // 長さチェック
-        $colTdLat->require();        // 必須入力チェック
+        $colTdLat->notHalfKana();   // 半角カナチェック
+        $colTdLat->length(0, 16);   // 長さチェック
+        $colTdLat->require();       // 必須入力チェック
 
         // 東京測地系-度分秒-経度
-        $colTdLng->notHalfKana();    // 半角カナチェック
-        $colTdLng->length(0, 16);    // 長さチェック
-        $colTdLng->require();        // 必須入力チェック
+        $colTdLng->notHalfKana();   // 半角カナチェック
+        $colTdLng->length(0, 16);   // 長さチェック
+        $colTdLng->require();       // 必須入力チェック
 
         // 東京測地系-度-緯度
         $colTdLatD->notHalfKana();  // 半角カナチェック
@@ -163,14 +160,14 @@ class HotelSurvey extends CommonDBModel
 
         if (!is_null($data) && count($data) > 0) {
             return array(
-                self::COL_HOTEL_CD => $data[0]->hotel_cd,
-                self::COL_WGS_LAT => $data[0]->wgs_lat,
-                self::COL_WGS_LNG => $data[0]->wgs_lng,
+                self::COL_HOTEL_CD  => $data[0]->hotel_cd,
+                self::COL_WGS_LAT   => $data[0]->wgs_lat,
+                self::COL_WGS_LNG   => $data[0]->wgs_lng,
                 self::COL_WGS_LAT_D => $data[0]->wgs_lat_d,
                 self::COL_WGS_LNG_D => $data[0]->wgs_lng_d,
-                self::COL_TD_LAT => $data[0]->td_lat,
-                self::COL_TD_LAT_D => $data[0]->td_lat_d,
-                self::COL_TD_LNG_D => $data[0]->td_lng_d
+                self::COL_TD_LAT    => $data[0]->td_lat,
+                self::COL_TD_LAT_D  => $data[0]->td_lat_d,
+                self::COL_TD_LNG_D  => $data[0]->td_lng_d
             );
         }
         return null;
