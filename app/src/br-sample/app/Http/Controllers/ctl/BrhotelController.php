@@ -745,6 +745,11 @@ class BrhotelController extends _commonController
         $errorList = array_merge($errorList, $hotelAccountModel->validation($inputHotelAccount));
         $errorList = array_merge($errorList, $hotelPersonModel->validation($inputHotelPerson));
         $errorList = array_merge($errorList, $hotelStatusModel->validation($inputHotelStatus));
+
+        // メール暗号化
+        $cipher = new Models_Cipher(config('settings.cipher_key'));
+        $inputHotelPerson['person_email'] = $cipher->encrypt($inputHotelPerson['person_email']);
+
         if (count($errorList) > 0) {
             DB::rollback();
             // 編集画面へ
@@ -757,9 +762,6 @@ class BrhotelController extends _commonController
                 ]);
         }
 
-        // メール暗号化
-        $cipher = new Models_Cipher(config('settings.cipher_key'));
-        $inputHotelPerson['person_email'] = $cipher->encrypt($inputHotelPerson['person_email']);
 
         // 共通カラム設定
         $hotelAccountModel->setUpdateCommonColumn($inputHotelAccount);

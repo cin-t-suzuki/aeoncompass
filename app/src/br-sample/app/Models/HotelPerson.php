@@ -101,8 +101,7 @@ class HotelPerson extends CommonDBModel
 
         // 担当者電子メールアドレス
         $colPersonEmail->notHalfKana(); // 半角カナチェック
-        // TODO: 単体メールアドレスチェック (feature/email_validation が merge されたら対応)
-        // $colPersonEmail->email();    // メールアドレスチェック
+        $colPersonEmail->email();       // メールアドレスチェック
         $colPersonEmail->length(0, 128); // 長さチェック
 
 		parent::setColumnDataArray([$colHotelCd, $colPersonPost, $colPersonNm, $colPersonTel, $colPersonFax, $colPersonEmail]);
