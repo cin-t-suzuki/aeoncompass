@@ -14,7 +14,30 @@ class Partner extends CommonDBModel
 {
 	use Traits;
 
-	protected $table = "partner";
+   // use HasFactory;
+
+    /**
+     * モデルに関連付けるテーブル
+     *
+     * @var string
+     */
+    protected $table = 'partner';
+
+    /**
+     * テーブルに関連付ける主キー
+     *
+     * @var string
+     */
+    protected $primaryKey = 'partner_cd';
+
+    /**
+     * モデルのIDを自動増分するか
+     *
+     * @var bool
+     */
+    public $incrementing = false;
+
+	
 
 	// カラム
 	public string $COL_PARTNER_CD = "partner_cd";
