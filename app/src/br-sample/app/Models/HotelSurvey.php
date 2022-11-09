@@ -48,6 +48,23 @@ class HotelSurvey extends CommonDBModel
     const CREATED_AT = 'entry_ts';
     const UPDATED_AT = 'modify_ts';
 
+    /**
+     * 複数代入可能な属性
+     *
+     * @var array
+     */
+    protected $fillable = [
+        self::COL_WGS_LAT,
+        self::COL_WGS_LNG,
+        self::COL_WGS_LAT_D,
+        self::COL_WGS_LNG_D,
+        self::COL_TD_LAT,
+        self::COL_TD_LNG,
+        self::COL_TD_LAT_D,
+        self::COL_TD_LNG_D,
+        'modify_cd',
+        'modify_ts',
+    ];
 
     // カラム
     const COL_HOTEL_CD  = "hotel_cd";
@@ -85,6 +102,7 @@ class HotelSurvey extends CommonDBModel
         $colTdLngD->setColumnName(self::COL_TD_LNG_D, '東京測地系-度-経度');
 
         // バリデーションルール
+        // PEND: 保留 数字・小数点以外の文字が登録できてしまう。
         // 施設コード
         $colHotelCd->require();      // 必須入力チェック
         $colHotelCd->notHalfKana();  // 半角カナチェック

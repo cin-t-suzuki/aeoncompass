@@ -1,6 +1,6 @@
 {{-- MEMO: 移植元 svn_trunk\public\app\ctl\views\brhotel\_input_survey_form.tpl --}}
 
-<script type="text/javascript" src="{$v->env.path_base_module}/js/jquery.js"></script>
+{{-- <script type="text/javascript" src="{$v->env.path_base_module}/js/jquery.js"></script> --}}
 <script type="text/javascript">
     // ↓ MEMO: js を理解できないブラウザに対する配慮（？）
     <!--
@@ -122,4 +122,8 @@
 
 <p>
     <input id="input-auto" type="button" value="自動入力" />&nbsp;※世界測地系-度-緯度・経度から残りの項目を自動計算します。
+    {{--
+        PEND: 対応保留
+        「世界測地系-度-緯度・経度」を入力して、「自動入力」ボタンで他の項目に反映させずに「施設測地更新」ボタンを押下することができ、この場合、互いに矛盾したデータが登録されてしまう。
+    --}}
 </p>

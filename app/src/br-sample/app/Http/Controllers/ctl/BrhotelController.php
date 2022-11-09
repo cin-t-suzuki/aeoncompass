@@ -561,6 +561,11 @@ class BrhotelController extends _commonController
 	}
 
 
+    /**
+     * 施設測地変更
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function editSurvey()
     {
         $errorList = Session::get('errors', []);
@@ -591,12 +596,31 @@ class BrhotelController extends _commonController
         ]);
     }
 
+    /**
+     * 施設測地変更 処理後結果
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function updateSurvey()
     {
         $errorList = ['dummy error'];
         $targetCd = Request::input('target_cd');
         $inputHotelSurvey = Request::input('Hotel_Survey');
-        if (rand(0,9) < 8) {
+
+        // TODO: to be deleted
+        // if (rand(0,9) < 8) {
+        //     return redirect()->route('ctl.br_hotel.edit_survey', ['target_cd' => $targetCd])
+        //         ->with([
+        //             'errors'       => $errorList,
+        //             'hotel_survey' => $inputHotelSurvey,
+        //         ]);
+        // }
+
+        // validation
+        $modelHotelSurvey = new HotelSurvey();
+        $errorList = $modelHotelSurvey->validation($inputHotelSurvey);
+        if (count($errorList) > 0) {
+            $errorList[] = '更新できませんでした。';
             return redirect()->route('ctl.br_hotel.edit_survey', ['target_cd' => $targetCd])
                 ->with([
                     'errors'       => $errorList,
@@ -604,7 +628,35 @@ class BrhotelController extends _commonController
                 ]);
         }
 
-        
+        // 共通カラム
+        $modelHotelSurvey->setUpdateCommonColumn($inputHotelSurvey);
+
+        try {
+            DB::beginTransaction();
+
+            if (!HotelSurvey::find($targetCd)->fill($inputHotelSurvey)->save()) {
+                DB::rollBack();
+                $errorList[] = '更新できませんでした。';
+                return redirect()->route('ctl.br_hotel.edit_survey', ['target_cd' => $targetCd])
+                    ->with([
+                        'errors'       => $errorList,
+                        'hotel_survey' => $inputHotelSurvey,
+                    ]);
+            }
+            // コミット
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error($e);
+            // HACK: 重複
+            $errorList[] = '更新できませんでした。';
+            return redirect()->route('ctl.br_hotel.edit_survey', ['target_cd' => $targetCd])
+                ->with([
+                    'errors'       => $errorList,
+                    'hotel_survey' => $inputHotelSurvey,
+                ]);
+        }
+
         // 完了メッセージ
         $guides[] = "施設測地の更新が完了いたしました。 ";
 
