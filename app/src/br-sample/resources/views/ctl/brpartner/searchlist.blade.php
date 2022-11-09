@@ -154,21 +154,23 @@
               <input type="hidden" name="partner_nm" value="{{$partners["partner_nm"]}}" />
             </td>
           {!! Form::close() !!}
-          <form action="{$v->env.source_path}{$v->env.module}/brpartnersection/" method="post">
+          {!! Form::open(['route' => ['ctl.brpartnersection.index'], 'method' => 'post']) !!}
             <td align="center">
               <input type="submit" value="変更">
-              <input type="hidden" name="partner_cd"               value="{$v->helper->form->strip_tags($partner.partner_cd)}" />
-              <input type="hidden" name="search_partner_cd"        value="{$v->helper->form->strip_tags($v->assign->params.partner_cd)}" />
-              <input type="hidden" name="search_partner_nm"        value="{$v->helper->form->strip_tags($v->assign->params.partner_nm)|urlencode}" />
-              <input type="hidden" name="search_connect_cls"       value="{$v->helper->form->strip_tags($v->assign->params.connect_cls)}" />
-              <input type="hidden" name="search_connect_type"      value="{$v->helper->form->strip_tags($v->assign->params.connect_type)}" />
-              <input type="hidden" name="search_partner_disply_1" value="{$v->helper->form->strip_tags($v->assign->params.partner_disply[1])}" />
-              <input type="hidden" name="search_partner_disply_2" value="{$v->helper->form->strip_tags($v->assign->params.partner_disply[2])}" />
-              <input type="hidden" name="search_partner_disply_3" value="{$v->helper->form->strip_tags($v->assign->params.partner_disply[3])}" />
-              <input type="hidden" name="search_partner_disply_4" value="{$v->helper->form->strip_tags($v->assign->params.partner_disply[4])}" />
-              <input type="hidden" name="search_partner_disply_5" value="{$v->helper->form->strip_tags($v->assign->params.partner_disply[5])}" />
+              <input type="hidden" name="partner_cd"               value="{{$partners["partner_cd"]}}" />
+              <input type="hidden" name="search_partner_cd"        value="{{$views->params["partner_cd"]}}" />
+              {{-- ↓|urlencode削除 --}}
+              <input type="hidden" name="search_partner_nm"        value="{{$views->params["partner_nm"]}}" />
+              <input type="hidden" name="search_connect_cls"       value="{{$views->params["connect_cls"]}}" />
+              <input type="hidden" name="search_connect_type"      value="{{$views->params["connect_type"]}}" />
+              <input type="hidden" name="search_partner_disply_1" value="{{$views->params["partner_disply_1"]?? null}}" />
+              <input type="hidden" name="search_partner_disply_2" value="{{$views->params["partner_disply_2"]?? null}}" />
+              <input type="hidden" name="search_partner_disply_3" value="{{$views->params["partner_disply_3"]?? null}}" />
+              <input type="hidden" name="search_partner_disply_4" value="{{$views->params["partner_disply_4"]?? null}}" />
+              <input type="hidden" name="search_partner_disply_5" value="{{$views->params["partner_disply_5"]?? null}}" />
+              {{-- ↑?? null追加でいいか --}}
             </td>
-          </form>
+          {!! Form::close() !!}
           <form action="{$v->env.source_path}{$v->env.module}/brpartnerkeyword/" method="post">
             <td align="center">
               <input type="submit" value="変更">

@@ -165,14 +165,31 @@ use App\Common\Traits;
 			$s_return_flg = Request::input("return_flg");
 
 			if ($s_return_flg != "true"){
-				$a_row = $partner_control->selectByKey($a_params['partner_cd']);
-
-				//初期表示時に検索結果をassign
-				$this->addViewData("control_value", $a_row);
+				//エラーで戻ってきた場合
+				if (session()->get('back_flg')) {
+					//渡されてきたデータの取得
+					$back_data = session()->get('rtn_data'); //配列でとってきてしまう
+					$a_row = $back_data[0]; //ので、これで大丈夫か
+					$this->addViewData("control_value", $a_row);
+					$this->addViewData("partners", $a_row); //リクエストがないのでpartnersにも同じ値を入れた
+					//エラーメッセージの取得
+					$errorList = session()->get('errors');
+					$this->addErrorMessageArray($errorList);
+					//セッションの削除
+					session()->forget('rtn_data');
+					session()->forget('back_flg');
+					session()->forget('errors');
+				} else {
+					$a_row = $partner_control->selectByKey($a_params['partner_cd']);
+					//初期表示時に検索結果をassign
+					$this->addViewData("control_value", $a_row);
+					$this->addViewData("partners", $a_params);
+				}
 
 			}else{
 				//初期表示以外は取得したデータをassign
 				$this->addViewData("control_value", $a_params);
+				$this->addViewData("partners", $a_params);
 			}
 
 			// 接続形態一覧の取得
@@ -181,7 +198,6 @@ use App\Common\Traits;
 			// 接続形態（詳細）一覧の取得
 			$a_connect_type_list = $models_partner->get_connect_type_list();
 
-			$this->addViewData("partners", $a_params);
 			$this->addViewData("connect_cls", $a_connect_cls_list);
 			$this->addViewData("connect_type", $a_connect_type_list);
 
@@ -236,12 +252,6 @@ use App\Common\Traits;
 
 			$requestPartnerControl = Request::all(); 
 			$partnerControlModel = new PartnerControl();
-			//バリデーションエラーでの戻り時用 				
-				$partnerModel = new Partner();
-				// 接続形態一覧の取得
-				$a_connect_cls_list = $partnerModel->get_connect_cls_list();
-				// 接続形態（詳細）一覧の取得
-				$a_connect_type_list = $partnerModel->get_connect_type_list();
 			
 				// UIに適した形式から登録用の形式に整形
 				if ( $requestPartnerControl['is_send_report'] == 1 ) {
@@ -258,12 +268,10 @@ use App\Common\Traits;
 							$requestPartnerControl['result_email'] = implode(',', $requestPartnerControl['result_email_list']);//追記
 							$errorList = $this->validatePartnerControlEmailFromScreen($partnerControlData, $requestPartnerControl['result_email'], $partnerControlModel);
 							if ( !$this->is_empty($errorList) ) {
-									$this->addErrorMessageArray($errorList);
-									$this->addViewData("partners", $requestPartnerControl); //TODO 要書き替え
-									$this->addViewData("control_value", $requestPartnerControl); 
-									$this->addViewData("connect_cls", $a_connect_cls_list);
-									$this->addViewData("connect_type", $a_connect_type_list);
-									return view("ctl.brpartner.partnercontroledt", $this->getViewData());
+								session()->put('errors', $errorList);
+								session()->put('back_flg', true);
+								session()->push('rtn_data',$requestPartnerControl);//渡す値あってる？
+								return redirect()->route('ctl.brpartner.partnercontroledt');
 							}
 						}
 					}
@@ -271,12 +279,10 @@ use App\Common\Traits;
 
 					if ($this->is_empty($requestPartnerControl['result_email'])) {
 						$errorList[] ='実績レポート配信メールアドレスが未設定です';
-						$this->addErrorMessageArray($errorList);
-						$this->addViewData("partners", $requestPartnerControl); //TODO 要書き替え
-						$this->addViewData("control_value", $requestPartnerControl); 
-						$this->addViewData("connect_cls", $a_connect_cls_list);
-						$this->addViewData("connect_type", $a_connect_type_list);
-						return view("ctl.brpartner.partnercontroledt", $this->getViewData());
+						session()->put('errors', $errorList);
+						session()->put('back_flg', true);
+						session()->push('rtn_data',$requestPartnerControl);//渡す値あってる？
+						return redirect()->route('ctl.brpartner.partnercontroledt');
 					}
 
 				} else {
@@ -289,12 +295,10 @@ use App\Common\Traits;
 				if ( $requestPartnerControl['result_rpc_status'] !== '0') {
 					if ($this->is_empty($requestPartnerControl['result_rpc_url'])) {
 						$errorList[] ='予約時実績報告レポート配信先URLが未設定です';
-						$this->addErrorMessageArray($errorList);
-						$this->addViewData("partners", $requestPartnerControl); //TODO 要書き替え
-						$this->addViewData("control_value", $requestPartnerControl); 
-						$this->addViewData("connect_cls", $a_connect_cls_list);
-						$this->addViewData("connect_type", $a_connect_type_list);
-						return view("ctl.brpartner.partnercontroledt", $this->getViewData());
+						session()->put('errors', $errorList);
+						session()->put('back_flg', true);
+						session()->push('rtn_data',$requestPartnerControl);//渡す値あってる？
+						return redirect()->route('ctl.brpartner.partnercontroledt');
 					}
 				}
 
@@ -305,14 +309,10 @@ use App\Common\Traits;
 
 			if( count($errorList) > 0){
 				$errorList[] = "提携先管理情報の更新ができませんでした。";
-
-				//書き換え後
-				$this->addErrorMessageArray($errorList);
-				$this->addViewData("partners", $requestPartnerControl); //TODO 要書き替え
-				$this->addViewData("control_value", $requestPartnerControl); 
-				$this->addViewData("connect_cls", $a_connect_cls_list);
-				$this->addViewData("connect_type", $a_connect_type_list);
-				return view("ctl.brpartner.partnercontroledt", $this->getViewData());
+				session()->put('errors', $errorList);
+				session()->put('back_flg', true);
+				session()->push('rtn_data',$requestPartnerControl);//渡す値あってる？
+				return redirect()->route('ctl.brpartner.partnercontroledt');
 					
 			}
 
@@ -341,13 +341,11 @@ use App\Common\Traits;
 		
 			// 更新エラー
 			if ($dbCount == 0 || count($errorList) > 0 || !empty($dbErr)){
-				$errorList[] = 'ご希望のデータを更新できませんでした';
-				$this->addErrorMessageArray($errorList);
-				$this->addViewData("partners", $requestPartnerControl); //TODO 要書き替え
-				$this->addViewData("control_value", $requestPartnerControl); 
-				$this->addViewData("connect_cls", $a_connect_cls_list);
-				$this->addViewData("connect_type", $a_connect_type_list);
-				return view("ctl.brpartner.partnercontroledt", $this->getViewData());
+				$errorList[] = '提携先管理情報の更新ができませんでした';
+				session()->put('errors', $errorList);
+				session()->put('back_flg', true);
+				session()->push('rtn_data',$requestPartnerControl);//渡す値あってる？
+				return redirect()->route('ctl.brpartner.partnercontroledt');
 			}
 
 			$this->addGuideMessage("提携先管理情報の更新が完了いたしました。 ");
