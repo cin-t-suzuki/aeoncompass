@@ -128,17 +128,23 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
     });
 
 
-
-	//
+	// パートナー精算先
 	Route::get('/brpartnercustomer/', 'BrPartnerCustomerController@index')->name('brpartnercustomer.index');
 	Route::get('/brpartnercustomer/search', 'BrPartnerCustomerController@search')->name('brpartnercustomer.search');
 
 	Route::get('/brpartnercustomer/create', 'BrPartnerCustomerController@create')->name('brpartnercustomer.create');
 	Route::post('/brpartnercustomer/register', 'BrPartnerCustomerController@register')->name('brpartnercustomer.register');
 
-	Route::get('/brpartnercustomer/edit/{customer_id}', 'BrPartnerCustomerController@edit')->name('brpartnercustomer.edit');
+	// TODO: 要調査 クエリパラメータに ? をつけて任意にしないとレンダリングが通らなくなっている。
+	// ルートパラメータではなく通常のクエリパラメータにしたほうがスッキリするように思われる。
+	Route::get('/brpartnercustomer/edit/{customer_id?}', 'BrPartnerCustomerController@edit')->name('brpartnercustomer.edit');
 	Route::post('/brpartnercustomer/modify', 'BrPartnerCustomerController@modify')->name('brpartnercustomer.modify');
 
-	Route::post('/brpartnersite/search', function() {return 'TODO: search, session.customer_off の forgot が必要なケースあり（？）'; })->name('brpartnersite.search');
+
+	// 精算サイト
+	Route::get('/brpartnersite/', 'BrPartnerSiteController@index');
+	Route::get('/brpartnersite/search', 'BrPartnerSiteController@search')->name('ctl.brPartnerSite.search');
+	Route::get('/brpartnersite/edit', 'BrPartnerSiteController@edit')->name('ctl.brPartnerSite.edit');
+	Route::post('/brpartnersite/modify', 'BrPartnerSiteController@modify')->name('ctl.brPartnerSite.modify');
 
 });
