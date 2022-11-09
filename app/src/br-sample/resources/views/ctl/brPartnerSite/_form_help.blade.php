@@ -1,6 +1,4 @@
-{{-- 元ファイル: svn_trunk\public\app\ctl\view2\brpartnercustomer\_form_help.tpl --}}
-
-{{-- キーワード検索のヘルプ --}}
+{{-- 移植元: svn_trunk\public\app\ctl\view2\brpartnersite\_form_help.tpl --}}
 <div id="help" style="border: 1px solid rgb(0, 0, 0); display: none; position: absolute; background-color: rgb(255, 255, 255);" align="left">
     <div style="margin: 2px 4px; text-align: right;">
         <a href="#" class="toggle_form_help">

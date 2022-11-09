@@ -22,6 +22,7 @@ class ValidationColumn
 	private $hyphenOrSlashDateCheck = false;          // ハイフンかスラッシュ日付の妥当性チェック対象
 	private $postalCheck = false;          //郵便番号の妥当性チェック対象
 	private $phoneNumberCheck = false;          //電話番号の妥当性チェック対象
+    private $emailCheck = false;               // メールアドレスの妥当性チェック対象 (単体)
 	private $emailsCheck = false;               // メールアドレスの妥当性チェック対象 (カンマ区切りで列挙可)
 	private $checkInOutTimeCheck = false;          //チェックインとアウトの時刻書式のチェック対象
 
@@ -135,6 +136,16 @@ class ValidationColumn
 		return $this;
 	}
 	public function isPhoneNumber(){ return $this->phoneNumberCheck; }
+
+    /**
+     * メールアドレス (単体) かチェック
+     */
+    public function email()
+    {
+        $this->emailCheck = true;
+        return $this;
+    }
+    public function isEmail() { return $this->emailCheck; }
 
     /**
      * メールアドレス (カンマ区切りで列挙可) かチェック
