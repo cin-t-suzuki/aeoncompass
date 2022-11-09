@@ -81,6 +81,7 @@ class BrhotelController extends _commonController
 	 * @return void
 	 */
 	public function show(){
+        $this->addErrorMessageArray(Session::pull('errors', []));
 		$hotelStaffNoteData = Request::input('Hotel_Staff_Note');
 		$hotelCd = Request::input('target_cd');
 		
@@ -568,13 +569,13 @@ class BrhotelController extends _commonController
      */
     public function editSurvey()
     {
-        $errorList = Session::get('errors', []);
+        $errorList = Session::pull('errors', []);
         $targetCd = Request::input('target_cd');
 
-        // TODO: session に 'hotel_status' を持っていたら、 update からの error での戻りなので、その入力を表示する。
+        // session に 'hotel_status' を持っていたら、 update からの error での戻りなので、その入力を表示する。
         // session に 'hotel_status' が無ければ、画面表示のためのデータを取得
         if (Session::has('hotel_survey')) {
-            $hotelSurvey = (object)Session::get('hotel_survey');
+            $hotelSurvey = (object)Session::pull('hotel_survey');
         } else {
             $hotelSurvey = HotelSurvey::find($targetCd);
         }
@@ -607,15 +608,6 @@ class BrhotelController extends _commonController
         $targetCd = Request::input('target_cd');
         $inputHotelSurvey = Request::input('Hotel_Survey');
 
-        // TODO: to be deleted
-        // if (rand(0,9) < 8) {
-        //     return redirect()->route('ctl.br_hotel.edit_survey', ['target_cd' => $targetCd])
-        //         ->with([
-        //             'errors'       => $errorList,
-        //             'hotel_survey' => $inputHotelSurvey,
-        //         ]);
-        // }
-
         // validation
         $modelHotelSurvey = new HotelSurvey();
         $errorList = $modelHotelSurvey->validation($inputHotelSurvey);
@@ -632,29 +624,16 @@ class BrhotelController extends _commonController
         $modelHotelSurvey->setUpdateCommonColumn($inputHotelSurvey);
 
         try {
-            DB::beginTransaction();
-
-            if (!HotelSurvey::find($targetCd)->fill($inputHotelSurvey)->save()) {
-                DB::rollBack();
-                $errorList[] = '更新できませんでした。';
-                return redirect()->route('ctl.br_hotel.edit_survey', ['target_cd' => $targetCd])
-                    ->with([
-                        'errors'       => $errorList,
-                        'hotel_survey' => $inputHotelSurvey,
-                    ]);
-            }
-            // コミット
-            DB::commit();
+            DB::transaction(function () use ($targetCd, $inputHotelSurvey) {
+                if (!HotelSurvey::find($targetCd)->fill($inputHotelSurvey)->save()) {
+                    throw new \Exception('hotel_survey が更新されませんでした。');
+                }
+            });
         } catch (\Exception $e) {
-            DB::rollBack();
             Log::error($e);
-            // HACK: 重複
-            $errorList[] = '更新できませんでした。';
-            return redirect()->route('ctl.br_hotel.edit_survey', ['target_cd' => $targetCd])
-                ->with([
-                    'errors'       => $errorList,
-                    'hotel_survey' => $inputHotelSurvey,
-                ]);
+            $errorList[] = '更新時にエラーが発生しました。';
+            return redirect()->route('ctl.brhotel.show', ['target_cd' => $targetCd])
+                ->with(['errors' => $errorList]);
         }
 
         // 完了メッセージ
