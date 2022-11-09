@@ -12,7 +12,21 @@ use stdClass;
 class PartnerCustomer extends CommonDBModel
 {
     use Traits;
+
+    /**
+     * モデルに関連付けるテーブル
+     *
+     * @var string
+     */
     protected $table = 'partner_customer';
+
+    /**
+     * テーブルに関連付ける主キー
+     *
+     * @var string
+     */
+    protected $primaryKey = 'customer_id';
+
     // カラム
     // static のほうがよい？
     public string $COL_CUSTOMER_ID              = 'customer_id';

@@ -41,7 +41,7 @@
     <hr class="contents-margin" />
 
     {{-- 精算サイト一覧へ戻る --}}
-    {{ Form::open(['route' => 'brpartnersite.search', 'method' => 'post']) }}
+    {{ Form::open(['route' => 'ctl.brPartnerSite.search', 'method' => 'get']) }}
         <small>
             <input type="submit" value="精算サイト一覧へ">
         </small>

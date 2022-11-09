@@ -8,7 +8,10 @@
                 <th>キーワード</th>
                 <td>
                     <input type="text" name="keywords" size="50" maxlength="20" value="{{ strip_tags($keywords) }}" />
-                    <br /><a href="#" class="toggle_form_help">キーワードのヘルプ</a>
+                    <br />
+                    <a href="#" class="toggle_form_help">
+                        キーワードのヘルプ
+                    </a>
                 </td>
             </tr>
         </table>
