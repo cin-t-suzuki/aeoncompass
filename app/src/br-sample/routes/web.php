@@ -124,31 +124,39 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
         Route::post('/create', 'create')->name('ctl.brhotelRate.create'); //新規処理
         Route::post('/destroy', 'destroy')->name('ctl.brhotelRate.destroy'); //削除処理
     });
-	//supervisor
+
+	//施設統括
 	Route::controller(BrsupervisorController::class)->prefix("brsupervisor")->group(function(){
-		Route::get('/index', 'index')->name('ctl.brsupervisor.index'); //施設統括(hotel_supervisor)表示
-		Route::post('/list', 'list')->name('ctl.brsupervisor.list'); //施設統括(hotel_supervisor)表示
+		Route::get('/index', 'index')->name('ctl.brsupervisor.index'); 
+		Route::post('/list', 'list')->name('ctl.brsupervisor.list'); 
 		Route::post('/update', 'update')->name('ctl.brsupervisor.update'); 
 		Route::post('/new', 'new')->name('ctl.brsupervisor.new'); 
 		Route::post('/create', 'create')->name('ctl.brsupervisor.create'); 
-		Route::post('/listhotel', 'listhotel')->name('ctl.brsupervisor.listhotel'); //施設統括施設(hotel_supervisor_hotel)表示
-		Route::post('/newhotel', 'newhotel')->name('ctl.brsupervisor.newhotel'); //施設コードで追加対象を検索
-		Route::post('/cnfhotel', 'cnfhotel')->name('ctl.brsupervisor.cnfhotel'); //施設統括ホテル確認
-		Route::post('/createhotel', 'createhotel')->name('ctl.brsupervisor.createhotel'); //施設統括ホテル登録
-		Route::post('/deletehotel', 'deletehotel')->name('ctl.brsupervisor.deletehotel'); //施設統括ホテル削除
-		Route::post('/edit', 'edit')->name('ctl.brsupervisor.edit'); //施設統括変更
+		Route::post('/listhotel', 'listhotel')->name('ctl.brsupervisor.listhotel'); 
+		Route::post('/newhotel', 'newhotel')->name('ctl.brsupervisor.newhotel'); 
+		Route::post('/cnfhotel', 'cnfhotel')->name('ctl.brsupervisor.cnfhotel'); 
+		Route::post('/createhotel', 'createhotel')->name('ctl.brsupervisor.createhotel'); 
+		Route::post('/deletehotel', 'deletehotel')->name('ctl.brsupervisor.deletehotel'); 
+		Route::post('/edit', 'edit')->name('ctl.brsupervisor.edit'); 
 	});		
 
-	//
+	// パートナー精算先
 	Route::get('/brpartnercustomer/', 'BrPartnerCustomerController@index')->name('brpartnercustomer.index');
 	Route::get('/brpartnercustomer/search', 'BrPartnerCustomerController@search')->name('brpartnercustomer.search');
 
 	Route::get('/brpartnercustomer/create', 'BrPartnerCustomerController@create')->name('brpartnercustomer.create');
 	Route::post('/brpartnercustomer/register', 'BrPartnerCustomerController@register')->name('brpartnercustomer.register');
 
-	Route::get('/brpartnercustomer/edit/{customer_id}', 'BrPartnerCustomerController@edit')->name('brpartnercustomer.edit');
+	// TODO: 要調査 クエリパラメータに ? をつけて任意にしないとレンダリングが通らなくなっている。
+	// ルートパラメータではなく通常のクエリパラメータにしたほうがスッキリするように思われる。
+	Route::get('/brpartnercustomer/edit/{customer_id?}', 'BrPartnerCustomerController@edit')->name('brpartnercustomer.edit');
 	Route::post('/brpartnercustomer/modify', 'BrPartnerCustomerController@modify')->name('brpartnercustomer.modify');
 
-	Route::post('/brpartnersite/search', function() {return 'TODO: search, session.customer_off の forgot が必要なケースあり（？）'; })->name('brpartnersite.search');
+
+	// 精算サイト
+	Route::get('/brpartnersite/', 'BrPartnerSiteController@index');
+	Route::get('/brpartnersite/search', 'BrPartnerSiteController@search')->name('ctl.brPartnerSite.search');
+	Route::get('/brpartnersite/edit', 'BrPartnerSiteController@edit')->name('ctl.brPartnerSite.edit');
+	Route::post('/brpartnersite/modify', 'BrPartnerSiteController@modify')->name('ctl.brPartnerSite.modify');
 
 });
