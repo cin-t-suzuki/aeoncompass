@@ -9,7 +9,7 @@
     <meta name="robots" content="none">
     <script type="text/javascript" src="/scripts/jquery.js?9465-2"></script>
     <script type="text/javascript" src="/scripts/jquery.cookies.js"></script>
-    <title>[ストリーム]予約受付管理 [{$v->helper->form->strip_tags($title)}]</title>
+    <title>[ストリーム]予約受付管理 [@yield('title')]</title>
     <link type="text/css" rel="stylesheet" href="/styles/base.css?9465-2">
     {{-- 印刷用スタイルシート --}}
     {if $print_flg}

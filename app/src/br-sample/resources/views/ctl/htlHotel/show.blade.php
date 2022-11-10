@@ -1,14 +1,18 @@
 {{-- MEMO: 移植元 svn_trunk\public\app\ctl\views\htlhotel\show.tpl --}}
 
-{{-- header start --}}
-    {include file=$v->env.module_root|cat:'/views/_common/_htl_header.tpl' title='施設情報詳細'}
-{{-- header end --}}
+@extends('ctl.common._htl_base')
+@section('title', '施設情報詳細')
+
+@section('content')
 {{-- パンクズ --}}
-<a href="{$v->env.source_path}{$v->env.module}/htltop/index/target_cd/{$v->assign->target_cd}">メインメニュー</a>&nbsp;&gt;&nbsp;施設情報詳細
+<a href="{$v->env.source_path}{$v->env.module}/htltop/index/target_cd/{$v->assign->target_cd}">
+    メインメニュー
+</a>&nbsp;&gt;&nbsp;施設情報詳細
+
 <br>
 <br>
 {{-- メッセージ --}}
-{include file=$v->env.module_root|cat:'/views/_common/_message.tpl'}
+@include('ctl.common.message')
 
 施設情報
 <table border="1" cellspacing="0" cellpadding="4">
@@ -73,7 +77,7 @@
     </tr>
     {{-- 施設情報ページ（キャンセル等条件） --}}
     <tr>
-    <td bgcolor="#EEEEFF" nowrap>
+        <td bgcolor="#EEEEFF" nowrap>
             施設連絡事項
         </td>
         <form action="{$v->env.source_path}{$v->env.module}/htlhotelinform/list/" method="post" >
@@ -122,7 +126,7 @@
                 {if zap_is_empty($v->assign->a_hotel_station)}
                     <span style="color:#ccc">なし</span>
                 {else}
-                    {include file=$v->env.module_root|cat:'/views/_common/_hotel_stations.tpl' hotel_stations=$v->assign->a_hotel_station}
+                    @include('ctl.common._hotel_stations')
                 {/if}
             </td>
             <input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($v->assign->target_cd)}">
@@ -395,4 +399,4 @@
     </form>
 </div>
 
-{include file=$v->env.module_root|cat:'/views/_common/_htl_footer.tpl'}
+@endsection
