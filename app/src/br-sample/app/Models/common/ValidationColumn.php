@@ -14,6 +14,7 @@ class ValidationColumn
 	private $columnName = "";              // 論理カラム名
 	private $requireCheck = false;         // 必須チェック対象
 	private $notHalfKanaCheck = false;     // 半角カナチェック対象
+	private $notFullCharacterCheck = false;   // 追記　全角英数チェック
 	private $kanaOnlyCheck = false;     // カナのみかチェック対象
 	private $intOnlyCheck = false;         // 数値のみかチェック対象
 	private $currencyOnlyCheck = false;         // 数値のみかチェック対象
@@ -64,6 +65,15 @@ class ValidationColumn
 	}
 	public function isNotHalfKana(){ return $this->notHalfKanaCheck; }
 
+	/**
+	 * 全角英数チェック
+	 */
+	public function notFullCharacter(){
+		$this->notFullCharacterCheck = true;
+		return $this;
+	}
+	public function isNotFullCharacter(){ return $this->notFullCharacterCheck; }
+	
 	/**
 	 * カナのみかチェック
 	 */

@@ -16,7 +16,6 @@
       <td nowrap bgcolor="#EEFFEE" >施設名</td>
       <td nowrap>
         {{strip_tags($views->hotelData['hotel_nm'])}}
-
       </td>
     </tr>
   </table>

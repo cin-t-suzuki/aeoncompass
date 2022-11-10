@@ -27,9 +27,8 @@ class HotelSupervisor extends CommonDBModel
 	 * コンストラクタ
 	 */
 	function __construct(){
-		// TODOカラム情報の設定
-		$colSupervisorCd = (new ValidationColumn())->setColumnName($this->COL_SUPERVISOR_CD, "supervisor_cd")->require()->length(0, 10)->notHalfKana();
-		$colSupervisorNm = (new ValidationColumn())->setColumnName($this->COL_SUPERVISOR_NM, "supervisor_nm")->require()->length(0, 42)->notHalfKana();
+		$colSupervisorCd = (new ValidationColumn())->setColumnName($this->COL_SUPERVISOR_CD, "施設統括コード")->require()->length(0, 10)->notHalfKana();
+		$colSupervisorNm = (new ValidationColumn())->setColumnName($this->COL_SUPERVISOR_NM, "施設統括名")->require()->length(0, 42)->notHalfKana();
 
 		parent::setColumnDataArray([$colSupervisorCd, $colSupervisorNm]);
 	}

@@ -29,7 +29,7 @@ class HotelRate extends CommonDBModel
 
 	/** コンストラクタ
 	 */
-	function __construct(){
+	function 	(){
 		// カラム情報の設定
 		$colHotelCd = (new ValidationColumn())->setColumnName($this->COL_HOTEL_CD, "施設コード")->require()->length(0, 10)->notHalfKana();
 		$colBranchNo = (new ValidationColumn())->setColumnName($this->COL_BRANCH_NO, "枝番")->require()->length(0, 2)->currencyOnly(); 

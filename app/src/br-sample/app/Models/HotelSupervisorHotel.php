@@ -150,8 +150,8 @@ SQL;
 	 * @param [type] $hotelCd
 	 * @return void
 	 */
-	public function deleteByKey($con, $hotelCd){
-		$result = $con->table($this->table)->where(array($this->COL_HOTEL_CD=>$hotelCd))->delete();
+	public function deleteByKey($con, $id){
+		$result = $con->table($this->table)->where(array($this->COL_ID=>$id))->delete();
 		return $result;
 	}
 

@@ -11,13 +11,12 @@
     [
     'a_hotel_supervisor' => $views->a_hotel_supervisor
     ,'a_hotel_supervisor_account' => $views->a_hotel_supervisor_account
+    ,'supervisor_cd' => $views->supervisor_cd
     ])
 
   <input type="submit" value="更新">
   <input type="hidden" name="supervisor_cd" value="{{strip_tags($views->supervisor_cd)}}">
-  <input type="hidden" name="hotel_supervisor[supervisor_nm]" value="{{strip_tags($views->a_hotel_supervisor['supervisor_nm'])}}">
-  <input type="hidden" name="hotel_supervisor_account[account_id]" value="{{strip_tags($views->a_hotel_supervisor_account['account_id'])}}">
-  <input type="hidden" name="hotel_supervisor_account[accept_status]" value="{{strip_tags($views->a_hotel_supervisor_account['accept_status'])}}">
+  <input type="hidden" name="Hotel_Supervisor_Account[password]" value="{{strip_tags($views->a_hotel_supervisor_account['password'])}}">
 {!! Form::close() !!}
 
 <div align="right">

@@ -77,6 +77,15 @@ abstract class CommonDBModel extends Model
 				}
 			}
 
+			// 全角英数チェック
+			if($this->colmunArray[$key]->isNotFullCharacter()){
+				if (strlen($val) != 0){
+					if($val != mb_convert_kana($val, "kvrn")){
+						$rtnErrors[] = $this->colmunArray[$key]->getColumnName() . "に全角英数が含まれています";
+					}
+				}
+			}
+
 			// 整数のみかチェック（小数点NG、マイナスOK）
 			if($this->colmunArray[$key]->isIntOnly()){
 				if (strlen($val) != 0){

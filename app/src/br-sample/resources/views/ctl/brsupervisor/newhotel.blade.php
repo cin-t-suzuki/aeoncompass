@@ -14,11 +14,8 @@
     ['a_hotel_supervisor_hotel' => $views->a_hotel_supervisor_hotel
     ,'supervisor_cd' => $views->supervisor_cd
     ])
-
   <input type="submit" value="確認">
-  <input type="hidden" name="supervisor_cd" value="{{strip_tags($views->supervisor_cd ??null )}}">
-
-
+  <input type="hidden" name="supervisor_cd" value="{{strip_tags($views->supervisor_cd)}}">
 {!! Form::close() !!}
 
 
