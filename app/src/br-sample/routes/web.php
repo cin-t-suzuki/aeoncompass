@@ -82,6 +82,22 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 	});
 
     Route::get('/htlHotel/show', 'HtlHotelController@show')->name('ctl.htl_hotel.show');
+    Route::match(['get', 'post'], '/htlHotel/edit/',                function(){ return 'TODO:'; })->name('ctl.htl_hotel.edit');
+    Route::match(['get', 'post'], '/htlHotelCard/show/',            function(){ return 'TODO:'; })->name('ctl.htl_hotel_card.show');
+    Route::match(['get', 'post'], '/htlHotelInfo/',                 function(){ return 'TODO:'; })->name('ctl.htl_hotel_info.index');
+    Route::match(['get', 'post'], '/htlHotelInform/list/',          function(){ return 'TODO:'; })->name('ctl.htl_hotel_inform.list');
+    Route::match(['get', 'post'], '/htlHotelLink/list/',            function(){ return 'TODO:'; })->name('ctl.htl_hotel_link.list');
+    Route::match(['get', 'post'], '/htlHotelStation/list/',         function(){ return 'TODO:'; })->name('ctl.htl_hotel_station.list');
+    Route::match(['get', 'post'], '/htlHotelAmenity/list/',         function(){ return 'TODO:'; })->name('ctl.htl_hotel_amenity.list');
+    Route::match(['get', 'post'], '/htlHotelService/list/',         function(){ return 'TODO:'; })->name('ctl.htl_hotel_service.list');
+    Route::match(['get', 'post'], '/htlHotelNearby/list/',          function(){ return 'TODO:'; })->name('ctl.htl_hotel_nearby.list');
+    Route::match(['get', 'post'], '/htlHotelFacility/list/',        function(){ return 'TODO:'; })->name('ctl.htl_hotel_facility.list');
+    Route::match(['get', 'post'], '/htlHotelFacilityRoom/list/',    function(){ return 'TODO:'; })->name('ctl.htl_hotel_facility_room.list');
+    Route::match(['get', 'post'], '/htlHotelChargeRound/index/',    function(){ return 'TODO:'; })->name('ctl.htl_hotel_charge_round.index');
+    Route::match(['get', 'post'], '/htlHotelCancel/index/',         function(){ return 'TODO:'; })->name('ctl.htl_hotel_cancel.index');
+    Route::match(['get', 'post'], '/htlHotelReceipt/index/',        function(){ return 'TODO:'; })->name('ctl.htl_hotel_receipt.index');
+    Route::match(['get', 'post'], '/htlBathTax/',                   function(){ return 'TODO:'; })->name('ctl.htl_bath_tax.index');
+
 
 	// 施設情報
 	Route::controller(HtlhotelInfoController::class)->prefix("brhotelInfo")->group(function(){

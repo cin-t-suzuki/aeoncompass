@@ -1,4 +1,4 @@
-{{-- MEMO: 移植元 svn_trunk\public\app\ctl\views\htlhotel\show.tpl --}}
+{{-- MEMO: 移植元 svn_trunk\public\app\ctl\views\htlHotel\show.tpl --}}
 
 @extends('ctl.common._htl_base')
 @section('title', '施設情報詳細')
@@ -21,11 +21,11 @@
         <td bgcolor="#EEEEFF" nowrap>
             施設情報登録内容
         </td>
-        <form action="{$v->env.source_path}{$v->env.module}/htlhotel/edit/" method="post">
+        <form action="/ctl/htlHotel/edit/" method="post">
             <td>
                 <input type="submit" value="詳細">
             </td>
-            <input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($v->assign->target_cd)}">
+            {{ Form::hidden('target_cd', strip_tags($target_cd)) }}
         </form>
         <td>
             施設情報登録内容の変更
@@ -36,10 +36,10 @@
         <td bgcolor="#EEEEFF" nowrap>
             利用可能カード
         </td>
-        <form action="{$v->env.source_path}{$v->env.module}/htlhotelcard/show/" method="post">
+        <form action="/ctl/htlHotelCard/show/" method="post">
             <td>
                 <input type="submit" value="詳細">
-                <input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($v->assign->target_cd)}">
+                {{ Form::hidden('target_cd', strip_tags($target_cd)) }}
             </td>
         </form>
         <td>
@@ -61,11 +61,11 @@
         <td bgcolor="#EEEEFF" nowrap>
             施設情報
         </td>
-        <form action="{$v->env.source_path}{$v->env.module}/htlhotelinfo/" method="post">
+        <form action="/ctl/htlHotelInfo/" method="post">
             <td>
                 <input type="submit" value="詳細">
             </td>
-        <input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($v->assign->target_cd)}">
+        {{ Form::hidden('target_cd', strip_tags($target_cd)) }}
         </form>
         <td>
             {if zap_is_empty($v->assign->a_hotel_info)}
@@ -80,7 +80,7 @@
         <td bgcolor="#EEEEFF" nowrap>
             施設連絡事項
         </td>
-        <form action="{$v->env.source_path}{$v->env.module}/htlhotelinform/list/" method="post" >
+        <form action="/ctl/htlHotelInform/list/" method="post" >
             <td>
                 <input type="submit" value="詳細">
             </td>
@@ -91,7 +91,7 @@
                     注意事項 その他記入欄
                 {/if}
             </td>
-            <input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($v->assign->target_cd)}">
+            {{ Form::hidden('target_cd', strip_tags($target_cd)) }}
         </form>
     </tr>
     {{-- リンクページ --}}
@@ -99,7 +99,7 @@
         <td bgcolor="#EEEEFF" nowrap rowsupan="{$v->assign->a_hotel_link|@count}">
             リンクページ
         </td>
-        <form action="{$v->env.source_path}{$v->env.module}/htlhotellink/list/" method="post" >
+        <form action="/ctl/htlHotelLink/list/" method="post" >
             <td rowsupan="{$v->assign->a_hotel_link.values|@count}">
                 <input type="submit" value="詳細">
             </td>
@@ -110,7 +110,7 @@
                     施設情報ページからのリンク
                 {/if}
             </td>
-            <input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($v->assign->target_cd)}">
+            {{ Form::hidden('target_cd', strip_tags($target_cd)) }}
         </form>
     </tr>
     {{-- 交通アクセス --}}
@@ -118,7 +118,7 @@
         <td bgcolor="#EEEEFF" nowrap>
             交通アクセス
         </td>
-        <form action="{$v->env.source_path}{$v->env.module}/htlhotelstation/list/" method="post" >
+        <form action="/ctl/htlHotelStation/list/" method="post" >
             <td>
                 <input type="submit" value="詳細">
             </td>
@@ -129,7 +129,7 @@
                     @include('ctl.common._hotel_stations')
                 {/if}
             </td>
-            <input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($v->assign->target_cd)}">
+            {{ Form::hidden('target_cd', strip_tags($target_cd)) }}
         </form>
     </tr>
     {{-- アメニティ --}}
@@ -137,7 +137,7 @@
         <td bgcolor="#EEEEFF" nowrap>
             アメニティ
         </td>
-        <form action="{$v->env.source_path}{$v->env.module}/htlhotelamenity/list/" method="post" >
+        <form action="/ctl/htlHotelAmenity/list/" method="post" >
             <td>
                 <input type="submit" value="詳細">
             </td>
@@ -159,7 +159,7 @@
                     {/foreach}
                 {/if}
             </td>
-            <input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($v->assign->target_cd)}">
+            {{ Form::hidden('target_cd', strip_tags($target_cd)) }}
         </form>
     </tr>
     {{-- サービス --}}
@@ -167,7 +167,7 @@
         <td bgcolor="#EEEEFF" nowrap>
             サービス
         </td>
-        <form action="{$v->env.source_path}{$v->env.module}/htlhotelservice/list/" method="post" >
+        <form action="/ctl/htlHotelService/list/" method="post" >
             <td>
                 <input type="submit" value="詳細">
             </td>
@@ -189,7 +189,7 @@
                     {/foreach}
                 {/if}
             </td>
-            <input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($v->assign->target_cd)}">
+            {{ Form::hidden('target_cd', strip_tags($target_cd)) }}
         </form>
     </tr>
     {{-- 周辺情報 --}}
@@ -197,7 +197,7 @@
         <td bgcolor="#EEEEFF" nowrap>
             周辺情報
         </td>
-        <form action="{$v->env.source_path}{$v->env.module}/htlhotelnearby/list/" method="post" >
+        <form action="/ctl/htlHotelNearby/list/" method="post" >
             <td>
                 <input type="submit" value="詳細">
             </td>
@@ -219,7 +219,7 @@
                     {/foreach}
                 {/if}
             </td>
-            <input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($v->assign->target_cd)}">
+            {{ Form::hidden('target_cd', strip_tags($target_cd)) }}
         </form>
     </tr>
     {{-- 設備 --}}
@@ -227,7 +227,7 @@
         <td bgcolor="#EEEEFF" nowrap>
             設備
         </td>
-        <form action="{$v->env.source_path}{$v->env.module}/htlhotelfacility/list/" method="post" >
+        <form action="/ctl/htlHotelFacility/list/" method="post" >
             <td>
                 <input type="submit" value="詳細">
             </td>
@@ -249,7 +249,7 @@
                     {/foreach}
                 {/if}
             </td>
-            <input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($v->assign->target_cd)}">
+            {{ Form::hidden('target_cd', strip_tags($target_cd)) }}
         </form>
     </tr>
     {{-- 部屋設備 --}}
@@ -257,7 +257,7 @@
         <td bgcolor="#EEEEFF" nowrap>
             部屋設備
         </td>
-        <form action="{$v->env.source_path}{$v->env.module}/htlhotelfacilityroom/list/" method="post" >
+        <form action="/ctl/htlHotelFacilityRoom/list/" method="post" >
             <td>
                 <input type="submit" value="詳細">
             </td>
@@ -279,7 +279,7 @@
                     {/foreach}
                 {/if}
             </td>
-            <input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($v->assign->target_cd)}">
+            {{ Form::hidden('target_cd', strip_tags($target_cd)) }}
         </form>
     </tr>
     {{-- 施設管理 --}}
@@ -287,7 +287,7 @@
         <td bgcolor="#EEEEFF" nowrap>
             早割丸め設定
         </td>
-        <form action="{$v->env.source_path}{$v->env.module}/htlhotelchargeround/index/" method="post" >
+        <form action="/ctl/htlHotelChargeRound/index/" method="post" >
             <td>
                 <input type="submit" value="詳細">
             </td>
@@ -304,7 +304,7 @@
                     <span style="color:#ccc">未設定</span>
                 {/if}
             </td>
-            <input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($v->assign->target_cd)}">
+            {{ Form::hidden('target_cd', strip_tags($target_cd)) }}
         </form>
     </tr>
     {{-- キャンセルポリシー --}}
@@ -312,7 +312,7 @@
         <td bgcolor="#EEEEFF" nowrap>
             キャンセルポリシー
         </td>
-        <form action="{$v->env.source_path}{$v->env.module}/htlhotelcancel/index/" method="post" >
+        <form action="/ctl/htlHotelCancel/index/" method="post" >
             <td>
                 <input type="submit" value="詳細">
             </td>
@@ -323,7 +323,7 @@
                     施設 キャンセルポリシーの選択
                 {/if}
             </td>
-            <input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($v->assign->target_cd)}">
+            {{ Form::hidden('target_cd', strip_tags($target_cd)) }}
         </form>
     </tr>
     {{-- 領収書発行 --}}
@@ -331,7 +331,7 @@
         <td bgcolor="#EEEEFF" nowrap>
             領収書発行ポリシー
         </td>
-        <form action="{$v->env.source_path}{$v->env.module}/htlhotelreceipt/index/" method="post" >
+        <form action="/ctl/htlHotelReceipt/index/" method="post" >
             <td>
                 <input type="submit" value="詳細">
             </td>
@@ -342,7 +342,7 @@
                     領収書発行ポリシー
                 {/if}
             </td>
-            <input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($v->assign->target_cd)}">
+            {{ Form::hidden('target_cd', strip_tags($target_cd)) }}
         </form>
     </tr>
     <tr>
@@ -350,7 +350,7 @@
             入湯税
         </td>
         {if $v->assign->a_hotel_bath_tax_flg == 1}
-            <form action="{$v->env.source_path}{$v->env.module}/htlsbathtax/" method="post" >
+            <form action="/ctl/htlBathTax/" method="post" >
                 <td>
                     <input type="submit" value="詳細" />
                     <input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($v->assign->target_cd)}" />
@@ -389,11 +389,11 @@
 <br />
 
 <div style="float:right">
-    <FORM ACTION="{$v->env.source_path}{$v->env.module}/htlhotel/staticupdate/" METHOD="POST" target="page_test">
+    <FORM action="/ctl/htlHotel/staticupdate/" METHOD="POST" target="page_test">
         情報ページHTML
         <small>
             <INPUT TYPE="submit" VALUE="更新する">
-            <input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($v->assign->target_cd)}">
+            {{ Form::hidden('target_cd', strip_tags($target_cd)) }}
             <input type="hidden" name="redirect_url" value="http://{$v->config->system->rsv_host_name}/hotel/{$v->helper->form->strip_tags($v->assign->target_cd)}/">
         </small>
     </form>

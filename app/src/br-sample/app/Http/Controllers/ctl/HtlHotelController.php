@@ -8,9 +8,12 @@ use Illuminate\Http\Request;
 class HtlHotelController extends Controller
 {
     //
-    public function show()
+    public function show(Request $request)
     {
-        return view('ctl.htlHotel.show');
+        $targetCd = $request->input('target_cd');
+        return view('ctl.htlHotel.show', [
+            'target_cd' => $targetCd,
+        ]);
         return 'HtlHotelController show method';
     }
 }
