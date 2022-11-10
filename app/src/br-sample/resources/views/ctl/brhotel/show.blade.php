@@ -115,10 +115,10 @@
 						施設情報詳細
 						</td>
 					@if ($views->hotel_regist == true)
-						<form method="POST" action="{$v->env.source_path}{$v->env.module}/htlhotel/show/">
-						<td nowrap><input type="submit" value=" 詳細 "></td>
-						<input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($views->target_cd)}">
-						</form>
+                        {{ Form::open(['route' => 'ctl.htl_hotel.show', 'method' => 'get']) }}
+                            <td nowrap><input type="submit" value=" 詳細 "></td>
+                            <input type="hidden" name="target_cd" value="{{ strip_tags($views->target_cd) }}">
+                        {{ Form::close() }}
 					@else
 						<td nowrap colspan="2" width="90%">施設情報詳細 <font color="red">※</font>施設を登録してください。</td>
 					@endif

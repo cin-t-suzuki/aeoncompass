@@ -81,6 +81,8 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 		Route::get('/show', 'show')->name('ctl.brfaxPr.show');
 	});
 
+    Route::get('/htlHotel/show', 'HtlHotelController@show')->name('ctl.htl_hotel.show');
+
 	// 施設情報
 	Route::controller(HtlhotelInfoController::class)->prefix("brhotelInfo")->group(function(){
 		Route::match(['get','post'], '/show', 'show')->name('ctl.htlhotelInfo.show');
