@@ -1,18 +1,18 @@
 {{-- MEMO: 移植元 svn_trunk\public\app\ctl\views\htlhotel\show.tpl --}}
 
-{* header start *}
-	{include file=$v->env.module_root|cat:'/views/_common/_htl_header.tpl' title='施設情報詳細'}
-{* header end *}
-{* パンクズ *}
+{{-- header start --}}
+    {include file=$v->env.module_root|cat:'/views/_common/_htl_header.tpl' title='施設情報詳細'}
+{{-- header end --}}
+{{-- パンクズ --}}
 <a href="{$v->env.source_path}{$v->env.module}/htltop/index/target_cd/{$v->assign->target_cd}">メインメニュー</a>&nbsp;&gt;&nbsp;施設情報詳細
 <br>
 <br>
-{* メッセージ *}
+{{-- メッセージ --}}
 {include file=$v->env.module_root|cat:'/views/_common/_message.tpl'}
 
 施設情報
 <table border="1" cellspacing="0" cellpadding="4">
-  {*施設情報登録内容*}
+  {{-- 施設情報登録内容 --}}
   <tr>
     <td bgcolor="#EEEEFF" nowrap>
       施設情報登録内容
@@ -27,7 +27,7 @@
       施設情報登録内容の変更
     </td>
   </tr>
-  {*利用可能カード*}
+  {{-- 利用可能カード --}}
   <tr>
     <td bgcolor="#EEEEFF" nowrap>
       利用可能カード
@@ -52,7 +52,7 @@
      {/if}
     </td>
   </tr>
-  {*施設情報*}
+  {{-- 施設情報 --}}
   <tr>
     <td bgcolor="#EEEEFF" nowrap>
       施設情報
@@ -71,7 +71,7 @@
       {/if}
     </td>
   </tr>
-  {* 施設情報ページ（キャンセル等条件） *}
+  {{-- 施設情報ページ（キャンセル等条件） --}}
   <tr>
   <td bgcolor="#EEEEFF" nowrap>
       施設連絡事項
@@ -90,7 +90,7 @@
     <input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($v->assign->target_cd)}">
     </form>
   </tr>
-  {*リンクページ*}
+  {{-- リンクページ --}}
   <tr>
     <td bgcolor="#EEEEFF" nowrap rowsupan="{$v->assign->a_hotel_link|@count}">
       リンクページ
@@ -109,7 +109,7 @@
     <input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($v->assign->target_cd)}">
     </form>
   </tr>
-  {* 交通アクセス*}
+  {{-- 交通アクセス --}}
   <tr>
   <td bgcolor="#EEEEFF" nowrap>
       交通アクセス
@@ -128,7 +128,7 @@
     <input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($v->assign->target_cd)}">
     </form>
   </tr>
-  {*アメニティ*}
+  {{-- アメニティ --}}
   <tr>
     <td bgcolor="#EEEEFF" nowrap>
       アメニティ
@@ -159,7 +159,7 @@
     <input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($v->assign->target_cd)}">
     </form>
   </tr>
-  {*サービス*}
+  {{-- サービス --}}
   <tr>
     <td bgcolor="#EEEEFF" nowrap>
       サービス
@@ -190,7 +190,7 @@
     <input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($v->assign->target_cd)}">
     </form>
   </tr>
-  {*周辺情報*}
+  {{-- 周辺情報 --}}
   <tr>
     <td bgcolor="#EEEEFF" nowrap>
       周辺情報
@@ -221,7 +221,7 @@
     <input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($v->assign->target_cd)}">
     </form>
   </tr>
-  {*設備*}
+  {{-- 設備 --}}
   <tr>
     <td bgcolor="#EEEEFF" nowrap>
       設備
@@ -252,7 +252,7 @@
     <input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($v->assign->target_cd)}">
     </form>
   </tr>
-  {*部屋設備*}
+  {{-- 部屋設備 --}}
   <tr>
     <td bgcolor="#EEEEFF" nowrap>
       部屋設備
@@ -283,7 +283,7 @@
     <input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($v->assign->target_cd)}">
     </form>
   </tr>
-  {* 施設管理*}
+  {{-- 施設管理 --}}
   <tr>
     <td bgcolor="#EEEEFF" nowrap>
       早割丸め設定
@@ -308,7 +308,7 @@
     <input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($v->assign->target_cd)}">
     </form>
   </tr>
-  {* キャンセルポリシー *}
+  {{-- キャンセルポリシー --}}
   <tr>
   <td bgcolor="#EEEEFF" nowrap>
       キャンセルポリシー
@@ -327,7 +327,7 @@
     <input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($v->assign->target_cd)}">
     </form>
   </tr>
-  {* 領収書発行 *}
+  {{-- 領収書発行 --}}
   <tr>
   <td bgcolor="#EEEEFF" nowrap>
       領収書発行ポリシー
@@ -373,7 +373,6 @@
     </td>
     {else}
     <td>
-      　　
     </td>
     <td>
         <font size="2" color="#5555FE">※ＪＲコレクション用の設定になります。<br />
