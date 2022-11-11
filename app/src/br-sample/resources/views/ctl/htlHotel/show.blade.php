@@ -2,11 +2,13 @@
 
 @extends('ctl.common._htl_base')
 @section('title', '施設情報詳細')
+@inject('service', 'App\Http\Controllers\ctl\HtlHotelController')
 
 {{-- HACK: （工数次第） #ccc はフェードアウトっぽくしているところなので、 class でまとめて css に定義したい --}}
+{{-- HACK: （工数次第） 各行のタイトルが青背景で改行禁止になっている。 css にまとめたい --}}
 @section('headScript')
     <style type="text/css">
-        .fadeout {
+        .grayout {
             color: #ccc;
         }
     </style>
@@ -24,7 +26,7 @@
 
 {{-- パンクズ --}}
 {{-- TODO: 名前付きルートに変更 --}}
-<a href="ctl/htltop/index/target_cd/{{ $target_cd }}">
+<a href="/ctl/htltop/index/target_cd/{{ $target_cd }}">
     メインメニュー
 </a>&nbsp;&gt;&nbsp;施設情報詳細
 
@@ -66,7 +68,7 @@
                 {{ $value->card_id }}
                 {{ $loop->last ? '' : '、' }}
             @empty
-                <span style="color:#ccc">なし</span>
+                <span class="grayout">なし</span>
             @endforelse
         </td>
     </tr>
@@ -82,12 +84,12 @@
             {{ Form::hidden('target_cd', strip_tags($target_cd)) }}
         {{ Form::close() }}
         <td>
-            <span class="{{ is_null($a_hotel_info) ? 'fadeout' : '' }}">
+            <span class="{{ is_null($a_hotel_info) ? 'grayout' : '' }}">
                 駐車場詳細、カード利用条件、特色
             </span>
         </td>
     </tr>
-    {{-- 施設情報ページ（キャンセル等条件） --}}TODO:
+    {{-- 施設情報ページ（キャンセル等条件） --}}
     <tr>
         <td bgcolor="#EEEEFF" nowrap>
             施設連絡事項
@@ -97,38 +99,38 @@
                 <input type="submit" value="詳細">
             </td>
             <td>
-                {if zap_is_empty($a_hotel_inform_cancel.values) and zap_is_empty($a_hotel_inform_free.values)}
-                    <span style="color:#ccc">注意事項 その他記入欄</span>
-                {else}
+                <span class="{{ $a_hotel_inform_cancel->isEmpty() && $a_hotel_inform_free->isEmpty() ? 'grayout' : ''}}">
                     注意事項 その他記入欄
-                {/if}
+                </span>
             </td>
             {{ Form::hidden('target_cd', strip_tags($target_cd)) }}
         {{ Form::close() }}
     </tr>
-    {{-- リンクページ --}}TODO:
+
+    {{-- リンクページ --}}
     <tr>
-        <td bgcolor="#EEEEFF" nowrap rowsupan="{count($a_hotel_link)}">
+        {{--
+            MEMO: 移植元では未定義配列の要素数で rowsupan を設定している。
+            rowspan の typo と思われるが、正しく設定するとテーブルが崩れる。
+            内容から推測して、 rowspan 指定は必要ないと判断した。
+        --}}
+        <td bgcolor="#EEEEFF" nowrap>
             リンクページ
         </td>
         {{ Form::open(['route' => 'ctl.htl_hotel_link.list', 'method' => 'post']) }}
-            <td rowsupan="{count($a_hotel_link.values)}">
+            <td>
                 <input type="submit" value="詳細">
             </td>
             <td>
-                {if zap_is_empty($a_hotel_links.values)}
-                    <span style="color:#ccc">施設情報ページからのリンク</span>
-                {else}
-                    施設情報ページからのリンク
-                {/if}
-                <span class="{{ rand(0,1) ? 'fadeout' : '' }}">
+                <span class="{{ $a_hotel_links->isEmpty() ? 'grayout' : '' }}">
                     施設情報ページからのリンク
                 </span>
             </td>
             {{ Form::hidden('target_cd', strip_tags($target_cd)) }}
         {{ Form::close() }}
     </tr>
-    {{-- 交通アクセス --}}TODO:
+
+    {{-- 交通アクセス --}}
     <tr>
         <td bgcolor="#EEEEFF" nowrap>
             交通アクセス
@@ -138,16 +140,20 @@
                 <input type="submit" value="詳細">
             </td>
             <td>
-                {if zap_is_empty($a_hotel_station)}
-                    <span style="color:#ccc">なし</span>
-                {else}
-                    @include('ctl.common._hotel_stations')
-                {/if}
+                @if ($a_hotel_station->isEmpty())
+                    <span class="grayout">なし</span>
+                @else
+                    @include('ctl.common._hotel_stations', [
+                        'hotel_stations' => $a_hotel_station,
+                        'limit' => 3, // 未定義だと動作しないため、 null で定義
+                    ])
+                @endif
             </td>
             {{ Form::hidden('target_cd', strip_tags($target_cd)) }}
         {{ Form::close() }}
     </tr>
-    {{-- アメニティ --}}TODO:
+
+    {{-- アメニティ --}}
     <tr>
         <td bgcolor="#EEEEFF" nowrap>
             アメニティ
@@ -157,27 +163,24 @@
                 <input type="submit" value="詳細">
             </td>
             <td>
-                {if zap_is_empty($a_hotel_amenities.values)}
-                    <span style="color:#ccc">なし</span>
-                {else}
-                    {foreach from=$a_amenity.values name=amenity item=values}
-                        {if $smarty.foreach.amenity.last}
-                            {strip_tags($values.element_nm)}
-                            {if 3 <= $smarty.foreach.amenity.total}
-                                等
-                            {/if}
-                        {else}
-                            {strip_tags($values.element_nm)}、
-                        {/if}
-                    {foreachelse}
-                        <span style="color:#ccc">なし</span>
-                    {/foreach}
-                {/if}
+                @if ($a_hotel_amenities->isEmpty())
+                    <span class="grayout">なし</span>
+                @else
+                    @forelse ($a_amenity as $value)
+                        {{ strip_tags($value['element_nm']) . (!$loop->last ? '、' : '') }}
+                        @if ($loop->last && $loop->count >= 3)
+                            等
+                        @endif
+                    @empty
+                        <span class="grayout">なし</span>
+                    @endforelse
+                @endif
             </td>
             {{ Form::hidden('target_cd', strip_tags($target_cd)) }}
         {{ Form::close() }}
     </tr>
-    {{-- サービス --}}TODO:
+
+    {{-- サービス --}}
     <tr>
         <td bgcolor="#EEEEFF" nowrap>
             サービス
@@ -187,27 +190,24 @@
                 <input type="submit" value="詳細">
             </td>
             <td>
-                {if zap_is_empty($a_hotel_services.values)}
-                    <span style="color:#ccc">なし</span>
-                {else}
-                    {foreach from=$a_service.values name=service item=values}
-                        {if $smarty.foreach.service.last}
-                            {strip_tags($values.element_nm)}
-                            {if 3 <= $smarty.foreach.service.total}
-                                等
-                            {/if}
-                        {else}
-                            {strip_tags($values.element_nm)}、
-                        {/if}
-                    {foreachelse}
-                        <span style="color:#ccc">なし</span>
-                    {/foreach}
-                {/if}
+                @if ($a_hotel_services->isEmpty())
+                    <span class="grayout">なし</span>
+                @else
+                    @forelse ($a_service as $value)
+                        {{ strip_tags($value['element_nm']) . (!$loop->last ? '、' : '') }}
+                        @if ($loop->last && $loop->count >= 3)
+                            等
+                        @endif
+                    @empty
+                        <span class="grayout">なし</span>
+                    @endforelse
+                @endif
             </td>
             {{ Form::hidden('target_cd', strip_tags($target_cd)) }}
         {{ Form::close() }}
     </tr>
-    {{-- 周辺情報 --}}TODO:
+
+    {{-- 周辺情報 --}}
     <tr>
         <td bgcolor="#EEEEFF" nowrap>
             周辺情報
@@ -217,27 +217,24 @@
                 <input type="submit" value="詳細">
             </td>
             <td>
-                {if zap_is_empty($a_hotel_nearbies.values)}
-                    <span style="color:#ccc">なし</span>
-                {else}
-                    {foreach from=$a_nearby.values name=nearby item=values}
-                        {if $smarty.foreach.nearby.last}
-                            {strip_tags($values.element_nm)}
-                            {if 3 <= $smarty.foreach.nearby.total}
-                                等
-                            {/if}
-                        {else}
-                            {strip_tags($values.element_nm)}、
-                        {/if}
-                    {foreachelse}
-                        <span style="color:#ccc">なし</span>
-                    {/foreach}
-                {/if}
+                @if ($a_hotel_nearbies->isEmpty())
+                    <span class="grayout">なし</span>
+                @else
+                    @forelse ($a_nearby as $value)
+                        {{ strip_tags($value['element_nm']) . (!$loop->last ? '、' : '') }}
+                        @if ($loop->last && $loop->count >= 3)
+                            等
+                        @endif
+                    @empty
+                        <span class="grayout">なし</span>
+                    @endforelse
+                @endif
             </td>
             {{ Form::hidden('target_cd', strip_tags($target_cd)) }}
         {{ Form::close() }}
     </tr>
-    {{-- 設備 --}}TODO:
+
+    {{-- 設備 --}}
     <tr>
         <td bgcolor="#EEEEFF" nowrap>
             設備
@@ -247,27 +244,24 @@
                 <input type="submit" value="詳細">
             </td>
             <td>
-                {if zap_is_empty($a_hotel_facilities.values)}
-                    <span style="color:#ccc">なし</span>
-                {else}
-                    {foreach from=$a_facility.values name=facility item=values}
-                        {if $smarty.foreach.facility.last}
-                            {strip_tags($values.element_nm)}
-                            {if 3 <= $smarty.foreach.facility.total}
-                                等
-                            {/if}
-                        {else}
-                            {strip_tags($values.element_nm)}、
-                        {/if}
-                    {foreachelse}
-                        <span style="color:#ccc">なし</span>
-                    {/foreach}
-                {/if}
+                @if ($a_hotel_facilities->isEmpty())
+                    <span class="grayout">なし</span>
+                @else
+                    @forelse ($a_facility as $value)
+                        {{ strip_tags($value['element_nm']) . (!$loop->last ? '、' : '') }}
+                        @if ($loop->last && $loop->count >= 3)
+                            等
+                        @endif
+                    @empty
+                        <span class="grayout">なし</span>
+                    @endforelse
+                @endif
             </td>
             {{ Form::hidden('target_cd', strip_tags($target_cd)) }}
         {{ Form::close() }}
     </tr>
-    {{-- 部屋設備 --}}TODO:
+
+    {{-- 部屋設備 --}}
     <tr>
         <td bgcolor="#EEEEFF" nowrap>
             部屋設備
@@ -277,27 +271,24 @@
                 <input type="submit" value="詳細">
             </td>
             <td>
-                {if zap_is_empty($a_hotel_facility_rooms.values)}
-                    <span style="color:#ccc">なし</span>
-                {else}
-                    {foreach from=$a_facility_room.values name=facility_room item=values}
-                        {if $smarty.foreach.facility_room.last}
-                            {strip_tags($values.element_nm)}
-                            {if 3 <= $smarty.foreach.facility_room.total}
-                                等
-                            {/if}
-                        {else}
-                            {strip_tags($values.element_nm)}、
-                        {/if}
-                    {foreachelse}
-                        <span style="color:#ccc">なし</span>
-                    {/foreach}
-                {/if}
+                @if ($a_hotel_facility_rooms->isEmpty())
+                    <span class="grayout">なし</span>
+                @else
+                    @forelse ($a_facility_room as $value)
+                        {{ strip_tags($value['element_nm']) . (!$loop->last ? '、' : '') }}
+                        @if ($loop->last && $loop->count >= 3)
+                            等
+                        @endif
+                    @empty
+                        <span class="grayout">なし</span>
+                    @endforelse
+                @endif
             </td>
             {{ Form::hidden('target_cd', strip_tags($target_cd)) }}
         {{ Form::close() }}
     </tr>
-    {{-- 施設管理 --}}TODO:
+
+    {{-- 施設管理 --}}
     <tr>
         <td bgcolor="#EEEEFF" nowrap>
             早割丸め設定
@@ -307,22 +298,25 @@
                 <input type="submit" value="詳細">
             </td>
             <td>
-                {if count($a_hotel_control) != 0}
-                    {if $a_hotel_control.charge_round == 1 || zap_is_empty($a_hotel_control.charge_round)}
+                @if (!is_null($a_hotel_control))
+                    @if ($a_hotel_control->charge_round == 1 || is_null($a_hotel_control->charge_round))
                         1の位で丸める
-                    {elseif $a_hotel_control.charge_round == 10}
+                    @elseif ($a_hotel_control->charge_round == 10)
                         10の位で丸める
-                    {elseif $a_hotel_control.charge_round == 100}
+                    @elseif ($a_hotel_control->charge_round == 100)
                         100の位で丸める
-                    {/if}<br />
-                {else}
-                    <span style="color:#ccc">未設定</span>
-                {/if}
+                    @else
+                        {{-- MEMO: 移植元では実装なし。空欄になる想定 --}}
+                    @endif<br />
+                @else
+                    <span class="grayout">未設定</span>
+                @endif
             </td>
             {{ Form::hidden('target_cd', strip_tags($target_cd)) }}
         {{ Form::close() }}
     </tr>
-    {{-- キャンセルポリシー --}}TODO:
+
+    {{-- キャンセルポリシー --}}
     <tr>
         <td bgcolor="#EEEEFF" nowrap>
             キャンセルポリシー
@@ -332,16 +326,15 @@
                 <input type="submit" value="詳細">
             </td>
             <td>
-                {if is_empty($a_hotel_cancel_rates.values) and is_empty($a_hotel_cancel_policy)}
-                    <span style="color:#ccc">施設 キャンセルポリシーの選択</span>
-                {else}
+                <span class="{{ $a_hotel_cancel_rates->isEmpty() && is_null($a_hotel_cancel_policy) ? 'grayout' : '' }}">
                     施設 キャンセルポリシーの選択
-                {/if}
+                </span>
             </td>
             {{ Form::hidden('target_cd', strip_tags($target_cd)) }}
         {{ Form::close() }}
     </tr>
-    {{-- 領収書発行ポリシー --}}TODO:
+
+    {{-- 領収書発行ポリシー --}}
     <tr>
         <td bgcolor="#EEEEFF" nowrap>
             領収書発行ポリシー
@@ -351,21 +344,20 @@
                 <input type="submit" value="詳細">
             </td>
             <td>
-                {if is_empty($a_hotel_receipt)}
-                    <span style="color:#ccc">領収書発行ポリシー</span>
-                {else}
+                <span class="{{ is_null($a_hotel_receipt) ? 'grayout' : '' }}">
                     領収書発行ポリシー
-                {/if}
+                </span>
             </td>
             {{ Form::hidden('target_cd', strip_tags($target_cd)) }}
         {{ Form::close() }}
     </tr>
-    {{-- 入湯税 --}}TODO:
+
+    {{-- 入湯税 --}}
     <tr>
         <td bgcolor="#EEEEFF" nowrap>
             入湯税
         </td>
-        {if $a_hotel_bath_tax_flg == 1}
+        @if ($a_hotel_bath_tax_flg == 1)
             {{ Form::open(['route' => 'ctl.htl_bath_tax.index', 'method' => 'post']) }}
                 <td>
                     <input type="submit" value="詳細" />
@@ -377,18 +369,19 @@
                     ＪＲコレクション用の設定になります。<br />
                     入湯税が必要な旨の表示は「施設連絡事項」をご利用頂き、現地にて徴収してください。
                 </font><br />
-                {if is_empty($a_hotel_bath_tax)}
-                    <span style="color:#ccc">未設定</span>
-                {else}
-                    {if $a_hotel_bath_tax.bath_tax_status == 1}
-                        (大人)１人１泊：￥{$a_hotel_bath_tax.bath_tax_charge|number_format}<br />
-                        (子供)１人１泊：￥{$a_hotel_bath_tax.bath_tax_charge_child|number_format}
-                    {else}
+                @if (is_null($a_hotel_bath_tax))
+                    <span class="grayout">未設定</span>
+                @else
+                    {{-- HACK: magic number --}}
+                    @if ($a_hotel_bath_tax->bath_tax_status == 1)
+                        (大人)１人１泊：￥{{ number_format($a_hotel_bath_tax->bath_tax_charge) }}<br />
+                        (子供)１人１泊：￥{{ number_format($a_hotel_bath_tax->bath_tax_charge_child) }}
+                    @else
                         入湯税不要
-                    {/if}
-                {/if}
+                    @endif
+                @endif
             </td>
-        {else}
+        @else
             <td>
             </td>
             <td>
@@ -399,13 +392,13 @@
                 入湯税が変動制のエリアになりますので<br />
                 こちらの機能はご利用頂けません。
             </td>
-        {/if}
+        @endif
     </tr>
 </table>
 <br />
 
 <div style="float:right">
-    <FORM action="/ctl/htlHotel/staticupdate/" METHOD="POST" target="page_test">
+    <form action="/ctl/htlHotel/staticupdate/" method="post" target="page_test">
         情報ページHTML
         <small>
             <input type="submit" value="更新する">
