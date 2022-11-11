@@ -18,6 +18,7 @@
     {/if}
     {{-- Googleアナリティクス --}}
     {include file=$v->env.module_root|cat:'/views/_common/_google_analytics.tpl'}
+    @yield('headScript')
 </head>
 
 {{-- TODO: タグのインデントを修正 --}}
