@@ -37,7 +37,12 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 
 	// 社内トップ
 	Route::controller(BrTopController::class)->prefix("brtop")->group(function(){
-		Route::get('/', 'index')->name('ctl.brtop.index');
+		Route::get('/', 'BrtopController@index')->name('ctl.brtop.index');
+		Route::match(['get','post'],'/inspect', function(){return'TODO';})->name('ctl.brtop.inspect');
+		Route::match(['get','post'],'/registration', function(){return'TODO';})->name('ctl.brtop.registration');
+		Route::match(['get','post'],'/payment', function(){return'TODO';})->name('ctl.brtop.payment');
+
+
 	});
 
 	// ホテルトップ
