@@ -11,7 +11,14 @@
     class Operator
     {
         public $staff_nm = '';
-        public function __construct($staffName) { $this->staff_nm = $staffName; }
+        public $nta_login_data;
+        public function __construct($staffName)
+        {
+            $this->staff_nm = $staffName;
+            $this->nta_login_data = (object)[
+                'staff_nm' => 'staff_nm' . Str::random(3,6),
+            ];
+        }
         public function is_staff() { return rand(0,1); }
         public function is_nta() { return rand(0,1); }
         public function is_login() { return rand(0,1); }
@@ -68,7 +75,8 @@
     $no_print               = rand(0,1) == 0;
     $no_print_title         = rand(0,1) == 0;
     $service_info_flg       = rand(0,1) == 0;
-    $menu_title             = rand(0,1) == 0;
+    $menu_title             = rand(0,2) ? '' : 'menu_title_' . Str::random(rand(2,4));
+    $title                  = rand(0,2) ? '' : 'title_' . Str::random(rand(2,4));
     $acceptance_status_flg  = rand(0,1) == 0;
     $header_number          = 'header_number_' . rand(0,100);
     $ad = Str::random(16);
@@ -197,7 +205,7 @@
 @endif
 
 {{-- サービスセンター --}}
-@if (!($service->is_empty($menu_title)) || !($service->is_empty($title)))
+@if (!$service->is_empty($menu_title) || !$service->is_empty($title))
     <table border="3" cellspacing="0" cellpadding="2">
         <tr>
             <td bgcolor="#EEEEFF" align="center">

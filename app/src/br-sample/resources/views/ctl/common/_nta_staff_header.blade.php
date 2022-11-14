@@ -5,7 +5,7 @@
         <tr>
             <td style="white-space:nowrap; text-align:left;">
                 {{ strip_tags($v->user->hotel->hotel_nm) }}
-                @if (!is_empty(strip_tags($v->user->hotel->hotel_old_nm)))
+                @if (!$service->is_empty(strip_tags($v->user->hotel->hotel_old_nm)))
                     (旧{{ strip_tags($v->user->hotel->hotel_old_nm) }})
                 @endif
                 ({{ strip_tags($v->user->hotel->hotel_cd) }})

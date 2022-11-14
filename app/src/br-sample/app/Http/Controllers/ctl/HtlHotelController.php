@@ -25,24 +25,21 @@ use Illuminate\Support\Facades\DB;
 class HtlHotelController extends Controller
 {
     use Traits;
-    //
+
     public function show(Request $request)
     {
         $targetCd = $request->input('target_cd');
-
 
         $aa_hotel = Hotel::find($targetCd);
         $a_hotel_info = HotelInfo::find($targetCd);
         $a_hotel_bath_tax = HotelBathTax::find($targetCd);
         $a_hotel_bath_tax_flg = 1;
-        if ($aa_hotel->city_id == 44202) {
+        if ($aa_hotel->city_id == \App\Models\MastCity::CITY_ID_BEPPU) {
             // 別府市は宿泊税の金額に応じて入湯税額が変わるためこの機能を使えないようにFLGをセット
             // HACK: magic number
             $a_hotel_bath_tax_flg = 0;
         }
 
-
-        // TODO:
         // HACK: 移植元では、 get_hotel_xxx() 系を Hotel モデルにまとめている。
         // hotel_cdをセット
 
@@ -82,6 +79,7 @@ class HtlHotelController extends Controller
                 break;
             }
         }
+        $a_hotel_station = collect($a_hotel_station);
 
         return view('ctl.htlHotel.show', [
             'target_cd' => $targetCd,
@@ -105,7 +103,7 @@ class HtlHotelController extends Controller
             'a_facility'                => $a_facility,
 
             'a_facility_room'           => $a_facility_room,
-            'a_hotel_station'           => collect($a_hotel_station),
+            'a_hotel_station'           => $a_hotel_station,
             'a_hotel_control'           => $a_hotel_control,
             'a_hotel_cancel_policy'     => $a_hotel_cancel_policy,
             'a_hotel_cancel_rates'      => $a_hotel_cancel_rates,
@@ -115,8 +113,12 @@ class HtlHotelController extends Controller
             'a_hotel_bath_tax_flg'      => $a_hotel_bath_tax_flg,
 
         ]);
-        return 'HtlHotelController show method';
     }
+
+
+    // HACK: 以下の getHotelXxx 系のメソッド、定義場所要検討（工数次第か）
+    // Zend の Model から Laravel の Model に移すのは、役割上適切ではないと判断したため、 Controller に実装している。
+    // Controller が Fat になるため、 Service 層を導入するのがよいか
 
     private function getHotelLinks($targetCd)
     {
@@ -141,17 +143,30 @@ class HtlHotelController extends Controller
 
     private function getHotelCards($targetCd)
     {
-        // TODO: mast_card と join して card_nm を取得
-        return HotelCard::where('hotel_cd', $targetCd)->get();
+        $sql = <<<SQL
+            select
+                q1.hotel_cd,
+                mast_card.card_id,
+                mast_card.card_type,
+                mast_card.card_nm
+            from
+                mast_card
+                inner join (
+                    select
+                        hotel_card.hotel_cd,
+                        hotel_card.card_id
+                    from
+                        hotel_card
+                    where
+                        hotel_card.hotel_cd = :hotel_cd
+                ) q1
+                    on mast_card.card_id = q1.card_id
+            order by
+                mast_card.card_type,
+                mast_card.card_id
+        SQL;
+        return collect(DB::select($sql, ['hotel_cd' => $targetCd]));
     }
-    /**
-     * Undocumented function
-     *
-     * HACK: 定義場所要検討
-     *
-     * @param [type] $targetCd
-     * @return void
-     */
     private function getHotelAmenities($targetCd)
     {
         $sql = <<<SQL
@@ -613,5 +628,4 @@ class HtlHotelController extends Controller
         $parameters['hotel_cd'] = $targetCd;
         return collect(DB::select($sql, $parameters));
     }
-
 }

@@ -16,14 +16,6 @@
 
 @section('content')
 
-{{-- TODO: 共通ヘッダとの境界 to be deleted --}}
-<hr>
-<hr>
-<hr>
-<hr>
-<hr>
-
-
 {{-- パンクズ --}}
 {{-- TODO: 名前付きルートに変更 --}}
 <a href="/ctl/htltop/index/target_cd/{{ $target_cd }}">
@@ -65,7 +57,7 @@
         {{ Form::close() }}
         <td>
             @forelse ($a_hotel_card as $value)
-                {{ $value->card_id }}
+                {{ $value->card_nm }}
                 {{ $loop->last ? '' : '、' }}
             @empty
                 <span class="grayout">なし</span>
@@ -408,11 +400,4 @@
     </form>
 </div>
 
-
-<hr>
-<hr>
-<hr>
-<hr>
-<hr>
-{{-- TODO: 共通フッタとの境界 to be deleted --}}
 @endsection
