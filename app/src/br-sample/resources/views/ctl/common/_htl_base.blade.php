@@ -126,133 +126,122 @@
         </div>
 @endif
 
-<div class="{{ $no_print == true ? 'noprint' : '' }}">
-
-{{-- staffのみ情報を表示 --}}
-@if ($v->user->operator->is_staff())
-    @include ('ctl.common._htl_staff_header')
-@elseif ($v->user->operator->is_nta())
-    @include ('ctl.common._nta_staff_header')
-@endif
-
-<table border="0" width="100%" cellspacing="0" cellpadding="5" bgcolor="#EEEEFF" >
-    <tr>
-        <td nowrap>{{ strip_tags($header_number) }}</td>
-        <td>
-            {{-- TODO: URL --}}
-            <a href="{{ $v->env->source_path }}{{ $v->env->module }}/redirect/rsvhotel/?target_cd={{ $v->user->hotel->hotel_cd }}" target="_blank">
-                {{ strip_tags($v->user->hotel->hotel_nm) }}
-                @if ((!$service->is_empty(strip_tags($v->user->hotel->hotel_old_nm))))
-                    (旧{{ strip_tags($v->user->hotel->hotel_old_nm) }})
-                @endif
-            </a> 様
-            (施設コード：{{ strip_tags($v->user->hotel->hotel_cd) }})
-        </td>
-        <td nowrap align="right">
-            <table cellspacing="0" cellpadding="2" border="0">
-                <tr>
-                    {{-- aやん! --}}
-                    <td rowspan="2">
-                        {{-- <a href="http://www.nihon-weekly.com/hotelask/" target="_blank"><img src="/images/intro/ayan/banner.gif" width="300" height="56" border="0" alt="aやん! ウィークリーホテルズ" /></a> --}}
-                        {{-- TODO: 期間外、対応確認 --}}
-                        {{-- @if ($smarty->now >= '2020-06-01 00:00:00'|strtotime and $smarty->now <= '2020-07-15 23:59:59'|strtotime)
-                            <a href="https://www.kanxashi.co.jp/cp/202006kanxashi/?key=brv" target="_blank"><img src="/images/intro/kanzashi/kanxashi_zenryoku.png" alt="かんざしクラウド" height="56" width="300" /></a>
-                        @endif --}}
-                    </td>
-                    {{-- 一時削除 ２月早々にリニューアル予定 --}}
-                    {{-- <td rowspan="2"><a href="http://{$v->config->system->rsv_host_name}/intro/htlorimo/" target="_blank"><img src="/images/intro/htlorimo/banner.gif" width="328" height="56" border="0" alt="ＯＲＩＭＯケータイプレミアムモニターキャンペーン" /></a></td> --}}
-                    <td rowspan="2">
-                        @if ($v->user->hotel_status->entry_status == 0 && !($acceptance_status_flg === false))
-                            @include ('ctl.common._change_acceptance')
-                        @elseif ($v->user->hotel->ydp2_status && !($acceptance_status_flg === false))
-                            @include ('ctl.common._change_acceptance')
+    <div class="{{ $no_print == true ? 'noprint' : '' }}">
+        {{-- staffのみ情報を表示 --}}
+        @if ($v->user->operator->is_staff())
+            @include ('ctl.common._htl_staff_header')
+        @elseif ($v->user->operator->is_nta())
+            @include ('ctl.common._nta_staff_header')
+        @endif
+        <table border="0" width="100%" cellspacing="0" cellpadding="5" bgcolor="#EEEEFF" >
+            <tr>
+                <td nowrap>{{ strip_tags($header_number) }}</td>
+                <td>
+                    {{-- TODO: URL --}}
+                    <a href="{{ $v->env->source_path }}{{ $v->env->module }}/redirect/rsvhotel/?target_cd={{ $v->user->hotel->hotel_cd }}" target="_blank">
+                        {{ strip_tags($v->user->hotel->hotel_nm) }}
+                        @if ((!$service->is_empty(strip_tags($v->user->hotel->hotel_old_nm))))
+                            (旧{{ strip_tags($v->user->hotel->hotel_old_nm) }})
                         @endif
-                    </td>
-                        <td><br>
-                    </td>
-                </tr>
+                    </a> 様
+                    (施設コード：{{ strip_tags($v->user->hotel->hotel_cd) }})
+                </td>
+                <td nowrap align="right">
+                    <table cellspacing="0" cellpadding="2" border="0">
+                        <tr>
+                            {{-- aやん! --}}
+                            <td rowspan="2">
+                                {{-- <a href="http://www.nihon-weekly.com/hotelask/" target="_blank"><img src="/images/intro/ayan/banner.gif" width="300" height="56" border="0" alt="aやん! ウィークリーホテルズ" /></a> --}}
+                                {{-- TODO: 期間外、対応確認 --}}
+                                {{-- @if ($smarty->now >= '2020-06-01 00:00:00'|strtotime and $smarty->now <= '2020-07-15 23:59:59'|strtotime)
+                                    <a href="https://www.kanxashi.co.jp/cp/202006kanxashi/?key=brv" target="_blank"><img src="/images/intro/kanzashi/kanxashi_zenryoku.png" alt="かんざしクラウド" height="56" width="300" /></a>
+                                @endif --}}
+                            </td>
+                            {{-- 一時削除 ２月早々にリニューアル予定 --}}
+                            {{-- <td rowspan="2"><a href="http://{$v->config->system->rsv_host_name}/intro/htlorimo/" target="_blank"><img src="/images/intro/htlorimo/banner.gif" width="328" height="56" border="0" alt="ＯＲＩＭＯケータイプレミアムモニターキャンペーン" /></a></td> --}}
+                            <td rowspan="2">
+                                @if ($v->user->hotel_status->entry_status == 0 && !($acceptance_status_flg === false))
+                                    @include ('ctl.common._change_acceptance')
+                                @elseif ($v->user->hotel->ydp2_status && !($acceptance_status_flg === false))
+                                    @include ('ctl.common._change_acceptance')
+                                @endif
+                            </td>
+                                <td><br>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                {{-- TODO: Form Facades --}}
+                                <form action="{{ $v->env->source_path }}{{ $v->env->module }}/htltop/" method="post">
+                                    <input type="hidden" name="target_cd" value="{{ strip_tags($target_cd) }}" />
+                                    <input type="submit" value="メニュー">
+                                </form>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <br />
+        {{-- サービスセンター --}}
+        @if ($service_info_flg !== false)
+            @include ('ctl.common._htl_service_info', ['ad' => $ad])
+        @endif
+    </div>
+
+    <div class="{{ $no_print_title == true ? 'noprint' : '' }}">
+        {{-- サービスセンター --}}
+        @if (!$service->is_empty($menu_title) || !$service->is_empty($title))
+            <table border="3" cellspacing="0" cellpadding="2">
                 <tr>
-                    <td>
-                        {{-- TODO: Form Facades --}}
-                        <form action="{{ $v->env->source_path }}{{ $v->env->module }}/htltop/" method="post">
-                            <input type="hidden" name="target_cd" value="{{ strip_tags($target_cd) }}" />
-                            <input type="submit" value="メニュー">
-                        </form>
+                    <td bgcolor="#EEEEFF" align="center">
+                        <big>
+                            @if ($service->is_empty($menu_title))
+                                {{ strip_tags($title) }}
+                            @else
+                                {{ strip_tags($menu_title) }}
+                            @endif
+                        </big>
                     </td>
                 </tr>
             </table>
-        </td>
-    </tr>
-</table>
-
-<br />
-
-{{-- サービスセンター --}}
-@if ($service_info_flg !== false)
-    @include ('ctl.common._htl_service_info', ['ad' => $ad])
-@endif
-
-</div>
-
-<div class="{{ $no_print_title == true ? 'noprint' : '' }}">
-
-{{-- サービスセンター --}}
-@if (!$service->is_empty($menu_title) || !$service->is_empty($title))
-    <table border="3" cellspacing="0" cellpadding="2">
-        <tr>
-            <td bgcolor="#EEEEFF" align="center">
-                <big>
-                    @if ($service->is_empty($menu_title))
-                        {{ strip_tags($title) }}
-                    @else
-                        {{ strip_tags($menu_title) }}
-                    @endif
-                </big>
-            </td>
-        </tr>
-    </table>
-@endif
-
-<br />
-
-</div>
+        @endif
+        <br />
+    </div>
 
 {{-- MEMO: ここまで svn_trunk\public\app\ctl\views\_common\_htl_header.tpl --}}
 
-@yield('content')
+    @yield('content')
 
 {{-- MEMO: ここから svn_trunk\public\app\ctl\views\_common\_htl_footer.tpl --}}
 
-<div class="{{ $no_print == true ? 'noprint' : '' }}">
-
-<br>
-<table border="0" width="100%" cellspacing="0" cellpadding="0" >
-    <tr>
-        <td colspan="2" width="100%"><hr size="1" width="100%"></td>
-    </tr>
-    <tr>
-        {{-- ログインしていれば --}}
-        @if ($v->user->operator->is_login() == true)
-            <td nowrap>
-                @if (!$v->user->operator->is_staff())
-                    {{-- TODO: URL --}}
-                    <small><a href="{{ $v->env->source_path }}{{ $v->env->module }}/logout/">ログアウト</a></small>
+    <div class="{{ $no_print == true ? 'noprint' : '' }}">
+        <br>
+        <table border="0" width="100%" cellspacing="0" cellpadding="0" >
+            <tr>
+                <td colspan="2" width="100%"><hr size="1" width="100%"></td>
+            </tr>
+            <tr>
+                {{-- ログインしていれば --}}
+                @if ($v->user->operator->is_login() == true)
+                    <td nowrap>
+                        @if (!$v->user->operator->is_staff())
+                            {{-- TODO: URL --}}
+                            <small><a href="{{ $v->env->source_path }}{{ $v->env->module }}/logout/">ログアウト</a></small>
+                        @endif
+                    </td>
                 @endif
-            </td>
-        @endif
-        <td align="right">
-            <small>画面更新日時({{ date('Y-m-d H:i:s') }})</small>
-        </td>
-    </tr>
-</table>
-
-<br />
-
-<small>(c)Copyright {{ date('Y') }} BestReserve Co.,Ltd. All Rights Reserved.</small>
-<br><br>
-
-</div>
+                <td align="right">
+                    <small>画面更新日時({{ date('Y-m-d H:i:s') }})</small>
+                </td>
+            </tr>
+        </table>
+        <br />
+        <small>(c)Copyright {{ date('Y') }} BestReserve Co.,Ltd. All Rights Reserved.</small>
+        <br><br>
+    </div>
 
 </body>
+
 </html>
 {{-- MEMO: ここまで svn_trunk\public\app\ctl\views\_common\_htl_footer.tpl --}}
