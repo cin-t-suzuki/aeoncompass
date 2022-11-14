@@ -73,9 +73,7 @@
     $header_number          = 'header_number_' . rand(0,100);
     $ad = Str::random(16);
     $soon_after_release = '2010-05-22 17:00:00';
-    $key = ['error_handler', 'module', 'controller', 'action', Str::random(10)][rand(4,4)];
 
-    unset($value);
 @endphp
 
 <head>
