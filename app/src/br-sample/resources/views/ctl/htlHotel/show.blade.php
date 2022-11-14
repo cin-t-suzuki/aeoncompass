@@ -4,7 +4,7 @@
 @section('title', '施設情報詳細')
 @inject('service', 'App\Http\Controllers\ctl\HtlHotelController')
 
-{{-- HACK: （工数次第） #ccc はフェードアウトっぽくしているところなので、 class でまとめて css に定義したい --}}
+{{-- HACK: （工数次第） #ccc はグレーアウトっぽくしているところなので、 class でまとめて css に定義したい --}}
 {{-- HACK: （工数次第） 各行のタイトルが青背景で改行禁止になっている。 css にまとめたい --}}
 @section('headScript')
     <style type="text/css">
@@ -145,7 +145,7 @@
                 @else
                     @include('ctl.common._hotel_stations', [
                         'hotel_stations' => $a_hotel_station,
-                        'limit' => 3, // 未定義だと動作しないため、 null で定義
+                        'limit' => null, // 未定義だと動作しないため、 null で定義
                     ])
                 @endif
             </td>
