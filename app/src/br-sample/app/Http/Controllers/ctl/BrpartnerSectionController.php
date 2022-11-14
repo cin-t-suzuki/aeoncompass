@@ -3,15 +3,15 @@ namespace App\Http\Controllers\ctl;
 use App\Http\Controllers\ctl\_commonController;
 use Illuminate\Support\Facades\Request;
 use App\Models\PartnerSection;
-use App\Util\Models_Cipher;
 use Illuminate\Support\Facades\DB;
 use Exception;
-use Carbon\Carbon;
 use App\Common\Traits;
 
 	class BrpartnerSectionController extends _commonController
 	{
 		use Traits;
+
+		//TODO 再読み込みを行った際の制御（再度前のアクションが実行されてエラーになる）
 
 		//======================================================================
 		// インデックス
@@ -19,15 +19,12 @@ use App\Common\Traits;
 		public function index()
 		{	
 			// データを取得
-			//別ページからのredirectの場合は渡されたデータを反映する
-			if (session()->get('return_flg')) {
-					$return_data = session()->get('rtn_data');//配列でとってきてしまう
-					$request_params = $return_data[0];//これで大丈夫か
-					session()->forget('rtn_data');
-					session()->forget('return_flg');
+			//別アクションからのredirectの場合は渡されたデータを反映する
+			if (session()->has('return_data')) {
+					$request_params = session()->pull('return_data');
 			} else {
 				//それ以外（初期表示）
-				$request_params = Request::all();//違うかも
+				$request_params = Request::all();
 			}
 	
 			$partnerSectionModel = new PartnerSection();
@@ -48,7 +45,7 @@ use App\Common\Traits;
 		public function new()
 		{	
 			// データを取得
-			$_a_request_params = Request::all();//違うかも
+			$_a_request_params = Request::all();
 			$partnerSectionModel = new PartnerSection();
 			$search_params = $partnerSectionModel->search_params($_a_request_params);
 
@@ -70,7 +67,7 @@ use App\Common\Traits;
 			$partnerSectionData[$partnerSectionModel->COL_PARTNER_CD] = $request["partner_cd"]??null;
 			$partnerSectionData[$partnerSectionModel->COL_SECTION_ID] = $request["section_id"]??null;
 			$partnerSectionData[$partnerSectionModel->COL_SECTION_NM] = $request["section_nm"]??null;
-			$partnerSectionData[$partnerSectionModel->COL_ORDER_NO] = $request["order_no"];
+			$partnerSectionData[$partnerSectionModel->COL_ORDER_NO] = $request["order_no"]??null;
 	
 			// バリデーション
 			$errorList = $partnerSectionModel->validation($partnerSectionData);
@@ -92,7 +89,7 @@ use App\Common\Traits;
 			$requestPartnerSection['order_no'] = $partnerSectionModel->get_order_no_next($requestPartnerSection);
 
 
-			// 画面入力を変換 （TODO 入力でも使うはず）
+			// 画面入力を変換
 			$errorList = $this->validatePartnerSectionFromScreen($partnerSectionData, $requestPartnerSection, $partnerSectionModel);
 
 			if( count($errorList) > 0){
@@ -116,6 +113,7 @@ use App\Common\Traits;
 				{
 					// DB更新
 					$partnerSectionModel->insert($con, $partnerSectionData); 
+					//insertでいいか？
 				});
 
 			}catch(Exception $e){
@@ -132,13 +130,9 @@ use App\Common\Traits;
 					->with(['errors'=>$errorList]);
 			}
 
-			// 正常に完了
-			// 一覧へ戻る
+			// 正常に完了、一覧へ戻る
 			// 更新後の結果表示
-			session()->put('return_flg', true);
-			session()->push('rtn_data',$partnerSectionData);//渡す値あってる？
-
-			// indexへ
+			session()->put('return_data',$partnerSectionData);
 			return redirect()->route('ctl.brpartnersection.index');
 
 		}
@@ -196,7 +190,7 @@ use App\Common\Traits;
 			// 更新するデータを作成
 			$partner_section_find['section_nm']  = $requestPartnerSection['section_nm'];
 			
-			// 画面入力を変換 （TODO 入力でも使うはず）
+			// 画面入力を変換
 			$errorList = $this->validatePartnerSectionFromScreen($partnerSectionData, $partner_section_find, $partnerSectionModel);
 
 			if( count($errorList) > 0){
@@ -238,10 +232,8 @@ use App\Common\Traits;
 					->with(['errors'=>$errorList]);
 			}
 
-			// 正常に完了
-			// 一覧へ戻る
-			session()->put('return_flg', true);
-			session()->push('rtn_data',$partnerSectionData);//渡す値あってる？
+			// 正常に完了、一覧へ戻る
+			session()->put('return_data',$partnerSectionData);
 			return redirect()->route('ctl.brpartnersection.index');
 
 		}
@@ -323,8 +315,7 @@ SQL;
 
 			// 正常に完了
 			// 一覧へ戻る
-			session()->put('return_flg', true);
-			session()->push('rtn_data',$requestPartnerSection);//渡す値あってる？
+			session()->put('return_data',$requestPartnerSection);//渡す値あってる？
 			return redirect()->route('ctl.brpartnersection.index');
 
 		}
@@ -440,8 +431,7 @@ SQL;
 			
 			// 正常に完了
 			// 一覧へ戻る
-			session()->put('return_flg', true);
-			session()->push('rtn_data',$requestPartnerSection);//渡す値あってる？
+			session()->put('return_data',$requestPartnerSection);//渡す値あってる？
 			return redirect()->route('ctl.brpartnersection.index');
 		}
 		
@@ -493,8 +483,7 @@ SQL;
 			
 			// 正常に完了
 			// 一覧へ戻る
-			session()->put('return_flg', true);
-			session()->push('rtn_data',$requestPartnerSection);//渡す値あってる？
+			session()->put('return_data',$requestPartnerSection);//渡す値あってる？
 			return redirect()->route('ctl.brpartnersection.index');
 		}
 		
@@ -539,8 +528,7 @@ SQL;
 			
 			// 正常に完了
 			// 一覧へ戻る
-			session()->put('return_flg', true);
-			session()->push('rtn_data',$requestPartnerSection);//渡す値あってる？
+			session()->put('return_data',$requestPartnerSection);//渡す値あってる？
 			return redirect()->route('ctl.brpartnersection.index');
 		}
 		
@@ -593,8 +581,7 @@ SQL;
 			
 			// 正常に完了
 			// 一覧へ戻る
-			session()->put('return_flg', true);
-			session()->push('rtn_data',$requestPartnerSection);//渡す値あってる？
+			session()->put('return_data',$requestPartnerSection);//渡す値あってる？
 			return redirect()->route('ctl.brpartnersection.index');
 		}
 	}

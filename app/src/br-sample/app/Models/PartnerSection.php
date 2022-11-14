@@ -72,10 +72,10 @@ SQL;
 	//======================================================================
 	// 
 	//======================================================================
-	public function search_params($_a_request_params)
+	public function search_params($request_params)
 	{
 		// 検索用パラメータ設定（パートナー管理に戻った時用）
-		$search_params = $this->_set_search_params($_a_request_params);
+		$search_params = $this->_set_search_params($request_params);
 		return $search_params;
 	}
 
@@ -83,36 +83,36 @@ SQL;
 	// 検索用パラメータ設定（パートナー管理に戻った時用）
 	//   ※リクエストから検索に使用するパラメータだけを抽出して保持する
 	//======================================================================
-	private function _set_search_params($_a_request_params)
+	private function _set_search_params($request_params)
 	{
 		// 初期化
 		$_a_search_params = array();
 		$_s_search_params = '';
 		
 		// 提携先コード
-		if ( !$this->is_empty($_a_request_params['search_partner_cd']?? null) ) { //??null追加でいいか（下記同様）
-			$_a_search_params['search_partner_cd'] = $_a_request_params['search_partner_cd'];
+		if ( !$this->is_empty($request_params['search_partner_cd']?? null) ) { //??null追加でいいか（下記同様）
+			$_a_search_params['search_partner_cd'] = $request_params['search_partner_cd'];
 		}
 		
 		// 提携先名称
-		if ( !$this->is_empty($_a_request_params['search_partner_nm']?? null) ) {
-			$_a_search_params['search_partner_nm'] = $_a_request_params['search_partner_nm'];
+		if ( !$this->is_empty($request_params['search_partner_nm']?? null) ) {
+			$_a_search_params['search_partner_nm'] = $request_params['search_partner_nm'];
 		}
 		
 		// 接続形態
-		if ( !$this->is_empty($_a_request_params['search_connect_cls']?? null) ) {
-			$_a_search_params['search_connect_cls'] = $_a_request_params['search_connect_cls'];
+		if ( !$this->is_empty($request_params['search_connect_cls']?? null) ) {
+			$_a_search_params['search_connect_cls'] = $request_params['search_connect_cls'];
 		}
 		
 		// 接続形態詳細
-		if ( !$this->is_empty($_a_request_params['search_connect_type']?? null) ) {
-			$_a_search_params['search_connect_type'] = $_a_request_params['search_connect_type'];
+		if ( !$this->is_empty($request_params['search_connect_type']?? null) ) {
+			$_a_search_params['search_connect_type'] = $request_params['search_connect_type'];
 		}
 		
 		// 表示項目
 		for ( $ii = 1; $ii <= 5; $ii++ ) {
-			if ( !$this->is_empty($_a_request_params['search_partner_disply_' . $ii]?? null) ) {
-				$_a_search_params['search_partner_disply_' . $ii] = $_a_request_params['search_partner_disply_' . $ii];
+			if ( !$this->is_empty($request_params['search_partner_disply_' . $ii]?? null) ) {
+				$_a_search_params['search_partner_disply_' . $ii] = $request_params['search_partner_disply_' . $ii];
 			}
 		}
 		

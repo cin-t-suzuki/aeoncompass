@@ -10,7 +10,7 @@
     });
   -->
 </script>
-  {{-- メッセージボックス ※引数入れていない --}}
+  {{-- メッセージボックス --}}
   {{-- メッセージ/TODO 他と書き方違う --}}
   @section('message')
   @include('ctl.common.message',['guides'=>$messages["guides"]])

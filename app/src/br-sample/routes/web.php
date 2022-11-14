@@ -133,6 +133,7 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 		Route::match(['get','post'],'/partnercontroledt', 'partnercontroledt')->name('ctl.brpartner.partnercontroledt'); //表示
 		Route::post('/partnercontrolupd', 'partnercontrolupd')->name('ctl.brpartner.partnercontrolupd'); //更新
 	});	
+
 	//所属団体設定画面
 	Route::controller(BrpartnerSectionController::class)->prefix("brpartnersection")->group(function(){
 		Route::match(['get','post'],'/', 'index')->name('ctl.brpartnersection.index'); //表示
@@ -145,6 +146,17 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 		Route::post('/down', 'down')->name('ctl.brpartnersection.down'); //1つ下へ
 		Route::post('/head', 'head')->name('ctl.brpartnersection.head'); //一番上へ
 		Route::post('/tail', 'tail')->name('ctl.brpartnersection.tail'); //一番下へ
+	});	
+
+	//キーワード設定
+	Route::controller(BrpartnerKeywordController::class)->prefix("brpartnerKeyword")->group(function(){
+		Route::match(['get','post'],'/', 'index')->name('ctl.brpartnerKeyword.index'); //表示
+		Route::match(['get','post'],'/new', 'new')->name('ctl.brpartnerKeyword.new'); //表示
+		Route::post('/_input', '_input')->name('ctl.brpartnerKeyword._input'); //表示
+		Route::post('/create', 'create')->name('ctl.brpartnerKeyword.create'); //追加
+		Route::match(['get','post'],'/edit', 'edit')->name('ctl.brpartnerKeyword.edit'); //編集
+		Route::post('/update', 'update')->name('ctl.brpartnerKeyword.update'); //更新
+		Route::post('/sort', 'sort')->name('ctl.brpartnerKeyword.sort'); //順番変更
 	});	
 
 	// パートナー精算先

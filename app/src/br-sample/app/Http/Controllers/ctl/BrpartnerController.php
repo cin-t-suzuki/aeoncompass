@@ -43,8 +43,8 @@ use App\Common\Traits;
 				$partner = new Partner();
 
 				// リターンフラグ
-				$s_return_flg = Request::input("return_flg");
-				if ($s_return_flg != "true"){
+				$return_from_update = Request::input("return_flg");
+				if ($return_from_update != "true"){
 					$a_row = $partner->selectByKey($a_params["partner_cd"]);
 					//DBからの取得時は日付をフォーマット
 					$date = new Carbon($a_row['open_ymd']);
@@ -158,34 +158,29 @@ use App\Common\Traits;
 			$a_params = Request::all();
 			$models_partner = new Partner();
 
-			// Partner_controlモデル の インスタンスを取得 　これでいい？
+			// PartnerControlモデルを取得
 			$partner_control = new PartnerControl();
 
-			// 検索実行用フラグ
-			$s_return_flg = Request::input("return_flg");
+			// partnercontrolupdからの戻りの判定用 
+			$return_from_upd = Request::input("return_flg");
 
-			if ($s_return_flg != "true"){
+			if ($return_from_upd != "true"){
 				//エラーで戻ってきた場合
-				if (session()->get('back_flg')) {
-					//渡されてきたデータの取得
-					$back_data = session()->get('rtn_data'); //配列でとってきてしまう
-					$a_row = $back_data[0]; //ので、これで大丈夫か
+				if (session()->has('return_data')) {
+					//エラー時の入力値データの取得、セット
+					$a_row = session()->pull('return_data');
 					$this->addViewData("control_value", $a_row);
-					$this->addViewData("partners", $a_row); //リクエストがないのでpartnersにも同じ値を入れた
-					//エラーメッセージの取得
-					$errorList = session()->get('errors');
+					$this->addViewData("partners", $a_row); //リクエストがないのでpartnersにも同じ値を代入
+					//エラーメッセージの取得、セット
+					$errorList = session()->pull('errors');
 					$this->addErrorMessageArray($errorList);
-					//セッションの削除
-					session()->forget('rtn_data');
-					session()->forget('back_flg');
-					session()->forget('errors');
 				} else {
+					//初期表示時にsearchlistから渡されたpartner_cdで検索
 					$a_row = $partner_control->selectByKey($a_params['partner_cd']);
-					//初期表示時に検索結果をassign
+					//データをビューにセット
 					$this->addViewData("control_value", $a_row);
 					$this->addViewData("partners", $a_params);
 				}
-
 			}else{
 				//初期表示以外は取得したデータをassign
 				$this->addViewData("control_value", $a_params);
@@ -269,9 +264,9 @@ use App\Common\Traits;
 							$errorList = $this->validatePartnerControlEmailFromScreen($partnerControlData, $requestPartnerControl['result_email'], $partnerControlModel);
 							if ( !$this->is_empty($errorList) ) {
 								session()->put('errors', $errorList);
-								session()->put('back_flg', true);
-								session()->push('rtn_data',$requestPartnerControl);//渡す値あってる？
+								session()->put('return_data',$requestPartnerControl);
 								return redirect()->route('ctl.brpartner.partnercontroledt');
+									//できなかった ->with(['errors'=> $errorList,'return_data',$requestPartnerControl]);
 							}
 						}
 					}
@@ -280,8 +275,7 @@ use App\Common\Traits;
 					if ($this->is_empty($requestPartnerControl['result_email'])) {
 						$errorList[] ='実績レポート配信メールアドレスが未設定です';
 						session()->put('errors', $errorList);
-						session()->put('back_flg', true);
-						session()->push('rtn_data',$requestPartnerControl);//渡す値あってる？
+						session()->put('return_data',$requestPartnerControl);
 						return redirect()->route('ctl.brpartner.partnercontroledt');
 					}
 
@@ -296,8 +290,7 @@ use App\Common\Traits;
 					if ($this->is_empty($requestPartnerControl['result_rpc_url'])) {
 						$errorList[] ='予約時実績報告レポート配信先URLが未設定です';
 						session()->put('errors', $errorList);
-						session()->put('back_flg', true);
-						session()->push('rtn_data',$requestPartnerControl);//渡す値あってる？
+						session()->put('return_data',$requestPartnerControl);
 						return redirect()->route('ctl.brpartner.partnercontroledt');
 					}
 				}
@@ -310,8 +303,7 @@ use App\Common\Traits;
 			if( count($errorList) > 0){
 				$errorList[] = "提携先管理情報の更新ができませんでした。";
 				session()->put('errors', $errorList);
-				session()->put('back_flg', true);
-				session()->push('rtn_data',$requestPartnerControl);//渡す値あってる？
+				session()->put('return_data',$requestPartnerControl);
 				return redirect()->route('ctl.brpartner.partnercontroledt');
 					
 			}
@@ -343,8 +335,7 @@ use App\Common\Traits;
 			if ($dbCount == 0 || count($errorList) > 0 || !empty($dbErr)){
 				$errorList[] = '提携先管理情報の更新ができませんでした';
 				session()->put('errors', $errorList);
-				session()->put('back_flg', true);
-				session()->push('rtn_data',$requestPartnerControl);//渡す値あってる？
+				session()->put('return_data',$requestPartnerControl);
 				return redirect()->route('ctl.brpartner.partnercontroledt');
 			}
 
