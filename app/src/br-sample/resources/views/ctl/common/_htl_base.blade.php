@@ -18,20 +18,24 @@
     }
     $v->user->operator = new Operator(Str::random(16));
 
-    $v->user->hotel = new stdClass();
-    $v->user->hotel->hotel_old_nm = 'hotel_old_nm_value';
-    $v->user->hotel->ydp2_status = rand(0,1) == 0;
+    $v->user->hotel = (object)[
+        'hotel_nm'      => 'hotel_nm_'      . Str::random(rand(3,8)),
+        'hotel_cd'      => 'hotel_cd_'      . Str::random(rand(3,8)),
+        'hotel_old_nm'  => 'hotel_old_nm_'  . Str::random(rand(3,8)),
+        'ydp2_status'   => rand(0,1) == 0,
+    ];
 
-    $v->user->hotel_status = new stdClass();
-    $v->user->hotel_status->entry_status = rand(0,1);
+    $v->user->hotel_status = (object)[
+        'entry_status' => rand(0,1),
+    ];
 
-    // $v->env = [
-    //     'controller'        => "brtop",
-    //     'action'            => "index",
-    //     'source_path'       => 'source_path_val',
-    //     'module'            => 'module_val',
-    //     'path_base_module'  => 'ctl/statics',
-    // ];
+    $v->env = (object)[
+        'controller'        => "brtop",
+        'action'            => "index",
+        'source_path'       => 'source_path_val',
+        'module'            => 'module_val',
+        'path_base_module'  => 'ctl/statics',
+    ];
 
     $v->config = new \stdClass;
     $v->config->environment = new \stdClass;
@@ -46,7 +50,7 @@
     $service_info_flg       = rand(0,1) == 0;
     $menu_title             = rand(0,1) == 0;
     $acceptance_status_flg  = rand(0,1) == 0;
-
+    $header_number          = 'header_number_' . rand(0,100);
     $ad = Str::random(16);
 
 @endphp
@@ -70,7 +74,7 @@
         <link type="text/css" rel="stylesheet" href="/styles/screen.css" media="screen">
     @endif
     {{-- TODO: Googleアナリティクス --}}
-        {{-- {{ include file=$v->env['module_root']|cat:'/views/_common/_google_analytics.tpl' }} --}}
+        {{-- { include file=$v->env['module_root']|cat:'/views/_common/_google_analytics.tpl' } --}}
     {{-- /Googleアナリティクス --}}
     @yield('headScript')
 </head>
@@ -102,24 +106,22 @@
 {{-- staffのみ情報を表示 --}}
 @if ($v->user->operator->is_staff())
     @include ('ctl.common._htl_staff_header')
-    {include file=$v->env.module_root|cat:'/views/_common/_htl_staff_header.tpl'}
 @elseif ($v->user->operator->is_nta())
     @include ('ctl.common._nta_staff_header')
-    {include file=$v->env.module_root|cat:'/view2/_common/_nta_staff_header.tpl'}
 @endif
 
 <table border="0" width="100%" cellspacing="0" cellpadding="5" bgcolor="#EEEEFF" >
     <tr>
-        <td nowrap>{strip_tags($header_number)}</td>
+        <td nowrap>{{ strip_tags($header_number) }}</td>
         <td>
             {{-- TODO: URL --}}
-            <a href="{$v->env.source_path}{$v->env.module}/redirect/rsvhotel/?target_cd={$v->user->hotel.hotel_cd}" target="_blank">
-                {strip_tags($v->user->hotel.hotel_nm)}
+            <a href="{{ $v->env->source_path }}{{ $v->env->module }}/redirect/rsvhotel/?target_cd={{ $v->user->hotel->hotel_cd }}" target="_blank">
+                {{ strip_tags($v->user->hotel->hotel_nm) }}
                 @if ((!$service->is_empty(strip_tags($v->user->hotel->hotel_old_nm))))
-                    (旧{strip_tags($v->user->hotel.hotel_old_nm)})
+                    (旧{{ strip_tags($v->user->hotel->hotel_old_nm) }})
                 @endif
             </a> 様
-            (施設コード：{strip_tags($v->user->hotel.hotel_cd)})
+            (施設コード：{{ strip_tags($v->user->hotel->hotel_cd) }})
         </td>
         <td nowrap align="right">
             <table cellspacing="0" cellpadding="2" border="0">
@@ -137,10 +139,8 @@
                     <td rowspan="2">
                         @if ($v->user->hotel_status->entry_status == 0 && !($acceptance_status_flg === false))
                             @include ('ctl.common._change_acceptance')
-                            {include file=$v->env.module_root|cat:'/views/_common/_change_acceptance.tpl'}
                         @elseif ($v->user->hotel->ydp2_status && !($acceptance_status_flg === false))
                             @include ('ctl.common._change_acceptance')
-                            {include file=$v->env.module_root|cat:'/views/_common/_change_acceptance.tpl'}
                         @endif
                     </td>
                         <td><br>
@@ -149,8 +149,8 @@
                 <tr>
                     <td>
                         {{-- TODO: Form Facades --}}
-                        <form action="{$v->env.source_path}{$v->env.module}/htltop/" method="post">
-                            <input type="hidden" name="target_cd" value="{strip_tags($v->assign->target_cd)}" />
+                        <form action="{{ $v->env->source_path }}{{ $v->env->module }}/htltop/" method="post">
+                            <input type="hidden" name="target_cd" value="{{ strip_tags($target_cd) }}" />
                             <input type="submit" value="メニュー">
                         </form>
                     </td>
@@ -165,7 +165,6 @@
 {{-- サービスセンター --}}
 @if ($service_info_flg !== false)
     @include ('ctl.common._htl_service_info', ['ad' => $ad])
-    {include file=$v->env.module_root|cat:'/views/_common/_htl_service_info.tpl' ad=$ad}
 @endif
 
 @if ($no_print == true)
@@ -218,7 +217,7 @@
             <td nowrap>
                 @if (!$v->user->operator->is_staff())
                     {{-- TODO: URL --}}
-                    <small><a href="{$v->env.source_path}{$v->env.module}/logout/">ログアウト</a></small>
+                    <small><a href="{{ $v->env->source_path }}{{ $v->env->module }}/logout/">ログアウト</a></small>
                 @endif
             </td>
         @endif
