@@ -60,10 +60,8 @@
 
     $v->config = new \stdClass;
     $v->config->environment = new \stdClass;
-    $v->config->environment->status = 'development';
-    if (rand(0,99) == 0) $v->config->environment->status = 'test';
-    if (rand(0,99) == 1) $v->config->environment->status = 'product';
-    if (rand(0,99) == 2) $v->config->environment->status = 'unknown';
+    $statuses = ['development', 'test', 'product', 'unknown'];
+    $v->config->environment->status = $statuses[rand(0,3)];
 
     $v->config->environment->mail = (object)[
         'from' => (object)[
@@ -119,18 +117,16 @@
         <div style="margin-left:-12px;padding:0.25em 0;background-color:#36A;color:#fff;font-weifht:bold;width:6em;text-align:center;">
             開発環境
         </div>
-@elseif ($v->config->environment->status != "product")
+@elseif ($v->config->environment->status == "product")
+    <body topmargin="0" marginheight="0">
+@else
     <body topmargin="0" marginheight="0" style="margin-top:0;margin-left:0;padding-left:8px;border-left:4px solid #A63;">
         <div style="margin-left:-12px;padding:0.25em 0;background-color:#A63;color:#fff;font-weifht:bold;width:6em;text-align:center;">
             環境不明
         </div>
-@else
-    <body topmargin="0" marginheight="0">
 @endif
 
-@if ($no_print == true)
-    <div class="noprint">
-@endif
+<div class="{{ $no_print == true ? 'noprint' : '' }}">
 
 {{-- staffのみ情報を表示 --}}
 @if ($v->user->operator->is_staff())
@@ -196,13 +192,9 @@
     @include ('ctl.common._htl_service_info', ['ad' => $ad])
 @endif
 
-@if ($no_print == true)
-    </div>
-@endif
+</div>
 
-@if ($no_print_title == true)
-    <div class="noprint">
-@endif
+<div class="{{ $no_print_title == true ? 'noprint' : '' }}">
 
 {{-- サービスセンター --}}
 @if (!$service->is_empty($menu_title) || !$service->is_empty($title))
@@ -223,18 +215,16 @@
 
 <br />
 
-@if ($no_print_title == true)
-    </div>
-@endif
+</div>
 
 {{-- MEMO: ここまで svn_trunk\public\app\ctl\views\_common\_htl_header.tpl --}}
 
 @yield('content')
 
 {{-- MEMO: ここから svn_trunk\public\app\ctl\views\_common\_htl_footer.tpl --}}
-@if ($no_print == true)
-    <div class="noprint">
-@endif
+
+<div class="{{ $no_print == true ? 'noprint' : '' }}">
+
 <br>
 <table border="0" width="100%" cellspacing="0" cellpadding="0" >
     <tr>
@@ -260,9 +250,8 @@
 
 <small>(c)Copyright {{ date('Y') }} BestReserve Co.,Ltd. All Rights Reserved.</small>
 <br><br>
-@if ($no_print == true)
-    </div>
-@endif
+
+</div>
 
 </body>
 </html>
