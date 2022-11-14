@@ -23,17 +23,31 @@
         'hotel_cd'      => 'hotel_cd_'      . Str::random(rand(3,8)),
         'hotel_old_nm'  => 'hotel_old_nm_'  . Str::random(rand(3,8)),
         'ydp2_status'   => rand(0,1) == 0,
+
+        'premium_status' => rand(0,1) == 0,
+        'visual_package_status' => rand(0,1) == 0,
+        'accept_status' => rand(0,1),
     ];
 
     $v->user->hotel_status = (object)[
         'entry_status' => rand(0,1),
     ];
 
+    $v->user->hotel_control = (object)[
+        'stock_type' => rand(0,2),
+    ];
+    $v->user->hotel_person = (object)[
+        'person_nm' => 'person_nm_' . Str::random(rand(8, 16)),
+        'person_post' => 'person_post_' . Str::random(rand(8, 16)),
+        'person_tel' => 'person_tel_' . rand(1000000, 9999999),
+        'person_fax' => 'person_fax_' . rand(1000000, 9999999),
+    ];
+
     $v->env = (object)[
         'controller'        => "brtop",
         'action'            => "index",
-        'source_path'       => 'source_path_val',
-        'module'            => 'module_val',
+        'source_path'       => '',
+        'module'            => '/ctl',
         'path_base_module'  => 'ctl/statics',
     ];
 
@@ -44,6 +58,12 @@
     if (rand(0,99) == 1) $v->config->environment->status = 'product';
     if (rand(0,99) == 2) $v->config->environment->status = 'unknown';
 
+    $v->config->environment->mail = (object)[
+        'from' => (object)[
+            'opc' => Str::random(rand(20, 30)),
+        ],
+    ];
+
     $print_flg              = rand(0,9) == 0;
     $no_print               = rand(0,1) == 0;
     $no_print_title         = rand(0,1) == 0;
@@ -52,7 +72,10 @@
     $acceptance_status_flg  = rand(0,1) == 0;
     $header_number          = 'header_number_' . rand(0,100);
     $ad = Str::random(16);
+    $soon_after_release = '2010-05-22 17:00:00';
+    $key = ['error_handler', 'module', 'controller', 'action', Str::random(10)][rand(4,4)];
 
+    unset($value);
 @endphp
 
 <head>
