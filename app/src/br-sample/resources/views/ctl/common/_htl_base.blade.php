@@ -106,22 +106,24 @@
     @yield('headScript')
 </head>
 
-{{-- TODO: タグのインデントを修正 --}}
+{{-- HACK: （工数次第か）タグのインデントを修正。 CSS を共通化して、class の付与で分岐したらスッキリすると思われる。 --}}
 @if ($v->config->environment->status == "test")
-    <body topmargin="0" marginheight="0" style="margin-top:0;margin-left:0;padding-left:8px;border-left:4px solid #297;">
-        <div style="margin-left:-12px;padding:0.25em 0;background-color:#297;color:#fff;font-weifht:bold;width:6em;text-align:center;">
+    <body topmargin="0" marginheight="0" style="margin-top:0;margin-left:0;padding-left:8px;border-left-width:4px;border-left-style:solid;border-left-color:#297;">
+        <div style="margin-left:-12px;padding:0.25em 0;color:#fff;font-weifht:bold;width:6em;text-align:center;background-color:#297;">
             検証環境
         </div>
 @elseif ($v->config->environment->status == "development")
-    <body topmargin="0" marginheight="0" style="margin-top:0;margin-left:0;padding-left:8px;border-left:4px solid #36A;">
-        <div style="margin-left:-12px;padding:0.25em 0;background-color:#36A;color:#fff;font-weifht:bold;width:6em;text-align:center;">
+    <body topmargin="0" marginheight="0" style="margin-top:0;margin-left:0;padding-left:8px;border-left-width:4px;border-left-style:solid;border-left-color:#36A;">
+        <div style="margin-left:-12px;padding:0.25em 0;color:#fff;font-weifht:bold;width:6em;text-align:center;background-color:#36A;">
             開発環境
         </div>
 @elseif ($v->config->environment->status == "product")
     <body topmargin="0" marginheight="0">
+        <div>
+        </div>
 @else
-    <body topmargin="0" marginheight="0" style="margin-top:0;margin-left:0;padding-left:8px;border-left:4px solid #A63;">
-        <div style="margin-left:-12px;padding:0.25em 0;background-color:#A63;color:#fff;font-weifht:bold;width:6em;text-align:center;">
+    <body topmargin="0" marginheight="0" style="margin-top:0;margin-left:0;padding-left:8px;border-left-width:4px;border-left-style:solid;border-left-color:#A63;">
+        <div style="margin-left:-12px;padding:0.25em 0;color:#fff;font-weifht:bold;width:6em;text-align:center;background-color:#A63;">
             環境不明
         </div>
 @endif
