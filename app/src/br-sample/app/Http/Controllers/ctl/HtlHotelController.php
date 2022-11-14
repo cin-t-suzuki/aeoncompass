@@ -115,7 +115,6 @@ class HtlHotelController extends Controller
         ]);
     }
 
-
     // HACK: 以下の getHotelXxx 系のメソッド、定義場所要検討（工数次第か）
     // Zend の Model から Laravel の Model に移すのは、役割上適切ではないと判断したため、 Controller に実装している。
     // Controller が Fat になるため、 Service 層を導入するのがよいか
@@ -124,7 +123,6 @@ class HtlHotelController extends Controller
     {
         return HotelLink::where('hotel_cd', $targetCd)->get();
     }
-
     private function getHotelInformCancels($targetCd)
     {
         return HotelInform::where('hotel_cd', $targetCd)
@@ -132,7 +130,6 @@ class HtlHotelController extends Controller
             ->orderBy('order_no', 'asc')
             ->get();
     }
-
     private function getHotelInformFrees($targetCd)
     {
         return HotelInform::where('hotel_cd', $targetCd)
@@ -140,7 +137,6 @@ class HtlHotelController extends Controller
             ->orderBy('order_no', 'asc')
             ->get();
     }
-
     private function getHotelCards($targetCd)
     {
         $sql = <<<SQL
@@ -205,7 +201,6 @@ class HtlHotelController extends Controller
 
         return collect(DB::select($sql, ['hotel_cd' => $targetCd]));
     }
-
     private function getHotelServices($targetCd)
     {
         $sql = <<<SQL
@@ -408,7 +403,6 @@ class HtlHotelController extends Controller
 
         return $a_amenity;
     }
-
     private function getServices($a_hotel_services)
     {
         // MEMO: 要は重複を排除して、表示数を3個に制限するものと思われる。
@@ -433,7 +427,6 @@ class HtlHotelController extends Controller
         }
         return $a_service;
     }
-
     private function getNearbies($a_hotel_nearbies)
     {
 
