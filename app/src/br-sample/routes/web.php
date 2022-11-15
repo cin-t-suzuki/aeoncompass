@@ -129,9 +129,12 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 
     });
 
-    Route::get('/ctl/brhotelarea', 'BrHotelAreaController@index')->name('ctl.br_hotel_area.index');
-    Route::get('/ctl/brhotelarea/new', 'BrHotelAreaController@new')->name('ctl.br_hotel_area.new');
-    Route::get('/ctl/brhotelarea/edit', 'BrHotelAreaController@edit')->name('ctl.br_hotel_area.edit');
+    Route::get('/brhotelarea', 'BrHotelAreaController@index')->name('ctl.br_hotel_area.index');
+    Route::post('/brhotelarea/new', 'BrHotelAreaController@new')->name('ctl.br_hotel_area.new');
+    Route::post('/brhotelarea/edit', 'BrHotelAreaController@edit')->name('ctl.br_hotel_area.edit');
+    Route::post('/brhotelarea/delete', 'BrHotelAreaController@delete')->name('ctl.br_hotel_area.delete');
+    Route::post('/brhotelarea/create', 'BrHotelAreaController@create')->name('ctl.br_hotel_area.create');
+    Route::post('/brhotelarea/update', 'BrHotelAreaController@update')->name('ctl.br_hotel_area.update');
 
 
     // 施設情報変更 登録状態変更

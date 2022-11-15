@@ -50,9 +50,9 @@
     {{-- 余白 --}}
     <hr class="bound-line" />
 
-    <form method="post" action="{$v->env.source_path}{$v->env.module}/{$v->env.controller}/{$action_type}/">
+    {{ Form::open(['route' => 'ctl.br_hotel_area.' . $action_type, 'method' => 'post']) }}
         <div>
-            <input type="hidden" name="target_cd" value="{$v->assign->request_params.target_cd}" />
+            <input type="hidden" name="target_cd" value="{{ request()->input('target_cd') }}" />
             <input type="hidden" name="is_submit" value="true" />
 
             @if ($action_type === 'update')
@@ -95,17 +95,17 @@
             </table>
             <div class="br-list-tail">&nbsp;</div>
         </div>
-    </form>
+    {{ Form::close() }}
 
     {{-- 余白 --}}
     <hr class="bound-line-l" />
 
-    <form method="post" action="{$v->env.source_path}{$v->env.module}/brhotelarea/">
+    {{ Form::open(['route' => 'ctl.br_hotel_area.index', 'method' => 'get']) }}
         <div class="br-back-main-menu-form">
-            <input type="hidden" name="target_cd" value="{$v->assign->request_params.target_cd}" />
+            <input type="hidden" name="target_cd" value="{{ request()->input('target_cd') }}" />
             <input type="submit" value="施設と地域の関連付け【一覧】へ" />
         </div>
-    </form>
+    {{ Form::close() }}
 
     {{-- 余白 --}}
     <hr class="bound-line-l" />
