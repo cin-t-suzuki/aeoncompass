@@ -17,15 +17,19 @@
 
 {{-- JavaScript指定 --}}
 @section('headScript')
+
+    <script type="text/javascript" src="{{ asset('/js/brj.ctl.js') }}"></script>
+
     <script type="text/javascript">
         <!--
         $(document).ready(function() {
             $('#jqs-hotel-area').loadHotelArea({
-                uri         : '{$v->env.source_path}{$v->env.module}/brhotelarea/json/',
-                area_large  : {$v->assign->request_params.area_large},
-                area_pref   : {$v->assign->request_params.area_pref},
-                area_middle : {$v->assign->request_params.area_middle},
-                area_small  : {$v->assign->request_params.area_small}
+                uri : '/ctl/brhotelarea/json/',
+                // uri         : '{$v->env.source_path}{$v->env.module}/brhotelarea/json/',
+                // area_large  : {$v->assign->request_params.area_large},
+                // area_pref   : {$v->assign->request_params.area_pref},
+                // area_middle : {$v->assign->request_params.area_middle},
+                // area_small  : {$v->assign->request_params.area_small}
             });
         });
         // -->
@@ -37,8 +41,6 @@
     {{-- 余白 --}}
     <hr class="bound-line-l" />
 
-    {{-- TODO: パラメータ --}}
-    {{-- {include file='./_hotel_info.tpl' hotel_info=$v->assign->hotel_info} --}}
     @include('ctl.brHotelArea._hotel_info')
 
     {{-- 余白 --}}
@@ -56,7 +58,7 @@
             <input type="hidden" name="is_submit" value="true" />
 
             @if ($action_type === 'update')
-                <input type="hidden" name="entry_no" value="{$v->assign->request_params.entry_no}" />
+                <input type="hidden" name="entry_no" value="{{ request()->input('entry_no') }}" />
             @endif
 
             <table class="br-list" id="jqs-hotel-area">
@@ -89,7 +91,7 @@
                         </select>
                     </td>
                     <td>
-                        <input type="submit" value="{if $action_type === 'create'}追加{elseif $action_type === 'update'}変更{/if}" />
+                        <input type="submit" value="{{ $action_type === 'create' ? '追加' : ($action_type === 'update' ? '変更' : '') }}" />
                     </td>
                 </tr>
             </table>

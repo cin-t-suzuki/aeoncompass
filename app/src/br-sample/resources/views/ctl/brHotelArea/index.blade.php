@@ -1,6 +1,7 @@
 {{-- MEMO: 移植元 svn_trunk\public\app\ctl\view2\brhotelarea\index.tpl --}}
 
 {{-- ヘッダーのテンプレート読み込み --}}
+{{-- TODO: 読込ファイルは、別の新たに発見されたもの --}}
 {{-- TODO: パラメータ --}}
 {{-- {include
   file  = $v->env.module_root|cat:'/view2/_common/_header2.tpl'
@@ -38,8 +39,6 @@
     {{-- 余白 --}}
     <hr class="bound-line-l" />
 
-    {{-- TODO: パラメータ --}}
-    {{-- {include file='./_hotel_info.tpl' hotel_info=$v->assign->hotel_info} --}}
     @include('ctl.brHotelArea._hotel_info')
 
     {{-- 余白 --}}
@@ -62,16 +61,22 @@
                 </th>
             </tr>
             @forelse ($hotel_areas as $hotel_area)
-                <tr class="{if $v->assign->request_params.target_no === $hotel_area.entry_no}active{else}{cycle values='odd,even'}{/if}">
-                    <td>{$hotel_area.area_nm_l}</td>
-                    <td>{$hotel_area.area_nm_p}</td>
-                    <td>{$hotel_area.area_nm_m}</td>
-                    <td>{$hotel_area.area_nm_s}</td>
+                <tr class="
+                    @if (request()->input('target_no') === $hotel_area->entry_no)
+                        {{ 'active' }}
+                    @else
+                        {{ $loop->odd ? 'odd' : 'even' }}
+                    @endif
+                ">
+                    <td>{{ $hotel_area->area_nm_l }}</td>
+                    <td>{{ $hotel_area->area_nm_p }}</td>
+                    <td>{{ $hotel_area->area_nm_m }}</td>
+                    <td>{{ $hotel_area->area_nm_s }}</td>
                     <td>
                         {{ Form::open(['route' => 'ctl.br_hotel_area.edit', 'method' => 'post']) }}
                             <div>
                                 <input type="hidden" name="target_cd" value="{{ $hotel_area->hotel_cd }}" />
-                                <input type="hidden" name="entry_no" value="{$hotel_area.entry_no}" />
+                                <input type="hidden" name="entry_no" value="{{ $hotel_area->entry_no }}" />
                                 <input type="submit" value="編集" />
                             </div>
                         {{ Form::close() }}
@@ -79,9 +84,9 @@
                     <td>
                         {{ Form::open(['route' => 'ctl.br_hotel_area.delete', 'method' => 'post']) }}
                             <div>
-                                <input type="hidden" name="area_pattern" class="jqs-area-nm" value="{$hotel_area.area_nm_l|cat:' '|cat:$hotel_area.area_nm_p|cat:' '|cat:$hotel_area.area_nm_m|cat:' '|cat:$hotel_area.area_nm_s}" />
+                                <input type="hidden" name="area_pattern" class="jqs-area-nm" value="{{ $hotel_area->area_nm_l . ' ' . $hotel_area->area_nm_p . ' ' . $hotel_area->area_nm_m . ' ' . $hotel_area->area_nm_s }}" />
                                 <input type="hidden" name="target_cd" value="{{ $hotel_area->hotel_cd }}" />
-                                <input type="hidden" name="entry_no" value="{$hotel_area.entry_no}" />
+                                <input type="hidden" name="entry_no" value="{{ $hotel_area->entry_no }}" />
                                 <input type="submit" value="削除" class="jqs-area-delete" />
                             </div>
                         {{ Form::close() }}
