@@ -129,6 +129,9 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 
     });
 
+    Route::get('/ctl/brhotelarea', 'BrHotelAreaController@index')->name('ctl.br_hotel_area.index');
+
+
     // 施設情報変更 登録状態変更
     Route::controller(BrhotelStatusController::class)->prefix("brhotelStatus")->group(function(){
         Route::match(['get','post'],'/index', 'index')->name('ctl.brhotelStatus.index'); //表示
