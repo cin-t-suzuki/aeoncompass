@@ -17,8 +17,7 @@
 @section('content')
 
 {{-- パンクズ --}}
-{{-- TODO: 名前付きルートに変更 --}}
-<a href="/ctl/htltop/index/target_cd/{{ $target_cd }}">
+<a href="{{ route('ctl.htl_top.index', ['target_cd' => $target_cd]) }}">
     メインメニュー
 </a>&nbsp;&gt;&nbsp;施設情報詳細
 

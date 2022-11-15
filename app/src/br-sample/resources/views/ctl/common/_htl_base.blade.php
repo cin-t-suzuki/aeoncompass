@@ -78,7 +78,6 @@
     $acceptance_status_flg  = rand(0,1) == 0;
     $header_number          = 'header_number_' . rand(0,100);
     $ad = Str::random(16);
-    $soon_after_release = '2010-05-22 17:00:00';
 
 @endphp
 
@@ -139,7 +138,7 @@
             <tr>
                 <td nowrap>{{ strip_tags($header_number) }}</td>
                 <td>
-                    {{-- TODO: URL --}}
+                    {{-- TODO: URL, create Route --}}
                     <a href="{{ $v->env->source_path }}{{ $v->env->module }}/redirect/rsvhotel/?target_cd={{ $v->user->hotel->hotel_cd }}" target="_blank">
                         {{ strip_tags($v->user->hotel->hotel_nm) }}
                         @if ((!$service->is_empty(strip_tags($v->user->hotel->hotel_old_nm))))
@@ -173,7 +172,7 @@
                         </tr>
                         <tr>
                             <td>
-                                {{-- TODO: Form Facades --}}
+                                {{-- TODO: Form Facades, create Route --}}
                                 <form action="{{ $v->env->source_path }}{{ $v->env->module }}/htltop/" method="post">
                                     <input type="hidden" name="target_cd" value="{{ strip_tags($target_cd) }}" />
                                     <input type="submit" value="メニュー">
@@ -228,7 +227,7 @@
                 @if ($v->user->operator->is_login() == true)
                     <td nowrap>
                         @if (!$v->user->operator->is_staff())
-                            {{-- TODO: URL --}}
+                            {{-- TODO: URL, create Route --}}
                             <small><a href="{{ $v->env->source_path }}{{ $v->env->module }}/logout/">ログアウト</a></small>
                         @endif
                     </td>

@@ -4,8 +4,7 @@
     <tr>
         <td align="center">
             <table border="0" cellspacing="0" cellpadding="2">
-                {{-- TODO: Form Facades --}}
-                {{-- TODO: create route  --}}
+                {{-- TODO: Form Facades, create route  --}}
                 <form action="{{ $v->env->source_path }}{{ $v->env->module }}/htlacceptance/update/" method="post">
                     @if ($v->user->hotel->accept_status == 1)
                         <tr>

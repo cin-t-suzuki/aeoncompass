@@ -41,8 +41,7 @@
                 <a href="{{ $v->env->source_path }}{{ $v->env->module }}/ntatop/">
                     メインメニュー
                 </a><br>
-                {{-- TODO: Form Facades --}}
-                {{-- TODO: create route --}}
+                {{-- TODO: Form Facades, create route --}}
                 <form action="{{ $v->env->source_path }}{{ $v->env->module }}/htltop/" method="post" target="_blank">
                     担当：{{ $v->user->operator->nta_login_data->staff_nm }}<br>
                     施設コード：<input type="text" size="12" maxlength="10" name="target_cd" value="" />

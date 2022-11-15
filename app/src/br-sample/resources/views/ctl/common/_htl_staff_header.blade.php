@@ -36,7 +36,7 @@
                 TEL : {{ strip_tags($v->user->hotel_person->person_tel) }}&emsp;
                 FAX : {{ strip_tags($v->user->hotel_person->person_fax) }}
             </td>
-            {{-- TODO: Form Facades --}}
+            {{-- TODO: Form Facades, create Route --}}
             <form action="{{ $v->env->source_path }}{{ $v->env->module }}/htltop/" method="post" target="_blank">
                 <td style="text-align:right" width="100%">
                     <a href="{{ $v->env->source_path }}{{ $v->env->module }}/brtop/">
