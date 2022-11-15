@@ -1,6 +1,5 @@
 {{-- MEMO: 移植元 svn_trunk\public\app\ctl\view2\brhotelarea\_hotel_info.tpl --}}
 
-{strip}
   <div class="br-search-box">
     <table class="br-search-field">
       <tr>
@@ -30,4 +29,3 @@
     </table>
   </div>
   <div class="clear"></div>
-{/strip}

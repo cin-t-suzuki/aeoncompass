@@ -130,6 +130,8 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
     });
 
     Route::get('/ctl/brhotelarea', 'BrHotelAreaController@index')->name('ctl.br_hotel_area.index');
+    Route::get('/ctl/brhotelarea/new', 'BrHotelAreaController@new')->name('ctl.br_hotel_area.new');
+    Route::get('/ctl/brhotelarea/edit', 'BrHotelAreaController@edit')->name('ctl.br_hotel_area.edit');
 
 
     // 施設情報変更 登録状態変更

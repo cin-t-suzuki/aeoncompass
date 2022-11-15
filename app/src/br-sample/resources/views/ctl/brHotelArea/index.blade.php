@@ -1,11 +1,18 @@
 {{-- MEMO: 移植元 svn_trunk\public\app\ctl\view2\brhotelarea\index.tpl --}}
 
-{strip}
-  {*--------------------------------------------------------------------------*}
-  {* JavaScript指定                                                           *}
-  {*--------------------------------------------------------------------------*}
-  {capture name=js_action}
-    {literal}
+{{-- ヘッダーのテンプレート読み込み --}}
+{{-- TODO: パラメータ --}}
+{{-- {include
+  file  = $v->env.module_root|cat:'/view2/_common/_header2.tpl'
+  title = '施設と地域の関連付け【一覧】'
+  screen_type  = 'br'
+  js_action    = $smarty.capture.js_action
+} --}}
+@extends('ctl.common.base2')
+@section('title', '施設と地域の関連付け【一覧】')
+
+  {{-- JavaScript指定 --}}
+  @section('headScript')
       <script type="text/javascript">
         <!--
           $(document).ready(function () {
@@ -15,31 +22,24 @@
           });
         -->
       </script>
-    {/literal}
-  {/capture}
-  
-  {*--------------------------------------------------------------------------*}
-  {* ヘッダーのテンプレート読み込み                                           *}
-  {*--------------------------------------------------------------------------*}
-  {include
-    file  = $v->env.module_root|cat:'/view2/_common/_header2.tpl'
-    title = '施設と地域の関連付け【一覧】'
-    screen_type  = 'br'
-    js_action    = $smarty.capture.js_action
-  }
+  @endsection
 
-  {* 余白 *}
+  @section('content')
+
+  {{-- 余白 --}}
   <hr class="bound-line-l" />
   
-  {* メッセージ *}
-  {include file=$v->env.module_root|cat:'/view2/_common/_message.tpl'}
+  {{-- メッセージ --}}
+  @include('ctl.common.message2')
 
-  {* 余白 *}
+  {{-- 余白 --}}
   <hr class="bound-line-l" />
   
-  {include file='./_hotel_info.tpl' hotel_info=$v->assign->hotel_info}
-  
-  {* 余白 *}
+  {{-- TODO: パラメータ --}}
+  {{-- {include file='./_hotel_info.tpl' hotel_info=$v->assign->hotel_info} --}}
+  @include('ctl.brHotelArea._hotel_info')
+
+  {{-- 余白 --}}
   <hr class="bound-line-l" />
   
   <div>
@@ -59,7 +59,7 @@
           </form>
         </th>
       </tr>
-      {foreach from=$v->assign->hotel_areas item=hotel_area}
+      @forelse ($hotel_areas as $hotel_area)
         <tr class="{if $v->assign->request_params.target_no === $hotel_area.entry_no}active{else}{cycle values='odd,even'}{/if}">
           <td>{$hotel_area.area_nm_l}</td>
           <td>{$hotel_area.area_nm_p}</td>
@@ -85,16 +85,16 @@
             </form>
           </td>
         </tr>
-      {foreachelse}
+      @empty
         <tr>
           <td colspan="6"><p class="msg-text-error">現在登録されている地域はありません</p></td>
         </tr>
-      {/foreach}
+      @endforelse
     </table>
     <div class="br-list-tail">&nbsp;</div>
   </div>
   
-  {* 余白 *}
+  {{-- 余白 --}}
   <hr class="bound-line-l" />
   
   <form method="post" action="{$v->env.source_path}{$v->env.module}/brhotel/show/">
@@ -104,11 +104,7 @@
     </div>
   </form>
 
-  {* 余白 *}
+  {{-- 余白 --}}
   <hr class="bound-line-l" />
 
-  {*===============================================================================================*}
-  {* フッター                                                                                      *}
-  {*===============================================================================================*}
-  {include file=$v->env.module_root|cat:'/view2/_common/_footer2.tpl'}
-{/strip}
+@endsection
