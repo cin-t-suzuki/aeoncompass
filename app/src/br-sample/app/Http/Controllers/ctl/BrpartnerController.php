@@ -48,7 +48,7 @@ use App\Common\Traits;
 					$a_row = $partner->selectByKey($a_params["partner_cd"]);
 					//DBからの取得時は日付をフォーマット
 					$date = new Carbon($a_row['open_ymd']);
-					$a_row['open_ymd'] = "$date->year"."-"."$date->month"."-"."$date->day";
+					$a_row['open_ymd'] = "$date->year"."/".sprintf('%02d',$date->month)."/".sprintf('%02d',$date->day);
 					//初期表示時に検索結果をassign
 					$this->addViewData("partner_value", $a_row);
 				}else{
@@ -145,7 +145,7 @@ use App\Common\Traits;
 			$partnerData = $partnerModel->selectByKey($requestPartner["partner_cd"]);
 			//DBからの取得時は日付をフォーマット
 			$date = new Carbon($partnerData['open_ymd']);
-			$partnerData['open_ymd'] = "$date->year"."-"."$date->month"."-"."$date->day";
+			$partnerData['open_ymd'] = "$date->year"."/".sprintf('%02d',$date->month)."/".sprintf('%02d',$date->day);
 			$this->addViewData("partner_value", $partnerData);
 
 			// ビューを表示
