@@ -75,7 +75,7 @@ class BrHotelAreaService
                                         h.hotel_cd = :hotel_cd
                                 ) q1 on q1.pref_id = mp.pref_id
                         ) q2 on q2.city_id = mc.city_id
-                ) q3 on q3.ward_id = mw.ward_id        
+                ) q3 on q3.ward_id = mw.ward_id
         SQL;
         /* こういう SQL では違う？
             $sql = <<<SQL
@@ -123,7 +123,100 @@ class BrHotelAreaService
             ];
         }
     }
-    
+
+    public function getHotelAreas($hotelCd)
+    {
+
+        $a_conditions = array('hotel_cd' => $this->s_hotel_cd);
+        $a_area_detail_large  = array();
+        $a_area_detail_pref   = array();
+        $a_area_detail_middle = array();
+        $a_area_detail_small  = array();
+        $a_sort_keys          = array();
+        $a_area_key_names     = array(
+            0 => 'area_j',
+            1 => 'area_l',
+            2 => 'area_p',
+            3 => 'area_m',
+            4 => 'area_s'
+        );
+
+        $s_sql = <<< SQL
+            select
+                q1.hotel_cd,
+                q1.entry_no,
+                ma.area_id,
+                ma.area_type,
+                ma.order_no
+            from
+                mast_area ma,
+                (
+                    select
+                        ha.hotel_cd,
+                        ha.entry_no,
+                        ha.area_id,
+                        ha.area_type
+                    from
+                        hotel_area ha
+                    where
+                        ha.hotel_cd = :hotel_cd
+                ) q1
+            where
+                ma.area_id = q1.area_id
+                and ma.area_type = q1.area_type
+            order by
+                ma.order_no asc
+        SQL;
+
+        $a_temp_hotel_areas = nvl($this->o_oracle->find_by_sql($s_sql, $a_conditions), array());
+
+        // 整形
+        foreach ($a_temp_hotel_areas as $a_temp_hotel_area) {
+            $this->a_hotel_areas[$a_temp_hotel_area['entry_no']]['hotel_cd'] = $a_temp_hotel_area['hotel_cd'];
+            $this->a_hotel_areas[$a_temp_hotel_area['entry_no']]['entry_no'] = $a_temp_hotel_area['entry_no'];
+            $this->a_hotel_areas[$a_temp_hotel_area['entry_no']][$a_area_key_names[$a_temp_hotel_area['area_type']]] = $a_temp_hotel_area['area_id'];
+
+            // ソートキーを作成
+            if (is_empty($a_sort_keys[$a_temp_hotel_area['entry_no']])) {
+                $a_sort_keys[$a_temp_hotel_area['entry_no']] = str_pad($a_temp_hotel_area['order_no'], 10, 0, STR_PAD_LEFT);
+            } else {
+                $a_sort_keys[$a_temp_hotel_area['entry_no']] = $a_sort_keys[$a_temp_hotel_area['order_no']] . str_pad($a_temp_hotel_area['order_no'], 10, 0, STR_PAD_LEFT);
+            }
+        }
+
+        // ソートキーを整形
+        // ※小エリアが存在するものとしないもので10桁の差異が生まれるのでそれを解消
+        // 大・都道府県・中・小エリア各10桁ずつの合計40桁のコードをソートキーとする
+        foreach ($a_sort_keys as $key => $value) {
+            if (40 > strlen($value)) {
+                $a_sort_keys[$key] = $a_sort_keys[$key] . str_pad('', 40 - strlen($value), 0, STR_PAD_LEFT);
+            }
+
+            $this->a_hotel_areas[$key]['sort'] = $a_sort_keys[$key];
+        }
+
+        // エリアマスタの表示順に応じたソートを行う
+        array_multisort($a_sort_keys, SORT_STRING, $this->a_hotel_areas);
+
+        // 地域名称を設定
+        foreach ($this->a_hotel_areas as $key => $a_hotel_area) {
+            // 地域IDから地域情報を取得
+            $a_area_detail_large  = $this->get_area($a_hotel_area['area_l']);
+            $a_area_detail_pref   = $this->get_area($a_hotel_area['area_p']);
+            $a_area_detail_middle = $this->get_area($a_hotel_area['area_m']);
+
+            // 取得した地域名を設定
+            $this->a_hotel_areas[$key]['area_nm_l'] = $a_area_detail_large['area_nm'];  // 大エリア
+            $this->a_hotel_areas[$key]['area_nm_p'] = $a_area_detail_pref['area_nm'];   // 都道府県
+            $this->a_hotel_areas[$key]['area_nm_m'] = $a_area_detail_middle['area_nm']; // 中エリア
+
+            // 小エリアは登録されているときのみ名称を取得する
+            if (!is_empty($a_hotel_area['area_s'])) {
+                $a_area_detail_small = $this->get_area($a_hotel_area['area_s']);
+                $this->a_hotel_areas[$key]['area_nm_s'] = $a_area_detail_small['area_nm']; // 小エリア
+            }
+        }
+    }
     // TODO: to be deleted
     public function dummyHotelArea($targetCd)
     {

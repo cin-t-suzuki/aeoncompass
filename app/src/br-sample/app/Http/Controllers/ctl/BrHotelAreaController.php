@@ -11,6 +11,8 @@ class BrHotelAreaController extends Controller
     public function index(Request $request, Service $service)
     {
         $targetCd = $request->input('target_cd');
+        $hotelInfo = $service->getHotelInfo($targetCd);
+
         $hotelAreas = [
             $service->dummyHotelArea($targetCd),
             $service->dummyHotelArea($targetCd),
@@ -18,8 +20,7 @@ class BrHotelAreaController extends Controller
             $service->dummyHotelArea($targetCd),
             $service->dummyHotelArea($targetCd),
         ];
-
-        $hotelInfo = $service->getHotelInfo($targetCd);
+        // $hotelAreas = $service->getHotelAreas($targetCd);
 
         return view('ctl.brHotelArea.index', [
             'request_params' => $request->input(),
