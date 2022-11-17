@@ -4,10 +4,18 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use stdClass;
 
 class BrHotelAreaService
 {
-    public function getHotelInfo($hotelCd)
+
+    /**
+     * Undocumented function
+     *
+     * @param string $hotelCd
+     * @return stdClass
+     */
+    public function getHotelInfo($hotelCd): stdClass
     {
         $sql = <<<SQL
             select
@@ -124,9 +132,17 @@ class BrHotelAreaService
         }
     }
 
-    public function getHotelAreas($hotelCd)
+    /**
+     * Undocumented function
+     *
+     * MEMO: 移植元 public\app\ctl\models\HotelArea.php > _make_hotel_areas()
+     * 移植元では、どこかで class property に設定(make) して、呼び出し時は class property を参照している
+     * 
+     * @param string $hotelCd
+     * @return array
+     */
+    public function getHotelAreas($hotelCd): array
     {
-
         $a_conditions = [
             'hotel_cd' => $hotelCd,
         ];
@@ -175,9 +191,9 @@ class BrHotelAreaService
 
         // 整形
         foreach ($a_temp_hotel_areas as $a_temp_hotel_area) {
-            $this->a_hotel_areas[$a_temp_hotel_area->entry_no]['hotel_cd'] = $a_temp_hotel_area->hotel_cd;
-            $this->a_hotel_areas[$a_temp_hotel_area->entry_no]['entry_no'] = $a_temp_hotel_area->entry_no;
-            $this->a_hotel_areas[$a_temp_hotel_area->entry_no][$a_area_key_names[$a_temp_hotel_area->area_type]] = $a_temp_hotel_area->area_id;
+            $a_hotel_areas[$a_temp_hotel_area->entry_no]['hotel_cd'] = $a_temp_hotel_area->hotel_cd;
+            $a_hotel_areas[$a_temp_hotel_area->entry_no]['entry_no'] = $a_temp_hotel_area->entry_no;
+            $a_hotel_areas[$a_temp_hotel_area->entry_no][$a_area_key_names[$a_temp_hotel_area->area_type]] = $a_temp_hotel_area->area_id;
 
             // ソートキーを作成
             if (!array_key_exists($a_temp_hotel_area->entry_no, $a_sort_keys)) {
@@ -197,61 +213,104 @@ class BrHotelAreaService
                 $a_sort_keys[$key] = $a_sort_keys[$key] . str_pad('', 40 - strlen($value), 0, STR_PAD_LEFT);
             }
 
-            $this->a_hotel_areas[$key]['sort'] = $a_sort_keys[$key];
+            $a_hotel_areas[$key]['sort'] = $a_sort_keys[$key];
         }
 
         // エリアマスタの表示順に応じたソートを行う
-        array_multisort($a_sort_keys, SORT_STRING, $this->a_hotel_areas);
+        array_multisort($a_sort_keys, SORT_STRING, $a_hotel_areas);
 
         // 地域名称を設定
-        foreach ($this->a_hotel_areas as $key => $a_hotel_area) {
+        foreach ($a_hotel_areas as $key => $a_hotel_area) {
             // 地域IDから地域情報を取得
             $a_area_detail_large  = $this->getArea($a_hotel_area['area_l']);
             $a_area_detail_pref   = $this->getArea($a_hotel_area['area_p']);
             $a_area_detail_middle = $this->getArea($a_hotel_area['area_m']);
 
             // 取得した地域名を設定
-            $this->a_hotel_areas[$key]['area_nm_l'] = $a_area_detail_large['area_nm'];  // 大エリア
-            $this->a_hotel_areas[$key]['area_nm_p'] = $a_area_detail_pref['area_nm'];   // 都道府県
-            $this->a_hotel_areas[$key]['area_nm_m'] = $a_area_detail_middle['area_nm']; // 中エリア
+            $a_hotel_areas[$key]['area_nm_l'] = $a_area_detail_large->area_nm;  // 大エリア
+            $a_hotel_areas[$key]['area_nm_p'] = $a_area_detail_pref->area_nm;   // 都道府県
+            $a_hotel_areas[$key]['area_nm_m'] = $a_area_detail_middle->area_nm; // 中エリア
 
             // 小エリアは登録されているときのみ名称を取得する
-            if (!is_empty($a_hotel_area['area_s'])) {
+            if (array_key_exists('area_s', $a_hotel_area)) {
                 $a_area_detail_small = $this->getArea($a_hotel_area['area_s']);
-                $this->a_hotel_areas[$key]['area_nm_s'] = $a_area_detail_small['area_nm']; // 小エリア
+                $a_hotel_areas[$key]['area_nm_s'] = $a_area_detail_small->area_nm; // 小エリア
+            } else {
+                $a_hotel_areas[$key]['area_nm_s'] = null;
             }
         }
+
+        return $a_hotel_areas; // MEMO: 移植元では、 return せずに class property に代入している
     }
 
-    private function getArea($an_area_id)
+    /**
+     * Undocumented function
+     *
+     * @param string $an_area_id
+     * @return stdClass
+     */
+    private function getArea($an_area_id): stdClass
     {
-
         // 地域IDがNull
-        if (is_empty($an_area_id)) {
-            return array();
+        if (is_null($an_area_id)) {
+            return (object)['area_nm' => null];
         }
-
         // 地域マスター情報から一致する地域情報を探す
-        foreach (nvl($this->a_mast_areas, array()) as $a_area) {
+        $mastAreas = $this->getMastAreas();
+        foreach ($mastAreas as $a_area) {
             // 見つかった場合は対象の情報を返却する
-            if ((int)$a_area['area_id'] === (int)$an_area_id) {
+            if ((int)$a_area->area_id === (int)$an_area_id) {
                 return $a_area;
             }
         }
-
         // 見つからなかった場合
-        return array();
+        return (object)['area_nm' => null];
+    }
+
+    /**
+     * Undocumented function
+     *
+     * MEMO: 移植元 public\app\ctl\models\HotelArea.php > _make_mast_areas()
+     * 移植元では、どこかで class property に設定(make) して、呼び出し時は class property を参照している
+     * 
+     * MEMO: MastArea model で置き換えられるか。
+     * 
+     * @return stdClass[]
+     */
+    private function getMastAreas()
+    {
+        $sql = <<< SQL
+            select
+                area_id,
+                parent_area_id,
+                area_nm,
+                area_type
+            from
+                mast_area
+            order by
+                order_no asc
+        SQL;
+        // $a_rows = $this->o_oracle->find_by_sql($sql, array());
+        $a_rows = DB::select($sql);
+
+        if (!is_null($a_rows)) {
+            $a_mast_areas = $a_rows;
+        } else {
+            $a_mast_areas = [];
+        }
+
+        return $a_mast_areas; // MEMO: 移植元では、 return せずに class property に代入している
     }
     // TODO: to be deleted
-    public function dummyHotelArea($targetCd)
-    {
-        return (object)[
-            'entry_no'      => 'entry_no_val' . Str::random(5),
-            'area_nm_l'     => 'area_nm_l_val' . Str::random(5),
-            'area_nm_m'     => 'area_nm_m_val' . Str::random(5),
-            'area_nm_p'     => 'area_nm_p_val' . Str::random(5),
-            'area_nm_s'     => 'area_nm_s_val' . Str::random(5),
-            'hotel_cd'      => $targetCd,
-        ];
-    }
+    // public function dummyHotelArea($targetCd)
+    // {
+    //     return (object)[
+    //         'entry_no'      => 'entry_no_val' . Str::random(5),
+    //         'area_nm_l'     => 'area_nm_l_val' . Str::random(5),
+    //         'area_nm_m'     => 'area_nm_m_val' . Str::random(5),
+    //         'area_nm_p'     => 'area_nm_p_val' . Str::random(5),
+    //         'area_nm_s'     => 'area_nm_s_val' . Str::random(5),
+    //         'hotel_cd'      => $targetCd,
+    //     ];
+    // }
 }

@@ -8,18 +8,17 @@ use Illuminate\Http\Request;
 
 class BrHotelAreaController extends Controller
 {
+    /**
+     * Undocumented function
+     *
+     * @param Request $request
+     * @param Service $service
+     * @return \Illuminate\Http\Response
+     */
     public function index(Request $request, Service $service)
     {
         $targetCd = $request->input('target_cd');
         $hotelInfo = $service->getHotelInfo($targetCd);
-
-        $hotelAreas = [
-            $service->dummyHotelArea($targetCd),
-            $service->dummyHotelArea($targetCd),
-            $service->dummyHotelArea($targetCd),
-            $service->dummyHotelArea($targetCd),
-            $service->dummyHotelArea($targetCd),
-        ];
         $hotelAreas = $service->getHotelAreas($targetCd);
 
         return view('ctl.brHotelArea.index', [
@@ -30,10 +29,10 @@ class BrHotelAreaController extends Controller
         ]);
     }
 
-    public function new(Request $request)
+    public function new(Request $request, Service $service)
     {
         $targetCd = $request->input('target_cd');
-        $hotelInfo = $this->dummyHotelInfo($targetCd);
+        $hotelInfo = $service->getHotelInfo($targetCd);
 
         return view('ctl.brHotelArea.new', [
             'target_cd'     => $targetCd,
@@ -41,10 +40,10 @@ class BrHotelAreaController extends Controller
         ]);
     }
 
-    public function edit(Request $request)
+    public function edit(Request $request, Service $service)
     {
         $targetCd = $request->input('target_cd');
-        $hotelInfo = $this->dummyHotelInfo($targetCd);
+        $hotelInfo = $service->getHotelInfo($targetCd);
 
         return view('ctl.brHotelArea.edit', [
             'target_cd'     => $targetCd,

@@ -62,21 +62,22 @@
             </tr>
             @forelse ($hotel_areas as $hotel_area)
                 <tr class="
-                    @if (request()->input('target_no') === $hotel_area->entry_no)
+                    @if (request()->input('target_no') === $hotel_area['entry_no'])
                         {{ 'active' }}
                     @else
                         {{ $loop->odd ? 'odd' : 'even' }}
                     @endif
                 ">
-                    <td>{{ $hotel_area->area_nm_l }}</td>
-                    <td>{{ $hotel_area->area_nm_p }}</td>
-                    <td>{{ $hotel_area->area_nm_m }}</td>
-                    <td>{{ $hotel_area->area_nm_s }}</td>
+                    <td>{{ $hotel_area['area_nm_l'] }}</td>
+                    <td>{{ $hotel_area['area_nm_p'] }}</td>
+                    <td>{{ $hotel_area['area_nm_m'] }}</td>
+                    {{-- TODO: null 合体を削除 --}}
+                    <td>{{ $hotel_area['area_nm_s'] }}</td>
                     <td>
                         {{ Form::open(['route' => 'ctl.br_hotel_area.edit', 'method' => 'post']) }}
                             <div>
-                                <input type="hidden" name="target_cd" value="{{ $hotel_area->hotel_cd }}" />
-                                <input type="hidden" name="entry_no" value="{{ $hotel_area->entry_no }}" />
+                                <input type="hidden" name="target_cd" value="{{ $hotel_area['hotel_cd'] }}" />
+                                <input type="hidden" name="entry_no" value="{{ $hotel_area['entry_no'] }}" />
                                 <input type="submit" value="編集" />
                             </div>
                         {{ Form::close() }}
@@ -84,9 +85,9 @@
                     <td>
                         {{ Form::open(['route' => 'ctl.br_hotel_area.delete', 'method' => 'post']) }}
                             <div>
-                                <input type="hidden" name="area_pattern" class="jqs-area-nm" value="{{ $hotel_area->area_nm_l . ' ' . $hotel_area->area_nm_p . ' ' . $hotel_area->area_nm_m . ' ' . $hotel_area->area_nm_s }}" />
-                                <input type="hidden" name="target_cd" value="{{ $hotel_area->hotel_cd }}" />
-                                <input type="hidden" name="entry_no" value="{{ $hotel_area->entry_no }}" />
+                                <input type="hidden" name="area_pattern" class="jqs-area-nm" value="{{ $hotel_area['area_nm_l'] . ' ' . $hotel_area['area_nm_p'] . ' ' . $hotel_area['area_nm_m'] . ' ' . $hotel_area['area_nm_s'] }}" />
+                                <input type="hidden" name="target_cd" value="{{ $hotel_area['hotel_cd'] }}" />
+                                <input type="hidden" name="entry_no" value="{{ $hotel_area['entry_no'] }}" />
                                 <input type="submit" value="削除" class="jqs-area-delete" />
                             </div>
                         {{ Form::close() }}
