@@ -9,6 +9,53 @@ use stdClass;
 class BrHotelAreaService
 {
 
+    // 定数の定義
+    const IDX_AREA_LARGE  = 0; // 大エリア
+    const IDX_AREA_PREF   = 1; // 都道府県
+    const IDX_AREA_MIDDLE = 2; // 中エリア
+    const IDX_AREA_SMALL  = 3; // 小エリア
+
+    // メンバ変数の定義
+    protected $o_box;
+    protected $o_oracle;
+    protected $o_hotel_area;
+    protected $o_validations;
+    protected $s_hotel_cd;
+    protected $a_mast_areas;
+    protected $a_hotel_area_default;
+    protected $a_attributes;
+    protected $a_hotel_info;
+    protected $a_hotel_areas;
+    protected $n_active_entry_no;
+
+
+    public function __construct()
+    {
+        try {
+            // boxの生成
+            $o_controller = Zend_Controller_Front::getInstance();
+            $this->o_box = &$o_controller->getPlugin('Box')->box;
+
+            // インスタンス生成
+            $this->o_oracle      = _Oracle::getInstance();
+            $this->o_validations = Validations::getInstance($this->o_box);
+            $this->o_hotel_area  = Hotel_Area::getInstance();
+
+            // 初期化
+            $this->s_hotel_cd           = null;
+            $this->n_active_entry_no    = null;
+            $this->a_mast_areas         = array();
+            $this->this->a_hotel_info   = array();
+            $this->a_hotel_area_default = array();
+            $this->a_attributes         = array();
+            $this->a_hotel_areas        = array();
+
+            // 地域マスタデータ取得
+            $this->_make_mast_areas();
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
     /**
      * Undocumented function
      *
@@ -137,7 +184,7 @@ class BrHotelAreaService
      *
      * MEMO: 移植元 public\app\ctl\models\HotelArea.php > _make_hotel_areas()
      * 移植元では、どこかで class property に設定(make) して、呼び出し時は class property を参照している
-     * 
+     *
      * @param string $hotelCd
      * @return array
      */
@@ -267,14 +314,72 @@ class BrHotelAreaService
         return (object)['area_nm' => null];
     }
 
+    public function getHotelAreaDefault($an_entry_no = null)
+    {
+        // 登録番号が指定されているときは地域情報を取得し直す
+        if (!is_empty($an_entry_no)) {
+            $this->makeHotelAreaDefault($an_entry_no);
+        }
+        return $this->a_hotel_area_default;
+    }
+
+    private function makeHotelAreaDefault($an_entry_no)
+    {
+
+        // 初期化
+        $n_temp_parent_area_id = null;
+        $a_area_detail_large   = array();
+        $a_area_detail_pref    = array();
+        $a_area_detail_middle  = array();
+        $a_area_detail_small   = array();
+
+        // エラーチェック
+        if (!$this->_is_set_hotel_cd()) {
+            throw new \Exception('施設コードが設定されていません。');
+        }
+
+        // 登録番号が未指定の場合
+        if (is_empty($an_entry_no)) {
+            // 都道府県エリアの取得
+            $a_area_detail_pref  = $this->getArea($this->convert_id_pref_to_area($this->o_box->user->hotel['pref_id']));
+            $this->a_hotel_area_default['area_pref'] = $a_area_detail_pref['area_id'];
+
+            // 大エリアの取得
+            $a_area_detail_large = $this->getArea($a_area_detail_pref['parent_area_id']);
+            $this->a_hotel_area_default['area_large'] = $a_area_detail_large['area_id'];
+
+            return;
+        }
+
+        foreach (nvl($this->a_hotel_areas, array()) as $a_hotel_area) {
+            // 指定の登録番号をもつ地域情報を設定
+            if ((int)$an_entry_no === (int)$a_hotel_area['entry_no']) {
+                // 大エリアの取得
+                $this->a_hotel_area_default['area_large'] = $a_hotel_area['area_l'];
+
+                // 都道府県エリアの取得
+                $this->a_hotel_area_default['area_pref'] = $a_hotel_area['area_p'];
+
+                // 中エリアの取得
+                $this->a_hotel_area_default['area_middle'] = $a_hotel_area['area_m'];
+
+                // 小エリアの取得
+                if (!is_empty($a_hotel_area['area_s'])) {
+                    $this->a_hotel_area_default['area_small'] = $a_hotel_area['area_s'];
+                }
+
+                return;
+            }
+        }
+    }
     /**
      * Undocumented function
      *
      * MEMO: 移植元 public\app\ctl\models\HotelArea.php > _make_mast_areas()
      * 移植元では、どこかで class property に設定(make) して、呼び出し時は class property を参照している
-     * 
+     *
      * MEMO: MastArea model で置き換えられるか。
-     * 
+     *
      * @return stdClass[]
      */
     private function getMastAreas()

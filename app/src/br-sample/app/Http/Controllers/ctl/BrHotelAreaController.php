@@ -32,6 +32,30 @@ class BrHotelAreaController extends Controller
     public function new(Request $request, Service $service)
     {
         $targetCd = $request->input('target_cd');
+        $request_params = $request->input();
+
+        // ↓ 貼付け
+        $a_temp_hotel_area_default = array();
+
+        // 施設コードの設定
+        $this->o_models_hotel_area->set_hotel_cd($this->a_request_params['target_cd']);
+
+        // 登録情報の設定
+        if ( is_empty($this->a_request_params['is_submit']) ) {
+            $a_temp_hotel_area_default = $this->o_models_hotel_area->get_hotel_area_default();
+
+            $this->a_request_params['area_large']  = nvl($a_temp_hotel_area_default['area_large'],  -1);
+            $this->a_request_params['area_pref']   = nvl($a_temp_hotel_area_default['area_pref'],   -1);
+            $this->a_request_params['area_middle'] = nvl($a_temp_hotel_area_default['area_middle'], -1);
+            $this->a_request_params['area_small']  = nvl($a_temp_hotel_area_default['area_small'],  -1);
+        } else {
+            $this->a_request_params['area_large']  = nvl($this->a_request_params['area_large'],  -1);
+            $this->a_request_params['area_pref']   = nvl($this->a_request_params['area_pref'],   -1);
+            $this->a_request_params['area_middle'] = nvl($this->a_request_params['area_middle'], -1);
+            $this->a_request_params['area_small']  = nvl($this->a_request_params['area_small'],  -1);
+        }
+        // ↑ 貼付け
+
         $hotelInfo = $service->getHotelInfo($targetCd);
 
         return view('ctl.brHotelArea.new', [
