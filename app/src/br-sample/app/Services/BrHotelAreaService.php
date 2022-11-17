@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Hotel;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use stdClass;
@@ -15,47 +16,6 @@ class BrHotelAreaService
     const IDX_AREA_MIDDLE = 2; // 中エリア
     const IDX_AREA_SMALL  = 3; // 小エリア
 
-    // メンバ変数の定義
-    protected $o_box;
-    protected $o_oracle;
-    protected $o_hotel_area;
-    protected $o_validations;
-    protected $s_hotel_cd;
-    protected $a_mast_areas;
-    protected $a_hotel_area_default;
-    protected $a_attributes;
-    protected $a_hotel_info;
-    protected $a_hotel_areas;
-    protected $n_active_entry_no;
-
-
-    public function __construct()
-    {
-        try {
-            // boxの生成
-            $o_controller = Zend_Controller_Front::getInstance();
-            $this->o_box = &$o_controller->getPlugin('Box')->box;
-
-            // インスタンス生成
-            $this->o_oracle      = _Oracle::getInstance();
-            $this->o_validations = Validations::getInstance($this->o_box);
-            $this->o_hotel_area  = Hotel_Area::getInstance();
-
-            // 初期化
-            $this->s_hotel_cd           = null;
-            $this->n_active_entry_no    = null;
-            $this->a_mast_areas         = array();
-            $this->this->a_hotel_info   = array();
-            $this->a_hotel_area_default = array();
-            $this->a_attributes         = array();
-            $this->a_hotel_areas        = array();
-
-            // 地域マスタデータ取得
-            $this->_make_mast_areas();
-        } catch (Exception $e) {
-            throw $e;
-        }
-    }
     /**
      * Undocumented function
      *
@@ -316,62 +276,104 @@ class BrHotelAreaService
 
     public function getHotelAreaDefault($an_entry_no = null)
     {
-        // 登録番号が指定されているときは地域情報を取得し直す
-        if (!is_empty($an_entry_no)) {
-            $this->makeHotelAreaDefault($an_entry_no);
-        }
-        return $this->a_hotel_area_default;
+        $a_hotel_area_default = $this->makeHotelAreaDefault($an_entry_no);
+        return $a_hotel_area_default;
+
+        // MEMO: 可読性のため処理の流れを変更
+
+        // // 登録番号が指定されているときは地域情報を取得し直す
+        // // MEMO: is_empty() で判定されていたが、0 や '' は入らない想定
+        // if (!is_null($an_entry_no)) {
+        //     $this->a_hotel_area_default = $this->makeHotelAreaDefault($an_entry_no);
+        // }
+        // return $this->a_hotel_area_default;
     }
 
-    private function makeHotelAreaDefault($an_entry_no)
+    /**
+     * Undocumented function
+     *
+     * @param [type] $an_entry_no
+     * @return array
+     */
+    private function makeHotelAreaDefault($hotelCd, $an_entry_no = null)
     {
-
         // 初期化
-        $n_temp_parent_area_id = null;
-        $a_area_detail_large   = array();
-        $a_area_detail_pref    = array();
-        $a_area_detail_middle  = array();
-        $a_area_detail_small   = array();
+        // $n_temp_parent_area_id = null;
+        $a_area_detail_large   = [];
+        $a_area_detail_pref    = [];
+        // $a_area_detail_middle  = [];
+        // $a_area_detail_small   = [];
 
-        // エラーチェック
-        if (!$this->_is_set_hotel_cd()) {
-            throw new \Exception('施設コードが設定されていません。');
-        }
+        // // エラーチェック
+        // if (!$this->isSetHotelCd()) {
+        //     throw new \Exception('施設コードが設定されていません。');
+        // }
+
+        $a_hotel_area_default = [];
 
         // 登録番号が未指定の場合
-        if (is_empty($an_entry_no)) {
+        // MEMO: is_empty() で判定されていたが、0 や '' は入らない想定
+        if (is_null($an_entry_no)) {
             // 都道府県エリアの取得
-            $a_area_detail_pref  = $this->getArea($this->convert_id_pref_to_area($this->o_box->user->hotel['pref_id']));
-            $this->a_hotel_area_default['area_pref'] = $a_area_detail_pref['area_id'];
+
+            // $prefId = $this->o_box->user->hotel['pref_id'];
+            $prefId = Hotel::find($hotelCd)->pref_id;
+
+            $a_area_detail_pref = $this->getArea($this->convertIdPrefToArea($prefId));
+            $a_hotel_area_default['area_pref'] = $a_area_detail_pref->area_id;
 
             // 大エリアの取得
-            $a_area_detail_large = $this->getArea($a_area_detail_pref['parent_area_id']);
-            $this->a_hotel_area_default['area_large'] = $a_area_detail_large['area_id'];
+            $a_area_detail_large = $this->getArea($a_area_detail_pref->parent_area_id);
+            $a_hotel_area_default['area_large'] = $a_area_detail_large->area_id;
 
-            return;
+            return $a_hotel_area_default;
         }
 
-        foreach (nvl($this->a_hotel_areas, array()) as $a_hotel_area) {
+        $a_hotel_areas = $this->getHotelAreas($hotelCd);
+
+        foreach ($a_hotel_areas as $a_hotel_area) {
             // 指定の登録番号をもつ地域情報を設定
             if ((int)$an_entry_no === (int)$a_hotel_area['entry_no']) {
                 // 大エリアの取得
-                $this->a_hotel_area_default['area_large'] = $a_hotel_area['area_l'];
+                $a_hotel_area_default['area_large'] = $a_hotel_area['area_l'];
 
                 // 都道府県エリアの取得
-                $this->a_hotel_area_default['area_pref'] = $a_hotel_area['area_p'];
+                $a_hotel_area_default['area_pref'] = $a_hotel_area['area_p'];
 
                 // 中エリアの取得
-                $this->a_hotel_area_default['area_middle'] = $a_hotel_area['area_m'];
+                $a_hotel_area_default['area_middle'] = $a_hotel_area['area_m'];
 
                 // 小エリアの取得
-                if (!is_empty($a_hotel_area['area_s'])) {
-                    $this->a_hotel_area_default['area_small'] = $a_hotel_area['area_s'];
+                if (array_key_exists('area_s', $a_hotel_area)) {
+                    $a_hotel_area_default['area_small'] = $a_hotel_area['area_s'];
                 }
 
-                return;
+                return $a_hotel_area_default;
             }
         }
     }
+    /**
+     * 都道府県IDから地域ID（都道府県）を取得
+     *
+     * @param int 都道府県ID
+     * @return int  地域ID（都道府県）
+     */
+    private function convertIdPrefToArea($as_pref_id)
+    {
+        // 数値型にキャストしておく
+        $n_pref_id = (int)$as_pref_id;
+
+        // 都道府県IDに補正値を加算し地域IDを取得する
+        // HAKC: magic number
+        if (in_array($n_pref_id, [16, 17, 18])) {
+            return $n_pref_id + 14;
+        } else if (in_array($n_pref_id, [19, 20])) {
+            return $n_pref_id + 9;
+        } else {
+            return $n_pref_id + 12;
+        }
+    }
+
     /**
      * Undocumented function
      *
@@ -395,7 +397,7 @@ class BrHotelAreaService
             order by
                 order_no asc
         SQL;
-        // $a_rows = $this->o_oracle->find_by_sql($sql, array());
+        // $a_rows = $this->o_oracle->find_by_sql($sql, []);
         $a_rows = DB::select($sql);
 
         if (!is_null($a_rows)) {
