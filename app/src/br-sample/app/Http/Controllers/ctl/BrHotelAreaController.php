@@ -20,7 +20,7 @@ class BrHotelAreaController extends Controller
             $service->dummyHotelArea($targetCd),
             $service->dummyHotelArea($targetCd),
         ];
-        // $hotelAreas = $service->getHotelAreas($targetCd);
+        $hotelAreas = $service->getHotelAreas($targetCd);
 
         return view('ctl.brHotelArea.index', [
             'request_params' => $request->input(),
