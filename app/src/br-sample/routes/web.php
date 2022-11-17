@@ -145,4 +145,13 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 	Route::get('/brpartnersite/edit', 'BrPartnerSiteController@edit')->name('ctl.brPartnerSite.edit');
 	Route::post('/brpartnersite/modify', 'BrPartnerSiteController@modify')->name('ctl.brPartnerSite.modify');
 
+	// 迷わずここ！
+	Route::controller(BrhotelAdvert2009000400Controller::class)->prefix("brhoteladvert2009000400")->group(function(){
+		Route::match(['get','post'],'/list', 'list')->name('ctl.brhoteladvert2009000400.list'); //表示
+		Route::post('/new', 'new')->name('ctl.brhoteladvert2009000400.new'); //新規登録画面
+		Route::post('/create', 'create')->name('ctl.brhoteladvert2009000400.create'); //登録
+		Route::post('/edit', 'edit')->name('ctl.brhoteladvert2009000400.edit'); //編集画面
+		Route::post('/update', 'update')->name('ctl.brhoteladvert2009000400.update'); //更新
+	});
+
 });
