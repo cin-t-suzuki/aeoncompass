@@ -26,10 +26,10 @@
             $('#jqs-hotel-area').loadHotelArea({
                 uri : '/ctl/brHotelArea/json',
                 // uri         : '{$v->env.source_path}{$v->env.module}/brhotelarea/json/',
-                area_large  : '{{ request()->input('area_large', '') }}',
-                area_pref   : '{{ request()->input('area_pref', '') }}',
-                area_middle : '{{ request()->input('area_middle', '') }}',
-                area_small  : '{{ request()->input('area_small', '') }}'
+                area_large  : '{{ $request_params['area_large'] }}',
+                area_pref   : '{{ $request_params['area_pref'] }}',
+                area_middle : '{{ $request_params['area_middle'] }}',
+                area_small  : '{{ $request_params['area_small'] }}'
             });
         });
         // -->

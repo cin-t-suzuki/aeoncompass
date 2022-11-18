@@ -274,10 +274,9 @@ class BrHotelAreaService
         return (object)['area_nm' => null];
     }
 
-    public function getHotelAreaDefault($an_entry_no = null)
+    public function getHotelAreaDefault($hotelCd, $an_entry_no = null)
     {
-        $a_hotel_area_default = $this->makeHotelAreaDefault($an_entry_no);
-        return $a_hotel_area_default;
+        return $this->makeHotelAreaDefault($hotelCd, $an_entry_no);
 
         // MEMO: 可読性のため処理の流れを変更
 
@@ -298,27 +297,19 @@ class BrHotelAreaService
     private function makeHotelAreaDefault($hotelCd, $an_entry_no = null)
     {
         // 初期化
-        // $n_temp_parent_area_id = null;
-        $a_area_detail_large   = [];
-        $a_area_detail_pref    = [];
-        // $a_area_detail_middle  = [];
-        // $a_area_detail_small   = [];
-
-        // // エラーチェック
-        // if (!$this->isSetHotelCd()) {
-        //     throw new \Exception('施設コードが設定されていません。');
-        // }
-
-        $a_hotel_area_default = [];
+        $a_hotel_area_default = [
+            'area_large'    => -1,
+            'area_pref'     => -1,
+            'area_middle'   => -1,
+            'area_small'    => -1,
+        ];
 
         // 登録番号が未指定の場合
-        // MEMO: is_empty() で判定されていたが、0 や '' は入らない想定
+        // ホテルの所在都道府県と、その属する大エリアをセットして返す
+        // TODO: is_empty() で判定されていたが、0 や '' は入らない想定、確認
         if (is_null($an_entry_no)) {
             // 都道府県エリアの取得
-
-            // $prefId = $this->o_box->user->hotel['pref_id'];
             $prefId = Hotel::find($hotelCd)->pref_id;
-
             $a_area_detail_pref = $this->getArea($this->convertIdPrefToArea($prefId));
             $a_hotel_area_default['area_pref'] = $a_area_detail_pref->area_id;
 
@@ -351,6 +342,9 @@ class BrHotelAreaService
                 return $a_hotel_area_default;
             }
         }
+
+        // 見つからなかった場合
+        return $a_hotel_area_default;
     }
     /**
      * 都道府県IDから地域ID（都道府県）を取得

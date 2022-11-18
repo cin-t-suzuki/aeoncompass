@@ -66,8 +66,28 @@ class BrHotelAreaController extends Controller
     {
         $targetCd = $request->input('target_cd');
         $hotelInfo = $service->getHotelInfo($targetCd);
+        $entryNo = $request->input('entry_no');
+        $AreaIdSet = [];
+
+        // 登録情報の設定
+        if ($request->missing('is_submit')) {
+            // is_submit がなければ初期表示なので、登録されているデータを表示
+            $a_temp_hotel_area_default = $service->getHotelAreaDefault($targetCd, $entryNo);
+
+            $AreaIdSet['area_large']  = $a_temp_hotel_area_default['area_large'];
+            $AreaIdSet['area_pref']   = $a_temp_hotel_area_default['area_pref'];
+            $AreaIdSet['area_middle'] = $a_temp_hotel_area_default['area_middle'];
+            $AreaIdSet['area_small']  = $a_temp_hotel_area_default['area_small'];
+        } else {
+            // is_submit があれば、入力を保持して表示
+            $AreaIdSet['area_large']  = $request->input('area_large',   -1);
+            $AreaIdSet['area_pref']   = $request->input('area_pref',    -1);
+            $AreaIdSet['area_middle'] = $request->input('area_middle',  -1);
+            $AreaIdSet['area_small']  = $request->input('area_small',   -1);
+        }
 
         return view('ctl.brHotelArea.edit', [
+            'request_params' => $AreaIdSet,
             'target_cd'     => $targetCd,
             'hotel_info'    => $hotelInfo,
         ]);
