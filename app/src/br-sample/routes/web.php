@@ -136,6 +136,7 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
         Route::post('/edit'     , 'edit'    )->name('ctl.br_hotel_area.edit');
         Route::post('/update'   , 'update'  )->name('ctl.br_hotel_area.update');
         Route::post('/delete'   , 'delete'  )->name('ctl.br_hotel_area.delete');
+        Route::get ('/json'     , 'json'    )->name('ctl.br_hotel_area.json');
     });
 
 

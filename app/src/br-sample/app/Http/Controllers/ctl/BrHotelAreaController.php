@@ -114,4 +114,11 @@ class BrHotelAreaController extends Controller
         $targetCd = $request->input('target_cd');
         return redirect()->route('ctl.br_hotel_area.index', ['target_cd' => $targetCd]);
     }
+
+    public function json(Request $request, Service $service)
+    {
+        header('Content-type: application/json; charset=UTF-8');
+        print json_encode($service->getMastAreas());
+        exit;
+    }
 }

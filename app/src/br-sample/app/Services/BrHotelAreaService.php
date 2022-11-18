@@ -384,7 +384,7 @@ class BrHotelAreaService
      *
      * @return stdClass[]
      */
-    private function getMastAreas()
+    public function getMastAreas()
     {
         $sql = <<< SQL
             select

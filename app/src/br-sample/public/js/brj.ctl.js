@@ -523,28 +523,32 @@
             sPropertySelectedAreaSmall = '';
           }
           
+          // case を 文字列にするとすべて default: に落ちたので、数値に修正した。
           switch (data[ii].area_type) {
-          case '1':
-            $('#jqs-area-l-list').append('<option value="' + data[ii].area_id + '" ' + sPropertySelectedAreaLarge + '>' + data[ii].area_nm + '<\/option>');
-            break;
-            
-          case '2':
-            if ( data[ii].parent_area_id == nHotelAreaLargeId ) {
-              $('#jqs-area-p-list').append('<option value="' + data[ii].area_id + '" ' + sPropertySelectedAreaPref + '>' + data[ii].area_nm + '<\/option>');
-            }
-            break;
-            
-          case '3':
-            if ( data[ii].parent_area_id == nHotelAreaPrefId ) {
-              $('#jqs-area-m-list').append('<option value="' + data[ii].area_id + '" ' + sPropertySelectedAreaMiddle + '>' + data[ii].area_nm + '<\/option>');
-            }
-            break;
-            
-          case '4':
-            if ( data[ii].parent_area_id == nHotelAreaMiddleId ) {
-              $('#jqs-area-s-list').append('<option value="' + data[ii].area_id + '" ' + sPropertySelectedAreaSmall + '>' + data[ii].area_nm + '<\/option>');
-            }
-            break;
+            case 1:
+              $('#jqs-area-l-list').append('<option value="' + data[ii].area_id + '" ' + sPropertySelectedAreaLarge + '>' + data[ii].area_nm + '<\/option>');
+              break;
+
+            case 2:
+              if ( data[ii].parent_area_id == nHotelAreaLargeId ) {
+                $('#jqs-area-p-list').append('<option value="' + data[ii].area_id + '" ' + sPropertySelectedAreaPref + '>' + data[ii].area_nm + '<\/option>');
+              }
+              break;
+
+            case 3:
+              if ( data[ii].parent_area_id == nHotelAreaPrefId ) {
+                $('#jqs-area-m-list').append('<option value="' + data[ii].area_id + '" ' + sPropertySelectedAreaMiddle + '>' + data[ii].area_nm + '<\/option>');
+              }
+              break;
+
+            case 4:
+              if ( data[ii].parent_area_id == nHotelAreaMiddleId ) {
+                $('#jqs-area-s-list').append('<option value="' + data[ii].area_id + '" ' + sPropertySelectedAreaSmall + '>' + data[ii].area_nm + '<\/option>');
+              }
+              break;
+            default:
+              // ignored
+              break;
           }
         }
         

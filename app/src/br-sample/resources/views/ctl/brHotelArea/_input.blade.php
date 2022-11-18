@@ -24,12 +24,12 @@
         <!--
         $(document).ready(function() {
             $('#jqs-hotel-area').loadHotelArea({
-                uri : '/ctl/brhotelarea/json/',
+                uri : '/ctl/brHotelArea/json',
                 // uri         : '{$v->env.source_path}{$v->env.module}/brhotelarea/json/',
-                // area_large  : {$v->assign->request_params.area_large},
-                // area_pref   : {$v->assign->request_params.area_pref},
-                // area_middle : {$v->assign->request_params.area_middle},
-                // area_small  : {$v->assign->request_params.area_small}
+                area_large  : '{{ request()->input('area_large', '') }}',
+                area_pref   : '{{ request()->input('area_pref', '') }}',
+                area_middle : '{{ request()->input('area_middle', '') }}',
+                area_small  : '{{ request()->input('area_small', '') }}'
             });
         });
         // -->
