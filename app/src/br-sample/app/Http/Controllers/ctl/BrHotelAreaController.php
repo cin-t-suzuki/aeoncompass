@@ -26,6 +26,7 @@ class BrHotelAreaController extends Controller
             // 'target_cd' => $targetCd,
             'hotel_info' => $hotelInfo,
             'hotel_areas' => $hotelAreas,
+            'guides' => $request->session()->pull('guides', []),
         ]);
     }
 
@@ -120,19 +121,28 @@ class BrHotelAreaController extends Controller
         // ↑貼付け
 
 
-        return redirect()->route('ctl.br_hotel_area.index', ['target_cd' => $targetCd]);
+        return redirect()->route('ctl.br_hotel_area.complete', ['target_cd' => $targetCd]);
     }
 
     public function update(Request $request)
     {
         $targetCd = $request->input('target_cd');
-        return redirect()->route('ctl.br_hotel_area.index', ['target_cd' => $targetCd]);
+        return redirect()->route('ctl.br_hotel_area.complete', ['target_cd' => $targetCd]);
     }
 
     public function delete(Request $request)
     {
         $targetCd = $request->input('target_cd');
-        return redirect()->route('ctl.br_hotel_area.index', ['target_cd' => $targetCd]);
+        return redirect()->route('ctl.br_hotel_area.complete', ['target_cd' => $targetCd]);
+    }
+
+    public function complete(Request $request)
+    {
+        return redirect()->route('ctl.br_hotel_area.index', [
+            'target_cd' => $request->input('target_cd'),
+        ])->with([
+            'guides' => ['施設・地域情報を更新しました。'],
+        ]);
     }
 
     public function json(Request $request, Service $service)
