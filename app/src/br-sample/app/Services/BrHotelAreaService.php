@@ -403,6 +403,25 @@ class BrHotelAreaService
         return $a_mast_areas; // MEMO: 移植元では、 return せずに class property に代入している
     }
     // TODO: to be deleted
+    
+    public function delete($hotelCd, $entryNo)
+    {
+        DB::beginTransaction();
+        // MEMO: 移植元では、PK 指定が必要なためそれぞれで削除処理を行っているが、Laravel では where で絞り込んだレコードを一括削除できる。
+        $affectedRowCount =  HotelArea::where('hotel_cd', $hotelCd)
+            ->where('entry_no', $entryNo)
+            ->delete();
+        // TODO: 確認、変更ログ（1時間ごとのファイルを作成して23時間保持）は必要？
+
+        if ($affectedRowCount === 0) {
+            DB::rollBack();
+            return false;
+        }
+
+        DB::commit();
+        return true;
+    }
+    
     // public function dummyHotelArea($targetCd)
     // {
     //     return (object)[

@@ -130,9 +130,18 @@ class BrHotelAreaController extends Controller
         return redirect()->route('ctl.br_hotel_area.complete', ['target_cd' => $targetCd]);
     }
 
-    public function delete(Request $request)
+    public function delete(Request $request, Service $service)
     {
         $targetCd = $request->input('target_cd');
+        $entryNo = $request->input('entry_no');
+
+        // 失敗
+        if (!$service->delete($targetCd, $entryNo)) {
+            return redirect()->route('ctl.br_hotel_area.index', ['target_cd' => $targetCd])
+                ->with(['errors' => ['削除に失敗しました']]);
+        }
+
+        // 成功
         return redirect()->route('ctl.br_hotel_area.complete', ['target_cd' => $targetCd]);
     }
 
