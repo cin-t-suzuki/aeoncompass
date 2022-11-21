@@ -145,4 +145,11 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 	Route::get('/brpartnersite/edit', 'BrPartnerSiteController@edit')->name('ctl.brPartnerSite.edit');
 	Route::post('/brpartnersite/modify', 'BrPartnerSiteController@modify')->name('ctl.brPartnerSite.modify');
 
+	// 重点表示プラン
+	Route::controller(BrroomPlanPriority2Controller::class)->prefix("brroomplanpriority2")->group(function(){
+		Route::match(['get','post'],'/list', 'list')->name('ctl.brroomplanpriority2.list'); //表示
+		Route::post('/registration', 'registration')->name('ctl.brroomplanpriority2.registration'); //登録更新処理
+		Route::post('/sort', 'sort')->name('ctl.brroomplanpriority2.sort'); //登録更新処理
+	});
+
 });
