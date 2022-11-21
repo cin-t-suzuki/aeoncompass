@@ -21,13 +21,13 @@
   <tr>
     <td bgcolor="#eeffee">掲載開始年月日</td>
     {{-- 要書き換えあっているか --}}
-    <td><input type="text" name="hotel_advert[advert_s_ymd]" value="{{$views->hotel_advert['advert_s_ymd']??date('Y-m-d')}}" size="15" maxlength="10" /><small>YYYY-MM-DD or YYYY/MM/DD</small></td>
+    <td><input type="text" name="hotel_advert[advert_s_ymd]" value="{{strip_tags($views->hotel_advert['advert_s_ymd']??date('Y-m-d'))}}" size="15" maxlength="10" /><small>YYYY-MM-DD or YYYY/MM/DD</small></td>
     
   </tr>
   <tr>
     <td bgcolor="#eeffee">掲載最終年月日</td>
     {{-- 要書き換えあっているか --}}
-    <td><input type="text" name="hotel_advert[advert_e_ymd]" value="{{$views->hotel_advert['advert_e_ymd']??date('Y-m-d')}}" size="15" maxlength="10" /><small>YYYY-MM-DD or YYYY/MM/DD</small></td>
+    <td><input type="text" name="hotel_advert[advert_e_ymd]" value="{{strip_tags($views->hotel_advert['advert_e_ymd']??date('Y-m-d'))}}" size="15" maxlength="10" /><small>YYYY-MM-DD or YYYY/MM/DD</small></td>
   </tr>
   <tr>
     <td bgcolor="#eeffee">掲載順序</td>
