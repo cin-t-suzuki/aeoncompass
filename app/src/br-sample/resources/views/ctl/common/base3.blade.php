@@ -72,7 +72,7 @@
         'hotel' => (object) [
             'hotel_nm' => 'hotel_nm_' . Str::random(rand(3, 8)),
             'hotel_cd' => 'hotel_cd_' . Str::random(rand(3, 8)),
-            'hotel_old_nm' => 'hotel_old_nm_' . Str::random(rand(3, 8)),
+            'hotel_old_nm' => [null, 'hotel_old_nm_' . Str::random(rand(3, 8))][rand(0,1)],
             'ydp2_status' => rand(0, 1) == 0,
             'premium_status' => rand(0, 1) == 0,
             'visual_package_status' => rand(0, 1) == 0,
