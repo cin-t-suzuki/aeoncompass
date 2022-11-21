@@ -131,7 +131,7 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 
     Route::controller(BrHotelAreaController::class)->prefix('brHotelArea')->group(function() {
         Route::get ('/'         , 'index'   )->name('ctl.br_hotel_area.index');
-        Route::post('/new'      , 'new'     )->name('ctl.br_hotel_area.new');
+        Route::get ('/new'      , 'new'     )->name('ctl.br_hotel_area.new');
         Route::post('/create'   , 'create'  )->name('ctl.br_hotel_area.create');
         Route::post('/edit'     , 'edit'    )->name('ctl.br_hotel_area.edit');
         Route::post('/update'   , 'update'  )->name('ctl.br_hotel_area.update');

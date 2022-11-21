@@ -33,31 +33,20 @@ class BrHotelAreaController extends Controller
     public function new(Request $request, Service $service)
     {
         $targetCd = $request->input('target_cd');
-        $request_params = $request->input();
-
-        // 施設コードの設定
-        $service->setHotelCd($targetCd);
 
         // 登録情報の設定
-        // if ( is_empty($this->a_request_params['is_submit']) ) {
-        if ($request->missing('is_submit')) {
-            $a_temp_hotel_area_default = $service->getHotelAreaDefault();
-
-            $request_params['area_large']  = $a_temp_hotel_area_default['area_large'] ??  -1;
-            $request_params['area_pref']   = $a_temp_hotel_area_default['area_pref'] ??   -1;
-            $request_params['area_middle'] = $a_temp_hotel_area_default['area_middle'] ?? -1;
-            $request_params['area_small']  = $a_temp_hotel_area_default['area_small'] ??  -1;
+        if ($request->session()->has('input_data')) {
+            // input_data があれば、入力を保持して表示
+            $areaIdSet = $request->session()->pull('input_data');
         } else {
-            $request_params['area_large']  = $request_params['area_large'] ??  -1;
-            $request_params['area_pref']   = $request_params['area_pref'] ??   -1;
-            $request_params['area_middle'] = $request_params['area_middle'] ?? -1;
-            $request_params['area_small']  = $request_params['area_small'] ??  -1;
+            // input_data がなければ、初期表示用データを表示
+            $areaIdSet = $service->getHotelAreaDefault($targetCd, null);
         }
 
         $hotelInfo = $service->getHotelInfo($targetCd);
 
         return view('ctl.brHotelArea.new', [
-            'request_params' => $request_params,
+            'request_params' => $areaIdSet,
             'target_cd'     => $targetCd,
             'hotel_info'    => $hotelInfo,
         ]);
@@ -94,33 +83,29 @@ class BrHotelAreaController extends Controller
         ]);
     }
 
-    public function create(Request $request)
+    public function create(Request $request, Service $service)
     {
         $targetCd = $request->input('target_cd');
+        $inputData = $request->only(
+            'area_large',
+            'area_pref',
+            'area_middle',
+            'area_small',
+        );
 
-
-        // ↓貼付け
-        $this->oracle->beginTransaction();
-
-        // アクションの処理
-        if (!$this->createMethod()) {
-            $this->oracle->rollback();
-            return $this->_forward('new');
+        // データ整形・バリデーション・挿入
+        $errorMessages = $service->create($targetCd, $inputData);
+        if (count($errorMessages) > 0) {
+            // 失敗
+            return redirect()->route('ctl.br_hotel_area.new', [
+                'target_cd' => $targetCd,
+            ])->with([
+                'errors' => $errorMessages,
+                'input_data' => $inputData,
+            ]);
         }
 
-        // コミット
-        $this->oracle->commit();
-
-        $s_uri .= $this->box->info->env->source_path;
-        $s_uri .= $this->box->info->env->module;
-        $s_uri .= '/';
-        $s_uri .= $this->box->info->env->controller;
-        $s_uri .= '/complete/target_cd/' . $this->box->user->hotel['hotel_cd'] . '/target_no/' . $this->o_models_hotel_area->get_active_entry_no() . '/';
-
-        return $this->_redirect($s_uri);
-        // ↑貼付け
-
-
+        // 成功
         return redirect()->route('ctl.br_hotel_area.complete', ['target_cd' => $targetCd]);
     }
 

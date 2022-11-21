@@ -52,7 +52,7 @@
                 <th>中エリア</th>
                 <th>小エリア</th>
                 <th colspan="2" class="lc">
-                    {{ Form::open(['route' => 'ctl.br_hotel_area.new', 'method' => 'post']) }}
+                    {{ Form::open(['route' => 'ctl.br_hotel_area.new', 'method' => 'get']) }}
                         <div>
                             <input type="submit" value="新規追加" />
                             <input type="hidden" name="target_cd" value="{{ request()->input('target_cd') }}" />

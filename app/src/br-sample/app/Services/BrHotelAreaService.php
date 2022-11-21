@@ -3,9 +3,8 @@
 namespace App\Services;
 
 use App\Models\Hotel;
+use App\Models\HotelArea;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
-use stdClass;
 
 class BrHotelAreaService
 {
@@ -20,9 +19,9 @@ class BrHotelAreaService
      * Undocumented function
      *
      * @param string $hotelCd
-     * @return stdClass
+     * @return \stdClass
      */
-    public function getHotelInfo($hotelCd): stdClass
+    public function getHotelInfo($hotelCd): \stdClass
     {
         $sql = <<<SQL
             select
@@ -197,6 +196,7 @@ class BrHotelAreaService
         $a_temp_hotel_areas = DB::select($s_sql, $a_conditions);
 
         // 整形
+        $a_hotel_areas = [];
         foreach ($a_temp_hotel_areas as $a_temp_hotel_area) {
             $a_hotel_areas[$a_temp_hotel_area->entry_no]['hotel_cd'] = $a_temp_hotel_area->hotel_cd;
             $a_hotel_areas[$a_temp_hotel_area->entry_no]['entry_no'] = $a_temp_hotel_area->entry_no;
@@ -254,15 +254,21 @@ class BrHotelAreaService
      * Undocumented function
      *
      * @param string $an_area_id
-     * @return stdClass
+     * @return \stdClass
      */
-    private function getArea($an_area_id): stdClass
+    private function getArea($an_area_id): \stdClass
     {
         // 地域IDがNull
         if (is_null($an_area_id)) {
-            return (object)['area_nm' => null];
+            return (object)[
+                'area_id' => null,
+                'parent_area_id' => null,
+                'area_nm' => null,
+                'area_type' => null,
+            ];
         }
         // 地域マスター情報から一致する地域情報を探す
+        // HACK: 都度 mast_area model から検索したほうがよいか
         $mastAreas = $this->getMastAreas();
         foreach ($mastAreas as $a_area) {
             // 見つかった場合は対象の情報を返却する
@@ -271,30 +277,22 @@ class BrHotelAreaService
             }
         }
         // 見つからなかった場合
-        return (object)['area_nm' => null];
-    }
-
-    public function getHotelAreaDefault($hotelCd, $an_entry_no = null)
-    {
-        return $this->makeHotelAreaDefault($hotelCd, $an_entry_no);
-
-        // MEMO: 可読性のため処理の流れを変更
-
-        // // 登録番号が指定されているときは地域情報を取得し直す
-        // // MEMO: is_empty() で判定されていたが、0 や '' は入らない想定
-        // if (!is_null($an_entry_no)) {
-        //     $this->a_hotel_area_default = $this->makeHotelAreaDefault($an_entry_no);
-        // }
-        // return $this->a_hotel_area_default;
+        return (object)[
+            'area_id' => null,
+            'parent_area_id' => null,
+            'area_nm' => null,
+            'area_type' => null,
+        ];
     }
 
     /**
      * Undocumented function
      *
+     * @param [type] $hotelCd
      * @param [type] $an_entry_no
      * @return array
      */
-    private function makeHotelAreaDefault($hotelCd, $an_entry_no = null)
+    public function getHotelAreaDefault($hotelCd, $an_entry_no): array
     {
         // 初期化
         $a_hotel_area_default = [
@@ -306,7 +304,6 @@ class BrHotelAreaService
 
         // 登録番号が未指定の場合
         // ホテルの所在都道府県と、その属する大エリアをセットして返す
-        // TODO: is_empty() で判定されていたが、0 や '' は入らない想定、確認
         if (is_null($an_entry_no)) {
             // 都道府県エリアの取得
             $prefId = Hotel::find($hotelCd)->pref_id;
@@ -358,7 +355,7 @@ class BrHotelAreaService
         $n_pref_id = (int)$as_pref_id;
 
         // 都道府県IDに補正値を加算し地域IDを取得する
-        // HAKC: magic number
+        // HACK: magic number
         if (in_array($n_pref_id, [16, 17, 18])) {
             return $n_pref_id + 14;
         } else if (in_array($n_pref_id, [19, 20])) {
@@ -402,8 +399,343 @@ class BrHotelAreaService
 
         return $a_mast_areas; // MEMO: 移植元では、 return せずに class property に代入している
     }
-    // TODO: to be deleted
-    
+
+    /**
+     * Undocumented function
+     *
+     * @param string $hotelCd
+     * @param array $inputParams
+     * @return array: error messages
+     */
+    public function create($hotelCd, $inputParams): array
+    {
+        DB::beginTransaction();
+
+        // アクションの処理
+        $errorMassages = $this->createMethod($hotelCd, $inputParams);
+        if (count($errorMassages) > 0) {
+            DB::rollback();
+            return $errorMassages;
+        }
+
+        // コミット
+        DB::commit();
+        return $errorMassages;
+    }
+
+    private function createMethod($hotelCd, $inputParams): array
+    {
+        // 初期化・データの整形
+        $a_attributes = [];
+        if (array_key_exists('entry_no', $inputParams)) {
+            // entry_no が指定されている場合は「更新」
+            $entryNo = $inputParams['entry_no'];
+        } else {
+            // entry_no が指定されていない場合は「登録」
+            $entryNo = $this->issueEntryNo($hotelCd);
+        }
+
+        $a_area_ids = [
+            self::IDX_AREA_LARGE  => $inputParams['area_large'],  // 大エリア
+            self::IDX_AREA_PREF   => $inputParams['area_pref'],   // 都道府県
+            self::IDX_AREA_MIDDLE => $inputParams['area_middle'], // 中エリア
+            self::IDX_AREA_SMALL  => $inputParams['area_small'],  // 小エリア
+        ];
+
+        // レコード作成の為の情報を作成
+        // MEMO: 大域、都道府県、中域、小域で、最大4つのレコードが挿入される
+        $a_area_detail = [];
+        foreach ($a_area_ids as $key => $area_id) {
+            // 対象の地域情報を取得
+            $a_area_detail = $this->getArea($area_id);
+
+            // 登録用のデータを設定
+            $a_attributes[$key] = [
+                'hotel_cd'  => $hotelCd,
+                'entry_no'  => $entryNo,
+                'area_id'   => $a_area_detail->area_id,
+                'area_type' => $a_area_detail->area_type,
+
+                // TODO: 登録・編集者の設定
+                'entry_cd'  => 'BrHotelArea',
+                'modify_cd' => 'BrHotelArea',
+
+                // MEMO: 共通カラム、日付は laravel で入れられる
+            ];
+        }
+
+        // 独自バリデーション
+        // HACK: （工数次第）validation は controller か FormObject に回したい
+        $validationErrorMessages = $this->customValidation($hotelCd, $entryNo, $a_attributes);
+        if (count($validationErrorMessages) > 0) {
+            return $validationErrorMessages;
+        }
+
+        // Insert の実行
+        foreach ($a_attributes as $a_attribute) {
+            // HACK: （工数次第）ここで null の判定が必要ない形にしたいが、処理が複雑なため骨が折れそう。
+            if (!is_null($a_attribute['area_id'])) {
+                $createdHotelArea = HotelArea::create($a_attribute);
+                if (!$createdHotelArea->wasRecentlyCreated) {
+                    return ['地域・施設情報を登録できませんでした。'];
+                }
+            }
+        }
+
+        return [];
+    }
+
+    /**
+     * 登録番号の新規発番したものを取得
+     *
+     * @param string $hotelCd
+     * @return int
+     */
+    private function issueEntryNo($hotelCd): int
+    {
+        // HACK: HotelArea model から QueryBuilder で取得したほうが可読性あがるか。
+        $sql = <<<SQL
+            select
+                entry_no
+            from
+                hotel_area
+            where
+                hotel_cd = :hotel_cd
+            group by
+                entry_no
+            order by
+                entry_no asc
+        SQL;
+        $a_rows = DB::select($sql, ['hotel_cd' => $hotelCd]);
+
+        // 既存の番号に1番が存在していない場合は1とする
+        if (count($a_rows) === 0 || $a_rows[0]->entry_no != 1) {
+            return 1;
+        }
+
+        // 歯抜けが発生している場合はその番号を取得して返す
+        $sql = <<<SQL
+            select
+                ifnull(min(entry_no + 1), 1) as issue_entry_no
+            from
+                hotel_area
+            where
+                hotel_cd = :hotel_cd_1
+                and (entry_no + 1) not in (
+                    select
+                        entry_no
+                    from
+                        hotel_area
+                    where
+                        hotel_cd = :hotel_cd_2
+                )
+        SQL;
+        $a_row = DB::select($sql, [
+            'hotel_cd_1' => $hotelCd,
+            'hotel_cd_2' => $hotelCd,
+        ]);
+
+        return (int)$a_row[0]->issue_entry_no;
+    }
+
+    /**
+     * エラーチェック
+     *
+     * @return array: エラーメッセージ
+     */
+    private function customValidation($hotelCd, $entryNo, $a_attributes): array
+    {
+        // 初期化
+        $errorMessages = [];
+        $a_temp_idx = [
+            self::IDX_AREA_LARGE  => '大エリア',
+            self::IDX_AREA_PREF   => '都道府県',
+            self::IDX_AREA_MIDDLE => '中エリア'
+        ];
+
+        foreach ($a_temp_idx as $key => $value) {
+            // 必須チェック
+            if (is_null($a_attributes[$key]['area_id'])) {
+                $errorMessages[] = '「' . $value . '」が選択されていません。';
+            }
+
+            // 整合性チェック
+            if (!$this->isIntegrityAreaId(
+                $a_attributes[$key]['area_id'],
+                $a_attributes[$key]['area_type']
+            )) {
+                $errorMessages[] = '「' . $value . '」に指定された地域データが存在していません。';
+            }
+        }
+
+        // 地域データ（大エリア・都道府県・中エリア・小エリア）の組み合わせの整合性チェック
+        if (
+            !$this->isIntegrityAreaPattern(
+                $a_attributes[self::IDX_AREA_LARGE]['area_id'],
+                $a_attributes[self::IDX_AREA_PREF]['area_id'],
+                $a_attributes[self::IDX_AREA_MIDDLE]['area_id'],
+                $a_attributes[self::IDX_AREA_SMALL]['area_id']
+            )
+        ) {
+            $errorMessages[] = '地域の組合せが正しくありません。';
+        }
+
+        // 地域データ（大エリア・都道府県・中エリア・小エリア）の組み合わせの重複チェック
+        if (
+            !$this->isUniqueAreaPattern(
+                $hotelCd,
+                $entryNo,
+                $a_attributes[self::IDX_AREA_LARGE]['area_id'],
+                $a_attributes[self::IDX_AREA_PREF]['area_id'],
+                $a_attributes[self::IDX_AREA_MIDDLE]['area_id'],
+                $a_attributes[self::IDX_AREA_SMALL]['area_id']
+            )
+        ) {
+            $errorMessages[] = 'この地域の組み合わせはすでに登録されています。';
+        }
+
+        return $errorMessages;
+    }
+
+    /**
+     * 対象のエリアIDの整合性チェック
+     *
+     * @param string $an_area_id: エリアID
+     * @param string $an_area_type: 地域タイプ
+     * @return bool: 整合性の成否(true：正規, false:不正)
+     */
+    private function isIntegrityAreaId($an_area_id, $an_area_type): bool
+    {
+        $a_mast_areas = $this->getMastAreas();
+        // HACK: 都度 mast_area model から検索したほうがよさそうか？
+        foreach ($a_mast_areas as $a_area) {
+            // 地域IDのマッチング
+            if ((int)$a_area->area_id === (int)$an_area_id) {
+                // 地域タイプのマッチング
+                if ((int)$a_area->area_type === (int)$an_area_type) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 対象エリアIDの組合せの整合性チェック
+     *
+     * @param string $an_area_l: エリアID（大エリア）
+     * @param string $an_area_p: エリアID（都道府県）
+     * @param string $an_area_m: エリアID（中エリア）
+     * @param string $an_area_s: エリアID（小エリア）
+     * @return bool: 登録の可否（true：登録可, false：登録不可）
+     */
+    private function isIntegrityAreaPattern(
+        $an_area_l,
+        $an_area_p,
+        $an_area_m,
+        $an_area_s
+    ): bool {
+        // 初期化
+        $a_area_detail_pref   = $this->getArea($an_area_p);         // 都道府県
+        $a_area_detail_middle = $this->getArea($an_area_m);         // 中エリア
+        $a_area_detail_small  = $this->getArea($an_area_s);         // 小エリア
+        $a_area_m_children    = $this->getChildAreas($an_area_m);   // 中エリアを親に持つ小エリアID情報
+
+        // 小エリアを指定しているとき
+        if (!is_null($an_area_s)) {
+            if ((int)$a_area_detail_small->parent_area_id !== (int)$an_area_m) {
+                return false;
+            }
+        }
+
+        // 中エリア
+        if ((int)$a_area_detail_middle->parent_area_id !== (int)$an_area_p) {
+            return false;
+        }
+
+        // 対象の中エリアに小エリアが存在する場合
+        if (count($a_area_m_children) > 0) {
+            // 小エリアが指定されているかをチェックする
+            if (!in_array($an_area_s, $a_area_m_children)) {
+                return false;
+            }
+        }
+
+        // 都道府県
+        if ((int)$a_area_detail_pref->parent_area_id !== (int)$an_area_l) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * 対象エリアIDの組合せの重複チェック
+     *
+     * @param [type] $hotelCd
+     * @param [type] $entryNo
+     * @param [type] $an_area_l: エリアID（大エリア）
+     * @param [type] $an_area_p: エリアID（都道府県）
+     * @param [type] $an_area_m: エリアID（中エリア）
+     * @param [type] $an_area_s:エリアID（小エリア）
+     * @return boolean: 登録の可否（true：登録可, false：登録不可）
+     */
+    private function isUniqueAreaPattern(
+        $hotelCd,
+        $entryNo,
+        $an_area_l,
+        $an_area_p,
+        $an_area_m,
+        $an_area_s
+    ): bool {
+        $a_hotel_areas = $this->getHotelAreas($hotelCd);
+        foreach ($a_hotel_areas as $a_row) {
+            if (
+                (int)$entryNo !== (int)$a_row['entry_no']
+                && (int)$a_row['area_l'] === (int)$an_area_l
+                && (int)$a_row['area_p'] === (int)$an_area_p
+                && (int)$a_row['area_m'] === (int)$an_area_m
+                && (!array_key_exists('area_s', $a_row)
+                    || (int)$a_row['area_s'] === (int)$an_area_s
+                )
+            ) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * 対象地域IDを親地域IDにもつ地域IDをすべて取得
+     *
+     * @param string $an_area_id: 地域ID
+     * @return array: 対象地域IDの配列
+     */
+    private function getChildAreas($an_area_id): array
+    {
+        // 初期化
+        $n_area_id  = (int)$an_area_id;
+        $a_area_ids = [];
+
+        // 地域IDがNull
+        if (is_null($an_area_id)) {
+            return $a_area_ids;
+        }
+
+        // 地域マスター情報から一致する地域情報を探す
+        // HACK: mast_area model から検索したほうがよさそう？
+        $a_mast_areas = $this->getMastAreas();
+        foreach ($a_mast_areas as $a_area) {
+            // 見つかった場合は対象の情報を返却する
+            if ((int)$a_area->parent_area_id === $n_area_id) {
+                $a_area_ids[] = $a_area->area_id;
+            }
+        }
+
+        return $a_area_ids;
+    }
+
     public function delete($hotelCd, $entryNo)
     {
         DB::beginTransaction();
@@ -421,16 +753,4 @@ class BrHotelAreaService
         DB::commit();
         return true;
     }
-    
-    // public function dummyHotelArea($targetCd)
-    // {
-    //     return (object)[
-    //         'entry_no'      => 'entry_no_val' . Str::random(5),
-    //         'area_nm_l'     => 'area_nm_l_val' . Str::random(5),
-    //         'area_nm_m'     => 'area_nm_m_val' . Str::random(5),
-    //         'area_nm_p'     => 'area_nm_p_val' . Str::random(5),
-    //         'area_nm_s'     => 'area_nm_s_val' . Str::random(5),
-    //         'hotel_cd'      => $targetCd,
-    //     ];
-    // }
 }

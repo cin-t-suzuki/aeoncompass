@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class HotelArea extends Model
+class MastArea extends Model
 {
     use HasFactory;
 
@@ -14,17 +14,14 @@ class HotelArea extends Model
      *
      * @var string
      */
-    protected $table = 'hotel_area';
+    protected $table = 'mast_area';
 
     /**
      * テーブルに関連付ける主キー
      *
-     * 複合主キー: hotel_cd, entry_no, area_id
-     * MEMO: Laravel は複合主キーに対応していない
-     *
      * @var string
      */
-    // protected $primaryKey = 'hotel_cd';
+    protected $primaryKey = 'area_id';
 
     /**
      * モデルのIDを自動増分するか
@@ -41,7 +38,7 @@ class HotelArea extends Model
      *
      * @var bool
      */
-    // public $timestamps = false;
+    public $timestamps = false;
     const CREATED_AT = 'entry_ts';
     const UPDATED_AT = 'modify_ts';
 
@@ -51,20 +48,12 @@ class HotelArea extends Model
      * @var array
      */
     protected $fillable = [
-        'hotel_cd',
-        'entry_no',
-        'area_id',
-        'area_type',
-        'entry_cd',
-        // 'entry_ts',
-        'modify_cd',
-        // 'modify_ts',
     ];
 
-    // カラム定数
-    const AREA_TYPE_JAPAN   = 0; // 日本全域
-    const AREA_TYPE_LARGE   = 1; // 大エリア
-    const AREA_TYPE_PREF    = 2; // 都道府県
-    const AREA_TYPE_MIDDLE  = 3; // 中エリア
+    const AREA_TYPE_JAPAN   = 0; // 日本全域 
+    const AREA_TYPE_LARGE   = 1; // 大エリア 
+    const AREA_TYPE_PREF    = 2; // 都道府県 
+    const AREA_TYPE_MIDDLE  = 3; // 中エリア 
     const AREA_TYPE_SMALL   = 4; // 小エリア
+
 }
