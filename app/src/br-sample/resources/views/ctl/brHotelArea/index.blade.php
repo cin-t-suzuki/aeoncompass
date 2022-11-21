@@ -9,7 +9,7 @@
   screen_type  = 'br'
   js_action    = $smarty.capture.js_action
 } --}}
-@extends('ctl.common.base2')
+@extends('ctl.common.base3')
 @section('title', '施設と地域の関連付け【一覧】')
 
 {{-- JavaScript指定 --}}
