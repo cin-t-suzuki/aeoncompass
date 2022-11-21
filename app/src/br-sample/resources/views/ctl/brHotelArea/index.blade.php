@@ -19,7 +19,7 @@
         $(document).ready(function() {
             $('input.jqs-area-delete').click(function() {
                 return confirm(
-                    $('.jqs-area-nm').eq($('input.jqs-area-delete').index(this)).val() 
+                    $('.jqs-area-nm').eq($('input.jqs-area-delete').index(this)).val()
                     + '\n\nこの地域情報を削除します。\nよろしいですか？'
                 );
             });
@@ -74,7 +74,7 @@
                     {{-- TODO: null 合体を削除 --}}
                     <td>{{ $hotel_area['area_nm_s'] }}</td>
                     <td>
-                        {{ Form::open(['route' => 'ctl.br_hotel_area.edit', 'method' => 'post']) }}
+                        {{ Form::open(['route' => 'ctl.br_hotel_area.edit', 'method' => 'get']) }}
                             <div>
                                 <input type="hidden" name="target_cd" value="{{ $hotel_area['hotel_cd'] }}" />
                                 <input type="hidden" name="entry_no" value="{{ $hotel_area['entry_no'] }}" />

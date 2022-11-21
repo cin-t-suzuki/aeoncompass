@@ -55,29 +55,21 @@ class BrHotelAreaController extends Controller
     public function edit(Request $request, Service $service)
     {
         $targetCd = $request->input('target_cd');
-        $hotelInfo = $service->getHotelInfo($targetCd);
         $entryNo = $request->input('entry_no');
-        $AreaIdSet = [];
+        $areaIdSet = [];
 
         // 登録情報の設定
-        if ($request->missing('is_submit')) {
-            // is_submit がなければ初期表示なので、登録されているデータを表示
-            $a_temp_hotel_area_default = $service->getHotelAreaDefault($targetCd, $entryNo);
-
-            $AreaIdSet['area_large']  = $a_temp_hotel_area_default['area_large'];
-            $AreaIdSet['area_pref']   = $a_temp_hotel_area_default['area_pref'];
-            $AreaIdSet['area_middle'] = $a_temp_hotel_area_default['area_middle'];
-            $AreaIdSet['area_small']  = $a_temp_hotel_area_default['area_small'];
+        if ($request->session()->has('input_data')) {
+            // input_data があれば、入力を保持して表示
+            $areaIdSet = $request->session()->pull('input_data');
         } else {
-            // is_submit があれば、入力を保持して表示
-            $AreaIdSet['area_large']  = $request->input('area_large',   -1);
-            $AreaIdSet['area_pref']   = $request->input('area_pref',    -1);
-            $AreaIdSet['area_middle'] = $request->input('area_middle',  -1);
-            $AreaIdSet['area_small']  = $request->input('area_small',   -1);
+            // input_data がなければ初期表示なので、登録されているデータを表示
+            $areaIdSet = $service->getHotelAreaDefault($targetCd, $entryNo);
         }
 
+        $hotelInfo = $service->getHotelInfo($targetCd);
         return view('ctl.brHotelArea.edit', [
-            'request_params' => $AreaIdSet,
+            'request_params' => $areaIdSet,
             'target_cd'     => $targetCd,
             'hotel_info'    => $hotelInfo,
         ]);
@@ -109,9 +101,30 @@ class BrHotelAreaController extends Controller
         return redirect()->route('ctl.br_hotel_area.complete', ['target_cd' => $targetCd]);
     }
 
-    public function update(Request $request)
+    public function update(Request $request, Service $service)
     {
         $targetCd = $request->input('target_cd');
+        $inputData = $request->only([
+            'entry_no',
+            'area_large',
+            'area_pref',
+            'area_middle',
+            'area_small',
+        ]);
+
+        $errorMessages = $service->update($targetCd, $inputData);
+        if (count($errorMessages) > 0) {
+            // 失敗
+            return redirect()->route('ctl.br_hotel_area.edit', [
+                'target_cd' => $targetCd,
+                'entry_no' => $inputData['entry_no'],
+            ])->with([
+                'errors' => $errorMessages,
+                'input_data' => $inputData,
+            ]);
+        }
+
+        // 成功
         return redirect()->route('ctl.br_hotel_area.complete', ['target_cd' => $targetCd]);
     }
 

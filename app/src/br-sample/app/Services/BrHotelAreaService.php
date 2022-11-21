@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Hotel;
 use App\Models\HotelArea;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class BrHotelAreaService
 {
@@ -491,6 +492,40 @@ class BrHotelAreaService
         return $dbErrorMessages;
     }
 
+    public function update($hotelCd, $inputData): array
+    {
+        DB::beginTransaction();
+
+        // アクションの処理
+        $errorMessages = $this->updateMethod($hotelCd, $inputData);
+        if (count($errorMessages) > 0) {
+            DB::rollBack();
+        } else {
+            DB::commit();
+        }
+
+        return $errorMessages;
+    }
+
+    private function updateMethod($hotelCd, $inputData): array
+    {
+        $errorMessages = [];
+        $deleteAffectedRowCount = $this->deleteMethod($hotelCd, $inputData['entry_no']);
+        if ($deleteAffectedRowCount === 0) {
+            $errorMessages[] = '更新時に既存レコード群を削除できませんでした。';
+            return $errorMessages;
+        }
+
+        $createErrorMessages = $this->createMethod($hotelCd, $inputData);
+        if (count($createErrorMessages) > 0) {
+            $errorMessages = $createErrorMessages;
+            $errorMessages[] = '更新時に既存レコード群を登録できませんでした。';
+            return $errorMessages;
+        }
+
+        return $errorMessages;
+    }
+
     /**
      * 登録番号の新規発番したものを取得
      *
@@ -745,12 +780,7 @@ class BrHotelAreaService
     public function delete($hotelCd, $entryNo)
     {
         DB::beginTransaction();
-        // MEMO: 移植元では、PK 指定が必要なためそれぞれで削除処理を行っているが、Laravel では where で絞り込んだレコードを一括削除できる。
-        $affectedRowCount =  HotelArea::where('hotel_cd', $hotelCd)
-            ->where('entry_no', $entryNo)
-            ->delete();
-        // TODO: 確認、変更ログ（1時間ごとのファイルを作成して23時間保持）は必要？
-
+        $affectedRowCount = $this->deleteMethod($hotelCd, $entryNo);
         if ($affectedRowCount === 0) {
             DB::rollBack();
             return false;
@@ -758,5 +788,16 @@ class BrHotelAreaService
 
         DB::commit();
         return true;
+    }
+
+    private function deleteMethod($hotelCd, $entryNo)
+    {
+        // MEMO: 移植元では、PK 指定が必要なためそれぞれで削除処理を行っているが、Laravel では where で絞り込んだレコードを一括削除できる。
+        $affectedRowCount =  HotelArea::where('hotel_cd', $hotelCd)
+            ->where('entry_no', $entryNo)
+            ->delete();
+        // TODO: 確認、変更ログ（1時間ごとのファイルを作成して23時間保持）は必要？
+
+        return $affectedRowCount;
     }
 }
