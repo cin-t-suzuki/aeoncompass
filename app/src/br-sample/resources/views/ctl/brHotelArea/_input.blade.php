@@ -12,8 +12,10 @@
     screen_type  = 'br'
     js_action    = $smarty.capture.js_action
   } --}}
-@extends('ctl.common.base2')
-@section('title', $title)
+@extends('ctl.common.base3', [
+    'title' => $title,
+])
+{{-- @section('title', $title) --}}
 
 {{-- JavaScript指定 --}}
 @section('headScript')

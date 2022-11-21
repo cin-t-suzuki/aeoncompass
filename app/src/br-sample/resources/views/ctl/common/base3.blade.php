@@ -72,7 +72,7 @@
         'hotel' => (object) [
             'hotel_nm' => 'hotel_nm_' . Str::random(rand(3, 8)),
             'hotel_cd' => 'hotel_cd_' . Str::random(rand(3, 8)),
-            'hotel_old_nm' => [null, 'hotel_old_nm_' . Str::random(rand(3, 8))][rand(0,1)],
+            'hotel_old_nm' => [null, 'hotel_old_nm_' . Str::random(rand(3, 8))][rand(0, 1)],
             'ydp2_status' => rand(0, 1) == 0,
             'premium_status' => rand(0, 1) == 0,
             'visual_package_status' => rand(0, 1) == 0,
@@ -104,7 +104,7 @@
     ];
     $config = (object) [
         'environment' => (object) [
-            'status' => ['development', 'test', 'product', 'unknown'][rand(0, 3)],
+            'status' => ['development', 'test', 'product', 'unknown'][rand(0, 0)],
             'mail' => (object) [
                 'from' => (object) [
                     'opc' => 'mail_' . Str::random(rand(20, 30)),
@@ -127,12 +127,12 @@
     //   $acceptance_status_flg  = rand(0,1) == 0;
     //   $header_number          = 'header_number_' . rand(0,100);
     //   $ad = Str::random(16);
-    $screen_type = ['htl', 'br', 'ptn'][rand(0, 2)];
-    $is_staff_navi = rand(0, 1);
-    $is_htl_navi = rand(0, 1);
-    $is_ptn_navi = rand(0, 1);
-    $is_ctl_menu = rand(0, 1);
-    $title = [null, 'TITLE_' . Str::random(5)][rand(0, 1)];
+    $screen_type = ['htl', 'br', 'ptn'][rand(1, 1)];
+    $is_staff_navi = rand(0, 0);
+    $is_htl_navi = rand(0, 0);
+    $is_ptn_navi = rand(0, 0);
+    $is_ctl_menu = rand(0, 0);
+    // $title = [null, 'TITLE_' . Str::random(5)][rand(0, 1)];
 @endphp
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
@@ -174,9 +174,12 @@
     {{-- ------------------------------------------------------------------------ --}}
     {{-- ファイル読み込み --}}
     {{-- TODO: ファイル存在確認 --}}
-    <script type="text/javascript" src="{{ asset('js/jquery.js?6735-2') }}"></script>
-    <script type="text/javascript" src="{{ asset('js/jquery.cookies.js?6735-2') }}"></script>
-    <script type="text/javascript" src="{{ asset('js/brj.ctl.js?6735-2') }}"></script>
+    {{-- <script type="text/javascript" src="{{ asset('js/jquery.js?6735-2') }}"></script> --}}
+    <script type="text/javascript" src="{{ asset('js/jquery.js') }}"></script>
+    {{-- <script type="text/javascript" src="{{ asset('js/jquery.cookies.js?6735-2') }}"></script> --}}
+    <script type="text/javascript" src="{{ asset('js/jquery.cookies.js') }}"></script>
+    {{-- <script type="text/javascript" src="{{ asset('js/brj.ctl.js?6735-2') }}"></script> --}}
+    <script type="text/javascript" src="{{ asset('js/brj.ctl.js') }}"></script>
 
 
     {{-- Google Analytics --}}
@@ -259,8 +262,10 @@
                         <div class="info-box-br-contents">
                             <ul>
                                 <li>
-                                    <div id="item-mail">MAIL</div>：&nbsp;<a
-                                        href="mailto:{{ $v->config->environment->mail->from->opc }}">{{ $v->config->environment->mail->from->opc }}</a>
+                                    <div id="item-mail">MAIL</div>：&nbsp;
+                                    <a href="mailto:{{ $v->config->environment->mail->from->opc }}">
+                                        {{ $v->config->environment->mail->from->opc }}
+                                    </a>
                                 </li>
                                 <li>
                                     <div id="item-tel">TEL</div>：&nbsp;03-5751-8243
