@@ -7,7 +7,7 @@
 {!! Form::open(['route' => ['ctl.brpartner.partnercontroledt'], 'method' => 'post']) !!}
   @foreach ($views->partner_control_value as $key => $value)
   {{-- 下記、value(item)の書き換え問題ない？ --}}
-  <input type="hidden" name="{{$key}}" value="{{$value}}" /> 
+  <input type="hidden" name="{{$key}}" value="{{strip_tags($value)}}" /> 
   @endforeach
   <input type='hidden' name='return_flg' value='true'>
   {{-- ↓がないとnmがとれないので追加したがいいか？（元ソースにはない） --}}

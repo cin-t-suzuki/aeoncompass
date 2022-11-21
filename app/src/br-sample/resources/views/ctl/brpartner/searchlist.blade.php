@@ -14,10 +14,10 @@
         <tr>
             <td nowrap>提携先コード</td> 
             <!-- GETだとパラメータないと以下二つは引っかかる -->
-            <td nowrap><input type="text" name="partner_cd" value="{{$views->params["partner_cd"] ?? null }}" size="20" maxlength="20" /></td>
+            <td nowrap><input type="text" name="partner_cd" value="{{strip_tags($views->params["partner_cd"]) ?? null }}" size="20" maxlength="20" /></td>
           <tr>
             <td nowrap>提携先名称</td>
-            <td nowrap><input type="text" name="partner_nm" value="{{$views->params["partner_nm"] ?? null }}" size="20" maxlength="20" /></td>
+            <td nowrap><input type="text" name="partner_nm" value="{{strip_tags($views->params["partner_nm"]) ?? null }}" size="20" maxlength="20" /></td>
           </tr>
           <tr>
             <td nowrap>接続形態</td>
@@ -100,9 +100,9 @@
     @foreach ($views->partner_list["values"] as $partners)
       <tr>
         <td>
-        {{$partners["partner_cd"]}}<br>
-        {{$partners["partner_nm"]}}<br>
-        {{$partners["system_nm"]}}<br>
+        {{strip_tags($partners["partner_cd"])}}<br>
+        {{strip_tags($partners["partner_nm"])}}<br>
+        {{strip_tags($partners["system_nm"])}}<br>
         </td>
         @if ($views->params["partner_disply_1"] ?? null == 1)
         <td>
@@ -118,8 +118,8 @@
         @if ($views->params["partner_disply_2"] ?? null == 1)
           <td>
             @if ($partners["connect_cls"] != "" && $partners["connect_type"] != "")
-            {{$partners["connect_cls"]}}<br>
-            {{$partners["connect_type"]}}
+            {{strip_tags($partners["connect_cls"])}}<br>
+            {{strip_tags($partners["connect_type"])}}
             @else
                <font color="red">未設定</font>
             @endif
@@ -144,47 +144,47 @@
           {!! Form::open(['route' => ['ctl.brpartner.partnerconf'], 'method' => 'post']) !!} 
             <td align="center">
               <INPUT TYPE="submit" VALUE="変更">
-              <input type="hidden" name="partner_cd" value="{{$partners["partner_cd"]}}" />
+              <input type="hidden" name="partner_cd" value="{{strip_tags($partners["partner_cd"])}}" />
             </td>
           {!! Form::close() !!}
           {!! Form::open(['route' => ['ctl.brpartner.partnercontroledt'], 'method' => 'post']) !!} 
             <td align="center">
               <INPUT TYPE="submit" VALUE="変更">
-              <input type="hidden" name="partner_cd" value="{{$partners["partner_cd"]}}" />
-              <input type="hidden" name="partner_nm" value="{{$partners["partner_nm"]}}" />
+              <input type="hidden" name="partner_cd" value="{{strip_tags($partners["partner_cd"])}}" />
+              <input type="hidden" name="partner_nm" value="{{strip_tags($partners["partner_nm"])}}" />
             </td>
           {!! Form::close() !!}
           {!! Form::open(['route' => ['ctl.brpartnersection.index'], 'method' => 'post']) !!}
             <td align="center">
               <input type="submit" value="変更">
-              <input type="hidden" name="partner_cd"               value="{{$partners["partner_cd"]}}" />
-              <input type="hidden" name="search_partner_cd"        value="{{$views->params["partner_cd"]}}" />
+              <input type="hidden" name="partner_cd"               value="{{strip_tags($partners["partner_cd"])}}" />
+              <input type="hidden" name="search_partner_cd"        value="{{strip_tags($views->params["partner_cd"])}}" />
               {{-- ↓|urlencode削除 --}}
-              <input type="hidden" name="search_partner_nm"        value="{{$views->params["partner_nm"]}}" />
-              <input type="hidden" name="search_connect_cls"       value="{{$views->params["connect_cls"]}}" />
-              <input type="hidden" name="search_connect_type"      value="{{$views->params["connect_type"]}}" />
-              <input type="hidden" name="search_partner_disply_1" value="{{$views->params["partner_disply_1"]?? null}}" />
-              <input type="hidden" name="search_partner_disply_2" value="{{$views->params["partner_disply_2"]?? null}}" />
-              <input type="hidden" name="search_partner_disply_3" value="{{$views->params["partner_disply_3"]?? null}}" />
-              <input type="hidden" name="search_partner_disply_4" value="{{$views->params["partner_disply_4"]?? null}}" />
-              <input type="hidden" name="search_partner_disply_5" value="{{$views->params["partner_disply_5"]?? null}}" />
+              <input type="hidden" name="search_partner_nm"        value="{{strip_tags($views->params["partner_nm"])}}" />
+              <input type="hidden" name="search_connect_cls"       value="{{strip_tags($views->params["connect_cls"])}}" />
+              <input type="hidden" name="search_connect_type"      value="{{strip_tags($views->params["connect_type"])}}" />
+              <input type="hidden" name="search_partner_disply_1" value="{{strip_tags($views->params["partner_disply_1"]?? null)}}" />
+              <input type="hidden" name="search_partner_disply_2" value="{{strip_tags($views->params["partner_disply_2"]?? null)}}" />
+              <input type="hidden" name="search_partner_disply_3" value="{{strip_tags($views->params["partner_disply_3"]?? null)}}" />
+              <input type="hidden" name="search_partner_disply_4" value="{{strip_tags($views->params["partner_disply_4"]?? null)}}" />
+              <input type="hidden" name="search_partner_disply_5" value="{{strip_tags($views->params["partner_disply_5"]?? null)}}" />
               {{-- ↑?? null追加でいいか --}}
             </td>
           {!! Form::close() !!}
           {!! Form::open(['route' => ['ctl.brpartnerKeyword.index'], 'method' => 'post']) !!}
             <td align="center">
               <input type="submit" value="変更">
-              <input type="hidden" name="partner_cd"               value="{{$partners["partner_cd"]}}" />
-              <input type="hidden" name="search_partner_cd"        value="{{$views->params["partner_cd"]}}" />
+              <input type="hidden" name="partner_cd"               value="{{strip_tags($partners["partner_cd"])}}" />
+              <input type="hidden" name="search_partner_cd"        value="{{strip_tags($views->params["partner_cd"])}}" />
               {{-- ↓|urlencode削除 --}}
-              <input type="hidden" name="search_partner_nm"        value="{{$views->params["partner_nm"]}}" />
-              <input type="hidden" name="search_connect_cls"       value="{{$views->params["connect_cls"]}}" />
-              <input type="hidden" name="search_connect_type"      value="{{$views->params["connect_type"]}}" />
-              <input type="hidden" name="search_partner_disply_1" value="{{$views->params["partner_disply_1"]?? null}}" />
-              <input type="hidden" name="search_partner_disply_2" value="{{$views->params["partner_disply_2"]?? null}}" />
-              <input type="hidden" name="search_partner_disply_3" value="{{$views->params["partner_disply_3"]?? null}}" />
-              <input type="hidden" name="search_partner_disply_4" value="{{$views->params["partner_disply_4"]?? null}}" />
-              <input type="hidden" name="search_partner_disply_5" value="{{$views->params["partner_disply_5"]?? null}}" />
+              <input type="hidden" name="search_partner_nm"        value="{{strip_tags($views->params["partner_nm"])}}" />
+              <input type="hidden" name="search_connect_cls"       value="{{strip_tags($views->params["connect_cls"])}}" />
+              <input type="hidden" name="search_connect_type"      value="{{strip_tags($views->params["connect_type"])}}" />
+              <input type="hidden" name="search_partner_disply_1" value="{{strip_tags($views->params["partner_disply_1"]?? null)}}" />
+              <input type="hidden" name="search_partner_disply_2" value="{{strip_tags($views->params["partner_disply_2"]?? null)}}" />
+              <input type="hidden" name="search_partner_disply_3" value="{{strip_tags($views->params["partner_disply_3"]?? null)}}" />
+              <input type="hidden" name="search_partner_disply_4" value="{{strip_tags($views->params["partner_disply_4"]?? null)}}" />
+              <input type="hidden" name="search_partner_disply_5" value="{{strip_tags($views->params["partner_disply_5"]?? null)}}" />
               {{-- ↑?? null追加でいいか --}}
             </td>
           {!! Form::close() !!}

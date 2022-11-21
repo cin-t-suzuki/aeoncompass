@@ -53,17 +53,17 @@
   <table border="1" cellspacing="0" cellpadding="1">
     <tr>
       <td  BGCOLOR="#EEFFEE" >提携先コード</td>
-      <td>{{$views->partners["partner_cd"]}}</td>
+      <td>{{strip_tags($views->partners["partner_cd"])}}</td>
     </tr>
     <tr><td  BGCOLOR="#EEFFEE" >提携先名</td>
-      <td>{{$views->partners["partner_nm"]}}</big>
+      <td>{{strip_tags($views->partners["partner_nm"])}}</big>
       </td>
     </tr>
   </table>
 <p>更新</p>
 {!! Form::open(['route' => ['ctl.brpartner.partnercontrolupd'], 'method' => 'post']) !!}
-  <input type="hidden" name="partner_cd" value="{{$views->partners["partner_cd"]}}" />
-  <input type="hidden" name="partner_nm" value="{{$views->partners["partner_nm"]}}" />
+  <input type="hidden" name="partner_cd" value="{{strip_tags($views->partners["partner_cd"])}}" />
+  <input type="hidden" name="partner_nm" value="{{strip_tags($views->partners["partner_nm"])}}" />
   <table cellspacing="0" cellpadding="10" border="1">
     <tr>
       <td bgcolor="#EEFFEE" nowrap>接続形態</td>
@@ -98,7 +98,7 @@
     <tr>
       <td bgcolor="#EEFFEE" nowrap>接続パスワード</td>
       <td>
-        <input type="text" name="pw_user" value="{{$views->control_value["pw_user"]}}" size="12" maxlength="12" />
+        <input type="text" name="pw_user" value="{{strip_tags($views->control_value["pw_user"])}}" size="12" maxlength="12" />
       </td>
     </tr>
     <tr>
@@ -128,7 +128,7 @@
     <tr>
       <td bgcolor="#EEFFEE" nowrap>ページ有効時間</td>
       <td>
-        <input type="text" name="page_timelimit" value="{{$views->control_value["page_timelimit"]}}" size="4" maxlength="4" />
+        <input type="text" name="page_timelimit" value="{{strip_tags($views->control_value["page_timelimit"])}}" size="4" maxlength="4" />
           分 （ゼロの時は無制限）<br>
         <font color="#FF0000">connect_type=（CLONE,CLOUT）のとき</font>
       </td>
@@ -136,7 +136,7 @@
     <tr>
       <td bgcolor="#EEFFEE" nowrap>料率</td>
       <td>
-        <input type="text" name="rate" value="{{$views->control_value["rate"]}}" size="3" maxlength="3" />％
+        <input type="text" name="rate" value="{{strip_tags($views->control_value["rate"])}}" size="3" maxlength="3" />％
       </td>
     </tr>
     <tr>
