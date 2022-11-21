@@ -3,6 +3,8 @@
     移植元で view と view2 で分かれてたものの view2 のほう。
     ./message.blade.php が view のほうのもの。
     構造は同じだが、装飾が異なる。
+    view のベースとなるテンプレートファイルでも、 view2 のメッセージで統一する場合、
+    view2 で読み込んでいる css を読み込む必要がある。
 --}}
 
 @if (!empty($errors) && count($errors) > 0)

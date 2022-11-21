@@ -16,6 +16,19 @@ class Hotel extends CommonDBModel
 	use Traits;
 
 	protected $table = "hotel";
+    /**
+     * テーブルに関連付ける主キー
+     *
+     * @var string
+     */
+    protected $primaryKey = 'hotel_cd';
+    /**
+     * モデルのIDを自動増分するか
+     *
+     * @var bool
+     */
+    public $incrementing = false;
+
 	// カラム
 	public string $COL_HOTEL_CD = "hotel_cd";
 	public string $COL_ORDER_NO = "order_no";
@@ -39,6 +52,10 @@ class Hotel extends CommonDBModel
 	public string $COL_ACCEPT_STATUS = "accept_status";
 	public string $COL_ACCEPT_AUTO = "accept_auto";
 	public string $COL_ACCEPT_DTM = "accept_dtm";
+
+    // カラム定数
+    const ACCEPT_STATUS_STOPPING  = 0; // 停止中
+    const ACCEPT_STATUS_ACCEPTING = 1; // 受付中
 
 	/** コンストラクタ
 	 */

@@ -107,6 +107,8 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
         Route::post('/createnote', 'createnote')->name('ctl.brhotel.createnote'); //施設管理特記事項
         Route::post('/updatenote', 'updatenote')->name('ctl.brhotel.updatenote'); //
 
+        Route::get('/editManagement', 'editManagement')->name('ctl.br_hotel.edit_management'); // 施設管理情報更新
+        Route::post('/updateManagement', 'updateManagement')->name('ctl.br_hotel.update_management'); // 施設管理情報更新処理
     });
 
     // 施設情報変更 登録状態変更

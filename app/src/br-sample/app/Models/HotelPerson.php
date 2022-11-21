@@ -14,6 +14,47 @@ class HotelPerson extends CommonDBModel
 	use Traits;
 
 	protected $table = "hotel_person";
+    /**
+     * テーブルに関連付ける主キー
+     *
+     * @var string
+     */
+    protected $primaryKey = 'hotel_cd';
+    /**
+     * モデルのIDを自動増分するか
+     *
+     * @var bool
+     */
+    public $incrementing = false;
+    /**
+     * モデルにタイムスタンプを付けるか
+     *
+     * MEMO: 独自実装でタイムスタンプを設定しているため、Laravel 側では設定しない。
+     * HACK: (工数次第) Laravel の機能を使ったほうがよい気もする。
+     *
+     * @var bool
+     */
+    public $timestamps = false;
+    const CREATED_AT = 'entry_ts';
+    const UPDATED_AT = 'modify_ts';
+
+    /**
+     * 複数代入可能な属性
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'person_post',
+        'person_nm',
+        'person_tel',
+        'person_fax',
+        'person_email',
+        'entry_cd',
+        'entry_ts',
+        'modify_cd',
+        'modify_ts',
+    ];
+
 	// カラム
 	public string $COL_HOTEL_CD = "hotel_cd";
 	public string $COL_PERSON_POST = "person_post";
@@ -29,9 +70,39 @@ class HotelPerson extends CommonDBModel
 		$colHotelCd = (new ValidationColumn())->setColumnName($this->COL_HOTEL_CD, "施設コード")->require()->length(0, 10)->notHalfKana(); //TODO 独自チェック
 		$colPersonPost = (new ValidationColumn())->setColumnName($this->COL_PERSON_POST, "担当者役職");//TODO チェック
 		$colPersonNm = (new ValidationColumn())->setColumnName($this->COL_PERSON_NM, "担当者名称"); //TODO チェック
-		$colPersonTel = (new ValidationColumn())->setColumnName($this->COL_person_tel, "担当者電話番号"); //TODO チェック
-		$colPersonFax = (new ValidationColumn())->setColumnName($this->COL_person_fax, "担当者ファックス番号"); //TODO チェック
-		$colPersonEmail = (new ValidationColumn())->setColumnName($this->COL_person_email, "担当者電子メールアドレス"); //TODO チェック
+        $colPersonTel = (new ValidationColumn())->setColumnName($this->COL_PERSON_TEL, "担当者電話番号"); //TODO チェック
+        $colPersonFax = (new ValidationColumn())->setColumnName($this->COL_PERSON_FAX, "担当者ファックス番号"); //TODO チェック
+        $colPersonEmail = (new ValidationColumn())->setColumnName($this->COL_PERSON_EMAIL, "担当者電子メールアドレス"); //TODO チェック
+
+        // 施設コード
+        $colHotelCd->require();         // 必須入力チェック
+        $colHotelCd->notHalfKana();     // 半角カナチェック
+        $colHotelCd->length(0, 10);     // 長さチェック
+
+        // 担当者役職
+        $colPersonPost->notHalfKana();  // 半角カナチェック
+        $colPersonPost->length(0, 32);  // 長さチェック
+
+        // 担当者名称
+        $colPersonNm->require();        // 必須入力チェック
+        $colPersonNm->notHalfKana();    // 半角カナチェック
+        $colPersonNm->length(0, 32);    // 長さチェック
+
+        // 担当者電話番号
+        $colPersonTel->require();       // 必須入力チェック
+        $colPersonTel->notHalfKana();   // 半角カナチェック
+        $colPersonTel->phoneNumber();   // 電話番号チェック
+        $colPersonTel->length(0, 15);   // 長さチェック
+
+        // 担当者ファックス番号
+        $colPersonFax->notHalfKana();   // 半角カナチェック
+        $colPersonFax->phoneNumber();   // 電話番号チェック
+        $colPersonFax->length(0, 15);   // 長さチェック
+
+        // 担当者電子メールアドレス
+        $colPersonEmail->notHalfKana(); // 半角カナチェック
+        $colPersonEmail->email();       // メールアドレスチェック
+        $colPersonEmail->length(0, 128); // 長さチェック
 
 		parent::setColumnDataArray([$colHotelCd, $colPersonPost, $colPersonNm, $colPersonTel, $colPersonFax, $colPersonEmail]);
 	}

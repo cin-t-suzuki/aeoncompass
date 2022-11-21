@@ -16,6 +16,19 @@ class HotelControl extends CommonDBModel
 	use Traits;
 
 	protected $table = "hotel_control";
+    /**
+     * テーブルに関連付ける主キー
+     *
+     * @var string
+     */
+    protected $primaryKey = 'hotel_cd';
+    /**
+     * モデルのIDを自動増分するか
+     *
+     * @var bool
+     */
+    public $incrementing = false;
+
 	// カラム
 	public string $COL_HOTEL_CD = "hotel_cd";
 	public string $COL_STOCK_TYPE = "stock_type";
@@ -23,6 +36,18 @@ class HotelControl extends CommonDBModel
 	public string $COL_CHARGE_ROUND = "charge_round";
 	public string $COL_STAY_CAP = "stay_cap";
 	public string $COL_MANAGEMENT_STATUS = "management_status";
+
+
+    // カラム定数
+    /*
+        MEMO: 移植元ソースのテーブル定義書を参照。
+        実際に検証データに登録されている値に「-2」はなし。
+        DB にはほかに「3」が見られるが、定義書に記載されていない。
+    */
+    const STOCK_TYPE_CONTRACT_SALE = 0;             //受託販売
+    const STOCK_TYPE_PURCHASE_SALE = 1;             //買取販売
+    const STOCK_TYPE_BULK_CONTRACT_TOYOKO_INN = 2;  //一括受託（東横イン）
+    const STOCK_TYPE_BULK_CONTRACT_OLD_YADO_PLAZA = -2; //一括受託（旧宿ぷらざ）
 
 	/** コンストラクタ
 	 */
