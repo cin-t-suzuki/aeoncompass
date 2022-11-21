@@ -12,8 +12,8 @@
         <td>
           <select size="1" name="priority[pref_id]">
             @foreach ($views->mast_pref['values'] as $value)
-            {{-- null追記,要書き換え --}}
-            <option value="{{strip_tags($value['pref_id'])}}" @if ($value['pref_id'] == $views->select_pref['pref_id']) selected="selected"@endif @if (($value['pref_id'] == 13) && $service->is_empty($views->select_pref['pref_id']))selected="selected"@endif>{{strip_tags($value['pref_nm'])}}</option>
+            {{-- null追記 --}}
+            <option value="{{strip_tags($value['pref_id']??null)}}" @if ($value['pref_id'] == $views->select_pref['pref_id']??null) selected="selected"@endif @if (($value['pref_id'] == 13) && $service->is_empty($views->select_pref['pref_id']??null))selected="selected"@endif>{{strip_tags($value['pref_nm']??null)}}</option>
               {{-- <option value="{$v->helper->form->strip_tags($value.pref_id)}" {if $value.pref_id == $v->assign->select_pref.pref_id} selected="selected"{/if} {if ($value.pref_id == 13) && is_empty($v->assign->select_pref.pref_id)}selected="selected"{/if}>{$v->helper->form->strip_tags($value.pref_nm)}</option> --}}
             @endforeach
           </select>

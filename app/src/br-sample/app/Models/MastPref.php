@@ -109,7 +109,7 @@ class MastPref extends CommonDBModel
 			$s_pref_id = '	and	mast_pref.pref_id = :pref_id';
 		}
 
-		//TODO 取り除く都道府県ID
+		//TODO 取り除く都道府県ID（おそらくこのままで大丈夫では？）
 		$s_not_in_by_pref_id = '';
 		if (isset($aa_conditions['not_in_by_pref_id']) && !$this->is_empty($aa_conditions['not_in_by_pref_id'])){
 			$s_not_in_by_pref_id = '	and	mast_pref.pref_id not in(';
@@ -141,7 +141,7 @@ class MastPref extends CommonDBModel
 			order by mast_pref.{$as_order}
 			SQL;
 
-		$data = DB::select($s_sql);
+		$data = DB::select($s_sql, $aa_conditions); //取り除く都道府県ID実装時に, $aa_conditions追記
 
 		$result = [];
 		if(!is_null($data) && count($data) > 0){ //TODO 複数件

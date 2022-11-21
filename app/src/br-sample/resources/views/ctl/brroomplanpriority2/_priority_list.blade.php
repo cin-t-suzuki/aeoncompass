@@ -30,17 +30,13 @@
       <td nowrap bgcolor="#EEFFEE">宿泊対象曜日</td>
     </tr>
     @if (count($views->priority_list) >= $views->priority_cnt)
-      {{-- {assign var = loop value = $v->assign->priority_cnt} --}}
       @php $loops = $views->priority_cnt @endphp
-    {{-- @elseif ($v->error->count() > 0 && $v->assign->priority_cd.action == "create") --}}
     @elseif (count($errors) > 0 && $views->priority_cd['action'] == "create")
-      {{-- {assign var = loop value = $v->assign->priority_list|@count} --}}
       @php $loops = count($views->priority_list) @endphp
     @else
-      {{-- {math equation = 'x + 1' x = $v->assign->priority_list|@count assign = loop} --}}
       @php $loops = count($views->priority_list) + 1 @endphp
     @endif
-    {{--$loopだとループ変数に引っかかってしまう？ので名前変更 {section loop=$loop start = 0 name = list} --}}
+    {{--↑↓$loopだとループ変数に引っかかってしまう？ので$loopsに名前変更 {section loop=$loop start = 0 name = list} --}}
     @for ($list = array_key_first($views->priority_list); $list <= $loops; $list++)
   <tr>
     <td>

@@ -54,7 +54,7 @@ class BrroomPlanPriority2Controller extends _commonController
 		$mastPrefModel = new MastPref();
 
 		// 都道府県の一覧データを配列で取得
-		$mastPrefsData = $mastPrefModel->getMastPrefs();
+		$mastPrefsData = $mastPrefModel->getMastPrefs(array('not_in_by_pref_id'=> array(00,48)));
 		// $mastPrefsData = $mastPrefModel->getMastPrefs(array('not_in_by_pref_id'=> array(00,48)));
 
 		// 選択された都道府県名取得
@@ -118,7 +118,6 @@ class BrroomPlanPriority2Controller extends _commonController
 		$this->addViewData("select_pref", $a_select_pref);
 		$this->addViewData("priority_cd", $a_priority);
 		$this->addViewData("priority_list", $a_priority_list);
-		$this->addViewData("mast_pref", $mastPrefsData);
 
 		$priority_cnt = $this->_priority_cnt;
 		$a_wday = $this->_a_wday;
