@@ -218,28 +218,28 @@
 
             {{-- BRスタッフ --}}
             @if ($v->user->operator->is_staff())
-                {include file=$v->env->module_root|cat:'/view2/_common/_header_staff_br.tpl'}
+                @include('ctl.common._header_staff_br')
             @endif
 
             {{-- NTAスタッフ --}}
             @if ($v->user->operator->is_nta())
-                {include file=$v->env->module_root|cat:'/view2/_common/_header_staff_nta.tpl'}
+                @include('ctl.common._header_staff_nta')
             @endif
 
         @endif
 
         {{-- 施設 --}}
         @if ($is_htl_navi)
-            {include file=$v->env->module_root|cat:'/view2/_common/_header_htl.tpl'}
+            @include('ctl.common._header_htl')
         @endif
 
         {{-- 提携先 --}}
         @if ($is_ptn_navi)
-            {include file=$v->env->module_root|cat:'/view2/_common/_header_ptn.tpl'}
+            @include('ctl.common._header_ptn')
         @endif
 
         @if ($screen_type === 'br')
-            {include file=$v->env->module_root|cat:'/view2/_common/_header_br.tpl'}
+            @include('ctl.common._header_br')
         @endif
 
         {{-- ------------------------------------------------------------------------ --}}
