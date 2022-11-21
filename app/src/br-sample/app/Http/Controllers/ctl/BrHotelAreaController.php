@@ -86,12 +86,12 @@ class BrHotelAreaController extends Controller
     public function create(Request $request, Service $service)
     {
         $targetCd = $request->input('target_cd');
-        $inputData = $request->only(
+        $inputData = $request->only([
             'area_large',
             'area_pref',
             'area_middle',
             'area_small',
-        );
+        ]);
 
         // データ整形・バリデーション・挿入
         $errorMessages = $service->create($targetCd, $inputData);

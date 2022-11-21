@@ -472,17 +472,23 @@ class BrHotelAreaService
         }
 
         // Insert の実行
-        foreach ($a_attributes as $a_attribute) {
-            // HACK: （工数次第）ここで null の判定が必要ない形にしたいが、処理が複雑なため骨が折れそう。
-            if (!is_null($a_attribute['area_id'])) {
-                $createdHotelArea = HotelArea::create($a_attribute);
-                if (!$createdHotelArea->wasRecentlyCreated) {
-                    return ['地域・施設情報を登録できませんでした。'];
+        $dbErrorMessages = [];
+        try {
+            foreach ($a_attributes as $a_attribute) {
+                // HACK: （工数次第）ここで null の判定が必要ない形にしたいが、処理が複雑なため骨が折れそう。
+                if (!is_null($a_attribute['area_id'])) {
+                    $createdHotelArea = HotelArea::create($a_attribute);
+                    if (!$createdHotelArea->wasRecentlyCreated) {
+                        $dbErrorMessages[] = '地域・施設情報を登録できませんでした。';
+                    }
                 }
             }
+        } catch (\Exception $e) {
+            $dbErrorMessages[] = '地域・施設情報を登録できませんでした。';
+            Log::error($e);
         }
 
-        return [];
+        return $dbErrorMessages;
     }
 
     /**
