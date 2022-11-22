@@ -1,16 +1,10 @@
 {{-- MEMO: 移植元 svn_trunk\public\app\ctl\view2\brhotelarea\index.tpl --}}
 
 {{-- ヘッダーのテンプレート読み込み --}}
-{{-- TODO: 読込ファイルは、別の新たに発見されたもの --}}
-{{-- TODO: パラメータ --}}
-{{-- {include
-  file  = $v->env.module_root|cat:'/view2/_common/_header2.tpl'
-  title = '施設と地域の関連付け【一覧】'
-  screen_type  = 'br'
-  js_action    = $smarty.capture.js_action
-} --}}
+{{-- MEMO: file = $v->env.module_root|cat:'/view2/_common/_header2.tpl' --}}
 @extends('ctl.common.base3', [
     'title' => '施設と地域の関連付け【一覧】',
+    'screen_type' => 'br',
 ])
 {{-- @section('title', '施設と地域の関連付け【一覧】') --}}
 
@@ -21,17 +15,16 @@
         $(document).ready(function() {
             $('input.jqs-area-delete').click(function() {
                 return confirm(
-                    $('.jqs-area-nm').eq($('input.jqs-area-delete').index(this)).val()
-                    + '\n\nこの地域情報を削除します。\nよろしいですか？'
+                    $('.jqs-area-nm').eq($('input.jqs-area-delete').index(this)).val() +
+                    '\n\nこの地域情報を削除します。\nよろしいですか？'
                 );
             });
         });
-        // -->
+        //-->
     </script>
 @endsection
 
 @section('content')
-
     {{-- 余白 --}}
     <hr class="bound-line-l" />
 
@@ -57,23 +50,16 @@
                     {{ Form::open(['route' => 'ctl.br_hotel_area.new', 'method' => 'get']) }}
                         <div>
                             <input type="submit" value="新規追加" />
-                            <input type="hidden" name="target_cd" value="{{ request()->input('target_cd') }}" />
+                            <input type="hidden" name="target_cd" value="{{ $target_cd }}" />
                         </div>
                     {{ Form::close() }}
                 </th>
             </tr>
             @forelse ($hotel_areas as $hotel_area)
-                <tr class="
-                    @if (request()->input('target_no') === $hotel_area['entry_no'])
-                        {{ 'active' }}
-                    @else
-                        {{ $loop->odd ? 'odd' : 'even' }}
-                    @endif
-                ">
+                <tr class="{{ (int) $hotel_area['entry_no'] === (int) $target_no ? 'active' : ($loop->odd ? 'odd' : 'even') }}">
                     <td>{{ $hotel_area['area_nm_l'] }}</td>
                     <td>{{ $hotel_area['area_nm_p'] }}</td>
                     <td>{{ $hotel_area['area_nm_m'] }}</td>
-                    {{-- TODO: null 合体を削除 --}}
                     <td>{{ $hotel_area['area_nm_s'] }}</td>
                     <td>
                         {{ Form::open(['route' => 'ctl.br_hotel_area.edit', 'method' => 'get']) }}
@@ -112,12 +98,11 @@
     {{ Form::open(['route' => 'ctl.brhotel.show', 'method' => 'get']) }}
         <div class="br-back-main-menu-form">
             {{-- <input type="hidden" name="target_cd" value="{$hotel_area.hotel_cd}" /> --}}
-            <input type="hidden" name="target_cd" value="{{ request()->input('target_cd') }}" />
+            <input type="hidden" name="target_cd" value="{{ $target_cd }}" />
             <input type="submit" value="詳細変更へ" />
         </div>
     {{ Form::close() }}
 
     {{-- 余白 --}}
     <hr class="bound-line-l" />
-
 @endsection

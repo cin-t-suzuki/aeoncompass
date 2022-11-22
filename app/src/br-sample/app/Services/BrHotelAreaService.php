@@ -17,7 +17,7 @@ class BrHotelAreaService
     const IDX_AREA_SMALL  = 3; // 小エリア
 
     /**
-     * Undocumented function
+     * 施設情報の取得
      *
      * @param string $hotelCd
      * @return \stdClass
@@ -140,10 +140,7 @@ class BrHotelAreaService
     }
 
     /**
-     * Undocumented function
-     *
-     * MEMO: 移植元 public\app\ctl\models\HotelArea.php > _make_hotel_areas()
-     * 移植元では、どこかで class property に設定(make) して、呼び出し時は class property を参照している
+     * 施設・地域情報一覧の取得
      *
      * @param string $hotelCd
      * @return array
@@ -252,7 +249,7 @@ class BrHotelAreaService
     }
 
     /**
-     * Undocumented function
+     * 地域IDから対象の地域情報を取得
      *
      * @param string $an_area_id
      * @return \stdClass
@@ -287,10 +284,10 @@ class BrHotelAreaService
     }
 
     /**
-     * Undocumented function
+     * 対象施設の地域情報を取得
      *
-     * @param [type] $hotelCd
-     * @param [type] $an_entry_no
+     * @param string $hotelCd
+     * @param string $an_entry_no
      * @return array
      */
     public function getHotelAreaDefault($hotelCd, $an_entry_no): array
@@ -367,7 +364,7 @@ class BrHotelAreaService
     }
 
     /**
-     * Undocumented function
+     * 地域データ一覧の取得
      *
      * MEMO: 移植元 public\app\ctl\models\HotelArea.php > _make_mast_areas()
      * 移植元では、どこかで class property に設定(make) して、呼び出し時は class property を参照している
@@ -402,18 +399,27 @@ class BrHotelAreaService
     }
 
     /**
-     * Undocumented function
+     * 登録処理
      *
      * @param string $hotelCd
+     * @param string $entryNo
      * @param array $inputParams
      * @return array: error messages
      */
-    public function create($hotelCd, $inputParams): array
+    public function create($hotelCd, $entryNo, $inputParams): array
     {
+        // entry_no の取得
+        // if (array_key_exists('entry_no', $inputParams)) {
+        //     // entry_no が指定されている場合は「更新」
+        //     $entryNo = $inputParams['entry_no'];
+        // } else {
+        // entry_no が指定されていない場合は「登録」
+        // }
+
         DB::beginTransaction();
 
         // アクションの処理
-        $errorMassages = $this->createMethod($hotelCd, $inputParams);
+        $errorMassages = $this->createMethod($hotelCd, $entryNo, $inputParams);
         if (count($errorMassages) > 0) {
             DB::rollback();
             return $errorMassages;
@@ -424,17 +430,18 @@ class BrHotelAreaService
         return $errorMassages;
     }
 
-    private function createMethod($hotelCd, $inputParams): array
+    /**
+     * 新規作成処理
+     *
+     * @param string $hotelCd
+     * @param string $entryNo
+     * @param array $inputParams
+     * @return array
+     */
+    private function createMethod($hotelCd, $entryNo, $inputParams): array
     {
         // 初期化・データの整形
         $a_attributes = [];
-        if (array_key_exists('entry_no', $inputParams)) {
-            // entry_no が指定されている場合は「更新」
-            $entryNo = $inputParams['entry_no'];
-        } else {
-            // entry_no が指定されていない場合は「登録」
-            $entryNo = $this->issueEntryNo($hotelCd);
-        }
 
         $a_area_ids = [
             self::IDX_AREA_LARGE  => $inputParams['area_large'],  // 大エリア
@@ -457,9 +464,9 @@ class BrHotelAreaService
                 'area_id'   => $a_area_detail->area_id,
                 'area_type' => $a_area_detail->area_type,
 
-                // TODO: 登録・編集者の設定
-                'entry_cd'  => 'BrHotelArea',
-                'modify_cd' => 'BrHotelArea',
+                // 登録・編集者の設定
+                'entry_cd'  => $this->getActionCd(),
+                'modify_cd' => $this->getActionCd(),
 
                 // MEMO: 共通カラム、日付は laravel で入れられる
             ];
@@ -492,12 +499,20 @@ class BrHotelAreaService
         return $dbErrorMessages;
     }
 
-    public function update($hotelCd, $inputData): array
+    /**
+     * 更新処理
+     *
+     * @param string $hotelCd
+     * @param string $entryNo
+     * @param array $inputData
+     * @return array
+     */
+    public function update($hotelCd, $entryNo, $inputData): array
     {
         DB::beginTransaction();
 
         // アクションの処理
-        $errorMessages = $this->updateMethod($hotelCd, $inputData);
+        $errorMessages = $this->updateMethod($hotelCd, $entryNo, $inputData);
         if (count($errorMessages) > 0) {
             DB::rollBack();
         } else {
@@ -507,16 +522,24 @@ class BrHotelAreaService
         return $errorMessages;
     }
 
-    private function updateMethod($hotelCd, $inputData): array
+    /**
+     * 更新処理
+     *
+     * @param string $hotelCd
+     * @param string $entryNo
+     * @param array $inputData
+     * @return array
+     */
+    private function updateMethod($hotelCd, $entryNo, $inputData): array
     {
         $errorMessages = [];
-        $deleteAffectedRowCount = $this->deleteMethod($hotelCd, $inputData['entry_no']);
+        $deleteAffectedRowCount = $this->deleteMethod($hotelCd, $entryNo);
         if ($deleteAffectedRowCount === 0) {
             $errorMessages[] = '更新時に既存レコード群を削除できませんでした。';
             return $errorMessages;
         }
 
-        $createErrorMessages = $this->createMethod($hotelCd, $inputData);
+        $createErrorMessages = $this->createMethod($hotelCd, $entryNo, $inputData);
         if (count($createErrorMessages) > 0) {
             $errorMessages = $createErrorMessages;
             $errorMessages[] = '更新時に既存レコード群を登録できませんでした。';
@@ -532,7 +555,7 @@ class BrHotelAreaService
      * @param string $hotelCd
      * @return int
      */
-    private function issueEntryNo($hotelCd): int
+    public function issueEntryNo($hotelCd): int
     {
         // HACK: HotelArea model から QueryBuilder で取得したほうが可読性あがるか。
         $sql = <<<SQL
@@ -777,7 +800,14 @@ class BrHotelAreaService
         return $a_area_ids;
     }
 
-    public function delete($hotelCd, $entryNo)
+    /**
+     * 削除処理
+     *
+     * @param string $hotelCd
+     * @param string $entryNo
+     * @return bool
+     */
+    public function delete($hotelCd, $entryNo): bool
     {
         DB::beginTransaction();
         $affectedRowCount = $this->deleteMethod($hotelCd, $entryNo);
@@ -790,14 +820,38 @@ class BrHotelAreaService
         return true;
     }
 
-    private function deleteMethod($hotelCd, $entryNo)
+    /**
+     * 削除処理
+     *
+     * @param string $hotelCd
+     * @param string $entryNo
+     * @return int
+     */
+    private function deleteMethod($hotelCd, $entryNo): int
     {
         // MEMO: 移植元では、PK 指定が必要なためそれぞれで削除処理を行っているが、Laravel では where で絞り込んだレコードを一括削除できる。
         $affectedRowCount =  HotelArea::where('hotel_cd', $hotelCd)
             ->where('entry_no', $entryNo)
             ->delete();
-        // TODO: 確認、変更ログ（1時間ごとのファイルを作成して23時間保持）は必要？
 
         return $affectedRowCount;
+    }
+
+    /**
+     * コントローラ名とアクション名を取得して、ユーザーIDと連結
+     * ユーザーID取得は暫定の為、書き換え替えが必要です。
+     *
+     * HACK: app/Models/common/CommonDBModel.php からのコピペ
+     * @return string
+     */
+    private function getActionCd()
+    {
+        $path = explode("@", \Illuminate\Support\Facades\Route::currentRouteAction());
+        $pathList = explode('\\', $path[0]);
+        $controllerName = str_replace("Controller", "", end($pathList)); //コントローラ名
+        $actionName = $path[1];           // アクション名
+        $userId = \Illuminate\Support\Facades\Session::get("user_id"); //TODO ユーザー情報取得のキーは仮です
+        $action_cd = $controllerName . "/" . $actionName . "." . $userId;
+        return $action_cd;
     }
 }

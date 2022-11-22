@@ -1,5 +1,6 @@
 {{-- MEMO: 移植元 ここから public\app\ctl\view2\_common\_header2.tpl --}}
 
+{{-- TODO: xml --}}
 {{-- <?xml version="1.0" encoding="UTF-8"?> --}}
 
 {{-- ================================================================================================ --}}
@@ -118,16 +119,6 @@
         'env' => $env,
         'config' => $config,
     ];
-    //   $print_flg              = rand(0,9) == 0;
-    //   $no_print               = rand(0,1) == 0;
-    //   $no_print_title         = rand(0,1) == 0;
-    //   $service_info_flg       = rand(0,1) == 0;
-    //   $menu_title             = rand(0,2) ? '' : 'menu_title_' . Str::random(rand(2,4));
-    //   $title                  = rand(0,2) ? '' : 'title_' . Str::random(rand(2,4));
-    //   $acceptance_status_flg  = rand(0,1) == 0;
-    //   $header_number          = 'header_number_' . rand(0,100);
-    //   $ad = Str::random(16);
-    $screen_type = ['htl', 'br', 'ptn'][rand(1, 1)];
     $is_staff_navi = rand(0, 0);
     $is_htl_navi = rand(0, 0);
     $is_ptn_navi = rand(0, 0);

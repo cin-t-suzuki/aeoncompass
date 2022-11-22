@@ -5,28 +5,22 @@
     $action_type: 実行されるアクションを指定します。（create：新規作成, update：更新）
 --}}
 {{-- ヘッダーのテンプレート読み込み --}}
-{{-- TODO: パラメータ --}}
-{{-- {include
-    file  = $v->env.module_root|cat:'/view2/_common/_header2.tpl'
-    title = $title
-    screen_type  = 'br'
-    js_action    = $smarty.capture.js_action
-  } --}}
+{{-- MEMO: file = $v->env.module_root|cat:'/view2/_common/_header2.tpl' --}}
 @extends('ctl.common.base3', [
     'title' => $title,
+    'screen_type' => 'br',
 ])
 {{-- @section('title', $title) --}}
 
 {{-- JavaScript指定 --}}
 @section('headScript')
-
     <script type="text/javascript" src="{{ asset('/js/brj.ctl.js') }}"></script>
 
     <script type="text/javascript">
         <!--
         $(document).ready(function() {
             $('#jqs-hotel-area').loadHotelArea({
-                uri : '/ctl/brHotelArea/json',
+                uri: '/ctl/brHotelArea/json',
                 // uri         : '{$v->env.source_path}{$v->env.module}/brhotelarea/json/',
                 area_large  : '{{ $request_params['area_large'] }}',
                 area_pref   : '{{ $request_params['area_pref'] }}',
@@ -34,12 +28,11 @@
                 area_small  : '{{ $request_params['area_small'] }}'
             });
         });
-        // -->
+        //-->
     </script>
 @endsection
 
 @section('content')
-
     {{-- 余白 --}}
     <hr class="bound-line-l" />
 
@@ -56,11 +49,11 @@
 
     {{ Form::open(['route' => 'ctl.br_hotel_area.' . $action_type, 'method' => 'post']) }}
         <div>
-            <input type="hidden" name="target_cd" value="{{ request()->input('target_cd') }}" />
+            <input type="hidden" name="target_cd" value="{{ $target_cd }}" />
             <input type="hidden" name="is_submit" value="true" />
 
             @if ($action_type === 'update')
-                <input type="hidden" name="entry_no" value="{{ request()->input('entry_no') }}" />
+                <input type="hidden" name="entry_no" value="{{ $entry_no }}" />
             @endif
 
             <table class="br-list" id="jqs-hotel-area">
@@ -106,12 +99,11 @@
 
     {{ Form::open(['route' => 'ctl.br_hotel_area.index', 'method' => 'get']) }}
         <div class="br-back-main-menu-form">
-            <input type="hidden" name="target_cd" value="{{ request()->input('target_cd') }}" />
+            <input type="hidden" name="target_cd" value="{{ $target_cd }}" />
             <input type="submit" value="施設と地域の関連付け【一覧】へ" />
         </div>
     {{ Form::close() }}
 
     {{-- 余白 --}}
     <hr class="bound-line-l" />
-
 @endsection
