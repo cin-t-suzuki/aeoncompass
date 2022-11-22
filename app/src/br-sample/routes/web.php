@@ -92,6 +92,7 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 
     // 施設登録
     Route::get('/brHotel/new', [\App\Http\Controllers\ctl\BrHotelRegisterController::class, 'new'])->name('ctl.br_hotel.new');
+    Route::post('/brHotel/create', [\App\Http\Controllers\ctl\BrHotelRegisterController::class, 'create'])->name('ctl.br_hotel.create');
 
     // 施設情報メイン
     Route::controller(BrhotelController::class)->prefix("brhotel")->group(function(){
