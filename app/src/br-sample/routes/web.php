@@ -90,6 +90,9 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 		Route::post('/update', 'update')->name('ctl.htlhotelInfo.update');
 	});
 
+    // 施設登録
+    Route::get('/brHotel/new', [\App\Http\Controllers\ctl\BrHotelRegisterController::class, 'new'])->name('ctl.br_hotel.new');
+
     // 施設情報メイン
     Route::controller(BrhotelController::class)->prefix("brhotel")->group(function(){
         Route::get('/hotelsearch', 'hotelsearch')->name('ctl.brhotel.hotelsearch'); //宿泊施設検索
