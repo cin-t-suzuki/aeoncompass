@@ -97,4 +97,9 @@ class BrHotelRegisterController extends Controller
             'target_stock_type' => $a_hotel_control['stock_type'],
         ]);
     }
+
+    public function management(Request $request)
+    {
+        return 'TODO: br hotel register controller management';
+    }
 }
