@@ -79,10 +79,22 @@ class BrHotelRegisterController extends Controller
         ]);
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        return view('ctl.brhotel.create', [
+        $a_hotel = $request->input('Hotel');
+        $a_hotel_control = $request->input('Hotel_Control');
 
+        $a_mast_pref = null;
+        $a_mast_city = null;
+        $a_mast_ward = null;
+
+        return view('ctl.brhotel.create', [
+            'hotel'             => $a_hotel,
+            'a_mast_pref'       => $a_mast_pref,
+            'a_mast_city'       => $a_mast_city,
+            'a_mast_ward'       => $a_mast_ward,
+            'target_cd'         => $request->input('target_cd'),
+            'target_stock_type' => $a_hotel_control['stock_type'],
         ]);
     }
 }
