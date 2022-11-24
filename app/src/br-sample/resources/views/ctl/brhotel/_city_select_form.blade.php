@@ -22,7 +22,7 @@
     <select size="1" name="Hotel[city_id]">
         <option value="">未選択</option>
         @foreach ($mast_cities['values'] as $mast_city)
-            <option value="{{ strip_tags($mast_city['city_id']) }}" @if (isset($hotel) && array_key_exists('city_id', $hotel) && !$service->is_empty($hotel['city_id']) && $mast_city['city_id'] == $hotel['city_id']) selected @endif>
+            <option value="{{ strip_tags($mast_city['city_id']) }}" {{ isset($hotel) && array_key_exists('city_id', $hotel) && !$service->is_empty($hotel['city_id']) && $mast_city['city_id'] == $hotel['city_id'] ? 'selected' : '' }}>
                 {{ strip_tags($mast_city['city_nm']) }}
             </option>
         @endforeach

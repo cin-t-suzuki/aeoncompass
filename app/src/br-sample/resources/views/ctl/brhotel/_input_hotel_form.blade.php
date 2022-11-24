@@ -16,10 +16,10 @@
         <td bgcolor="#EEFFEE">施設区分※</td>
         <td>
             <select size="1" name="Hotel[hotel_category]">
-                <option value="b" @if ($hotel['hotel_category'] == 'b') selected @endif>b:ビジネスホテル</option>
-                <option value="a" @if ($hotel['hotel_category'] == 'a') selected @endif>a:カプセルホテル</option>
-                <option value="c" @if ($hotel['hotel_category'] == 'c') selected @endif>c:シティホテル</option>
-                <option value="j" @if ($hotel['hotel_category'] == 'j') selected @endif>j:旅館</option>
+                <option value="b" {{ $hotel['hotel_category'] == 'b' ? 'selected' : '' }}>b:ビジネスホテル</option>
+                <option value="a" {{ $hotel['hotel_category'] == 'a' ? 'selected' : '' }}>a:カプセルホテル</option>
+                <option value="c" {{ $hotel['hotel_category'] == 'c' ? 'selected' : '' }}>c:シティホテル</option>
+                <option value="j" {{ $hotel['hotel_category'] == 'j' ? 'selected' : '' }}>j:旅館</option>
             </select>
         </td>
         <td>
@@ -111,24 +111,24 @@
 
             <select size="1" name="Hotel[check_in]">
                 @for ($check_in = 0; $check_in < 31; $check_in++)
-                    <option value="{{ sprintf('%02d', strip_tags($check_in)) }}:00" @if ($hotel['check_in'] == sprintf('%02d', $check_in) . ':00') selected @endif>
+                    <option value="{{ sprintf('%02d', strip_tags($check_in)) }}:00" {{ $hotel['check_in'] == sprintf('%02d', $check_in) . ':00' ? 'selected' : '' }}>
                         {{ sprintf('%02d', strip_tags($check_in)) }}:00
                     </option>
-                    <option value="{{ sprintf('%02d', strip_tags($check_in)) }}:30" @if ($hotel['check_in'] == sprintf('%02d', $check_in) . ':30') selected @endif>
+                    <option value="{{ sprintf('%02d', strip_tags($check_in)) }}:30" {{ $hotel['check_in'] == sprintf('%02d', $check_in) . ':30' ? 'selected' : '' }}>
                         {{ sprintf('%02d', strip_tags($check_in)) }}:30
                     </option>
                 @endfor
             </select>
             ～
             <select size="1" name="Hotel[check_in_end]">
-                <option value="" @if ($service->is_empty($hotel['check_in_end'])) selected @endif>
+                <option value="" {{ $service->is_empty($hotel['check_in_end']) ? 'selected' : '' }}>
                     指定無し
                 </option>
                 @for ($check_in_end = 0; $check_in_end < 31; $check_in_end++)
-                    <option value="{{ sprintf('%02d', strip_tags($check_in_end)) }}:00" @if ($hotel['check_in_end'] == sprintf('%02d', $check_in_end) . ':00') selected @endif>
+                    <option value="{{ sprintf('%02d', strip_tags($check_in_end)) }}:00" {{ $hotel['check_in_end'] == sprintf('%02d', $check_in_end) . ':00' ? 'selected' : '' }}>
                         {{ sprintf('%02d', strip_tags($check_in_end)) }}:00
                     </option>
-                    <option value="{{ sprintf('%02d', strip_tags($check_in_end)) }}:30" @if ($hotel['check_in_end'] == sprintf('%02d', $check_in_end) . ':30') selected @endif>
+                    <option value="{{ sprintf('%02d', strip_tags($check_in_end)) }}:30" {{ $hotel['check_in_end'] == sprintf('%02d', $check_in_end) . ':30' ? 'selected' : '' }}>
                         {{ sprintf('%02d', strip_tags($check_in_end)) }}:30
                     </option>
                 @endfor
@@ -150,10 +150,10 @@
         <td>
             <select size="1" name="Hotel[check_out]">
                 @for ($check_out = 0; $check_out < 24; $check_out++)
-                    <option value="{{ sprintf('%02d', strip_tags($check_out)) }}:00" @if ($hotel['check_out'] == sprintf('%02d', $check_out) . ':00') selected @endif>
+                    <option value="{{ sprintf('%02d', strip_tags($check_out)) }}:00" {{ $hotel['check_out'] == sprintf('%02d', $check_out) . ':00' ? 'selected' : '' }}>
                         {{ sprintf('%02d', strip_tags($check_out)) }}:00
                     </option>
-                    <option value="{{ sprintf('%02d', strip_tags($check_out)) }}:30" @if ($hotel['check_out'] == sprintf('%02d', $check_out) . ':30') selected @endif>
+                    <option value="{{ sprintf('%02d', strip_tags($check_out)) }}:30" {{ $hotel['check_out'] == sprintf('%02d', $check_out) . ':30' ? 'selected' : '' }}>
                         {{ sprintf('%02d', strip_tags($check_out)) }}:30
                     </option>
                 @endfor
@@ -166,13 +166,13 @@
         <td bgcolor="#EEFFEE">深夜受付</td>
         <td>
             <label>
-                <input type="radio" name="Hotel[midnight_status]" value="0" @if ($hotel['midnight_status'] == 0) checked @endif id="i1">
+                <input type="radio" name="Hotel[midnight_status]" value="0" {{ $hotel['midnight_status'] == 0 ? 'checked' : '' }} id="i1">
                 <label for="i1">
                     受け入れない
                 </label>
             </label>
             <label>
-                <input type="radio" name="Hotel[midnight_status]" value="1" @if ($hotel['midnight_status'] == 1) checked @endif id="i2">
+                <input type="radio" name="Hotel[midnight_status]" value="1" {{ $hotel['midnight_status'] == 1 ? 'checked' : '' }} id="i2">
                 <label for="i2">
                     受け入れる
                 </label>
@@ -187,20 +187,19 @@
             <td>
                 <label>
                     {{-- TODO hotel_controlは施設情報更新では出てこないので、条件追加が必要 --}}
-                    <input type="radio" name="Hotel_Control[stock_type]" value="0"
-                        @if ($hotel_control['stock_type'] == 0) checked @endif id="i1">
+                    <input type="radio" name="Hotel_Control[stock_type]" value="0" {{ $hotel_control['stock_type'] == 0 ? 'checked' : '' }} id="i1">
                     <label for="i1">
                         受託販売
                     </label>
                 </label>
                 <label>
-                    <input type="radio" name="Hotel_Control[stock_type]" value="1" @if ($hotel_control['stock_type'] == 1) checked @endif id="i2">
+                    <input type="radio" name="Hotel_Control[stock_type]" value="1" {{ $hotel_control['stock_type'] == 1 ? 'checked' : '' }} id="i2">
                     <label for="i2">
                         買取販売
                     </label>
                 </label>
                 <label>
-                    <input type="radio" name="Hotel_Control[stock_type]" value="3" @if ($hotel_control['stock_type'] == 3) checked @endif id="i3">
+                    <input type="radio" name="Hotel_Control[stock_type]" value="3" {{ $hotel_control['stock_type'] == 3 ? 'checked' : '' }} id="i3">
                     <label for="i3">
                         特定施設(三普)
                     </label>

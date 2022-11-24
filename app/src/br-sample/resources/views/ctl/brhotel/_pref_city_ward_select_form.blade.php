@@ -30,7 +30,7 @@
         {{-- 都道府県表示 --}}
         <select size="1" name="Hotel[pref_id]">
             @foreach ($mast_prefs['values'] as $mast_pref)
-                <option value="{{ strip_tags($mast_pref['pref_id']) }}" @if ($mast_pref['pref_id'] == $hotel['pref_id']) selected @endif>
+                <option value="{{ strip_tags($mast_pref['pref_id']) }}" {{ $mast_pref['pref_id'] == $hotel['pref_id'] ? 'selected' : '' }}>
                     {{ strip_tags($mast_pref['pref_nm']) }}
                 </option>
             @endforeach
