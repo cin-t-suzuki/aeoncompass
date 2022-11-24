@@ -17,13 +17,13 @@ class MastCity extends CommonDBModel
     protected $table = "mast_city";
 
     // カラム
-    public string $COL_CITY_ID = "city_id";
-    public string $COL_PREF_ID = "pref_id";
-    public string $COL_CITY_NM = "city_nm";
+    public string $COL_CITY_ID      = "city_id";
+    public string $COL_PREF_ID      = "pref_id";
+    public string $COL_CITY_NM      = "city_nm";
     public string $COL_PREF_CITY_NM = "pref_city_nm";
-    public string $COL_ORDER_NO = "order_no";
-    public string $COL_CITY_CD = "city_cd";
-    public string $COL_DELETE_YMD = "delete_ymd";
+    public string $COL_ORDER_NO     = "order_no";
+    public string $COL_CITY_CD      = "city_cd";
+    public string $COL_DELETE_YMD   = "delete_ymd";
 
     /**
      * コンストラクタ

@@ -16,15 +16,15 @@ class MastWard extends CommonDBModel
 
     protected $table = "mast_ward";
     // カラム
-    public string $COL_WARD_ID = "ward_id";
-    public string $COL_PREF_ID = "pref_id";
-    public string $COL_CITY_ID = "city_id";
-    public string $COL_WARD_CD = "ward_cd";
-    public string $COL_WARD_NM = "ward_nm";
-    public string $COL_CITY_WARD_NM = "city_ward_nm";
-    public string $COL_PREF_CITY_WARD_NM = "pref_city_ward_nm";
-    public string $COL_ORDER_NO = "order_no";
-    public string $COL_DELETE_YMD = "delete_ymd";
+    public string $COL_WARD_ID              = "ward_id";
+    public string $COL_PREF_ID              = "pref_id";
+    public string $COL_CITY_ID              = "city_id";
+    public string $COL_WARD_CD              = "ward_cd";
+    public string $COL_WARD_NM              = "ward_nm";
+    public string $COL_CITY_WARD_NM         = "city_ward_nm";
+    public string $COL_PREF_CITY_WARD_NM    = "pref_city_ward_nm";
+    public string $COL_ORDER_NO             = "order_no";
+    public string $COL_DELETE_YMD           = "delete_ymd";
 
     /**
      * コンストラクタ

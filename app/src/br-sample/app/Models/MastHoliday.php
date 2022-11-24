@@ -13,8 +13,8 @@ class MastHoliday extends CommonDBModel
 {
     protected $table = "mast_holiday";
     // カラム
-    public string $COL_HOLIDAY = "holiday";
-    public string $COL_HOLIDAY_NM = "holiday_nm";
+    public string $COL_HOLIDAY      = "holiday";
+    public string $COL_HOLIDAY_NM   = "holiday_nm";
 
     /**
      * コンストラクタ

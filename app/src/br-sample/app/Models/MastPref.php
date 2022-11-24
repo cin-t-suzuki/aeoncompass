@@ -17,13 +17,13 @@ class MastPref extends CommonDBModel
     protected $table = "mast_pref";
 
     // カラム
-    public string $COL_PREF_ID = "pref_id";
-    public string $COL_REGION_ID = "region_id";
-    public string $COL_PREF_NM = "pref_nm";
-    public string $COL_PREF_NS = "pref_ns";
-    public string $COL_ORDER_NO = "order_no";
-    public string $COL_PREF_CD = "pref_cd";
-    public string $COL_DELETE_YMD = "delete_ymd";
+    public string $COL_PREF_ID      = "pref_id";
+    public string $COL_REGION_ID    = "region_id";
+    public string $COL_PREF_NM      = "pref_nm";
+    public string $COL_PREF_NS      = "pref_ns";
+    public string $COL_ORDER_NO     = "order_no";
+    public string $COL_PREF_CD      = "pref_cd";
+    public string $COL_DELETE_YMD   = "delete_ymd";
 
     /**
      * コンストラクタ
