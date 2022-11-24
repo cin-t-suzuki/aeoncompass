@@ -66,16 +66,17 @@
     {{-- TODO include file=$v->env.module_root|cat:'/views/brhotel/_pref_city_ward_select_form.tpl' --}}
     {{-- @section('select_parts') --}}
     @include('ctl.brhotel._pref_city_ward_select_form', [
-        'hotel' => $hotel,
-        'mast_prefs' => $mast_prefs,
-        'mast_cities' => $mast_cities,
-        'mast_wards' => $mast_wards,
+        // 'hotel' => $hotel,
+        // 'mast_prefs' => $mast_prefs,
+        // 'mast_cities' => $mast_cities,
+        // 'mast_wards' => $mast_wards,
     ])
 
     <tr>
         <td bgcolor="#EEFFEE">住所※</td>
         <td>
-            <input type="text" name="Hotel[address]" value="{{ strip_tags($hotel['address']) }}" size="50" maxlength="200"><br><small>市区以下を入力　例）大阪市北区・・・</small>
+            <input type="text" name="Hotel[address]" value="{{ strip_tags($hotel['address']) }}" size="50" maxlength="200"><br>
+            <small>市区以下を入力　例）大阪市北区・・・</small>
         </td>
         <td><small>100文字<font color="#0000ff">（必須）</font></small></td>
     </tr>

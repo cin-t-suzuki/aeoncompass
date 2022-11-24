@@ -45,18 +45,18 @@
 
 	{{--市表示 --}}
 	<span id="res_city">
-		@include('ctl.brhotel._city_select_form',
-			["hotel" => $hotel
-			,"mast_cities" => $mast_cities
+		@include('ctl.brhotel._city_select_form', [
+			// "hotel" => $hotel,
+			// "mast_cities" => $mast_cities
 		])
 	</span>
 
 	{{--別ファイル 区表示 --}}
 	<span id="res_ward">
-		@include('ctl.brhotel._ward_select_form',
-		["hotel" => $hotel
-		,"mast_wards" => $mast_wards
-	])
+		@include('ctl.brhotel._ward_select_form', [
+			// "hotel" => $hotel,
+			// "mast_wards" => $mast_wards
+		])
 
 	</span>
 		
