@@ -81,6 +81,8 @@ class BrHotelRegisterController extends Controller
 
     public function create()
     {
-        return 'TODO: br hotel register controller create';
+        return view('ctl.brhotel.create', [
+
+        ]);
     }
 }
