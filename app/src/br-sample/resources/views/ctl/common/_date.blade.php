@@ -14,6 +14,7 @@
 //           ym     : 2008年08月            : Y年m月
 //           d      : 05                    : d
 //           J      : 火曜日                : J
+//	  (追加) ymdhi  : 2008-08-05 12:59
 //           ------- ----------------------- ---------------
 //          ※ 必要に応じてパターンの追加する。
 //
@@ -94,6 +95,12 @@
 		else
 		  assign var='day' value=$v->helper->date->to_format('Y年m月d日')|cat:'（'|cat:$v->helper->date->to_week('j')|cat:'）'
 		*/
+	}
+	// Y年m月d日 
+	elseif ( $format == 'ymdhi' )
+	{
+	  //追加
+		$day = $dateUtil->to_format('Y-m-d H:i');
 	}
 	//{{-- TODO 実装箇所のみコメントアウト
 
