@@ -150,4 +150,8 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 	Route::get('/brpartnersite/edit', 'BrPartnerSiteController@edit')->name('ctl.brPartnerSite.edit');
 	Route::post('/brpartnersite/modify', 'BrPartnerSiteController@modify')->name('ctl.brPartnerSite.modify');
 
+	// お天気保証
+	Route::match(['get','post'],'/brinsuranceweather/', 'BrInsuranceWeatherController@index')->name('ctl.brinsuranceweather.index');
+	Route::match(['get','post'],'/brinsuranceweather/updatecondition', 'BrInsuranceWeatherController@updateCondition')->name('ctl.brinsuranceweather.updatecondition');
+
 });
