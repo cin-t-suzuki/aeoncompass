@@ -25,10 +25,13 @@ class MastCity extends CommonDBModel
     public string $COL_CITY_CD      = "city_cd";
     public string $COL_DELETE_YMD   = "delete_ymd";
 
+    // 宿泊税の特別処理のための定数
+    public const CITY_ID_BEPPU = 44202;
+
     /**
      * コンストラクタ
      */
-    function __construct()
+    public function __construct()
     {
         // カラム情報の設定
         $colCityId = new ValidationColumn();
@@ -46,11 +49,14 @@ class MastCity extends CommonDBModel
         $colDeleteYmd = new ValidationColumn();
         $colDeleteYmd->setColumnName($this->COL_DELETE_YMD, "削除日")->correctDate();
 
-        parent::setColumnDataArray([$colCityId, $colPrefId, $colCityNm, $colPrefCityNm, $colOrderNo, $colPrefCd, $colDeleteYmd]);
+        parent::setColumnDataArray([
+            $colCityId, $colPrefId, $colCityNm, $colPrefCityNm, $colOrderNo,
+            $colPrefCd, $colDeleteYmd
+        ]);
     }
 
     //TODO  独自のバリデーション 使用箇所未確認のため未実装
-    public function city_nm_validate()
+    public function cityNmValidate()
     {
     }
 
@@ -96,7 +102,6 @@ class MastCity extends CommonDBModel
         $result = [];
         if (!is_null($data) && count($data) > 0) {
             foreach ($data as $row) {
-
                 $result[] = [
                     $this->COL_CITY_ID      => $row->city_id,
                     $this->COL_PREF_ID      => $row->pref_id,
