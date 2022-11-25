@@ -23,6 +23,8 @@ class MastCity extends CommonDBModel
 	public string $COL_CITY_CD = "city_cd";
 	public string $COL_DELETE_YMD = "delete_ymd";
 
+    // 宿泊税の特別処理のための定数
+    const CITY_ID_BEPPU = 44202;
 	/**
 	 * コンストラクタ
 	 */
