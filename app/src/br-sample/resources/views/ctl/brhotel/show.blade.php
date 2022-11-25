@@ -31,7 +31,7 @@
 						<input type="hidden" name="target_cd" value="{{strip_tags($views->target_cd)}}">
 						{!! Form::close() !!}
 					@else
-						{!! Form::open(['route' => ['ctl.brhotel.new'], 'method' => 'post']) !!}
+						{!! Form::open(['route' => ['ctl.br_hotel.new'], 'method' => 'get']) !!}
 						<td nowrap><input type="submit" value=" 登録"></td>
 						<input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($views->target_cd)}">
 						{!! Form::close() !!}

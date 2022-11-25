@@ -99,12 +99,12 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
     // 施設情報メイン
     Route::controller(BrhotelController::class)->prefix("brhotel")->group(function(){
         Route::get('/hotelsearch', 'hotelsearch')->name('ctl.brhotel.hotelsearch'); //宿泊施設検索
-        Route::match(['get','post'], '/new', 'new')->name('ctl.brhotel.new');
+        // Route::match(['get','post'], '/new', 'new')->name('ctl.brhotel.new');
 
         Route::match(['get','post'], '/edit', 'edit')->name('ctl.brhotel.edit');
         Route::post('/update', 'update')->name('ctl.brhotel.update'); //施設更新？
 
-        Route::get('/index', 'index')->name('ctl.brhotel.index'); // 検索 初期表示
+        Route::get('/', 'index')->name('ctl.brhotel.index'); // 検索 初期表示
         Route::match(['get','post'],'/show', 'show')->name('ctl.brhotel.show'); // 詳細変更 施設各情報ハブ
 
         Route::get('/searchcity', 'searchcity')->name('ctl.brhotel.searchcity'); // 検索部品 市プルダウン

@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\MastCity;
 use App\Models\MastPref;
 use App\Models\MastWard;
+use App\Models\Hotel;
+use App\Services\BrHotelRegisterService as Service;
 use Illuminate\Http\Request;
 
 // MEMO: 移植元では、 BrhotelController に一緒くたにされていた。
@@ -79,14 +81,57 @@ class BrHotelRegisterController extends Controller
         ]);
     }
 
-    public function create(Request $request)
+    public function create(Request $request, Service $service)
     {
         $a_hotel = $request->input('Hotel');
         $a_hotel_control = $request->input('Hotel_Control');
 
+        // データ整形
+        $rules = [
+            'Hotel.hotel_category'      => '',
+            'Hotel.hotel_nm'            => '',
+            'Hotel.hotel_kn'            => '',
+            'Hotel.hotel_old_nm'        => '',
+            'Hotel.postal_cd'           => '',
+            'Hotel.address'             => '',
+            'Hotel.tel'                 => '',
+            'Hotel.fax'                 => '',
+            'Hotel.room_count'          => '',
+            'Hotel.check_in'            => '',
+            'Hotel.check_in_end'        => '',
+            'Hotel.check_in_info'       => '',
+            'Hotel.check_out'           => '',
+            'Hotel.midnight_status'     => '',
+            'Hotel.hotel_cd'            => '',
+
+            'Hotel_Control.stock_type'  => '',
+        ];
+        // validation
+
+        // hotel_cd 採番
+        $hotelCd = $service->getHotelCd();
+
+        // DB登録処理
+
+        // 結果表示用データ取得
+        $a_hotel = (new Hotel())->selectByKey($hotelCd);
+        $a_hotel = Hotel::find($hotelCd);
+
+        // 都道府県
         $a_mast_pref = null;
+        $a_mast_pref = (new MastPref())->selectByKey($a_hotel['pref_id']);
+
+        // 市
         $a_mast_city = null;
+        if (array_key_exists('city_id', $a_hotel)) {
+            $a_mast_city = (new MastCity())->selectByKey($a_hotel['city_id']);
+        }
+
+        // 区
         $a_mast_ward = null;
+        if (array_key_exists('ward_id', $a_hotel)) {
+            $a_mast_ward = (new MastWard())->selectByKey($a_hotel['ward_id']);
+        }
 
         return view('ctl.brhotel.create', [
             'hotel'             => $a_hotel,

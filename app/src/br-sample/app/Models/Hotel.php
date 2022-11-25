@@ -13,15 +13,17 @@ use Illuminate\Support\Facades\DB;
  */
 class Hotel extends CommonDBModel
 {
-	use Traits;
+    use Traits;
 
-	protected $table = "hotel";
+    protected $table = "hotel";
+
     /**
      * テーブルに関連付ける主キー
      *
      * @var string
      */
     protected $primaryKey = 'hotel_cd';
+
     /**
      * モデルのIDを自動増分するか
      *
@@ -29,124 +31,136 @@ class Hotel extends CommonDBModel
      */
     public $incrementing = false;
 
-	// カラム
-	public string $COL_HOTEL_CD = "hotel_cd";
-	public string $COL_ORDER_NO = "order_no";
-	public string $COL_HOTEL_CATEGORY = "hotel_category";
-	public string $COL_HOTEL_NM = "hotel_nm";
-	public string $COL_HOTEL_KN = "hotel_kn";
-	public string $COL_HOTEL_OLD_NM = "hotel_old_nm";
-	public string $COL_POSTAL_CD = "postal_cd";
-	public string $COL_PREF_ID = "pref_id";
-	public string $COL_CITY_ID = "city_id";
-	public string $COL_WARD_ID = "ward_id";
-	public string $COL_ADDRESS = "address";
-	public string $COL_TEL = "tel";
-	public string $COL_FAX = "fax";
-	public string $COL_ROOM_COUNT = "room_count";
-	public string $COL_CHECK_IN = "check_in";
-	public string $COL_CHECK_IN_END = "check_in_end";
-	public string $COL_CHECK_IN_INFO = "check_in_info";
-	public string $COL_CHECK_OUT = "check_out";
-	public string $COL_MIDNIGHT_STATUS = "midnight_status";
-	public string $COL_ACCEPT_STATUS = "accept_status";
-	public string $COL_ACCEPT_AUTO = "accept_auto";
-	public string $COL_ACCEPT_DTM = "accept_dtm";
+    // カラム
+    public string $COL_HOTEL_CD         = "hotel_cd";
+    public string $COL_ORDER_NO         = "order_no";
+    public string $COL_HOTEL_CATEGORY   = "hotel_category";
+    public string $COL_HOTEL_NM         = "hotel_nm";
+    public string $COL_HOTEL_KN         = "hotel_kn";
+    public string $COL_HOTEL_OLD_NM     = "hotel_old_nm";
+    public string $COL_POSTAL_CD        = "postal_cd";
+    public string $COL_PREF_ID          = "pref_id";
+    public string $COL_CITY_ID          = "city_id";
+    public string $COL_WARD_ID          = "ward_id";
+    public string $COL_ADDRESS          = "address";
+    public string $COL_TEL              = "tel";
+    public string $COL_FAX              = "fax";
+    public string $COL_ROOM_COUNT       = "room_count";
+    public string $COL_CHECK_IN         = "check_in";
+    public string $COL_CHECK_IN_END     = "check_in_end";
+    public string $COL_CHECK_IN_INFO    = "check_in_info";
+    public string $COL_CHECK_OUT        = "check_out";
+    public string $COL_MIDNIGHT_STATUS  = "midnight_status";
+    public string $COL_ACCEPT_STATUS    = "accept_status";
+    public string $COL_ACCEPT_AUTO      = "accept_auto";
+    public string $COL_ACCEPT_DTM       = "accept_dtm";
 
     // カラム定数
     const ACCEPT_STATUS_STOPPING  = 0; // 停止中
     const ACCEPT_STATUS_ACCEPTING = 1; // 受付中
 
-	/** コンストラクタ
-	 */
-	function __construct(){
-		// カラム情報の設定
-		$colHotelCd = new ValidationColumn();
-		$colHotelCd->setColumnName($this->COL_HOTEL_CD, "ホテルコード")->require()->length(0, 10)->notHalfKana();
-		$colOrderNo = new ValidationColumn();
-		$colOrderNo->setColumnName($this->COL_ORDER_NO, "表示順序")->length(0, 10)->intOnly();
-		//'a' => 'カプセルホテル','b' => 'ビジネスホテル','c' => 'シティホテル','j' => '旅館'
-		$colHotelCategory = new ValidationColumn();
-		$colHotelCategory->setColumnName($this->COL_HOTEL_CATEGORY, "施設区分")->notHalfKana(); //プルダウンなのでチェック不要
-		$colHotelNm = new ValidationColumn();
-		$colHotelNm->setColumnName($this->COL_HOTEL_NM, "ホテル名")->require()->length(0, 50)->notHalfKana();
-		$colHotelKn = new ValidationColumn();
-		$colHotelKn->setColumnName($this->COL_HOTEL_KN, "ホテル名称かな")->require()->length(0, 150)->notHalfKana()->kanaOnly();
-		$colHotelOldNm = new ValidationColumn();
-		$colHotelOldNm->setColumnName($this->COL_HOTEL_OLD_NM, "旧ホテル名称")->length(0, 50)->notHalfKana();
-		$colPostalCd = new ValidationColumn();// activeRecordでは「〒」だが、チェックで漢字名
-		$colPostalCd->setColumnName($this->COL_POSTAL_CD, "郵便番号")->require()->length(0, 8)->notHalfKana()->postal();
-		$colPrefId = new ValidationColumn();
-		$colPrefId->setColumnName($this->COL_PREF_ID, "都道府県")->require()->length(0, 2)->intOnly();
-		$colCityId = new ValidationColumn();
-		$colCityId->setColumnName($this->COL_CITY_ID, "市")->require()->length(0, 20)->intOnly();
-		$colWardId = new ValidationColumn();
-		$colWardId->setColumnName($this->COL_WARD_ID, "区")->length(0, 20)->intOnly();
-		$colAddress = new ValidationColumn();
-		$colAddress->setColumnName($this->COL_ADDRESS, "住所")->require()->length(0, 100)->notHalfKana();
-		$colTel = new ValidationColumn();
-		$colTel->setColumnName($this->COL_TEL, "TEL")->require()->length(0, 15)->notHalfKana()->phoneNumber();
-		$colFax = new ValidationColumn();
-		$colFax->setColumnName($this->COL_FAX, "FAX")->length(0, 15)->notHalfKana()->phoneNumber();
-		$colRoomCount = new ValidationColumn();
-		$colRoomCount->setColumnName($this->COL_ROOM_COUNT, "部屋数")->length(0, 4)->intOnly();
-		$colCheckIn = new ValidationColumn();
-		$colCheckIn->setColumnName($this->COL_CHECK_IN, "チェックイン")->require()->length(0, 5)->notHalfKana()->checkInOutTime();
-			// チェックイン時刻 独自チェック→checkInTimeFromTo
-		$colCheckInEnd = new ValidationColumn();
-		$colCheckInEnd->setColumnName($this->COL_CHECK_IN_END, "チェックイン終了時刻")->length(0, 5)->notHalfKana()->checkInOutTime();
-		$colCheckInInfo = new ValidationColumn();
-		$colCheckInInfo->setColumnName($this->COL_CHECK_IN_INFO, "チェックイン時刻コメント")->length(0, 75)->notHalfKana();
-		$colCheckOut = new ValidationColumn();
-		$colCheckOut->setColumnName($this->COL_CHECK_OUT, "チェックアウト")->require()->length(0, 5)->notHalfKana()->checkInOutTime();
-		$colMidnightStatus = new ValidationColumn();
-		$colMidnightStatus->setColumnName($this->COL_MIDNIGHT_STATUS, "深夜受付状態")->require();//TODO 独自チェック→ラジオボタンで不要
-		$colAcceptStatus = new ValidationColumn();
-		$colAcceptStatus->setColumnName($this->COL_ACCEPT_STATUS, "予約受付状態");//TODO 独自チェック 条件必須 更新では不要、深夜受付状態と同一→更新画面にない
-		$colAcceptAuto = new ValidationColumn();
-		$colAcceptAuto->setColumnName($this->COL_ACCEPT_AUTO, "予約受付状態自動更新有無");//TODO 条件必須 更新では不要 、独自チェック
-		$colAcceptDtm = new ValidationColumn();
-		$colAcceptDtm->setColumnName($this->COL_ACCEPT_DTM, "予約受付状態更新日時")->correctDate(); //TODO 更新画面にない
+    /**
+     * コンストラクタ
+     */
+    function __construct(){
+        // カラム情報の設定
+        $colHotelCd = new ValidationColumn();
+        $colHotelCd->setColumnName($this->COL_HOTEL_CD, "ホテルコード")->require()->length(0, 10)->notHalfKana();
+        $colOrderNo = new ValidationColumn();
+        $colOrderNo->setColumnName($this->COL_ORDER_NO, "表示順序")->length(0, 10)->intOnly();
+        //'a' => 'カプセルホテル','b' => 'ビジネスホテル','c' => 'シティホテル','j' => '旅館'
+        $colHotelCategory = new ValidationColumn();
+        $colHotelCategory->setColumnName($this->COL_HOTEL_CATEGORY, "施設区分")->notHalfKana(); //プルダウンなのでチェック不要
+        $colHotelNm = new ValidationColumn();
+        $colHotelNm->setColumnName($this->COL_HOTEL_NM, "ホテル名")->require()->length(0, 50)->notHalfKana();
+        $colHotelKn = new ValidationColumn();
+        $colHotelKn->setColumnName($this->COL_HOTEL_KN, "ホテル名称かな")->require()->length(0, 150)->notHalfKana()->kanaOnly();
 
-		parent::setColumnDataArray([$colHotelCd, $colOrderNo, $colHotelCategory, $colHotelNm, $colHotelKn,
-					$colHotelOldNm, $colPostalCd, $colPrefId, $colCityId, $colWardId, $colAddress, $colTel, $colFax,
-					$colRoomCount, $colCheckIn, $colCheckInEnd, $colCheckInInfo, $colCheckOut, $colMidnightStatus, $colAcceptStatus,
-					$colAcceptAuto, $colAcceptDtm
-				]);
-	}
+        $colHotelOldNm = new ValidationColumn();
+        $colHotelOldNm->setColumnName($this->COL_HOTEL_OLD_NM, "旧ホテル名称")->length(0, 50)->notHalfKana();
+        $colPostalCd = new ValidationColumn();// activeRecordでは「〒」だが、チェックで漢字名
+        $colPostalCd->setColumnName($this->COL_POSTAL_CD, "郵便番号")->require()->length(0, 8)->notHalfKana()->postal();
+        $colPrefId = new ValidationColumn();
+        $colPrefId->setColumnName($this->COL_PREF_ID, "都道府県")->require()->length(0, 2)->intOnly();
+        $colCityId = new ValidationColumn();
+        $colCityId->setColumnName($this->COL_CITY_ID, "市")->require()->length(0, 20)->intOnly();
+        $colWardId = new ValidationColumn();
+        $colWardId->setColumnName($this->COL_WARD_ID, "区")->length(0, 20)->intOnly();
 
-	/** 主キーで取得
-	 */
-	public function selectByKey($hotelCd){
-		$data = $this->where($this->COL_HOTEL_CD, $hotelCd)->get();
-		if(!is_null($data) && count($data) > 0){
-			return array(
-				$this->COL_HOTEL_CD => $data[0]->hotel_cd,
-				$this->COL_ORDER_NO => $data[0]->order_no,
-				$this->COL_HOTEL_CATEGORY => $data[0]->hotel_category,
-				$this->COL_HOTEL_NM => $data[0]->hotel_nm,
-				$this->COL_HOTEL_KN => $data[0]->hotel_kn,
-				$this->COL_HOTEL_OLD_NM => $data[0]->hotel_old_nm,
-				$this->COL_POSTAL_CD => $data[0]->postal_cd,
-				$this->COL_PREF_ID => $data[0]->pref_id,
-				$this->COL_CITY_ID => $data[0]->city_id,
-				$this->COL_WARD_ID => $data[0]->ward_id,
-				$this->COL_ADDRESS => $data[0]->address,
-				$this->COL_TEL => $data[0]->tel,
-				$this->COL_FAX => $data[0]->fax,
-				$this->COL_ROOM_COUNT => $data[0]->room_count,
-				$this->COL_CHECK_IN => $data[0]->check_in,
-				$this->COL_CHECK_IN_END => $data[0]->check_in_end,
-				$this->COL_CHECK_IN_INFO => $data[0]->check_in_info,
-				$this->COL_CHECK_OUT => $data[0]->check_out,
-				$this->COL_MIDNIGHT_STATUS => $data[0]->midnight_status,
-				$this->COL_ACCEPT_STATUS => $data[0]->accept_status,
-				$this->COL_ACCEPT_AUTO => $data[0]->accept_auto,
-				$this->COL_ACCEPT_DTM => $data[0]->accept_dtm
-			);
-		}
-		return null;
-	}
+        $colAddress = new ValidationColumn();
+        $colAddress->setColumnName($this->COL_ADDRESS, "住所")->require()->length(0, 100)->notHalfKana();
+        $colTel = new ValidationColumn();
+        $colTel->setColumnName($this->COL_TEL, "TEL")->require()->length(0, 15)->notHalfKana()->phoneNumber();
+        $colFax = new ValidationColumn();
+        $colFax->setColumnName($this->COL_FAX, "FAX")->length(0, 15)->notHalfKana()->phoneNumber();
+        $colRoomCount = new ValidationColumn();
+        $colRoomCount->setColumnName($this->COL_ROOM_COUNT, "部屋数")->length(0, 4)->intOnly();
+        $colCheckIn = new ValidationColumn();
+        $colCheckIn->setColumnName($this->COL_CHECK_IN, "チェックイン")->require()->length(0, 5)->notHalfKana()->checkInOutTime();
+            // チェックイン時刻 独自チェック→checkInTimeFromTo
+
+        $colCheckInEnd = new ValidationColumn();
+        $colCheckInEnd->setColumnName($this->COL_CHECK_IN_END, "チェックイン終了時刻")->length(0, 5)->notHalfKana()->checkInOutTime();
+        $colCheckInInfo = new ValidationColumn();
+        $colCheckInInfo->setColumnName($this->COL_CHECK_IN_INFO, "チェックイン時刻コメント")->length(0, 75)->notHalfKana();
+        $colCheckOut = new ValidationColumn();
+        $colCheckOut->setColumnName($this->COL_CHECK_OUT, "チェックアウト")->require()->length(0, 5)->notHalfKana()->checkInOutTime();
+        $colMidnightStatus = new ValidationColumn();
+        $colMidnightStatus->setColumnName($this->COL_MIDNIGHT_STATUS, "深夜受付状態")->require();//TODO 独自チェック→ラジオボタンで不要
+        $colAcceptStatus = new ValidationColumn();
+        $colAcceptStatus->setColumnName($this->COL_ACCEPT_STATUS, "予約受付状態");//TODO 独自チェック 条件必須 更新では不要、深夜受付状態と同一→更新画面にない
+
+        $colAcceptAuto = new ValidationColumn();
+        $colAcceptAuto->setColumnName($this->COL_ACCEPT_AUTO, "予約受付状態自動更新有無");//TODO 条件必須 更新では不要 、独自チェック
+        $colAcceptDtm = new ValidationColumn();
+        $colAcceptDtm->setColumnName($this->COL_ACCEPT_DTM, "予約受付状態更新日時")->correctDate(); //TODO 更新画面にない
+
+        parent::setColumnDataArray([
+            $colHotelCd     , $colOrderNo       , $colHotelCategory , $colHotelNm       , $colHotelKn,
+            $colHotelOldNm  , $colPostalCd      , $colPrefId        , $colCityId        , $colWardId,
+            $colAddress     , $colTel           , $colFax           , $colRoomCount     , $colCheckIn,
+            $colCheckInEnd  , $colCheckInInfo   , $colCheckOut      , $colMidnightStatus, $colAcceptStatus,
+            $colAcceptAuto  , $colAcceptDtm
+        ]);
+    }
+
+    /**
+     * 主キーで取得
+     */
+    public function selectByKey($hotelCd){
+        $data = $this->where($this->COL_HOTEL_CD, $hotelCd)->get();
+        if(!is_null($data) && count($data) > 0){
+            return array(
+                $this->COL_HOTEL_CD         => $data[0]->hotel_cd,
+                $this->COL_ORDER_NO         => $data[0]->order_no,
+                $this->COL_HOTEL_CATEGORY   => $data[0]->hotel_category,
+                $this->COL_HOTEL_NM         => $data[0]->hotel_nm,
+                $this->COL_HOTEL_KN         => $data[0]->hotel_kn,
+
+                $this->COL_HOTEL_OLD_NM     => $data[0]->hotel_old_nm,
+                $this->COL_POSTAL_CD        => $data[0]->postal_cd,
+                $this->COL_PREF_ID          => $data[0]->pref_id,
+                $this->COL_CITY_ID          => $data[0]->city_id,
+                $this->COL_WARD_ID          => $data[0]->ward_id,
+
+                $this->COL_ADDRESS          => $data[0]->address,
+                $this->COL_TEL              => $data[0]->tel,
+                $this->COL_FAX              => $data[0]->fax,
+                $this->COL_ROOM_COUNT       => $data[0]->room_count,
+                $this->COL_CHECK_IN         => $data[0]->check_in,
+
+                $this->COL_CHECK_IN_END     => $data[0]->check_in_end,
+                $this->COL_CHECK_IN_INFO    => $data[0]->check_in_info,
+                $this->COL_CHECK_OUT        => $data[0]->check_out,
+                $this->COL_MIDNIGHT_STATUS  => $data[0]->midnight_status,
+                $this->COL_ACCEPT_STATUS    => $data[0]->accept_status,
+
+                $this->COL_ACCEPT_AUTO      => $data[0]->accept_auto,
+                $this->COL_ACCEPT_DTM       => $data[0]->accept_dtm
+            );
+        }
+        return null;
+    }
 
 	/**  キーで更新
 	 *
@@ -160,7 +174,7 @@ class Hotel extends CommonDBModel
 				return "更新に失敗しました";
 		}
 		return "";
-}
+    }
 
 // 条件キーの初期化と値設定
 	public function getConditionsForSearch(
