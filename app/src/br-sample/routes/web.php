@@ -14,25 +14,25 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-	return view('toppage-test');
+    return view('toppage-test');
 })->name('ctl.index');
 
 
 /**
  * 宿泊予約
  */
-Route::namespace("App\Http\Controllers\rsv")->prefix("rsv")->group(function(){
-	// 施設情報
-	Route::controller(HotelController::class)->prefix("hotel")->group(function(){
-		Route::get('/{hotel_cd}', 'info')->name('rsv.hotel.info');
-	});
+Route::namespace("App\Http\Controllers\rsv")->prefix("rsv")->group(function () {
+    // 施設情報
+    Route::controller(HotelController::class)->prefix("hotel")->group(function () {
+        Route::get('/{hotel_cd}', 'info')->name('rsv.hotel.info');
+    });
 });
 
 
 /**
  * 管理システム
  */
-Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
+Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function () {
 
 
 	// 社内トップ
@@ -50,36 +50,36 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 		Route::get('/', 'index')->name('ctl.top.index');
 	});
 
-	// 銀行支店マスタ
-	Route::controller(BrbankController::class)->prefix("brbank")->group(function(){
-		Route::get('/', 'index')->name('ctl.brbank.index');
-		Route::post('/newbank', 'newbank')->name('ctl.brbank.newbank');
-		Route::post('/createbank', 'createbank')->name('ctl.brbank.createbank');
-		Route::post('/viewbank', 'viewbank')->name('ctl.brbank.viewbank');
-		Route::post('/updatebank', 'updatebank')->name('ctl.brbank.updatebank');
-		Route::post('/newbankbranch', 'newbankbranch')->name('ctl.brbank.newbankbranch');
-		Route::post('/createbankbranch', 'createbankbranch')->name('ctl.brbank.createbankbranch');
-		Route::post('/viewbankbranch', 'viewbankbranch')->name('ctl.brbank.viewbankbranch');
-		Route::post('/updatebankbranch', 'updatebankbranch')->name('ctl.brbank.updatebankbranch');
-	});
+    // 銀行支店マスタ
+    Route::controller(BrbankController::class)->prefix("brbank")->group(function () {
+        Route::get('/', 'index')->name('ctl.brbank.index');
+        Route::post('/newbank', 'newbank')->name('ctl.brbank.newbank');
+        Route::post('/createbank', 'createbank')->name('ctl.brbank.createbank');
+        Route::post('/viewbank', 'viewbank')->name('ctl.brbank.viewbank');
+        Route::post('/updatebank', 'updatebank')->name('ctl.brbank.updatebank');
+        Route::post('/newbankbranch', 'newbankbranch')->name('ctl.brbank.newbankbranch');
+        Route::post('/createbankbranch', 'createbankbranch')->name('ctl.brbank.createbankbranch');
+        Route::post('/viewbankbranch', 'viewbankbranch')->name('ctl.brbank.viewbankbranch');
+        Route::post('/updatebankbranch', 'updatebankbranch')->name('ctl.brbank.updatebankbranch');
+    });
 
-	// 施設管理TOPお知らせ情報管理
-	Route::controller(BrbroadcastMessageController::class)->prefix("brbroadcastMessage")->group(function(){
-		Route::get('/', 'index')->name('ctl.brbroadcastMessage.index');
-		Route::post('/new', 'new')->name('ctl.brbroadcastMessage.new');
-		Route::post('/create', 'create')->name('ctl.brbroadcastMessage.create');
-		Route::post('/detail', 'detail')->name('ctl.brbroadcastMessage.detail');
-		Route::post('/edit', 'edit')->name('ctl.brbroadcastMessage.edit');
-		Route::post('/update', 'update')->name('ctl.brbroadcastMessage.update');
-		Route::post('/destroy', 'destroy')->name('ctl.brbroadcastMessage.destroy');
-	});
+    // 施設管理TOPお知らせ情報管理
+    Route::controller(BrbroadcastMessageController::class)->prefix("brbroadcastMessage")->group(function () {
+        Route::get('/', 'index')->name('ctl.brbroadcastMessage.index');
+        Route::post('/new', 'new')->name('ctl.brbroadcastMessage.new');
+        Route::post('/create', 'create')->name('ctl.brbroadcastMessage.create');
+        Route::post('/detail', 'detail')->name('ctl.brbroadcastMessage.detail');
+        Route::post('/edit', 'edit')->name('ctl.brbroadcastMessage.edit');
+        Route::post('/update', 'update')->name('ctl.brbroadcastMessage.update');
+        Route::post('/destroy', 'destroy')->name('ctl.brbroadcastMessage.destroy');
+    });
 
-	// 予約通知ＦＡＸ広告 掲載文章
-	Route::controller(BrfaxPrController::class)->prefix("brfaxPr")->group(function(){
-		Route::post('/edit', 'edit')->name('ctl.brfaxPr.edit');
-		Route::post('/update', 'update')->name('ctl.brfaxPr.update');
-		Route::get('/show', 'show')->name('ctl.brfaxPr.show');
-	});
+    // 予約通知ＦＡＸ広告 掲載文章
+    Route::controller(BrfaxPrController::class)->prefix("brfaxPr")->group(function () {
+        Route::post('/edit', 'edit')->name('ctl.brfaxPr.edit');
+        Route::post('/update', 'update')->name('ctl.brfaxPr.update');
+        Route::get('/show', 'show')->name('ctl.brfaxPr.show');
+    });
 
     Route::get('/htltop/index/target_cd/{target_cd}', function ($targetCd) {return 'TODO: htl top index : ' . $targetCd; })->name('ctl.htl_top.index');
 
