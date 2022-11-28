@@ -170,4 +170,7 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 	Route::get('/brpartnersite/edit', 'BrPartnerSiteController@edit')->name('ctl.brPartnerSite.edit');
 	Route::post('/brpartnersite/modify', 'BrPartnerSiteController@modify')->name('ctl.brPartnerSite.modify');
 
+	// パートナー精算確認
+	Route::match(['get','post'],'/brbillpayptn/list', 'BrBillPayPtnController@list')->name('ctl.brbillpayptn.list');
+
 });
