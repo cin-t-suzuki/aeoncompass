@@ -126,17 +126,17 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
     });
 
 	//施設統括
-		Route::get('brsupervisor/index', [\App\Http\Controllers\ctl\BrsupervisorController::class,'index'])->name('ctl.brsupervisor.index'); 
-		Route::post('brsupervisor/list',  [\App\Http\Controllers\ctl\BrsupervisorController::class,'list'])->name('ctl.brsupervisor.list'); 
-		Route::post('brsupervisor/update', [\App\Http\Controllers\ctl\BrsupervisorController::class,'update'])->name('ctl.brsupervisor.update'); 
-		Route::post('brsupervisor/new', [\App\Http\Controllers\ctl\BrsupervisorController::class,'new'])->name('ctl.brsupervisor.new'); 
-		Route::post('brsupervisor/create', [\App\Http\Controllers\ctl\BrsupervisorController::class,'create'])->name('ctl.brsupervisor.create'); 
-		Route::post('brsupervisor/listhotel',[\App\Http\Controllers\ctl\BrsupervisorController::class,'listhotel'])->name('ctl.brsupervisor.listhotel'); 
-		Route::post('brsupervisor/newhotel', [\App\Http\Controllers\ctl\BrsupervisorController::class,'newhotel'])->name('ctl.brsupervisor.newhotel'); 
-		Route::post('brsupervisor/cnfhotel', [\App\Http\Controllers\ctl\BrsupervisorController::class,'cnfhotel'])->name('ctl.brsupervisor.cnfhotel'); 
-		Route::post('brsupervisor/createhotel', [\App\Http\Controllers\ctl\BrsupervisorController::class,'createhotel'])->name('ctl.brsupervisor.createhotel'); 
-		Route::post('brsupervisor/deletehotel', [\App\Http\Controllers\ctl\BrsupervisorController::class,'deletehotel'])->name('ctl.brsupervisor.deletehotel'); 
-		Route::post('brsupervisor/edit', [\App\Http\Controllers\ctl\BrsupervisorController::class,'edit'])->name('ctl.brsupervisor.edit'); 
+	Route::get('brsupervisor/index', [\App\Http\Controllers\ctl\BrsupervisorController::class,'index'])->name('ctl.brsupervisor.index'); 
+	Route::post('brsupervisor/list',  [\App\Http\Controllers\ctl\BrsupervisorController::class,'list'])->name('ctl.brsupervisor.list'); 
+	Route::post('brsupervisor/update', [\App\Http\Controllers\ctl\BrsupervisorController::class,'update'])->name('ctl.brsupervisor.update'); 
+	Route::post('brsupervisor/new', [\App\Http\Controllers\ctl\BrsupervisorController::class,'new'])->name('ctl.brsupervisor.new'); 
+	Route::post('brsupervisor/create', [\App\Http\Controllers\ctl\BrsupervisorController::class,'create'])->name('ctl.brsupervisor.create'); 
+	Route::post('brsupervisor/listhotel',[\App\Http\Controllers\ctl\BrsupervisorController::class,'listhotel'])->name('ctl.brsupervisor.listhotel'); 
+	Route::post('brsupervisor/newhotel', [\App\Http\Controllers\ctl\BrsupervisorController::class,'newhotel'])->name('ctl.brsupervisor.newhotel'); 
+	Route::post('brsupervisor/cnfhotel', [\App\Http\Controllers\ctl\BrsupervisorController::class,'cnfhotel'])->name('ctl.brsupervisor.cnfhotel'); 
+	Route::post('brsupervisor/createhotel', [\App\Http\Controllers\ctl\BrsupervisorController::class,'createhotel'])->name('ctl.brsupervisor.createhotel'); 
+	Route::post('brsupervisor/deletehotel', [\App\Http\Controllers\ctl\BrsupervisorController::class,'deletehotel'])->name('ctl.brsupervisor.deletehotel'); 
+	Route::post('brsupervisor/edit', [\App\Http\Controllers\ctl\BrsupervisorController::class,'edit'])->name('ctl.brsupervisor.edit'); 
 
 
 
