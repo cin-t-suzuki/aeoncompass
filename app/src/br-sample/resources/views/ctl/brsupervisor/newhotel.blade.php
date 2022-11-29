@@ -1,15 +1,12 @@
-@section('title', 'グループホテル一覧')
 @include('ctl.common.base')
 
 
 {{-- メッセージ --}}
-@section('message')
 @include('ctl.common.message', $messages)
 
 {{-- 入力フォーム --}}
 {!! Form::open(['route' => ['ctl.brsupervisor.cnfhotel'], 'method' => 'post']) !!}
 
-@section('brhotelsupervisor_input_new_hotel')
 @include('ctl.brsupervisor._input_new_hotel',
     ['a_hotel_supervisor_hotel' => $views->a_hotel_supervisor_hotel
     ,'supervisor_cd' => $views->supervisor_cd
@@ -28,5 +25,4 @@
   </small>
 </div>
 
-@section('title', 'footer')
 @include('ctl.common.footer')

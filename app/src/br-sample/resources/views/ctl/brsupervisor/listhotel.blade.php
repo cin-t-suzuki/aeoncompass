@@ -1,4 +1,3 @@
-@section('title', 'グループホテル一覧')
 @include('ctl.common.base')
 
 
@@ -9,11 +8,9 @@
 
 <br>
 {{-- メッセージ --}}
-@section('message')
 @include('ctl.common.message', $messages)
 
 {{-- グループホテル一覧表示 --}}
-@section('brhotelsupervisor_listhotel')
 @include('ctl.brsupervisor._list_hotel',
     ['a_hotel_supervisor_hotel' => $views->a_hotel_supervisor_hotel
     ,'id' => $views->id
@@ -29,5 +26,4 @@
   </small>
 </div>
 
-@section('title', 'footer')
 @include('ctl.common.footer')
