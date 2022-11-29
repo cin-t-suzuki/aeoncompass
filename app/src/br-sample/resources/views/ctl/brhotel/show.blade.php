@@ -103,10 +103,10 @@
 							施設・地域関連付け
 						</td>
 						<td>
-							<form method="post" action="{$v->env.source_path}{$v->env.module}/brhotelarea/" style="display: inline;">
-								<input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($views->target_cd)}">
-								<input type="submit" value=" 変更 " />
-							</form>
+                            {{ Form::open(['route' => 'ctl.br_hotel_area.index', 'method' => 'get', 'style' => 'display: inline;']) }}
+                                {{ Form::hidden('target_cd', strip_tags($views->target_cd)) }}
+                                {{ Form::submit(' 変更 ') }}
+                            {{ Form::close() }}
 						</td>
 					</tr>
 				</table>

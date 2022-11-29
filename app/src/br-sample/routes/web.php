@@ -134,6 +134,18 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
         Route::post('/updateManagement' , 'updateManagement')->name('ctl.br_hotel.update_management');  // 施設管理情報更新処理
     });
 
+    Route::controller(BrHotelAreaController::class)->prefix('brHotelArea')->group(function () {
+        Route::get('/', 'index')->name('ctl.br_hotel_area.index');
+        Route::get('/new', 'new')->name('ctl.br_hotel_area.new');
+        Route::post('/create', 'create')->name('ctl.br_hotel_area.create');
+        Route::get('/edit', 'edit')->name('ctl.br_hotel_area.edit');
+        Route::post('/update', 'update')->name('ctl.br_hotel_area.update');
+        Route::post('/delete', 'delete')->name('ctl.br_hotel_area.delete');
+        Route::get('/complete', 'complete')->name('ctl.br_hotel_area.complete');
+        Route::get('/json', 'json')->name('ctl.br_hotel_area.json');
+    });
+
+
     // 施設情報変更 登録状態変更
     Route::controller(BrhotelStatusController::class)->prefix("brhotelStatus")->group(function(){
         Route::match(['get','post'],'/index', 'index')->name('ctl.brhotelStatus.index'); //表示
