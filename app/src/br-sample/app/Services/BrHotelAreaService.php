@@ -91,7 +91,7 @@ class BrHotelAreaService
                         ) q2 on q2.city_id = mc.city_id
                 ) q3 on q3.ward_id = mw.ward_id
         SQL;
-        /* こういう SQL では違う？
+        /* MEMO: おそらくこういう SQL で書き換え可能、念のため移植元のまま
             $sql = <<<SQL
                 select
                     hotel.hotel_cd,
@@ -146,22 +146,6 @@ class BrHotelAreaService
      */
     public function getHotelAreas($hotelCd): array
     {
-        $a_conditions = [
-            'hotel_cd' => $hotelCd,
-        ];
-        $a_area_detail_large  = [];
-        $a_area_detail_pref   = [];
-        $a_area_detail_middle = [];
-        $a_area_detail_small  = [];
-        $a_sort_keys          = [];
-        $a_area_key_names     = [
-            0 => 'area_j',
-            1 => 'area_l',
-            2 => 'area_p',
-            3 => 'area_m',
-            4 => 'area_s'
-        ];
-
         $s_sql = <<< SQL
             select
                 q1.hotel_cd,
@@ -188,12 +172,18 @@ class BrHotelAreaService
             order by
                 ma.order_no asc
         SQL;
-
-        // $a_temp_hotel_areas = nvl($this->o_oracle->find_by_sql($s_sql, $a_conditions), []);
-        $a_temp_hotel_areas = DB::select($s_sql, $a_conditions);
+        $a_temp_hotel_areas = DB::select($s_sql, ['hotel_cd' => $hotelCd]);
 
         // 整形
+        $a_sort_keys = [];
         $a_hotel_areas = [];
+        $a_area_key_names = [
+            0 => 'area_j',
+            1 => 'area_l',
+            2 => 'area_p',
+            3 => 'area_m',
+            4 => 'area_s'
+        ];
         foreach ($a_temp_hotel_areas as $a_temp_hotel_area) {
             $a_hotel_areas[$a_temp_hotel_area->entry_no]['hotel_cd'] = $a_temp_hotel_area->hotel_cd;
             $a_hotel_areas[$a_temp_hotel_area->entry_no]['entry_no'] = $a_temp_hotel_area->entry_no;
@@ -204,6 +194,7 @@ class BrHotelAreaService
                 $a_sort_keys[$a_temp_hotel_area->entry_no] = str_pad($a_temp_hotel_area->order_no, 10, 0, STR_PAD_LEFT);
             } else {
                 // MEMO: 現行のミスだと思われるため変更した。
+                // MEMO: order_no を桁幅10で 大エリア・都道府県・中エリア・小エリアの順に連結し、表示順を設定している想定。
                 // $a_sort_keys[$a_temp_hotel_area->entry_no] = $a_sort_keys[$a_temp_hotel_area->order_no] . str_pad($a_temp_hotel_area->order_no, 10, 0, STR_PAD_LEFT);
                 $a_sort_keys[$a_temp_hotel_area->entry_no] .= str_pad($a_temp_hotel_area->order_no, 10, 0, STR_PAD_LEFT);
             }
@@ -385,7 +376,6 @@ class BrHotelAreaService
             order by
                 order_no asc
         SQL;
-        // $a_rows = $this->o_oracle->find_by_sql($sql, []);
         $a_rows = DB::select($sql);
 
         if (!is_null($a_rows)) {
