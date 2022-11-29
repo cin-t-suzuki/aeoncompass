@@ -9,12 +9,11 @@ use Illuminate\Support\Facades\Log;
 
 class BrHotelAreaService
 {
-
     // 定数の定義
-    const IDX_AREA_LARGE  = 0; // 大エリア
-    const IDX_AREA_PREF   = 1; // 都道府県
-    const IDX_AREA_MIDDLE = 2; // 中エリア
-    const IDX_AREA_SMALL  = 3; // 小エリア
+    private const IDX_AREA_LARGE  = 0; // 大エリア
+    private const IDX_AREA_PREF   = 1; // 都道府県
+    private const IDX_AREA_MIDDLE = 2; // 中エリア
+    private const IDX_AREA_SMALL  = 3; // 小エリア
 
     /**
      * 施設情報の取得
@@ -356,7 +355,7 @@ class BrHotelAreaService
         // HACK: magic number
         if (in_array($n_pref_id, [16, 17, 18])) {
             return $n_pref_id + 14;
-        } else if (in_array($n_pref_id, [19, 20])) {
+        } elseif (in_array($n_pref_id, [19, 20])) {
             return $n_pref_id + 9;
         } else {
             return $n_pref_id + 12;
@@ -624,10 +623,12 @@ class BrHotelAreaService
             }
 
             // 整合性チェック
-            if (!$this->isIntegrityAreaId(
-                $a_attributes[$key]['area_id'],
-                $a_attributes[$key]['area_type']
-            )) {
+            if (
+                !$this->isIntegrityAreaId(
+                    $a_attributes[$key]['area_id'],
+                    $a_attributes[$key]['area_type']
+                )
+            ) {
                 $errorMessages[] = '「' . $value . '」に指定された地域データが存在していません。';
             }
         }
@@ -736,12 +737,12 @@ class BrHotelAreaService
     /**
      * 対象エリアIDの組合せの重複チェック
      *
-     * @param [type] $hotelCd
-     * @param [type] $entryNo
-     * @param [type] $an_area_l: エリアID（大エリア）
-     * @param [type] $an_area_p: エリアID（都道府県）
-     * @param [type] $an_area_m: エリアID（中エリア）
-     * @param [type] $an_area_s:エリアID（小エリア）
+     * @param string $hotelCd
+     * @param string $entryNo
+     * @param string $an_area_l: エリアID（大エリア）
+     * @param string $an_area_p: エリアID（都道府県）
+     * @param string $an_area_m: エリアID（中エリア）
+     * @param string $an_area_s:エリアID（小エリア）
      * @return boolean: 登録の可否（true：登録可, false：登録不可）
      */
     private function isUniqueAreaPattern(
