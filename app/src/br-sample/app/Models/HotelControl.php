@@ -8,14 +8,14 @@ use App\Models\common\ValidationColumn;
 use Illuminate\Support\Facades\DB;
 
 
-/** 
+/**
  * 施設管理
  */
 class HotelControl extends CommonDBModel
 {
-	use Traits;
+    use Traits;
 
-	protected $table = "hotel_control";
+    protected $table = "hotel_control";
     /**
      * テーブルに関連付ける主キー
      *
@@ -28,6 +28,36 @@ class HotelControl extends CommonDBModel
      * @var bool
      */
     public $incrementing = false;
+
+    /**
+     * モデルにタイムスタンプを付けるか
+     *
+     * MEMO: 独自実装でタイムスタンプを設定しているため、Laravel 側では設定しない。
+     * HACK: (工数次第) Laravel の機能を使ったほうがよい気もする。
+     *
+     * @var bool
+     */
+    public $timestamps = false;
+    public const CREATED_AT = 'entry_ts';
+    public const UPDATED_AT = 'modify_ts';
+
+    /**
+     * 複数代入可能な属性
+     *
+     * @var array
+     */
+    protected $fillable = [
+        // 'hotel_cd',
+        // 'stock_type',
+        // 'checksheet_send',
+        // 'charge_round',
+        // 'stay_cap',
+        // 'management_status',
+        'entry_cd',
+        'entry_ts',
+        'modify_cd',
+        'modify_ts',
+    ];
 
 	// カラム
 	public string $COL_HOTEL_CD = "hotel_cd";
@@ -43,11 +73,16 @@ class HotelControl extends CommonDBModel
         MEMO: 移植元ソースのテーブル定義書を参照。
         実際に検証データに登録されている値に「-2」はなし。
         DB にはほかに「3」が見られるが、定義書に記載されていない。
+
+        (追記）3 が特定施設（三普）であることは、ハードコーディングからの推測（以下などを参照）
+            public\app\ctl\controllers\BrhotelController.php L.740 あたりの if 文
+            public\app\ctl\views\brhotel\_input_hotel_form.tpl L.168 あたりの 「仕入タイプ」の選択肢
     */
-    const STOCK_TYPE_CONTRACT_SALE = 0;             //受託販売
-    const STOCK_TYPE_PURCHASE_SALE = 1;             //買取販売
-    const STOCK_TYPE_BULK_CONTRACT_TOYOKO_INN = 2;  //一括受託（東横イン）
-    const STOCK_TYPE_BULK_CONTRACT_OLD_YADO_PLAZA = -2; //一括受託（旧宿ぷらざ）
+    public const STOCK_TYPE_CONTRACT_SALE = 0;             //受託販売
+    public const STOCK_TYPE_PURCHASE_SALE = 1;             //買取販売
+    public const STOCK_TYPE_BULK_CONTRACT_TOYOKO_INN = 2;  //一括受託（東横イン）
+    public const STOCK_TYPE_BULK_CONTRACT_OLD_YADO_PLAZA = -2; //一括受託（旧宿ぷらざ）
+    public const STOCK_TYPE_SANPU = 3; // 特定施設(三普)
 
 	/** コンストラクタ
 	 */

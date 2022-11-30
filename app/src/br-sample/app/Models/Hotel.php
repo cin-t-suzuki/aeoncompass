@@ -31,6 +31,52 @@ class Hotel extends CommonDBModel
      */
     public $incrementing = false;
 
+    /**
+     * モデルにタイムスタンプを付けるか
+     *
+     * MEMO: 独自実装でタイムスタンプを設定しているため、Laravel 側では設定しない。
+     * HACK: (工数次第) Laravel の機能を使ったほうがよい気もする。
+     *
+     * @var bool
+     */
+    // public $timestamps = false;
+    public const CREATED_AT = 'entry_ts';
+    public const UPDATED_AT = 'modify_ts';
+
+    /**
+     * 複数代入可能な属性
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'hotel_cd',
+        // 'order_no',
+        'hotel_category',
+        'hotel_nm',
+        'hotel_kn',
+        'hotel_old_nm',
+        'postal_cd',
+        'pref_id',
+        'city_id',
+        'ward_id',
+        'address',
+        'tel',
+        'fax',
+        'room_count',
+        'check_in',
+        'check_in_end',
+        'check_in_info',
+        'check_out',
+        'midnight_status',
+        'accept_status',
+        'accept_auto',
+        'accept_dtm',
+        'entry_cd',
+        'entry_ts',
+        'modify_cd',
+        'modify_ts',
+    ];
+
     // カラム
     public string $COL_HOTEL_CD         = "hotel_cd";
     public string $COL_ORDER_NO         = "order_no";
@@ -56,8 +102,12 @@ class Hotel extends CommonDBModel
     public string $COL_ACCEPT_DTM       = "accept_dtm";
 
     // カラム定数
-    const ACCEPT_STATUS_STOPPING  = 0; // 停止中
-    const ACCEPT_STATUS_ACCEPTING = 1; // 受付中
+    // 予約受付状態
+    public const ACCEPT_STATUS_STOPPING     = 0; // 停止中
+    public const ACCEPT_STATUS_ACCEPTING    = 1; // 受付中
+    // 予約受付状態手動更新
+    public const ACCEPT_AUTO_AUTO       = 0; // 自動更新
+    public const ACCEPT_AUTO_MANUAL     = 1; // 手動更新
 
     /**
      * コンストラクタ
