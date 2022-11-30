@@ -53,7 +53,8 @@ class BrsupervisorController extends _commonController
             $supervisor_cd = Request::input('supervisor_cd');
 
             $brsupervisormodel = new HotelSupervisorHotel();
-            $a_hotel_supervisor_hotel = $brsupervisormodel->getHotelSupervisorHotel(array('supervisor_cd' => $supervisor_cd));
+            $a_hotel_supervisor_hotel = $brsupervisormodel->getHotelSupervisorHotel([
+                'supervisor_cd' => $supervisor_cd]);
 
             if (count($a_hotel_supervisor_hotel['values']) == 0) {
                 $this->addErrorMessage("グループのホテルは存在しません。");
@@ -74,8 +75,8 @@ class BrsupervisorController extends _commonController
     {
         $supervisor_cd = Request::input('supervisor_cd');  //hotel_supervisor_account
         $supervisor_nm = Request::input('supervisor_nm');  //hotel_supervisor
-        $account_id = Request::input('account_id');        //hotel_supervisor_account
-        $password = Request::input('password');            //hotel_supervisor_account
+        $account_id    = Request::input('account_id');     //hotel_supervisor_account
+        $password      = Request::input('password');       //hotel_supervisor_account
         $accept_status = Request::input('accept_status');  //hotel_supervisor_account
 
         try {
@@ -99,9 +100,9 @@ class BrsupervisorController extends _commonController
     {
         $supervisor_cd = Request::input('supervisor_cd');  //hotel_supervisor_account
         $supervisor_nm = Request::input('supervisor_nm');  //hotel_supervisor
-        $account_id = Request::input('account_id');        //hotel_supervisor_account
+        $account_id    = Request::input('account_id');     //hotel_supervisor_account
         $accept_status = Request::input('accept_status');  //hotel_supervisor_account
-        $password = Request::input('password');            //hotel_supervisor_account
+        $password      = Request::input('password');       //hotel_supervisor_account
 
         $accountCreateData = $this->getAccountCreateData($supervisor_cd, $account_id, $password, $accept_status);
         $supervisorCreateData = $this->getSupervisorCreateData($supervisor_cd, $supervisor_nm);
@@ -110,7 +111,7 @@ class BrsupervisorController extends _commonController
         $hotelSupervisorAccountModel = new HotelSupervisorAccount();
         $hotelSupervisorModel = new HotelSupervisor();
 
-        $accountErrorList = []; //初期化
+        $accountErrorList    = []; //初期化
         $supervisorErrorList = []; //初期化
 
         $accountErrorList = $hotelSupervisorAccountModel->validation($accountCreateData);
@@ -122,7 +123,14 @@ class BrsupervisorController extends _commonController
             $errorListArray = array_merge($supervisorErrorList, $accountErrorList);
             //バリデーションメッセージの重複削除
             $errorList = array_unique($errorListArray);
-            return $this->viewAgainNewScreen($errorList, $supervisor_cd, $supervisor_nm, $account_id, $password, $accept_status);
+            return $this->viewAgainNewScreen(
+                $errorList,
+                $supervisor_cd,
+                $supervisor_nm,
+                $account_id,
+                $password,
+                $accept_status
+            );
         }
 
         // PW暗号化
@@ -137,7 +145,13 @@ class BrsupervisorController extends _commonController
         // 登録処理　2テーブル登録
         try {
             $con = DB::connection('mysql');
-            $dbErr = $con->transaction(function () use ($con, $hotelSupervisorAccountModel, $accountCreateData, $hotelSupervisorModel, $supervisorCreateData) {
+            $dbErr = $con->transaction(function () use (
+                $con,
+                $hotelSupervisorAccountModel,
+                $accountCreateData,
+                $hotelSupervisorModel,
+                $supervisorCreateData
+            ) {
                 $hotelSupervisorAccountModel->singleInsert($con, $accountCreateData);
                 $hotelSupervisorModel->singleInsert($con, $supervisorCreateData);
             });
@@ -160,7 +174,9 @@ class BrsupervisorController extends _commonController
         $a_hotel_supervisor = $o_hotel_supervisor->selectByKey($supervisor_cd);
 
         // 完了メッセージ 正常であれば、listを表示
-        $this->addGuideMessage($a_hotel_supervisor['supervisor_cd'] . "　" . $a_hotel_supervisor['supervisor_nm'] . "　の登録が完了しました 。");
+        $this->addGuideMessage(
+            $a_hotel_supervisor['supervisor_cd'] . "　" . $a_hotel_supervisor['supervisor_nm'] . "　の登録が完了しました 。"
+        );
         // グループホテル一覧へ
         return $this->list();
     }
@@ -226,7 +242,14 @@ class BrsupervisorController extends _commonController
         // バリデーション バリデーションエラーでeditへ遷移。
         if (count($accountErrorList) > 0 || count($supervisorErrorList) > 0) {
             $errorList = array_merge($accountErrorList, $supervisorErrorList);
-            return $this->viewAgainEditScreen($errorList, $supervisor_cd, $supervisor_nm, $account_id, $password, $accept_status);
+            return $this->viewAgainEditScreen(
+                $errorList,
+                $supervisor_cd,
+                $supervisor_nm,
+                $account_id,
+                $password,
+                $accept_status
+            );
         }
 
         //対象データ取得
@@ -253,7 +276,15 @@ class BrsupervisorController extends _commonController
         //2テーブル更新。トランザクション/ロールバックはクロージャを使用
         try {
             $con = DB::connection('mysql');
-            $dbErr1 = $con->transaction(function () use ($con, $hotelSupervisorAccountModel, $hotelSupervisorModel, $accountUpdateData, $supervisorUpdateData, &$accountDB, &$supervisorDB) {
+            $dbErr1 = $con->transaction(function () use (
+                $con,
+                $hotelSupervisorAccountModel,
+                $hotelSupervisorModel,
+                $accountUpdateData,
+                $supervisorUpdateData,
+                &$accountDB,
+                &$supervisorDB
+            ) {
                 $accountDB = $hotelSupervisorAccountModel->updateByKey($con, $accountUpdateData);
                 $supervisorDB = $hotelSupervisorModel->updateByKey($con, $supervisorUpdateData);
             });
@@ -265,7 +296,14 @@ class BrsupervisorController extends _commonController
         // 更新処理 更新0件またはアップデート処理失敗でeditへエラー遷移
         if (count($errorList) > 0 || $accountDB == 0 || $supervisorDB == 0) {
             $errorList[] = "ご希望のデータを更新できませんでした。";
-            return $this->viewAgainEditScreen($errorList, $supervisor_cd, $supervisor_nm, $account_id, $password, $accept_status);
+            return $this->viewAgainEditScreen(
+                $errorList,
+                $supervisor_cd,
+                $supervisor_nm,
+                $account_id,
+                $password,
+                $accept_status
+            );
         }
 
         // インスタンスの取得
@@ -275,7 +313,9 @@ class BrsupervisorController extends _commonController
         $a_hotel_supervisor = $o_hotel_supervisor->selectByKey($supervisor_cd);
 
         // 完了メッセージ 正常であれば、Listを表示
-        $this->addGuideMessage($a_hotel_supervisor['supervisor_cd'] . "　" . $a_hotel_supervisor['supervisor_nm'] . "　の更新が完了しました 。");
+        $this->addGuideMessage(
+            $a_hotel_supervisor['supervisor_cd'] . "　" . $a_hotel_supervisor['supervisor_nm'] . "　の更新が完了しました 。"
+        );
 
         // グループホテル一覧へ
         return $this->list();
@@ -314,7 +354,11 @@ class BrsupervisorController extends _commonController
         $errorList = $hotelSupervisorHotelModel->validation($hotelSupervisorHotelData);
         //エラーリストの件数チェック、0件なら独自チェック実行
         if (count($errorList) == 0) {
-            $hotelSupervisorHotelModel->hotelCdValidate($errorList, $hotelSupervisorHotelData, $hotelSupervisorHotelModel->METHOD_SAVE);
+            $hotelSupervisorHotelModel->hotelCdValidate(
+                $errorList,
+                $hotelSupervisorHotelData,
+                $hotelSupervisorHotelModel->METHOD_SAVE
+            );
         }
         //エラーリストが1件以上ならエラー表示をし処理中断
         if (count($errorList) > 0) {
@@ -361,13 +405,21 @@ class BrsupervisorController extends _commonController
 
         //連番idの採番
         $hotelSupervisorHotelId = $hotelSupervisorHotelModel->getSequence();
-        $hotelSupervisorHotelData = $this->getHotelSupervisorHotelData($supervisor_cd, $hotel_cd, $hotelSupervisorHotelId);
+        $hotelSupervisorHotelData = $this->getHotelSupervisorHotelData(
+            $supervisor_cd,
+            $hotel_cd,
+            $hotelSupervisorHotelId
+        );
 
         //発行前に事前チェック
         $errorList = $hotelSupervisorHotelModel->validation($hotelSupervisorHotelData);
         //TODO エラーリストの件数チェック、0件なら独自チェック実行
         if (count($errorList) == 0) {
-            $hotelSupervisorHotelModel->hotelCdValidate($errorList, $hotelSupervisorHotelData, $hotelSupervisorHotelModel->METHOD_SAVE);
+            $hotelSupervisorHotelModel->hotelCdValidate(
+                $errorList,
+                $hotelSupervisorHotelData,
+                $hotelSupervisorHotelModel->METHOD_SAVE
+            );
         }
         //TODO エラーリストが1件以上ならエラー表示をし処理中断
         if (count($errorList) > 0) {
@@ -381,7 +433,11 @@ class BrsupervisorController extends _commonController
 
         try {
             $con = DB::connection('mysql');
-            $dbErr = $con->transaction(function () use ($con, $hotelSupervisorHotelModel, $hotelSupervisorHotelData) {
+            $dbErr = $con->transaction(function () use (
+                $con,
+                $hotelSupervisorHotelModel,
+                $hotelSupervisorHotelData
+            ) {
                 $hotelSupervisorHotelModel->singleInsert($con, $hotelSupervisorHotelData);
             });
         } catch (Exception $e) {
