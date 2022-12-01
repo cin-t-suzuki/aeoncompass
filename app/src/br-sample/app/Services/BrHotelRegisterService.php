@@ -101,8 +101,42 @@ class BrHotelRegisterService
         return $errorMessages;
     }
 
-    public function makeHotelInsuranceWeatherData($hotelCd, $hotel, $actionCd): array
+    public function makeHotelData($hotelCd, $inputHotel): array
     {
+        $actionCd = $this->getActionCd();
+        return [
+            'hotel_cd'          => $hotelCd,
+            'hotel_category'    => $inputHotel['hotel_category'],
+            'hotel_nm'          => $inputHotel['hotel_nm'],
+            'hotel_kn'          => $inputHotel['hotel_kn'],
+            'hotel_old_nm'      => $inputHotel['hotel_old_nm'],
+            'postal_cd'         => $inputHotel['postal_cd'],
+            'pref_id'           => $inputHotel['pref_id'],
+            'city_id'           => $inputHotel['city_id'],
+            'ward_id'           => array_key_exists('ward_id', $inputHotel) ? $inputHotel['ward_id'] : null,
+            'address'           => $inputHotel['address'],
+            'tel'               => $inputHotel['tel'],
+            'fax'               => $inputHotel['fax'],
+            'room_count'        => $inputHotel['room_count'],
+            'check_in'          => $inputHotel['check_in'],
+            'check_in_end'      => $inputHotel['check_in_end'],
+            'check_in_info'     => $inputHotel['check_in_info'],
+            'check_out'         => $inputHotel['check_out'],
+            'midnight_status'   => $inputHotel['midnight_status'],
+            'accept_status'     => Hotel::ACCEPT_STATUS_STOPPING,
+
+            // ※初期登録時に自動更新だと登録中にもかかわらずbatch処理が走ると勝手に受付状態を停止中→受付中へ変更してしまう為。 バグ3196対応
+            'accept_auto'       => Hotel::ACCEPT_AUTO_MANUAL,
+
+            'accept_dtm'        => date("Y-m-d H:i:s"),
+            'entry_cd'          => $actionCd,
+            'modify_cd'         => $actionCd,
+        ];
+    }
+
+    public function makeHotelInsuranceWeatherData($hotelCd, $hotel): array
+    {
+        $actionCd = $this->getActionCd();
         $data = $this->getAmedasAddress(
             $hotel['pref_id'],
             $hotel['city_id'],
@@ -217,8 +251,9 @@ class BrHotelRegisterService
         return count($a_sky) > 0;
     }
 
-    public function makeDenyListsData($hotelCd, $actionCd): array
+    public function makeDenyListsData($hotelCd): array
     {
+        $actionCd = $this->getActionCd();
         $result = [];
 
         // TODO: hard coding logic, magic number: AC 用にカスタム
@@ -282,5 +317,24 @@ class BrHotelRegisterService
         SQL;
         $result = DB::select($sql);
         return $result[0]->deny_cd;
+    }
+
+
+    /**
+     * コントローラ名とアクション名を取得して、ユーザーIDと連結
+     * ユーザーID取得は暫定の為、書き換え替えが必要です。
+     *
+     * TODO: 適切に共通化
+     * @return string
+     */
+    private function getActionCd()
+    {
+        $path = explode("@", \Illuminate\Support\Facades\Route::currentRouteAction());
+        $pathList = explode('\\', $path[0]);
+        $controllerName = str_replace("Controller", "", end($pathList)); // コントローラ名
+        $actionName = $path[1]; // アクション名
+        $userId = \Illuminate\Support\Facades\Session::get("user_id"); // TODO: ユーザー情報取得のキーは仮です
+        $action_cd = $controllerName . "/" . $actionName . "." . $userId;
+        return $action_cd;
     }
 }

@@ -19,50 +19,38 @@ class BrHotelRegisterController extends Controller
     {
         $guides = ['施設登録の際はウィザードに添ってSTEP 6/6 まで必ず完了してください。'];
 
-        if ($request->session()->has('Hotel')) {
-            // session にデータがある場合、登録処理からの戻り
-            $a_hotel = $request->session()->get('Hotel');
-        } else {
-            // session にデータがない場合、初期表示
-            $a_hotel = [
-                'hotel_cd'          => null,
-                'hotel_category'    => null,
-                'hotel_nm'          => null,
-                'hotel_kn'          => null,
-                'hotel_old_nm'      => null,
-                'postal_cd'         => null,
-                'pref_id'           => null,
-                'city_id'           => null,
-                'ward_id'           => null,
-                'address'           => null,
-                'tel'               => null,
-                'fax'               => null,
-                'room_count'        => null,
-                'check_in'          => null,
-                'check_in_end'      => null,
-                'check_in_info'     => null,
-                'check_out'         => null,
-                'midnight_status'   => null,
-            ];
-        }
+        // 登録処理からの戻りで session にデータがある場合、 old を使って取得
+        // そうでない場合、初期表示（第2引数でデフォルト値を指定）
+        // HACK: （工数次第）画面側で old ヘルパ関数を使うほうが一般的と思われる（更新処理と合わせての修正が必要）
+        $a_hotel = $request->old('Hotel', [
+            'hotel_cd'          => null,
+            'hotel_category'    => null,
+            'hotel_nm'          => null,
+            'hotel_kn'          => null,
+            'hotel_old_nm'      => null,
+            'postal_cd'         => null,
+            'pref_id'           => null,
+            'city_id'           => null,
+            'ward_id'           => null,
+            'address'           => null,
+            'tel'               => null,
+            'fax'               => null,
+            'room_count'        => null,
+            'check_in'          => null,
+            'check_in_end'      => null,
+            'check_in_info'     => null,
+            'check_out'         => null,
+            'midnight_status'   => null,
+        ]);
+        $a_hotel_control = $request->old('Hotel_Control', [
+            'stock_type' => null,
+        ]);
 
-        // TODO: old の処理
-        $a_hotel = $request->old('Hotel') ?? $a_hotel;
         if (!array_key_exists('city_id', $a_hotel)) {
             $a_hotel['city_id'] = null;
         }
         if (!array_key_exists('ward_id', $a_hotel)) {
             $a_hotel['ward_id'] = null;
-        }
-
-        if ($request->session()->has('Hotel_Control')) {
-            // session にデータがある場合、登録処理からの戻り
-            $a_hotel_control = $request->session()->get('Hotel_Control');
-        } else {
-            // session にデータがない場合、初期表示
-            $a_hotel_control = [
-                'stock_type' => null,
-            ];
         }
 
         // 都道府県
@@ -78,11 +66,8 @@ class BrHotelRegisterController extends Controller
             $a_mast_wards = (new MastWard())->getMastWards($a_hotel['city_id']);
         }
 
-        if ($request->session()->has('errors')) {
-            $errors = $request->session()->get('errors')->all();
-        } else {
-            $errors = [];
-        }
+        $errors = $request->session()->get('errors', []);
+
         return view('ctl.brhotel.new', [
             'action'        => 'new',
             'guides'        => $guides,
@@ -100,6 +85,9 @@ class BrHotelRegisterController extends Controller
 
     public function create(Request $request, Service $service)
     {
+        $a_hotel = $request->input('Hotel');
+        $a_hotel_control = $request->input('Hotel_Control');
+
         /*
             validation
          */
@@ -183,22 +171,19 @@ class BrHotelRegisterController extends Controller
         $validator = Validator::make($request->all(), $rules, $messages, $attributes);
         if ($validator->fails()) {
             return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
+                ->withInput()
+                ->with([
+                    'errors' => $validator->errors()->all(),
+                ]);
         }
 
         /*
             データ整形
          */
-        // TODO: 登録・更新者名
-        $actionCd = '';
-        $a_hotel = $request->input('Hotel');
-        $a_hotel_control = $request->input('Hotel_Control');
-
         // hotel_cd 採番
-        // TODO: AC 用にカスタマイズ
+        // TODO: AC 用にカスタマイズが必要か。
         if ($a_hotel_control['stock_type'] == HotelControl::STOCK_TYPE_SANPU) {
-            //三普用の施設の場合
+            // 三普用の施設の場合
             $hotelCd = $service->getHotelCdSanpu();
         } else {
             // 受託販売  買取販売の場合
@@ -206,34 +191,28 @@ class BrHotelRegisterController extends Controller
         }
 
         // hotel
-        $a_hotel['hotel_cd']      = $hotelCd;
-        $a_hotel['accept_status'] = Hotel::ACCEPT_STATUS_STOPPING;
-        $a_hotel['accept_auto']   = Hotel::ACCEPT_AUTO_MANUAL; // ※初期登録時に自動更新だと登録中にもかかわらずbatch処理が走ると勝手に受付状態を停止中→受付中へ変更してしまう為。 バグ3196対応
-        $a_hotel['accept_dtm']    = date("Y-m-d H:i:s");
-        $a_hotel['entry_cd']      = $actionCd;
-        $a_hotel['modify_cd']     = $actionCd;
-        if (!array_key_exists('ward_id', $a_hotel)) {
-            $a_hotel['ward_id'] = null;
-        }
+        $hotel = $service->makeHotelData($hotelCd, $a_hotel);
 
         // hotel_insurance_weather
-        $hotelInsuranceWeather = $service->makeHotelInsuranceWeatherData($hotelCd, $a_hotel, $actionCd);
+        $hotelInsuranceWeather = $service->makeHotelInsuranceWeatherData($hotelCd, $hotel);
 
         // deny_list
-        $denyLists = $service->makeDenyListsData($hotelCd, $actionCd);
+        $denyLists = $service->makeDenyListsData($hotelCd);
 
         /*
             DB登録処理
          */
-        $errorMessages = $service->store($a_hotel, $hotelInsuranceWeather, $denyLists);
+        $errorMessages = $service->store($hotel, $hotelInsuranceWeather, $denyLists);
         if (count($errorMessages) > 0) {
             return redirect()->back()
-                ->withInput();
+                ->withInput()
+                ->with([
+                    'errors' => $errorMessages,
+                ]);
         }
 
         // 結果表示用データ取得
         $a_hotel = (new Hotel())->selectByKey($hotelCd);
-        // $a_hotel = Hotel::find($hotelCd);
 
         // 都道府県
         $a_mast_pref = null;
