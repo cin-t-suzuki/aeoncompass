@@ -241,6 +241,7 @@ class BrHotelRegisterController extends Controller
 
     public function management(Request $request)
     {
-        return 'TODO: br hotel register controller management';
+        return view('ctl.brhotel.management', [
+        ]);
     }
 }
