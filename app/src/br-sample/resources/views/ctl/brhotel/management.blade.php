@@ -1,26 +1,23 @@
 {{-- MEMO: 移植元 public\app\ctl\views\brhotel\management.tpl --}}
 
-{* header start *}
-	{include file=$v->env.module_root|cat:'/views/_common/_br_header.tpl' title="施設管理情報　STEP3/6"}
-{* header end *}
+@inject('service', 'App\Http\Controllers\ctl\BrhotelController')
 
-{* メッセージ *}
-{include file=$v->env.module_root|cat:'/views/_common/_message.tpl'}
+{{-- MEMO: 移植元では .../views/_common/_br_header.tpl' を読み込んでいる (title="施設管理情報　STEP3/6") --}}
+@extends('ctl.common.base')
+@section('title', '施設管理情報　STEP3/6')
 
-<FORM method="POST" action="{$v->env.source_path}{$v->env.module}/brhotel/createmanagement/">
+@section('page_blade')
+    {{-- メッセージ --}}
+    @include('ctl.common.message')
 
-{* new_flg はここで使う。 $status = 'new' は、ここからは設定されている *}
-  {include file=$v->env.module_root|cat:'/views/brhotel/_input_management_form.tpl' new_flg = 1}
+    {{ Form::open(['route' => 'ctl.br_hotel.create_management', 'method' => 'post']) }}
+        @include('ctl.brhotel._input_management_form', [
+            'new_flg' => 1,
+        ])
+        <input type="submit" value="施設管理情報登録">
+        ※は必須です。
+    {{ Form::close() }}
 
-<INPUT TYPE="submit" VALUE="施設管理情報登録">
-※は必須です。
-
-</FORM>
-
-{include file=$v->env.module_root|cat:'/views/brhotel/_hotel_top_form.tpl'}
-
-<br>
-
-{* footer start *}
-	{include file=$v->env.module_root|cat:'/views/_common/_br_footer.tpl'}
-{* footer end *}
+    @include('ctl.brhotel._hotel_top_form')
+    <br>
+@endsection

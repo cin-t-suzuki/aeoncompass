@@ -2,10 +2,13 @@
 
 namespace App\Services;
 
-use App\Models\HotelInsuranceWeather;
 use App\Models\DenyList;
 use App\Models\Hotel;
+use App\Models\HotelAccount;
 use App\Models\HotelControl;
+use App\Models\HotelInsuranceWeather;
+use App\Models\HotelPerson;
+use App\Models\HotelStatus;
 use Illuminate\Support\Facades\DB;
 
 class BrHotelRegisterService

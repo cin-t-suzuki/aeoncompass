@@ -92,9 +92,10 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 
     // 施設登録
     // TODO: 重複排除
-    Route::get ('/brHotel/new'          , [\App\Http\Controllers\ctl\BrHotelRegisterController::class, 'new'        ])->name('ctl.br_hotel.new');
-    Route::post('/brHotel/create'       , [\App\Http\Controllers\ctl\BrHotelRegisterController::class, 'create'     ])->name('ctl.br_hotel.create');
-    Route::get ('/brHotel/management'   , [\App\Http\Controllers\ctl\BrHotelRegisterController::class, 'management' ])->name('ctl.br_hotel.management');
+    Route::get('/brHotel/new', [\App\Http\Controllers\ctl\BrHotelRegisterController::class, 'new'])->name('ctl.br_hotel.new');
+    Route::post('/brHotel/create', [\App\Http\Controllers\ctl\BrHotelRegisterController::class, 'create'])->name('ctl.br_hotel.create');
+    Route::get('/brHotel/management', [\App\Http\Controllers\ctl\BrHotelRegisterController::class, 'management'])->name('ctl.br_hotel.management');
+    Route::post('/brHotel/createManagement', [\App\Http\Controllers\ctl\BrHotelRegisterController::class, 'createManagement'])->name('ctl.br_hotel.create_management');
 
     // 施設情報メイン
     Route::controller(BrhotelController::class)->prefix("brhotel")->group(function(){

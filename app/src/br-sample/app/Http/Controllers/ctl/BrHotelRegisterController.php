@@ -7,6 +7,7 @@ use App\Models\MastCity;
 use App\Models\MastPref;
 use App\Models\MastWard;
 use App\Models\Hotel;
+use App\Models\HotelAccount;
 use App\Models\HotelControl;
 use App\Services\BrHotelRegisterService as Service;
 use Illuminate\Http\Request;
@@ -241,7 +242,52 @@ class BrHotelRegisterController extends Controller
 
     public function management(Request $request)
     {
-        return view('ctl.brhotel.management', [
+        $hotelCd = $request->input('target_cd');
+        $a_hotel = Hotel::find($hotelCd);
+
+        // 登録処理からの戻りで session にデータがある場合、 old を使って取得
+        // そうでない場合、初期表示（第2引数でデフォルト値を指定）
+        // HACK: （工数次第）画面側で old ヘルパ関数を使うほうが一般的と思われる（更新処理と合わせての修正が必要）
+        $hotelAccount = (object)$request->old('Hotel_Account', [
+            'account_id_begin'  => null,
+            'password'          => null,
+            'accept_status'     => null,
         ]);
+        $hotelPerson = (object)$request->old('Hotel_Person', [
+            'person_post'   => null,
+            'person_nm'     => null,
+            'person_tel'    => null,
+            'person_fax'    => null,
+            'person_email'  => null,
+            'accept_status' => null,
+
+        ]);
+        $hotelStatus = (object)$request->old('Hotel_Status', [
+            'contract_ymd'  => null,
+            'open_ymd'      => null,
+        ]);
+
+        return view('ctl.brhotel.management', [
+            'guides' => ['表示されています。'], // TODO: to be deleted
+
+            // tpl新規時判断用
+            'status'         => 'new',
+
+            'hotel'          => $a_hotel,
+            'hotel_account'  => $hotelAccount,
+            'hotel_person'   => $hotelPerson,
+            'hotel_status'   => $hotelStatus,
+            'target_cd'      => $hotelCd,
+            'target_stock_type' => $request->input('target_stock_type'),
+
+            // MEMO: 移植元では、更新の場合のみ設定されている値。
+            // 未定義だと動作しないため、干渉しない値であろうを設定している。
+            'disp' => null,
+        ]);
+    }
+
+    public function createManagement(Request $request, Service $service)
+    {
+        return 'controller createManagement called!!';
     }
 }
