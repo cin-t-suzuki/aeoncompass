@@ -15,6 +15,12 @@ use Illuminate\Support\Facades\Validator;
 // MEMO: 移植元では、 BrhotelController に一緒くたにされていた。
 class BrHotelRegisterController extends Controller
 {
+    /**
+     * 施設情報入力
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function new(Request $request)
     {
         $guides = ['施設登録の際はウィザードに添ってSTEP 6/6 まで必ず完了してください。'];
@@ -22,7 +28,7 @@ class BrHotelRegisterController extends Controller
         // 登録処理からの戻りで session にデータがある場合、 old を使って取得
         // そうでない場合、初期表示（第2引数でデフォルト値を指定）
         // HACK: （工数次第）画面側で old ヘルパ関数を使うほうが一般的と思われる（更新処理と合わせての修正が必要）
-        $a_hotel = $request->old('Hotel', [
+        $displayHotel = $request->old('Hotel', [
             'hotel_cd'          => null,
             'hotel_category'    => null,
             'hotel_nm'          => null,
@@ -42,28 +48,28 @@ class BrHotelRegisterController extends Controller
             'check_out'         => null,
             'midnight_status'   => null,
         ]);
-        $a_hotel_control = $request->old('Hotel_Control', [
+        $displayHotelControl = $request->old('Hotel_Control', [
             'stock_type' => null,
         ]);
 
-        if (!array_key_exists('city_id', $a_hotel)) {
-            $a_hotel['city_id'] = null;
+        if (!array_key_exists('city_id', $displayHotel)) {
+            $displayHotel['city_id'] = null;
         }
-        if (!array_key_exists('ward_id', $a_hotel)) {
-            $a_hotel['ward_id'] = null;
+        if (!array_key_exists('ward_id', $displayHotel)) {
+            $displayHotel['ward_id'] = null;
         }
 
         // 都道府県
-        $a_mast_prefs = (new MastPref())->getMastPrefs();
+        $mastPrefs = (new MastPref())->getMastPrefs();
         // 市
-        $a_mast_cities = ['values' => []];
-        if (!is_null($a_hotel['pref_id'])) {
-            $a_mast_cities = (new MastCity())->getMastCities($a_hotel['pref_id']);
+        $mastCities = ['values' => []];
+        if (!is_null($displayHotel['pref_id'])) {
+            $mastCities = (new MastCity())->getMastCities($displayHotel['pref_id']);
         }
         // 区
-        $a_mast_wards = null;
-        if (!is_null($a_hotel['city_id'])) {
-            $a_mast_wards = (new MastWard())->getMastWards($a_hotel['city_id']);
+        $mastWards = null;
+        if (!is_null($displayHotel['city_id'])) {
+            $mastWards = (new MastWard())->getMastWards($displayHotel['city_id']);
         }
 
         $errors = $request->session()->get('errors', []);
@@ -73,25 +79,30 @@ class BrHotelRegisterController extends Controller
             'guides'        => $guides,
             'errors'        => $errors,
 
-            'mast_prefs'    => $a_mast_prefs,
-            'mast_cities'   => $a_mast_cities,
-            'mast_wards'    => $a_mast_wards,
+            'mast_prefs'    => $mastPrefs,
+            'mast_cities'   => $mastCities,
+            'mast_wards'    => $mastWards,
 
-            'hotel'         => $a_hotel,
-            'hotel_control' => $a_hotel_control,
+            'hotel'         => $displayHotel,
+            'hotel_control' => $displayHotelControl,
             'target_cd'     => $request->input('target_cd'),
         ]);
     }
 
+    /**
+     * 施設情報登録
+     *
+     * @param Request $request
+     * @param Service $service
+     * @return \Illuminate\Http\Response
+     */
     public function create(Request $request, Service $service)
     {
-        $a_hotel = $request->input('Hotel');
-        $a_hotel_control = $request->input('Hotel_Control');
+        $inputHotel         = $request->input('Hotel');
+        $inputHotelControl  = $request->input('Hotel_Control');
 
-        /*
-            validation
-         */
-        // TODO: 正規表現のバリデーション
+        /* validation */
+        // TODO: カナ関連のをカスタムバリデーション
         $rules = [
             // 'Hotel.hotel_cd'          => ['required', 'regex:/\A[^ｦ-ﾟ]*\z/', 'between:0,10'],
             'Hotel.hotel_category'    => ['regex:/\A(a|b|c|j)\z/'],
@@ -137,9 +148,6 @@ class BrHotelRegisterController extends Controller
 
         // TODO:
         $messages = [
-            // 'Hotel.hotel_category.regex' => ':attribute を適切に選択してください。',
-            // 'Hotel.hotel_nm.regex' => ':attribute に半角カナが含まれています。',
-            // 'Hotel.hotel_kn.regex' => ':attribute に半角カナが含まれています。',
             'regex' => '[:attribute] に正規表現違反があります。',
         ];
         $attributes = [
@@ -177,12 +185,10 @@ class BrHotelRegisterController extends Controller
                 ]);
         }
 
-        /*
-            データ整形
-         */
+        /* データ整形 */
         // hotel_cd 採番
         // TODO: AC 用にカスタマイズが必要か。
-        if ($a_hotel_control['stock_type'] == HotelControl::STOCK_TYPE_SANPU) {
+        if ($inputHotelControl['stock_type'] == HotelControl::STOCK_TYPE_SANPU) {
             // 三普用の施設の場合
             $hotelCd = $service->getHotelCdSanpu();
         } else {
@@ -190,18 +196,11 @@ class BrHotelRegisterController extends Controller
             $hotelCd = $service->getHotelCd();
         }
 
-        // hotel
-        $hotel = $service->makeHotelData($hotelCd, $a_hotel);
+        $hotel                  = $service->makeHotelData($hotelCd, $inputHotel);
+        $hotelInsuranceWeather  = $service->makeHotelInsuranceWeatherData($hotelCd, $hotel);
+        $denyLists              = $service->makeDenyListsData($hotelCd);
 
-        // hotel_insurance_weather
-        $hotelInsuranceWeather = $service->makeHotelInsuranceWeatherData($hotelCd, $hotel);
-
-        // deny_list
-        $denyLists = $service->makeDenyListsData($hotelCd);
-
-        /*
-            DB登録処理
-         */
+        /* DB登録処理 */
         $errorMessages = $service->store($hotel, $hotelInsuranceWeather, $denyLists);
         if (count($errorMessages) > 0) {
             return redirect()->back()
@@ -211,32 +210,32 @@ class BrHotelRegisterController extends Controller
                 ]);
         }
 
-        // 結果表示用データ取得
-        $a_hotel = (new Hotel())->selectByKey($hotelCd);
+        /* 結果表示用データ取得 */
+        $registeredHotel = (new Hotel())->selectByKey($hotelCd);
 
         // 都道府県
-        $a_mast_pref = null;
-        $a_mast_pref = (new MastPref())->selectByKey($a_hotel['pref_id']);
+        $mastPrefs = null;
+        $mastPrefs = (new MastPref())->selectByKey($registeredHotel['pref_id']);
 
         // 市
-        $a_mast_city = null;
-        if (array_key_exists('city_id', $a_hotel)) {
-            $a_mast_city = (new MastCity())->selectByKey($a_hotel['city_id']);
+        $mastCities = null;
+        if (array_key_exists('city_id', $registeredHotel)) {
+            $mastCities = (new MastCity())->selectByKey($registeredHotel['city_id']);
         }
 
         // 区
-        $a_mast_ward = null;
-        if (array_key_exists('ward_id', $a_hotel)) {
-            $a_mast_ward = (new MastWard())->selectByKey($a_hotel['ward_id']);
+        $mastWards = null;
+        if (array_key_exists('ward_id', $registeredHotel)) {
+            $mastWards = (new MastWard())->selectByKey($registeredHotel['ward_id']);
         }
 
         return view('ctl.brhotel.create', [
-            'hotel'             => $a_hotel,
-            'a_mast_pref'       => $a_mast_pref,
-            'a_mast_city'       => $a_mast_city,
-            'a_mast_ward'       => $a_mast_ward,
+            'hotel'             => $registeredHotel,
+            'a_mast_pref'       => $mastPrefs,
+            'a_mast_city'       => $mastCities,
+            'a_mast_ward'       => $mastWards,
             'target_cd'         => $request->input('target_cd'),
-            'target_stock_type' => $a_hotel_control['stock_type'],
+            'target_stock_type' => $inputHotelControl['stock_type'],
         ]);
     }
 

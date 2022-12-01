@@ -65,11 +65,11 @@ class BrHotelRegisterService
     }
 
     /**
-     * Undocumented function
+     * DB 登録処理を実行
      *
-     * @param [type] $hotel
-     * @param [type] $hotelInsuranceWeather
-     * @param [type] $denyLists
+     * @param array $hotel
+     * @param array $hotelInsuranceWeather
+     * @param array $denyLists
      * @return array
      */
     public function store($hotel, $hotelInsuranceWeather, $denyLists): array
@@ -101,6 +101,13 @@ class BrHotelRegisterService
         return $errorMessages;
     }
 
+    /**
+     * hotel テーブルに登録するデータを整形
+     *
+     * @param string $hotelCd
+     * @param array $inputHotel
+     * @return array
+     */
     public function makeHotelData($hotelCd, $inputHotel): array
     {
         $actionCd = $this->getActionCd();
@@ -134,21 +141,28 @@ class BrHotelRegisterService
         ];
     }
 
-    public function makeHotelInsuranceWeatherData($hotelCd, $hotel): array
+    /**
+     * hotel_insurance_weather に登録するデータを整形
+     *
+     * @param string $hotelCd
+     * @param array $inputHotel
+     * @return array
+     */
+    public function makeHotelInsuranceWeatherData($hotelCd, $inputHotel): array
     {
         $actionCd = $this->getActionCd();
         $data = $this->getAmedasAddress(
-            $hotel['pref_id'],
-            $hotel['city_id'],
-            $hotel['ward_id'],
-            $hotel['address']
+            $inputHotel['pref_id'],
+            $inputHotel['city_id'],
+            $inputHotel['ward_id'],
+            $inputHotel['address']
         );
 
         if (count($data) === 0) {
             $insuranceStatus = HotelInsuranceWeather::INSURANCE_STATUS_STOP_ETERNAL;
             $amedasCd = null;
         } else {
-            if ($this->isSkyAddress($hotel['pref_id'], $hotel['address'])) {
+            if ($this->isSkyAddress($inputHotel['pref_id'], $inputHotel['address'])) {
                 $insuranceStatus = HotelInsuranceWeather::INSURANCE_STATUS_STOP_WINTER;
             } else {
                 $insuranceStatus = HotelInsuranceWeather::INSURANCE_STATUS_AVAILABLE;
@@ -171,18 +185,14 @@ class BrHotelRegisterService
      *
      * MEMO: 移植元は public\app\_common\models\Core\Insurance\Weather.php
      *
-     * @param [type] $prefId
-     * @param [type] $cityId
-     * @param [type] $wardId
-     * @param [type] $address
+     * @param string $prefId
+     * @param string $cityId
+     * @param string $wardId
+     * @param string $address
      * @return array
      */
-    private function getAmedasAddress(
-        $prefId,
-        $cityId,
-        $wardId,
-        $address
-    ): array {
+    private function getAmedasAddress($prefId, $cityId, $wardId, $address): array
+    {
         $sql = <<<SQL
             select
                 jbr_id,
@@ -203,7 +213,7 @@ class BrHotelRegisterService
                 )
         SQL;
 
-        $a_amedas = DB::select($sql, [
+        $mastAmedas = DB::select($sql, [
             'pref_id' => $prefId,
             'city_id' => $cityId,
             'ward_id1' => $wardId,
@@ -213,13 +223,11 @@ class BrHotelRegisterService
 
         // MEMO: 移植元では、エラー通知メールを送信している。
         // MEMO: 移植元 public\app\_common\models\Core\Insurance\Weather.php set_amedas_address
-        if (count($a_amedas) === 0) {
+        if (count($mastAmedas) === 0) {
             \Illuminate\Support\Facades\Log::error('[JBR][Warning] アメダス設置場所取得失敗');
         }
 
-        // $this->amedas_cd = $a_amedas[0]['amedas_cd'];
-        // $this->amedas_nm = $a_amedas[0]['amedas_nm'];
-        return $a_amedas;
+        return $mastAmedas;
     }
 
     /**
@@ -227,14 +235,12 @@ class BrHotelRegisterService
      *
      * MEMO: 移植元は public\app\_common\models\Core\Insurance\Weather.php
      *
-     * @param [type] $as_pref_id
-     * @param [type] $as_address
+     * @param string $prefId
+     * @param string $address
      * @return bool
      */
-    private function isSkyAddress(
-        $as_pref_id,
-        $as_address
-    ): bool {
+    private function isSkyAddress($prefId, $address): bool
+    {
         $sql = <<<SQL
             select
                 1
@@ -244,13 +250,19 @@ class BrHotelRegisterService
                 pref_id = :pref_id
                 and :address like concat(address, '%')
         SQL;
-        $a_sky = DB::select($sql, [
-            'pref_id' => $as_pref_id,
-            'address' => $as_address,
+        $skyAreas = DB::select($sql, [
+            'pref_id' => $prefId,
+            'address' => $address,
         ]);
-        return count($a_sky) > 0;
+        return count($skyAreas) > 0;
     }
 
+    /**
+     * deny_list に登録するデータを整形
+     *
+     * @param string $hotelCd
+     * @return array
+     */
     public function makeDenyListsData($hotelCd): array
     {
         $actionCd = $this->getActionCd();
@@ -319,12 +331,12 @@ class BrHotelRegisterService
         return $result[0]->deny_cd;
     }
 
-
     /**
      * コントローラ名とアクション名を取得して、ユーザーIDと連結
      * ユーザーID取得は暫定の為、書き換え替えが必要です。
      *
-     * TODO: 適切に共通化
+     * MEMO: app/Models/common/CommonDBModel.php から移植したもの
+     * HACK: 適切に共通化したいか。
      * @return string
      */
     private function getActionCd()
@@ -334,7 +346,7 @@ class BrHotelRegisterService
         $controllerName = str_replace("Controller", "", end($pathList)); // コントローラ名
         $actionName = $path[1]; // アクション名
         $userId = \Illuminate\Support\Facades\Session::get("user_id"); // TODO: ユーザー情報取得のキーは仮です
-        $action_cd = $controllerName . "/" . $actionName . "." . $userId;
-        return $action_cd;
+        $actionCd = $controllerName . "/" . $actionName . "." . $userId;
+        return $actionCd;
     }
 }
