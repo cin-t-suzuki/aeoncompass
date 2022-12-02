@@ -26,6 +26,7 @@ class BrHotelRegisterController extends Controller
     {
         $guides = ['施設登録の際はウィザードに添ってSTEP 6/6 まで必ず完了してください。'];
 
+        /* 初期表示値 or 戻りの入力値 を取得 */
         // 登録処理からの戻りで session にデータがある場合、 old を使って取得
         // そうでない場合、初期表示（第2引数でデフォルト値を指定）
         // HACK: （工数次第）画面側で old ヘルパ関数を使うほうが一般的と思われる（更新処理と合わせての修正が必要）
@@ -121,10 +122,10 @@ class BrHotelRegisterController extends Controller
                 // 'regex:/\A[^ｦ-ﾟ]*\z/',
                 'between:0,50'
             ],
-            'Hotel.postal_cd'         => ['required', 'regex:/\A[^ｦ-ﾟ]*\z/', 'regex:/\A\d{3}[-]\d{4}\z/'],
-            'Hotel.pref_id'           => ['required', 'integer', 'numeric', 'between:0,50'], // TODO: between
-            'Hotel.city_id'           => ['required', 'integer', 'numeric', 'between:0,50000'], // TODO: between
-            'Hotel.ward_id'           => ['integer', 'numeric', 'between:0,50000'], // TODO: between
+            'Hotel.postal_cd'         => ['required', 'regex:/\A\d{3}[-]\d{4}\z/'],
+            'Hotel.pref_id'           => ['required', 'integer', 'numeric', 'digit_between:0,2'],
+            'Hotel.city_id'           => ['required', 'integer', 'numeric', 'digit_between:0,20'],
+            'Hotel.ward_id'           => ['integer', 'numeric', 'digit_between:0,20'],
             'Hotel.address'           => [
                 'required',
                 // 'regex:/\A[^ｦ-ﾟ]*\z/',
@@ -136,7 +137,7 @@ class BrHotelRegisterController extends Controller
             'Hotel.fax'               => ['regex:/(\A0\d{1,4}?-\d{1,4}?-\d{1,4}\z|\A\d{9,12}\z)/'],
             'Hotel.room_count'        => ['integer', 'numeric', 'between:0,9999'],
             'Hotel.check_in'          => ['required', 'regex:/\A\d{2}:\d{2}\z/'],
-            'Hotel.check_in_end'      => ['regex:/\A\d{2}:\d{2}\z/'], // TODO: 独自チェック
+            'Hotel.check_in_end'      => ['regex:/\A\d{2}:\d{2}\z/'], // TODO: 独自チェック check_in より後であることをバリデーション
             'Hotel.check_in_info'     => [
                 // 'regex:/\A[^ｦ-ﾟ]*\z/',
                 'between:0,75'
@@ -240,11 +241,18 @@ class BrHotelRegisterController extends Controller
         ]);
     }
 
+    /**
+     * 施設管理情報入力 (STEP 3/6)
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function management(Request $request)
     {
         $hotelCd = $request->input('target_cd');
         $a_hotel = Hotel::find($hotelCd);
 
+        /* 初期表示値 or 戻りの入力値 を取得 */
         // 登録処理からの戻りで session にデータがある場合、 old を使って取得
         // そうでない場合、初期表示（第2引数でデフォルト値を指定）
         // HACK: （工数次第）画面側で old ヘルパ関数を使うほうが一般的と思われる（更新処理と合わせての修正が必要）
@@ -260,7 +268,6 @@ class BrHotelRegisterController extends Controller
             'person_fax'    => null,
             'person_email'  => null,
             'accept_status' => null,
-
         ]);
         $hotelStatus = (object)$request->old('Hotel_Status', [
             'contract_ymd'  => null,
