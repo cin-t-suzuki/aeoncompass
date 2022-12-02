@@ -1,33 +1,35 @@
 {{-- MEMO: 移植元 public\app\ctl\views\brhotel\createmanagement.tpl --}}
 
-{* header start *}
-	{include file=$v->env.module_root|cat:'/views/_common/_br_header.tpl' title="施設管理登録情報　STEP4/6"}
-{* header end *}
+{{-- MEMO: 移植元では .../views/_common/_br_header.tpl' を読み込んでいる --}}
+@extends('ctl.common.base')
+@section('title', '施設管理登録情報　STEP4/6')
 
-{* メッセージ *}
-{include file=$v->env.module_root|cat:'/views/_common/_message.tpl'}
+@section('page_blade')
+    {{-- メッセージ --}}
+    @include('ctl.common.message')
 
-{if $v->assign->hotel_notify|@count == 0}
-  <FORM method="POST" action="{$v->env.source_path}{$v->env.module}/brhotel/state/">
-{else}
-  <FORM method="POST" action="{$v->env.source_path}{$v->env.module}/brhotel/show/">
-{/if}
+    {{-- TODO: タグのインデントを整理 --}}
+    @if (!$existsHotelNotify)
+        {{ Form::open(['route' => 'ctl.br_hotel.status', 'method' => 'post']) }}
+        {{-- <form method="post" action="{$v->env.source_path}{$v->env.module}/brhotel/state/"> --}}
+    @else
+        {{ Form::open(['route' => 'ctl.brhotel.show', 'method' => 'post']) }}
+        {{-- <form method="post" action="{$v->env.source_path}{$v->env.module}/brhotel/show/"> --}}
+    @endif
 
-  {include file=$v->env.module_root|cat:'/views/brhotel/_info_management_form.tpl'}
+    @include('ctl.brhotel._info_management_form')
 
+    @if (!$existsHotelNotify)
+        <input type="submit" value="施設状態登録へ">
+    @else
+        <input type="submit" value="詳細変更へ">
+    @endif
 
-{if $v->assign->hotel_notify|@count == 0}
-  <INPUT TYPE="submit" VALUE="施設状態登録へ">
-{else}
-  <INPUT TYPE="submit" VALUE="詳細変更へ">
-{/if}
+    {{-- </form> --}}
+    {{ Form::close() }}
 
-</FORM>
+    @include('ctl.brhotel._hotel_top_form')
+    {{-- {include file=$v->env.module_root|cat:'/views/brhotel/_hotel_top_form.tpl'} --}}
 
-{include file=$v->env.module_root|cat:'/views/brhotel/_hotel_top_form.tpl'}
-
-<br>
-
-{* footer start *}
-	{include file=$v->env.module_root|cat:'/views/_common/_br_footer.tpl'}
-{* footer end *}
+    <br>
+@endsection

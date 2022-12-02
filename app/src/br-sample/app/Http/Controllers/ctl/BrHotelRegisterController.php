@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Hotel;
 use App\Models\HotelAccount;
 use App\Models\HotelControl;
+use App\Models\HotelNotify;
 use App\Models\HotelPerson;
 use App\Models\HotelStatus;
 use App\Models\MastCity;
@@ -126,9 +127,9 @@ class BrHotelRegisterController extends Controller
                 'between:0,50'
             ],
             'Hotel.postal_cd'         => ['required', 'regex:/\A\d{3}[-]\d{4}\z/'],
-            'Hotel.pref_id'           => ['required', 'integer', 'numeric', 'digit_between:0,2'],
-            'Hotel.city_id'           => ['required', 'integer', 'numeric', 'digit_between:0,20'],
-            'Hotel.ward_id'           => ['integer', 'numeric', 'digit_between:0,20'],
+            'Hotel.pref_id'           => ['required', 'integer', 'numeric', 'digits_between:0,2'],
+            'Hotel.city_id'           => ['required', 'integer', 'numeric', 'digits_between:0,20'],
+            'Hotel.ward_id'           => ['integer', 'numeric', 'digits_between:0,20'],
             'Hotel.address'           => [
                 'required',
                 // 'regex:/\A[^ｦ-ﾟ]*\z/',
@@ -306,8 +307,12 @@ class BrHotelRegisterController extends Controller
         /* validation */
         // TODO: バリデーションルール記述
         $rules = [
-            'Hotel_Account.account_id_begin'    => ['required', 'between:0,10'], // TODO: 独自バリデーション (password と異なる、 hotel_account.account_id で一意)
-            'Hotel_Account.password'            => ['required', 'regex:/\A[A-Z0-9]{1,10}\z/'], // TODO: 独自バリデーション(ID と password が一致の場合エラー)
+            // TODO: 独自バリデーション (password と異なる、 hotel_account.account_id で一意)
+            'Hotel_Account.account_id_begin'    => ['required', 'between:0,10'],
+
+            // TODO: 独自バリデーション(ID と password が一致の場合エラー)
+            'Hotel_Account.password'            => ['required', 'regex:/\A[A-Z0-9]{1,10}\z/'],
+
             'Hotel_Account.accept_status'       => ['required'],
 
             // TODO: hotel_person すべて、半角カナ禁止バリデーション
@@ -317,7 +322,7 @@ class BrHotelRegisterController extends Controller
             'Hotel_Person.person_fax'   => ['between:0,15'], // TODO: 電話番号バリデーション, between 不要か。
             'Hotel_Person.person_email' => ['between:0,128'], // TODO: メールアドレスバリデーション, between 不要か。
 
-            'Hotel_Status.entry_status' => ['required', Rule::in([0, 1, 2])], // 入力値ではない, 1 (ENTRY_STATUS_REGISTERING; 登録作業中) で固定
+            'Hotel_Status.entry_status' => ['required', Rule::in([0, 1, 2])], // hidden で 1 (登録作業中) 固定
             'Hotel_Status.contract_ymd' => [],
             'Hotel_Status.open_ymd'     => [],
             'Hotel_Status.close_dtm'    => [], // 入力値ではない
@@ -353,9 +358,9 @@ class BrHotelRegisterController extends Controller
         }
 
         /* データ整形 */
-        $hotelAccount = $service->makeHotelAccountData($hotelCd, $inputHotelAccount);
-        $hotelPerson = $service->makeHotelPersonData($hotelCd, $inputHotelPerson);
-        $hotelStatus = $service->makeHotelStatusData($hotelCd, $inputHotelStatus);
+        $hotelAccount   = $service->makeHotelAccountData($hotelCd, $inputHotelAccount);
+        $hotelPerson    = $service->makeHotelPersonData($hotelCd, $inputHotelPerson);
+        $hotelStatus    = $service->makeHotelStatusData($hotelCd, $inputHotelStatus);
 
         /* DB登録処理 */
         $errorMessages = $service->storeManagement($hotelAccount, $hotelPerson, $hotelStatus);
@@ -367,15 +372,34 @@ class BrHotelRegisterController extends Controller
                 ]);
         }
 
-        $hotelCd = '2015060001'; // dummy TODO: to be deleted
         /* 結果表示用データ取得 */
         $registeredHotelAccount = HotelAccount::find($hotelCd);
-        $registeredHotelPerson = HotelPerson::find($hotelCd);
-        $registeredHotelStatus = HotelStatus::find($hotelCd);
+        $registeredHotelPerson  = HotelPerson::find($hotelCd);
+        $registeredHotelStatus  = HotelStatus::find($hotelCd);
 
         // 日付の整形
+        if (!is_null($registeredHotelStatus->contract_ymd)) {
+            $registeredHotelStatus->contract_ymd = date('Y-m-d', strtotime($registeredHotelStatus->contract_ymd));
+        }
+        if (!is_null($registeredHotelStatus->open_ymd)) {
+            $registeredHotelStatus->open_ymd = date('Y-m-d', strtotime($registeredHotelStatus->open_ymd));
+        }
+        if (!is_null($registeredHotelStatus->close_dtm)) {
+            $registeredHotelStatus->close_dtm = date('Y-m-d H:i:s', strtotime($registeredHotelStatus->close_dtm));
+        }
+
+        // Notifyのインスタンスを取得 (次画面判断用)
+        $existsHotelNotify = HotelNotify::where('hotel_cd', $hotelCd)->exists();
 
         return view('ctl.brhotel.create-management', [
+            'target_cd'         => $hotelCd,
+            'target_stock_type' => $request->input('target_stock_type'),
+
+            'hotel_account'  => $registeredHotelAccount,
+            'hotel_person'   => $registeredHotelPerson,
+            'hotel_status'   => $registeredHotelStatus,
+
+            'existsHotelNotify' => $existsHotelNotify,
         ]);
         return 'controller createManagement called!!';
     }

@@ -9,6 +9,7 @@ use App\Models\HotelControl;
 use App\Models\HotelInsuranceWeather;
 use App\Models\HotelPerson;
 use App\Models\HotelStatus;
+use App\Util\Models_Cipher;
 use Illuminate\Support\Facades\DB;
 
 class BrHotelRegisterService
@@ -334,12 +335,19 @@ class BrHotelRegisterService
         return $result[0]->deny_cd;
     }
 
-    public function storeManagement($inputHotelAccount, $inputHotelPerson, $inputHotelStatus): array
+    public function storeManagement($hotelAccount, $hotelPerson, $hotelStatus): array
     {
         $errorMessages = [];
         DB::beginTransaction();
 
-        //
+        try {
+            HotelAccount::create($hotelAccount);
+            HotelPerson::create($hotelPerson);
+            HotelStatus::create($hotelStatus);
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error($e);
+            $errorMessages[] = '登録に失敗しました。';
+        }
 
         if (count($errorMessages) > 0) {
             DB::rollBack();
@@ -351,20 +359,38 @@ class BrHotelRegisterService
     }
     public function makeHotelAccountData($hotelCd, $inputHotelAccount): array
     {
-        // TODO:
         $actionCd = $this->getActionCd();
+
+        // パスワード暗号化
+        $cipher = new Models_Cipher(config('settings.cipher_key'));
+        $encryptedPassword = $cipher->encrypt($inputHotelAccount['password']);
+
         return [
-            'entry_cd' => $actionCd,
-            'modify_cd' => $actionCd,
+            'hotel_cd'          => $hotelCd,
+            'account_id_begin'  => $inputHotelAccount['account_id_begin'],
+            'account_id'        => strtoupper($inputHotelAccount['account_id_begin']),
+            'accept_status'     => $inputHotelAccount['accept_status'],
+            'password'          => $encryptedPassword,
+            'entry_cd'          => $actionCd,
+            'modify_cd'         => $actionCd,
         ];
     }
     public function makeHotelPersonData($hotelCd, $inputHotelPerson): array
     {
-        // TODO:
         $actionCd = $this->getActionCd();
+
+        // メールアドレス暗号化
+        $cipher = new Models_Cipher(config('settings.cipher_key'));
+        $encryptedPersonEmail = $cipher->encrypt($inputHotelPerson['person_email']);
         return [
-            'entry_cd' => $actionCd,
-            'modify_cd' => $actionCd,
+            'hotel_cd'      => $hotelCd,
+            'person_post'   => $inputHotelPerson['person_post'],
+            'person_nm'     => $inputHotelPerson['person_nm'],
+            'person_tel'    => $inputHotelPerson['person_tel'],
+            'person_fax'    => $inputHotelPerson['person_fax'],
+            'person_email'  => $encryptedPersonEmail,
+            'entry_cd'      => $actionCd,
+            'modify_cd'     => $actionCd,
         ];
     }
     public function makeHotelStatusData($hotelCd, $inputHotelStatus): array
@@ -372,8 +398,13 @@ class BrHotelRegisterService
         // TODO:
         $actionCd = $this->getActionCd();
         return [
-            'entry_cd' => $actionCd,
-            'modify_cd' => $actionCd,
+            'hotel_cd' => $hotelCd,
+            'entry_status'  => $inputHotelStatus['entry_status'],
+            'contract_ymd'  => $inputHotelStatus['contract_ymd'],
+            'open_ymd'      => $inputHotelStatus['open_ymd'],
+            // 'close_dtm'     => $inputHotelStatus['close_dtm'],
+            'entry_cd'      => $actionCd,
+            'modify_cd'     => $actionCd,
         ];
     }
     /**
