@@ -8,28 +8,11 @@
     {{-- メッセージ --}}
     @include('ctl.common.message')
 
-    {{-- TODO: タグのインデントを整理 --}}
-    @if (!$existsHotelNotify)
-        {{ Form::open(['route' => 'ctl.br_hotel.status', 'method' => 'post']) }}
-        {{-- <form method="post" action="{$v->env.source_path}{$v->env.module}/brhotel/state/"> --}}
-    @else
-        {{ Form::open(['route' => 'ctl.brhotel.show', 'method' => 'post']) }}
-        {{-- <form method="post" action="{$v->env.source_path}{$v->env.module}/brhotel/show/"> --}}
-    @endif
-
-    @include('ctl.brhotel._info_management_form')
-
-    @if (!$existsHotelNotify)
-        <input type="submit" value="施設状態登録へ">
-    @else
-        <input type="submit" value="詳細変更へ">
-    @endif
-
-    {{-- </form> --}}
+    {{ Form::open(['route' => !$existsHotelNotify ? 'ctl.br_hotel.status' : 'ctl.brhotel.show', 'method' => 'get']) }}
+        @include('ctl.brhotel._info_management_form')
+        <input type="submit" value="{{ !$existsHotelNotify ? '施設状態登録へ' : '詳細変更へ' }}">
     {{ Form::close() }}
 
     @include('ctl.brhotel._hotel_top_form')
-    {{-- {include file=$v->env.module_root|cat:'/views/brhotel/_hotel_top_form.tpl'} --}}
-
     <br>
 @endsection
