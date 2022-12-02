@@ -96,8 +96,8 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
     Route::post('/brHotel/create', [\App\Http\Controllers\ctl\BrHotelRegisterController::class, 'create'])->name('ctl.br_hotel.create');
     Route::get('/brHotel/management', [\App\Http\Controllers\ctl\BrHotelRegisterController::class, 'management'])->name('ctl.br_hotel.management');
     Route::post('/brHotel/createManagement', [\App\Http\Controllers\ctl\BrHotelRegisterController::class, 'createManagement'])->name('ctl.br_hotel.create_management');
-    Route::get('/brHotel/status', [\App\Http\Controllers\ctl\BrHotelRegisterController::class, 'status'])->name('ctl.br_hotel.status');
-    Route::post('/brHotel/createStatus', [\App\Http\Controllers\ctl\BrHotelRegisterController::class, 'createStatus'])->name('ctl.br_hotel.create_status');
+    Route::get('/brHotel/state', [\App\Http\Controllers\ctl\BrHotelRegisterController::class, 'state'])->name('ctl.br_hotel.state');
+    Route::post('/brHotel/createState', [\App\Http\Controllers\ctl\BrHotelRegisterController::class, 'createState'])->name('ctl.br_hotel.create_state');
 
     // 施設情報メイン
     Route::controller(BrhotelController::class)->prefix("brhotel")->group(function(){

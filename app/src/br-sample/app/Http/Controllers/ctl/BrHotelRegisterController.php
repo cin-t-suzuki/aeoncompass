@@ -401,6 +401,37 @@ class BrHotelRegisterController extends Controller
 
             'existsHotelNotify' => $existsHotelNotify,
         ]);
-        return 'controller createManagement called!!';
+    }
+
+    public function state(Request $request)
+    {
+        /* 初期表示値 or 戻りの入力値 を取得 */
+
+        return view('ctl.brhotel.state', [
+
+        ]);
+    }
+
+    public function createState(Request $request, Service $service)
+    {
+        /* validation */
+        $rules = [];
+        $messages = [];
+        $attributes = [];
+        $validator = Validator::make($request->all(), $rules, $messages, $attributes);
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withInput()
+                ->with([
+                    'errors' => $validator->errors()->all(),
+                ]);
+        }
+        /* データ整形 */
+        /* DB登録処理 */
+        /* 結果表示用データ取得 */
+
+        return view('ctl.brhotel.create-state', [
+
+        ]);
     }
 }

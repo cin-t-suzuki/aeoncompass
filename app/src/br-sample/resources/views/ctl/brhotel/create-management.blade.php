@@ -8,7 +8,7 @@
     {{-- メッセージ --}}
     @include('ctl.common.message')
 
-    {{ Form::open(['route' => !$existsHotelNotify ? 'ctl.br_hotel.status' : 'ctl.brhotel.show', 'method' => 'get']) }}
+    {{ Form::open(['route' => !$existsHotelNotify ? 'ctl.br_hotel.state' : 'ctl.brhotel.show', 'method' => 'get']) }}
         @include('ctl.brhotel._info_management_form')
         <input type="submit" value="{{ !$existsHotelNotify ? '施設状態登録へ' : '詳細変更へ' }}">
     {{ Form::close() }}
