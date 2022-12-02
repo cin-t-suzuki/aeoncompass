@@ -3,15 +3,18 @@
 namespace App\Http\Controllers\ctl;
 
 use App\Http\Controllers\Controller;
-use App\Models\MastCity;
-use App\Models\MastPref;
-use App\Models\MastWard;
 use App\Models\Hotel;
 use App\Models\HotelAccount;
 use App\Models\HotelControl;
+use App\Models\HotelPerson;
+use App\Models\HotelStatus;
+use App\Models\MastCity;
+use App\Models\MastPref;
+use App\Models\MastWard;
 use App\Services\BrHotelRegisterService as Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 // MEMO: 移植元では、 BrhotelController に一緒くたにされていた。
 class BrHotelRegisterController extends Controller
@@ -295,6 +298,85 @@ class BrHotelRegisterController extends Controller
 
     public function createManagement(Request $request, Service $service)
     {
+        $hotelCd            = $request->input('target_cd');
+        $inputHotelAccount  = $request->input('Hotel_Account');
+        $inputHotelPerson   = $request->input('Hotel_Person');
+        $inputHotelStatus   = $request->input('Hotel_Status');
+
+        /* validation */
+        // TODO: バリデーションルール記述
+        $rules = [
+            'Hotel_Account.account_id_begin'    => ['required', 'between:0,10'], // TODO: 独自バリデーション (password と異なる、 hotel_account.account_id で一意)
+            'Hotel_Account.password'            => ['required', 'regex:/\A[A-Z0-9]{1,10}\z/'], // TODO: 独自バリデーション(ID と password が一致の場合エラー)
+            'Hotel_Account.accept_status'       => ['required'],
+
+            // TODO: hotel_person すべて、半角カナ禁止バリデーション
+            'Hotel_Person.person_post'  => ['between:0,32'],
+            'Hotel_Person.person_nm'    => ['required', 'between:0,32'],
+            'Hotel_Person.person_tel'   => ['required', 'between:0,15'], // TODO: 電話番号バリデーション, between 不要か。
+            'Hotel_Person.person_fax'   => ['between:0,15'], // TODO: 電話番号バリデーション, between 不要か。
+            'Hotel_Person.person_email' => ['between:0,128'], // TODO: メールアドレスバリデーション, between 不要か。
+
+            'Hotel_Status.entry_status' => ['required', Rule::in([0, 1, 2])], // 入力値ではない, 1 (ENTRY_STATUS_REGISTERING; 登録作業中) で固定
+            'Hotel_Status.contract_ymd' => [],
+            'Hotel_Status.open_ymd'     => [],
+            'Hotel_Status.close_dtm'    => [], // 入力値ではない
+        ];
+        $messages = [];
+        $attributes = [
+            // 'Hotel_Account.hotel_cd'         => '施設コード',
+            'Hotel_Account.account_id_begin' => '入力アカウントID',
+            // 'Hotel_Account.account_id'       => 'アカウントID',
+            'Hotel_Account.password'         => 'パスワード',
+            'Hotel_Account.accept_status'    => 'ステータス',
+
+            // 'Hotel_Person.hotel_cd'     => '施設コード',
+            'Hotel_Person.person_post'  => '担当者役職',
+            'Hotel_Person.person_nm'    => '担当者名称',
+            'Hotel_Person.person_tel'   => '担当者電話番号',
+            'Hotel_Person.person_fax'   => '担当者ファックス番号',
+            'Hotel_Person.person_email' => '担当者電子メールアドレス',
+
+            // 'Hotel_Status.hotel_cd'     => '施設コード',
+            // 'Hotel_Status.entry_status' => '登録状態',
+            'Hotel_Status.contract_ymd' => '契約日',
+            'Hotel_Status.open_ymd'     => '公開日',
+            // 'Hotel_Status.close_dtm'    => '解約日時',
+        ];
+        $validator = Validator::make($request->all(), $rules, $messages, $attributes);
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withInput()
+                ->with([
+                    'errors' => $validator->errors()->all(),
+                ]);
+        }
+
+        /* データ整形 */
+        $hotelAccount = $service->makeHotelAccountData($hotelCd, $inputHotelAccount);
+        $hotelPerson = $service->makeHotelPersonData($hotelCd, $inputHotelPerson);
+        $hotelStatus = $service->makeHotelStatusData($hotelCd, $inputHotelStatus);
+
+        /* DB登録処理 */
+        $errorMessages = $service->storeManagement($hotelAccount, $hotelPerson, $hotelStatus);
+        if (count($errorMessages) > 0) {
+            return redirect()->back()
+                ->withInput()
+                ->with([
+                    'errors' => $errorMessages,
+                ]);
+        }
+
+        $hotelCd = '2015060001'; // dummy TODO: to be deleted
+        /* 結果表示用データ取得 */
+        $registeredHotelAccount = HotelAccount::find($hotelCd);
+        $registeredHotelPerson = HotelPerson::find($hotelCd);
+        $registeredHotelStatus = HotelStatus::find($hotelCd);
+
+        // 日付の整形
+
+        return view('ctl.brhotel.create-management', [
+        ]);
         return 'controller createManagement called!!';
     }
 }

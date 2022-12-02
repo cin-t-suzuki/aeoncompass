@@ -334,6 +334,48 @@ class BrHotelRegisterService
         return $result[0]->deny_cd;
     }
 
+    public function storeManagement($inputHotelAccount, $inputHotelPerson, $inputHotelStatus): array
+    {
+        $errorMessages = [];
+        DB::beginTransaction();
+
+        //
+
+        if (count($errorMessages) > 0) {
+            DB::rollBack();
+        } else {
+            DB::commit();
+        }
+
+        return $errorMessages;
+    }
+    public function makeHotelAccountData($hotelCd, $inputHotelAccount): array
+    {
+        // TODO:
+        $actionCd = $this->getActionCd();
+        return [
+            'entry_cd' => $actionCd,
+            'modify_cd' => $actionCd,
+        ];
+    }
+    public function makeHotelPersonData($hotelCd, $inputHotelPerson): array
+    {
+        // TODO:
+        $actionCd = $this->getActionCd();
+        return [
+            'entry_cd' => $actionCd,
+            'modify_cd' => $actionCd,
+        ];
+    }
+    public function makeHotelStatusData($hotelCd, $inputHotelStatus): array
+    {
+        // TODO:
+        $actionCd = $this->getActionCd();
+        return [
+            'entry_cd' => $actionCd,
+            'modify_cd' => $actionCd,
+        ];
+    }
     /**
      * コントローラ名とアクション名を取得して、ユーザーIDと連結
      * ユーザーID取得は暫定の為、書き換え替えが必要です。

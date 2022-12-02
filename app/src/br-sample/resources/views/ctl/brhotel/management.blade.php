@@ -12,7 +12,7 @@
 
     {{ Form::open(['route' => 'ctl.br_hotel.create_management', 'method' => 'post']) }}
         @include('ctl.brhotel._input_management_form', [
-            'new_flg' => 1,
+            'new_flg' => true,
         ])
         <input type="submit" value="施設管理情報登録">
         ※は必須です。
