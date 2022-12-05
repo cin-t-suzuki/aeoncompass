@@ -405,22 +405,46 @@ class BrHotelRegisterController extends Controller
 
     public function state(Request $request)
     {
-        /* 初期表示値 or 戻りの入力値 を取得 */
-        // 初回のみ施設情報画面で設定した値を取得する
-        $a_hotel_control = $request->input('Hotel_Control');
-        // if (!array_key_exists('stock_type', $a_hotel_control)) {
-        //     $a_hotel_control['stock_type'] = (object)$request->input('target_stock_type');
-        // }
+        $hotelCd     = $request->input('target_cd');
+        $targetStockType = $request->input('target_stock_type');
 
-        $a_hotel_control = $this->dummyHotelControl();
+        /* 戻りの入力値を取得、なければ初期表示値を設定 */
+        // 登録処理からの戻りで session にデータがある場合、 old を使って取得
+        // そうでない場合、初期表示（第2引数でデフォルト値を指定）
+        // HACK: （工数次第）画面側で old ヘルパ関数を使うほうが一般的と思われる（更新処理と合わせての修正が必要）
+        $hotel_notify  = (object)$request->old('Hotel_Notify', [
+            'neppan_status' => null,
+            'notify_status' => null,
+            'faxpr_status'  => null,
+            'notify_email'  => null,
+            'notify_fax'    => null,
+        ]);
+        $a_hotel_control = (object)$request->old('Hotel_Control', [
+            'stock_type'        => null,
+            'checksheet_send'   => null,
+            'charge_round'      => null,
+            'stay_cap'          => null,
+            'management_status' => null,
+            'akafu_status'      => null,
+        ]);
+        if (is_null($a_hotel_control->stock_type)) {
+            // 初回のみ施設情報画面で設定した値を取得する
+            $a_hotel_control->stock_type = $targetStockType;
+        }
+        $notify_device = $request->old('notify_device', []);
+        $version = $request->old('version');
 
         return view('ctl.brhotel.state', [
-            'target_cd'     => $request->input('target_cd'),
-            'hotel_notify'  => $request->input('Hotel_Notify', $this->dummyHotelNotify()),
-            'hotel_control' => $a_hotel_control,
-            'notify_device' => $request->input('notify_device', $this->dummyHotelDevice()),
-            'version'       => $request->input('version'),
+            'target_cd'     => $hotelCd,
+            // 'target_stock_type' => $targetStockType,
 
+            'hotel_notify'  => $hotel_notify,
+            'hotel_control' => $a_hotel_control,
+            'notify_device' => $notify_device,
+            'version'       => $version,
+
+            // MEMO: 移植元では、更新の場合のみ設定されている値。
+            // 未定義だと動作しないため、干渉しない値であろうを設定している。
             // TODO:
             'hotel_status'  => (object)['entry_status' => null],
         ]);

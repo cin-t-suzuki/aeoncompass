@@ -12,23 +12,18 @@
         <td bgcolor="#EEFFEE">通知媒体</td>
         <td>
             {{-- TODO: $loop 変数を使って書く --}}
-            @php $device_first = true @endphp
             @foreach ($notify_device as $value)
-                @if ($device_first != true)
+                @if (!$loop->first)
                     +
                 @endif
                 @if ($value == 1)
                     ファックス
-                    @php $device_first = false @endphp
                 @elseif ($value == 2)
                     電子メール
-                    @php $device_first = false @endphp
                 @elseif ($value == 4)
                     オペレータ連絡
-                    @php $device_first = false @endphp
                 @elseif ($value == 8)
                     リンカーン
-                    @php $device_first = false @endphp
                 @endif
             @endforeach
             <br />

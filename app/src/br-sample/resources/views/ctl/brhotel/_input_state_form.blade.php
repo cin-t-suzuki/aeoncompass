@@ -13,31 +13,19 @@
         <td bgcolor="#EEFFEE">通知媒体</td>
         <td>
             <input type="checkbox" name="notify_device[]" value="1"
-                @if (count($notify_device) === 0)
-                    checked
-                @else
-                    @foreach ($notify_device as $item)
-                        @if ($item == 1)
-                            checked
-                        @endif
-                    @endforeach
-                @endif
-            id="nd1">
+                {{ count($notify_device) === 0 || in_array(1, $notify_device) ? 'checked' : '' }} id="nd1">
             <label for="nd1">ファックス</label>
 
             <input type="checkbox" name="notify_device[]" value="2"
-                @foreach ($notify_device as $item) @if ($item == 2) checked @endif @endforeach
-                id="nd2">
+                {{ in_array(2, $notify_device) ? 'checked' : '' }} id="nd2">
             <label for="nd2">電子メール</label>
 
             <input type="checkbox" name="notify_device[]" value="4"
-                @foreach ($notify_device as $item) @if ($item == 4) checked @endif @endforeach
-                id="nd3">
+                {{ in_array(4, $notify_device) ? 'checked' : '' }} id="nd3">
             <label for="nd3">オペレータ連絡</label>
 
             <input type="checkbox" name="notify_device[]" value="8"
-                @foreach ($notify_device as $item) @if ($item == 8) checked @endif @endforeach
-                id="nd4">
+                {{ in_array(8, $notify_device) ? 'checked' : '' }} id="nd4">
             <label for="nd4">リンカーン</label>
         </td>
         <td>
@@ -50,20 +38,20 @@
         <td>
             <label>
                 <input type="radio" name="Hotel_Notify[neppan_status]" value="1"
-                    @if ($hotel_notify->neppan_status === '1') checked="checked" @endif />
+                    {{ $hotel_notify->neppan_status === '1' ? 'checked' : '' }} />
                 通知する
             </label>
 
             <label>
                 <input type="radio" name="Hotel_Notify[neppan_status]" value="0"
-                    @if ($hotel_notify->neppan_status === '0') checked="checked" @endif />
+                    {{ $hotel_notify->neppan_status === '0' ? 'checked' : '' }} />
                 通知しない
             </label>
 
             {{-- MEMO: 移植元は is_empty --}}
             <label>
                 <input type="radio" name="Hotel_Notify[neppan_status]" value=""
-                    @if (is_null($hotel_notify->neppan_status)) checked="checked" @endif />
+                    {{ is_null($hotel_notify->neppan_status) ? 'checked' : '' }} />
                 通知しない(※連動時に「通知する」に自動切替)
             </label>
         </td>
@@ -75,12 +63,14 @@
         <td>
             {{-- MEMO: 移植元は is_empty --}}
             <input type="radio" name="Hotel_Notify[notify_status]" value="1"
-                @if ($hotel_notify->notify_status == 1 || is_null($hotel_notify->notify_status)) checked @endif id="j4">
+                {{ $hotel_notify->notify_status == 1 || is_null($hotel_notify->notify_status) ? 'checked' : '' }}
+                id="j4">
             <label for="j4">通知する</label>
 
             {{-- MEMO: 移植元は is_empty --}}
             <input type="radio" name="Hotel_Notify[notify_status]" value="0"
-                @if ($hotel_notify->notify_status == 0 && !is_null($hotel_notify->notify_status)) checked @endif id="j5">
+                {{ $hotel_notify->notify_status == 0 && !is_null($hotel_notify->notify_status) ? 'checked' : '' }}
+                id="j5">
             <label for="j5">通知しない</label>
         </td>
         <td><small>選択<font color="#ff0000">※ここが「通知しない」だとファックス、電子メール、リンカーンの通知はされません</font></small></td>
@@ -109,12 +99,14 @@
         <td>
             {{-- MEMO: 移植元は is_empty --}}
             <input type="radio" name="Hotel_Notify[faxpr_status]" value="1"
-                @if ($hotel_notify->faxpr_status == 1 || is_null($hotel_notify->faxpr_status)) checked @endif id="j9">
+                {{ $hotel_notify->faxpr_status == 1 || is_null($hotel_notify->faxpr_status) ? 'checked' : '' }}
+                id="j9">
             <label for="j9">表示する</label>
 
             {{-- MEMO: 移植元は is_empty --}}
             <input type="radio" name="Hotel_Notify[faxpr_status]" value="0"
-                @if ($hotel_notify->faxpr_status == 0 && !is_null($hotel_notify->faxpr_status)) checked @endif id="j8">
+                {{ $hotel_notify->faxpr_status == 0 && !is_null($hotel_notify->faxpr_status) ? 'checked' : '' }}
+                id="j8">
             <label for="j8">表示しない</label>
         </td>
         <td><small>選択</small></td>
@@ -123,19 +115,20 @@
     <tr>
         <td bgcolor="#EEFFEE">仕入タイプ</td>
         <td>
-            @if ($hotel_control->stock_type == '2') 一括受託（東横イン）
+            @if ($hotel_control->stock_type == '2')
+                一括受託（東横イン）
                 <input type="hidden" name="Hotel_Control[stock_type]" value="2" />
             @else
                 <input type="radio" name="Hotel_Control[stock_type]" value="0"
-                    @if ($hotel_control->stock_type == 0) checked @endif id="i1">
+                    {{ $hotel_control->stock_type == 0 ? 'checked' : '' }} id="i1">
                 <label for="i1">受託販売</label>
 
                 <input type="radio" name="Hotel_Control[stock_type]" value="1"
-                    @if ($hotel_control->stock_type == 1) checked @endif id="i2">
+                    {{ $hotel_control->stock_type == 1 ? 'checked' : '' }} id="i2">
                 <label for="i2">買取販売</label>
 
                 <input type="radio" name="Hotel_Control[stock_type]" value="3"
-                    @if ($hotel_control->stock_type == 3) checked @endif id="i3">
+                    {{ $hotel_control->stock_type == 3 ? 'checked' : '' }} id="i3">
                 <label for="i3">特定施設(三普)</label>
             @endif
         </td>
@@ -147,12 +140,14 @@
         <td>
             {{-- MEMO: 移植元は is_empty --}}
             <input type="radio" name="Hotel_Control[checksheet_send]" value="1"
-                @if ($hotel_control->checksheet_send == 1 && !is_null($hotel_control->checksheet_send)) checked @endif id="i4">
+                {{ $hotel_control->checksheet_send == 1 && !is_null($hotel_control->checksheet_send) ? 'checked' : '' }}
+                id="i4">
             <label for="i4">送信する</label>
 
             {{-- MEMO: 移植元は is_empty --}}
             <input type="radio" name="Hotel_Control[checksheet_send]" value="0"
-                @if ($hotel_control->checksheet_send == 0 || is_null($hotel_control->checksheet_send)) checked @endif id="i3">
+                {{ $hotel_control->checksheet_send == 0 || is_null($hotel_control->checksheet_send) ? 'checked' : '' }}
+                id="i3">
             <label for="i3">送信しない</label>
         </td>
         <td><small>選択</small></td>
@@ -163,15 +158,16 @@
         <td>
             {{-- MEMO: 移植元は is_empty --}}
             <input type="radio" name="Hotel_Control[charge_round]" value="1"
-                @if ($hotel_control->charge_round == 1 || is_null($hotel_status->entry_status)) checked @endif id="i5">
+                {{ $hotel_control->charge_round == 1 || is_null($hotel_status->entry_status) ? 'checked' : '' }}
+                id="i5">
             <label for="i5">1の位で丸める</label>
 
             <input type="radio" name="Hotel_Control[charge_round]" value="10"
-                @if ($hotel_control->charge_round == 10) checked @endif id="i6">
+                {{ $hotel_control->charge_round == 10 ? 'checked' : '' }} id="i6">
             <label for="i6">10の位で丸める</label>
 
             <input type="radio" name="Hotel_Control[charge_round]" value="100"
-                @if ($hotel_control->charge_round == 100) checked @endif id="i7">
+                {{ $hotel_control->charge_round == 100 ? 'checked' : '' }} id="i7">
             <label for="i7">100の位で丸める</label>
         </td>
         <td><small>選択</small></td>
@@ -190,16 +186,17 @@
         <td bgcolor="#EEFFEE">利用方法</td>
         <td>
             <input type="radio" name="Hotel_Control[management_status]" value="1"
-                @if ($hotel_control->management_status == 1) checked @endif id="management_status1">
+                {{ $hotel_control->management_status == 1 ? 'checked' : '' }} id="management_status1">
             <label for="management_status1">ファックス管理</label>
 
             {{-- MEMO: 移植元は is_empty --}}
             <input type="radio" name="Hotel_Control[management_status]" value="2"
-                @if ($hotel_control->management_status == 2 || is_null($hotel_control->management_status)) checked @endif id="management_status2">
+                {{ $hotel_control->management_status == 2 || is_null($hotel_control->management_status) ? 'checked' : '' }}
+                id="management_status2">
             <label for="management_status2">インターネット管理</label>
 
             <input type="radio" name="Hotel_Control[management_status]" value="3"
-                @if ($hotel_control->management_status == 3) checked @endif id="management_status3">
+                {{ $hotel_control->management_status == 3 ? 'checked' : '' }} id="management_status3">
             <label for="management_status3">ファックス管理＋インターネット管理</label>
         </td>
         <td><small>選択</small></td>
@@ -210,12 +207,12 @@
         <td>
             {{-- MEMO: 移植元は is_empty --}}
             <input type="checkbox" name="version[]" value="1" id="system_version1"
-                @if (!is_null($version) and in_array(1, $version)) checked @endif />
+                {{ !is_null($version) && in_array(1, $version) ? 'checked' : '' }} />
             <label for="system_version1">旧インターフェース</label>
 
             {{-- MEMO: 移植元は is_empty --}}
             <input type="checkbox" name="version[]" value="2" id="system_version2"
-                @if (is_null($version) or in_array(2, $version)) checked @endif />
+                {{ is_null($version) || in_array(2, $version) ? 'checked' : '' }} />
             <label for="system_version2">新インターフェース</label>
         </td>
         <td><small>複数選択可<font color="#0000ff">（必須）</font></small></td>
@@ -225,11 +222,11 @@
         <td bgcolor="#EEFFEE">日本旅行在庫連携</td>
         <td>
             <input type="radio" id="akafu_status_1" name="Hotel_Control[akafu_status]" value="1"
-                @if ($hotel_control->akafu_status == 1) checked="checked" @endif />
+                {{ $hotel_control->akafu_status == 1 ? 'checked' : '' }} />
             <label for="akafu_status_1">利用する</label>
 
             <input type="radio" id="akafu_status_0" name="Hotel_Control[akafu_status]" value="0"
-                @if ($hotel_control->akafu_status != 1) checked="checked" @endif />
+                {{ $hotel_control->akafu_status != 1 ? 'checked' : '' }} />
             <label for="akafu_status_0">利用しない</label>
         </td>
         <td><small>選択</small></td>
