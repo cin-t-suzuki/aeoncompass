@@ -406,9 +406,23 @@ class BrHotelRegisterController extends Controller
     public function state(Request $request)
     {
         /* 初期表示値 or 戻りの入力値 を取得 */
+        // 初回のみ施設情報画面で設定した値を取得する
+        $a_hotel_control = $request->input('Hotel_Control');
+        // if (!array_key_exists('stock_type', $a_hotel_control)) {
+        //     $a_hotel_control['stock_type'] = (object)$request->input('target_stock_type');
+        // }
+
+        $a_hotel_control = $this->dummyHotelControl();
 
         return view('ctl.brhotel.state', [
+            'target_cd'     => $request->input('target_cd'),
+            'hotel_notify'  => $request->input('Hotel_Notify', $this->dummyHotelNotify()),
+            'hotel_control' => $a_hotel_control,
+            'notify_device' => $request->input('notify_device', $this->dummyHotelDevice()),
+            'version'       => $request->input('version'),
 
+            // TODO:
+            'hotel_status'  => (object)['entry_status' => null],
         ]);
     }
 
@@ -430,8 +444,44 @@ class BrHotelRegisterController extends Controller
         /* DB登録処理 */
         /* 結果表示用データ取得 */
 
-        return view('ctl.brhotel.create-state', [
+        $a_hotel_notify = $this->dummyHotelNotify();
+        $a_hotel_control = $this->dummyHotelControl();
+        $a_notify_device = $this->dummyHotelDevice();
 
+        return view('ctl.brhotel.create-state', [
+            'target_cd'     => $request->input('target_cd', (object)['stock_type' => null]),
+
+            'hotel_notify'  => $a_hotel_notify,
+            'hotel_control' => $a_hotel_control,
+            'notify_device' => $a_notify_device,
+
+            // 'version'        => $o_core->to_shift($a_hotel_system_version['version'], true),
+            'version'        => [],
         ]);
+    }
+    private function dummyHotelNotify()
+    {
+        return (object)[
+            'neppan_status' => null,
+            'notify_status' => null,
+            'faxpr_status' => null,
+            'notify_email' => null,
+            'notify_fax' => null,
+        ];
+    }
+    private function dummyHotelControl()
+    {
+        return (object)[
+            'stock_type' => null,
+            'checksheet_send' => null,
+            'charge_round' => null,
+            'management_status' => null,
+            'akafu_status' => null,
+            'stay_cap' => null,
+        ];
+    }
+    private function dummyHotelDevice()
+    {
+        return [1, 2, 4, 8];
     }
 }
