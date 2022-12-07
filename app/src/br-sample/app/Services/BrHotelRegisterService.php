@@ -7,8 +7,10 @@ use App\Models\Hotel;
 use App\Models\HotelAccount;
 use App\Models\HotelControl;
 use App\Models\HotelInsuranceWeather;
+use App\Models\HotelNotify;
 use App\Models\HotelPerson;
 use App\Models\HotelStatus;
+use App\Models\HotelSystemVersion;
 use App\Util\Models_Cipher;
 use Illuminate\Support\Facades\DB;
 
@@ -357,6 +359,14 @@ class BrHotelRegisterService
 
         return $errorMessages;
     }
+
+    /**
+     * hotel_account に登録するデータを整形
+     *
+     * @param string $hotelCd
+     * @param array $inputHotelAccount
+     * @return array
+     */
     public function makeHotelAccountData($hotelCd, $inputHotelAccount): array
     {
         $actionCd = $this->getActionCd();
@@ -375,6 +385,14 @@ class BrHotelRegisterService
             'modify_cd'         => $actionCd,
         ];
     }
+
+    /**
+     * hotel_person に登録するデータを整形
+     *
+     * @param string $hotelCd
+     * @param array $inputHotelPerson
+     * @return array
+     */
     public function makeHotelPersonData($hotelCd, $inputHotelPerson): array
     {
         $actionCd = $this->getActionCd();
@@ -393,9 +411,16 @@ class BrHotelRegisterService
             'modify_cd'     => $actionCd,
         ];
     }
+
+    /**
+     * hotel_status に登録するデータを整形
+     *
+     * @param string $hotelCd
+     * @param array $inputHotelStatus
+     * @return array
+     */
     public function makeHotelStatusData($hotelCd, $inputHotelStatus): array
     {
-        // TODO:
         $actionCd = $this->getActionCd();
         return [
             'hotel_cd' => $hotelCd,
@@ -407,6 +432,156 @@ class BrHotelRegisterService
             'modify_cd'     => $actionCd,
         ];
     }
+    public function storeStatus($hotelNotify, $hotelControl, $hotelSystemVersion): array
+    {
+        $errorMessages = [];
+        DB::beginTransaction();
+
+        try {
+            HotelNotify::create($hotelNotify);
+            HotelControl::create($hotelControl);
+            HotelSystemVersion::create($hotelSystemVersion);
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error($e);
+            $errorMessages[] = '登録に失敗しました。';
+        }
+
+        if (count($errorMessages) > 0) {
+            DB::rollBack();
+        } else {
+            DB::commit();
+        }
+
+        return $errorMessages;
+    }
+
+    /**
+     * hotel_notify に登録するデータを整形
+     *
+     * @param string $hotelCd
+     * @param array $inputHotelNotify
+     * @param array $notifyDevices
+     * @return array
+     */
+    public function makeHotelNotifyData($hotelCd, $inputHotelNotify, $notifyDevices): array
+    {
+        $actionCd = $this->getActionCd();
+
+        $notifyDeviceValue = 0;
+        foreach ($notifyDevices as $value) {
+            $notifyDeviceValue += $value;
+        }
+
+        // メールアドレス 暗号化
+        $cipher = new Models_Cipher(config('settings.cipher_key'));
+        $encryptedNotifyEmail = $cipher->encrypt($inputHotelNotify['notify_email']);
+
+        return [
+            'hotel_cd'      => $hotelCd,
+            'notify_status' => $inputHotelNotify['notify_status'],
+            'notify_device' => $notifyDeviceValue,
+            'neppan_status' => $inputHotelNotify['neppan_status'],
+            // 'notify_no'     => $inputHotelNotify['notify_no'],
+            'notify_email'  => $encryptedNotifyEmail,
+            'notify_fax'    => $inputHotelNotify['notify_fax'],
+            'faxpr_status'  => $inputHotelNotify['faxpr_status'],
+            'entry_cd'      => $actionCd,
+            'modify_cd'     => $actionCd,
+        ];
+    }
+
+    /**
+     * hotel_control に登録するデータを整形
+     *
+     * @param string $hotelCd
+     * @param array $inputHotelControl
+     * @return array
+     */
+    public function makeHotelControlData($hotelCd, $inputHotelControl): array
+    {
+        $actionCd = $this->getActionCd();
+        return [
+            'hotel_cd'          => $hotelCd,
+            'stock_type'        => $inputHotelControl['stock_type'],
+            'checksheet_send'   => $inputHotelControl['checksheet_send'],
+            'charge_round'      => $inputHotelControl['charge_round'],
+            'stay_cap'          => $inputHotelControl['stay_cap'],
+            'management_status' => $inputHotelControl['management_status'],
+            'akafu_status'      => $inputHotelControl['akafu_status'],
+            'entry_cd'          => $actionCd,
+            'modify_cd'         => $actionCd,
+        ];
+    }
+
+    /**
+     * hotel_system_version に登録するデータを整形
+     *
+     * @param string $hotelCd
+     * @param array $checkedSystemVersions
+     * @return array
+     */
+    public function makeHotelSystemVersionData($hotelCd, $checkedSystemVersions): array
+    {
+        $actionCd = $this->getActionCd();
+
+        $versionValue = 0;
+        foreach ($checkedSystemVersions as $value) {
+            $versionValue += $value;
+        }
+
+        return [
+            'hotel_cd'      => $hotelCd,
+            'system_type'   => HotelSystemVersion::SYSTEM_TYPE_PLAN,
+            'version'       => $versionValue,
+            'entry_cd'      => $actionCd,
+            'modify_cd'     => $actionCd,
+        ];
+    }
+
+    /**
+     * 数値をビットに分解した配列に変換する（通知媒体）
+     *
+     * @param int $notifyDeviceValue
+     * @return array
+     */
+    public function divideNotifyDeviceValueToArray($notifyDeviceValue): array
+    {
+        $notifyDevices = [];
+        $array = [
+            HotelNotify::NOTIFY_DEVICE_FAX,
+            HotelNotify::NOTIFY_DEVICE_EMAIL,
+            HotelNotify::NOTIFY_DEVICE_OPERATOR,
+            HotelNotify::NOTIFY_DEVICE_LINCOLN,
+        ];
+        foreach ($array as $value) {
+            if ($notifyDeviceValue & (1 << $value)) {
+                $notifyDevices[] = (1 << $value);
+            }
+        }
+        return $notifyDevices;
+    }
+
+    /**
+     * 数値をビットに分解した配列に変換する（施設バージョン）
+     *
+     * @param int $systemVersionValue
+     * @return array
+     */
+    public function divideSystemVersionValueToArray($systemVersionValue): array
+    {
+        $systemVersions = [];
+        $array = [
+            HotelSystemVersion::VERSION_1,
+            HotelSystemVersion::VERSION_2,
+        ];
+        foreach ($array as $value) {
+            if ($systemVersionValue & $value) {
+                $systemVersions[] = $value;
+            }
+        }
+        return $systemVersions;
+    }
+
     /**
      * コントローラ名とアクション名を取得して、ユーザーIDと連結
      * ユーザーID取得は暫定の為、書き換え替えが必要です。

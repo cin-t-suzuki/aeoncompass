@@ -134,6 +134,7 @@
     <tr>
         <td bgcolor="#EEFFEE">利用方法</td>
         <td>
+        {{-- TODO: magic number --}}
             @if ($hotel_control->management_status == 1)
                 ファックス管理 <br />
             @elseif ($hotel_control->management_status == 2)
@@ -148,7 +149,7 @@
         <td bgcolor="#EEFFEE">管理システムバージョン※</td>
         <td>
             {{-- TODO: magic number --}}
-            @if (in_array(1, $version) and in_array(2, $version))
+            @if (in_array(1, $version) && in_array(2, $version))
                 旧インターフェース / 新インターフェース
             @elseif (in_array(1, $version))
                 旧インターフェース

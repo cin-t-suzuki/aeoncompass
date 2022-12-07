@@ -7,7 +7,6 @@ use App\Models\common\CommonDBModel;
 use App\Models\common\ValidationColumn;
 use Illuminate\Support\Facades\DB;
 
-
 /**
  * 施設管理
  */
@@ -22,6 +21,7 @@ class HotelControl extends CommonDBModel
      * @var string
      */
     protected $primaryKey = 'hotel_cd';
+
     /**
      * モデルのIDを自動増分するか
      *
@@ -32,12 +32,9 @@ class HotelControl extends CommonDBModel
     /**
      * モデルにタイムスタンプを付けるか
      *
-     * MEMO: 独自実装でタイムスタンプを設定しているため、Laravel 側では設定しない。
-     * HACK: (工数次第) Laravel の機能を使ったほうがよい気もする。
-     *
      * @var bool
      */
-    public $timestamps = false;
+    public $timestamps = true;
     public const CREATED_AT = 'entry_ts';
     public const UPDATED_AT = 'modify_ts';
 
@@ -47,12 +44,13 @@ class HotelControl extends CommonDBModel
      * @var array
      */
     protected $fillable = [
-        // 'hotel_cd',
-        // 'stock_type',
-        // 'checksheet_send',
-        // 'charge_round',
-        // 'stay_cap',
-        // 'management_status',
+        'hotel_cd',
+        'stock_type',
+        'checksheet_send',
+        'charge_round',
+        'stay_cap',
+        'management_status',
+        'akafu_status',
         'entry_cd',
         'entry_ts',
         'modify_cd',
@@ -67,9 +65,9 @@ class HotelControl extends CommonDBModel
 	public string $COL_STAY_CAP = "stay_cap";
 	public string $COL_MANAGEMENT_STATUS = "management_status";
 
-
     // カラム定数
     /*
+        仕入タイプ
         MEMO: 移植元ソースのテーブル定義書を参照。
         実際に検証データに登録されている値に「-2」はなし。
         DB にはほかに「3」が見られるが、定義書に記載されていない。
@@ -83,6 +81,17 @@ class HotelControl extends CommonDBModel
     public const STOCK_TYPE_BULK_CONTRACT_TOYOKO_INN = 2;  //一括受託（東横イン）
     public const STOCK_TYPE_BULK_CONTRACT_OLD_YADO_PLAZA = -2; //一括受託（旧宿ぷらざ）
     public const STOCK_TYPE_SANPU = 3; // 特定施設(三普)
+    // 送客リスト送信可否
+    private const CHECKSHEET_SEND_FALSE = 0; // 送付しない
+    private const CHECKSHEET_SEND_TRUE  = 1; // 送付する
+    // 利用方法（複数選択可）
+    // MEMO: 実質ビット演算
+    private const MANAGEMENT_STATUS_FAX             = 1; // ファックス管理
+    private const MANAGEMENT_STATUS_INTERNET        = 2; // インターネット管理
+    private const MANAGEMENT_STATUS_FAX_INTERNET    = 3; // ファックス管理＋インターネット管理
+    // 赤い風船在庫利用施設
+    private const AKAFU_STATUS_FALSE    = 0; // 利用否
+    private const AKAFU_STATUS_TRUE     = 1; // 利用施設
 
 	/** コンストラクタ
 	 */

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use App\Common\Traits;
@@ -6,14 +7,62 @@ use App\Models\common\CommonDBModel;
 use App\Models\common\ValidationColumn;
 use Illuminate\Support\Facades\DB;
 
-/** 施設通知
- * 
+/**
+ * 施設通知
  */
 class HotelNotify extends CommonDBModel
 {
-	use Traits;
+    use Traits;
 
-	protected $table = "hotel_notify";
+    /**
+     * モデルに関連付けるテーブル
+     *
+     * @var string
+     */
+    protected $table = 'hotel_notify';
+
+    /**
+     * テーブルに関連付ける主キー
+     *
+     * @var string
+     *
+     */
+    protected $primaryKey = 'hotel_cd';
+
+    /**
+     * モデルのIDを自動増分するか
+     *
+     * @var bool
+     */
+    public $incrementing = false;
+
+    /**
+     * モデルにタイムスタンプを付けるか
+     *
+     * @var bool
+     */
+    public $timestamps = true;
+    public const CREATED_AT = 'entry_ts';
+    public const UPDATED_AT = 'modify_ts';
+
+    /**
+     * 複数代入可能な属性
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'hotel_cd',
+        'notify_status',
+        'notify_device',
+        'neppan_status',
+        'notify_no',
+        'otify_email',
+        'notify_fax',
+        'faxpr_status',
+        'entry_cd',
+        'modify_cd',
+    ];
+
 	// カラム
 	public string $COL_HOTEL_CD = "hotel_cd";
 	public string $COL_NOTIFY_DEVICE = "notify_device";
@@ -23,6 +72,32 @@ class HotelNotify extends CommonDBModel
 	public string $COL_NOTIFY_EMAIL = "notify_email";
 	public string $COL_NOTIFY_FAX = "notify_fax";
 	public string $COL_FAXPR_STATUS = "faxpr_status";
+
+    // カラム定数
+    // 通知ステータス
+    private const NOTIFY_STATUS_FALSE   = 0; // 通知しない
+    private const NOTIFY_STATUS_TRUE    = 1; // 通知する
+    /*
+        通知媒体 (複数選択可)
+            複数選択をビット列による集合表現で管理
+
+        notify_device カラムの値を2進数で表したとき、
+        下から（右から） NOTIFY_DEVICE_XXX 桁目のフラグが立っている（1である）ならば、
+        その通知方法が指定されている。
+        例: 11 -> 8 + 2 + 1 -> 1011(2) -> [fax, 電子メール, リンカーン]
+
+        cf. https://qiita.com/drken/items/7c6ff2aa4d8fce1c9361
+     */
+    public const NOTIFY_DEVICE_FAX         = 0; // fax
+    public const NOTIFY_DEVICE_EMAIL       = 1; // 電子メール
+    public const NOTIFY_DEVICE_OPERATOR    = 2; // オペレータ連絡
+    public const NOTIFY_DEVICE_LINCOLN     = 3; // リンカーン
+    // ねっぱん通知ステータス
+    private const NEPPAN_STATUS_FALSE   = 0; // 否通知
+    private const NEPPAN_STATUS_TRUE    = 1; // 通知
+    // FAXPR可否
+    private const FAXPR_STATUS_FALSE    = 0; // 非表示
+    private const FAXPR_STATUS_TRUE     = 1; // 表示
 
 	/** コンストラクタ
 	 */

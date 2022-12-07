@@ -9,10 +9,12 @@ use App\Models\HotelControl;
 use App\Models\HotelNotify;
 use App\Models\HotelPerson;
 use App\Models\HotelStatus;
+use App\Models\HotelSystemVersion;
 use App\Models\MastCity;
 use App\Models\MastPref;
 use App\Models\MastWard;
 use App\Services\BrHotelRegisterService as Service;
+use App\Util\Models_Cipher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -279,8 +281,6 @@ class BrHotelRegisterController extends Controller
         ]);
 
         return view('ctl.brhotel.management', [
-            'guides' => ['表示されています。'], // TODO: to be deleted
-
             // tpl新規時判断用
             'status'         => 'new',
 
@@ -388,6 +388,8 @@ class BrHotelRegisterController extends Controller
             $registeredHotelStatus->close_dtm = date('Y-m-d H:i:s', strtotime($registeredHotelStatus->close_dtm));
         }
 
+        // TODO: メールアドレス 復号
+
         // Notifyのインスタンスを取得 (次画面判断用)
         $existsHotelNotify = HotelNotify::where('hotel_cd', $hotelCd)->exists();
 
@@ -432,7 +434,7 @@ class BrHotelRegisterController extends Controller
             $a_hotel_control->stock_type = $targetStockType;
         }
         $notify_device = $request->old('notify_device', []);
-        $version = $request->old('version');
+        $version = $request->old('version', []);
 
         return view('ctl.brhotel.state', [
             'target_cd'     => $hotelCd,
@@ -445,17 +447,64 @@ class BrHotelRegisterController extends Controller
 
             // MEMO: 移植元では、更新の場合のみ設定されている値。
             // 未定義だと動作しないため、干渉しない値であろうを設定している。
-            // TODO:
+            // TODO: 確認
             'hotel_status'  => (object)['entry_status' => null],
         ]);
     }
 
     public function createState(Request $request, Service $service)
     {
+        $hotelCd                = $request->input('target_cd');
+        $inputHotelNotify       = $request->input('Hotel_Notify');
+        $inputHotelControl      = $request->input('Hotel_Control');
+        $inputNotifyDevices     = $request->input('notify_device');
+        $checkedSystemVersions  = $request->input('version');
+
         /* validation */
-        $rules = [];
+        // TODO:
+        $rules = [
+            'notify_device' => [],
+
+            'Hotel_Notify.neppan_status'    => [],
+            'Hotel_Notify.notify_status'    => [],
+            'Hotel_Notify.notify_email'     => [],
+            'Hotel_Notify.notify_fax'       => [],
+            'Hotel_Notify.faxpr_status'     => [],
+
+            'Hotel_Control.stock_type'          => [],
+            'Hotel_Control.checksheet_send'     => [],
+            'Hotel_Control.charge_round'        => [],
+            'Hotel_Control.stay_cap'            => [],
+            'Hotel_Control.management_status'   => [],
+            'Hotel_Control.akafu_status'        => [],
+
+            'version' => [],
+
+            // 'target_cd' => [],
+        ];
         $messages = [];
-        $attributes = [];
+        $attributes = [
+            'notify_device' => '通知媒体',
+
+            // 'Hotel_Notify.hotel_cd'          => '施設コード',
+            'Hotel_Notify.notify_device'    => '通知媒体',
+            'Hotel_Notify.neppan_status'    => 'ねっぱん通知ステータス',
+            'Hotel_Notify.notify_status'    => '通知ステータス',
+            // 'Hotel_Notify.notify_no'        => '通知No',
+            'Hotel_Notify.notify_email'     => '通知電子メールアドレス',
+            'Hotel_Notify.notify_fax'       => '通知ファックス番号',
+            'Hotel_Notify.faxpr_status'     => 'FAXPR可否',
+
+            // 'Hotel_Control.hotel_cd'            => '施設コード',
+            'Hotel_Control.stock_type'          => '仕入形態',
+            'Hotel_Control.checksheet_send'     => '送客リスト送付可否',
+            'Hotel_Control.charge_round'        => '金額切り捨て桁',
+            'Hotel_Control.stay_cap'            => '連泊限界数',
+            'Hotel_Control.management_status'   => '利用方法',
+            'Hotel_Control.akafu_status'        => '日本旅行在庫連携',
+
+            'version' => '管理システムバージョン',
+        ];
         $validator = Validator::make($request->all(), $rules, $messages, $attributes);
         if ($validator->fails()) {
             return redirect()->back()
@@ -464,48 +513,45 @@ class BrHotelRegisterController extends Controller
                     'errors' => $validator->errors()->all(),
                 ]);
         }
-        /* データ整形 */
-        /* DB登録処理 */
-        /* 結果表示用データ取得 */
 
-        $a_hotel_notify = $this->dummyHotelNotify();
-        $a_hotel_control = $this->dummyHotelControl();
-        $a_notify_device = $this->dummyHotelDevice();
+        /* データ整形 */
+        $hotelNotify        = $service->makeHotelNotifyData($hotelCd, $inputHotelNotify, $inputNotifyDevices);
+        $hotelControl       = $service->makeHotelControlData($hotelCd, $inputHotelControl);
+        $hotelSystemVersion = $service->makeHotelSystemVersionData($hotelCd, $checkedSystemVersions);
+
+        /* DB登録処理 */
+        $errorMessages = $service->storeStatus($hotelNotify, $hotelControl, $hotelSystemVersion);
+        if (count($errorMessages) > 0) {
+            return redirect()->back()
+                ->withInput()
+                ->with([
+                    'errors' => $errorMessages,
+                ]);
+        }
+
+        /* 結果表示用データ取得 */
+        $displayHotelNotify         = HotelNotify::find($hotelCd);
+        $displayHotelControl        = HotelControl::find($hotelCd);
+        $displayHotelSystemVersion  = HotelSystemVersion::where('hotel_cd', $hotelCd)
+            ->where('system_type', HotelSystemVersion::SYSTEM_TYPE_PLAN)
+            ->first();
+
+        // メールアドレス 復号
+        $cipher = new Models_Cipher(config('settings.cipher_key'));
+        $displayHotelNotify->notify_email = $cipher->decrypt($displayHotelNotify->notify_email);
+
+        $notifyDevices  = $service->divideNotifyDeviceValueToArray($displayHotelNotify->notify_device);
+        $versions       = $service->divideSystemVersionValueToArray($displayHotelSystemVersion->version);
 
         return view('ctl.brhotel.create-state', [
-            'target_cd'     => $request->input('target_cd', (object)['stock_type' => null]),
+            'guides'        => ['施設情報の登録が完了いたしました。'],
+            'target_cd'     => $hotelCd,
 
-            'hotel_notify'  => $a_hotel_notify,
-            'hotel_control' => $a_hotel_control,
-            'notify_device' => $a_notify_device,
+            'hotel_notify'  => $displayHotelNotify,
+            'hotel_control' => $displayHotelControl,
+            'notify_device' => $notifyDevices,
 
-            // 'version'        => $o_core->to_shift($a_hotel_system_version['version'], true),
-            'version'        => [],
+            'version'       => $versions,
         ]);
-    }
-    private function dummyHotelNotify()
-    {
-        return (object)[
-            'neppan_status' => null,
-            'notify_status' => null,
-            'faxpr_status' => null,
-            'notify_email' => null,
-            'notify_fax' => null,
-        ];
-    }
-    private function dummyHotelControl()
-    {
-        return (object)[
-            'stock_type' => null,
-            'checksheet_send' => null,
-            'charge_round' => null,
-            'management_status' => null,
-            'akafu_status' => null,
-            'stay_cap' => null,
-        ];
-    }
-    private function dummyHotelDevice()
-    {
-        return [1, 2, 4, 8];
     }
 }
