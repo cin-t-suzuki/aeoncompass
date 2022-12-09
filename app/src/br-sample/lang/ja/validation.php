@@ -125,6 +125,14 @@ return [
     'url'                  => ':attributeに正しい形式を指定してください。',
     'uuid'                 => ':attributeに有効なUUIDを指定してください。',
 
+    // original rules
+    'without_half_width_katakana'   => ':attributeに半角カナが含まれています。',
+    'only_full_width_katakana'      => ':attributeに全角カナ以外の文字が含まれています。',
+    'custom_email_single'           => 'TODO: メールアドレス単数',
+    'custom_email_multiple'         => 'TODO: メールアドレス複数',
+    'phone_number'                  => ':attributeは半角数字とハイフンで入力してください。',
+    'postal_code'                   => ':attributeは半角数字とハイフンで入力してください。',
+
     /*
     |--------------------------------------------------------------------------
     | Custom バリデーション言語行
