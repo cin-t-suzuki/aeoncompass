@@ -12,6 +12,11 @@
 
     <hr class="contents-margin" />
 
+  {{-- メッセージボックス --}}
+  {{-- 元々なかったが、コントローラでメッセージは渡していたので追記 --}}
+  @section('message')
+  @include('ctl.common.message', $messages)
+
     <div style="text-align:left;">
     @include ('ctl.brbillpayptn._form')
     </div>
@@ -36,23 +41,25 @@
         <td style="text-align:center;">
           @if ($service->is_empty($billpayptn['book_path']))未作成 
           @else 
-          <form action="{$v->env.path_base_module}/brbillpayptn/customer/" method="post">
+          {{ Form::open(['route' => 'ctl.brbillpayptn.customer', 'method' => 'post']) }}
             <input type="submit" value=" 表示 ">
-            <input type="hidden" name="billpay_ym"       value="@include ('ctl.common._date',['timestamp' => $billpayptn['billpay_ym'] , 'format' => 'ym'])" />
+            <input type="hidden" name="billpay_ym"       value="{{$billpayptn['billpay_ym']}}" />
             <input type="hidden" name="customer_id"      value="{{$billpayptn['customer_id']}}" />
             <input type="hidden" name="billpay_ptn_cd"   value="{{$billpayptn['billpay_ptn_cd']}}" />
-          </form>
+            {{--上記 {{$billpayptn['billpay_ym']}}の日付フォーマットしていないが、コントローラ側で既に済 --}}
+          {{ Form::close() }}
           @endif
         </td>
         <td style="text-align:center;">
           @if ($service->is_empty($billpayptn['book_path']))未作成
           @else 
-          <form action="{$v->env.path_base_module}/brbillpayptn/book/" method="post" target="_blank">
+          {{ Form::open(['route' => 'ctl.brbillpayptn.book', 'method' => 'post', 'target' => '_blank']) }}
             <input type="submit" value=" 原稿 ">
-            <input type="hidden" name="billpay_ym"    value="@include ('ctl.common._date',['timestamp' => $billpayptn['billpay_ym'] , 'format' => 'ym'])" />
+            <input type="hidden" name="billpay_ym"    value="{{$billpayptn['billpay_ym']}}" />
             <input type="hidden" name="customer_id"   value="{{$billpayptn['customer_id']}}" />
             <input type="hidden" name="key"           value="{{$billpayptn['book_path_encrypt']}}" />
-          </form>
+            {{--上記 {{$billpayptn['billpay_ym']}}の日付フォーマットしていないが、コントローラ側で既に済 --}}
+          {{ Form::close() }}
           @endif
         </td>
       </tr>
