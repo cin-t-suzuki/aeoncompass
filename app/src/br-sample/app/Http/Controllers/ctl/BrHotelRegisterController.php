@@ -121,7 +121,12 @@ class BrHotelRegisterController extends Controller
         $inputCheckInStart  = $request->input('Hotel.check_in');
         /* validation */
         $rules = [
-            'Hotel.hotel_category'    => [Rule::in(['a', 'b', 'c', 'j'])], // HACK: magic number
+            'Hotel.hotel_category'    => [Rule::in([
+                Hotel::CATEGORY_CAPSULE_HOTEL,
+                Hotel::CATEGORY_BUSINESS_HOTEL,
+                Hotel::CATEGORY_CITY_HOTEL,
+                Hotel::CATEGORY_JAPANESE_INN,
+            ])],
             'Hotel.hotel_nm'          => ['required', new WithoutHalfWidthKatakana(), 'between:0,50'],
             'Hotel.hotel_kn'          => ['required', new OnlyFullWidthKatakana(), 'between:0,150'],
             'Hotel.hotel_old_nm'      => [new WithoutHalfWidthKatakana(), 'between:0,50'],
@@ -158,9 +163,15 @@ class BrHotelRegisterController extends Controller
             ],
             'Hotel.check_in_info'     => [new WithoutHalfWidthKatakana(), 'between:0,75'],
             'Hotel.check_out'         => ['required', 'date_format:H:i'],
-            'Hotel.midnight_status'   => ['required', Rule::in([0, 1])],
+            'Hotel.midnight_status'   => ['required', Rule::in([
+                Hotel::MIDNIGHT_STATUS_STOP,
+                Hotel::MIDNIGHT_STATUS_ACCEPT,
+            ])],
 
-            'Hotel_Control.stock_type'  => [Rule::in([0, 1, 3])], // HACK: magic number
+            'Hotel_Control.stock_type'  => [Rule::in([
+                HotelControl::STOCK_TYPE_CONTRACT_SALE,
+                HotelControl::STOCK_TYPE_PURCHASE_SALE,
+            ])],
         ];
 
         $messages = [];
@@ -309,7 +320,7 @@ class BrHotelRegisterController extends Controller
         $rules = [
             'Hotel_Account.account_id_begin'    => [
                 'required',
-                'alpha_num',
+                'regex:/\A[0-9a-zA-Z]{1,10}\z/',
                 new WithoutHalfWidthKatakana(),
                 'max:10',
                 // 独自バリデーション hotel_account.account_id で一意
@@ -331,15 +342,16 @@ class BrHotelRegisterController extends Controller
             // hotel_person すべて、半角カナ禁止バリデーション
             'Hotel_Person.person_post'  => [new WithoutHalfWidthKatakana(), 'between:0,32'],
             'Hotel_Person.person_nm'    => [new WithoutHalfWidthKatakana(), 'required', 'between:0,32'],
-            // HACK: ↓ PhoneNumber に通れば半角カナ禁止チェックは不要
-            'Hotel_Person.person_tel'   => [new WithoutHalfWidthKatakana(), 'required', new PhoneNumber()],
-            // HACK: ↓ PhoneNumber に通れば半角カナ禁止チェックは不要
-            'Hotel_Person.person_fax'   => [new WithoutHalfWidthKatakana(), new PhoneNumber()],
-            // HACK: ↓ between 不要か？ HACK: ↓ PhoneNumber に通れば半角カナ禁止チェックは不要
-            'Hotel_Person.person_email' => [new WithoutHalfWidthKatakana(), new EmailSingle(), 'between:0,128'],
+            'Hotel_Person.person_tel'   => ['required', new PhoneNumber()],
+            'Hotel_Person.person_fax'   => [new PhoneNumber()],
+            'Hotel_Person.person_email' => [new EmailSingle(), 'between:0,128'],
 
-            // ↓ 登録画面では、hidden で 1 (登録作業中) 固定 magic number
-            'Hotel_Status.entry_status' => ['required', Rule::in([0, 1, 2])],
+            // ↓ 登録画面では、hidden で 1 (登録作業中) 固定
+            'Hotel_Status.entry_status' => ['required', Rule::in([
+                HotelStatus::ENTRY_STATUS_PUBLIC,
+                HotelStatus::ENTRY_STATUS_REGISTERING,
+                HotelStatus::ENTRY_STATUS_CANCELLED,
+            ])],
             'Hotel_Status.contract_ymd' => [],
             'Hotel_Status.open_ymd'     => [],
         ];
@@ -458,7 +470,6 @@ class BrHotelRegisterController extends Controller
 
             // MEMO: 移植元では、更新の場合のみ設定されている値。
             // 未定義だと動作しないため、干渉しない値であろうを設定している。
-            // TODO: 確認
             'hotel_status'  => (object)['entry_status' => null],
         ]);
     }
@@ -474,36 +485,56 @@ class BrHotelRegisterController extends Controller
         /* validation */
         $rules = [
             'notify_device'     => ['required', 'array'],
-            'notify_device.*'   => [Rule::in([1, 2, 8])],
+            'notify_device.*'   => [Rule::in([
+                1 << HotelNotify::NOTIFY_DEVICE_FAX,
+                1 << HotelNotify::NOTIFY_DEVICE_EMAIL,
+                1 << HotelNotify::NOTIFY_DEVICE_LINCOLN,
+            ])],
 
-            'Hotel_Notify.neppan_status'    => ['nullable', Rule::in([0, 1])],
-            'Hotel_Notify.notify_status'    => ['required', Rule::in([0, 1])],
-            // 'Hotel_Notify.notify_no'        => ['integer', 'numeric', 'between:0,10'], // 数字：数値チェック, 長さチェック
-            // HACK: ↓ EmailSingle に通れば半角カナ禁止チェック, 長さチェックは不要
+            'Hotel_Notify.neppan_status'    => ['nullable', Rule::in([
+                HotelNotify::NEPPAN_STATUS_FALSE,
+                HotelNotify::NEPPAN_STATUS_TRUE,
+            ])],
+            'Hotel_Notify.notify_status'    => ['required', Rule::in([
+                HotelNotify::NOTIFY_STATUS_FALSE,
+                HotelNotify::NOTIFY_STATUS_TRUE,
+            ])],
             'Hotel_Notify.notify_email'     => [
                 // 独自チェック 2(Email) にチェックがある場合: 'notify_email' が必須
-                Rule::requiredIf(in_array(2, $inputNotifyDevices)),
-                new WithoutHalfWidthKatakana(),
+                Rule::requiredIf(in_array(1 << HotelNotify::NOTIFY_DEVICE_EMAIL, $inputNotifyDevices)),
                 new EmailSingle(),
-                'between:0,500',
+                'between:0,500', // 過剰だが残している
             ],
-            // HACK: ↓ PhoneNumber に通れば半角カナ禁止チェック, 長さチェックは不要
             'Hotel_Notify.notify_fax'       => [
                 // 独自チェック 1(FAX) にチェックある場合: 'notify_fax' が必須
-                Rule::requiredIf(in_array(1, $inputNotifyDevices)),
-                new WithoutHalfWidthKatakana(),
+                Rule::requiredIf(in_array(1 << HotelNotify::NOTIFY_DEVICE_FAX, $inputNotifyDevices)),
                 new PhoneNumber(),
-                'between:0,15',
             ],
-            'Hotel_Notify.faxpr_status'     => ['required', Rule::in([0, 1])], // magic number
+            'Hotel_Notify.faxpr_status'     => ['required', Rule::in([
+                HotelNotify::FAXPR_STATUS_FALSE,
+                HotelNotify::FAXPR_STATUS_TRUE,
+            ])],
 
-            'Hotel_Control.stock_type'          => ['required', Rule::in([0, 1, 2, 3])], // magic number
-            'Hotel_Control.checksheet_send'     => ['required', Rule::in([0, 1])], // magic number
-            'Hotel_Control.charge_round'        => ['integer', 'numeric', Rule::in([1, 10, 100])], // magic number
+            'Hotel_Control.stock_type'          => ['required', Rule::in([
+                HotelControl::STOCK_TYPE_CONTRACT_SALE,
+                HotelControl::STOCK_TYPE_PURCHASE_SALE,
+            ])],
+            'Hotel_Control.checksheet_send'     => ['required', Rule::in([
+                HotelControl::CHECKSHEET_SEND_TRUE,
+                HotelControl::CHECKSHEET_SEND_FALSE,
+            ])],
+            'Hotel_Control.charge_round'        => ['integer', 'numeric', Rule::in([1, 10, 100])],
             'Hotel_Control.stay_cap'            => ['nullable', 'integer', 'numeric', 'min:1', 'max:99'],
-            'Hotel_Control.management_status'   => ['required', Rule::in([1, 2, 3])], // magic number
+            'Hotel_Control.management_status'   => ['required', Rule::in([
+                HotelControl::MANAGEMENT_STATUS_FAX,
+                HotelControl::MANAGEMENT_STATUS_INTERNET,
+                HotelControl::MANAGEMENT_STATUS_FAX_INTERNET,
+            ])],
             // MEMO: ↓ 移植元ではバリデーションされていなかった。ラジオボタンだから不具合にはならなかったのだろう。
-            'Hotel_Control.akafu_status'        => [Rule::in([0, 1])], // magic number
+            'Hotel_Control.akafu_status'        => [Rule::in([
+                HotelControl::AKAFU_STATUS_TRUE,
+                HotelControl::AKAFU_STATUS_FALSE,
+            ])],
         ];
         $messages = [];
         $attributes = [

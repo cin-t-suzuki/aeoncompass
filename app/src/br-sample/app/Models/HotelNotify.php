@@ -75,8 +75,9 @@ class HotelNotify extends CommonDBModel
 
     // カラム定数
     // 通知ステータス
-    private const NOTIFY_STATUS_FALSE   = 0; // 通知しない
-    private const NOTIFY_STATUS_TRUE    = 1; // 通知する
+    public const NOTIFY_STATUS_FALSE    = 0; // 通知しない
+    public const NOTIFY_STATUS_TRUE     = 1; // 通知する
+
     /*
         通知媒体 (複数選択可)
             複数選択をビット列による集合表現で管理
@@ -88,19 +89,20 @@ class HotelNotify extends CommonDBModel
 
         cf. https://qiita.com/drken/items/7c6ff2aa4d8fce1c9361
      */
-    public const NOTIFY_DEVICE_FAX         = 0; // fax
-    public const NOTIFY_DEVICE_EMAIL       = 1; // 電子メール
+    public const NOTIFY_DEVICE_FAX          = 0; // fax
+    public const NOTIFY_DEVICE_EMAIL        = 1; // 電子メール
     // public const NOTIFY_DEVICE_OPERATOR    = 2; // オペレータ連絡
     // MEMO: ↑ 移植元で、特殊な要件のために作ったもの、当システムでは利用しない
-    public const NOTIFY_DEVICE_LINCOLN     = 3; // リンカーン
+    public const NOTIFY_DEVICE_LINCOLN      = 3; // リンカーン
+
     // ねっぱん通知ステータス
-    private const NEPPAN_STATUS_FALSE       = 0;    // 否通知
-    private const NEPPAN_STATUS_TRUE        = 1;    // 通知
-    private const NEPPAN_STATUS_PENDING     = null; // 通知しない(※連動時に「通知する」に自動切替)
+    public const NEPPAN_STATUS_FALSE        = 0;    // 否通知
+    public const NEPPAN_STATUS_TRUE         = 1;    // 通知
+    public const NEPPAN_STATUS_PENDING      = null; // 通知しない(※連動時に「通知する」に自動切替)
 
     // FAXPR可否
-    private const FAXPR_STATUS_FALSE    = 0; // 非表示
-    private const FAXPR_STATUS_TRUE     = 1; // 表示
+    public const FAXPR_STATUS_FALSE     = 0; // 非表示
+    public const FAXPR_STATUS_TRUE      = 1; // 表示
 
 	/** コンストラクタ
 	 */

@@ -114,6 +114,10 @@ class Hotel extends CommonDBModel
     public const ACCEPT_AUTO_AUTO       = 0; // 自動更新
     public const ACCEPT_AUTO_MANUAL     = 1; // 手動更新
 
+    // 深夜受付すぺーたす
+    public const MIDNIGHT_STATUS_STOP   = 0; // 停止中
+    public const MIDNIGHT_STATUS_ACCEPT = 1; // 受付中
+
     /**
      * コンストラクタ
      */

@@ -69,9 +69,9 @@ class HotelStatus extends CommonDBModel
 
 
     // カラム定数
-    const ENTRY_STATUS_PUBLIC       = 0; // 公開中
-    const ENTRY_STATUS_REGISTERING  = 1; // 登録作業中
-    const ENTRY_STATUS_CANCELLED    = 2; // 解約
+    public const ENTRY_STATUS_PUBLIC        = 0; // 公開中
+    public const ENTRY_STATUS_REGISTERING   = 1; // 登録作業中
+    public const ENTRY_STATUS_CANCELLED     = 2; // 解約
 
 	/** コンストラクタ
 	 */

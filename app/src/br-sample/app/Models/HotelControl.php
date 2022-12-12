@@ -84,16 +84,17 @@ class HotelControl extends CommonDBModel
     // public const STOCK_TYPE_SANPU = 3; // 特定施設(三普)
 
     // 送客リスト送信可否
-    private const CHECKSHEET_SEND_FALSE = 0; // 送付しない
-    private const CHECKSHEET_SEND_TRUE  = 1; // 送付する
-    // 利用方法（複数選択可）
-    // MEMO: 実質ビット演算
-    private const MANAGEMENT_STATUS_FAX             = 1; // ファックス管理
-    private const MANAGEMENT_STATUS_INTERNET        = 2; // インターネット管理
-    private const MANAGEMENT_STATUS_FAX_INTERNET    = 3; // ファックス管理＋インターネット管理
+    public const CHECKSHEET_SEND_FALSE  = 0; // 送付しない
+    public const CHECKSHEET_SEND_TRUE   = 1; // 送付する
+
+    // 利用方法
+    public const MANAGEMENT_STATUS_FAX          = 1; // ファックス管理
+    public const MANAGEMENT_STATUS_INTERNET     = 2; // インターネット管理
+    public const MANAGEMENT_STATUS_FAX_INTERNET = 3; // ファックス管理＋インターネット管理
+
     // 赤い風船在庫利用施設
-    private const AKAFU_STATUS_FALSE    = 0; // 利用否
-    private const AKAFU_STATUS_TRUE     = 1; // 利用施設
+    public const AKAFU_STATUS_FALSE = 0; // 利用否
+    public const AKAFU_STATUS_TRUE  = 1; // 利用施設
 
 	/** コンストラクタ
 	 */
