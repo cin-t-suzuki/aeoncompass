@@ -173,7 +173,7 @@
     <tr>
         <td bgcolor="#EEFFEE">日本旅行在庫連携</td>
         <td>
-            {{-- TODO: magic number --}}
+            {{-- HACK: magic number --}}
             <input type="radio" id="akafu_status_1" name="Hotel_Control[akafu_status]" value="1" {{ $hotel_control->akafu_status == 1 ? 'checked' : '' }} />
             <label for="akafu_status_1">利用する</label>
 

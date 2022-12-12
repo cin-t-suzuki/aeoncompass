@@ -91,7 +91,7 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 	});
 
     // 施設登録
-    // TODO: 重複排除
+    // HACK: 重複排除
     Route::get('/brHotel/new', [\App\Http\Controllers\ctl\BrHotelRegisterController::class, 'new'])->name('ctl.br_hotel.new');
     Route::post('/brHotel/create', [\App\Http\Controllers\ctl\BrHotelRegisterController::class, 'create'])->name('ctl.br_hotel.create');
     Route::get('/brHotel/management', [\App\Http\Controllers\ctl\BrHotelRegisterController::class, 'management'])->name('ctl.br_hotel.management');

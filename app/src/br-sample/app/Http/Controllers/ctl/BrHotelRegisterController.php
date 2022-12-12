@@ -343,7 +343,7 @@ class BrHotelRegisterController extends Controller
             'Hotel_Person.person_post'  => [new WithoutHalfWidthKatakana(), 'between:0,32'],
             'Hotel_Person.person_nm'    => [new WithoutHalfWidthKatakana(), 'required', 'between:0,32'],
             'Hotel_Person.person_tel'   => ['required', new PhoneNumber()],
-            'Hotel_Person.person_fax'   => [new PhoneNumber()],
+            'Hotel_Person.person_fax'   => ['nullable', new PhoneNumber()],
             'Hotel_Person.person_email' => [new EmailSingle(), 'between:0,128'],
 
             // ↓ 登録画面では、hidden で 1 (登録作業中) 固定

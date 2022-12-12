@@ -107,7 +107,6 @@
     <tr>
         <td bgcolor="#EEFFEE">金額切り捨て桁</td>
         <td>
-            {{-- TODO: is_empty -> is_null に書き換えた。問題ないか確認 --}}
             @if ($hotel_control->charge_round == 1 || is_null($hotel_control->charge_round))
                 1の位で丸める
             @elseif ($hotel_control->charge_round == 10)
@@ -129,7 +128,7 @@
     <tr>
         <td bgcolor="#EEFFEE">利用方法</td>
         <td>
-        {{-- TODO: magic number --}}
+        {{-- HACK: magic number --}}
             @if ($hotel_control->management_status == 1)
                 ファックス管理 <br />
             @elseif ($hotel_control->management_status == 2)
