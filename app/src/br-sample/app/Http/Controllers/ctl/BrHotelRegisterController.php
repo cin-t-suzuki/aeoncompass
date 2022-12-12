@@ -10,13 +10,11 @@ use App\Models\{
     HotelNotify,
     HotelPerson,
     HotelStatus,
-    HotelSystemVersion,
     MastCity,
     MastPref,
     MastWard,
 };
 use App\Rules\{
-    EmailMultiple,
     EmailSingle,
     OnlyFullWidthKatakana,
     PhoneNumber,
@@ -29,7 +27,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
-// TODO: 管理システムバージョンを消す。固定値で「新インターフェース」を登録
 // MEMO: 移植元では、 BrhotelController に一緒くたにされていた。
 class BrHotelRegisterController extends Controller
 {
@@ -458,7 +455,6 @@ class BrHotelRegisterController extends Controller
             $a_hotel_control->stock_type = $targetStockType;
         }
         $notify_device = $request->old('notify_device', []);
-        $version = $request->old('version', []);
 
         return view('ctl.brhotel.state', [
             'target_cd'     => $hotelCd,
@@ -466,7 +462,6 @@ class BrHotelRegisterController extends Controller
             'hotel_notify'  => $hotel_notify,
             'hotel_control' => $a_hotel_control,
             'notify_device' => $notify_device,
-            'version'       => $version,
 
             // MEMO: 移植元では、更新の場合のみ設定されている値。
             // 未定義だと動作しないため、干渉しない値であろうを設定している。
@@ -482,7 +477,6 @@ class BrHotelRegisterController extends Controller
         $inputHotelNotify       = $request->input('Hotel_Notify');
         $inputHotelControl      = $request->input('Hotel_Control');
         $inputNotifyDevices     = $request->input('notify_device', []);
-        $checkedSystemVersions  = $request->input('version');
 
         /* validation */
         $rules = [
@@ -517,9 +511,6 @@ class BrHotelRegisterController extends Controller
             'Hotel_Control.management_status'   => ['required', Rule::in([1, 2, 3])], // magic number
             // MEMO: ↓ 移植元ではバリデーションされていなかった。ラジオボタンだから不具合にはならなかったのだろう。
             'Hotel_Control.akafu_status'        => [Rule::in([0, 1])], // magic number
-
-            'version'   => ['required', 'array'],
-            'version.*' => [Rule::in([1, 2])], // magic number
         ];
         $messages = [];
         $attributes = [
@@ -538,8 +529,6 @@ class BrHotelRegisterController extends Controller
             'Hotel_Control.stay_cap'            => '連泊限界数',
             'Hotel_Control.management_status'   => '利用方法',
             'Hotel_Control.akafu_status'        => '日本旅行在庫連携',
-
-            'version' => '管理システムバージョン',
         ];
         $validator = Validator::make($request->all(), $rules, $messages, $attributes);
         if ($validator->fails()) {
@@ -553,7 +542,7 @@ class BrHotelRegisterController extends Controller
         /* データ整形 */
         $hotelNotify        = $service->makeHotelNotifyData($hotelCd, $inputHotelNotify, $inputNotifyDevices);
         $hotelControl       = $service->makeHotelControlData($hotelCd, $inputHotelControl);
-        $hotelSystemVersion = $service->makeHotelSystemVersionData($hotelCd, $checkedSystemVersions);
+        $hotelSystemVersion = $service->makeHotelSystemVersionData($hotelCd);
 
         /* DB登録処理 */
         $errorMessages = $service->storeStatus($hotelNotify, $hotelControl, $hotelSystemVersion);
@@ -568,16 +557,12 @@ class BrHotelRegisterController extends Controller
         /* 結果表示用データ取得 */
         $displayHotelNotify         = HotelNotify::find($hotelCd);
         $displayHotelControl        = HotelControl::find($hotelCd);
-        $displayHotelSystemVersion  = HotelSystemVersion::where('hotel_cd', $hotelCd)
-            ->where('system_type', HotelSystemVersion::SYSTEM_TYPE_PLAN)
-            ->first();
 
         // メールアドレス 復号
         $cipher = new Models_Cipher(config('settings.cipher_key'));
         $displayHotelNotify->notify_email = $cipher->decrypt($displayHotelNotify->notify_email);
 
         $notifyDevices  = $service->divideNotifyDeviceValueToArray($displayHotelNotify->notify_device);
-        $versions       = $service->divideSystemVersionValueToArray($displayHotelSystemVersion->version);
 
         return view('ctl.brhotel.create-state', [
             'guides'        => ['施設情報の登録が完了いたしました。'],
@@ -586,8 +571,6 @@ class BrHotelRegisterController extends Controller
             'hotel_notify'  => $displayHotelNotify,
             'hotel_control' => $displayHotelControl,
             'notify_device' => $notifyDevices,
-
-            'version'       => $versions,
         ]);
     }
 }

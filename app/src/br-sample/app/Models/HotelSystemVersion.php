@@ -54,8 +54,9 @@ class HotelSystemVersion extends Model
     // カラム定数
     // システムページタイプ
     public const SYSTEM_TYPE_PLAN = 'plan'; // プランメンテナンス
+
     // システムバージョン（複数選択可）
     // ビット列による集合表現で管理
-    public const VERSION_1 = 1; // Ver1
-    public const VERSION_2 = 2; // Ver2
+    // public const VERSION_1 = 1; // Ver1 (旧システム) 使用しない
+    public const VERSION_2 = 2; // Ver2 (新システム)
 }

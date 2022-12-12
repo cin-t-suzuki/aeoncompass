@@ -23,9 +23,6 @@
             <input type="checkbox" name="notify_device[]" value="2" {{ in_array(2, $notify_device) ? 'checked' : '' }} id="nd2">
             <label for="nd2">電子メール</label>
 
-            <input type="checkbox" name="notify_device[]" value="4" {{ in_array(4, $notify_device) ? 'checked' : '' }} id="nd3">
-            <label for="nd3">オペレータ連絡</label>
-
             <input type="checkbox" name="notify_device[]" value="8" {{ in_array(8, $notify_device) ? 'checked' : '' }} id="nd4">
             <label for="nd4">リンカーン</label>
         </td>
@@ -174,19 +171,6 @@
             <label for="management_status3">ファックス管理＋インターネット管理</label>
         </td>
         <td><small>選択</small></td>
-    </tr>
-
-    <tr>
-        <td bgcolor="#EEFFEE">管理システムバージョン</td>
-        <td>
-            {{-- TODO: magic number --}}
-            <input type="checkbox" name="version[]" value="1" id="system_version1" {{ count($version) !== 0 && in_array(1, $version) ? 'checked' : '' }} />
-            <label for="system_version1">旧インターフェース</label>
-
-            <input type="checkbox" name="version[]" value="2" id="system_version2" {{ count($version) === 0 || in_array(2, $version) ? 'checked' : '' }} />
-            <label for="system_version2">新インターフェース</label>
-        </td>
-        <td><small>複数選択可<font color="#0000ff">（必須）</font></small></td>
     </tr>
 
     <tr>

@@ -517,22 +517,15 @@ class BrHotelRegisterService
      * hotel_system_version に登録するデータを整形
      *
      * @param string $hotelCd
-     * @param array $checkedSystemVersions
      * @return array
      */
-    public function makeHotelSystemVersionData($hotelCd, $checkedSystemVersions): array
+    public function makeHotelSystemVersionData($hotelCd): array
     {
         $actionCd = $this->getActionCd();
-
-        $versionValue = 0;
-        foreach ($checkedSystemVersions as $value) {
-            $versionValue += $value;
-        }
-
         return [
             'hotel_cd'      => $hotelCd,
-            'system_type'   => HotelSystemVersion::SYSTEM_TYPE_PLAN,
-            'version'       => $versionValue,
+            'system_type'   => HotelSystemVersion::SYSTEM_TYPE_PLAN, // 固定値
+            'version'       => HotelSystemVersion::VERSION_2, // 固定値
             'entry_cd'      => $actionCd,
             'modify_cd'     => $actionCd,
         ];
@@ -559,27 +552,6 @@ class BrHotelRegisterService
             }
         }
         return $notifyDevices;
-    }
-
-    /**
-     * 数値をビットに分解した配列に変換する（施設バージョン）
-     *
-     * @param int $systemVersionValue
-     * @return array
-     */
-    public function divideSystemVersionValueToArray($systemVersionValue): array
-    {
-        $systemVersions = [];
-        $array = [
-            HotelSystemVersion::VERSION_1,
-            HotelSystemVersion::VERSION_2,
-        ];
-        foreach ($array as $value) {
-            if ($systemVersionValue & $value) {
-                $systemVersions[] = $value;
-            }
-        }
-        return $systemVersions;
     }
 
     /**
