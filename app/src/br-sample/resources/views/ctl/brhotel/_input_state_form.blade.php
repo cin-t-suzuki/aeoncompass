@@ -12,6 +12,11 @@
     <tr>
         <td bgcolor="#EEFFEE">通知媒体</td>
         <td>
+            {{--
+                HACK: magic number
+                App\Models\HotelNotify::NOTIFY_DEVICE_XXX の値を x として、
+                2^x (= 1 << x) が value 属性に指定されている。
+            --}}
             <input type="checkbox" name="notify_device[]" value="1" {{ count($notify_device) === 0 || in_array(1, $notify_device) ? 'checked' : '' }} id="nd1">
             <label for="nd1">ファックス</label>
 
@@ -68,8 +73,7 @@
     <tr>
         <td bgcolor="#EEFFEE">通知電子メールアドレス</td>
         <td>
-            <input type="text" name="Hotel_Notify[notify_email]"
-                value="{{ strip_tags($hotel_notify->notify_email) }}" size="50" maxlength="50">
+            <input type="text" name="Hotel_Notify[notify_email]" value="{{ strip_tags($hotel_notify->notify_email) }}" size="50">
         </td>
         <td></td>
     </tr>
@@ -150,8 +154,8 @@
     <tr>
         <td bgcolor="#EEFFEE">連泊限界数</td>
         <td>
-            <input type="text" name="Hotel_Control[stay_cap]" value="{{ strip_tags($hotel_control->stay_cap) }}"
-                size="4" maxlength="2"><small>設定する場合入力</small>
+            <input type="text" name="Hotel_Control[stay_cap]" value="{{ strip_tags($hotel_control->stay_cap) }}" size="4">
+            <small>設定する場合入力</small>
         </td>
         <td><small>数字2桁</small></td>
     </tr>

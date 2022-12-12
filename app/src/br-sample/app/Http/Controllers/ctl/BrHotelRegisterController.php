@@ -3,28 +3,33 @@
 namespace App\Http\Controllers\ctl;
 
 use App\Http\Controllers\Controller;
-use App\Models\Hotel;
-use App\Models\HotelAccount;
-use App\Models\HotelControl;
-use App\Models\HotelNotify;
-use App\Models\HotelPerson;
-use App\Models\HotelStatus;
-use App\Models\HotelSystemVersion;
-use App\Models\MastCity;
-use App\Models\MastPref;
-use App\Models\MastWard;
-use App\Rules\EmailMultiple;
-use App\Rules\EmailSingle;
-use App\Rules\OnlyFullWidthKatakana;
-use App\Rules\PhoneNumber;
-use App\Rules\PostalCode;
-use App\Rules\WithoutHalfWidthKatakana;
+use App\Models\{
+    Hotel,
+    HotelAccount,
+    HotelControl,
+    HotelNotify,
+    HotelPerson,
+    HotelStatus,
+    HotelSystemVersion,
+    MastCity,
+    MastPref,
+    MastWard,
+};
+use App\Rules\{
+    EmailMultiple,
+    EmailSingle,
+    OnlyFullWidthKatakana,
+    PhoneNumber,
+    PostalCode,
+    WithoutHalfWidthKatakana
+};
 use App\Services\BrHotelRegisterService as Service;
 use App\Util\Models_Cipher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
+// TODO: 管理システムバージョンを消す。固定値で「新インターフェース」を登録
 // MEMO: 移植元では、 BrhotelController に一緒くたにされていた。
 class BrHotelRegisterController extends Controller
 {
@@ -116,11 +121,10 @@ class BrHotelRegisterController extends Controller
     {
         $inputHotel         = $request->input('Hotel');
         $inputHotelControl  = $request->input('Hotel_Control');
-
+        $inputCheckInStart  = $request->input('Hotel.check_in');
         /* validation */
         $rules = [
-            // 'Hotel.hotel_cd'          => ['required', new WithoutHalfWidthKatakana(), 'between:0,10'],
-            'Hotel.hotel_category'    => ['regex:/\A(a|b|c|j)\z/'],
+            'Hotel.hotel_category'    => [Rule::in(['a', 'b', 'c', 'j'])], // HACK: magic number
             'Hotel.hotel_nm'          => ['required', new WithoutHalfWidthKatakana(), 'between:0,50'],
             'Hotel.hotel_kn'          => ['required', new OnlyFullWidthKatakana(), 'between:0,150'],
             'Hotel.hotel_old_nm'      => [new WithoutHalfWidthKatakana(), 'between:0,50'],
@@ -131,27 +135,43 @@ class BrHotelRegisterController extends Controller
             'Hotel.address'           => ['required', new WithoutHalfWidthKatakana(), 'between:0,100'],
 
             'Hotel.tel'               => ['required', new PhoneNumber()],
-            'Hotel.fax'               => [new PhoneNumber()],
-            'Hotel.room_count'        => ['integer', 'numeric', 'between:0,9999'],
-            'Hotel.check_in'          => ['required', 'regex:/\A\d{2}:\d{2}\z/'], // TODO: 時刻チェック
-            'Hotel.check_in_end'      => ['regex:/\A\d{2}:\d{2}\z/'], // TODO: 独自チェック check_in より後であることをバリデーション
-            'Hotel.check_in_info'     => [new WithoutHalfWidthKatakana(), 'between:0,75'], // TODO: 時刻チェック
-            'Hotel.check_out'         => ['required', 'regex:/\A\d{2}:\d{2}\z/'], // TODO: 時刻チェック
-            'Hotel.midnight_status'   => ['required', 'regex:/\A(0|1)\z/'], // TODO: radio button
+            'Hotel.fax'               => ['nullable', new PhoneNumber()],
+            'Hotel.room_count'        => ['nullable', 'integer', 'numeric', 'min:0', 'max:9999'],
+            'Hotel.check_in'          => [
+                'required',
+                // 24時以降を許容した H:i の時刻形式であることをバリデーション
+                // MEMO: 'date_format:H:i' -> 24時以降の時刻に対応できない
+                'regex:/\A\d{2}:\d{2}\z/',
+            ],
+            'Hotel.check_in_end'      => [
+                'nullable',
+                // 24時以降を許容した H:i の時刻形式であることをバリデーション
+                // MEMO: 'date_format:H:i' -> 24時以降の時刻に対応できない
+                'regex:/\A\d{2}:\d{2}\z/',
 
-            'Hotel_Control.stock_type'  => [], // TODO: radio button
+                // 独自チェック check_in より後であることをバリデーション（同じではダメ）
+                // MEMO: 'after:Hotel.check_in' -> 24時以降の時刻に対応できない
+                // MEMO: 'gt:check_in' -> 文字列の場合、長さで判定される
+                function ($attribute, $value, $fail) use ($inputCheckInStart) {
+                    // 辞書順で比較
+                    if (strcmp($inputCheckInStart, $value) >= 0) {
+                        $fail(':attributeはチェックインより後の時刻を設定してください。');
+                    }
+                },
+            ],
+            'Hotel.check_in_info'     => [new WithoutHalfWidthKatakana(), 'between:0,75'],
+            'Hotel.check_out'         => ['required', 'date_format:H:i'],
+            'Hotel.midnight_status'   => ['required', Rule::in([0, 1])],
+
+            'Hotel_Control.stock_type'  => [Rule::in([0, 1, 3])], // HACK: magic number
         ];
 
-        // TODO:
-        $messages = [
-            'regex' => '[:attribute] に正規表現違反があります。',
-        ];
+        $messages = [];
         $attributes = [
-            'Hotel.hotel_cd'        => '施設コード',
             'Hotel.order_no'        => '表示順序',
             'Hotel.hotel_category'  => '施設区分',
             'Hotel.hotel_nm'        => '施設名称',
-            'Hotel.hotel_kn'        => '施設名称かな',
+            'Hotel.hotel_kn'        => '施設名称カナ',
             'Hotel.hotel_old_nm'    => '旧施設名称',
             'Hotel.postal_cd'       => '郵便番号',
             'Hotel.pref_id'         => '都道府県',
@@ -169,6 +189,7 @@ class BrHotelRegisterController extends Controller
             'Hotel.accept_status'   => '予約受付状態',
             'Hotel.accept_auto'     => '予約受付状態自動更新有無',
             'Hotel.accept_dtm'      => '予約受付状態更新日時',
+
             'Hotel_Control.stock_type' => '仕入タイプ',
         ];
 
@@ -294,48 +315,60 @@ class BrHotelRegisterController extends Controller
         $inputHotelStatus   = $request->input('Hotel_Status');
 
         /* validation */
-        // TODO: バリデーションルール記述
+        $inputAccountIdBegin = $request->input('Hotel_Account.account_id_begin');
         $rules = [
-            // TODO: 独自バリデーション (password と異なる、 hotel_account.account_id で一意)
-            'Hotel_Account.account_id_begin'    => ['required', 'between:0,10'],
-
-            // TODO: 独自バリデーション(ID と password が一致の場合エラー)
-            'Hotel_Account.password'            => ['required', 'regex:/\A[A-Z0-9]{1,10}\z/'],
-
-            'Hotel_Account.accept_status'       => ['required'], // TODO: radio button
+            'Hotel_Account.account_id_begin'    => [
+                'required',
+                'alpha_num',
+                new WithoutHalfWidthKatakana(),
+                'max:10',
+                // 独自バリデーション hotel_account.account_id で一意
+                'unique:App\Models\HotelAccount,account_id_begin',
+            ],
+            'Hotel_Account.password'            => [
+                'required',
+                'regex:/\A[A-Z0-9]{1,10}\z/',
+                new WithoutHalfWidthKatakana(),
+                // ↓ 独自バリデーション(ID と password が一致の場合エラー)
+                function ($attribute, $value, $fail) use ($inputAccountIdBegin) {
+                    if (strtolower($value) === strtolower($inputAccountIdBegin)) {
+                        $fail('アカウントIDと:attributeは異なる文字列を入力してください。');
+                    }
+                },
+            ],
+            'Hotel_Account.accept_status'       => ['required', Rule::in([0, 1])],
 
             // hotel_person すべて、半角カナ禁止バリデーション
             'Hotel_Person.person_post'  => [new WithoutHalfWidthKatakana(), 'between:0,32'],
             'Hotel_Person.person_nm'    => [new WithoutHalfWidthKatakana(), 'required', 'between:0,32'],
-            'Hotel_Person.person_tel'   => [new WithoutHalfWidthKatakana(), 'required', new PhoneNumber()], // TODO:PhoneNumber に通れば半角チェックは不要
-            'Hotel_Person.person_fax'   => [new WithoutHalfWidthKatakana(), new PhoneNumber()], // TODO:PhoneNumber に通れば半角チェックは不要
-            'Hotel_Person.person_email' => [new WithoutHalfWidthKatakana(), new EmailSingle(), 'between:0,128'], // TODO: between 不要か。
+            // HACK: ↓ PhoneNumber に通れば半角カナ禁止チェックは不要
+            'Hotel_Person.person_tel'   => [new WithoutHalfWidthKatakana(), 'required', new PhoneNumber()],
+            // HACK: ↓ PhoneNumber に通れば半角カナ禁止チェックは不要
+            'Hotel_Person.person_fax'   => [new WithoutHalfWidthKatakana(), new PhoneNumber()],
+            // HACK: ↓ between 不要か？ HACK: ↓ PhoneNumber に通れば半角カナ禁止チェックは不要
+            'Hotel_Person.person_email' => [new WithoutHalfWidthKatakana(), new EmailSingle(), 'between:0,128'],
 
-            'Hotel_Status.entry_status' => ['required', Rule::in([0, 1, 2])], // hidden で 1 (登録作業中) 固定 TODO: radio button
+            // ↓ 登録画面では、hidden で 1 (登録作業中) 固定 magic number
+            'Hotel_Status.entry_status' => ['required', Rule::in([0, 1, 2])],
             'Hotel_Status.contract_ymd' => [],
             'Hotel_Status.open_ymd'     => [],
-            'Hotel_Status.close_dtm'    => [], // 入力値ではない
         ];
         $messages = [];
         $attributes = [
-            // 'Hotel_Account.hotel_cd'         => '施設コード',
             'Hotel_Account.account_id_begin' => '入力アカウントID',
             // 'Hotel_Account.account_id'       => 'アカウントID',
             'Hotel_Account.password'         => 'パスワード',
             'Hotel_Account.accept_status'    => 'ステータス',
 
-            // 'Hotel_Person.hotel_cd'     => '施設コード',
             'Hotel_Person.person_post'  => '担当者役職',
             'Hotel_Person.person_nm'    => '担当者名称',
             'Hotel_Person.person_tel'   => '担当者電話番号',
             'Hotel_Person.person_fax'   => '担当者ファックス番号',
             'Hotel_Person.person_email' => '担当者電子メールアドレス',
 
-            // 'Hotel_Status.hotel_cd'     => '施設コード',
-            // 'Hotel_Status.entry_status' => '登録状態',
+            'Hotel_Status.entry_status' => '登録状態',
             'Hotel_Status.contract_ymd' => '契約日',
             'Hotel_Status.open_ymd'     => '公開日',
-            // 'Hotel_Status.close_dtm'    => '解約日時',
         ];
         $validator = Validator::make($request->all(), $rules, $messages, $attributes);
         if ($validator->fails()) {
@@ -429,7 +462,6 @@ class BrHotelRegisterController extends Controller
 
         return view('ctl.brhotel.state', [
             'target_cd'     => $hotelCd,
-            // 'target_stock_type' => $targetStockType,
 
             'hotel_notify'  => $hotel_notify,
             'hotel_control' => $a_hotel_control,
@@ -449,35 +481,45 @@ class BrHotelRegisterController extends Controller
         $hotelCd                = $request->input('target_cd');
         $inputHotelNotify       = $request->input('Hotel_Notify');
         $inputHotelControl      = $request->input('Hotel_Control');
-        $inputNotifyDevices     = $request->input('notify_device');
+        $inputNotifyDevices     = $request->input('notify_device', []);
         $checkedSystemVersions  = $request->input('version');
 
         /* validation */
-        // TODO:
         $rules = [
-            // 必須入力チェック, 数字：数値チェック, 独自チェック
-            // TODO: DB 側で validation するときは、配列から数値に変換した値で判定している。
-            // ここで validation するときは、1, 2, 4, 8 いずれかであることをチェックする。
-            // TODO: check box
-            'notify_device' => ['required', 'integer', 'numeric', 'TODO:custom_notify_device_validate'],
+            'notify_device'     => ['required', 'array'],
+            'notify_device.*'   => [Rule::in([1, 2, 8])],
 
-            'Hotel_Notify.neppan_status'    => ['regex:/\A(0|1)\z/'], // パターンチェック TODO: radio button
-            'Hotel_Notify.notify_status'    => ['required', 'regex:/\A(0|1)\z/'], // パターンチェック TODO: radio button
+            'Hotel_Notify.neppan_status'    => ['nullable', Rule::in([0, 1])],
+            'Hotel_Notify.notify_status'    => ['required', Rule::in([0, 1])],
             // 'Hotel_Notify.notify_no'        => ['integer', 'numeric', 'between:0,10'], // 数字：数値チェック, 長さチェック
-            'Hotel_Notify.notify_email'     => [new WithoutHalfWidthKatakana(), new EmailSingle(), 'between:0,500', 'TODO:custom_notify_email_validate'], // 独自チェック
-            'Hotel_Notify.notify_fax'       => [new WithoutHalfWidthKatakana(), new PhoneNumber(), 'between:0,15', 'TODO:custom_notify_fax_validate'], // 独自チェック
-            'Hotel_Notify.faxpr_status'     => ['required', 'regex:/\A(0|1)\z/'], // パターンチェック TODO: radio button
+            // HACK: ↓ EmailSingle に通れば半角カナ禁止チェック, 長さチェックは不要
+            'Hotel_Notify.notify_email'     => [
+                // 独自チェック 2(Email) にチェックがある場合: 'notify_email' が必須
+                Rule::requiredIf(in_array(2, $inputNotifyDevices)),
+                new WithoutHalfWidthKatakana(),
+                new EmailSingle(),
+                'between:0,500',
+            ],
+            // HACK: ↓ PhoneNumber に通れば半角カナ禁止チェック, 長さチェックは不要
+            'Hotel_Notify.notify_fax'       => [
+                // 独自チェック 1(FAX) にチェックある場合: 'notify_fax' が必須
+                Rule::requiredIf(in_array(1, $inputNotifyDevices)),
+                new WithoutHalfWidthKatakana(),
+                new PhoneNumber(),
+                'between:0,15',
+            ],
+            'Hotel_Notify.faxpr_status'     => ['required', Rule::in([0, 1])], // magic number
 
-            'Hotel_Control.stock_type'          => ['required', 'regex:/\A[0-3]\z/'], // パターンチェック TODO: radio button
-            'Hotel_Control.checksheet_send'     => ['required', 'regex:/\A[0-1]\z/'], // パターンチェック TODO: radio button
-            'Hotel_Control.charge_round'        => ['integer', 'numeric', 'digits_between:0,3'], // 数字：数値チェック, 長さチェック TODO: radio button
-            'Hotel_Control.stay_cap'            => ['integer', 'numeric', 'digits_between:0,2', 'TODO:custom_stay_cap_validate'], // 数字：数値チェック, 長さチェック, 独自チェック
-            'Hotel_Control.management_status'   => ['required', 'regex:/\A[1-3]\z/'], // パターンチェック TODO: radio button
-            'Hotel_Control.akafu_status'        => [], // TODO: 必要ない？ TODO: radio button
+            'Hotel_Control.stock_type'          => ['required', Rule::in([0, 1, 2, 3])], // magic number
+            'Hotel_Control.checksheet_send'     => ['required', Rule::in([0, 1])], // magic number
+            'Hotel_Control.charge_round'        => ['integer', 'numeric', Rule::in([1, 10, 100])], // magic number
+            'Hotel_Control.stay_cap'            => ['nullable', 'integer', 'numeric', 'min:1', 'max:99'],
+            'Hotel_Control.management_status'   => ['required', Rule::in([1, 2, 3])], // magic number
+            // MEMO: ↓ 移植元ではバリデーションされていなかった。ラジオボタンだから不具合にはならなかったのだろう。
+            'Hotel_Control.akafu_status'        => [Rule::in([0, 1])], // magic number
 
-            'version' => [], // TODO: check box
-
-            // 'target_cd' => [],
+            'version'   => ['required', 'array'],
+            'version.*' => [Rule::in([1, 2])], // magic number
         ];
         $messages = [];
         $attributes = [

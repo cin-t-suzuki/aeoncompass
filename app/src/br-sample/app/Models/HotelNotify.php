@@ -82,7 +82,7 @@ class HotelNotify extends CommonDBModel
             複数選択をビット列による集合表現で管理
 
         notify_device カラムの値を2進数で表したとき、
-        下から（右から） NOTIFY_DEVICE_XXX 桁目のフラグが立っている（1である）ならば、
+        下から（右から） NOTIFY_DEVICE_XXX 桁目(0はじまり) のフラグが立っている（1である）ならば、
         その通知方法が指定されている。
         例: 11 -> 8 + 2 + 1 -> 1011(2) -> [fax, 電子メール, リンカーン]
 
@@ -90,11 +90,14 @@ class HotelNotify extends CommonDBModel
      */
     public const NOTIFY_DEVICE_FAX         = 0; // fax
     public const NOTIFY_DEVICE_EMAIL       = 1; // 電子メール
-    public const NOTIFY_DEVICE_OPERATOR    = 2; // オペレータ連絡
+    // public const NOTIFY_DEVICE_OPERATOR    = 2; // オペレータ連絡
+    // MEMO: ↑ 移植元で、特殊な要件のために作ったもの、当システムでは利用しない
     public const NOTIFY_DEVICE_LINCOLN     = 3; // リンカーン
     // ねっぱん通知ステータス
-    private const NEPPAN_STATUS_FALSE   = 0; // 否通知
-    private const NEPPAN_STATUS_TRUE    = 1; // 通知
+    private const NEPPAN_STATUS_FALSE       = 0;    // 否通知
+    private const NEPPAN_STATUS_TRUE        = 1;    // 通知
+    private const NEPPAN_STATUS_PENDING     = null; // 通知しない(※連動時に「通知する」に自動切替)
+
     // FAXPR可否
     private const FAXPR_STATUS_FALSE    = 0; // 非表示
     private const FAXPR_STATUS_TRUE     = 1; // 表示

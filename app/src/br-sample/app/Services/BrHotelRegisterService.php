@@ -550,7 +550,7 @@ class BrHotelRegisterService
         $array = [
             HotelNotify::NOTIFY_DEVICE_FAX,
             HotelNotify::NOTIFY_DEVICE_EMAIL,
-            HotelNotify::NOTIFY_DEVICE_OPERATOR,
+            // HotelNotify::NOTIFY_DEVICE_OPERATOR,
             HotelNotify::NOTIFY_DEVICE_LINCOLN,
         ];
         foreach ($array as $value) {

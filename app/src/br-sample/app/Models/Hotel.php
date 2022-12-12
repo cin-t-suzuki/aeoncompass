@@ -102,6 +102,11 @@ class Hotel extends CommonDBModel
     public string $COL_ACCEPT_DTM       = "accept_dtm";
 
     // カラム定数
+    // 施設区分 (hotel_category)
+    public const CATEGORY_CAPSULE_HOTEL   = 'a'; // カプセルホテル
+    public const CATEGORY_BUSINESS_HOTEL  = 'b'; // ビジネスホテル
+    public const CATEGORY_CITY_HOTEL      = 'c'; // シティホテル
+    public const CATEGORY_JAPANESE_INN    = 'j'; // 旅館
     // 予約受付状態
     public const ACCEPT_STATUS_STOPPING     = 0; // 停止中
     public const ACCEPT_STATUS_ACCEPTING    = 1; // 受付中
