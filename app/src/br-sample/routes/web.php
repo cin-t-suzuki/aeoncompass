@@ -81,6 +81,26 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 		Route::get('/show', 'show')->name('ctl.brfaxPr.show');
 	});
 
+    Route::get('/htltop/index/target_cd/{target_cd}', function ($targetCd) {return 'TODO: htl top index : ' . $targetCd; })->name('ctl.htl_top.index');
+
+    Route::get('/htlHotel/show', [\App\Http\Controllers\ctl\HtlHotelController::class, 'show'])->name('ctl.htl_hotel.show');
+    Route::match(['get', 'post'], '/htlHotel/edit/'             , function(){ return 'TODO:'; })->name('ctl.htl_hotel.edit');
+    Route::match(['get', 'post'], '/htlHotelCard/show/'         , function(){ return 'TODO:'; })->name('ctl.htl_hotel_card.show');
+    Route::match(['get', 'post'], '/htlHotelInfo/'              , function(){ return 'TODO:'; })->name('ctl.htl_hotel_info.index');
+    Route::match(['get', 'post'], '/htlHotelInform/list/'       , function(){ return 'TODO:'; })->name('ctl.htl_hotel_inform.list');
+    Route::match(['get', 'post'], '/htlHotelLink/list/'         , function(){ return 'TODO:'; })->name('ctl.htl_hotel_link.list');
+    Route::match(['get', 'post'], '/htlHotelStation/list/'      , function(){ return 'TODO:'; })->name('ctl.htl_hotel_station.list');
+    Route::match(['get', 'post'], '/htlHotelAmenity/list/'      , function(){ return 'TODO:'; })->name('ctl.htl_hotel_amenity.list');
+    Route::match(['get', 'post'], '/htlHotelService/list/'      , function(){ return 'TODO:'; })->name('ctl.htl_hotel_service.list');
+    Route::match(['get', 'post'], '/htlHotelNearby/list/'       , function(){ return 'TODO:'; })->name('ctl.htl_hotel_nearby.list');
+    Route::match(['get', 'post'], '/htlHotelFacility/list/'     , function(){ return 'TODO:'; })->name('ctl.htl_hotel_facility.list');
+    Route::match(['get', 'post'], '/htlHotelFacilityRoom/list/' , function(){ return 'TODO:'; })->name('ctl.htl_hotel_facility_room.list');
+    Route::match(['get', 'post'], '/htlHotelChargeRound/index/' , function(){ return 'TODO:'; })->name('ctl.htl_hotel_charge_round.index');
+    Route::match(['get', 'post'], '/htlHotelCancel/index/'      , function(){ return 'TODO:'; })->name('ctl.htl_hotel_cancel.index');
+    Route::match(['get', 'post'], '/htlHotelReceipt/index/'     , function(){ return 'TODO:'; })->name('ctl.htl_hotel_receipt.index');
+    Route::match(['get', 'post'], '/htlBathTax/'                , function(){ return 'TODO:'; })->name('ctl.htl_bath_tax.index');
+
+
 	// 施設情報
 	Route::controller(HtlhotelInfoController::class)->prefix("brhotelInfo")->group(function(){
 		Route::match(['get','post'], '/show', 'show')->name('ctl.htlhotelInfo.show');
@@ -116,9 +136,24 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
         Route::post('/createnote', 'createnote')->name('ctl.brhotel.createnote'); //施設管理特記事項
         Route::post('/updatenote', 'updatenote')->name('ctl.brhotel.updatenote'); //
 
-        Route::get('/editManagement', 'editManagement')->name('ctl.br_hotel.edit_management'); // 施設管理情報更新
-        Route::post('/updateManagement', 'updateManagement')->name('ctl.br_hotel.update_management'); // 施設管理情報更新処理
+        Route::get ('/editSurvey'   , 'editSurvey'  )->name('ctl.br_hotel.edit_survey');    // 施設測地情報更新
+        Route::post('/updateSurvey' , 'updateSurvey')->name('ctl.br_hotel.update_survey');  // 施設測地情報更新 処理後結果
+
+        Route::get ('/editManagement'   , 'editManagement'  )->name('ctl.br_hotel.edit_management');    // 施設管理情報更新
+        Route::post('/updateManagement' , 'updateManagement')->name('ctl.br_hotel.update_management');  // 施設管理情報更新処理
     });
+
+    Route::controller(BrHotelAreaController::class)->prefix('brHotelArea')->group(function () {
+        Route::get('/', 'index')->name('ctl.br_hotel_area.index');
+        Route::get('/new', 'new')->name('ctl.br_hotel_area.new');
+        Route::post('/create', 'create')->name('ctl.br_hotel_area.create');
+        Route::get('/edit', 'edit')->name('ctl.br_hotel_area.edit');
+        Route::post('/update', 'update')->name('ctl.br_hotel_area.update');
+        Route::post('/delete', 'delete')->name('ctl.br_hotel_area.delete');
+        Route::get('/complete', 'complete')->name('ctl.br_hotel_area.complete');
+        Route::get('/json', 'json')->name('ctl.br_hotel_area.json');
+    });
+
 
     // 施設情報変更 登録状態変更
     Route::controller(BrhotelStatusController::class)->prefix("brhotelStatus")->group(function(){

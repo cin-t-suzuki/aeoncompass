@@ -85,10 +85,10 @@
 						施設測地情報
 						</td>
 					@if ($views->hotel_survey_regist == true)
-						<form method="post" action="{$v->env.source_path}{$v->env.module}/brhotel/editsurvey/">
-						<td nowrap><input type="submit" value=" 変更 "></td>
-						<input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($views->target_cd)}">
-						</form>
+						{{ Form::open(['route' => 'ctl.br_hotel.edit_survey', 'method' => 'get']) }}
+							<td nowrap><input type="submit" value=" 変更 "></td>
+							{{ Form::hidden('target_cd', strip_tags($views->target_cd)) }}
+						{{ Form::close() }}
 					@elseif ($views->hotel_regist != true)
 						<td nowrap colspan="2" width="90%">施設測地情報 <font color="red">※</font>施設を登録してください。</td>
 					@else
@@ -103,10 +103,10 @@
 							施設・地域関連付け
 						</td>
 						<td>
-							<form method="post" action="{$v->env.source_path}{$v->env.module}/brhotelarea/" style="display: inline;">
-								<input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($views->target_cd)}">
-								<input type="submit" value=" 変更 " />
-							</form>
+                            {{ Form::open(['route' => 'ctl.br_hotel_area.index', 'method' => 'get', 'style' => 'display: inline;']) }}
+                                {{ Form::hidden('target_cd', strip_tags($views->target_cd)) }}
+                                {{ Form::submit(' 変更 ') }}
+                            {{ Form::close() }}
 						</td>
 					</tr>
 				</table>
@@ -114,19 +114,22 @@
 
 			<td>
 				<table border="2" cellspacing="0" cellpadding="4">
-					<tr>
-						<td bgcolor="#EEEEFF" nowrap>
-						施設情報詳細
-						</td>
-					@if ($views->hotel_regist == true)
-						<form method="post" action="{$v->env.source_path}{$v->env.module}/htlhotel/show/">
-						<td nowrap><input type="submit" value=" 詳細 "></td>
-						<input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($views->target_cd)}">
-						</form>
-					@else
-						<td nowrap colspan="2" width="90%">施設情報詳細 <font color="red">※</font>施設を登録してください。</td>
-					@endif
-					</tr>
+                    <tr>
+                        <td bgcolor="#EEEEFF" nowrap>
+                            施設情報詳細
+                        </td>
+                        @if ($views->hotel_regist == true)
+                            {{ Form::open(['route' => 'ctl.htl_hotel.show', 'method' => 'get']) }}
+                                <td nowrap><input type="submit" value=" 詳細 "></td>
+                                <input type="hidden" name="target_cd" value="{{ strip_tags($views->target_cd) }}">
+                            {{ Form::close() }}
+                        @else
+                            <td nowrap colspan="2" width="90%">
+                                施設情報詳細
+                                <font color="red">※</font>施設を登録してください。
+                            </td>
+                        @endif
+                    </tr>
 					<tr>
 						<td bgcolor="#EEEEFF" nowrap>
 						施設画像情報

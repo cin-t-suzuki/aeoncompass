@@ -7,7 +7,6 @@ use App\Models\common\CommonDBModel;
 use App\Models\common\ValidationColumn;
 use Illuminate\Support\Facades\DB;
 
-
 /** 
  * ホテル
  */
@@ -15,6 +14,11 @@ class Hotel extends CommonDBModel
 {
     use Traits;
 
+    /**
+     * モデルに関連付けるテーブル
+     *
+     * @var string
+     */
     protected $table = "hotel";
 
     /**
@@ -107,9 +111,11 @@ class Hotel extends CommonDBModel
     public const CATEGORY_BUSINESS_HOTEL  = 'b'; // ビジネスホテル
     public const CATEGORY_CITY_HOTEL      = 'c'; // シティホテル
     public const CATEGORY_JAPANESE_INN    = 'j'; // 旅館
+
     // 予約受付状態
     public const ACCEPT_STATUS_STOPPING     = 0; // 停止中
     public const ACCEPT_STATUS_ACCEPTING    = 1; // 受付中
+
     // 予約受付状態手動更新
     public const ACCEPT_AUTO_AUTO       = 0; // 自動更新
     public const ACCEPT_AUTO_MANUAL     = 1; // 手動更新

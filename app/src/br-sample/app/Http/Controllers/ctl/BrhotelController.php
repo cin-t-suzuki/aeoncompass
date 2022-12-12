@@ -83,6 +83,7 @@ class BrhotelController extends _commonController
 	 * @return \Illuminate\Http\Response
 	 */
 	public function show(){
+        $this->addErrorMessageArray(Session::pull('errors', []));
 		$hotelStaffNoteData = Request::input('Hotel_Staff_Note');
 		$hotelCd = Request::input('target_cd');
 
@@ -853,6 +854,103 @@ class BrhotelController extends _commonController
             // MEMO: 移植元では、登録の場合のみ設定されている値。
             // 未定義だと動作しないため、干渉しない値であろうを設定している。
             'target_stock_type' => null,
+        ]);
+    }
+
+    /**
+     * 施設測地変更
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function editSurvey()
+    {
+        $errorList = Session::pull('errors', []);
+        $targetCd = Request::input('target_cd');
+
+        // session に 'hotel_status' があれば、 update からの error での戻りなので、その入力を表示
+        // なければ、画面表示のためのデータを DB から取得
+        if (Session::has('hotel_survey')) {
+            $hotelSurvey = (object)Session::pull('hotel_survey');
+        } else {
+            $hotelSurvey = HotelSurvey::find($targetCd);
+        }
+
+        // 施設情報取得
+        // 都道府県取得
+        $this->getHotelInfo($targetCd, $hotelData, $mastPrefData, $mastCityData, $mastWardData);
+
+        return view('ctl.brhotel.edit-survey', [
+            'errors'    => $errorList,
+
+            'target_cd' => $targetCd,
+
+            'hotel'     => $hotelData,
+            'mast_pref' => $mastPrefData,
+            'mast_city' => $mastCityData,
+            'mast_ward' => $mastWardData,
+            'hotel_survey' => $hotelSurvey,
+        ]);
+    }
+
+    /**
+     * 施設測地変更 処理後結果
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function updateSurvey()
+    {
+        $errorList = [];
+        $targetCd = Request::input('target_cd');
+        $inputHotelSurvey = Request::input('Hotel_Survey');
+
+        // validation
+        $modelHotelSurvey = new HotelSurvey();
+        $errorList = $modelHotelSurvey->validation($inputHotelSurvey);
+        if (count($errorList) > 0) {
+            $errorList[] = '更新できませんでした。';
+            return redirect()->route('ctl.br_hotel.edit_survey', ['target_cd' => $targetCd])
+                ->with([
+                    'errors'       => $errorList,
+                    'hotel_survey' => $inputHotelSurvey,
+                ]);
+        }
+
+        // 共通カラム
+        $modelHotelSurvey->setUpdateCommonColumn($inputHotelSurvey);
+
+        try {
+            DB::transaction(function () use ($targetCd, $inputHotelSurvey) {
+                if (!HotelSurvey::find($targetCd)->fill($inputHotelSurvey)->save()) {
+                    throw new \Exception('hotel_survey が更新されませんでした。');
+                }
+            });
+        } catch (\Exception $e) {
+            Log::error($e);
+            $errorList[] = '更新時にエラーが発生しました。';
+            return redirect()->route('ctl.brhotel.show', ['target_cd' => $targetCd])
+                ->with(['errors' => $errorList]);
+        }
+
+        // 完了メッセージ
+        $guides[] = "施設測地の更新が完了いたしました。 ";
+
+        // 表示用データの取得
+        $hotelSurvey = HotelSurvey::find($targetCd);
+
+        // 施設情報取得
+        // 都道府県取得
+        $this->getHotelInfo($targetCd, $hotelData, $mastPrefData, $mastCityData, $mastWardData);
+
+        return view('ctl.brhotel.update-survey', [
+            'guides'    => $guides,
+
+            'target_cd' => $targetCd,
+
+            'hotel'     => $hotelData,
+            'mast_pref' => $mastPrefData,
+            'mast_city' => $mastCityData,
+            'mast_ward' => $mastWardData,
+            'hotel_survey' => $hotelSurvey,
         ]);
     }
 }

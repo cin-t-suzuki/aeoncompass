@@ -14,7 +14,7 @@ class HotelControl extends CommonDBModel
 {
     use Traits;
 
-    protected $table = "hotel_control";
+    protected $table = 'hotel_control';
     /**
      * テーブルに関連付ける主キー
      *
@@ -57,13 +57,13 @@ class HotelControl extends CommonDBModel
         'modify_ts',
     ];
 
-	// カラム
-	public string $COL_HOTEL_CD = "hotel_cd";
-	public string $COL_STOCK_TYPE = "stock_type";
-	public string $COL_CHECKSHEET_SEND = "checksheet_send";
-	public string $COL_CHARGE_ROUND = "charge_round";
-	public string $COL_STAY_CAP = "stay_cap";
-	public string $COL_MANAGEMENT_STATUS = "management_status";
+    // カラム
+    public string $COL_HOTEL_CD             = 'hotel_cd';
+    public string $COL_STOCK_TYPE           = 'stock_type';
+    public string $COL_CHECKSHEET_SEND      = 'checksheet_send';
+    public string $COL_CHARGE_ROUND         = 'charge_round';
+    public string $COL_STAY_CAP             = 'stay_cap';
+    public string $COL_MANAGEMENT_STATUS    = 'management_status';
 
     // カラム定数
     /*
