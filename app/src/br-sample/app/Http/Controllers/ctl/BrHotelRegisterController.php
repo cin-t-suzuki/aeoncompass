@@ -201,14 +201,7 @@ class BrHotelRegisterController extends Controller
 
         /* データ整形 */
         // hotel_cd 採番
-        // TODO: AC 用にカスタマイズが必要か。
-        if ($inputHotelControl['stock_type'] == HotelControl::STOCK_TYPE_SANPU) {
-            // 三普用の施設の場合
-            $hotelCd = $service->getHotelCdSanpu();
-        } else {
-            // 受託販売  買取販売の場合
-            $hotelCd = $service->getHotelCd();
-        }
+        $hotelCd = $service->getHotelCd($inputHotel['pref_id']);
 
         $hotel                  = $service->makeHotelData($hotelCd, $inputHotel);
         $hotelInsuranceWeather  = $service->makeHotelInsuranceWeatherData($hotelCd, $hotel);

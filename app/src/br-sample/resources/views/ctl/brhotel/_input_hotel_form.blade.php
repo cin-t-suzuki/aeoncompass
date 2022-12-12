@@ -198,12 +198,6 @@
                         買取販売
                     </label>
                 </label>
-                <label>
-                    <input type="radio" name="Hotel_Control[stock_type]" value="3" {{ $hotel_control['stock_type'] == 3 ? 'checked' : '' }} id="i3">
-                    <label for="i3">
-                        特定施設(三普)
-                    </label>
-                </label>
             </td>
             <td><small>選択</small></td>
         </tr>

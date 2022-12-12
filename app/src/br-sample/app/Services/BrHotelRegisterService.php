@@ -18,56 +18,29 @@ class BrHotelRegisterService
 {
     /**
      * ホテルコードの取得
-     * ※YYYYMM(年月) + 今月の４桁の連番を取得
+     * ※都道府県コード(2桁) + 年2桁 + 月2桁 + 4桁
      *
      * @return string
      */
-    public function getHotelCd(): string
+    public function getHotelCd($prefId): string
     {
+        $prefix = sprintf('%02d', $prefId) . date('ym');
         $sql = <<<SQL
             select
                 ifnull(
                     max(hotel_cd) + 1
-                    , concat(date_format(now(), '%Y%m'), '0001')
+                    , :start_cd
                 ) as hotel_cd
             from
                 hotel
             where
-                hotel_cd LIKE concat(date_format(now(), '%Y%m'), '%')
+                hotel_cd LIKE concat(:prefix, '%')
         SQL;
-        $result = DB::select($sql);
-        return $result[0]->hotel_cd;
-    }
-
-    /**
-     * ホテルコードの取得
-     * ※ 3YYYMM(年月) + 今月の４桁の連番を取得
-     *
-     * @return string
-     */
-    public function getHotelCdSanpu(): string
-    {
-        $sql = <<<SQL
-            select
-                ifnull(
-                    max(hotel_cd) + 1
-                    , concat(
-                        '3'
-                        , substring(date_format(now(), '%Y%m'), 2)
-                        , '0001'
-                    )
-                ) as hotel_cd
-            from
-                hotel
-            where
-                hotel_cd LIKE concat(
-                    '3'
-                    , substring(date_format(now(), '%Y%m'), 2)
-                    , '%'
-                )
-        SQL;
-        $result = DB::select($sql);
-        return $result[0]->hotel_cd;
+        $result = DB::select($sql, [
+            'start_cd'  => $prefix . '0001',
+            'prefix'    => $prefix,
+        ]);
+        return sprintf('%010d', $result[0]->hotel_cd);
     }
 
     /**

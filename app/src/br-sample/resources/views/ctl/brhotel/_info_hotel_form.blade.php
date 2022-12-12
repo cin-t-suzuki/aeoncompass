@@ -137,6 +137,6 @@
     </tr>
 
     <input type="hidden" name="target_cd" value="{{ strip_tags($hotel['hotel_cd']) }}">
-    <!--target_stock_type は施設情報更新では扱っていないがcreateでは使っている セットしている処理は施設管理(hotel_control)？要確認-->
+    <!-- target_stock_type は施設情報更新では扱っていないがcreateでは使っている セットしている処理は施設管理(hotel_control) -->
     <input type="hidden" name="target_stock_type" value="{{ isset($target_stock_type) ? strip_tags($target_stock_type) : '' }}">
 </table>

@@ -110,9 +110,6 @@
 
                 <input type="radio" name="Hotel_Control[stock_type]" value="1" {{ $hotel_control->stock_type == 1 ? 'checked' : '' }} id="i2">
                 <label for="i2">買取販売</label>
-
-                <input type="radio" name="Hotel_Control[stock_type]" value="3" {{ $hotel_control->stock_type == 3 ? 'checked' : '' }} id="i3">
-                <label for="i3">特定施設(三普)</label>
             @endif
         </td>
         <td><small>選択</small></td>

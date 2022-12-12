@@ -87,8 +87,6 @@
                 買取販売
             @elseif ($hotel_control->stock_type == 2)
                 一括受託（東横イン）
-            @elseif ($hotel_control->stock_type == 3)
-                特定施設(三普)
             @endif
             <br />
         </td>

@@ -75,12 +75,14 @@ class HotelControl extends CommonDBModel
         (追記）3 が特定施設（三普）であることは、ハードコーディングからの推測（以下などを参照）
             public\app\ctl\controllers\BrhotelController.php L.740 あたりの if 文
             public\app\ctl\views\brhotel\_input_hotel_form.tpl L.168 あたりの 「仕入タイプ」の選択肢
+            「特別対応のためのもの」なので、使用しない。
     */
     public const STOCK_TYPE_CONTRACT_SALE = 0;             //受託販売
     public const STOCK_TYPE_PURCHASE_SALE = 1;             //買取販売
     public const STOCK_TYPE_BULK_CONTRACT_TOYOKO_INN = 2;  //一括受託（東横イン）
     public const STOCK_TYPE_BULK_CONTRACT_OLD_YADO_PLAZA = -2; //一括受託（旧宿ぷらざ）
-    public const STOCK_TYPE_SANPU = 3; // 特定施設(三普)
+    // public const STOCK_TYPE_SANPU = 3; // 特定施設(三普)
+
     // 送客リスト送信可否
     private const CHECKSHEET_SEND_FALSE = 0; // 送付しない
     private const CHECKSHEET_SEND_TRUE  = 1; // 送付する
