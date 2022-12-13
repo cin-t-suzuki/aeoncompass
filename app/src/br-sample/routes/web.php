@@ -120,7 +120,7 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
     Route::post('/brHotel/createState', [\App\Http\Controllers\ctl\BrHotelRegisterController::class, 'createState'])->name('ctl.br_hotel.create_state');
 
     // 施設情報メイン
-    Route::controller(BrhotelController::class)->prefix("brhotel")->group(function(){
+    Route::controller(BrhotelController::class)->prefix("brhotel")->group(function () {
         Route::get('/hotelsearch', 'hotelsearch')->name('ctl.brhotel.hotelsearch'); //宿泊施設検索
         // Route::match(['get','post'], '/new', 'new')->name('ctl.brhotel.new');
 
@@ -128,7 +128,7 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
         Route::post('/update', 'update')->name('ctl.brhotel.update'); //施設更新？
 
         Route::get('/', 'index')->name('ctl.brhotel.index'); // 検索 初期表示
-        Route::match(['get','post'],'/show', 'show')->name('ctl.brhotel.show'); // 詳細変更 施設各情報ハブ
+        Route::match(['get', 'post'], '/show', 'show')->name('ctl.brhotel.show'); // 詳細変更 施設各情報ハブ
 
         Route::get('/searchcity', 'searchcity')->name('ctl.brhotel.searchcity'); // 検索部品 市プルダウン
         Route::get('/searchward', 'searchward')->name('ctl.brhotel.searchward'); // 検索部品 区プルダウン
@@ -136,11 +136,11 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
         Route::post('/createnote', 'createnote')->name('ctl.brhotel.createnote'); //施設管理特記事項
         Route::post('/updatenote', 'updatenote')->name('ctl.brhotel.updatenote'); //
 
-        Route::get ('/editSurvey'   , 'editSurvey'  )->name('ctl.br_hotel.edit_survey');    // 施設測地情報更新
-        Route::post('/updateSurvey' , 'updateSurvey')->name('ctl.br_hotel.update_survey');  // 施設測地情報更新 処理後結果
+        Route::get ('/editSurvey', 'editSurvey')->name('ctl.br_hotel.edit_survey');    // 施設測地情報更新
+        Route::post('/updateSurvey', 'updateSurvey')->name('ctl.br_hotel.update_survey');  // 施設測地情報更新 処理後結果
 
-        Route::get ('/editManagement'   , 'editManagement'  )->name('ctl.br_hotel.edit_management');    // 施設管理情報更新
-        Route::post('/updateManagement' , 'updateManagement')->name('ctl.br_hotel.update_management');  // 施設管理情報更新処理
+        Route::get ('/editManagement', 'editManagement')->name('ctl.br_hotel.edit_management');    // 施設管理情報更新
+        Route::post('/updateManagement', 'updateManagement')->name('ctl.br_hotel.update_management');  // 施設管理情報更新処理
     });
 
     Route::controller(BrHotelAreaController::class)->prefix('brHotelArea')->group(function () {

@@ -27,7 +27,7 @@ use Illuminate\Http\Request;
 class BrHotelRegisterController extends Controller
 {
     /**
-     * 施設情報入力
+     * 施設情報入力 (STEP 1/6)
      *
      * @param Request $request
      * @return \Illuminate\Http\Response
@@ -102,7 +102,7 @@ class BrHotelRegisterController extends Controller
     }
 
     /**
-     * 施設情報登録
+     * 施設情報登録 (STEP 2/6)
      *
      * @param StoreHotelRequest $request
      * @param Service $service
@@ -214,7 +214,7 @@ class BrHotelRegisterController extends Controller
     }
 
     /**
-     * 施設管理情報登録
+     * 施設管理情報登録 (STEP 4/6)
      *
      * @param StoreManagementRequest $request
      * @param Service $service
@@ -277,6 +277,12 @@ class BrHotelRegisterController extends Controller
         ]);
     }
 
+    /**
+     * 施設状態情報入力 (STEP 5/6)
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function state(Request $request)
     {
         $hotelCd     = $request->input('target_cd');
@@ -321,7 +327,7 @@ class BrHotelRegisterController extends Controller
     }
 
     /**
-     * 施設状態情報登録
+     * 施設状態情報登録 (STEP 6/6)
      *
      * @param StoreStateRequest $request
      * @param Service $service
