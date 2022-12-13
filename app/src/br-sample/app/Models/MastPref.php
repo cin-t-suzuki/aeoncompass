@@ -67,7 +67,7 @@ class MastPref extends CommonDBModel
         return null;
     }
 
-    // 都道府県マスタを取得
+    // 都道府県マスタ取得
     //
     // aa_conditions
     //   region_id         地方ID
