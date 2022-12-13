@@ -552,4 +552,24 @@ class DateUtil {
 			return $a_week[$as_style][date('w', $this->date)];
 		}
 
+		// 現在設定されている日付をもとにある曜日の日付を取得
+		//
+		//   as_style  曜日を指定
+		//     1:日 2:月 3:火 4:水 5:木 6:金 7:土
+		//   ab_mon 週の開始を日曜日からとするのか月曜日からとするのかを設定します。
+		//     true:月曜を週の先頭 false:日曜を週の先頭
+		public function week_day($as_style, $ab_mon = false){
+
+			// 月曜日が週の開始であった場合かつ日曜日の日付を求める場合
+			if ($ab_mon && $as_style == 1){
+				$as_style = 8;
+			}
+
+			$this->add('d', ($this->to_week('n') * -1) + $as_style);
+
+			return $this->date;
+
+		}
+
+
 }
