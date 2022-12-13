@@ -3,6 +3,11 @@
 namespace App\Http\Controllers\ctl;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\{
+    StoreHotelRequest,
+    StoreManagementRequest,
+    StoreStateRequest,
+};
 use App\Models\{
     Hotel,
     HotelAccount,
@@ -14,18 +19,9 @@ use App\Models\{
     MastPref,
     MastWard,
 };
-use App\Rules\{
-    EmailSingle,
-    OnlyFullWidthKatakana,
-    PhoneNumber,
-    PostalCode,
-    WithoutHalfWidthKatakana
-};
 use App\Services\BrHotelRegisterService as Service;
 use App\Util\Models_Cipher;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 
 // MEMO: 移植元では、 BrhotelController に一緒くたにされていた。
 class BrHotelRegisterController extends Controller
@@ -108,107 +104,14 @@ class BrHotelRegisterController extends Controller
     /**
      * 施設情報登録
      *
-     * HACK: (工数次第) validation は FormRequest オブジェクトで実装する
-     *
-     * @param Request $request
+     * @param StoreHotelRequest $request
      * @param Service $service
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request, Service $service)
+    public function create(StoreHotelRequest $request, Service $service)
     {
         $inputHotel         = $request->input('Hotel');
         $inputHotelControl  = $request->input('Hotel_Control');
-        $inputCheckInStart  = $request->input('Hotel.check_in');
-        /* validation */
-        $rules = [
-            'Hotel.hotel_category'    => [Rule::in([
-                Hotel::CATEGORY_CAPSULE_HOTEL,
-                Hotel::CATEGORY_BUSINESS_HOTEL,
-                Hotel::CATEGORY_CITY_HOTEL,
-                Hotel::CATEGORY_JAPANESE_INN,
-            ])],
-            'Hotel.hotel_nm'          => ['required', new WithoutHalfWidthKatakana(), 'between:0,50'],
-            'Hotel.hotel_kn'          => ['required', new OnlyFullWidthKatakana(), 'between:0,150'],
-            'Hotel.hotel_old_nm'      => [new WithoutHalfWidthKatakana(), 'between:0,50'],
-            'Hotel.postal_cd'         => ['required', new PostalCode()],
-            'Hotel.pref_id'           => ['required', 'integer', 'numeric', 'digits_between:0,2'],
-            'Hotel.city_id'           => ['required', 'integer', 'numeric', 'digits_between:0,20'],
-            'Hotel.ward_id'           => ['integer', 'numeric', 'digits_between:0,20'],
-            'Hotel.address'           => ['required', new WithoutHalfWidthKatakana(), 'between:0,100'],
-
-            'Hotel.tel'               => ['required', new PhoneNumber()],
-            'Hotel.fax'               => ['nullable', new PhoneNumber()],
-            'Hotel.room_count'        => ['nullable', 'integer', 'numeric', 'min:0', 'max:9999'],
-            'Hotel.check_in'          => [
-                'required',
-                // 24時以降を許容した H:i の時刻形式であることをバリデーション
-                // MEMO: 'date_format:H:i' -> 24時以降の時刻に対応できない
-                'regex:/\A\d{2}:\d{2}\z/',
-            ],
-            'Hotel.check_in_end'      => [
-                'nullable',
-                // 24時以降を許容した H:i の時刻形式であることをバリデーション
-                // MEMO: 'date_format:H:i' -> 24時以降の時刻に対応できない
-                'regex:/\A\d{2}:\d{2}\z/',
-
-                // 独自チェック check_in より後であることをバリデーション（同じではダメ）
-                // MEMO: 'after:Hotel.check_in' -> 24時以降の時刻に対応できない
-                // MEMO: 'gt:check_in' -> 文字列の場合、長さで判定される
-                function ($attribute, $value, $fail) use ($inputCheckInStart) {
-                    // 辞書順で比較
-                    if (strcmp($inputCheckInStart, $value) >= 0) {
-                        $fail(':attributeはチェックインより後の時刻を設定してください。');
-                    }
-                },
-            ],
-            'Hotel.check_in_info'     => [new WithoutHalfWidthKatakana(), 'between:0,75'],
-            'Hotel.check_out'         => ['required', 'date_format:H:i'],
-            'Hotel.midnight_status'   => ['required', Rule::in([
-                Hotel::MIDNIGHT_STATUS_STOP,
-                Hotel::MIDNIGHT_STATUS_ACCEPT,
-            ])],
-
-            'Hotel_Control.stock_type'  => [Rule::in([
-                HotelControl::STOCK_TYPE_CONTRACT_SALE,
-                HotelControl::STOCK_TYPE_PURCHASE_SALE,
-            ])],
-        ];
-
-        $messages = [];
-        $attributes = [
-            'Hotel.order_no'        => '表示順序',
-            'Hotel.hotel_category'  => '施設区分',
-            'Hotel.hotel_nm'        => '施設名称',
-            'Hotel.hotel_kn'        => '施設名称カナ',
-            'Hotel.hotel_old_nm'    => '旧施設名称',
-            'Hotel.postal_cd'       => '郵便番号',
-            'Hotel.pref_id'         => '都道府県',
-            'Hotel.city_id'         => '市',
-            'Hotel.ward_id'         => '区',
-            'Hotel.address'         => '住所',
-            'Hotel.tel'             => '電話番号',
-            'Hotel.fax'             => 'ＦＡＸ番号',
-            'Hotel.room_count'      => '保有部屋数',
-            'Hotel.check_in'        => 'チェックイン開始時刻',
-            'Hotel.check_in_end'    => 'チェックイン終了時刻',
-            'Hotel.check_in_info'   => 'チェックイン時刻コメント',
-            'Hotel.check_out'       => 'チェックアウト時刻',
-            'Hotel.midnight_status' => '深夜受付状態',
-            'Hotel.accept_status'   => '予約受付状態',
-            'Hotel.accept_auto'     => '予約受付状態自動更新有無',
-            'Hotel.accept_dtm'      => '予約受付状態更新日時',
-
-            'Hotel_Control.stock_type' => '仕入タイプ',
-        ];
-
-        $validator = Validator::make($request->all(), $rules, $messages, $attributes);
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withInput()
-                ->with([
-                    'errors' => $validator->errors()->all(),
-                ]);
-        }
 
         /* データ整形 */
         // hotel_cd 採番
@@ -310,79 +213,19 @@ class BrHotelRegisterController extends Controller
         ]);
     }
 
-    // HACK: (工数次第) validation は FormRequest オブジェクトで実装する
-    public function createManagement(Request $request, Service $service)
+    /**
+     * 施設管理情報登録
+     *
+     * @param StoreManagementRequest $request
+     * @param Service $service
+     * @return \Illuminate\Http\Response
+     */
+    public function createManagement(StoreManagementRequest $request, Service $service)
     {
         $hotelCd            = $request->input('target_cd');
         $inputHotelAccount  = $request->input('Hotel_Account');
         $inputHotelPerson   = $request->input('Hotel_Person');
         $inputHotelStatus   = $request->input('Hotel_Status');
-
-        /* validation */
-        $inputAccountIdBegin = $request->input('Hotel_Account.account_id_begin');
-        $rules = [
-            'Hotel_Account.account_id_begin'    => [
-                'required',
-                'regex:/\A[0-9a-zA-Z]{1,10}\z/',
-                new WithoutHalfWidthKatakana(),
-                'max:10',
-                // 独自バリデーション hotel_account.account_id で一意
-                'unique:App\Models\HotelAccount,account_id_begin',
-            ],
-            'Hotel_Account.password'            => [
-                'required',
-                'regex:/\A[A-Z0-9]{1,10}\z/',
-                new WithoutHalfWidthKatakana(),
-                // ↓ 独自バリデーション(ID と password が一致の場合エラー)
-                function ($attribute, $value, $fail) use ($inputAccountIdBegin) {
-                    if (strtolower($value) === strtolower($inputAccountIdBegin)) {
-                        $fail('アカウントIDと:attributeは異なる文字列を入力してください。');
-                    }
-                },
-            ],
-            'Hotel_Account.accept_status'       => ['required', Rule::in([0, 1])],
-
-            // hotel_person すべて、半角カナ禁止バリデーション
-            'Hotel_Person.person_post'  => [new WithoutHalfWidthKatakana(), 'between:0,32'],
-            'Hotel_Person.person_nm'    => [new WithoutHalfWidthKatakana(), 'required', 'between:0,32'],
-            'Hotel_Person.person_tel'   => ['required', new PhoneNumber()],
-            'Hotel_Person.person_fax'   => ['nullable', new PhoneNumber()],
-            'Hotel_Person.person_email' => [new EmailSingle(), 'between:0,128'],
-
-            // ↓ 登録画面では、hidden で 1 (登録作業中) 固定
-            'Hotel_Status.entry_status' => ['required', Rule::in([
-                HotelStatus::ENTRY_STATUS_PUBLIC,
-                HotelStatus::ENTRY_STATUS_REGISTERING,
-                HotelStatus::ENTRY_STATUS_CANCELLED,
-            ])],
-            'Hotel_Status.contract_ymd' => [],
-            'Hotel_Status.open_ymd'     => [],
-        ];
-        $messages = [];
-        $attributes = [
-            'Hotel_Account.account_id_begin' => '入力アカウントID',
-            // 'Hotel_Account.account_id'       => 'アカウントID',
-            'Hotel_Account.password'         => 'パスワード',
-            'Hotel_Account.accept_status'    => 'ステータス',
-
-            'Hotel_Person.person_post'  => '担当者役職',
-            'Hotel_Person.person_nm'    => '担当者名称',
-            'Hotel_Person.person_tel'   => '担当者電話番号',
-            'Hotel_Person.person_fax'   => '担当者ファックス番号',
-            'Hotel_Person.person_email' => '担当者電子メールアドレス',
-
-            'Hotel_Status.entry_status' => '登録状態',
-            'Hotel_Status.contract_ymd' => '契約日',
-            'Hotel_Status.open_ymd'     => '公開日',
-        ];
-        $validator = Validator::make($request->all(), $rules, $messages, $attributes);
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withInput()
-                ->with([
-                    'errors' => $validator->errors()->all(),
-                ]);
-        }
 
         /* データ整形 */
         $hotelAccount   = $service->makeHotelAccountData($hotelCd, $inputHotelAccount);
@@ -477,94 +320,19 @@ class BrHotelRegisterController extends Controller
         ]);
     }
 
-    // HACK: (工数次第) validation は FormRequest オブジェクトで実装する
-    public function createState(Request $request, Service $service)
+    /**
+     * 施設状態情報登録
+     *
+     * @param StoreStateRequest $request
+     * @param Service $service
+     * @return \Illuminate\Http\Response
+     */
+    public function createState(StoreStateRequest $request, Service $service)
     {
         $hotelCd                = $request->input('target_cd');
         $inputHotelNotify       = $request->input('Hotel_Notify');
         $inputHotelControl      = $request->input('Hotel_Control');
         $inputNotifyDevices     = $request->input('notify_device', []);
-
-        /* validation */
-        $rules = [
-            'notify_device'     => ['required', 'array'],
-            'notify_device.*'   => [Rule::in([
-                1 << HotelNotify::NOTIFY_DEVICE_FAX,
-                1 << HotelNotify::NOTIFY_DEVICE_EMAIL,
-                1 << HotelNotify::NOTIFY_DEVICE_LINCOLN,
-            ])],
-
-            'Hotel_Notify.neppan_status'    => ['nullable', Rule::in([
-                HotelNotify::NEPPAN_STATUS_FALSE,
-                HotelNotify::NEPPAN_STATUS_TRUE,
-            ])],
-            'Hotel_Notify.notify_status'    => ['required', Rule::in([
-                HotelNotify::NOTIFY_STATUS_FALSE,
-                HotelNotify::NOTIFY_STATUS_TRUE,
-            ])],
-            'Hotel_Notify.notify_email'     => [
-                // 独自チェック 2(Email) にチェックがある場合: 'notify_email' が必須
-                Rule::requiredIf(in_array(1 << HotelNotify::NOTIFY_DEVICE_EMAIL, $inputNotifyDevices)),
-                new EmailSingle(),
-                'between:0,500', // 過剰だが残している
-            ],
-            'Hotel_Notify.notify_fax'       => [
-                // 独自チェック 1(FAX) にチェックある場合: 'notify_fax' が必須
-                Rule::requiredIf(in_array(1 << HotelNotify::NOTIFY_DEVICE_FAX, $inputNotifyDevices)),
-                new PhoneNumber(),
-            ],
-            'Hotel_Notify.faxpr_status'     => ['required', Rule::in([
-                HotelNotify::FAXPR_STATUS_FALSE,
-                HotelNotify::FAXPR_STATUS_TRUE,
-            ])],
-
-            'Hotel_Control.stock_type'          => ['required', Rule::in([
-                HotelControl::STOCK_TYPE_CONTRACT_SALE,
-                HotelControl::STOCK_TYPE_PURCHASE_SALE,
-            ])],
-            'Hotel_Control.checksheet_send'     => ['required', Rule::in([
-                HotelControl::CHECKSHEET_SEND_TRUE,
-                HotelControl::CHECKSHEET_SEND_FALSE,
-            ])],
-            'Hotel_Control.charge_round'        => ['integer', 'numeric', Rule::in([1, 10, 100])],
-            'Hotel_Control.stay_cap'            => ['nullable', 'integer', 'numeric', 'min:1', 'max:99'],
-            'Hotel_Control.management_status'   => ['required', Rule::in([
-                HotelControl::MANAGEMENT_STATUS_FAX,
-                HotelControl::MANAGEMENT_STATUS_INTERNET,
-                HotelControl::MANAGEMENT_STATUS_FAX_INTERNET,
-            ])],
-            // MEMO: ↓ 移植元ではバリデーションされていなかった。ラジオボタンだから不具合にはならなかったのだろう。
-            'Hotel_Control.akafu_status'        => [Rule::in([
-                HotelControl::AKAFU_STATUS_TRUE,
-                HotelControl::AKAFU_STATUS_FALSE,
-            ])],
-        ];
-        $messages = [];
-        $attributes = [
-            'notify_device' => '通知媒体',
-
-            'Hotel_Notify.neppan_status'    => 'ねっぱん通知ステータス',
-            'Hotel_Notify.notify_status'    => '通知ステータス',
-            // 'Hotel_Notify.notify_no'        => '通知No',
-            'Hotel_Notify.notify_email'     => '通知電子メールアドレス',
-            'Hotel_Notify.notify_fax'       => '通知ファックス番号',
-            'Hotel_Notify.faxpr_status'     => 'FAXPR可否',
-
-            'Hotel_Control.stock_type'          => '仕入形態',
-            'Hotel_Control.checksheet_send'     => '送客リスト送付可否',
-            'Hotel_Control.charge_round'        => '金額切り捨て桁',
-            'Hotel_Control.stay_cap'            => '連泊限界数',
-            'Hotel_Control.management_status'   => '利用方法',
-            'Hotel_Control.akafu_status'        => '日本旅行在庫連携',
-        ];
-        $validator = Validator::make($request->all(), $rules, $messages, $attributes);
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withInput()
-                ->with([
-                    'errors' => $validator->errors()->all(),
-                ]);
-        }
 
         /* データ整形 */
         $hotelNotify        = $service->makeHotelNotifyData($hotelCd, $inputHotelNotify, $inputNotifyDevices);

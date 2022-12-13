@@ -56,7 +56,7 @@ class HotelNotify extends CommonDBModel
         'notify_device',
         'neppan_status',
         'notify_no',
-        'otify_email',
+        'notify_email',
         'notify_fax',
         'faxpr_status',
         'entry_cd',

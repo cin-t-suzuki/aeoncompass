@@ -15,7 +15,6 @@ class EmailCommon
      */
     protected function isEmail($email): bool
     {
-        var_dump('email common called.');
         // 『@』が複数ないか？
         if (1 < substr_count($email, '@')) {
             return false;

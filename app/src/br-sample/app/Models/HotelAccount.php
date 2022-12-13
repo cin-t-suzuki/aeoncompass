@@ -63,6 +63,10 @@ class HotelAccount extends CommonDBModel
 	public string $COL_PASSWORD = "password";
 	public string $COL_ACCEPT_STATUS = "accept_status";
 
+    // カラム定数
+    public const ACCEPT_STATUS_FALSE    = 0; // 利用不可
+    public const ACCEPT_STATUS_TRUE     = 1; // 利用可
+
 	/** コンストラクタ
 	 */
 	function __construct(){
