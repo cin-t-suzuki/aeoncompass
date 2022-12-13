@@ -37,24 +37,23 @@ class BrBillPayPtnController extends _commonController
         $o_models_date = new DateUtil();
 
         if ($this->is_empty($year)) {
-            // $this->_request->setParam('year', $o_models_date->to_format('Y'));
             $year = $o_models_date->to_format('Y');
         }
         if ($this->is_empty($month)) {
-            // $this->_request->setParam('month', $o_models_date->to_format('m'));
             $month = $o_models_date->to_format('m');
         }
 
         $o_billpay_ym = new DateUtil($year . '-' . $month . '-01');
-        $billpayptn = $BillPayPtnModel->getBillPayPtn(array('billpay_ym' => $o_billpay_ym->to_format('Y-m')));
+        $billpayptn = $BillPayPtnModel->getBillPayPtn(['billpay_ym' => $o_billpay_ym->to_format('Y-m')]);
 
-        $error = ''; //追記
-        if ($error == 'NotFound') {
+        if ($billpayptn == 'NotFound') {
             $this->addGuideMessage("精算書が作成されたパートナーはありませんでした。");
+            // データを ビューにセット
+            $this->addViewData("billpayptn", []);
+        } else {
+            $this->addViewData("billpayptn", $billpayptn);
         }
 
-        // データを ビューにセット
-        $this->addViewData("billpayptn", $billpayptn);
         $this->addViewData("year", $year);
         $this->addViewData("month", $month);
 
@@ -74,7 +73,7 @@ class BrBillPayPtnController extends _commonController
 
         //初期化
         $BillPayPtnModel = new BillPayPtn();
-        $a_conditions     = array();
+        $a_conditions     = [];
         $error = '';
 
         $a_conditions['billpay_ym'] =  $requestBrBillPayPtn['billpay_ym'];
@@ -98,11 +97,11 @@ class BrBillPayPtnController extends _commonController
             }
         }
 
-        $a_sites = []; //初期化追記
+        $a_sites = [];
 
         if ($requestBrBillPayPtn['customer_id'] == 1) {
             // 在庫属性・サイト単位でグループし、テンプレート上で合計行の制御しないでいいようにする。
-            $a_sites = array('1' => array(), '2' => array(), '3' => array());
+            $a_sites = ['1' => [], '2' => [], '3' => []];
             for ($n_cnt = 0; $n_cnt < count($a_book); $n_cnt++) {
                 $a_sites[$a_book[$n_cnt]['stock_type']][$a_book[$n_cnt]['site_cd']][] = $a_book[$n_cnt];
             }
@@ -139,7 +138,7 @@ class BrBillPayPtnController extends _commonController
 
         //初期化
         $BillPayPtnModel = new BillPayPtn();
-        $a_conditions     = array();
+        $a_conditions     = [];
         $error = '';
 
         // ページ数設定
@@ -163,7 +162,7 @@ class BrBillPayPtnController extends _commonController
         $a_options['billpay']   = ($requestBrBillPayPtn['billpay'] ?? 0);
         $a_options['billpayed'] = ($requestBrBillPayPtn['billpayed'] ?? 0);
 
-        $a_offset =  array('page' => ($requestBrBillPayPtn['page'] ?? 1), 'size' => 50);
+        $a_offset =  ['page' => ($requestBrBillPayPtn['page'] ?? 1), 'size' => 50];
 
         $a_detail = $BillPayPtnModel->getDetail($a_conditions, $a_options, $a_offset);
 
@@ -182,7 +181,7 @@ class BrBillPayPtnController extends _commonController
         // $o_paginator->setPageRange(10);                                                      // ページ指定リンクの表示数を設定
         //
         //↓laravel仕様に書き換え（GETでパラメータ付与されてしまうが問題ないか？）
-        $per_page = 1; // 1ページ当りの表示数  ※TODO:修正要（本来10だが、ページャー確認できるよう一時的に1にしている）
+        $per_page = 10; // 1ページ当りの表示数
         // ページ番号が指定されていなかったら１ページ目
         $page_num = isset($requestBrBillPayPtn['page']) ? $requestBrBillPayPtn['page'] : 1;
         // ページ番号に従い、表示するレコードを切り出す
@@ -236,12 +235,11 @@ class BrBillPayPtnController extends _commonController
         $requestBrBillPayPtn = Request::all();
         $BillPayPtnModel = new BillPayPtn();
 
-        // $this->_request->setParam('page', 1);
-        $requestBrBillPayPtn['page'] = 1; //あってる？
-        //
+        $requestBrBillPayPtn['page'] = 1;
+
         $b_status = true;
         while ($b_status) {
-            //初期化　追記
+            //初期化
             $offset = [];
             $detail = [];
             $customer = [];

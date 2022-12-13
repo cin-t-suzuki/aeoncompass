@@ -34,7 +34,7 @@ class BillPayPtn extends CommonDBModel
     {
         // カラム情報の設定
     }
- 
+
     //======================================================================
     // 精算先サイトの取得
     // aa_conditions
@@ -1372,7 +1372,7 @@ SQL;
     public function getDetail($aa_conditions, $aa_options, $aa_offsets = null)
     {
         try {
-            $a_row = array();
+            $a_row = [];
             $o_data = $this->getDetailStatement($aa_conditions, $aa_options, $aa_offsets);
 
             // while ($a_data = $o_data->fetch()) {
@@ -1387,10 +1387,10 @@ SQL;
                 }
             }
 
-            return array(
+            return [
                             'values'     => $a_row,
                             // 'reference'  => $this->set_reference('支払・請求に対応する予約情報を取得します。', __METHOD__)
-                        );
+            ];
 
         // 各メソッドで Exception が投げられた場合
         } catch (Exception $e) {
@@ -1405,7 +1405,7 @@ SQL;
     {
         try {
             // 初期化
-            $_a_pager_params = array();
+            $_a_pager_params = [];
 
             // 精算年月
             if (!$this->is_empty($requestBrBillPayPtn['billpay_ym'])) {
@@ -1425,7 +1425,7 @@ SQL;
     {
         try {
             // 初期化
-            $_a_pager_params = array();
+            $_a_pager_params = [];
 
             // 精算年月
             if (!$this->is_empty($requestBrBillPayPtn['billpay_ym'] ?? null)) { //??null追記
@@ -1474,7 +1474,7 @@ SQL;
             throw $e;
         }
     }
- 
+
     //======================================================================
     // パートナー精算対象月の精算データを検索 ※private->publicへ変更
     //======================================================================
@@ -1484,7 +1484,7 @@ SQL;
     public function getBillPayPtn($aa_conditions)
     {
         try {
-            $s_customer_id = null; //初期化 追記
+            $s_customer_id = null; //初期化
 
             // バインドパラメータ設定
             $a_conditions['billpay_ym'] = $aa_conditions['billpay_ym'];
@@ -1571,10 +1571,11 @@ SQL;
             }
 
             if ($this->is_empty($a_book)) {
-                $error[] = 'NotFound';
+                $error = 'NotFound';
+                return $error;
             }
 
-            return $a_book ?? array();
+            return $a_book ?? [];
         } catch (Exception $e) {
             throw $e;
         }
@@ -1632,7 +1633,7 @@ SQL;
                 // $this->_assign->customer                = $a_customer;
             }
 
-            $a_offset =  array('page' => $requestBrBillPayPtn['page'], 'size' => 1000 );//TODO 1000から要変更？ページャーと合わせる？
+            $a_offset =  ['page' => $requestBrBillPayPtn['page'], 'size' => 1000 ];//TODO 1000から要変更？ページャーと合わせる？
             $a_offset['firstItemNumber'] =  $a_offset['size'] * ($a_offset['page'] - 1 ) + 1;
 
             $a_row = [];
