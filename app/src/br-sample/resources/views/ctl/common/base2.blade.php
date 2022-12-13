@@ -30,7 +30,7 @@
         <meta http-equiv="Cache-Control" content="no-cache" />
         <meta http-equiv="Expires" content="0" />
         <meta name="robots" content="none" />
-        {{-- TODO: jquery 存在確認 --}}<script type="text/javascript" src="/scripts/jquery.js"></script>
+        {{-- TODO: jquery 存在確認 --}}<script type="text/javascript" src="{{ asset('/js/jquery.js') }}"></script>
         <title>
             STREAM社内管理 @yield('title')
         </title>
