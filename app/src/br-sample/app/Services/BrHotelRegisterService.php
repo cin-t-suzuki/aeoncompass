@@ -59,10 +59,11 @@ class BrHotelRegisterService
         try {
             $newHotel = Hotel::create($hotel);
             HotelInsuranceWeather::create($hotelInsuranceWeather);
-            foreach ($denyLists as $denyList) {
-                $denyList['deny_cd'] = $this->getDenyListSequence();
-                DenyList::create($denyList);
-            }
+            // MEMO: イオンコンパスでは、リリース時は不要。
+            // foreach ($denyLists as $denyList) {
+            //     $denyList['deny_cd'] = $this->getDenyListSequence();
+            //     DenyList::create($denyList);
+            // }
 
             if (!$newHotel->wasRecentlyCreated) {
                 $errorMessages[] = '登録に失敗しました。';
@@ -239,77 +240,34 @@ class BrHotelRegisterService
     /**
      * deny_list に登録するデータを整形
      *
+     * MEMO: イオンコンパスでは、リリース時は不要。
+     *
      * @param string $hotelCd
      * @return array
      */
-    public function makeDenyListsData($hotelCd): array
-    {
-        $actionCd = $this->getActionCd();
-        $result = [];
-
-        // TODO: hard coding logic, magic number: AC 用にカスタム
-        $denyPartners = [
-            'jetstar' => '3016007888', // ジェットスター販売開始時にコメント外す
-            'msd'     => '2000005100',
-            'spring'  => '3018009900', // 春秋航空 国内DP
-        ];
-
-        // 拒否リスト作成
-        foreach ($denyPartners as $partnerName => $partnerCd) {
-            // 登録するデータ設定
-            $sequence = $this->getDenyListSequence();
-            $result[] = [
-                'deny_cd'    => str_pad($sequence, 5, 0, STR_PAD_LEFT),
-                'partner_cd' => $partnerCd,
-                'hotel_cd'   => $hotelCd,
-                'deny_type'  => DenyList::DENY_TYPE_PARTNER,
-                'entry_cd'   => $actionCd,
-                'modify_cd'  => $actionCd,
-            ];
-
-            // アークスリー または 春秋航空 は「運用」の2レコード目を作成する
-            if ($partnerName === 'jetstar' or $partnerName === 'spring') {
-                $sequence = $this->getDenyListSequence();
-                $result[] = [
-                    'deny_cd'    => str_pad($sequence, 5, 0, STR_PAD_LEFT),
-                    'partner_cd' => $partnerCd,
-                    'hotel_cd'   => $hotelCd,
-                    'deny_type'  => DenyList::DENY_TYPE_OPERATION,
-                    'entry_cd'   => $actionCd,
-                    'modify_cd'  => $actionCd,
-                ];
-            }
-        }
-        return $result;
-    }
+    // public function makeDenyListsData($hotelCd): array;
 
     /**
      * 拒否コードの取得
      * ※YYYY + 5桁の連番を取得
+     *
+     * MEMO: イオンコンパスでは、リリース時は不要。
      *
      * MEMO: 移植元では、 oracle の sequence 取得のファンクションを利用しているらしい
      * HACK: 単に、 mysql の auto increment ではダメなのか？
      *
      * @return string
      */
-    private function getDenyListSequence(): string
-    {
-        $year = date('Y');
-        $sql = <<<SQL
-            select
-                ifnull(
-                    max(deny_cd) + 1
-                    , concat({$year}, '00001')
-                ) as deny_cd
-            from
-                deny_list
-            where
-                deny_cd LIKE concat({$year}, '%')
-        SQL;
-        $result = DB::select($sql);
-        return $result[0]->deny_cd;
-    }
+    // private function getDenyListSequence(): string;
 
+    /**
+     * DB 登録処理を実行
+     *
+     * @param array $hotelAccount
+     * @param array $hotelPerson
+     * @param array $hotelStatus
+     * @return array
+     */
     public function storeManagement($hotelAccount, $hotelPerson, $hotelStatus): array
     {
         $errorMessages = [];
@@ -405,6 +363,15 @@ class BrHotelRegisterService
             'modify_cd'     => $actionCd,
         ];
     }
+
+    /**
+     * DB 登録処理を実行
+     *
+     * @param array $hotelNotify
+     * @param array $hotelControl
+     * @param array $hotelSystemVersion
+     * @return array
+     */
     public function storeStatus($hotelNotify, $hotelControl, $hotelSystemVersion): array
     {
         $errorMessages = [];

@@ -216,7 +216,10 @@ class BrHotelRegisterController extends Controller
 
         $hotel                  = $service->makeHotelData($hotelCd, $inputHotel);
         $hotelInsuranceWeather  = $service->makeHotelInsuranceWeatherData($hotelCd, $hotel);
-        $denyLists              = $service->makeDenyListsData($hotelCd);
+
+        // MEMO: イオンコンパスでは、リリース時は不要。
+        // $denyLists              = $service->makeDenyListsData($hotelCd);
+        $denyLists = [];
 
         /* DB登録処理 */
         $errorMessages = $service->store($hotel, $hotelInsuranceWeather, $denyLists);
