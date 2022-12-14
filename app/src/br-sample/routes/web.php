@@ -125,39 +125,56 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
         Route::post('/destroy', 'destroy')->name('ctl.brhotelRate.destroy'); //削除処理
     });
 
-	//パートナー管理画面
-	Route::controller(BrpartnerController::class)->prefix("brpartner")->group(function(){
-		Route::match(['get','post'],'/searchlist', 'searchlist')->name('ctl.brpartner.searchlist'); //表示
-		Route::match(['get','post'],'/partnerconf', 'partnerconf')->name('ctl.brpartner.partnerconf'); //表示
-		Route::post('/partnerupdate', 'partnerupdate')->name('ctl.brpartner.partnerupdate'); //更新
-		Route::match(['get','post'],'/partnercontroledt', 'partnercontroledt')->name('ctl.brpartner.partnercontroledt'); //表示
-		Route::post('/partnercontrolupd', 'partnercontrolupd')->name('ctl.brpartner.partnercontrolupd'); //更新
-	});	
+    //パートナー管理画面
+    Route::match(['get', 'post'], '/brpartner/searchlist/', 'BrpartnerController@searchList')
+        ->name('ctl.brpartner.searchlist'); //表示
+    Route::match(['get', 'post'], '/brpartner/partnerconf/', 'BrpartnerController@partnerConf')
+        ->name('ctl.brpartner.partnerconf'); //表示
+    Route::post('/brpartner/partnerupdate/', 'BrpartnerController@partnerUpdate')
+        ->name('ctl.brpartner.partnerupdate'); //更新
+    Route::match(['get', 'post'], '/brpartner/partnercontroledt/', 'BrpartnerController@partnerControlEdt')
+        ->name('ctl.brpartner.partnercontroledt'); //編集
+    Route::post('/brpartner/partnercontrolupd/', 'BrpartnerController@partnerControlUpd')
+        ->name('ctl.brpartner.partnercontrolupd'); //更新
 
-	//所属団体設定画面
-	Route::controller(BrpartnerSectionController::class)->prefix("brpartnersection")->group(function(){
-		Route::match(['get','post'],'/', 'index')->name('ctl.brpartnersection.index'); //表示
-		Route::post('/new', 'new')->name('ctl.brpartnersection.new'); //表示
-		Route::post('/create', 'create')->name('ctl.brpartnersection.create'); //登録
-		Route::post('/edit', 'edit')->name('ctl.brpartnersection.edit'); //編集
-		Route::post('/update', 'update')->name('ctl.brpartnersection.update'); //更新
-		Route::post('/delete', 'delete')->name('ctl.brpartnersection.delete'); //削除処理
-		Route::post('/up', 'up')->name('ctl.brpartnersection.up'); //1つ上へ
-		Route::post('/down', 'down')->name('ctl.brpartnersection.down'); //1つ下へ
-		Route::post('/head', 'head')->name('ctl.brpartnersection.head'); //一番上へ
-		Route::post('/tail', 'tail')->name('ctl.brpartnersection.tail'); //一番下へ
-	});	
 
-	//キーワード設定
-	Route::controller(BrpartnerKeywordController::class)->prefix("brpartnerKeyword")->group(function(){
-		Route::match(['get','post'],'/', 'index')->name('ctl.brpartnerKeyword.index'); //表示
-		Route::match(['get','post'],'/new', 'new')->name('ctl.brpartnerKeyword.new'); //表示
-		Route::post('/_input', '_input')->name('ctl.brpartnerKeyword._input'); //表示
-		Route::post('/create', 'create')->name('ctl.brpartnerKeyword.create'); //追加
-		Route::match(['get','post'],'/edit', 'edit')->name('ctl.brpartnerKeyword.edit'); //編集
-		Route::post('/update', 'update')->name('ctl.brpartnerKeyword.update'); //更新
-		Route::post('/sort', 'sort')->name('ctl.brpartnerKeyword.sort'); //順番変更
-	});	
+    //所属団体設定画面
+    Route::match(['get', 'post'], '/brpartnersection/', 'BrpartnerSectionController@index')
+        ->name('ctl.brpartnersection.index'); //表示
+    Route::post('/brpartnersection/new/', 'BrpartnerSectionController@new')
+        ->name('ctl.brpartnersection.new'); //新規登録
+    Route::post('/brpartnersection/create/', 'BrpartnerSectionController@create')
+        ->name('ctl.brpartnersection.create'); //作成
+    Route::post('/brpartnersection/edit/', 'BrpartnerSectionController@edit')
+        ->name('ctl.brpartnersection.edit'); //編集
+    Route::post('/brpartnersection/update/', 'BrpartnerSectionController@update')
+        ->name('ctl.brpartnersection.update'); //更新
+    Route::post('/brpartnersection/delete/', 'BrpartnerSectionController@delete')
+        ->name('ctl.brpartnersection.delete'); //削除処理
+    Route::post('/brpartnersection/up/', 'BrpartnerSectionController@up')
+        ->name('ctl.brpartnersection.up'); //1つ上へ
+    Route::post('/brpartnersection/down/', 'BrpartnerSectionController@down')
+        ->name('ctl.brpartnersection.down'); //1つ下へ
+    Route::post('/brpartnersection/head/', 'BrpartnerSectionController@head')
+        ->name('ctl.brpartnersection.head'); //一番上へ
+    Route::post('/brpartnersection/tail/', 'BrpartnerSectionController@tail')
+        ->name('ctl.brpartnersection.tail'); //一番下へ
+
+    //キーワード設定
+    Route::match(['get', 'post'], '/brpartnerKeyword/', 'BrpartnerKeywordController@index')
+        ->name('ctl.brpartnerKeyword.index'); //表示
+    Route::post('/brpartnerKeyword/new/', 'BrpartnerKeywordController@new')
+        ->name('ctl.brpartnerKeyword.new'); //新規登録
+    Route::post('/brpartnerKeyword/_input/', 'BrpartnerKeywordController@_input')
+        ->name('ctl.brpartnerKeyword._input'); //
+    Route::post('/brpartnerKeyword/create/', 'BrpartnerKeywordController@create')
+        ->name('ctl.brpartnerKeyword.create'); //新規登録
+    Route::match(['get', 'post'], '/brpartnerKeyword/edit/', 'BrpartnerKeywordController@edit')
+        ->name('ctl.brpartnerKeyword.edit'); //編集
+    Route::post('/brpartnerKeyword/update/', 'BrpartnerKeywordController@update')
+        ->name('ctl.brpartnerKeyword.update'); //更新
+    Route::post('/brpartnerKeyword/sort/', 'BrpartnerKeywordController@sort')
+        ->name('ctl.brpartnerKeyword.sort'); //順番変更
 
 	// パートナー精算先
 	Route::get('/brpartnercustomer/', 'BrPartnerCustomerController@index')->name('brpartnercustomer.index');
