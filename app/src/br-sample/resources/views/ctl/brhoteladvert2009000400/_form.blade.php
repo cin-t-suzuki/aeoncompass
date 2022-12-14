@@ -1,6 +1,5 @@
 
 <table border="1" cellpadding="4" cellspacing="0">
-  {{-- {if $v->env.action == 'new'} ↓書き換えあってる？newの時、の認識 --}}
   @if ( Route::currentRouteName() === 'ctl.brhoteladvert2009000400.new' || Route::currentRouteName() === 'ctl.brhoteladvert2009000400.create')
   <tr>
     <td bgcolor="#eeffee">施設コード</td>
