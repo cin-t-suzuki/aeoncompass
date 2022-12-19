@@ -32,8 +32,8 @@ Route::namespace("App\Http\Controllers\rsv")->prefix("rsv")->group(function(){
 /**
  * 管理システム
  */
-Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
-
+Route::namespace('App\Http\Controllers\ctl')->prefix('ctl')->group(function () {
+    Route::get('/brLogin', [\App\Http\Controllers\ctl\BrLoginController::class, 'index'])->name('ctl.br_login.index');
 
 	// 社内トップ
 	Route::controller(BrTopController::class)->prefix("brtop")->group(function(){
