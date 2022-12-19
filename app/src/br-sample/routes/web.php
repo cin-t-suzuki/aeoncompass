@@ -34,6 +34,7 @@ Route::namespace("App\Http\Controllers\rsv")->prefix("rsv")->group(function(){
  */
 Route::namespace('App\Http\Controllers\ctl')->prefix('ctl')->group(function () {
     Route::get('/brLogin', [\App\Http\Controllers\ctl\BrLoginController::class, 'index'])->name('ctl.br_login.index');
+    Route::post('brLogin/login', [\App\Http\Controllers\ctl\BrLoginController::class, 'login'])->name('ctl.br_login.login');
 
 	// 社内トップ
 	Route::controller(BrTopController::class)->prefix("brtop")->group(function(){
@@ -181,5 +182,4 @@ Route::namespace('App\Http\Controllers\ctl')->prefix('ctl')->group(function () {
 	Route::get('/brpartnersite/search', 'BrPartnerSiteController@search')->name('ctl.brPartnerSite.search');
 	Route::get('/brpartnersite/edit', 'BrPartnerSiteController@edit')->name('ctl.brPartnerSite.edit');
 	Route::post('/brpartnersite/modify', 'BrPartnerSiteController@modify')->name('ctl.brPartnerSite.modify');
-
 });
