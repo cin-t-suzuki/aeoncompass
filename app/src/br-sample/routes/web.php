@@ -41,9 +41,7 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 	});
 
 	// ホテルトップ
-	Route::controller(HotelTopController::class)->prefix("htltop")->group(function(){
-		Route::get('/', 'index')->name('ctl.htltop.index');
-	});
+	Route::get('/htltop/', 'HtlTopController@index')->name('ctl.htltop.index');
 
 	// 管理画面一覧
 	Route::controller(TopController::class)->prefix("top")->group(function(){
