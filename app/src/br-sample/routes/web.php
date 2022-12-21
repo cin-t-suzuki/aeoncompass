@@ -21,7 +21,7 @@ Route::get('/', function () {
 /**
  * 宿泊予約
  */
-Route::namespace("App\Http\Controllers\rsv")->prefix("rsv")->group(function(){
+Route::namespace('App\Http\Controllers\rsv')->prefix('rsv')->group(function () {
 	// 施設情報
 	Route::controller(HotelController::class)->prefix("hotel")->group(function(){
 		Route::get('/{hotel_cd}', 'info')->name('rsv.hotel.info');
@@ -36,10 +36,8 @@ Route::namespace('App\Http\Controllers\ctl')->prefix('ctl')->group(function () {
     Route::get('/brLogin', [\App\Http\Controllers\ctl\BrLoginController::class, 'index'])->name('ctl.br_login.index');
     Route::post('brLogin/login', [\App\Http\Controllers\ctl\BrLoginController::class, 'login'])->name('ctl.br_login.login');
 
-	// 社内トップ
-	Route::controller(BrTopController::class)->prefix("brtop")->group(function(){
-		Route::get('/', 'index')->name('ctl.brtop.index');
-	});
+    // 社内トップ
+    Route::get('brtop', [\App\Http\Controllers\ctl\BrtopController::class, 'index'])->name('ctl.brtop.index');
 
 	// ホテルトップ
 	Route::controller(HotelTopController::class)->prefix("htltop")->group(function(){
