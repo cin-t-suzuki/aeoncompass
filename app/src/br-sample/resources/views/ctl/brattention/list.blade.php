@@ -1,9 +1,15 @@
-{{--  css  --}}
-@include('ctl.brattention._css')
 {{--削除でいい？ {strip} --}}
   {{-- 提携先管理ヘッダー --}}
+  @extends('ctl.common.base2')
+
   @section('title', '施設管理TOP注目一覧')
-  @include('ctl.common.base')
+
+  {{--  css  --}}
+  @section('headScript')
+    @include('ctl.brattention._css')
+  @endsection
+
+  @section('content')
 
     {{--削除でいい？ <hr class="contents-margin" /> --}}
 
@@ -11,12 +17,13 @@
 
     {{--削除でいい？ <hr class="contents-margin" /> --}}
     {{-- メッセージ --}}
-    @section('message')
+    {{-- content内の書き換えあっている？ --}}
     @include('ctl.common.message', $messages)
+
     </div>
-    <div style="width:960px; margin:auto">
-    <h2 style="color:#444; text-align:center;">注目文言管理画面</h2>
-    <p style="text-align:center;">
+    <div style="width:960px;">
+    <h2 style="color:#444;">注目文言管理画面</h2>
+    <p>
       この画面は表示の可否と掲載開始日によって並べ替えられています。<br>
     </p>
     {{-- 新規登録 --}}
@@ -82,8 +89,5 @@
     </div>
     <hr class="contents-margin" />
 
-  {{-- 提携先管理フッター --}}
-  @section('title', 'footer')
-  @include('ctl.common.footer')
-  {{-- /提携先管理フッター --}}
+  @endsection
 {{--削除でいい？ {/strip} --}}

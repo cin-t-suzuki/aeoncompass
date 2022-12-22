@@ -1,12 +1,18 @@
-{{--  css  --}}
-@include('ctl.brattention._css')
 {{--削除でいい？ {strip} --}}
   {{-- 提携先管理ヘッダー --}}
+  @extends('ctl.common.base2')
+
   @section('title', 'BRサイトTOP注目変更画面')
-  @include('ctl.common.base')
+
+  {{--  css  --}}
+  @section('headScript')
+    @include('ctl.brattention._css')
+  @endsection
+
+  @section('content')
 
   {{-- メッセージ --}}
-  @section('message')
+  {{-- content内の書き換えあっている？ --}}
   @include('ctl.common.message', $messages)
 
    <hr class="contents-margin" />
@@ -31,8 +37,5 @@
   </div>
   <hr class="contents-margin" />
 
-  {{-- 提携先管理フッター --}}
-  @section('title', 'footer')
-  @include('ctl.common.footer')
-  {{-- /提携先管理フッター --}}
+  @endsection
 {{--削除でいい？ {/strip} --}}
