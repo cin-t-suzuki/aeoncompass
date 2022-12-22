@@ -5,7 +5,8 @@
 
   <script type="text/javascript" src="/js/jquery.js"></script>  {{-- script→jsへディレクトリ名変更 --}}
   <script type="text/javascript">
-    <!--
+    <!-- 
+      // TODO ↑消していいもの？コメントアウト？
       $(document).ready(function () {
         $('#add-input-address').on('click', function() { //.live→.onへ
           $(this).remove();

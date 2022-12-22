@@ -5,6 +5,7 @@
 
   <script type="text/javascript">
   <!--
+  // TODO ↑消していいもの？コメントアウト？
     $(document).ready(function () {
       $('input.jqs-btn-section-delete').click(function(){
          return confirm($('.jqs-section-nm').eq($('input.jqs-btn-section-delete').index(this)).text() + '\n\nこの所属団体名称を削除します。\nよろしいですか？');
