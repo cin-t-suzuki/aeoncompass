@@ -9,14 +9,15 @@
 @endsection
 {{-- {/capture} --}}
 
+@extends('ctl.common.base2')
 @section('title', 'パートナー管理')
-@include('ctl.common.base')
+
+@section('content')
 
 <div class="box-keyword-form">
 
   {{-- メッセージボックス --}}
-  {{-- メッセージ/TODO 他と書き方違う --}}
-  @section('message')
+  {{-- content内の書き方はこれであっているか？ --}}
   @include('ctl.common.message',['guides'=>$messages["guides"]])
   
   {{-- 入力フォーム --}}
@@ -74,7 +75,6 @@
   <br>　
 </div>
 
-@section('title', 'footer')
-@include('ctl.common.footer')
+@endsection
 
 {{-- {/strip} 削除していいか？--}}

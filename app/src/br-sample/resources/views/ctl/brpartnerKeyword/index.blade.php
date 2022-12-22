@@ -1,5 +1,4 @@
 {{-- {strip} 削除していいか？--}}
-
 {{-- 検索用パラメータのhiddenタグ作成（このコントローラ内で持ち回す形式） --}}
 {{-- {capture name=search_hidden_vars} --}}
 @section('search_hidden_vars')
@@ -9,16 +8,16 @@
 @endsection
 {{-- {/capture} --}}
 
+@extends('ctl.common.base2')
 @section('title', 'パートナー管理')
-@include('ctl.common.base')
 
+@section('content')
   {{-- メッセージボックス --}}
-  {{-- メッセージ/TODO 他と書き方違う --}}
-  @section('message')
+  {{-- content内の書き方はこれであっているか？ --}}
   @include('ctl.common.message',['guides'=>$messages["guides"]])
 
 
-<br>※要書き換え※BestReserveサイトの表示確認はこちら ⇒ <a href="http://www.bestrsv.com/rsv/" target="_blank">BestReserve確認用ページ</a>
+<br>※TOP完成後要修正※イオンコンパスサイトの表示確認はこちら ⇒ <a href="" target="_blank">イオンコンパス確認用ページ</a>
 <br>キーワードの並び順によっては文字が枠内からはみ出ることがあります。
 <br>表示やリンク先に誤りがないかご確認をお願い致します。
 <br>
@@ -118,7 +117,6 @@
 {!! Form::close() !!}
   
 
-@section('title', 'footer')
-@include('ctl.common.footer')
+@endsection
 
 {{-- {/strip} 削除していいか？--}}
