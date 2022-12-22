@@ -5,18 +5,18 @@
   @section('title', '施設管理TOP注目一覧')
   @include('ctl.common.base')
 
-    <hr class="contents-margin" />
+    {{--削除でいい？ <hr class="contents-margin" /> --}}
 
     <div style="text-align:left;">
 
-    <hr class="contents-margin" />
+    {{--削除でいい？ <hr class="contents-margin" /> --}}
     {{-- メッセージ --}}
     @section('message')
     @include('ctl.common.message', $messages)
     </div>
-    <div style="width:960px;">
-    <h2 style="color:#444">注目文言管理画面</h2>
-    <p>
+    <div style="width:960px; margin:auto">
+    <h2 style="color:#444; text-align:center;">注目文言管理画面</h2>
+    <p style="text-align:center;">
       この画面は表示の可否と掲載開始日によって並べ替えられています。<br>
     </p>
     {{-- 新規登録 --}}
