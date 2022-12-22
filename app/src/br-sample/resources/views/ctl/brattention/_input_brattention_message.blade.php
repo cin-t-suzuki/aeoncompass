@@ -46,6 +46,7 @@
       <td>
         <script language="javascript"  type="text/javascript">
         <!--
+          //TODO ↑の<!--は削除？コメントアウト？
           //削除でいい？ {literal}
           $(document).ready(function () {
           //  初期化
