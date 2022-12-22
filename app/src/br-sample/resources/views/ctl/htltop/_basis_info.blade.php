@@ -1,4 +1,4 @@
-<table border="1" cellspacing="0" cellpadding="3" width="600" style="margin: auto">
+<table border="1" cellspacing="0" cellpadding="3" width="600">
   <tr>
     <td  bgcolor="#EEEEFF"  colspan="2" align="center">
 <strong>基本情報の管理</strong></td>
@@ -51,7 +51,7 @@
 
 @if ($views->stock_type == 0)
 
-<table border="1" cellspacing="0" cellpadding="3" width="600" style="margin: auto">
+<table border="1" cellspacing="0" cellpadding="3" width="600">
   <tr>
     <td  bgcolor="#eeffee" colspan="2" align="center">
 <strong>担当者情報・メール情報の管理</strong></td>

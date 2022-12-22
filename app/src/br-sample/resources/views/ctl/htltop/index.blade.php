@@ -1,10 +1,8 @@
-{{-- header start --}}
-{{-- {include file=$v->env.module_root|cat:'/views/_common/_htl_header.tpl' title='メインメニュー' service_info_flg=false} --}}
+@extends('ctl.common._htl_base')
 @section('title', 'メインメニュー')
-@include('ctl.common.base')
-{{-- header end --}}
-
 @inject('service', 'App\Http\Controllers\ctl\HtlTopController')
+
+@section('content')
 
 {{-- {literal} --}}
 <style type="text/css">
@@ -66,6 +64,8 @@
 
 	</div>
 @endif
+
+<div align="center">
 
 {{-- bfsの紹介を表示する。 --}}
     <div style="width: 800px; margin: auto; text-align: center;">
@@ -129,7 +129,7 @@
 <br>
 
 @if ($views->stock_type == 0)
-<table border="1" cellspacing="0" cellpadding="3" width="600" style="margin: auto">
+<table border="1" cellspacing="0" cellpadding="3" width="600">
 	<tr>
 		<td  bgcolor="#EEEEFF"  colspan="2" align="center">
 <strong>その他</strong></td></tr>
@@ -228,9 +228,9 @@ $(function(){
 </script>
 
 @if ($views->confirm_hotel_person_force)
-	<div class="remodal" data-remodal-id="modal_confirm_info" data-remodal-options="hashTracking: false, closeOnOutsideClick: false,closeOnEscape:false" style="width:700px; margin:auto;">
+	<div class="remodal" data-remodal-id="modal_confirm_info" data-remodal-options="hashTracking: false, closeOnOutsideClick: false,closeOnEscape:false">
 @else
-	<div class="remodal" data-remodal-id="modal_confirm_info" data-remodal-options="hashTracking: false" style="width:700px; margin:auto;">
+	<div class="remodal" data-remodal-id="modal_confirm_info" data-remodal-options="hashTracking: false">
 @endif
 <div class="pop_confirm-header">
 	<!-- button data-remodal-action="close" class="remodal-close"></button-->
@@ -354,8 +354,4 @@ $(function(){
 		<p><a href="http://price.bestrsv.com/" target="_blank">日本最大級の競合料金分析サービス！「プライスコンシェルジュ」はこちら</a></p>
 		</div>
 
-{{-- footer start --}}
-	{{-- {include file=$v->env.module_root|cat:'/views/_common/_htl_footer.tpl'} --}}
-@section('title', 'footer')
-@include('ctl.common.footer')
-{{-- footer end --}}
+@endsection

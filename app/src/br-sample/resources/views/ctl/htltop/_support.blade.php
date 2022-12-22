@@ -1,4 +1,4 @@
-<table border="1" cellspacing="0" cellpadding="3" width="600" style="margin: auto">
+<table border="1" cellspacing="0" cellpadding="3" width="600">
   <tr>
     <td  bgcolor="#ffeded"  colspan="2" align="center">
 <strong>予約の管理と会員へのサポート</strong></td>

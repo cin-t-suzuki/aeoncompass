@@ -1,4 +1,4 @@
-<table border="1" cellspacing="0" cellpadding="3"  width="600" style="margin: auto">
+<table border="1" cellspacing="0" cellpadding="3"  width="600">
   <tr>
     <td  bgcolor="#EEEEFF"  colspan="2" align="center">
       <strong>部屋の管理</strong>
