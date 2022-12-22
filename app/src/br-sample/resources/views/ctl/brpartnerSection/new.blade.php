@@ -1,5 +1,7 @@
+@extends('ctl.common.base2')
 @section('title', 'パートナー管理')
-@include('ctl.common.base')
+
+@section('content')
 
 {{-- 検索用パラメータのhiddenタグ作成（このコントローラ内で持ち回す形式） --}}
 {{-- {capture name=search_hidden_vars} --}}
@@ -16,7 +18,7 @@
   {{-- メッセージボックス ※引数入れていない --}}
   @include('ctl.common.message')
 
-  {!! Form::open(['route' => ['ctl.brpartnersection.create'], 'method' => 'post']) !!}
+  {!! Form::open(['route' => ['ctl.brpartnerSection.create'], 'method' => 'post']) !!}
     {{-- 入力フォーム：タイトル --}}
     <div class="form-br-title">
       <div class="form-br-title-back">
@@ -47,7 +49,7 @@
   {{-- /入力フォーム --}}
   <hr class="contents-margin" />
   {{-- /一覧へ戻るフォーム --}}
-  {!! Form::open(['route' => ['ctl.brpartnersection.index'], 'method' => 'post']) !!}
+  {!! Form::open(['route' => ['ctl.brpartnerSection.index'], 'method' => 'post']) !!}
     <div class="br-back-main-menu-form">  
       <input type="hidden" name="partner_cd" value="{{$views->form_params['partner_cd']}}" />
       @yield('search_hidden_vars')
@@ -58,5 +60,4 @@
 </div>
 {{-- /コンテンツ --}}
 
-@section('title', 'footer')
-@include('ctl.common.footer')
+@endsection

@@ -1,5 +1,7 @@
+@extends('ctl.common.base')
 @section('title', 'PARTNER')
-@include('ctl.common.base')
+
+@section('page_blade')
 
 <br>
   <table border="1" cellspacing="0" cellpadding="1">
@@ -108,5 +110,4 @@
     </p>
   {!! Form::close() !!}
 
-@section('title', 'footer')
-@include('ctl.common.footer')
+@endsection

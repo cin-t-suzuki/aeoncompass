@@ -1,7 +1,10 @@
+@extends('ctl.common.base')
 @section('title', 'PARTNER')
-@include('ctl.common.base')
+
+@section('page_blade')
 
 {{-- メッセージ --}}
+{{-- content内の書き換えあっているか？ --}}
 @include('ctl.common.message',['guides'=>$messages["guides"]])
 
 {!! Form::open(['route' => ['ctl.brpartner.partnercontroledt'], 'method' => 'post']) !!}
@@ -15,5 +18,4 @@
   <INPUT TYPE="submit" VALUE="内容確認">
 {!! Form::close() !!}
 
-@section('title', 'footer')
-@include('ctl.common.footer')
+@endsection

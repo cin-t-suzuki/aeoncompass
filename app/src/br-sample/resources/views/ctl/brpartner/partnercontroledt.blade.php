@@ -1,5 +1,7 @@
+@extends('ctl.common.base')
 @section('title', 'PARTNER_CONTROL')
-@include('ctl.common.base')
+
+@section('page_blade')
 
   <script type="text/javascript" src="/js/jquery.js"></script>  {{-- script→jsへディレクトリ名変更 --}}
   <script type="text/javascript">
@@ -190,5 +192,4 @@
   <p><INPUT TYPE="submit" VALUE="設定を変更する"></p>
   {!! Form::close() !!}
 
-@section('title', 'footer')
-@include('ctl.common.footer')
+@endsection

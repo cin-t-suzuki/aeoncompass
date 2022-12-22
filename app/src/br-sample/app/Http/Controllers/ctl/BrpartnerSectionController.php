@@ -38,7 +38,7 @@ class BrpartnerSectionController extends _commonController
         $this->addViewData("section_list", $section_list);
         $this->addViewData("search_params", $search_params);
         // ビューを表示
-        return view("ctl.brpartnersection.index", $this->getViewData());
+        return view("ctl.brpartnerSection.index", $this->getViewData());
     }
 
     //======================================================================
@@ -55,7 +55,7 @@ class BrpartnerSectionController extends _commonController
         $this->addViewData("form_params", $_a_request_params);
         $this->addViewData("search_params", $search_params);
         // ビューを表示
-        return view("ctl.brpartnersection.new", $this->getViewData());
+        return view("ctl.brpartnerSection.new", $this->getViewData());
     }
 
     //======================================================================
@@ -100,7 +100,7 @@ class BrpartnerSectionController extends _commonController
             //書き換え後
             $this->addViewData("form_params", $requestPartnerSection);
             $this->addViewData("search_params", $search_params); //追記
-            return view("ctl.brpartnersection.new", $this->getViewData())
+            return view("ctl.brpartnerSection.new", $this->getViewData())
                 ->with(['errors' => $errorList]);
         }
 
@@ -125,14 +125,14 @@ class BrpartnerSectionController extends _commonController
             $errorList[] = "所属団体情報の更新ができませんでした。";
             $this->addViewData("form_params", $requestPartnerSection);
             $this->addViewData("search_params", $search_params); //追記
-            return view("ctl.brpartnersection.new", $this->getViewData())
+            return view("ctl.brpartnerSection.new", $this->getViewData())
                 ->with(['errors' => $errorList]);
         }
 
         // 正常に完了、一覧へ戻る
         // 更新後の結果表示
         session()->put('return_data', $partnerSectionData);
-        return redirect()->route('ctl.brpartnersection.index');
+        return redirect()->route('ctl.brpartnerSection.index');
     }
 
     //======================================================================
@@ -163,7 +163,7 @@ class BrpartnerSectionController extends _commonController
         $this->addViewData("search_params", $search_params); //追記
 
         // ビューを表示
-        return view("ctl.brpartnersection.edit", $this->getViewData());
+        return view("ctl.brpartnerSection.edit", $this->getViewData());
     }
 
     //======================================================================
@@ -199,7 +199,7 @@ class BrpartnerSectionController extends _commonController
             //書き換え後
             $this->addViewData("form_params", $requestPartnerSection);
             $this->addViewData("search_params", $search_params); //追記
-            return view("ctl.brpartnersection.edit", $this->getViewData())
+            return view("ctl.brpartnerSection.edit", $this->getViewData())
                 ->with(['errors' => $errorList]);
         }
 
@@ -225,13 +225,13 @@ class BrpartnerSectionController extends _commonController
             $errorList[] = "所属団体情報の更新ができませんでした。";
             $this->addViewData("form_params", $requestPartnerSection);
             $this->addViewData("search_params", $search_params); //追記
-            return view("ctl.brpartnersection.edit", $this->getViewData())
+            return view("ctl.brpartnerSection.edit", $this->getViewData())
                 ->with(['errors' => $errorList]);
         }
 
         // 正常に完了、一覧へ戻る
         session()->put('return_data', $partnerSectionData);
-        return redirect()->route('ctl.brpartnersection.index');
+        return redirect()->route('ctl.brpartnerSection.index');
     }
 
     //======================================================================
@@ -277,7 +277,7 @@ class BrpartnerSectionController extends _commonController
             $this->addViewData("search_params", $search_params); //検索用パラメータ
             $section_list = $partnerSectionModel->getSectionList($requestPartnerSection); //所属団体一覧の取得(indexに戻る用)
             $this->addViewData("section_list", $section_list); //所属団体一覧
-            return view("ctl.brpartnersection.index", $this->getViewData())
+            return view("ctl.brpartnerSection.index", $this->getViewData())
                 ->with(['errors' => $errorList]); //これであっている？共通化できない？
         }
 
@@ -304,14 +304,14 @@ SQL;
             $this->addViewData("search_params", $search_params); //検索用パラメータ
             $section_list = $partnerSectionModel->getSectionList($requestPartnerSection); //所属団体一覧の取得(indexに戻る用)
             $this->addViewData("section_list", $section_list); //所属団体一覧
-            return view("ctl.brpartnersection.index", $this->getViewData())
+            return view("ctl.brpartnerSection.index", $this->getViewData())
                 ->with(['errors' => $errorList]); //これであっている？共通化できない？
         }
 
         // 正常に完了
         // 一覧へ戻る
         session()->put('return_data', $requestPartnerSection); //渡す値あってる？
-        return redirect()->route('ctl.brpartnersection.index');
+        return redirect()->route('ctl.brpartnerSection.index');
     }
 
 
@@ -423,7 +423,7 @@ SQL;
         // 正常に完了
         // 一覧へ戻る
         session()->put('return_data', $requestPartnerSection); //渡す値あってる？
-        return redirect()->route('ctl.brpartnersection.index');
+        return redirect()->route('ctl.brpartnerSection.index');
     }
 
     //======================================================================
@@ -475,7 +475,7 @@ SQL;
         // 正常に完了
         // 一覧へ戻る
         session()->put('return_data', $requestPartnerSection); //渡す値あってる？
-        return redirect()->route('ctl.brpartnersection.index');
+        return redirect()->route('ctl.brpartnerSection.index');
     }
 
     //======================================================================
@@ -520,7 +520,7 @@ SQL;
         // 正常に完了
         // 一覧へ戻る
         session()->put('return_data', $requestPartnerSection); //渡す値あってる？
-        return redirect()->route('ctl.brpartnersection.index');
+        return redirect()->route('ctl.brpartnerSection.index');
     }
 
     //======================================================================
@@ -573,6 +573,6 @@ SQL;
         // 正常に完了
         // 一覧へ戻る
         session()->put('return_data', $requestPartnerSection); //渡す値あってる？
-        return redirect()->route('ctl.brpartnersection.index');
+        return redirect()->route('ctl.brpartnerSection.index');
     }
 }

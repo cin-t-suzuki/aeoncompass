@@ -1,5 +1,7 @@
+@extends('ctl.common.base2')
 @section('title', 'パートナー管理')
-@include('ctl.common.base')
+
+@section('content')
 
 {{-- 検索用パラメータのhiddenタグ作成（このコントローラ内で持ち回す形式） --}}
 {{-- {capture name=search_hidden_vars} --}}
@@ -14,12 +16,11 @@
 <div class="box-section-form">
   
   {{-- メッセージボックス ※引数入れていない --}}
-  {{-- メッセージ/TODO 他と書き方違う --}}
-  @section('message')
+{{-- content内の書き換えあっているか？ --}}
   @include('ctl.common.message',['guides'=>$messages["guides"]])
 
   {{-- 入力フォーム --}}
-  {!! Form::open(['route' => ['ctl.brpartnersection.update'], 'method' => 'post']) !!}
+  {!! Form::open(['route' => ['ctl.brpartnerSection.update'], 'method' => 'post']) !!}
     {{-- 入力フォーム：タイトル --}}
     <div class="form-br-title">
       <div class="form-br-title-back">
@@ -49,7 +50,7 @@
   {{-- /入力フォーム --}}
   <hr class="contents-margin" />
   {{-- /一覧へ戻るフォーム --}}
-  {!! Form::open(['route' => ['ctl.brpartnersection.index'], 'method' => 'post']) !!}
+  {!! Form::open(['route' => ['ctl.brpartnerSection.index'], 'method' => 'post']) !!}
     <div class="br-back-main-menu-form">  
       <input type="hidden" name="partner_cd" value="{{$views->form_params['partner_cd']}}" />
       @yield('search_hidden_vars')
@@ -60,5 +61,4 @@
 </div>
 {{-- /コンテンツ --}}
 
-@section('title', 'footer')
-@include('ctl.common.footer')
+@endsection

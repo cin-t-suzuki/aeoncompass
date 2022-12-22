@@ -1,8 +1,10 @@
+@extends('ctl.common.base')
 @section('title', 'PARTNER')
-@include('ctl.common.base')
 
-{{-- メッセージ/TODO 他と書き方違う --}}
-@section('message')
+@section('page_blade')
+
+{{-- メッセージ --}}
+{{-- content内の書き換えあっているか？ --}}
 @include('ctl.common.message',['guides'=>$messages["guides"]])
 
 
@@ -26,5 +28,4 @@
 </form>
 {!! Form::close() !!}
 
-@section('title', 'footer')
-@include('ctl.common.footer')
+@endsection

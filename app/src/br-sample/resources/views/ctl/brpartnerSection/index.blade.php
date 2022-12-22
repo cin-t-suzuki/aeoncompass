@@ -1,5 +1,7 @@
+@extends('ctl.common.base2')
 @section('title', 'パートナー管理')
-@include('ctl.common.base')
+
+@section('content')
 
   <script type="text/javascript">
   <!--
@@ -11,8 +13,7 @@
   -->
 </script>
   {{-- メッセージボックス --}}
-  {{-- メッセージ/TODO 他と書き方違う --}}
-  @section('message')
+  {{-- content内の書き換えあっているか？ --}}
   @include('ctl.common.message',['guides'=>$messages["guides"]])
   
 {{-- 検索用パラメータのhiddenタグ作成（このコントローラ内で持ち回す形式） --}}
@@ -31,7 +32,7 @@
     <th>所属団体名称</th>
     <th>表示順操作</th>
     <th class="lc action-menu">
-      {!! Form::open(['route' => ['ctl.brpartnersection.new'], 'method' => 'post']) !!}
+      {!! Form::open(['route' => ['ctl.brpartnerSection.new'], 'method' => 'post']) !!}
         <div>
           <input type="hidden" name="partner_cd" value="{{$views->form_params['partner_cd']}}" />
           {{-- {$smarty.capture.search_hidden_vars}書きすべて書き替え --}}
@@ -53,7 +54,7 @@
       </td>
       <td>
         @if (!$loop->first){{-- 先頭行には「↑」、「先頭へ」ボタンは表示しない --}}
-          {!! Form::open(['route' => ['ctl.brpartnersection.head'], 'method' => 'post']) !!}
+          {!! Form::open(['route' => ['ctl.brpartnerSection.head'], 'method' => 'post']) !!}
             <div class="form-menu-l">
               <input type="hidden" name="partner_cd" value="{{$section->partner_cd}}" />
               <input type="hidden" name="section_id" value="{{$section->section_id}}" />
@@ -61,7 +62,7 @@
               <input type="submit" value="先頭" />
             </div>
           {!! Form::close() !!}
-          {!! Form::open(['route' => ['ctl.brpartnersection.up'], 'method' => 'post']) !!}
+          {!! Form::open(['route' => ['ctl.brpartnerSection.up'], 'method' => 'post']) !!}
             <div class="form-menu-l">
               <input type="hidden" name="partner_cd" value="{{$section->partner_cd}}" />
               <input type="hidden" name="section_id" value="{{$section->section_id}}" />
@@ -71,7 +72,7 @@
           {!! Form::close() !!}
         @endif
         @if (!$loop->last){{-- 末尾行には「↓」、「末尾へ」ボタンは表示しない --}}
-          {!! Form::open(['route' => ['ctl.brpartnersection.down'], 'method' => 'post']) !!}
+          {!! Form::open(['route' => ['ctl.brpartnerSection.down'], 'method' => 'post']) !!}
             <div class="form-menu-l">
               <input type="hidden" name="partner_cd" value="{{$section->partner_cd}}" />
               <input type="hidden" name="section_id" value="{{$section->section_id}}" />
@@ -79,7 +80,7 @@
               <input type="submit" value="↓" />
             </div>
           {!! Form::close() !!}
-          {!! Form::open(['route' => ['ctl.brpartnersection.tail'], 'method' => 'post']) !!}
+          {!! Form::open(['route' => ['ctl.brpartnerSection.tail'], 'method' => 'post']) !!}
             <div class="form-menu-l">
               <input type="hidden" name="partner_cd" value="{{$section->partner_cd}}" />
               <input type="hidden" name="section_id" value="{{$section->section_id}}" />
@@ -90,7 +91,7 @@
         @endif
       </td>
       <td class="action-menu">
-        {!! Form::open(['route' => ['ctl.brpartnersection.delete'], 'method' => 'post']) !!}
+        {!! Form::open(['route' => ['ctl.brpartnerSection.delete'], 'method' => 'post']) !!}
           <div class="form-menu-r">
             <input type="hidden" name="partner_cd" value="{{$section->partner_cd}}" />
             <input type="hidden" name="section_id" value="{{$section->section_id}}" />
@@ -98,7 +99,7 @@
             <input type="submit" value="削除" class="jqs-btn-section-delete" />
           </div>
         {!! Form::close() !!}
-        {!! Form::open(['route' => ['ctl.brpartnersection.edit'], 'method' => 'post']) !!}
+        {!! Form::open(['route' => ['ctl.brpartnerSection.edit'], 'method' => 'post']) !!}
           <div class="form-menu-r">
             <input type="hidden" name="partner_cd" value="{{$section->partner_cd}}" />
             <input type="hidden" name="section_id" value="{{$section->section_id}}" />
@@ -145,5 +146,4 @@
 {{-- /戻るメニュー --}}
 {{-- /コンテンツ --}}
 
-@section('title', 'footer')
-@include('ctl.common.footer')
+@endsection

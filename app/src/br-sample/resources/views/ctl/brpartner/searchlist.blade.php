@@ -1,5 +1,7 @@
+@extends('ctl.common.base')
 @section('title', 'パートナー管理')
-@include('ctl.common.base')
+
+@section('page_blade')
 
 <!-- ↓postからgetへ変更している -->
 {!! Form::open(['route' => ['ctl.brpartner.searchlist'], 'method' => 'get']) !!} 
@@ -154,7 +156,7 @@
               <input type="hidden" name="partner_nm" value="{{strip_tags($partners["partner_nm"])}}" />
             </td>
           {!! Form::close() !!}
-          {!! Form::open(['route' => ['ctl.brpartnersection.index'], 'method' => 'post']) !!}
+          {!! Form::open(['route' => ['ctl.brpartnerSection.index'], 'method' => 'post']) !!}
             <td align="center">
               <input type="submit" value="変更">
               <input type="hidden" name="partner_cd"               value="{{strip_tags($partners["partner_cd"])}}" />
@@ -205,5 +207,4 @@
   @endif
 @endif
 
-@section('title', 'footer')
-@include('ctl.common.footer')
+@endsection
