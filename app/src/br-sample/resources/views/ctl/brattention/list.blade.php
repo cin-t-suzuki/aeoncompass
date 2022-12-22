@@ -71,8 +71,9 @@
           <td style="text-align:center;@if ($message_list->display_flag == 0)background: #aaa @elseif ($views->now_display_attention->attention_id == $message_list->attention_id)background: #F6FEC0 @endif">
             {{--書き換えあっている？ <p><a href= @if ($v->config->environment->status == "product") "http://www.bestrsv.com/rsv/"
               @else "http://www.dev.bestrsv.com/rsv/"@endif target="_blank">>></a></p> --}}
-            <p><a href= @if(App::environment('product')) "http://www.bestrsv.com/rsv/"
-              @else "http://www.dev.bestrsv.com/rsv/" @endif target="_blank">>></a></p>
+            {{-- TODO TOPページは動的。画面完成後にこちらにURL要設定。 --}}
+            <p><a href= @if(App::environment('product')) ""
+              @else "" @endif target="_blank">>></a></p>
           </td>
           <td nowrap @if ($message_list->display_flag == 0) style="background: #aaa" @elseif ($views->now_display_attention->attention_id == $message_list->attention_id) style="background: #F6FEC0" @endif>@include ('ctl.common._date',['timestamp' => $message_list->modify_ts , 'format' => 'ymdhi'])</td>
       </tr>
