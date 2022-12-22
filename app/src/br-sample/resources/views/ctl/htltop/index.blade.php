@@ -6,14 +6,13 @@
 
 {{-- {literal} --}}
 <style type="text/css">
-	/* <!-- */
-	table.info_system_rate_point_rate a:hover{
+/* <!--　-->　の書き換えはコメントアウトで合っている？元ソースでも効いていない？ */
+	/* table.info_system_rate_point_rate a:hover{
 		opacity: 0.6;
 	}
 		table.info_account_transfer a:hover{
 		opacity: 0.6;
-	}
-	/* --> */
+	} */
 </style>
 {{-- /* {/literal} */ --}}
 
