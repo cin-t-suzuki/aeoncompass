@@ -1,266 +1,313 @@
-{* header start *}
-	{include file=$v->env.module_root|cat:'/views/_common/_br_header.tpl' title="メインメニュー"}
-{* header end *}
-<br>
+{{-- MEMO: 移植元 public\app\ctl\views\brtop\index.tpl --}}
 
+{{-- {include file=$v->env.module_root|cat:'/views/_common/_br_header.tpl' title="メインメニュー"} --}}
+@extends('ctl.common.base')
+@section('title', 'メインメニュー')
 
-{* メインメニュー *}
-<table border="0" cellspacing="12" cellpadding="8" >
-  <tr>
-    <td bgcolor="#FFF9FF" valign="top">
-      <table border="1" cellspacing="0" cellpadding="4">
+@section('page_blade')
+    <br>
+    {{-- メインメニュー --}}
+    <table border="0" cellspacing="12" cellpadding="8">
         <tr>
-          <form method="POST" action="{$v->env.source_path}{$v->env.module}/brreserve/">
-          <td nowrap width="100%">予約の検索</td>
-          <td nowrap><input type="submit" value=" 検索 "></td>
-          </form>
-        </tr>
-        <tr>
-          <form method="POST" action="{$v->env.source_path}{$v->env.module}/brreserveck/">
-          <td nowrap width="100%">送客実績・料金変更</td>
-          <td nowrap><input type="submit" value=" 確認 "></td>
-          </form>
-        </tr>
-        <tr>
-          <form method="post" action="{$v->env.source_path}{$v->env.module}/brdemandresult/list/">
-            <td width="100%" nowrap="nowrap">送客請求実績</td>
-            <td nowrap="nowrap">
-              <input value=" 確認 " type="submit">
+            <td bgcolor="#FFF9FF" valign="top">
+                <table border="1" cellspacing="0" cellpadding="4">
+                    <tr>
+                        <form method="POST" action="{$v->env.source_path}{$v->env.module}/brreserve/">
+                            <td nowrap width="100%">予約の検索</td>
+                            <td nowrap><input type="submit" value=" 検索 "></td>
+                        </form>
+                    </tr>
+                    <tr>
+                        <form method="POST" action="{$v->env.source_path}{$v->env.module}/brreserveck/">
+                            <td nowrap width="100%">送客実績・料金変更</td>
+                            <td nowrap><input type="submit" value=" 確認 "></td>
+                        </form>
+                    </tr>
+                    <tr>
+                        <form method="post" action="{$v->env.source_path}{$v->env.module}/brdemandresult/list/">
+                            <td width="100%" nowrap="nowrap">送客請求実績</td>
+                            <td nowrap="nowrap">
+                                <input value=" 確認 " type="submit">
+                            </td>
+                        </form>
+                    </tr>
+                </table>
+                <br>
+                <table border="1" cellspacing="0" cellpadding="4">
+                    <tr>
+                        <form method="POST" action="{$v->env.source_path}{$v->env.module}/brhotel/">
+                            <td nowrap width="100%">施設の登録・変更</td>
+                            <td nowrap><input type="submit" value=" 施設 "></td>
+                        </form>
+                    </tr>
+                </table>
+                <br>
+                <table border="1" cellspacing="0" cellpadding="4">
+                    <tr>
+                        <form method="POST" action="{$v->env.source_path}{$v->env.module}/brpartner/">
+                            <td nowrap width="100%">パートナー設定</td>
+                            <td nowrap><input type="submit" value=" 設定 "></td>
+                        </form>
+                    </tr>
+                    <tr>
+                        <form method="POST" action="{$v->env.source_path}{$v->env.module}/braffiliate/">
+                            <td nowrap width="100%">アフィリエイト設定</td>
+                            <td nowrap><input type="submit" value=" 設定 "></td>
+                        </form>
+                    </tr>
+                    <tr>
+                        <form method="POST" action="{$v->env.source_path}{$v->env.module}/brpartnercustomer/">
+                            <td nowrap width="100%">精算先設定</td>
+                            <td nowrap><input type="submit" value=" 設定 "></td>
+                        </form>
+                    </tr>
+                    <tr>
+                        <form method="POST" action="{$v->env.source_path}{$v->env.module}/brtop/payment/">
+                            <td nowrap width="100%">支払</td>
+                            <td nowrap><input type="submit" value=" 表示 "></td>
+                        </form>
+                    </tr>
+                </table>
+                <br>
+                <table border="1" cellspacing="0" cellpadding="4">
+                    <tr>
+                        <form method="POST" action="{$v->env.source_path}{$v->env.module}/brtop/confirmation/">
+                            <td nowrap width="100%">確認</td>
+                            <td nowrap><input type="submit" value=" 表示 "></td>
+                        </form>
+                    </tr>
+                    <tr>
+                        <form method="POST" action="{$v->env.source_path}{$v->env.module}/brtop/registration/">
+                            <td nowrap width="100%">登録</td>
+                            <td nowrap><input type="submit" value=" 表示 "></td>
+                        </form>
+                    </tr>
+                    <tr>
+                        <form method="POST" action="{$v->env.source_path}{$v->env.module}/brtop/offer/">
+                            <td nowrap width="100%">提供</td>
+                            <td nowrap><input type="submit" value=" 表示 "></td>
+                        </form>
+                    </tr>
+                    <tr>
+                        <form method="POST" action="{$v->env.source_path}{$v->env.module}/brtop/stock/">
+                            <td nowrap width="100%">仕入</td>
+                            <td nowrap><input type="submit" value=" 表示 "></td>
+                        </form>
+                    </tr>
+                    <tr>
+                        <form method="POST" action="{$v->env.source_path}{$v->env.module}/brtop/claim/">
+                            <td nowrap width="100%">請求書・支払書</td>
+                            <td nowrap><input type="submit" value=" 表示 "></td>
+                        </form>
+                    </tr>
+                    <tr>
+                        <form method="POST" action="{$v->env.source_path}{$v->env.module}/brgroupbuying/deals/">
+                            <td nowrap width="100%">ベストク（クーポン）</td>
+                            <td nowrap><input type="submit" value=" 表示 "></td>
+                        </form>
+                    </tr>
+                </table>
             </td>
-          </form>
-        </tr>
-      </table>
-      <br>
-      <table border="1" cellspacing="0" cellpadding="4">
-        <tr>
-          <form method="POST" action="{$v->env.source_path}{$v->env.module}/brhotel/">
-          <td nowrap width="100%">施設の登録・変更</td>
-          <td nowrap><input type="submit" value=" 施設 "></td>
-          </form>
-        </tr>
-      </table>
-      <br>
-      <table border="1" cellspacing="0" cellpadding="4">
-        <tr>
-          <form method="POST" action="{$v->env.source_path}{$v->env.module}/brpartner/">
-          <td nowrap width="100%">パートナー設定</td>
-          <td nowrap><input type="submit" value=" 設定 "></td>
-          </form>
-        </tr>
-        <tr>
-          <form method="POST" action="{$v->env.source_path}{$v->env.module}/braffiliate/">
-          <td nowrap width="100%">アフィリエイト設定</td>
-          <td nowrap><input type="submit" value=" 設定 "></td>
-          </form>
-        </tr>
-        <tr>
-          <form method="POST" action="{$v->env.source_path}{$v->env.module}/brpartnercustomer/">
-          <td nowrap width="100%">精算先設定</td>
-          <td nowrap><input type="submit" value=" 設定 "></td>
-          </form>
-        </tr>
-        <tr>
-          <form method="POST" action="{$v->env.source_path}{$v->env.module}/brtop/payment/">
-          <td nowrap width="100%">支払</td>
-          <td nowrap><input type="submit" value=" 表示 "></td>
-          </form>
-        </tr>
-      </table>
-      <br>
-      <table border="1" cellspacing="0" cellpadding="4">
-        <tr>
-          <form method="POST" action="{$v->env.source_path}{$v->env.module}/brtop/confirmation/">
-          <td nowrap width="100%">確認</td>
-          <td nowrap><input type="submit" value=" 表示 "></td>
-          </form>
-        </tr>
-        <tr>
-          <form method="POST" action="{$v->env.source_path}{$v->env.module}/brtop/registration/">
-          <td nowrap width="100%">登録</td>
-          <td nowrap><input type="submit" value=" 表示 "></td>
-          </form>
-        </tr>
-        <tr>
-          <form method="POST" action="{$v->env.source_path}{$v->env.module}/brtop/offer/">
-          <td nowrap width="100%">提供</td>
-          <td nowrap><input type="submit" value=" 表示 "></td>
-          </form>
-        </tr>
-        <tr>
-          <form method="POST" action="{$v->env.source_path}{$v->env.module}/brtop/stock/">
-          <td nowrap width="100%">仕入</td>
-          <td nowrap><input type="submit" value=" 表示 "></td>
-          </form>
-        </tr>
-        <tr>
-          <form method="POST" action="{$v->env.source_path}{$v->env.module}/brtop/claim/">
-          <td nowrap width="100%">請求書・支払書</td>
-          <td nowrap><input type="submit" value=" 表示 "></td>
-          </form>
-        </tr>
-        <tr>
-          <form method="POST" action="{$v->env.source_path}{$v->env.module}/brgroupbuying/deals/">
-          <td nowrap width="100%">ベストク（クーポン）</td>
-          <td nowrap><input type="submit" value=" 表示 "></td>
-          </form>
-        </tr>
-      </table>
-    </td>
 
-    <td bgcolor="#FFFFEF" valign="top">
-      <table border="1" cellspacing="0" cellpadding="4">
-        <tr>
-          <form method="POST" action="{$v->env.source_path}{$v->env.module}/brtop/inspect/">
-          <td nowrap width="100%">会員情報の確認・変更</td>
-          <td nowrap><input type="submit" value=" 確認 "></td>
-          </form>
-        </tr>
-        <tr>
-          <form method="POST" action="{$v->env.source_path}{$v->env.module}/brvoice/">
-          <td nowrap width="100%">クチコミ投稿表示・返信</td>
-          <td nowrap><input type="submit" value=" 確認 "></td>
-          </form>
-        </tr>
-        <tr>
-          <FORM ACTION="{$v->env.source_path}{$v->env.module}/brpoint/" METHOD="POST">
-          <td nowrap width="100%">ＢＲポイント・ギフト・サービスの管理</td>
-          <td><INPUT TYPE="submit" VALUE=" 確認 "></td>
-          </FORM>
-        </tr>
-        <tr>
-          <td nowrap width="100%"> <font color="#bfbfbf">メールマガジン 差し込み可</font></td>
-          <form method="POST" action="{$v->env.source_path}{$v->env.module}/brmailmagazine/">
-          <td nowrap>
-                <input type="hidden" name="send_system" value="reserve">
-                <input type="submit" value=" 設定 ">
-          </td>
-          </form>
-        </tr>
-        <tr>
-          <td nowrap width="100%">メールマガジン 差し込み<s>不</s>可</td>
-          <form method="POST" action="{$v->env.source_path}{$v->env.module}/brmailmagazine2/">
-          <td nowrap>
-                <input type="submit" value=" 設定 ">
-          </td>
-          </form>
-        </tr>
-        <tr>
-          <td nowrap width="100%">メール一括送信プログラムについて</td>
-          <form method="POST" action="{$v->env.source_path}{$v->env.module}/brmailmagazine2/">
-          <td nowrap>
+            <td bgcolor="#FFFFEF" valign="top">
+                <table border="1" cellspacing="0" cellpadding="4">
+                    <tr>
+                        <form method="POST" action="{$v->env.source_path}{$v->env.module}/brtop/inspect/">
+                            <td nowrap width="100%">会員情報の確認・変更</td>
+                            <td nowrap><input type="submit" value=" 確認 "></td>
+                        </form>
+                    </tr>
+                    <tr>
+                        <form method="POST" action="{$v->env.source_path}{$v->env.module}/brvoice/">
+                            <td nowrap width="100%">クチコミ投稿表示・返信</td>
+                            <td nowrap><input type="submit" value=" 確認 "></td>
+                        </form>
+                    </tr>
+                    <tr>
+                        <FORM ACTION="{$v->env.source_path}{$v->env.module}/brpoint/" METHOD="POST">
+                            <td nowrap width="100%">ＢＲポイント・ギフト・サービスの管理</td>
+                            <td><INPUT TYPE="submit" VALUE=" 確認 "></td>
+                        </FORM>
+                    </tr>
+                    <tr>
+                        <td nowrap width="100%">
+                            <font color="#bfbfbf">メールマガジン 差し込み可</font>
+                        </td>
+                        <form method="POST" action="{$v->env.source_path}{$v->env.module}/brmailmagazine/">
+                            <td nowrap>
+                                <input type="hidden" name="send_system" value="reserve">
+                                <input type="submit" value=" 設定 ">
+                            </td>
+                        </form>
+                    </tr>
+                    <tr>
+                        <td nowrap width="100%">メールマガジン 差し込み<s>不</s>可</td>
+                        <form method="POST" action="{$v->env.source_path}{$v->env.module}/brmailmagazine2/">
+                            <td nowrap>
+                                <input type="submit" value=" 設定 ">
+                            </td>
+                        </form>
+                    </tr>
+                    <tr>
+                        <td nowrap width="100%">メール一括送信プログラムについて</td>
+                        <form method="POST" action="{$v->env.source_path}{$v->env.module}/brmailmagazine2/">
+                            <td nowrap>
 
-                <a href="javascript:void(0);" onclick="openWin()">説明</a>
-                <script language="JavaScript" type="text/javascript">
-                {literal}
-function openWin(){
-  newWin = window.open('http://logbook.bestrsv.com/index_tsv_sendmail.html','tsv_sendmail','width=1200,height=900,scrollbars=no,status=no,toolbar=no,location=no,menubar=no,resizable=yes');
-  newWin.focus();
-}
-{/literal}
-</script>
-          </td>
-          </form>
-        </tr>
-        <tr>
-          <form method="POST" action="kbs_brv_hs_weekday_plan.main"></form>
-        </tr>
-        <tr>
-          <form method="POST" action="kbs_brv_hs_special_price.main"></form>
-        </tr>
-        <tr>
-          <form method="POST" action="kbs_brv_hs_email_tool.main"></form>
-        </tr>
-      </table>
-      <br>
-      <table border="1" cellspacing="0" cellpadding="4">
-        <tr>
-          <form method="POST" action="{$v->env.source_path}{$v->env.module}/brchangepass/">
-          <td nowrap width="100%">管理画面用パスワード変更</td>
-          <td nowrap><input type="submit" value=" 確認 "></td>
-          </form>
-        </tr>
-        <tr>
-          <form method="POST" action="kbs_brv_tool_member.touroku">
-          <td nowrap width="100%">管理画面操作者登録</td>
-          <td nowrap><input type="submit" value=" 登録 "></td>
-          </form>
-        </tr>
-      </table>
-    </td>
+                                <a href="javascript:void(0);" onclick="openWin()">説明</a>
+                                <script language="JavaScript" type="text/javascript">
+                                    {
+                                        literal
+                                    }
 
-{* スケージュールの表示 *}
-    <td valign="top">
-<strong>-- スケジュール --</strong><br><br>
-{if $v->helper->date->set($v->helper->date->to_format('Y-m-01'))}{/if}
-{if $v->helper->date->add('m', -1)}{/if}
-{assign var=ym value=$v->helper->date->get()}
-{include file=$v->env.module_root|cat:'/views/_common/_date.tpl' timestamp=$ym format='ym'}
-<table border="0" cellpadding="4" cellspacing="0">
-{foreach from=$v->assign->Schedules.pre_month.values name=schedules item=schedule}
-  <tr>
-    <td>{$schedule.schedule_nm}</td>
-    {if is_empty($schedule.date_ymd)}
-    <td><a href="{$v->env.source_path}{$v->env.module}/brmoneyschedule/new/?Money_Schedule[money_schedule_id]={$schedule.money_schedule_id}&Money_Schedule[ym]={$ym}">登録する</a></td>
-    {else}
-      {if $schedule.date_ymd|date_format:"%Y%m%d" == $smarty.now|date_format:"%Y%m%d"}
-      <td bgcolor="#ffccff">{include file=$v->env.module_root|cat:'/views/_common/_date.tpl' timestamp=$schedule.date_ymd format='ymd(w)' color_on=true}</td>
-      {else}
-      <td>{include file=$v->env.module_root|cat:'/views/_common/_date.tpl' timestamp=$schedule.date_ymd format='ymd(w)' color_on=true}</td>
-      {/if}
-    {/if}
-  </tr>
-{/foreach}
-</table><br>
-{if $v->helper->date->set($v->helper->date->to_format('Y-m-01'))}{/if}
-{assign var=ym value=$v->helper->date->get()}
-{include file=$v->env.module_root|cat:'/views/_common/_date.tpl' timestamp=$ym format='ym'}
-<table border="0" cellpadding="4" cellspacing="0">
-{foreach from=$v->assign->Schedules.this_month.values name=schedules item=schedule}
-  <tr>
-    <td>{$schedule.schedule_nm}</td>
-    {if is_empty($schedule.date_ymd)}
-    <td><a href="{$v->env.source_path}{$v->env.module}/brmoneyschedule/new/?Money_Schedule[money_schedule_id]={$schedule.money_schedule_id}&Money_Schedule[ym]={$ym}">登録する</a></td>
-    {else}
-      {if $schedule.date_ymd|date_format:"%Y%m%d" == $smarty.now|date_format:"%Y%m%d"}
-      <td bgcolor="#ffccff">{include file=$v->env.module_root|cat:'/views/_common/_date.tpl' timestamp=$schedule.date_ymd format='ymd(w)' color_on=true}</td>
-      {else}
-      <td>{include file=$v->env.module_root|cat:'/views/_common/_date.tpl' timestamp=$schedule.date_ymd format='ymd(w)' color_on=true}</td>
-      {/if}
-    {/if}
-  </tr>
-{/foreach}
-</table><br>
-{if $v->helper->date->set()}{/if}
-{if $v->helper->date->set($v->helper->date->to_format('Y-m-01'))}{/if}
-{if $v->helper->date->add('m', 1)}{/if}
-{assign var=ym value=$v->helper->date->get()}
-{include file=$v->env.module_root|cat:'/views/_common/_date.tpl' timestamp=$ym format='ym'}
-<table border="0" cellpadding="4" cellspacing="0">
-{foreach from=$v->assign->Schedules.next_month.values name=schedules item=schedule}
-  <tr>
-    <td>{$schedule.schedule_nm}</td>
-    {if is_empty($schedule.date_ymd)}
-    <td><a href="{$v->env.source_path}{$v->env.module}/brmoneyschedule/new/?Money_Schedule[money_schedule_id]={$schedule.money_schedule_id}&Money_Schedule[ym]={$ym}">登録する</a></td>
-    {else}
-      {if $schedule.date_ymd|date_format:"%Y%m%d" == $smarty.now|date_format:"%Y%m%d"}
-      <td bgcolor="#ffccff">{include file=$v->env.module_root|cat:'/views/_common/_date.tpl' timestamp=$schedule.date_ymd format='ymd(w)' color_on=true}</td>
-      {else}
-      <td>{include file=$v->env.module_root|cat:'/views/_common/_date.tpl' timestamp=$schedule.date_ymd format='ymd(w)' color_on=true}</td>
-      {/if}
-    {/if}
-  </tr>
-{/foreach}
-</table>
-    </td>
-  </tr>
-</table>
-<div style="text-align:left">
-  {foreach from=$v->assign->licenses item=license name=loop_license}
-    {if $smarty.foreach.loop_license.first}<ul>{/if}
-    <li style="padding:0; margin:0;">{$license}</li>
-    {if $smarty.foreach.loop_license.last}</ul>{/if}
-  {/foreach}
-</div>
-{* footer start *}
-	{include file=$v->env.module_root|cat:'/views/_common/_br_footer.tpl'}
-{* footer end *}
+                                    function openWin() {
+                                        newWin = window.open('http://logbook.bestrsv.com/index_tsv_sendmail.html', 'tsv_sendmail',
+                                            'width=1200,height=900,scrollbars=no,status=no,toolbar=no,location=no,menubar=no,resizable=yes');
+                                        newWin.focus();
+                                    } {
+                                        /literal}
+                                </script>
+                            </td>
+                        </form>
+                    </tr>
+                    <tr>
+                        <form method="POST" action="kbs_brv_hs_weekday_plan.main"></form>
+                    </tr>
+                    <tr>
+                        <form method="POST" action="kbs_brv_hs_special_price.main"></form>
+                    </tr>
+                    <tr>
+                        <form method="POST" action="kbs_brv_hs_email_tool.main"></form>
+                    </tr>
+                </table>
+                <br>
+                <table border="1" cellspacing="0" cellpadding="4">
+                    <tr>
+                        <form method="POST" action="{$v->env.source_path}{$v->env.module}/brchangepass/">
+                            <td nowrap width="100%">管理画面用パスワード変更</td>
+                            <td nowrap><input type="submit" value=" 確認 "></td>
+                        </form>
+                    </tr>
+                    <tr>
+                        <form method="POST" action="kbs_brv_tool_member.touroku">
+                            <td nowrap width="100%">管理画面操作者登録</td>
+                            <td nowrap><input type="submit" value=" 登録 "></td>
+                        </form>
+                    </tr>
+                </table>
+            </td>
+
+            {{-- スケージュールの表示 --}}
+            <td valign="top">
+                <strong>-- スケジュール --</strong>
+                <br>
+                <br>
+                {if $v->helper->date->set($v->helper->date->to_format('Y-m-01'))}
+                {/if}
+                {if $v->helper->date->add('m', -1)}
+                {/if}
+                {assign var=ym value=$v->helper->date->get()}
+                {include file=$v->env.module_root|cat:'/views/_common/_date.tpl' timestamp=$ym format='ym'}
+                <table border="0" cellpadding="4" cellspacing="0">
+                    {foreach from=$v->assign->Schedules.pre_month.values name=schedules item=schedule}
+                    <tr>
+                        <td>{$schedule.schedule_nm}</td>
+                        {if is_empty($schedule.date_ymd)}
+                        <td><a
+                                href="{$v->env.source_path}{$v->env.module}/brmoneyschedule/new/?Money_Schedule[money_schedule_id]={$schedule.money_schedule_id}&Money_Schedule[ym]={$ym}">登録する</a>
+                        </td>
+                        {else}
+                        {if $schedule.date_ymd|date_format:"%Y%m%d" == $smarty.now|date_format:"%Y%m%d"}
+                        <td bgcolor="#ffccff">
+                            {include file=$v->env.module_root|cat:'/views/_common/_date.tpl' timestamp=$schedule.date_ymd
+                            format='ymd(w)' color_on=true}
+                        </td>
+                        {else}
+                        <td>
+                            {include file=$v->env.module_root|cat:'/views/_common/_date.tpl' timestamp=$schedule.date_ymd
+                            format='ymd(w)' color_on=true}
+                        </td>
+                        {/if}
+                        {/if}
+                    </tr>
+                    {/foreach}
+                </table>
+                <br>
+                {if $v->helper->date->set($v->helper->date->to_format('Y-m-01'))}
+                {/if}
+                {assign var=ym value=$v->helper->date->get()}
+                {include file=$v->env.module_root|cat:'/views/_common/_date.tpl' timestamp=$ym format='ym'}
+                <table border="0" cellpadding="4" cellspacing="0">
+                    {foreach from=$v->assign->Schedules.this_month.values name=schedules item=schedule}
+                    <tr>
+                        <td>{$schedule.schedule_nm}</td>
+                        {if is_empty($schedule.date_ymd)}
+                        <td>
+                            <a
+                                href="{$v->env.source_path}{$v->env.module}/brmoneyschedule/new/?Money_Schedule[money_schedule_id]={$schedule.money_schedule_id}&Money_Schedule[ym]={$ym}">
+                                登録する
+                            </a>
+                        </td>
+                        {else}
+                        {if $schedule.date_ymd|date_format:"%Y%m%d" == $smarty.now|date_format:"%Y%m%d"}
+                        <td bgcolor="#ffccff">
+                            {include file=$v->env.module_root|cat:'/views/_common/_date.tpl' timestamp=$schedule.date_ymd
+                            format='ymd(w)' color_on=true}
+                        </td>
+                        {else}
+                        <td>
+                            {include file=$v->env.module_root|cat:'/views/_common/_date.tpl' timestamp=$schedule.date_ymd
+                            format='ymd(w)' color_on=true}
+                        </td>
+                        {/if}
+                        {/if}
+                    </tr>
+                    {/foreach}
+                </table>
+                <br>
+                {if $v->helper->date->set()}
+                {/if}
+                {if $v->helper->date->set($v->helper->date->to_format('Y-m-01'))}
+                {/if}
+                {if $v->helper->date->add('m', 1)}
+                {/if}
+                {assign var=ym value=$v->helper->date->get()}
+                {include file=$v->env.module_root|cat:'/views/_common/_date.tpl' timestamp=$ym format='ym'}
+                <table border="0" cellpadding="4" cellspacing="0">
+                    {foreach from=$v->assign->Schedules.next_month.values name=schedules item=schedule}
+                    <tr>
+                        <td>
+                            {$schedule.schedule_nm}
+                        </td>
+                        {if is_empty($schedule.date_ymd)}
+                        <td>
+                            <a
+                                href="{$v->env.source_path}{$v->env.module}/brmoneyschedule/new/?Money_Schedule[money_schedule_id]={$schedule.money_schedule_id}&Money_Schedule[ym]={$ym}">登録する</a>
+                        </td>
+                        {else}
+                        {if $schedule.date_ymd|date_format:"%Y%m%d" == $smarty.now|date_format:"%Y%m%d"}
+                        <td bgcolor="#ffccff">
+                            {include file=$v->env.module_root|cat:'/views/_common/_date.tpl' timestamp=$schedule.date_ymd
+                            format='ymd(w)' color_on=true}
+                        </td>
+                        {else}
+                        <td>
+                            {include file=$v->env.module_root|cat:'/views/_common/_date.tpl' timestamp=$schedule.date_ymd
+                            format='ymd(w)' color_on=true}
+                        </td>
+                        {/if}
+                        {/if}
+                    </tr>
+                    {/foreach}
+                </table>
+            </td>
+        </tr>
+    </table>
+    <div style="text-align:left">
+        <ul>
+            {foreach from=$v->assign->licenses item=license name=loop_license}
+            <li style="padding:0; margin:0;">{$license}</li>
+            {/foreach}
+        </ul>
+    </div>
+    {{-- {include file=$v->env.module_root|cat:'/views/_common/_br_footer.tpl'} --}}
+@endsection

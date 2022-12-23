@@ -11,6 +11,10 @@ return [
     | reset options for your application. You may change these defaults
     | as required, but they're a perfect start for most applications.
     |
+    | このオプションは、アプリケーションのデフォルトの認証「ガード (guard)」と
+    | パスワードのリセットオプションを制御します。これらのデフォルトは
+    | 必要に応じて変更できますが、ほとんどのアプリケーションにとって最適な出発点です。
+    |
     */
 
     'defaults' => [
@@ -31,6 +35,14 @@ return [
     | users are actually retrieved out of your database or other storage
     | mechanisms used by this application to persist your user's data.
     |
+    | 次に、アプリケーションのすべての認証ガード (guard) を定義できます。 もちろん、
+    | ここでは、セッションストレージと Eloquent ユーザープロバイダーを使用する優れた
+    | デフォルト構成が定義されています。
+    |
+    | すべての認証ドライバーには、ユーザープロバイダー (provider) があります。 これは、
+    | ユーザーのデータを永続化するためにこのアプリケーションが使用するデータベース
+    | またはその他のストレージメカニズムからユーザーを実際に取得する方法を定義します。
+    |
     | Supported: "session"
     |
     */
@@ -39,6 +51,28 @@ return [
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
+        ],
+
+        'staff' => [
+            'driver' => 'session',
+            'provider' => 'staff',
+        ],
+
+        'supervisor' => [
+            'driver' => 'session',
+            'provider' => 'supervisor',
+        ],
+        'hotel' => [
+            'driver' => 'session',
+            'provider' => 'hotel',
+        ],
+        'partner' => [
+            'driver' => 'session',
+            'provider' => 'partner',
+        ],
+        'affiliate' => [
+            'driver' => 'session',
+            'provider' => 'affiliate',
         ],
     ],
 
@@ -55,6 +89,14 @@ return [
     | sources which represent each model / table. These sources may then
     | be assigned to any extra authentication guards you have defined.
     |
+    | すべての認証ドライバーには、ユーザープロバイダー (provider) があります。これは、
+    | ユーザーのデータを永続化するためにこのアプリケーションが使用するデータベース
+    | またはその他のストレージメカニズムからユーザーを実際に取得する方法を定義します。
+    |
+    | 複数のユーザー テーブルまたはモデルがある場合は、各モデル/テーブルを表す
+    | 複数のソースを構成できます。これらのソースは、定義した追加の認証ガードに
+    | 割り当てることができます。
+    |
     | Supported: "database", "eloquent"
     |
     */
@@ -69,6 +111,27 @@ return [
         //     'driver' => 'database',
         //     'table' => 'users',
         // ],
+
+        'staff' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\StaffAccount::class,
+        ],
+        'supervisor' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\User::class, // TODO: 各ログイン機能実装時、対応するモデルに書き換える
+        ],
+        'hotel' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\User::class, // TODO: 各ログイン機能実装時、対応するモデルに書き換える
+        ],
+        'partner' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\User::class, // TODO: 各ログイン機能実装時、対応するモデルに書き換える
+        ],
+        'affiliate' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\User::class, // TODO: 各ログイン機能実装時、対応するモデルに書き換える
+        ],
     ],
 
     /*
@@ -84,11 +147,26 @@ return [
     | considered valid. This security feature keeps tokens short-lived so
     | they have less time to be guessed. You may change this as needed.
     |
+    | アプリケーションに複数のユーザー テーブルまたはモデルがあり、特定のユーザータイプに
+    | 基づいて個別のパスワードリセット設定が必要な場合は、複数のパスワードリセット構成を
+    | 指定できます。
+    |
+    | 有効期限は、各リセットトークンが有効と見なされる分数です。このセキュリティ機能により、
+    | トークンの有効期間が短くなるため、推測される時間が少なくなります。 これは必要に応じて
+    | 変更できます。
+    |
     */
 
     'passwords' => [
         'users' => [
             'provider' => 'users',
+            'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        // TODO: 詳細要確認。
+        'staff' => [
+            'provider' => 'staff',
             'table' => 'password_resets',
             'expire' => 60,
             'throttle' => 60,
@@ -104,8 +182,12 @@ return [
     | times out and the user is prompted to re-enter their password via the
     | confirmation screen. By default, the timeout lasts for three hours.
     |
+    | ここでは、パスワードの確認がタイムアウトし、ユーザーが確認画面でパスワードの
+    | 再入力を求められるまでの秒数を定義できます。デフォルトでは、タイムアウトは
+    | 3 時間続きます。
+    |
     */
 
-    'password_timeout' => 10800,
+    'password_timeout' => 10800, // 3 hours
 
 ];

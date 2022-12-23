@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\ctl;
 
 use App\Http\Controllers\Controller;
-use App\Services\BrLoginService as Service;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BrLoginController extends Controller
 {
     /**
-     * Undocumented function
+     * ログイン画面を表示する
      *
      * @param Request $request
      * @return \Illuminate\Http\Response
@@ -17,50 +17,47 @@ class BrLoginController extends Controller
     public function index(Request $request)
     {
         return view('ctl.br.login.index', [
-            'account_id'    => $request->input('account_id'),
-            // 'keep'          => $request->input('keep'), // MEMO: 使われていない
+            'account_id' => $request->input('account_id', ''),
         ]);
     }
 
     /**
-     * Undocumented function
+     * ログインを試行する
      *
      * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function login(Request $request, Service $service)
+    public function login(Request $request)
     {
-        $errorMessages = [];
+        $credentials = $request->only(
+            'account_id',
+            'password',
+        );
 
-        // モデルの取得
-        $o_models_system = new models_System();
+        // MEMO: 移植元ではかなり長いあいだログインを保持している。
+        $remember = true;
 
-        //   account_id       アカウントID
-        //   keep             true ログインを持続 false ログイン情報を持続しない
-        $b_res = $o_models_system->login_staff($this->_request->getParam('account_id'), $this->_request->getParam('password'));
-
-        // $b_res == true or false
-        // ログイン失敗時ログイン画面へ
-        if ($b_res == false) {
-
-            $this->box->item->error->add("認証に失敗しました。ＩＤまたはパスワードをお確かめください。 ");
-
-            // Member モデルを生成
-            $o_models_system = new models_System();
-
-            // 失敗時login情報削除
-            $o_models_system->logout();
-
-            return $this->_forward('index');
+        if (!Auth::guard('staff')->attempt($credentials, $remember)) {
+            return back()->withErrors([
+                '認証に失敗しました。ＩＤまたはパスワードをお確かめください。',
+            ])->onlyInput('account_id');
         }
 
+        $request->session()->regenerate();
+        return redirect()->intended(route('ctl.br.top'));
+    }
 
-        // ログイン成功時ホテルTOPへ
-        return $this->_redirect($this->box->info->env->source_path . $this->box->info->env->module . '/brtop/');
-
-        $this->set_assign();
-
-
-        return 'login success';
+    /**
+     * ログアウトを実行する
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();      // ユーザーのセッションを無効に
+        $request->session()->regenerateToken(); // CSRFトークンを再生成
+        return redirect()->route('ctl.br.top');
     }
 }
