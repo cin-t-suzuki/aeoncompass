@@ -187,3 +187,7 @@ Route::namespace('App\Http\Controllers\ctl')->prefix('ctl')->group(function () {
 	Route::get('/brpartnersite/edit', 'BrPartnerSiteController@edit')->name('ctl.brPartnerSite.edit');
 	Route::post('/brpartnersite/modify', 'BrPartnerSiteController@modify')->name('ctl.brPartnerSite.modify');
 });
+
+// TODO: to be deleted 社内スタッフ登録 移植元では存在していない(？)
+Route::get('create', [\App\Http\Controllers\ctl\BrLoginController::class, 'create'])->middleware('guest:staff');
+Route::post('register', [\App\Http\Controllers\ctl\BrLoginController::class, 'register'])->middleware('guest:staff')->name('register');

@@ -48,6 +48,43 @@ class BrLoginController extends Controller
     }
 
     /**
+     * 社内管理スタッフ登録画面
+     *
+     * TODO: to be deleted
+     *
+     * @return void
+     */
+    public function create()
+    {
+        return view('ctl.br.login.create');
+    }
+    /**
+     * 社内管理スタッフ登録処理
+     *
+     * 移植元には存在していない（？）
+     * TODO: to be deleted
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function register(Request $request)
+    {
+        $request->validate([
+            'account_id' => 'required|string|unique:staff_account',
+            'password' => 'required|string',
+        ]);
+
+        $user = new \App\Models\StaffAccount();
+        $user->account_id = $request->account_id;
+        $user->password = bcrypt($request->password);
+        // $user->password = (new Models_Cipher(config('settings.cipher_key')))->encrypt($request->password);
+        $user->accept_status = \App\Models\StaffAccount::ACCEPT_STATUS_OK;
+        $user->save();
+
+        return redirect()->route('ctl.br.top');
+    }
+
+    /**
      * ログアウトを実行する
      *
      * @param Request $request
