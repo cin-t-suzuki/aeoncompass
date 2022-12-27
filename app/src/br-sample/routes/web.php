@@ -182,4 +182,22 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 	Route::get('/brpartnersite/edit', 'BrPartnerSiteController@edit')->name('ctl.brPartnerSite.edit');
 	Route::post('/brpartnersite/modify', 'BrPartnerSiteController@modify')->name('ctl.brPartnerSite.modify');
 
+    // 口座振替　追加処理
+    Route::get('/bradditionalzengin/', 'BrAdditonalZenginController@list')->name('ctl.brAdditionalZengin.list');
+    Route::post('/bradditionalzengin/search', 'BrAdditonalZenginController@search')
+        ->name('ctl.brAdditionalZengin.search');
+    Route::get('/bradditionalzengin/searchList', 'BrAdditonalZenginController@searchList')
+        ->name('ctl.brAdditionalZengin.searchlist');
+    Route::get('/bradditionalzengin/searchhotel', 'BrAdditonalZenginController@searchHotel')
+        ->name('ctl.brAdditionalZengin.searchhotel');
+    Route::match(['get','post'], '/bradditionalzengin/edit', 'BrAdditonalZenginController@edit')
+        ->name('ctl.brAdditionalZengin.edit');
+    Route::post('/bradditionalzengin/create', 'BrAdditonalZenginController@create')
+        ->name('ctl.brAdditionalZengin.create');
+    Route::match(['get','post'], '/bradditionalzengin/detail', 'BrAdditonalZenginController@detail')
+        ->name('ctl.brAdditionalZengin.detail');
+    Route::match(['get','post'], '/bradditionalzengin/update', 'BrAdditonalZenginController@update')
+        ->name('ctl.brAdditionalZengin.update');
+    Route::match(['get', 'post'], '/bradditionalzengin/delete', 'BrAdditonalZenginController@delete')
+        ->name('ctl.brAdditionalZengin.delete');
 });

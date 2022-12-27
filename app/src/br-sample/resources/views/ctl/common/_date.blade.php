@@ -11,6 +11,7 @@
 //           ------- ----------------------- ---------------
 //           ymd(w) : 2008年08月05日（火）  : Y年m月d日（j）
 //           ymd    : 2008年08月05日        : Y年m月d日
+// 			 y/m/d  : 2008-08-05　　        : Y/m/d
 //           ym     : 2008年08月            : Y年m月
 //           d      : 05                    : d
 //           J      : 火曜日                : J
@@ -60,6 +61,12 @@
 	{
 		//assign var='day' value=$v->helper->date->to_format('Y年m月d日')|cat:'（'|cat:$v->helper->date->to_week('j')|cat:'）'
 		$day = $dateUtil->to_format('Y年m月d日') .'（'. $dateUtil->to_week('j'). '）';
+	}
+	// Y/m/d 
+		elseif ( $format == 'y/m/d' )
+	{
+	  //追加
+		$day = $dateUtil->to_format('Y/m/d');
 	}
 	// Y年m月d日 
 	elseif ( $format == 'ymd' )
