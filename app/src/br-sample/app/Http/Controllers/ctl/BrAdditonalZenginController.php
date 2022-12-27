@@ -291,6 +291,7 @@ class BrAdditonalZenginController extends _commonController
         ];
 
         // 検索条件に該当するホテル一覧の取得
+        //TODO 検索数が膨大な場合、エラーになる可能性あり（キーワードで「ホテル」など）
         $errrorArr = []; //引数が必要なため追記でいいか？
         $a_hotel_list = $hotelModel->search($errrorArr, $a_conditions);
         $a_hotel_list = json_decode(json_encode($a_hotel_list), true); //stdclassを配列にしないと下でエラーになる,blade側(edit)も配列での参照へ変更
