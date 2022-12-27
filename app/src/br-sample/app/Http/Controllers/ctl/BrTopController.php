@@ -2,50 +2,50 @@
 
 namespace App\Http\Controllers\ctl;
 
-use App\Common\DateUtil;
 use App\Http\Controllers\Controller;
-use App\Models\ModelsLicense;
-use App\Models\ModelsSchedule;
+use App\Services\BrTopService as Service;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
+/**
+ * MEMO: BrtopController にたくさんの機能が追加されているため、
+ * Top 表示のためだけのクラスを新たに作成
+ */
 class BrTopController extends Controller
 {
-    public function index(Request $request)
+    /**
+     * トップページ表示
+     *
+     * @param Request $request
+     * @param Service $service
+     * @return \Illuminate\Http\Response
+     */
+    public function index(Request $request, Service $service)
     {
-        // MEMO: BrtopController が役割過多になっているため、新たに作成
-
-        $a_schedules = [];
-        $a_license_tokens = [];
-
-        // ライセンス、 スケジュール モデルの取得
-        $modelsSchedule = new ModelsSchedule();
-        $modelsLicense  = new ModelsLicense();
+        $this_month = Carbon::now();
+        $last_month = $this_month->copy()->subMonthsNoOverflow();
+        $next_month = $this_month->copy()->addMonthNoOverflow();
 
         // 経理関係スケジュールの一覧を取得
-        $o_date = new DateUtil();
-        //当月
-        // $a_schedules['this_month'] = $modelsSchedule->get_schedules(array('date_ym' => $o_date->to_format('Y-m')));
-        //前月
-        $o_date->add('m', -1);
-        // $a_schedules['pre_month'] = $modelsSchedule->get_schedules(array('date_ym' => $o_date->to_format('Y-m')));
-        //翌月
-        $o_date->add('m', 2);
-        // $a_schedules['next_month'] = $modelsSchedule->get_schedules(array('date_ym' => $o_date->to_format('Y-m')));
-
-        // TODO:
-        $a_schedules = [
-            'pre_month' => [],
-            'this_month' => [],
-            'next_month' => [],
+        $schedules = [
+            'last_month'    => $service->getSchedules($last_month->format('Y-m')),
+            'this_month'    => $service->getSchedules($this_month->format('Y-m')),
+            'next_month'    => $service->getSchedules($next_month->format('Y-m')),
         ];
+
         // 自身に許可されているライセンストークン取得
-        //TODO ユーザー情報から取得し移送
-        $operator_cd = '1'; // magic number
-        $a_license_tokens = $modelsLicense->get_applicant_license($operator_cd);
+        // TODO: ユーザー情報から取得し移送
+        $operator_cd = '11'; // 仮実装
+        $licenses = $service->getApplicantLicense($operator_cd);
 
         return view("ctl.br.top.index", [
-            'Schedules'  => $a_schedules,
-            'licenses'   => $a_license_tokens,
+            'schedules'  => $schedules,
+            'licenses'   => $licenses,
+
+            // Carbon インスタンス
+            'last_month' => $last_month,
+            'this_month' => $this_month,
+            'next_month' => $next_month,
         ]);
     }
 }

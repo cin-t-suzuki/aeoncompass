@@ -71,14 +71,14 @@
     $user = (object) [
         'operator' => new Operator(Str::random(16)),
         'hotel' => (object) [
-            'hotel_nm' => 'hotel_nm_' . Str::random(rand(3, 8)),
-            'hotel_cd' => 'hotel_cd_' . Str::random(rand(3, 8)),
-            'hotel_old_nm' => [null, 'hotel_old_nm_' . Str::random(rand(3, 8))][rand(0, 1)],
-            'ydp2_status' => rand(0, 1) == 0,
-            'premium_status' => rand(0, 1) == 0,
+            'hotel_nm'              => 'hotel_nm_' . Str::random(rand(3, 8)),
+            'hotel_cd'              => 'hotel_cd_' . Str::random(rand(3, 8)),
+            'hotel_old_nm'          => [null, 'hotel_old_nm_' . Str::random(rand(3, 8))][rand(0, 1)],
+            'ydp2_status'           => rand(0, 1) == 0,
+            'premium_status'        => rand(0, 1) == 0,
             'visual_package_status' => rand(0, 1) == 0,
-            'accept_status' => rand(0, 1),
-            'jrset_status' => rand(0, 5),
+            'accept_status'         => rand(0, 1),
+            'jrset_status'          => rand(0, 5),
         ],
         'hotel_status' => (object) [
             'entry_status' => rand(0, 1),
@@ -87,21 +87,21 @@
             'stock_type' => rand(0, 2),
         ],
         'hotel_person' => (object) [
-            'person_nm' => 'person_nm_' . Str::random(rand(8, 16)),
-            'person_post' => 'person_post_' . Str::random(rand(8, 16)),
-            'person_tel' => 'person_tel_' . rand(1000000, 9999999),
-            'person_fax' => 'person_fax_' . rand(1000000, 9999999),
+            'person_nm'     => 'person_nm_'     . Str::random(rand(8, 16)),
+            'person_post'   => 'person_post_'   . Str::random(rand(8, 16)),
+            'person_tel'    => 'person_tel_'    . rand(1000000, 9999999),
+            'person_fax'    => 'person_fax_'    . rand(1000000, 9999999),
         ],
         'hotel_system_version' => (object) [
             'version' => rand(0, 2),
         ],
     ];
     $env = (object) [
-        'controller' => ['brtop', 'htlsroomoffer', 'htlsroomplan2', 'htlreserve', 'htlsroomplandp', 'pmscode'][rand(0, 5)],
-        'action' => 'index',
-        'source_path' => '',
-        'module' => '/ctl',
-        'path_base_module' => 'ctl/statics',
+        'controller'        => ['brtop', 'htlsroomoffer', 'htlsroomplan2', 'htlreserve', 'htlsroomplandp', 'pmscode'][rand(0, 5)],
+        'action'            => 'index',
+        'source_path'       => '',
+        'module'            => '/ctl',
+        'path_base_module'  => 'ctl/statics',
     ];
     $config = (object) [
         'environment' => (object) [
@@ -119,10 +119,10 @@
         'env' => $env,
         'config' => $config,
     ];
-    $is_staff_navi = rand(0, 0);
-    $is_htl_navi = rand(0, 0);
-    $is_ptn_navi = rand(0, 0);
-    $is_ctl_menu = rand(0, 0);
+    $is_staff_navi  = rand(0, 0);
+    $is_htl_navi    = rand(0, 0);
+    $is_ptn_navi    = rand(0, 0);
+    $is_ctl_menu    = rand(0, 0);
     // $title = [null, 'TITLE_' . Str::random(5)][rand(0, 1)];
 @endphp
 

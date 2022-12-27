@@ -1,5 +1,15 @@
 {{-- ここから svn_trunk\public\app\ctl\views\_common\_br_header.tpl --}}
 <HTML>
+@php
+    // TODO:
+    $print_flg      = '';
+    $no_print       = '';
+    $isLogin        = true;
+    $no_print_title = '';
+    $isStaff        = true;
+    $staff_nm       = 'staff_nm';
+    // var_dump(Auth::user()->account_id);
+@endphp
 <head>
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Cache-Control" content="no-cache">
@@ -11,7 +21,7 @@
     <title>STREAM社内管理 @yield('title')</title>
     <!--TODO デザイン link type="text/css" rel="stylesheet" href="/css/base.css"-->
     {{-- 印刷用スタイルシート --}}
-    @if(isset($print_flg) && $print_flg)
+    @if ($print_flg)
     <link type="text/css" rel="stylesheet" href="/styles/print.css" media="print">
     <link type="text/css" rel="stylesheet" href="/styles/screen.css" media="screen">
     @endif
@@ -47,7 +57,7 @@
     <div style="margin-left:-12px;padding:0.25em 0;background-color:#A63;color:#fff;font-weight:bold;width:6em;text-align:center;">環境不明</div>
 @endif
 
-@if(isset($no_print) && $no_print)
+@if ($no_print)
     <div class="noprint">
 @endif
 
@@ -56,39 +66,39 @@
             <td nowrap></td>
             <td nowrap WIDTH="20%"><B>STREAM社内管理</B></td>
             {{-- ログインしていれば --}}
-            @if(isset($isLogin) && $isLogin)
+            @if ($isLogin)
             <td align="right" WIDTH="70%">
                 <small>
                     {!! Form::open(['route' => ['ctl.index'], 'method' => 'get']) !!}
-                        <input type="submit" value="メインメニュー">担当：{{ staff_nm }}
+                        <input type="submit" value="メインメニュー">担当：{{ $staff_nm }}
                     {!! Form::close() !!}
                 </small>
             </td>
             @endif
         </tr>
     </table>
-@if(isset($no_print) && $no_print)
+@if ($no_print)
     </div>
 @endif
-@if(isset($no_print_title) && $no_print_title)
+@if ($no_print_title)
     <div class="noprint">
 @endif
 {{-- ログインしていれば --}}
-@if(isset($isLogin) && $isLogin)
+@if ($isLogin)
     <br />
     <br />
-    @if(isset($menu_title) || isset($title))
+    @if (isset($menu_title) || isset($title))
     <table border="3" cellpadding="2" cellspacing="0">
         <tr>
             <td align="center" bgcolor="#EEFFEE">
-                <big>{{ !isset($menu_title) ? $title : $menu_title }}</big>
+                <big>{{ isset($menu_title) ? $menu_title : $title }}</big>
             </td>
         </tr>
     </table>
     @endif
     <br />
 @endif
-@if(isset($no_print_title) && $no_print_title)
+@if ($no_print_title)
     </div>
 @endif
 {{-- ここまで svn_trunk\public\app\ctl\views\_common\_br_header.tpl --}}
@@ -99,18 +109,18 @@
 
 
 {{-- ここから svn_trunk\public\app\ctl\views\_common\_br_footer.tpl --}}
-@if(isset($no_print) && $no_print)
+@if ($no_print)
 <div class="noprint">
 @endif
 <br>
 {{-- ログインしていれば --}}
-@if(isset($isLogin) && $isLogin)
+@if ($isLogin)
 <table border="0" WIDTH="100%" cellspacing="0" cellpadding="0" bgcolor="#EEFFEE">
     <tr>
         <td bgcolor="#EEFFEE">
-        @if(isset($isStaff) && $isStaff)
+        @if ($isStaff)
             <small>
-            操作者変更（<a href="">Logout</a>）
+            操作者変更（<a href="{{ route('ctl.logout') }}">Logout</a>）
             </small>
         @else
             @if(\Route::currentRouteName() == "ctl.index")
@@ -129,7 +139,7 @@
 </table>
 @endif
 
-@if(isset($no_print) && $no_print)
+@if ($no_print)
     </div>
 @endif
 

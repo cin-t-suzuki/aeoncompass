@@ -116,15 +116,15 @@ Route::namespace('App\Http\Controllers\ctl')->prefix('ctl')->group(function () {
 	});
 
     // 施設情報メイン
-    Route::controller(BrhotelController::class)->prefix("brhotel")->group(function(){
+    Route::controller(BrhotelController::class)->prefix('brhotel')->group(function () {
         Route::get('/hotelsearch', 'hotelsearch')->name('ctl.brhotel.hotelsearch'); //宿泊施設検索
         Route::match(['get','post'], '/new', 'new')->name('ctl.brhotel.new');
 
         Route::match(['get','post'], '/edit', 'edit')->name('ctl.brhotel.edit');
         Route::post('/update', 'update')->name('ctl.brhotel.update'); //施設更新？
 
-        Route::get('/index', 'index')->name('ctl.brhotel.index'); // 検索 初期表示
-        Route::match(['get','post'],'/show', 'show')->name('ctl.brhotel.show'); // 詳細変更 施設各情報ハブ
+        Route::get('/', 'index')->name('ctl.brhotel.index'); // 検索 初期表示
+        Route::match(['get', 'post'], '/show', 'show')->name('ctl.brhotel.show'); // 詳細変更 施設各情報ハブ
 
         Route::get('/searchcity', 'searchcity')->name('ctl.brhotel.searchcity'); // 検索部品 市プルダウン
         Route::get('/searchward', 'searchward')->name('ctl.brhotel.searchward'); // 検索部品 区プルダウン
@@ -132,11 +132,11 @@ Route::namespace('App\Http\Controllers\ctl')->prefix('ctl')->group(function () {
         Route::post('/createnote', 'createnote')->name('ctl.brhotel.createnote'); //施設管理特記事項
         Route::post('/updatenote', 'updatenote')->name('ctl.brhotel.updatenote'); //
 
-        Route::get ('/editSurvey'   , 'editSurvey'  )->name('ctl.br_hotel.edit_survey');    // 施設測地情報更新
-        Route::post('/updateSurvey' , 'updateSurvey')->name('ctl.br_hotel.update_survey');  // 施設測地情報更新 処理後結果
+        Route::get('/editSurvey', 'editSurvey')->name('ctl.br_hotel.edit_survey');    // 施設測地情報更新
+        Route::post('/updateSurvey', 'updateSurvey')->name('ctl.br_hotel.update_survey');  // 施設測地情報更新 処理後結果
 
-        Route::get ('/editManagement'   , 'editManagement'  )->name('ctl.br_hotel.edit_management');    // 施設管理情報更新
-        Route::post('/updateManagement' , 'updateManagement')->name('ctl.br_hotel.update_management');  // 施設管理情報更新処理
+        Route::get('/editManagement', 'editManagement')->name('ctl.br_hotel.edit_management');    // 施設管理情報更新
+        Route::post('/updateManagement', 'updateManagement')->name('ctl.br_hotel.update_management');  // 施設管理情報更新処理
     });
 
     Route::controller(BrHotelAreaController::class)->prefix('brHotelArea')->group(function () {
@@ -152,17 +152,17 @@ Route::namespace('App\Http\Controllers\ctl')->prefix('ctl')->group(function () {
 
 
     // 施設情報変更 登録状態変更
-    Route::controller(BrhotelStatusController::class)->prefix("brhotelStatus")->group(function(){
-        Route::match(['get','post'],'/index', 'index')->name('ctl.brhotelStatus.index'); //表示
+    Route::controller(BrhotelStatusController::class)->prefix("brhotelStatus")->group(function () {
+        Route::match(['get', 'post'], '/index', 'index')->name('ctl.brhotelStatus.index'); //表示
         Route::post('/update', 'update')->name('ctl.brhotelStatus.update'); //更新処理
     });
 
     // 料率マスタ
-    Route::controller(BrhotelRateController::class)->prefix("brhotelRate")->group(function(){
-        Route::match(['get','post'],'/index', 'index')->name('ctl.brhotelRate.index'); //表示
-        Route::match(['get','post'],'/edit', 'edit')->name('ctl.brhotelRate.edit'); //更新 表示
+    Route::controller(BrhotelRateController::class)->prefix("brhotelRate")->group(function () {
+        Route::match(['get', 'post'], '/index', 'index')->name('ctl.brhotelRate.index'); //表示
+        Route::match(['get', 'post'], '/edit', 'edit')->name('ctl.brhotelRate.edit'); //更新 表示
         Route::post('/update', 'update')->name('ctl.brhotelRate.update'); //更新処理
-        Route::match(['get','post'],'/new', 'new')->name('ctl.brhotelRate.new'); //新規 表示
+        Route::match(['get', 'post'], '/new', 'new')->name('ctl.brhotelRate.new'); //新規 表示
         Route::post('/create', 'create')->name('ctl.brhotelRate.create'); //新規処理
         Route::post('/destroy', 'destroy')->name('ctl.brhotelRate.destroy'); //削除処理
     });
@@ -191,3 +191,31 @@ Route::namespace('App\Http\Controllers\ctl')->prefix('ctl')->group(function () {
 // TODO: to be deleted 社内スタッフ登録 移植元では存在していない(？)
 Route::get('create', [\App\Http\Controllers\ctl\BrLoginController::class, 'create'])->middleware('guest:staff');
 Route::post('register', [\App\Http\Controllers\ctl\BrLoginController::class, 'register'])->middleware('guest:staff')->name('register');
+
+// TODO: 実装したら削除する。
+// 情報を取得しているだけであれば、 get method を使うほうが適切ではないか？
+Route::post('/ctl/brreserve/', function () {return 'TODO: 【未実装】 /ctl/brreserve/'; })->name('ctl.br.reserve');
+Route::post('/ctl/brreserveck/', function () {return 'TODO: 【未実装】 /ctl/brreserveck/'; })->name('ctl.br.reserve.check');
+Route::post('/ctl/brdemandresult/list/', function () {return 'TODO: 【未実装】 /ctl/brdemandresult/list/'; })->name('ctl.br.demand.result.list');
+Route::post('/ctl/brpartner/', function () {return 'TODO: 【未実装】 /ctl/brpartner/'; })->name('ctl.br.partner');
+Route::post('/ctl/braffiliate/', function () {return 'TODO: 【未実装】 /ctl/braffiliate/'; })->name('ctl.br.affiliate');
+Route::post('/ctl/brtop/payment/', function () {return 'TODO: 【未実装】 /ctl/brtop/payment/'; })->name('ctl.br.top.payment');
+Route::post('/ctl/brtop/confirmation/', function () {return 'TODO: 【未実装】 /ctl/brtop/confirmation/'; })->name('ctl.br.top.confirmation');
+Route::post('/ctl/brtop/registration/', function () {return 'TODO: 【未実装】 /ctl/brtop/registration/'; })->name('ctl.br.top.registration');
+Route::post('/ctl/brtop/offer/', function () {return 'TODO: 【未実装】 /ctl/brtop/offer/'; })->name('ctl.br.top.offer');
+Route::post('/ctl/brtop/stock/', function () {return 'TODO: 【未実装】 /ctl/brtop/stock/'; })->name('ctl.br.top.stock');
+Route::post('/ctl/brtop/claim/', function () {return 'TODO: 【未実装】 /ctl/brtop/claim/'; })->name('ctl.br.top.claim');
+Route::post('/ctl/brgroupbuying/deals/', function () {return 'TODO: 【未実装】 /ctl/brgroupbuying/deals/'; })->name('ctl.br.group.buying.deals');
+
+Route::post('/ctl/brtop/inspect/', function () {return 'TODO: 【未実装】 /ctl/brtop/inspect/'; })->name('ctl.br.top.inspect');
+Route::post('/ctl/brvoice/', function () {return 'TODO: 【未実装】 /ctl/brvoice/'; })->name('ctl.br.voice');
+Route::post('/ctl/brpoint/', function () {return 'TODO: 【未実装】 /ctl/brpoint/'; })->name('ctl.br.point');
+Route::post('/ctl/brmailmagazine/', function () {return 'TODO: 【未実装】 /ctl/brmailmagazine/'; })->name('ctl.br.mail.magazine');
+Route::post('/ctl/brmailmagazine2/', function () {return 'TODO: 【未実装】 /ctl/brmailmagazine2/'; })->name('ctl.br.mail.magazine2');
+Route::post('/ctl/brchangepass/', function () {return 'TODO: 【未実装】 /ctl/brchangepass/'; })->name('ctl.br.change.pass');
+Route::post('/ctl/brtop/kbs_brv_tool_member.touroku', function () {return 'TODO: 【未実装】 kbs_brv_tool_member.touroku'; })->name('ctl.br.top.kbs.brv.tool.member.touroku');
+
+Route::get('/ctl/brmoneyschedule/new', function (\Illuminate\Http\Request $request) {
+    var_dump($request->input());
+    return 'TODO: 未実装';
+})->name('ctl.br.money.schedule.new');
