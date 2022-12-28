@@ -17,6 +17,7 @@ class ValidationColumn
 	private $kanaOnlyCheck = false;     // カナのみかチェック対象
 	private $intOnlyCheck = false;         // 数値のみかチェック対象
 	private $currencyOnlyCheck = false;         // 数値のみかチェック対象
+	private $numberAndUpperAlphabetCheck = false;     // 半角大文字英と数字のみかチェック対象
 	private $rateOnlyCheck = false;         // 数値のみかチェック対象
 	private $correctDateCheck = false;          // 日付の妥当性チェック対象
 	private $hyphenOrSlashDateCheck = false;          // ハイフンかスラッシュ日付の妥当性チェック対象
@@ -91,6 +92,15 @@ class ValidationColumn
 		return $this;
 	}
 	public function isCurrencyOnly(){ return $this->currencyOnlyCheck; }
+
+	/**
+	 * 半角大文字英と数字のみであるかチェック only_number_and_alphabet_shot_upper
+	 */
+	public function numberAndUpperAlphabet(){
+		$this->numberAndUpperAlphabetCheck = true;
+		return $this;
+	}
+	public function isNumberAndUpperAlphabet(){ return $this->numberAndUpperAlphabetCheck; }
 
 	/**
 	 * 0-100の率形式である。only_rate

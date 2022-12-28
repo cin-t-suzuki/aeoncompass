@@ -183,24 +183,22 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 	Route::post('/brpartnersite/modify', 'BrPartnerSiteController@modify')->name('ctl.brPartnerSite.modify');
 
     // 室数提供調整
-    Route::get('htlsroomoffer/index', [\App\Http\Controllers\ctl\HtlsroomofferController::class, 'index'])->name('ctl.htlsroomoffer.index');
+    Route::post('htlsroomoffer/index', [\App\Http\Controllers\ctl\HtlsroomofferController::class, 'index'])->name('ctl.htlsroomoffer.index');
     Route::post('htlsroomoffer/list', [\App\Http\Controllers\ctl\HtlsroomofferController::class, 'list'])->name('ctl.htlsroomoffer.list');
+    Route::get('htlsroomoffer/edit', [\App\Http\Controllers\ctl\HtlsroomofferController::class, 'edit'])->name('ctl.htlsroomoffer.edit');
     Route::post('htlsroomoffer/edit', [\App\Http\Controllers\ctl\HtlsroomofferController::class, 'edit'])->name('ctl.htlsroomoffer.edit');
     Route::post('htlsroomoffer/confirm', [\App\Http\Controllers\ctl\HtlsroomofferController::class, 'confirm'])->name('ctl.htlsroomoffer.confirm');
     Route::post('htlsroomoffer./update', [\App\Http\Controllers\ctl\HtlsroomofferController::class, 'update'])->name('ctl.htlsroomoffer.update');
-    // パラメータ直指定の箇所があるためget追記もしくはmatchが必要？ 
-    Route::match(['get', 'post'], 'htlsroomoffer/index', [\App\Http\Controllers\ctl\HtlsroomofferController::class, 'index'])->name('ctl.htlsroomoffer.index');
-    Route::match(['get', 'post'], 'htlsroomoffer/list', [\App\Http\Controllers\ctl\HtlsroomofferController::class, 'list'])->name('ctl.htlsroomoffer.list');
-    Route::match(['get', 'post'], 'htlsroomoffer/edit', [\App\Http\Controllers\ctl\HtlsroomofferController::class, 'edit'])->name('ctl.htlsroomoffer.edit');
-    Route::match(['get', 'post'], 'htlsroomoffer/confirm', [\App\Http\Controllers\ctl\HtlsroomofferController::class, 'confirm'])->name('ctl.htlsroomoffer.confirm');
-    Route::match(['get', 'post'], 'htlsroomoffer/update', [\App\Http\Controllers\ctl\HtlsroomofferController::class, 'update'])->name('ctl.htlsroomoffer.update');
 
 });
-
-Route::get('htlsplanoffer',function(){return 'TODO';})->name('ctl.htlsplanoffer');
-Route::get('htlsplan2',function(){return 'TODO';})->name('ctl.htlsplan2');
-Route::get('htlsplan2/list',function(){return 'TODO';})->name('ctl.htlsplan2.list');
-Route::get('htlsplan2/edit',function(){return 'TODO';})->name('ctl.htlsplan2.edit');
-Route::get('htlschargeoffer',function(){return 'TODO';})->name('ctl.htlschargeoffer');
-Route::get('htlsextendoffer',function(){return 'TODO';})->name('ctl.htlsextendoffer');
-Route::get('htlscharge2/single',function(){return 'TODO';})->name('ctl.htlscharge2.single');
+    Route::get('htlmigration',function(){return 'TODO';})->name('ctl.htlmigration');
+    Route::get('htlreserve',function(){return 'TODO';})->name('ctl.htlreserve');
+    Route::get('htlschargeoffer',function(){return 'TODO';})->name('ctl.htlschargeoffer');
+    Route::get('htlscharge2/single',function(){return 'TODO';})->name('ctl.htlscharge2.single');
+    Route::get('htlsextendoffer',function(){return 'TODO';})->name('ctl.htlsextendoffer');
+    Route::get('htlsplanoffer',function(){return 'TODO';})->name('ctl.htlsplanoffer');
+    Route::get('htlsplan2',function(){return 'TODO';})->name('ctl.htlsplan2');
+    Route::get('htlsplan2/edit',function(){return 'TODO';})->name('ctl.htlsplan2.edit');
+    Route::get('htlsroomplan2/list',function(){return 'TODO';})->name('ctl.htlsroomplan2.list');
+    Route::get('htlsroomplandp',function(){return 'TODO';})->name('ctl.htlsroomplandp');
+    Route::get('pmscode',function(){return 'TODO';})->name('ctl.pmscode');

@@ -95,6 +95,15 @@ abstract class CommonDBModel extends Model
 				}
 			}
 
+			// 半角大文字英と数字のみであるかチェック
+			if($this->colmunArray[$key]->isNumberAndUpperAlphabet()){
+				if (strlen($val) != 0){
+					if(!preg_match('/^[0-9A-Z]*$/', $val)){
+						$rtnErrors[] = $this->colmunArray[$key]->getColumnName() . "には半角大文字アルファベットまたは半角数字のみ入力いただけます。";
+					}
+				}
+			}
+
 			// 率かチェック
 			if($this->colmunArray[$key]->isRateOnly()){
 				if (strlen($val) != 0){
