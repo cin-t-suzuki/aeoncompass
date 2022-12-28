@@ -46,6 +46,8 @@ class BrTopController extends Controller
             'last_month' => $last_month,
             'this_month' => $this_month,
             'next_month' => $next_month,
+
+            'guides' => $request->session()->pull('guides', []),
         ]);
     }
 }

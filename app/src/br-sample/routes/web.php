@@ -37,6 +37,9 @@ Route::middleware(['guest:staff' /* TODO: 各ロールについて guest ミド�
 Route::get('ctl/logout', [\App\Http\Controllers\ctl\BrLoginController::class, 'logout'])->name('ctl.logout')->middleware('auth:staff');
 Route::get('ctl/brTop', [\App\Http\Controllers\ctl\BrTopController::class, 'index'])->name('ctl.br.top')->middleware('auth:staff');
 
+Route::get('/ctl/brChangePassword/', [\App\Http\Controllers\ctl\BrChangePasswordController::class, 'index'])->name('ctl.br.change.password')->middleware('auth:staff');
+Route::post('/ctl/brChangePassword/update', [\App\Http\Controllers\ctl\BrChangePasswordController::class, 'update'])->name('ctl.br.change.password.update')->middleware('auth:staff');
+
 /**
  * 管理システム
  */
@@ -212,7 +215,6 @@ Route::post('/ctl/brvoice/', function () {return 'TODO: 【未実装】 /ctl/brv
 Route::post('/ctl/brpoint/', function () {return 'TODO: 【未実装】 /ctl/brpoint/'; })->name('ctl.br.point');
 Route::post('/ctl/brmailmagazine/', function () {return 'TODO: 【未実装】 /ctl/brmailmagazine/'; })->name('ctl.br.mail.magazine');
 Route::post('/ctl/brmailmagazine2/', function () {return 'TODO: 【未実装】 /ctl/brmailmagazine2/'; })->name('ctl.br.mail.magazine2');
-Route::post('/ctl/brchangepass/', function () {return 'TODO: 【未実装】 /ctl/brchangepass/'; })->name('ctl.br.change.pass');
 Route::post('/ctl/brtop/kbs_brv_tool_member.touroku', function () {return 'TODO: 【未実装】 kbs_brv_tool_member.touroku'; })->name('ctl.br.top.kbs.brv.tool.member.touroku');
 
 Route::get('/ctl/brmoneyschedule/new', function (\Illuminate\Http\Request $request) {

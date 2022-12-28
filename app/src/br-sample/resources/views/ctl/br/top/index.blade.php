@@ -13,6 +13,7 @@
 @endsection
 
 @section('page_blade')
+    @include('ctl.common.message')
     <br>
     {{-- メインメニュー --}}
     {{-- HACK: HTTP 動詞 POST になっている
@@ -176,7 +177,7 @@
                 <br>
                 <table border="1" cellspacing="0" cellpadding="4">
                     <tr>
-                        {{ Form::open(['route' => 'ctl.br.change.pass', 'method' => 'post']) }}
+                        {{ Form::open(['route' => 'ctl.br.change.password', 'method' => 'get']) }}
                         <td nowrap width="100%">管理画面用パスワード変更</td>
                         <td nowrap><input type="submit" value=" 確認 "></td>
                         {{ Form::close() }}
