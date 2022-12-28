@@ -6,6 +6,7 @@ use App\Common\Traits;
 use App\Http\Controllers\Controller;
 use App\Models\Hotel;
 use App\Models\HotelAmenity;
+use App\Models\HotelAccount;
 use App\Models\HotelBathTax;
 use App\Models\HotelCancelPolicy;
 use App\Models\HotelCancelRate;
@@ -17,10 +18,15 @@ use App\Models\HotelInfo;
 use App\Models\HotelInform;
 use App\Models\HotelLink;
 use App\Models\HotelNearby;
+use App\Models\HotelNotify;
 use App\Models\HotelReceipt;
 use App\Models\HotelService;
+use App\Models\HotelStatus;
+use App\Models\MastPref;
+use App\Models\MastCity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Exception;
 
 class HtlHotelController extends Controller
 {
@@ -113,6 +119,89 @@ class HtlHotelController extends Controller
             'a_hotel_bath_tax_flg'      => $a_hotel_bath_tax_flg,
 
         ]);
+    }
+
+    // 施設情報登録内容の変更
+    public function edit(Request $request)
+    {
+        try {
+
+            $targetCd = $request->input('target_cd');
+
+            // 特定施設の設備(hotel_facility)の取得
+            $a_hotel_facilities = $this->getHotelFacilities($targetCd);
+
+            // リクエストの値の取得＆置き換え
+            $HotelFacility = $request->input('Hotel_Facility');
+            if (!empty($HotelFacility)) {
+                $a_req_hotel_facility = $HotelFacility;
+
+                // 駐車場の有無のチェックボックスの値を置き換え
+                if (is_array($a_hotel_facilities['values'])) {
+                    foreach ($a_hotel_facilities['values'] as $key => $value) {
+                        if ($value['element_id'] == 9) {
+                            $a_hotel_facilities['values'][$value['element_id']]['element_value_id'] = $a_req_hotel_facility[$value['element_id']];
+                        }
+                    }
+                }
+            }
+
+            // 特定施設のリンクの取得
+            $a_hotel_links = DB::table('hotel_link')->where('type', 1)->where('hotel_cd', $targetCd)->get(); //   type ウェブサイトタイプ  1:施設トップページ 2:携帯トップページ 3:その他ページ
+
+            // 施設情報取得
+            $a_hotel = Hotel::find($targetCd);
+
+            // 都道府県、市の取得
+            $a_pref = MastPref::where('pref_id', $a_hotel['pref_id'])->first();
+            $a_city = MastCity::where('city_id', $a_hotel['city_id'])->first();
+
+            // リクエストの値の取得＆置き換え
+            $Hotel = $request->input('Hotel');
+            if (!empty($Hotel)) {
+                $a_req_hotel = $Hotel;
+
+                // リクエストの値の取得
+                $a_hotel['postal_cd']    = $a_req_hotel['postal_cd'];
+                $a_hotel['address']      = $a_req_hotel['address'];
+                $a_hotel['tel']          = $a_req_hotel['tel'];
+                $a_hotel['fax']          = $a_req_hotel['fax'];
+                $a_hotel['room_count']   = $a_req_hotel['room_count'];
+                $a_hotel['check_in']     = $a_req_hotel['check_in'];
+                $a_hotel['check_in_end'] = $a_req_hotel['check_in_end'];
+                $a_hotel['check_out']    = $a_req_hotel['check_out'];
+            }
+
+            // 施設アカウント情報
+            $a_hotel_account = HotelAccount::find($targetCd);
+
+            // 施設状況情報
+            $a_hotel_status = HotelStatus::find($targetCd);
+
+            // 施設通知取得
+            $a_hotel_notify = HotelNotify::find($targetCd);
+
+            // メッセージの取得
+            $s_notify_message = $this->_make_notify_message($a_hotel_notify);
+
+
+            return view('ctl.htlHotel.edit', [
+                'target_cd'         => $targetCd,
+                'hotel'             => $a_hotel,
+                'pref'              => $a_pref,
+                'city'              => $a_city,
+                'notify_message'    => $s_notify_message,
+                'hotel_account'     => $a_hotel_account,
+                'hotel_status'      => $a_hotel_status,
+                'hotel_notify'      => $a_hotel_notify,
+                'hotel_facilities'  => $a_hotel_facilities,
+                'hotel_links'       => $a_hotel_links
+            ]);
+
+            // 各メソッドで Exception が投げられた場合
+        } catch (Exception $e) {
+            throw $e;
+        }
     }
 
     // HACK: 以下の getHotelXxx 系のメソッド、定義場所要検討（工数次第か）
@@ -434,12 +523,12 @@ class HtlHotelController extends Controller
         $old = "";
         $nearby_count = 0;
         if (is_countable($a_hotel_nearbies)) {
-            foreach($a_hotel_nearbies as $key => $value) {
+            foreach ($a_hotel_nearbies as $key => $value) {
                 if ($nearby_count == 3) {
                     break;
                 }
                 if ($value->element_value_text != 'なし') {
-                    if($value->element_id != $old){
+                    if ($value->element_id != $old) {
                         $a_nearby[$key]['element_nm'] = $value->element_nm;
                         $nearby_count++;
                     }
@@ -456,12 +545,12 @@ class HtlHotelController extends Controller
         $old = "";
         $facility_count = 0;
         if (is_countable($a_hotel_facilities)) {
-            foreach($a_hotel_facilities as $key => $value) {
+            foreach ($a_hotel_facilities as $key => $value) {
                 if ($facility_count == 3) {
                     break;
                 }
                 if ($value->element_value_text != 'なし') {
-                    if($value->element_id != $old){
+                    if ($value->element_id != $old) {
                         $a_facility[$key]['element_nm'] = $value->element_nm;
                         $facility_count++;
                     }
@@ -478,12 +567,12 @@ class HtlHotelController extends Controller
         $old = "";
         $facility_room_count = 0;
         if (is_countable($a_hotel_facility_rooms)) {
-            foreach($a_hotel_facility_rooms as $key => $value) {
+            foreach ($a_hotel_facility_rooms as $key => $value) {
                 if ($facility_room_count == 3) {
                     break;
                 }
                 if ($value->element_value_text != 'なし') {
-                    if($value->element_id != $old){
+                    if ($value->element_id != $old) {
                         $a_facility_room[$key]['element_nm'] = $value->element_nm;
                         $facility_room_count++;
                     }
@@ -620,5 +709,137 @@ class HtlHotelController extends Controller
 
         $parameters['hotel_cd'] = $targetCd;
         return collect(DB::select($sql, $parameters));
+    }
+
+    // 予約の通知欄のメーセージ作成
+    //   find で取得したhotel_notifyの配列
+    private function _make_notify_message($a_hotel_notify)
+    {
+        try {
+
+            // 初期化
+            $s_notify_message = "";
+
+            // ２進数を展開し一致するビットに変換
+            $a_notify_device = $this->to_shift($a_hotel_notify['notify_device'], true);
+            // 昇順に並び替え（tpl用）
+            sort($a_notify_device);
+
+            // 通知ステータスによって,予約通知FAX欄の表示を切り替える。　notify_status　0:通知しない 1:通知する 2:オペレータ連絡
+            // 通知ステータスが【通知しない】の場合 
+            if ($a_hotel_notify['notify_status'] == 0) {
+                $s_notify_message = "非通知となっています。予約者データは管理画面よりご確認下さい。";
+
+                // 通知ステータスが【通知する】の場合
+            } elseif ($a_hotel_notify['notify_status'] == 1) {
+
+                // １件だけの時
+                if (count($a_notify_device) == 1) {
+                    // 通知媒体がオペレータ連絡のみの場合
+                    if ($a_notify_device[0] == 4) {
+                        // メッセージを返す
+                        return "ベストリザーブ社スタッフから適宜ご通知いたします。";
+                    }
+                }
+
+                // 制御フラグ
+                $b_device_first = true;
+
+                // 通知媒体に該当するものを表示
+                foreach ($a_notify_device as $value) {
+
+                    // 通知媒体によって,予約通知FAX欄の表示を切り替える。　notify_device　 	1:ファックス 2:電子メール 3:ファックス＋電子メール
+                    // 「通知媒体」が『ファックス』の場合
+                    if ($value == 1) {
+                        if ($b_device_first != true) {
+                            $s_notify_message .= "と";
+                        }
+                        $s_notify_message .= "ファックス番号「 " . $a_hotel_notify['notify_fax'] . " 」";
+                        $b_device_first = false;
+
+                        // 「通知媒体」が『電子メール』の場合
+                    } elseif ($value == 2) {
+                        if ($b_device_first != true) {
+                            $s_notify_message .= "と";
+                        }
+                        $s_notify_message .= "電子メールアドレス「 " . $a_hotel_notify['notify_email'] . " 」";
+                        $b_device_first = false;
+                    }
+                }
+
+                // 配列の要素にリンカーンが存在すれば
+                if ((in_array(8, $a_notify_device))) {
+                    // メッセージを返す
+                    $s_notify_message .= "リンカーン経由にてご通知いたします。";
+
+                    // メッセージが空じゃなければ文言を追加
+                } elseif (!empty($s_notify_message)) {
+
+                    $s_notify_message .= "にご通知いたします。";
+                }
+            }
+
+            return $s_notify_message;
+
+            //各メソッドでExceptionが投げられた場合
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
+    // ２進数を展開し一致するビットもしくは位に変換します。
+    //
+    //  as_value 数字を設定
+    //  ab_bits  true ビットで返却 false 位で返却
+    //
+    //  example
+    //    bits = true
+    //      > 30
+    //        >> array(2, 4, 8, 16)
+    //    bits = false
+    //      > 30
+    //        >> array(1, 2, 3, 4)
+    public function to_shift($as_value, $ab_bits = true)
+    {
+        try {
+            if ($as_value <= 0) {
+                return null;
+            }
+
+            $buf_value = 1;
+
+            $n_cnt = 0;
+            while (
+                $buf_value <= $as_value
+            ) {
+                $buf_value <<= 1;
+                $bits[] = [$buf_value / 2, $n_cnt];    // ビットと位を保持
+                $n_cnt++;
+            }
+            // ビットで逆順に並び替え
+            rsort($bits);
+
+            // 一致するビットと位を取得
+            for ($n_cnt = 0; $n_cnt < count($bits); $n_cnt++) {
+                if ($bits[$n_cnt][0] <= $as_value) {
+                    $a_bits[] = $bits[$n_cnt][0];
+                    $a_position[] = $bits[$n_cnt][1];
+                    $as_value = $as_value - $bits[$n_cnt][0];
+                }
+            }
+
+            // ビットを返却
+            if ($ab_bits) {
+                return $a_bits;
+
+                // 位を返却
+            } else {
+                return $a_position;
+            }
+
+            // 各メソッドで Exception が投げられた場合
+        } catch (Exception $e) {
+            throw $e;
+        }
     }
 }

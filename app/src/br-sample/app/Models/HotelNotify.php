@@ -14,6 +14,15 @@ class HotelNotify extends CommonDBModel
 	use Traits;
 
 	protected $table = "hotel_notify";
+
+	// TODO カラム名大文字
+	/**
+     * テーブルに関連付ける主キー
+     *
+     * @var string
+     */
+    protected $primaryKey = 'HOTEL_CD';
+
 	// カラム
 	public string $COL_HOTEL_CD = "hotel_cd";
 	public string $COL_NOTIFY_DEVICE = "notify_device";
