@@ -14,7 +14,6 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         //
-        // TODO: ハッシュ化のロジックはここで指定できると思われる
     }
 
     /**

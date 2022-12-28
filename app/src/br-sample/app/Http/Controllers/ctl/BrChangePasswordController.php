@@ -32,9 +32,12 @@ class BrChangePasswordController extends Controller
     {
         try {
             /** @var StaffAccount */
-            $staffAccount = Auth::user();
-            $staffAccount->password = bcrypt($request->input('password'));
-            $staffAccount->save();
+            $user = Auth::user();
+
+            // $user->password = bcrypt($request->password);
+            $user->password = (new \App\Util\Models_Cipher(config('settings.cipher_key')))->encrypt($request->password);
+
+            $user->save();
         } catch (\Exception $e) {
             Log::error($e);
             return back()->withErrors([

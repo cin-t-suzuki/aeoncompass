@@ -76,8 +76,10 @@ class BrLoginController extends Controller
 
         $user = new \App\Models\StaffAccount();
         $user->account_id = $request->account_id;
-        $user->password = bcrypt($request->password);
-        // $user->password = (new Models_Cipher(config('settings.cipher_key')))->encrypt($request->password);
+
+        // $user->password = bcrypt($request->password);
+        $user->password = (new \App\Util\Models_Cipher(config('settings.cipher_key')))->encrypt($request->password);
+
         $user->accept_status = \App\Models\StaffAccount::ACCEPT_STATUS_OK;
         $user->save();
 

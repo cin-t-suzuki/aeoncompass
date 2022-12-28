@@ -113,7 +113,7 @@ return [
         // ],
 
         'staff' => [
-            'driver' => 'eloquent',
+            'driver' => 'custom', // ハッシュロジックを旧ソースの暗号化ロジックに差し替え
             'model' => App\Models\StaffAccount::class,
         ],
         'supervisor' => [
