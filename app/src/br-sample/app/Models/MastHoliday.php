@@ -47,7 +47,7 @@ class MastHoliday extends CommonDBModel
             from
                 mast_holiday
             where
-                date_format (holiday, '%Y-%m-%d') = ':date'
+                date_format(holiday, '%Y-%m-%d') = :date
         SQL;
 
         $data = DB::select($sql, ['date' => $date]);
