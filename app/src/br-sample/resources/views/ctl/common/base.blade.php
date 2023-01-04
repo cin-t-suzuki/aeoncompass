@@ -73,35 +73,26 @@
     </div>
 @endif
 
-@if ($no_print)
-    <div class="noprint">
-@endif
-
-    <table border="0" WIDTH="100%" cellspacing="0" cellpadding="6" bgcolor="#EEFFEE" >
+<div class="{{ $no_print ? 'noprint' : '' }}">
+    <table border="0" width="100%" cellspacing="0" cellpadding="6" bgcolor="#EEFFEE" >
         <tr>
             <td nowrap></td>
-            <td nowrap WIDTH="20%"><B>STREAM社内管理</B></td>
+            <td nowrap width="20%"><b>STREAM社内管理</b></td>
             {{-- ログインしていれば --}}
             @if ($isLogin)
-            <td align="right" WIDTH="70%">
+            <td align="right" width="70%">
                 <small>
-                    {!! Form::open(['route' => ['ctl.index'], 'method' => 'get']) !!}
+                    {{ Form::open(['route' => ['ctl.br.top'], 'method' => 'get']) }}
                         <input type="submit" value="メインメニュー">担当：{{ $staff_nm }}
-                    {!! Form::close() !!}
+                    {{ Form::close() }}
                 </small>
             </td>
             @endif
         </tr>
     </table>
+</div>
 
-@if ($no_print)
-    </div>
-@endif
-
-@if ($no_print_title)
-    <div class="noprint">
-@endif
-
+<div class="{{ $no_print_title ? 'noprint' : '' }}">
 {{-- ログインしていれば --}}
 @if ($isLogin)
     <br />
@@ -117,25 +108,19 @@
     @endif
     <br />
 @endif
-
-@if ($no_print_title)
-    </div>
-@endif
+</div>
 {{-- ここまで svn_trunk\public\app\ctl\views\_common\_br_header.tpl --}}
 
 {{-- blade --}}
 @yield('page_blade')
 
 
-
 {{-- ここから svn_trunk\public\app\ctl\views\_common\_br_footer.tpl --}}
-@if ($no_print)
-<div class="noprint">
-@endif
+<div class="{{ $no_print ? 'noprint' : '' }}">
 <br>
 {{-- ログインしていれば --}}
 @if ($isLogin)
-<table border="0" WIDTH="100%" cellspacing="0" cellpadding="0" bgcolor="#EEFFEE">
+<table border="0" width="100%" cellspacing="0" cellpadding="0" bgcolor="#EEFFEE">
     <tr>
         <td bgcolor="#EEFFEE">
         @if ($isStaff)
@@ -158,10 +143,7 @@
     </tr>
 </table>
 @endif
-
-@if ($no_print)
-    </div>
-@endif
+</div>
 
 </body>
 </HTML>
