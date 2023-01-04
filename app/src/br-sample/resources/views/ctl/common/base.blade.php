@@ -13,7 +13,9 @@
 
     $isStaff = Auth::guard('staff')->check();
     if ($isStaff) {
-        $staff_nm = Auth::guard('staff')->user()->staffInfo->staff_nm;
+        $staffName = Auth::guard('staff')->user()->staffInfo->staff_nm;
+    } else {
+        $staffName = 'TODO: ロール未実装';
     }
 @endphp
 
@@ -86,7 +88,7 @@
                     <td align="right" width="70%">
                         <small>
                             {{ Form::open(['route' => ['ctl.br.top'], 'method' => 'get']) }}
-                            <input type="submit" value="メインメニュー">担当：{{ $staff_nm }}
+                            <input type="submit" value="メインメニュー">担当：{{ $staffName }}
                             {{ Form::close() }}
                         </small>
                     </td>
@@ -100,11 +102,17 @@
         @if ($isLogin)
             <br />
             <br />
-            @if (isset($menu_title) || isset($title))
+            @if (View::hasSection('menu_title') || View::hasSection('title'))
                 <table border="3" cellpadding="2" cellspacing="0">
                     <tr>
                         <td align="center" bgcolor="#EEFFEE">
-                            <big>{{ isset($menu_title) ? $menu_title : $title }}</big>
+                            <big>
+                                @hasSection('menu_title')
+                                    @yield('menu_title')
+                                @else
+                                    @yield('title')
+                                @endif
+                            </big>
                         </td>
                     </tr>
                 </table>
