@@ -4,11 +4,17 @@
     // TODO:
     $print_flg      = '';
     $no_print       = '';
-    $isLogin        = true;
     $no_print_title = '';
-    $isStaff        = true;
-    $staff_nm       = 'staff_nm';
-    // var_dump(Auth::user()->account_id);
+
+    // TODO: 他の guard で認証しているとき、これを追加
+    // 他の guard: hotel(施設管理者), supervisor(施設統括), partner, affiliate
+    // MEMO: 移植元では、 lib\Br\Models\Authorize\Operator.php の is_login() で判定
+    $isLogin = Auth::guard('staff')->check();
+
+    $isStaff = Auth::guard('staff')->check();
+    if ($isStaff) {
+        $staff_nm = Auth::guard('staff')->user()->staffInfo->staff_nm;
+    }
 @endphp
 <head>
     <meta http-equiv="Pragma" content="no-cache">
@@ -45,16 +51,26 @@
     {{-- include file=$v->env.module_root|cat:'/views/_common/_google_analytics.tpl' --}}
 </head>
 <body topmargin="0" marginheight="0"
-    @if(config('app.env') == 'test') style="margin-top:0;margin-left:0;padding-left:8px;border-left:4px solid #297;" @endif
-    @if(config('app.env') == 'development') style="margin-top:0;margin-left:0;padding-left:8px;border-left:4px solid #36A;" @endif
-    @if(config('app.env') == 'product') style="margin-top:0;margin-left:0;padding-left:8px;border-left:4px solid #A63;" @endif
+    @if (config('app.env') == 'test')
+        style="margin-top:0;margin-left:0;padding-left:8px;border-left:4px solid #297;"
+    @elseif (config('app.env') == 'development')
+        style="margin-top:0;margin-left:0;padding-left:8px;border-left:4px solid #36A;"
+    @elseif (config('app.env') != 'product')
+        style="margin-top:0;margin-left:0;padding-left:8px;border-left:4px solid #A63;"
+    @endif
 >
-@if(config('app.env') == 'test')
-    <div style="margin-left:-12px;padding:0.25em 0;background-color:#297;color:#fff;font-weight:bold;width:6em;text-align:center;">検証環境</div>        
-@elseif(config('app.env') == 'development')
-    <div style="margin-left:-12px;padding:0.25em 0;background-color:#36A;color:#fff;font-weight:bold;width:6em;text-align:center;">開発環境</div>    
-@elseif(config('app.env') != 'product')
-    <div style="margin-left:-12px;padding:0.25em 0;background-color:#A63;color:#fff;font-weight:bold;width:6em;text-align:center;">環境不明</div>
+@if (config('app.env') == 'test')
+    <div style="margin-left:-12px;padding:0.25em 0;background-color:#297;color:#fff;font-weight:bold;width:6em;text-align:center;">
+        検証環境
+    </div>
+@elseif (config('app.env') == 'development')
+    <div style="margin-left:-12px;padding:0.25em 0;background-color:#36A;color:#fff;font-weight:bold;width:6em;text-align:center;">
+        開発環境
+    </div>
+@elseif (config('app.env') != 'product')
+    <div style="margin-left:-12px;padding:0.25em 0;background-color:#A63;color:#fff;font-weight:bold;width:6em;text-align:center;">
+        環境不明
+    </div>
 @endif
 
 @if ($no_print)
@@ -77,12 +93,15 @@
             @endif
         </tr>
     </table>
+
 @if ($no_print)
     </div>
 @endif
+
 @if ($no_print_title)
     <div class="noprint">
 @endif
+
 {{-- ログインしていれば --}}
 @if ($isLogin)
     <br />
@@ -98,6 +117,7 @@
     @endif
     <br />
 @endif
+
 @if ($no_print_title)
     </div>
 @endif

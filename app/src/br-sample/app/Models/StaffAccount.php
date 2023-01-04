@@ -22,6 +22,8 @@ class StaffAccount extends Authenticatable
     /**
      * テーブルに関連付ける主キー
      *
+     * MEMO: staff テーブルへの外部キーを兼ねる
+     *
      * @var string
      */
     protected $primaryKey = 'staff_id';
@@ -83,6 +85,17 @@ class StaffAccount extends Authenticatable
     protected $casts = [
         // 'email_verified_at' => 'datetime',
     ];
+
+    // リレーション (belongsTo) 設定
+    public function staffInfo()
+    {
+        // 第2引数に、外部キーを指定する
+        // HACK: staff テーブルと主キーを共有するテーブル設計のため、主キーが外部キーを兼ねている
+        // TODO: 両テーブルで主キーを auto increment に設定している場合、同時にインサートしないとリレーションがバグる
+        // TODO: 社内スタッフ登録機能開発時に対応
+        return $this->belongsTo(Staff::class, 'staff_id')
+            ->withDefault(['staff_nm' => 'スタッフ名が設定されていません']);
+    }
 
     // カラム定数
     public const ACCEPT_STATUS_NG = 0; // 利用不可
