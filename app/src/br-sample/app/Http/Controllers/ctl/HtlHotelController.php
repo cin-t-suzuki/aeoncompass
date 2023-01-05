@@ -22,13 +22,14 @@ use App\Models\HotelNotify;
 use App\Models\HotelReceipt;
 use App\Models\HotelService;
 use App\Models\HotelStatus;
+use App\Models\HotelStatusJr;
 use App\Models\MastPref;
 use App\Models\MastCity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Exception;
 
-class HtlHotelController extends Controller
+class HtlHotelController extends _commonController
 {
     use Traits;
 
@@ -126,6 +127,13 @@ class HtlHotelController extends Controller
     {
         try {
 
+            // エラーメッセージの設定
+            if ($request->session()->has('errors')) {
+                // エラーメッセージ があれば、入力を保持して表示
+                $errorList = $request->session()->pull('errors');
+                $this->addErrorMessageArray($errorList);
+            }
+
             $targetCd = $request->input('target_cd');
 
             // 特定施設の設備(hotel_facility)の取得
@@ -182,8 +190,7 @@ class HtlHotelController extends Controller
             $a_hotel_notify = HotelNotify::find($targetCd);
 
             // メッセージの取得
-            $s_notify_message = $this->_make_notify_message($a_hotel_notify);
-
+            $s_notify_message = $this->makeNotifyMessages($a_hotel_notify);
 
             return view('ctl.htlHotel.edit', [
                 'target_cd'         => $targetCd,
@@ -196,6 +203,195 @@ class HtlHotelController extends Controller
                 'hotel_notify'      => $a_hotel_notify,
                 'hotel_facilities'  => $a_hotel_facilities,
                 'hotel_links'       => $a_hotel_links
+            ]);
+
+            // 各メソッドで Exception が投げられた場合
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
+    // 施設情報登録内容の更新
+    public function update(Request $request)
+    {
+        $a_hotel  = $request->input('Hotel');
+        $targetCd = $request->input('target_cd');
+
+        try {
+            // トランザクション開始
+            DB::beginTransaction();
+
+            // ホテルのインスタンスの取得
+            $o_hotel          = new Hotel();
+
+            // TODO 施設情報HTML生成
+            // $o_hotel_html_system = new Hotel_Html_System();
+
+            $a_find_hotel = $o_hotel->find(['hotel_cd' => $targetCd])->first();
+
+            // バリデート
+            $a_attributes = [];
+            $a_attributes['hotel_cd'] = $targetCd;
+            $a_attributes['postal_cd'] = $a_hotel['postal_cd'];
+            $a_attributes['address'] = $a_hotel['address'];
+            $a_attributes['tel'] = $a_hotel['tel'];
+            $a_attributes['fax'] = $a_hotel['fax'];
+            $a_attributes['room_count'] = $a_hotel['room_count'];
+            $a_attributes['check_in'] = $a_hotel['check_in'];
+            $a_attributes['check_in_end'] = $a_hotel['check_in_end'];
+            $a_attributes['check_out'] = $a_hotel['check_out'];
+
+            // バリデート結果を判断
+            $errorList = [];
+            $errorList = $o_hotel->validation($a_attributes);
+
+            if (count($errorList) > 0) {
+                return $this->edit($request, ['target_cd' => $targetCd])->with(['errors' => $errorList]);
+            }
+
+            $hotel_update = $o_hotel->where(['hotel_cd' => $targetCd])
+                ->update([
+                    'hotel_cd' => $a_attributes['hotel_cd'],
+                    'postal_cd' => $a_attributes['postal_cd'],
+                    'address' => $a_attributes['address'],
+                    'tel' => $a_attributes['tel'],
+                    'fax' => $a_attributes['fax'],
+                    'room_count' => $a_attributes['room_count'],
+                    'check_in' => $a_attributes['check_in'],
+                    'check_in_end' => $a_attributes['check_in_end'],
+                    'check_out' => $a_attributes['check_out'],
+                    'modify_cd' => 'action_cd', // TODO $this->box->info->env->action_cd,
+                    'modify_ts'     => now()
+                ]);
+
+            // 更新後失敗した場合editアクションへ
+            if (!$hotel_update) {
+                // ロールバック
+                DB::rollback();
+
+                // editアクションに転送します
+                return $this->edit($request, ['target_cd' => $targetCd])->with(['errors' => '更新に失敗しました。']);
+            }
+
+            //-------------------------------
+            // JRセット参画施設の場合
+            //-------------------------------
+            $o_hotel_status_jr      = new HotelStatusJr();
+            $a_find_hotel_status_jr = $o_hotel_status_jr->find(['hotel_cd' => $targetCd])->first();
+            $b_is_rejudge           = false;
+            if (!empty($a_find_hotel_status_jr)) {
+                // 施設の郵便番号・住所・TEL・FAXのいずれかが更新された場合は再審査状態に変更
+                if ($a_find_hotel['postal_cd'] != $a_hotel['postal_cd']) {
+                    $b_is_rejudge = true;
+                }
+
+                if ($a_find_hotel['address'] !== $a_hotel['address']) {
+                    $b_is_rejudge = true;
+                }
+
+                if ($a_find_hotel['tel'] !== $a_hotel['tel']) {
+                    $b_is_rejudge = true;
+                }
+
+                if (($a_find_hotel['fax'] ?? '') !== $a_hotel['fax']) {
+                    $b_is_rejudge = true;
+                }
+
+                // 再審査が必要な場合は状態を更新
+                if ($b_is_rejudge) {
+                    // バリデート
+                    $a_attributes = [];
+                    $a_attributes['hotel_cd'] = $targetCd;
+                    $a_attributes['active_status'] = $a_find_hotel_status_jr['active_status'];
+                    $a_attributes['judge_status'] = $a_find_hotel_status_jr['judge_status'];
+                    $a_attributes['last_modify_dtm'] = now();
+
+                    $errorList = [];
+                    $errorList = $o_hotel_status_jr->validation($a_attributes);
+
+                    if (count($errorList) > 0) {
+                        return $this->edit($request, ['target_cd' => $targetCd])->with(['errors' => $errorList]);
+                    }
+
+                    // 更新
+                    $hotel_status_jr_update = $o_hotel_status_jr->where(['hotel_cd' => $targetCd])
+                        ->update([
+                            'last_modify_dtm' => now(),
+                            'modify_cd' => 'action_cd', // TODO $this->box->info->env->action_cd
+                            'modify_ts' => now(),
+                        ]);
+
+                    if (!$hotel_status_jr_update) {
+                        // ロールバック
+                        DB::rollback();
+
+                        // 入力画面へ
+                        return $this->edit($request, ['target_cd' => $targetCd])->with(['errors' => '更新に失敗しました。']);
+                    }
+                }
+            }
+
+            // コミット
+            DB::commit();
+
+            // TODO 施設情報ページHTML生成
+            // $a_uri = array(
+            //     'url' => $this->box->config->system->upload->static->hotel_url,
+            //     'method' => 'GET'
+            // );
+            // $a_params = array(
+            //     'input'                => "http://{$this->box->config->system->bsapp_host_name}/rsv/hotel2/index/hotel_cd/{$this->_request->getParam('target_cd')}",
+            //     'result_path'        => "{$this->box->config->system->upload->static->rsv->htdocw}/hotel/{$this->_request->getParam('target_cd')}/index.html",
+            // );
+
+            // // 送信＆レスポンスの取得
+            // $response = $o_hotel_html_system->request_to_inside($a_uri, $a_params);
+            // $o_hotel_body = simplexml_load_string($response->getBody());
+
+            // // エラーの場合
+            // if (preg_match('/Failure/', $o_hotel_body->detail)) {
+
+            //     // エラーメッセージ
+            //     $this->box->item->error->add("情報ページHTMLの作成に失敗しました。");
+
+            //     return $this->_forward('edit');
+            // }
+
+            // 登録完了後に登録内容の取得
+            // 特定施設のリンクの取得
+            $a_hotel_links = DB::table('hotel_link')->where('type', 1)->where('hotel_cd', $targetCd)->get(); //   type ウェブサイトタイプ  1:施設トップページ 2:携帯トップページ 3:その他ページ
+
+            // 施設情報取得
+            $a_hotel = Hotel::find($targetCd);
+
+            // 都道府県、市の取得            
+            $a_pref = MastPref::where('pref_id', $a_hotel['pref_id'])->first();
+            $a_city = MastCity::where('city_id', $a_hotel['city_id'])->first();
+
+
+            // 施設アカウント情報
+            $a_hotel_account = HotelAccount::find($targetCd);
+
+            // 施設状況情報
+            $a_hotel_status = HotelStatus::find($targetCd);
+
+            // 施設通知取得
+            $a_hotel_notify = HotelNotify::find($targetCd);
+
+            // メッセージの取得
+            $s_notify_message = $this->makeNotifyMessages($a_hotel_notify);
+
+            return view('ctl.htlHotel.update', [
+                'target_cd'         => $targetCd,
+                'hotel'             => $a_hotel,
+                'pref'              => $a_pref,
+                'city'              => $a_city,
+                'notify_message'    => $s_notify_message,
+                'hotel_account'     => $a_hotel_account,
+                'hotel_status'      => $a_hotel_status,
+                'hotel_notify'      => $a_hotel_notify,
+                'hotel_links'       => $a_hotel_links,
+                'guides'            => ['以下の内容で登録しました。']
             ]);
 
             // 各メソッドで Exception が投げられた場合
@@ -594,44 +790,43 @@ class HtlHotelController extends Controller
         $s_pri_station_nms  = ['select' => '', 'order' => ''];
         $s_station_nm = '';
 
-        if (array_key_exists('station_nm', $aa_conditions) && !$this->is_empty($aa_conditions['station_nm'])) {
+        if (array_key_exists('station_nm', $aa_conditions) && !empty($aa_conditions['station_nm'])) {
             $s_station_nm = 'and mast_stations.station_nm = :station_nm';
             $parameters['station_nm'] = $aa_conditions['station_nm'];
         }
 
-        // TODO: 使用箇所未実装のため、実装の確認を保留
-        // // 優先順位を設定
-        // if (!(is_empty($aa_priority['route_id']))){
-        //     $s_pri_route_id['select'] = 'decode(q3.route_id, :route_id, 0, 1) as order_route_id,';
-        //     $s_pri_route_id['order'] = 'order_route_id,';
-        //     $parameters['route_id'] = $aa_priority['route_id'];
-        // }
+        // 優先順位を設定
+        if (!(empty($aa_priority['route_id']))){
+            $s_pri_route_id['select'] = 'decode(q3.route_id, :route_id, 0, 1) as order_route_id,';
+            $s_pri_route_id['order'] = 'order_route_id,';
+            $parameters['route_id'] = $aa_priority['route_id'];
+        }
 
-        // if (!(is_empty($aa_priority['route_nm']))){
-        //     $s_pri_route_nm['select'] = 'decode(q3.route_nm, :route_nm, 0, 1) as order_route_nm,';
-        //     $s_pri_route_nm['order'] = 'order_route_nm,';
-        //     $parameters['route_nm'] = $aa_priority['route_nm'];
-        // }
+        if (!(empty($aa_priority['route_nm']))){
+            $s_pri_route_nm['select'] = 'decode(q3.route_nm, :route_nm, 0, 1) as order_route_nm,';
+            $s_pri_route_nm['order'] = 'order_route_nm,';
+            $parameters['route_nm'] = $aa_priority['route_nm'];
+        }
 
-        // if (!(is_empty($aa_priority['station_id']))){
-        //     $s_pri_station_id['select'] = 'decode(mast_stations.station_id, :station_id, 0, 1) as order_station_id,';
-        //     $s_pri_station_id['order'] = 'order_station_id,';
-        //     $parameters['station_id'] = $aa_priority['station_id'];
-        // }
+        if (!(empty($aa_priority['station_id']))){
+            $s_pri_station_id['select'] = 'decode(mast_stations.station_id, :station_id, 0, 1) as order_station_id,';
+            $s_pri_station_id['order'] = 'order_station_id,';
+            $parameters['station_id'] = $aa_priority['station_id'];
+        }
 
-        // if (!(is_empty($aa_priority['station_nm']))){
-        //     $s_pri_station_nm['select'] = 'decode(mast_stations.station_nm, :station_nm, 0, 1) as order_station_nm,';
-        //     $s_pri_station_nm['order'] = 'order_station_nm,';
-        //     $parameters['station_nm'] = $aa_priority['station_nm'];
-        // }
+        if (!(empty($aa_priority['station_nm']))){
+            $s_pri_station_nm['select'] = 'decode(mast_stations.station_nm, :station_nm, 0, 1) as order_station_nm,';
+            $s_pri_station_nm['order'] = 'order_station_nm,';
+            $parameters['station_nm'] = $aa_priority['station_nm'];
+        }
 
-        // if (!(is_empty($aa_priority['station_nms']))){
-        //     foreach ($aa_priority['station_nms'] as $key => $value){
-        //         $s_pri_station_nms['select'] .= 'decode(mast_stations.station_nm, :station_nms'.$key.', 0, 1) as order_station_nms'.$key.',';
-        //         $s_pri_station_nms['order']  .= 'order_station_nms'.$key.',';
-        //         $parameters['station_nms'.$key] = $value;
-        //     }
-        // }
+        if (!(empty($aa_priority['station_nms']))){
+            foreach ($aa_priority['station_nms'] as $key => $value){
+                $s_pri_station_nms['select'] .= 'decode(mast_stations.station_nm, :station_nms'.$key.', 0, 1) as order_station_nms'.$key.',';
+                $s_pri_station_nms['order']  .= 'order_station_nms'.$key.',';
+                $parameters['station_nms'.$key] = $value;
+            }
+        }
 
         $sql = <<<SQL
             select
@@ -713,7 +908,7 @@ class HtlHotelController extends Controller
 
     // 予約の通知欄のメーセージ作成
     //   find で取得したhotel_notifyの配列
-    private function _make_notify_message($a_hotel_notify)
+    private function makeNotifyMessages($a_hotel_notify)
     {
         try {
 
@@ -738,7 +933,7 @@ class HtlHotelController extends Controller
                     // 通知媒体がオペレータ連絡のみの場合
                     if ($a_notify_device[0] == 4) {
                         // メッセージを返す
-                        return "ベストリザーブ社スタッフから適宜ご通知いたします。";
+                        return "イオンコンパス社スタッフから適宜ご通知いたします。";
                     }
                 }
 

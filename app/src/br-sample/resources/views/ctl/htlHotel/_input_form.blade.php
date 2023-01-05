@@ -93,16 +93,16 @@
     <td>
     <select size="1" NAME="Hotel[check_in]">
       @for($i = 0; $i < 31; $i++)
-        <option value="{{$i}}:00" @if($hotel['check_in'] == $i.":00") selected @endif>{{$i}}:00</option>
-        <option value="{{$i}}:30" @if($hotel['check_in'] == $i.":30") selected @endif>{{$i}}:30</option>
+        <option value="{{sprintf("%02d",$i)}}:00" @if($hotel['check_in'] == $i.":00") selected @endif>{{$i}}:00</option>
+        <option value="{{sprintf("%02d",$i)}}:30" @if($hotel['check_in'] == $i.":30") selected @endif>{{$i}}:30</option>
       @endfor
     </select> 
      ～ 
     <select size="1" NAME="Hotel[check_in_end]">.
       <option value="" @if(empty($hotel['check_in_end'])) selected @endif>指定無し</option>
       @for($i = 0; $i < 31; $i++)
-        <option value="{{$i}}:00" @if($hotel['check_in_end'] == $i.":00") selected @endif>{{$i}}:00</option>
-        <option value="{{$i}}:30" @if($hotel['check_in_end'] == $i.":30") selected @endif>{{$i}}:30</option>
+        <option value="{{sprintf("%02d",$i)}}:00" @if($hotel['check_in_end'] == $i.":00") selected @endif>{{$i}}:00</option>
+        <option value="{{sprintf("%02d",$i)}}:30" @if($hotel['check_in_end'] == $i.":30") selected @endif>{{$i}}:30</option>
       @endfor
     </select> 
     </td>
@@ -113,8 +113,8 @@
     <td>
     <select size="1" NAME="Hotel[check_out]">
       @for($i = 0; $i < 24; $i++)
-        <option value="{{$i}}:00" @if($hotel['check_out'] == $i.":00") selected @endif>{{$i}}:00</option>
-        <option value="{{$i}}:30" @if($hotel['check_out'] == $i.":30") selected @endif>{{$i}}:30</option>
+        <option value="{{sprintf("%02d",$i)}}:00" @if($hotel['check_out'] == $i.":00") selected @endif>{{$i}}:00</option>
+        <option value="{{sprintf("%02d",$i)}}:30" @if($hotel['check_out'] == $i.":30") selected @endif>{{$i}}:30</option>
      @endfor
     </select> 
     </td>

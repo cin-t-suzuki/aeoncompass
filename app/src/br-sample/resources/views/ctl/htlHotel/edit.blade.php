@@ -37,8 +37,7 @@
     <td><small>※1：</small></td>
     <td><small>修正は『ＩＤとパスワードの変更』メニューから行ってください。</small></td>
     <form action="{$v->env.source_path}{$v->env.module}/htlchangepass/" method="POST">
-    <td><small><input type="submit" value="ＩＤとパスワードの変更へ"></small>
-      <input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($v->assign->target_cd)}">
+    <td><small><input type="hidden" name="target_cd" value="{{strip_tags($target_cd)}}">
     </td>
     </form>
   </tr>
@@ -48,7 +47,7 @@
     <td><small>修正は『リンクページ』メニューから行ってください。</small></td>
     <form action="{$v->env.source_path}{$v->env.module}/htlhotellink/list/" method="POST">
     <td><small><input type="submit" value="リンクページへ"></small>
-      <input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($v->assign->target_cd)}">
+      <input type="hidden" name="target_cd" value="{{strip_tags($target_cd)}}">
     </td>
     </form>
   </tr>
