@@ -28,6 +28,9 @@ Route::namespace("App\Http\Controllers\rsv")->prefix("rsv")->group(function(){
 	});
 });
 
+Route::get('/rsv/top', function () {
+    return view('rsv.top.index'); // TODO: 実装中断, Controller 未作成
+})->name('rsv.top');
 
 /**
  * 管理システム
