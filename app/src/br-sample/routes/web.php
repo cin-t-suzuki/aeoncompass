@@ -50,18 +50,17 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 		Route::get('/', 'index')->name('ctl.top.index');
 	});
 
-	// 銀行支店マスタ
-	Route::controller(BrbankController::class)->prefix("brbank")->group(function(){
-		Route::get('/', 'index')->name('ctl.brbank.index');
-		Route::post('/newbank', 'newbank')->name('ctl.brbank.newbank');
-		Route::post('/createbank', 'createbank')->name('ctl.brbank.createbank');
-		Route::post('/viewbank', 'viewbank')->name('ctl.brbank.viewbank');
-		Route::post('/updatebank', 'updatebank')->name('ctl.brbank.updatebank');
-		Route::post('/newbankbranch', 'newbankbranch')->name('ctl.brbank.newbankbranch');
-		Route::post('/createbankbranch', 'createbankbranch')->name('ctl.brbank.createbankbranch');
-		Route::post('/viewbankbranch', 'viewbankbranch')->name('ctl.brbank.viewbankbranch');
-		Route::post('/updatebankbranch', 'updatebankbranch')->name('ctl.brbank.updatebankbranch');
-	});
+    // 銀行支店マスタ
+    Route::get('/brbank/', 'BrbankController@index')->name('ctl.brbank.index');
+    Route::post('/brbank/newbank', 'BrbankController@newbank')->name('ctl.brbank.newbank');
+    Route::post('/brbank/createbank', 'BrbankController@createbank')->name('ctl.brbank.createbank');
+    Route::post('/brbank/viewbank', 'BrbankController@viewbank')->name('ctl.brbank.viewbank');
+    Route::post('/brbank/updatebank', 'BrbankController@updatebank')->name('ctl.brbank.updatebank');
+    Route::post('/brbank/newbankbranch', 'BrbankController@newbankbranch')->name('ctl.brbank.newbankbranch');
+    Route::post('/brbank/createbankbranch', 'BrbankController@createbankbranch')->name('ctl.brbank.createbankbranch');
+    Route::post('/brbank/viewbankbranch', 'BrbankController@viewbankbranch')->name('ctl.brbank.viewbankbranch');
+    Route::post('/brbank/updatebankbranch', 'BrbankController@updatebankbranch')->name('ctl.brbank.updatebankbranch');
+    Route::match(['get', 'post'], '/brbank/query', 'BrbankController@query')->name('ctl.brbank.query');
 
 	// 施設管理TOPお知らせ情報管理
 	Route::controller(BrbroadcastMessageController::class)->prefix("brbroadcastMessage")->group(function(){
@@ -181,5 +180,13 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 	Route::get('/brpartnersite/search', 'BrPartnerSiteController@search')->name('ctl.brPartnerSite.search');
 	Route::get('/brpartnersite/edit', 'BrPartnerSiteController@edit')->name('ctl.brPartnerSite.edit');
 	Route::post('/brpartnersite/modify', 'BrPartnerSiteController@modify')->name('ctl.brPartnerSite.modify');
+
+    // 精算先
+    Route::match(['get','post'], '/brcustomer/list', 'BrCustomerController@list')->name('ctl.brCustomer.list');
+    Route::post('/brcustomer/create', 'BrCustomerController@create')->name('ctl.brCustomer.create');
+    Route::match(['get','post'], '/brcustomer/edit', 'BrCustomerController@edit')->name('ctl.brCustomer.edit');
+    Route::post('/brcustomer/update', 'BrCustomerController@update')->name('ctl.brCustomer.update');
+    Route::get('/brcustomer/sendletter', 'BrCustomerController@sendletter')->name('ctl.brCustomer.sendletter');
+    Route::post('/brcustomer/csv', 'BrCustomerController@csv')->name('ctl.brCustomer.csv');
 
 });

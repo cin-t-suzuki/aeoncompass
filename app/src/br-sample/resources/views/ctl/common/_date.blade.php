@@ -11,6 +11,7 @@
 //           ------- ----------------------- ---------------
 //           ymd(w) : 2008年08月05日（火）  : Y年m月d日（j）
 //           ymd    : 2008年08月05日        : Y年m月d日
+//       y/m/d H:M:S: 2008/08/05 00:00:00   :y/m/d H:M:S
 //           ym     : 2008年08月            : Y年m月
 //           d      : 05                    : d
 //           J      : 火曜日                : J
@@ -66,6 +67,11 @@
 	{
 	  //assign var='day' value=$v->helper->date->to_format('Y年m月d日')
 		$day = $dateUtil->to_format('Y年m月d日');
+	}
+	// y/m/d H:M:S  
+	elseif ( $format == 'y/m/d H:M:S' )
+	{
+		$day = $dateUtil->to_format('Y/m/d H:i:s');
 	}
 	// Y年m月
 	elseif ( $format == 'ym' )

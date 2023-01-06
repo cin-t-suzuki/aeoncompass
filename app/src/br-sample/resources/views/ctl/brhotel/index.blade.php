@@ -44,18 +44,18 @@
 <br />
 <table border="1" cellspacing="0" cellpadding="4">
 	<tr>
-	<form method="post" action="{$v->env.source_path}{$v->env.module}/brcustomer/list/">
+	{!! Form::open(['route' => ['ctl.brCustomer.list'], 'method' => 'post']) !!}
 		<td nowrap bgcolor="#EEFFEE">精算先の登録・変更</td>
 		<td nowrap>
 		<input name="keywords" size="20" maxlength="30" type="text">
 		<input name="i_btn" value="設定" type="submit">
 		</td>
-	</form>
-	<form method="post" action="{$v->env.source_path}{$v->env.module}/brcustomer/csv/">
+	{!! Form::close() !!}
+	{!! Form::open(['route' => ['ctl.brCustomer.csv'], 'method' => 'post']) !!}
 		<td nowrap>
 		<input name="i_btn" value="精算先全件CSVダウンロード" type="submit">
 		</td>
-	</form>
+	{!! Form::close() !!}
 	</tr>
 </table>
 
