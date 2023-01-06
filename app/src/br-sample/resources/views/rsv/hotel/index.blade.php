@@ -2,7 +2,6 @@
 @section('title', '')
 @section('words', '')
 
-
 @section('page_blade')
 {{-- ヘッダナビゲーションバー --}}
 @include('rsv.common.header_main_nav1', ['pgh1_mnv' => 1])
@@ -17,7 +16,7 @@
     <div class="pg">
         <div class="pgc1-inner">
             @include('rsv.common.pgc1_breadcrumbs', [])
-            @include('rsv.common.snv_text.blade', ['current' => 'hotel'])
+            @include('rsv.common.snv_text', ['current' => 'hotel'])
         </div>
     </div>
 </div>

@@ -21,11 +21,11 @@ Route::get('/', function () {
 /**
  * 宿泊予約
  */
-Route::namespace("App\Http\Controllers\rsv")->prefix("rsv")->group(function(){
-	// 施設情報
-	Route::controller(HotelController::class)->prefix("hotel")->group(function(){
-		Route::get('/{hotel_cd}', 'info')->name('rsv.hotel.info');
-	});
+Route::namespace('App\Http\Controllers\rsv')->prefix('rsv')->group(function () {
+    // 施設情報
+    Route::controller(HotelController::class)->prefix('hotel')->group(function () {
+        Route::get('/{hotel_cd}', 'info')->name('rsv.hotel.info');
+    });
 });
 
 
