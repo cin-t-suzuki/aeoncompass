@@ -224,9 +224,6 @@ class HtlHotelController extends _commonController
             // ホテルのインスタンスの取得
             $o_hotel          = new Hotel();
 
-            // TODO 施設情報HTML生成
-            // $o_hotel_html_system = new Hotel_Html_System();
-
             $a_find_hotel = $o_hotel->find(['hotel_cd' => $targetCd])->first();
 
             // バリデート
@@ -333,29 +330,6 @@ class HtlHotelController extends _commonController
 
             // コミット
             DB::commit();
-
-            // TODO 施設情報ページHTML生成
-            // $a_uri = array(
-            //     'url' => $this->box->config->system->upload->static->hotel_url,
-            //     'method' => 'GET'
-            // );
-            // $a_params = array(
-            //     'input'                => "http://{$this->box->config->system->bsapp_host_name}/rsv/hotel2/index/hotel_cd/{$this->_request->getParam('target_cd')}",
-            //     'result_path'        => "{$this->box->config->system->upload->static->rsv->htdocw}/hotel/{$this->_request->getParam('target_cd')}/index.html",
-            // );
-
-            // // 送信＆レスポンスの取得
-            // $response = $o_hotel_html_system->request_to_inside($a_uri, $a_params);
-            // $o_hotel_body = simplexml_load_string($response->getBody());
-
-            // // エラーの場合
-            // if (preg_match('/Failure/', $o_hotel_body->detail)) {
-
-            //     // エラーメッセージ
-            //     $this->box->item->error->add("情報ページHTMLの作成に失敗しました。");
-
-            //     return $this->_forward('edit');
-            // }
 
             // 登録完了後に登録内容の取得
             // 特定施設のリンクの取得
@@ -796,35 +770,35 @@ class HtlHotelController extends _commonController
         }
 
         // 優先順位を設定
-        if (!(empty($aa_priority['route_id']))){
+        if (!(empty($aa_priority['route_id']))) {
             $s_pri_route_id['select'] = 'decode(q3.route_id, :route_id, 0, 1) as order_route_id,';
             $s_pri_route_id['order'] = 'order_route_id,';
             $parameters['route_id'] = $aa_priority['route_id'];
         }
 
-        if (!(empty($aa_priority['route_nm']))){
+        if (!(empty($aa_priority['route_nm']))) {
             $s_pri_route_nm['select'] = 'decode(q3.route_nm, :route_nm, 0, 1) as order_route_nm,';
             $s_pri_route_nm['order'] = 'order_route_nm,';
             $parameters['route_nm'] = $aa_priority['route_nm'];
         }
 
-        if (!(empty($aa_priority['station_id']))){
+        if (!(empty($aa_priority['station_id']))) {
             $s_pri_station_id['select'] = 'decode(mast_stations.station_id, :station_id, 0, 1) as order_station_id,';
             $s_pri_station_id['order'] = 'order_station_id,';
             $parameters['station_id'] = $aa_priority['station_id'];
         }
 
-        if (!(empty($aa_priority['station_nm']))){
+        if (!(empty($aa_priority['station_nm']))) {
             $s_pri_station_nm['select'] = 'decode(mast_stations.station_nm, :station_nm, 0, 1) as order_station_nm,';
             $s_pri_station_nm['order'] = 'order_station_nm,';
             $parameters['station_nm'] = $aa_priority['station_nm'];
         }
 
-        if (!(empty($aa_priority['station_nms']))){
-            foreach ($aa_priority['station_nms'] as $key => $value){
-                $s_pri_station_nms['select'] .= 'decode(mast_stations.station_nm, :station_nms'.$key.', 0, 1) as order_station_nms'.$key.',';
-                $s_pri_station_nms['order']  .= 'order_station_nms'.$key.',';
-                $parameters['station_nms'.$key] = $value;
+        if (!(empty($aa_priority['station_nms']))) {
+            foreach ($aa_priority['station_nms'] as $key => $value) {
+                $s_pri_station_nms['select'] .= 'decode(mast_stations.station_nm, :station_nms' . $key . ', 0, 1) as order_station_nms' . $key . ',';
+                $s_pri_station_nms['order']  .= 'order_station_nms' . $key . ',';
+                $parameters['station_nms' . $key] = $value;
             }
         }
 
