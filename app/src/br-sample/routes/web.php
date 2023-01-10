@@ -182,4 +182,9 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 	Route::get('/brpartnersite/edit', 'BrPartnerSiteController@edit')->name('ctl.brPartnerSite.edit');
 	Route::post('/brpartnersite/modify', 'BrPartnerSiteController@modify')->name('ctl.brPartnerSite.modify');
 
+    // 送客請求実績確認
+    Route::match(['get','post'], '/brdemandresult/list', 'BrDemandResultController@list')
+        ->name('ctl.BrDemandResult.list');
+
+
 });
