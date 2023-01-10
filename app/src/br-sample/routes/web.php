@@ -189,4 +189,10 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
     Route::get('/brcustomer/sendletter', 'BrCustomerController@sendletter')->name('ctl.brCustomer.sendletter');
     Route::post('/brcustomer/csv', 'BrCustomerController@csv')->name('ctl.brCustomer.csv');
 
+    // 施設情報：請求関連（請求先） 精算先（登録施設）
+    Route::match(['get','post'], '/brcustomerhotel/list', 'BrCustomerHotelController@list')->name('ctl.brCustomerHotel.list');//未確認
+    Route::post('/brcustomerhotel/hotellist', 'BrCustomerHotelController@hotellist')
+        ->name('ctl.brCustomerHotel.hotellist');
+    Route::post('/brcustomerhotel/setting', 'BrCustomerHotelController@setting')
+        ->name('ctl.brCustomerHotel.setting');
 });

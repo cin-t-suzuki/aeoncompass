@@ -450,6 +450,146 @@ SQL;
         }
     }
 
+    // 請求先・支払先一覧を取得します。
+    //
+    //  aa_conditions
+    //    search_type no       請求先連番
+    //                follow   請求先連番（以降を表示
+    //                name     請求先名称
+    //    like_type   front    前方一致
+    //                back     後方一致
+    //                無し             あいまい
+    //    key         demand_cd もしくは demand_nm
+    //
+    //  return
+    //    values
+    //          values データ
+    //          cnt    件数
+    public function getCustomerList($aa_conditions)
+    {
+        try {
+            if ($aa_conditions['search_type'] == 'no') {
+                $s_where = "	and	customer_id = :key";
+                $a_conditions['key'] = $aa_conditions['key'];
+            } elseif ($aa_conditions['search_type'] == 'follow') {
+                $s_where = "	and	customer_id >= :key";
+                $a_conditions['key'] = $aa_conditions['key'];
+            } elseif ($aa_conditions['search_type'] == 'name') {
+                $s_where = "	and	customer_nm like :key";
+                if ($aa_conditions['like_type'] == 'front') {
+                    $a_conditions['key'] = $aa_conditions['key'] . '%';
+                } elseif ($aa_conditions['like_type'] == 'back') {
+                    $a_conditions['key'] = '%' . $aa_conditions['key'];
+                } else {
+                    $a_conditions['key'] = '%' . $aa_conditions['key'] . '%';
+                }
+            }
+
+            $s_sql =
+            <<<SQL
+					select	count(*) as cnt
+					from	customer
+					where null is null
+						{$s_where}
+SQL;
+
+            // データの取得
+            $n_cnt = DB::select($s_sql, $a_conditions);
+
+            $s_sql =
+            <<<SQL
+					select	customer_id,
+							customer_nm,
+							section_nm,
+							person_nm,
+							postal_cd,
+							pref_id,
+							address,
+							tel,
+							fax,
+							email,
+							bill_bank_nm,
+							bill_bank_account_no,
+							payment_bank_cd,
+							payment_bank_branch_cd,
+							payment_bank_account_type,
+							payment_bank_account_no,
+							payment_bank_account_kn,
+							bill_required_month,
+							payment_required_month,
+							bill_charge_min,
+							payment_charge_min,
+							entry_ts as entry_ts -- 書き換えあっているか？？
+					from	customer
+					where	null is null
+						{$s_where}
+					order by customer_id
+SQL;
+
+            // データの取得
+            $a_row = DB::select($s_sql, $a_conditions);
+
+            return [
+                'values'     => [
+                    'values' => $a_row,
+                    'cnt'    => $n_cnt[0]->cnt
+                ],
+            ];
+
+            // 各メソッドで Exception が投げられた場合
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
+    // 請求先・支払先関連施設データを取得
+    //   as_customer_id 請求先・支払先ID
+    public function getCustomerHotel($as_customer_id)
+    {
+        try {
+            $s_sql =
+            <<<SQL
+					select	q1.hotel_cd,
+							q2.hotel_nm,
+							q2.accept_status, -- 0:停止中 1:受付中
+							q3.entry_status,  -- 0:公開中 1:登録作業中 2:解約
+							q4.person_post,
+							q4.person_nm,
+							q4.person_tel,
+							q4.person_fax,
+							q5.stock_type,
+							q6.pref_id,
+							q6.pref_nm
+					from	customer_hotel q1,
+							hotel          q2,
+							hotel_status   q3,
+							hotel_person   q4,
+							hotel_control  q5,
+							mast_pref      q6
+					where	q1.customer_id = :customer_id
+						and	q1.hotel_cd    = q2.hotel_cd -- (+)削除でいいか？ 
+						and	q1.hotel_cd    = q3.hotel_cd -- (+)削除でいいか？
+						and	q1.hotel_cd    = q4.hotel_cd -- (+)削除でいいか？
+						and	q1.hotel_cd    = q5.hotel_cd -- (+)削除でいいか？
+						and	q2.pref_id     = q6.pref_id -- (+)削除でいいか？
+					order by q3.entry_status,
+							 q2.accept_status,
+							 q1.hotel_cd
+SQL;
+
+            // データの取得
+            $a_row = DB::select($s_sql, ['customer_id' => $as_customer_id]);
+
+            return [
+                'values'     => $a_row,
+            ];
+
+            // 各メソッドで Exception が投げられた場合
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
     // 請求先・支払先を検索
     //
     //  aa_conditions

@@ -75,12 +75,11 @@
           {!! Form::close() !!}
         </td>
         <td>
-          {{-- TODO　実装後に修正 --}}
-          <form action="{$v->env.source_path}{$v->env.module}/brcustomerhotel/hotellist/" method="post">
-            <input type="hidden" name="customer_id" value="{strip_tags($views->customer_list['values'][$customer_list]['customer_id)}">
-            <input type="hidden" name="keywords" value="{$v->helper->form->strip_tags($views->keywords)}">
+          {!! Form::open(['route' => ['ctl.brCustomerHotel.hotellist'], 'method' => 'post']) !!}
+            <input type="hidden" name="customer_id" value="{{strip_tags($views->customer_list['values'][$customer_list]->customer_id)}}">
+            <input type="hidden" name="keywords" value="{{strip_tags($views->keywords)}}">
             <input value="登録施設" type="submit"><br />
-          </form>
+          {!! Form::close() !!}
         </td>
         </form>
       </tr>

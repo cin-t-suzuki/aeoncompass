@@ -154,7 +154,7 @@ class HotelRate extends CommonDBModel
 	public function selectByHotelCd($hotelCd){
 		$data = $this->where($this->COL_HOTEL_CD, $hotelCd)->orderBy($this->COL_ACCEPT_S_YMD,'desc')->get();
 
-		$result = null;
+		$result = [];  // TODO null→[]へ変更していいか？(count関数でnullだとエラーになる)
 
 		if(!empty($data) && count($data) > 0){
 			foreach($data as $row){
