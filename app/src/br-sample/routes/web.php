@@ -35,10 +35,11 @@ Route::namespace("App\Http\Controllers\rsv")->prefix("rsv")->group(function(){
 Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 
 
-	// 社内トップ
-	Route::controller(BrTopController::class)->prefix("brtop")->group(function(){
-		Route::get('/', 'index')->name('ctl.brtop.index');
-	});
+    // 社内トップ
+    Route::get('/', [\App\Http\Controllers\ctl\BrtopController::class,'index'])->name('ctl.brtop.index');
+    Route::post('brtop/inspect', [\App\Http\Controllers\ctl\BrtopController::class, 'inspect'])->name('ctl.brtop.inspect');
+    Route::post('brtop/registration', [\App\Http\Controllers\ctl\BrtopController::class, 'registration'])->name('ctl.brtop.registration');
+    Route::post('brtop/payment', [\App\Http\Controllers\ctl\BrtopController::class, 'payment'])->name('ctl.brtop.payment');
 
 	// ホテルトップ
 	Route::controller(HotelTopController::class)->prefix("htltop")->group(function(){
