@@ -82,11 +82,15 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 	});
 
     Route::get('/htltop/index/target_cd/{target_cd}', function ($targetCd) {return 'TODO: htl top index : ' . $targetCd; })->name('ctl.htl_top.index');
+    Route::match(['get', 'post'], '/htltop/show/'             , function(){ return 'TODO:'; })->name('ctl.htl_top.show');
 
     Route::get('/htlHotel/show', [\App\Http\Controllers\ctl\HtlHotelController::class, 'show'])->name('ctl.htl_hotel.show');
     Route::match(['get', 'post'], '/htlHotel/edit/'             , function(){ return 'TODO:'; })->name('ctl.htl_hotel.edit');
     Route::match(['get', 'post'], '/htlHotelCard/show/'         , function(){ return 'TODO:'; })->name('ctl.htl_hotel_card.show');
-    Route::match(['get', 'post'], '/htlHotelInfo/'              , function(){ return 'TODO:'; })->name('ctl.htl_hotel_info.index');
+    Route::match(['get', 'post'], '/htlHotelInfo/'              , [\App\Http\Controllers\ctl\HtlhotelInfoController::class, 'index'])->name('ctl.htl_hotel_info.index');
+    Route::match(['get', 'post'], '/htlHotelInfo/new/'          , [\App\Http\Controllers\ctl\HtlhotelInfoController::class, 'new'])->name('ctl.htl_hotel_info.new');
+    Route::match(['get', 'post'], '/htlHotelInfo/show/'         , [\App\Http\Controllers\ctl\HtlhotelInfoController::class, 'show'])->name('ctl.htl_hotel_info.show');
+    Route::match(['get', 'post'], '/htlHotelInfo/create/'       , [\App\Http\Controllers\ctl\HtlhotelInfoController::class, 'create'])->name('ctl.htl_hotel_info.create');
     Route::match(['get', 'post'], '/htlHotelInform/list/'       , function(){ return 'TODO:'; })->name('ctl.htl_hotel_inform.list');
     Route::match(['get', 'post'], '/htlHotelLink/list/'         , function(){ return 'TODO:'; })->name('ctl.htl_hotel_link.list');
     Route::match(['get', 'post'], '/htlHotelStation/list/'      , function(){ return 'TODO:'; })->name('ctl.htl_hotel_station.list');
