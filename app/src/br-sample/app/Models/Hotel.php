@@ -6,6 +6,7 @@ use App\Common\Traits;
 use App\Models\common\CommonDBModel;
 use App\Models\common\ValidationColumn;
 use Illuminate\Support\Facades\DB;
+use Exception;
 
 /** 
  * ホテル
@@ -630,4 +631,62 @@ SQL;
 
 	}
 
+    // 枝序番号などを求めます
+    //   現在登録されていて歯抜けになっているところを取得するか、そうでなければ最大値 + 1を取得します。
+    //
+    //  CoreHotel->hotel_cd 施設コード
+    //  as_table_name       テーブル名称
+    //  aa_conditions
+    //    array(columns => value)
+    public function fill_counter($as_table_name, $as_column_nm, $target_cd, $aa_conditions = [])
+    {
+        try {
+
+            // テーブル名称
+            if (empty($as_table_name)) {
+                throw new Exception('テーブルを設定してください。');
+            }
+
+            // カラム名称
+            if (empty($as_column_nm)) {
+                throw new Exception('カラムを設定してください。');
+            }
+
+            $a_conditions['hotel_cd'] = $target_cd;
+
+            // 条件
+            $s_where = '';
+            if (!(empty($aa_conditions))) {
+                foreach ($aa_conditions as $key => $value) {
+                    $s_where .= 'and	' . $key . ' = :' . $key;
+                    $a_conditions[$key] = $value;
+                }
+            }
+
+            $s_sql =
+                <<< SQL
+					select	{$as_column_nm}
+					from	{$as_table_name}
+					where	hotel_cd = :hotel_cd
+						{$s_where}
+					order by {$as_column_nm}
+SQL;
+
+            $a_row = DB::select($s_sql, $a_conditions);
+
+            $n_value = 1;
+            for ($n_cnt = 0; $n_cnt < count($a_row); $n_cnt++) {
+                if ($n_value != $a_row[$n_cnt]->$as_column_nm) {
+                    return $n_value;
+                }
+                $n_value++;
+            }
+
+            return $n_value;
+
+            // 各メソッドで Exception が投げられた場合
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
 }
