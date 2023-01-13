@@ -16,6 +16,48 @@ class HotelStatus extends CommonDBModel
 	use Traits;
 
 	protected $table = "hotel_status";
+    /**
+     * テーブルに関連付ける主キー
+     *
+     * @var string
+     */
+    protected $primaryKey = 'hotel_cd';
+    /**
+     * モデルのIDを自動増分するか
+     *
+     * @var bool
+     */
+    public $incrementing = false;
+    /**
+     * モデルにタイムスタンプを付けるか
+     *
+     * MEMO: 独自実装でタイムスタンプを設定しているため、Laravel 側では設定しない。
+     * HACK: (工数次第) Laravel の機能を使ったほうがよい気もする。
+     * 使えるところでは自動入力を有効にするため、 true に設定。
+     *
+     * @var bool
+     */
+    public $timestamps = true;
+    public const CREATED_AT = 'entry_ts';
+    public const UPDATED_AT = 'modify_ts';
+
+    /**
+     * 複数代入可能な属性
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'hotel_cd',
+        'entry_status',
+        'contract_ymd',
+        'open_ymd',
+        'close_dtm',
+        'entry_cd',
+        // 'entry_ts',
+        'modify_cd',
+        // 'modify_ts',
+    ];
+
 	// カラム
 	public string $COL_HOTEL_CD = "hotel_cd";
 	public string $COL_ENTRY_STATUS = "entry_status";
@@ -24,6 +66,12 @@ class HotelStatus extends CommonDBModel
 	public string $COL_CLOSE_DTM = "close_dtm";
 
 	public string $COL_ENTRY_TS = "entry_ts";
+
+
+    // カラム定数
+    public const ENTRY_STATUS_PUBLIC        = 0; // 公開中
+    public const ENTRY_STATUS_REGISTERING   = 1; // 登録作業中
+    public const ENTRY_STATUS_CANCELLED     = 2; // 解約
 
 	/** コンストラクタ
 	 */

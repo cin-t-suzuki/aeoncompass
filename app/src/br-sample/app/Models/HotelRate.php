@@ -17,7 +17,8 @@ class HotelRate extends CommonDBModel
 	use Traits;
 
 	protected $table = "hotel_rate";
-	// カラム
+
+    // カラム
 	public string $COL_HOTEL_CD = "hotel_cd";
 	public string $COL_BRANCH_NO = "branch_no";
 	public string $COL_ACCEPT_S_YMD = "accept_s_ymd";
