@@ -6,9 +6,10 @@
 {{--削除でいい？ {strip} --}}
   {{-- 提携先管理ヘッダー --}}
   {{--元 {include file='../_common/_br_header2.tpl' title="パートナー精算実績の予約明細"} --}}
+  @extends('ctl.common.base2')
   @section('title', 'パートナー精算実績の内容')
-  @include('ctl.common.base')
 
+  @section('content')
   <hr class="contents-margin" />
 
   {{-- 検索条件 --}}
@@ -66,10 +67,8 @@
 
   {{-- メッセージボックス --}}
   {{-- {include file='../_common/_message.tpl'} --}}
-  @section('message')
   @include('ctl.common.message', $messages)
-
-
+  
   <hr class="contents-margin" />
 
   {{-- 予約データ --}}
@@ -85,9 +84,7 @@
 
   {{-- ページャー --}}
   {{-- {include file='../_common/_pager.tpl' pager=$v->assign->pager params=$v->assign->search_params} --}}
-  {{-- laravel形式に書き換え→include先は削除 getになるがいい？（パラメータたくさん）  --}}
-  {{-- TODO: デザイン修正要、bootstrap入れていないから崩れている？  --}}
-  {{ $views->pager->appends($views->search_params)->links('pagination::bootstrap-4') }}  
+    @include ('ctl.common._pager2', ['pager' => $views->pager,'params' => $views->search_params])
   {{-- /ページャー --}}
 
   <hr class="contents-margin" />
@@ -116,8 +113,4 @@
 
   <hr class="contents-margin" />
 
-  {{-- 提携先管理フッター --}}
-  {{-- @include file='../_common/_br_footer.tpl'} --}}
-  @section('title', 'footer')
-  @include('ctl.common.footer')
-{{--削除でいい？ {/strip} --}}
+@endsection
