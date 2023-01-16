@@ -89,7 +89,6 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
     Route::match(['get', 'post'], '/htlHotelCard/show/'         , function(){ return 'TODO:'; })->name('ctl.htl_hotel_card.show');
     Route::match(['get', 'post'], '/htlHotelInfo/'              , function(){ return 'TODO:'; })->name('ctl.htl_hotel_info.index');
     Route::match(['get', 'post'], '/htlHotelInform/list/'       , function(){ return 'TODO:'; })->name('ctl.htl_hotel_inform.list');
-    Route::match(['get', 'post'], '/htlHotelLink/list/'         , function(){ return 'TODO:'; })->name('ctl.htl_hotel_link.list');
     Route::match(['get', 'post'], '/htlHotelStation/list/'      , function(){ return 'TODO:'; })->name('ctl.htl_hotel_station.list');
     Route::match(['get', 'post'], '/htlHotelAmenity/list/'      , function(){ return 'TODO:'; })->name('ctl.htl_hotel_amenity.list');
     Route::match(['get', 'post'], '/htlHotelService/list/'      , function(){ return 'TODO:'; })->name('ctl.htl_hotel_service.list');
@@ -261,4 +260,14 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
         ->name('ctl.brhoteladvert2009000400.edit'); //編集画面
     Route::post('/brhoteladvert2009000400/update', 'BrhotelAdvert2009000400Controller@update')
         ->name('ctl.brhoteladvert2009000400.update'); //更新
+
+    // リンクページ
+    Route::match(['get', 'post'], '/htlHotelLink/list/', [\App\Http\Controllers\ctl\HtlHotelLinkController::class, 'list'])->name('ctl.htl_hotel_link.list');
+    Route::match(['get', 'post'], '/htlHotelLink/new/', [\App\Http\Controllers\ctl\HtlHotelLinkController::class, 'new'])->name('ctl.htl_hotel_link.new');
+    Route::match(['get', 'post'], '/htlHotelLink/create/', [\App\Http\Controllers\ctl\HtlHotelLinkController::class, 'create'])->name('ctl.htl_hotel_link.create');
+    Route::match(['get', 'post'], '/htlHotelLink/edit/', [\App\Http\Controllers\ctl\HtlHotelLinkController::class, 'edit'])->name('ctl.htl_hotel_link.edit');
+    Route::match(['get', 'post'], '/htlHotelLink/update/', [\App\Http\Controllers\ctl\HtlHotelLinkController::class, 'update'])->name('ctl.htl_hotel_link.update');
+    Route::match(['get', 'post'], '/htlHotelLink/delete/', [\App\Http\Controllers\ctl\HtlHotelLinkController::class, 'delete'])->name('ctl.htl_hotel_link.delete');
+    Route::match(['get', 'post'], '/htlHotelLink/changeorderno/', [\App\Http\Controllers\ctl\HtlHotelLinkController::class, 'changeorderno'])->name('ctl.htl_hotel_link.changeorderno');
+
 });
