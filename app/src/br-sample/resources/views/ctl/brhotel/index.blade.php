@@ -32,13 +32,13 @@
 {{--TODO 精算先 画面遷移--}}
 <table border="1" cellspacing="0" cellpadding="5">
 	<!--TODO form action="{$v->env.source_path}{$v->env.module}/brhotel/new/" method="post"-->
-	{!! Form::open(['route' => ['ctl.brhotel.new'], 'method' => 'post']) !!}
+	{{ Form::open(['route' => ['ctl.br_hotel.new'], 'method' => 'get']) }}
 	<tr>
 	<td bgcolor="#EEFFEE">宿泊施設（発番処理）</td>
 	<td bgcolor="#EEFFEE">新規登録</td>
 	<td><input type="submit" value="施設登録"></td>
 	</tr>
-	{!! Form::close() !!}
+	{{ Form::close() }}
 </table>
 
 <br />

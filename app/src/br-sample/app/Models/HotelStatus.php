@@ -33,12 +33,13 @@ class HotelStatus extends CommonDBModel
      *
      * MEMO: 独自実装でタイムスタンプを設定しているため、Laravel 側では設定しない。
      * HACK: (工数次第) Laravel の機能を使ったほうがよい気もする。
+     * 使えるところでは自動入力を有効にするため、 true に設定。
      *
      * @var bool
      */
-    public $timestamps = false;
-    const CREATED_AT = 'entry_ts';
-    const UPDATED_AT = 'modify_ts';
+    public $timestamps = true;
+    public const CREATED_AT = 'entry_ts';
+    public const UPDATED_AT = 'modify_ts';
 
     /**
      * 複数代入可能な属性
@@ -46,14 +47,15 @@ class HotelStatus extends CommonDBModel
      * @var array
      */
     protected $fillable = [
+        'hotel_cd',
         'entry_status',
         'contract_ymd',
         'open_ymd',
         'close_dtm',
         'entry_cd',
-        'entry_ts',
+        // 'entry_ts',
         'modify_cd',
-        'modify_ts',
+        // 'modify_ts',
     ];
 
 	// カラム
@@ -67,9 +69,9 @@ class HotelStatus extends CommonDBModel
 
 
     // カラム定数
-    const ENTRY_STATUS_PUBLIC       = 0; // 公開中
-    const ENTRY_STATUS_REGISTERING  = 1; // 登録作業中
-    const ENTRY_STATUS_CANCELLED    = 2; // 解約
+    public const ENTRY_STATUS_PUBLIC        = 0; // 公開中
+    public const ENTRY_STATUS_REGISTERING   = 1; // 登録作業中
+    public const ENTRY_STATUS_CANCELLED     = 2; // 解約
 
 	/** コンストラクタ
 	 */

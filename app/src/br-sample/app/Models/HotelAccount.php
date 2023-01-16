@@ -31,12 +31,13 @@ class HotelAccount extends CommonDBModel
      *
      * MEMO: 独自実装でタイムスタンプを設定しているため、Laravel 側では設定しない。
      * HACK: (工数次第) Laravel の機能を使ったほうがよい気もする。
+     * 使えるところでは自動入力を有効にするため、 true に設定。
      *
      * @var bool
      */
-    public $timestamps = false;
-    const CREATED_AT = 'entry_ts';
-    const UPDATED_AT = 'modify_ts';
+    public $timestamps = true;
+    public const CREATED_AT = 'entry_ts';
+    public const UPDATED_AT = 'modify_ts';
 
     /**
      * 複数代入可能な属性
@@ -44,13 +45,15 @@ class HotelAccount extends CommonDBModel
      * @var array
      */
     protected $fillable = [
+        'hotel_cd',
         'account_id',
         'account_id_begin',
+        'password',
         'accept_status',
         'entry_cd',
-        'entry_ts',
+        // 'entry_ts',
         'modify_cd',
-        'modify_ts',
+        // 'modify_ts',
     ];
 
 	// カラム
@@ -59,6 +62,10 @@ class HotelAccount extends CommonDBModel
 	public string $COL_ACCOUNT_ID = "account_id";
 	public string $COL_PASSWORD = "password";
 	public string $COL_ACCEPT_STATUS = "accept_status";
+
+    // カラム定数
+    public const ACCEPT_STATUS_FALSE    = 0; // 利用不可
+    public const ACCEPT_STATUS_TRUE     = 1; // 利用可
 
 	/** コンストラクタ
 	 */
