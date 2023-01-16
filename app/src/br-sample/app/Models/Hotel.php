@@ -6,6 +6,7 @@ use App\Common\Traits;
 use App\Models\common\CommonDBModel;
 use App\Models\common\ValidationColumn;
 use Illuminate\Support\Facades\DB;
+use Exception;
 
 /** 
  * ホテル
@@ -123,6 +124,10 @@ class Hotel extends CommonDBModel
     // 深夜受付すぺーたす
     public const MIDNIGHT_STATUS_STOP   = 0; // 停止中
     public const MIDNIGHT_STATUS_ACCEPT = 1; // 受付中
+
+    protected $s_hotel_cd   = null;  // 施設コード
+    // キャッシュ用変数
+    private $a_get_hotel_inform_cancel = [];
 
     /**
      * コンストラクタ
@@ -629,5 +634,44 @@ SQL;
 		);
 
 	}
+
+
+    // 施設注意事項情報の取得
+    //
+    // this->s_hotel_cd 施設コード
+    //
+    public function getHotelInformCancel()
+    {
+        try {
+            // キーが同じ場合キャッシュを利用
+            if ($this->s_hotel_cd == ($this->a_get_hotel_inform_cancel['hotel_cd'] ?? null)) { //??null追記でいいか？
+                return $this->a_get_hotel_inform_cancel['values'] ?? null;
+            }
+
+            $s_sql =
+            <<<SQL
+					select	hotel_inform.hotel_cd,
+							hotel_inform.branch_no,
+							hotel_inform.inform,
+							hotel_inform.order_no
+					from	hotel_inform
+					where	hotel_inform.hotel_cd = :hotel_cd
+						and	hotel_inform.inform_type = 0
+					order by hotel_inform.order_no
+SQL;
+
+            // データの取得
+            $this->a_get_hotel_inform_cancel['hotel_cd'] = $this->s_hotel_cd;
+            $this->a_get_hotel_inform_cancel['values'] = [
+                'values'     => DB::select($s_sql, ['hotel_cd' => $this->s_hotel_cd])
+            ];
+
+            return $this->a_get_hotel_inform_cancel['values'];
+
+            // 各メソッドで Exception が投げられた場合
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
 
 }

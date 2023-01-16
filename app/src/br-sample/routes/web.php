@@ -253,4 +253,16 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
         ->name('ctl.brhoteladvert2009000400.edit'); //編集画面
     Route::post('/brhoteladvert2009000400/update', 'BrhotelAdvert2009000400Controller@update')
         ->name('ctl.brhoteladvert2009000400.update'); //更新
+
+    // 送客実績・料金変更
+    Route::match(['get', 'post'], '/brreserveck/index', 'BrReserveCkController@index')
+        ->name('ctl.brReserveCk.index'); //表示
+    Route::match(['get', 'post'], '/brreserveck/search', 'BrReserveCkController@search')
+        ->name('ctl.brReserveCk.search'); //検索
+    Route::post('/brreserveck/update', 'BrReserveCkController@update')
+        ->name('ctl.brReserveCk.update'); //更新
+    Route::match(['get', 'post'], '/brreserveck/reserveck', 'BrReserveCkController@reserveck')
+        ->name('ctl.brReserveCk.reserveck'); //更新
+    Route::get('/dl/reserveck.csv', 'BrReserveCkController@csv')
+        ->name('ctl.dl.reserveck'); //CSV　パス、URL合っている？
 });
