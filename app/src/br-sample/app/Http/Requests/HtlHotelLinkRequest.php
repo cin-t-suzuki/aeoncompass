@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\WithoutHalfWidthKatakana;
 
 class HtlHotelLinkRequest extends FormRequest
 {
@@ -24,8 +25,8 @@ class HtlHotelLinkRequest extends FormRequest
     public function rules()
     {
         return [
-            'HotelLink.title' => 'required|max:100',
-            'HotelLink.url' => 'required|url'
+            'HotelLink.title' => ['required', new WithoutHalfWidthKatakana(), 'between:0,100'],
+            'HotelLink.url' => ['required', new WithoutHalfWidthKatakana(), 'url', 'between:0,128'],
         ];
     }
     public function attributes()
