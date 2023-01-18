@@ -12,6 +12,10 @@ use App\Models\MastBank;
 use App\Models\MastBankBranch;
 use Exception;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use App\Http\Requests\{
+    CustomerRequest,
+};
+use App\Services\BrCustomerService as Service;
 
 class BrCustomerController extends _commonController
 {
@@ -43,13 +47,6 @@ class BrCustomerController extends _commonController
             }
         }
 
-        // エラーメッセージの設定
-        if ($request->session()->has('errors')) {
-            // エラーメッセージ があれば、入力を保持して表示
-            $errorList = $request->session()->pull('errors');
-            $this->addErrorMessageArray($errorList);
-        }
-
         // マスタ共通オブジェクト取得
         $mastPrefModel  = new MastPref();
         $customerModel  = new Customer();
@@ -57,8 +54,8 @@ class BrCustomerController extends _commonController
         // 都道府県の一覧データを配列で取得
         $a_mast_prefs = $mastPrefModel->getMastPrefs();
 
-        // keywordsが存在しない場合のデフォルト値設定  // null,0で追記したが問題ないか？
-        $a_customer_list = null;
+        // keywordsが存在しない場合のデフォルト値設定
+        $a_customer_list = [];
         $n_cnt = 0;
 
         // keywordsが存在すれば検索
@@ -137,42 +134,44 @@ class BrCustomerController extends _commonController
         $a_factoring_bank        = $mast_bank->selectByKey($a_customer['factoring_bank_cd'] ?? null);
         $a_factoring_bank_branch = $mast_bank_branch->selectByKey($a_customer['factoring_bank_cd'] ?? null, $a_customer['factoring_bank_branch_cd'] ?? null);
 
-        // ビュー情報を設定
-        $this->addViewData("customer_list", $a_customer_list);
-        $this->addViewData("mast_pref", $a_mast_prefs);
-        $keyword = $request->input('keywords'); //確認用
-        $this->addViewData("keywords", $request->input('keywords'));
-        $this->addViewData("limit", $this->default_customer_limit);
-        $this->addViewData("cnt", $n_cnt);
-        $this->addViewData("customer", $a_customer);
-        $this->addViewData("bank", $a_bank);
-        $this->addViewData("bank_branch", $a_bank_branch);
-        $this->addViewData("factoring_bank", $a_factoring_bank);
-        $this->addViewData("factoring_bank_branch", $a_factoring_bank_branch);
-        // ビューを表示
-        return view("ctl.brCustomer.list", $this->getViewData());
+        $errors = $request->session()->get('errors', []);
+        // errorsの渡し方でエラーが出てたため、以下のreturnも含め書き方変更し、blade側も変更しています。
+        // editとこちらしか以下returnの書き方は変更していないが、他のメソッドも合わせるべき？？（合わせる場合はblade側も要修正）
+
+        return view('ctl.brCustomer.list', [
+            'customer_list'      => $a_customer_list,
+            'mast_pref'    => $a_mast_prefs,
+            'keywords'   => $request->input('keywords'),
+            'limit'    => $this->default_customer_limit,
+            'cnt'    => $n_cnt,
+            'customer'    => $a_customer,
+            'bank'         => $a_bank,
+            'bank_branch' => $a_bank_branch,
+            'factoring_bank'     => $a_factoring_bank,
+            'factoring_bank_branch'     => $a_factoring_bank_branch,
+            // 'guides'        => $guides,
+            'errors'        => $errors
+        ]);
     }
 
-    public function create(Request $request)
+    public function banksearch(Request $request)
     {
         // $this->paramsは$request->inputでいいか？(このアクション内全体的に変更済)
         $a_customer = $request->input('customer');
 
-        // 銀行検索の場合、銀行検索マスタのコントローラへ遷移する
-        if (!$this->is_empty($request->input('bank_query'))) {
-            // $request->input('next', 'brcustomer/list/?' . $this->request->to_query(['module', 'controller', 'action', 'bank_query'], false));
-            // 書き換え以下であっているか？ $request->bank_query;では「?bank_query=検索&amp;is_fact=1」のうち検索しかとってこれない
-            // ここを修正する場合、2つ目（545行目付近）も修正要
-
-            // 検索から戻ってくる際のURLを生成
-            $bank_query = $request->query('bank_query'); //bank_query部分を取得
+        // 検索から戻ってくる際のURLを生成
             $is_fact = $request->query('is_fact') ?? null; //is_fact部分を取得(渡されないときはnullで、URLに出力しないよう設定)
-            $next = route('ctl.brCustomer.list', ['customer' => $a_customer, 'bank_query' => $bank_query, 'is_fact' => $is_fact]);
+            $next = route('ctl.brCustomer.list', ['customer' => $a_customer, 'is_fact' => $is_fact]);
             return redirect()->route('ctl.brbank.query')->with([
                 'next' => $next,
                 'keyword' => ''
             ]);
-        }
+    }
+
+    public function create(CustomerRequest $request, Service $service)
+    {
+        // $this->paramsは$request->inputでいいか？(このアクション内全体的に変更済)
+        $a_customer = $request->input('customer');
 
         // 銀行の存在確認（支払）
         $mast_bank = new MastBank();
@@ -290,79 +289,26 @@ class BrCustomerController extends _commonController
             $a_customer['payment_required_month'] .= ($a_customer['payment_month' . str_pad($i, 2, 0, STR_PAD_LEFT)] ?? '0');
         }
 
-        //上記の整形後を登録するためセットしなおす（a_customerそのままセットでは不可）
-        //必須以外は??nullでいいか（新規はnullでいいはず）
-        $requestCustomer['customer_id'] = $a_customer['customer_id'];
-        $requestCustomer['customer_nm'] = $a_customer['customer_nm'];
-        $requestCustomer['section_nm'] = $a_customer['section_nm'] ?? null;
-        $requestCustomer['person_post'] = $a_customer['person_post'] ?? null;
-        $requestCustomer['person_nm'] = $a_customer['person_nm'] ?? null;
-        $requestCustomer['postal_cd'] = $a_customer['postal_cd'];
-        $requestCustomer['pref_id'] = $a_customer['pref_id'];
-        $requestCustomer['address'] = $a_customer['address'];
-        $requestCustomer['tel'] = $a_customer['tel'];
-        $requestCustomer['fax'] = $a_customer['fax'] ?? null;
-        $requestCustomer['email'] = $a_customer['email'] ?? null;
-        $requestCustomer['bill_bank_nm'] = $a_customer['bill_bank_nm'];
-        $requestCustomer['bill_bank_account_no'] = $a_customer['bill_bank_account_no'] ?? null;
-        $requestCustomer['payment_bank_cd'] = $a_customer['payment_bank_cd'] ?? null;
-        $requestCustomer['payment_bank_branch_cd'] = $a_customer['payment_bank_branch_cd'] ?? null;
-        $requestCustomer['payment_bank_account_type'] = $a_customer['payment_bank_account_type'] ?? null;
-        $requestCustomer['payment_bank_account_no'] = $a_customer['payment_bank_account_no'] ?? null;
-        $requestCustomer['payment_bank_account_kn'] = $a_customer['payment_bank_account_kn'] ?? null;
-        $requestCustomer['bill_required_month'] = $a_customer['bill_required_month'];
-        $requestCustomer['payment_required_month'] = $a_customer['payment_required_month'];
-        $requestCustomer['bill_charge_min'] = $a_customer['bill_charge_min'] ?? null;
-        $requestCustomer['payment_charge_min'] = $a_customer['payment_charge_min'] ?? null;
-        $requestCustomer['bill_send'] = $a_customer['bill_send'] ?? null;//追記
-        $requestCustomer['payment_send'] = $a_customer['payment_send'] ?? null;//追記
-        $requestCustomer['factoring_send'] = $a_customer['factoring_send'] ?? null;//追記
-        $requestCustomer['bill_way'] = $a_customer['bill_way'] ?? null;
-        $requestCustomer['factoring_cd'] = $a_customer['factoring_cd'] ?? null;//追記
-        $requestCustomer['factoring_bank_cd'] = $a_customer['factoring_bank_cd'];
-        $requestCustomer['factoring_bank_branch_cd'] = $a_customer['factoring_bank_branch_cd'];
-        $requestCustomer['factoring_bank_account_type'] = $a_customer['factoring_bank_account_type'] ?? null;
-        $requestCustomer['factoring_bank_account_no'] = $a_customer['factoring_bank_account_no'];
-        $requestCustomer['factoring_bank_account_kn'] = $a_customer['factoring_bank_account_kn'] ?? null;
-        $requestCustomer['fax_recipient_cd'] = $a_customer['fax_recipient_cd'] ?? null;
-        $requestCustomer['optional_nm'] = $a_customer['optional_nm'] ?? null;
-        $requestCustomer['optional_section_nm'] = $a_customer['optional_section_nm'] ?? null;
-        $requestCustomer['optional_person_nm'] = $a_customer['optional_person_nm'] ?? null;
-        $requestCustomer['optional_fax'] = $a_customer['optional_fax'] ?? null;
-
         // モデルの取得
         $customerModel  = new Customer();
 
-        // プライマリキーの値を設定
-        //n_sequenceの取得がないので、それも追記でいいか？$o_customer->attributes(array('customer_id'  => $n_sequence));
-        //書き替えあっている？ $o_customer->attributes($a_customer);
-        // プライマリキーの値を発行
+        // プライマリキーの値を設定,customer_idへ再代入
         $n_sequence = $customerModel->getSequenceNo();
         $a_customer['customer_id'] = $n_sequence;
 
-        //↓ 日本語カラム名称を設定しているが、必要？
-        // $o_customer->set_logical_nm('customer_nm', '精算先名称');
+        /* データ整形 */
+        $customerData = $service->makeCustomerData($a_customer);
 
-        // バリデーション
-        //カラムの書き方をconstにしてみたので、validationの書き方も変えましたが合っていますでしょうか？
-        $errorList = $customerModel->validation($requestCustomer);
-        if (count($errorList) > 0) {
-            $errorList[] = "精算先情報を更新できませんでした。 ";
-            return redirect()->route('ctl.brCustomer.list', [
-                'customer' => $a_customer
-            ])->with([
-                'errors' => $errorList
-            ]);
-        }
         // 共通カラム値設定
-        $customerModel->setInsertCommonColumn($requestCustomer);
+        $customerModel->setInsertCommonColumn($customerData);
 
         // コネクション
+        $errorList = []; //初期化
         try {
             $con = DB::connection('mysql');
-            $dbErr = $con->transaction(function () use ($con, $customerModel, $requestCustomer) {
+            $dbErr = $con->transaction(function () use ($con, $customerModel, $customerData) {
                 // DB更新
-                $customerModel->insert($con, $requestCustomer);
+                $customerModel->insert($con, $customerData);
                 //insertでいいか？
             });
         } catch (Exception $e) {
@@ -402,14 +348,16 @@ class BrCustomerController extends _commonController
         $this->addViewData("bank_branch", $a_bank_branch);
 
         // 引落銀行の取得　//元ソースにはないが必要そう　// ?? null追記でいいか
-        $a_factoring_bank        = $mast_bank->selectByKey($a_customer['factoring_bank_cd'] ?? null);
-        $a_factoring_bank_branch = $mast_bank_branch->selectByKey($a_customer['factoring_bank_cd'] ?? null, $a_customer['factoring_bank_branch_cd'] ?? null);
+        $a_factoring_bank        = $mast_bank->selectByKey($a_customer['factoring_bank_cd']);
+        $a_factoring_bank_branch = $mast_bank_branch->selectByKey($a_customer['factoring_bank_cd'], $a_customer['factoring_bank_branch_cd']);
         $this->addViewData("factoring_bank", $a_factoring_bank);
         $this->addViewData("factoring_bank_branch", $a_factoring_bank_branch);
 
         // ビューを表示
         return view("ctl.brCustomer.create", $this->getViewData());
     }
+
+
     public function edit(Request $request)
     {
         try {
@@ -419,13 +367,6 @@ class BrCustomerController extends _commonController
             } else {
                 // 遷移元データがなければ、初期表示用データを表示
                 $a_customer = $request->input('customer');
-            }
-
-            // エラーメッセージの設定
-            if ($request->session()->has('errors')) {
-                // エラーメッセージ があれば、入力を保持して表示
-                $errorList = $request->session()->pull('errors');
-                $this->addErrorMessageArray($errorList);
             }
 
             // マスタ共通オブジェクト取得
@@ -447,19 +388,21 @@ class BrCustomerController extends _commonController
 
             // Customerモデルを取得
             $o_customer      = new Customer();
-
+            $check = $request->all();
             $a_find_customer = $o_customer->find(['customer_id' => $request->input('customer_id')]);
 
             if ($this->is_empty($a_customer)) {
                 // 請求月
                 // top用に請求月を整形
-                for ($i = 1; $i <= strlen($a_find_customer['bill_required_month']); $i++) {
+                //?? null追記でいいか？(バリデーションエラーで戻ってきたときにa_customerがない)
+                for ($i = 1; $i <= strlen($a_find_customer['bill_required_month'] ?? null); $i++) {
                     $a_find_customer['bill_month' . str_pad($i, 2, 0, STR_PAD_LEFT)] = substr($a_find_customer['bill_required_month'], ($i - 1), 1);
                 }
 
                 // 支払月
                 // top用に支払月を整形
-                for ($i = 1; $i <= strlen($a_find_customer['payment_required_month']); $i++) {
+                //?? null追記でいいか？(バリデーションエラーで戻ってきたときにa_customerがない)
+                for ($i = 1; $i <= strlen($a_find_customer['payment_required_month'] ?? null); $i++) {
                     $a_find_customer['payment_month' . str_pad($i, 2, 0, STR_PAD_LEFT)] = substr($a_find_customer['payment_required_month'], ($i - 1), 1);
                 }
 
@@ -467,7 +410,7 @@ class BrCustomerController extends _commonController
                 $a_customer = $a_find_customer;
             }
 
-            //以下4か所 ?? null追記でいいか？
+            //以下4か所 ?? null追記でいいか？(バリデーションエラーで戻ってきたときにa_customerがない)
             // 銀行の取得（支払）
             $mast_bank = new MastBank();
             $a_bank = $mast_bank->selectByKey(['bank_cd' => $a_customer['payment_bank_cd'] ?? null]); //find→selectByKeyでいいか
@@ -512,19 +455,21 @@ SQL;
                 }
             }
 
-            // ビュー情報を設定
-            $this->addViewData("customer", $a_customer);
-            $this->addViewData("mast_pref", $a_mast_prefs);
-            $this->addViewData("keywords", $request->input('keywords'));
-            $this->addViewData("customer_id", $request->input('customer_id'));
-            $this->addViewData("bank", $a_bank);
-            $this->addViewData("bank_branch", $a_bank_branch);
-            $this->addViewData("factoring_bank", $a_factoring_bank);
-            $this->addViewData("factoring_bank_branch", $a_factoring_bank_branch);
-            $this->addViewData("log_customer", $a_log_customer);
+            $errors = $request->session()->get('errors', []);
 
-            // ビューを表示
-            return view("ctl.brCustomer.edit", $this->getViewData());
+            return view('ctl.brCustomer.edit', [
+                'customer'      => $a_customer,
+                'mast_pref'    => $a_mast_prefs,
+                'keywords'   => $request->input('keywords'),
+                'customer_id'    => $request->input('customer_id'),
+                'bank'         => $a_bank,
+                'bank_branch' => $a_bank_branch,
+                'factoring_bank'     => $a_factoring_bank,
+                'factoring_bank_branch'     => $a_factoring_bank_branch,
+                'log_customer'     => $a_log_customer,
+                // 'guides'        => $guides,
+                'errors'        => $errors
+            ]);
 
             // 各メソッドで Exception が投げられた場合
         } catch (Exception $e) {
@@ -532,23 +477,9 @@ SQL;
         }
     }
 
-    public function update(Request $request)
+    public function update(CustomerRequest $request, Service $service)
     {
         $a_customer = $request->input('customer');
-
-        // 銀行検索の場合、銀行検索マスタのコントローラへ遷移する
-        if (!$this->is_empty($request->input('bank_query'))) {
-            // TODO 1つ目（164行目付近）を修正する場合、こちらも修正要
-            // 検索から戻ってくる際のURLを生成
-            $bank_query = $request->query('bank_query'); //bank_query部分を取得
-            $is_fact = $request->query('is_fact') ?? null; //is_fact部分を取得(渡されないときはnullで、URLに出力しないよう設定)
-            $next = route('ctl.brCustomer.list', ['customer' => $a_customer, 'bank_query' => $bank_query, 'is_fact' => $is_fact]);
-            return redirect()->route('ctl.brbank.query')->with([
-                'next' => $next,
-                'keyword' => ''
-            ]);
-        }
-
 
         // 銀行の存在確認（支払）
         $mast_bank = new MastBank();
@@ -667,74 +598,23 @@ SQL;
 
         // モデルの取得
         $customerModel  = new Customer();
-        $requestCustomer = $customerModel->selectByKey(['customer_id' => $request->input('customer_id')]); //find→selectByKeyでいいか
+        $customerData = $customerModel->selectByKey(['customer_id' => $request->input('customer_id')]); //find→selectByKeyでいいか
 
-        //上記の整形後を登録するためセットしなおす（a_customerそのままセットでは不可）
-        //必須以外は??nullでいいか（新規はnullでいいはず）,項目あっている？
-        $requestCustomer['customer_id'] = $a_customer['customer_id'];
-        $requestCustomer['customer_nm'] = $a_customer['customer_nm'];
-        $requestCustomer['section_nm'] = $a_customer['section_nm'] ?? null;
-        $requestCustomer['person_post'] = $a_customer['person_post'] ?? null;
-        $requestCustomer['person_nm'] = $a_customer['person_nm'] ?? null;
-        $requestCustomer['postal_cd'] = $a_customer['postal_cd'];
-        $requestCustomer['pref_id'] = $a_customer['pref_id'];
-        $requestCustomer['address'] = $a_customer['address'];
-        $requestCustomer['tel'] = $a_customer['tel'];
-        $requestCustomer['fax'] = $a_customer['fax'] ?? null;
-        $requestCustomer['email'] = $a_customer['email'] ?? null;
-        $requestCustomer['bill_bank_nm'] = $a_customer['bill_bank_nm'];
-        $requestCustomer['bill_bank_account_no'] = $a_customer['bill_bank_account_no'] ?? null;
-        $requestCustomer['payment_bank_cd'] = $a_customer['payment_bank_cd'] ?? null;
-        $requestCustomer['payment_bank_branch_cd'] = $a_customer['payment_bank_branch_cd'] ?? null;
-        $requestCustomer['payment_bank_account_type'] = $a_customer['payment_bank_account_type'] ?? null;
-        $requestCustomer['payment_bank_account_no'] = $a_customer['payment_bank_account_no'] ?? null;
-        $requestCustomer['payment_bank_account_kn'] = $a_customer['payment_bank_account_kn'] ?? null;
-        $requestCustomer['bill_required_month'] = $a_customer['bill_required_month'];
-        $requestCustomer['payment_required_month'] = $a_customer['payment_required_month'];
-        $requestCustomer['bill_charge_min'] = $a_customer['bill_charge_min'] ?? null;
-        $requestCustomer['payment_charge_min'] = $a_customer['payment_charge_min'] ?? null;
-        $requestCustomer['bill_send'] = $a_customer['bill_send'] ?? null;//追記
-        $requestCustomer['payment_send'] = $a_customer['payment_send'] ?? null;//追記
-        $requestCustomer['factoring_send'] = $a_customer['factoring_send'] ?? null;//追記
-        $requestCustomer['bill_way'] = $a_customer['bill_way'] ?? null;
-        $requestCustomer['factoring_cd'] = $a_customer['factoring_cd'] ?? null;//追記
-        $requestCustomer['factoring_bank_cd'] = $a_customer['factoring_bank_cd'];
-        $requestCustomer['factoring_bank_branch_cd'] = $a_customer['factoring_bank_branch_cd'];
-        $requestCustomer['factoring_bank_account_type'] = $a_customer['factoring_bank_account_type'] ?? null;
-        $requestCustomer['factoring_bank_account_no'] = $a_customer['factoring_bank_account_no'];
-        $requestCustomer['factoring_bank_account_kn'] = $a_customer['factoring_bank_account_kn'] ?? null;
-        $requestCustomer['fax_recipient_cd'] = $a_customer['fax_recipient_cd'] ?? null;
-        $requestCustomer['optional_nm'] = $a_customer['optional_nm'] ?? null;
-        $requestCustomer['optional_section_nm'] = $a_customer['optional_section_nm'] ?? null;
-        $requestCustomer['optional_person_nm'] = $a_customer['optional_person_nm'] ?? null;
-        $requestCustomer['optional_fax'] = $a_customer['optional_fax'] ?? null;
+        /* データ整形 */
+        $customerData = $service->makeCustomerData($a_customer);
 
-        //↓ 日本語カラム名称を設定しているが、必要？
-        // $o_customer->set_logical_nm('customer_nm', '精算先名称');
-
-        // バリデーション
-        //カラムの書き方をconstにしてみたので、validationの書き方も変えましたが合っていますでしょうか？
-        $errorList = $customerModel->validation($requestCustomer);
-        if (count($errorList) > 0) {
-            $errorList[] = "精算先情報を更新できませんでした。 ";
-            // edit アクションに転送します
-            return redirect()->route('ctl.brCustomer.edit', [
-                'customer' => $a_customer
-            ])->with([
-                'errors' => $errorList
-            ]);
-        }
         // 共通カラム値設定
-        $customerModel->setUpdateCommonColumn($requestCustomer);
+        $customerModel->setUpdateCommonColumn($customerData);
 
         // 更新件数
         $dbCount = 0;
         // コネクション
+        $errorList = []; //初期化
         try {
             $con = DB::connection('mysql');
-            $dbErr = $con->transaction(function () use ($con, $customerModel, $requestCustomer, &$dbCount) {
+            $dbErr = $con->transaction(function () use ($con, $customerModel, $customerData, &$dbCount) {
                 // DB更新
-                $dbCount = $customerModel->updateByKey($con, $requestCustomer);
+                $dbCount = $customerModel->updateByKey($con, $customerData);
                 //TODO 更新件数0件でも1で戻る気がする,modify_tsがあるからでは？（共通カラム設定消すと想定通りになる）
             });
         } catch (Exception $e) {

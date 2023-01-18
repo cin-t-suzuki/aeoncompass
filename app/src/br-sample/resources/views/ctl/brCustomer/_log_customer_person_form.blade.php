@@ -27,7 +27,7 @@
         </td>
       </tr>
 
-@foreach ($views->log_customer as $customer)
+@foreach ($log_customer as $customer)
       <tr>
         <td nowrap>
           {{strip_tags($customer->section_nm)}}

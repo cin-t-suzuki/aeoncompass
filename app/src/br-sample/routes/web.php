@@ -243,7 +243,8 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 
     // 精算先
     Route::match(['get','post'], '/brcustomer/list', 'BrCustomerController@list')->name('ctl.brCustomer.list');
-    Route::post('/brcustomer/create', 'BrCustomerController@create')->name('ctl.brCustomer.create');
+    Route::match(['get','post'], '/brcustomer/create', 'BrCustomerController@create')->name('ctl.brCustomer.create');
+    Route::post('/brcustomer/banksearch', 'BrCustomerController@banksearch')->name('ctl.brCustomer.banksearch');
     Route::match(['get','post'], '/brcustomer/edit', 'BrCustomerController@edit')->name('ctl.brCustomer.edit');
     Route::post('/brcustomer/update', 'BrCustomerController@update')->name('ctl.brCustomer.update');
     Route::get('/brcustomer/sendletter', 'BrCustomerController@sendletter')->name('ctl.brCustomer.sendletter');
