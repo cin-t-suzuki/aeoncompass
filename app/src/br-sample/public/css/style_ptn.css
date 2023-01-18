@@ -1,0 +1,501 @@
+/* public\app\ctl\statics\css\style_ptn.css */
+
+@charset "UTF-8";
+
+/*------------------------------------------------------------------------------
+  パートナー管理
+------------------------------------------------------------------------------*/
+/* パートナー管理：ヘッダー */
+.header-ptn {
+    width: 100%;
+    min-width: 1024px;
+    width: expression(document.body.clientWidth < 1024 ? "1024px" : "auto");
+    padding: 0;
+    margin: 0;
+    text-align: left;
+
+}
+
+.header-ptn .header-ptn-back {
+    background-color: #FFC760;
+    padding: 10px;
+}
+
+.header-ptn .header-ptn-back .header-ptn-contents {
+    font-weight: bold;
+    color: #3c3c3c;
+
+}
+
+.header-ptn .header-ptn-back .header-ptn-contents div#system-name {
+    float: left;
+}
+
+.header-ptn .header-ptn-back .header-ptn-contents div#logout {
+    float: right;
+}
+
+/* パートナー管理：フッター */
+.footer-ptn {
+    width: 100%;
+    min-width: 1024px;
+    width: expression(document.body.clientWidth < 1024 ? "1024px" : "auto");
+    padding: 0;
+    margin: 0;
+}
+
+.footer-ptn .footer-ptn-back {
+    background-color: #FFC760;
+    color: #3c3c3c;
+    font-weight: bold;
+}
+
+.footer-ptn .footer-ptn-back .footer-ptn-contents {
+    padding: 10px;
+}
+
+.footer-ptn .footer-ptn-back .footer-ptn-contents div#copyright {
+    float: right;
+}
+
+.footer-ptn .footer-ptn-back .footer-ptn-contents div#dtm {
+    float: left;
+}
+
+/* パートナー管理：汎用フォーム */
+.form-ptn-title,
+.form-ptn-box {
+    background-color: #f8f8f8;
+    margin: 0 auto;
+}
+
+.form-ptn-title .form-ptn-title-back,
+.form-ptn-box .form-ptn-box-back {
+    margin: 0 auto;
+}
+
+.form-ptn-title .form-ptn-title-back .form-ptn-title-conntents {
+    padding: 10px;
+    border: 1px solid #FFC760;
+    background-color: #FFC760;
+    text-align: left;
+    color: #3c3c3c;
+    border-radius: 3px 3px 0px 0px;
+    font-weight: bold;
+}
+
+.form-ptn-box .form-ptn-box-back .form-ptn-box-contents {
+    padding: 10px;
+    border: 2px solid #FFD387;
+    text-align: left;
+    border-radius: 0px 0px 3px 3px;
+    box-shadow: 0 8px 6px -6px #c9c9c9;
+}
+
+.form-ptn-box .item-name {
+    margin: 0;
+}
+
+.form-ptn-box .item-comment {
+    font-size: 10px;
+}
+
+.form-ptn-box .item-value {
+    color: #3c3c3c;
+    margin: 4px 6px;
+    font-weight: bold;
+}
+
+.form-ptn-box .item-value#explain {
+    border: 1px solid #cdcdcd;
+    padding: 6px;
+    border-radius: 3px;
+}
+
+.form-ptn-box hr.item-margin {
+    color: #f8f8f8;
+    background-color: #f8f8f8;
+    border: none;
+    border-top: 1px #f8f8f8;
+    height: 12px;
+}
+
+.form-ptn-box hr {
+    color: #ffffff;
+    background-color: #ffffff;
+    border: none;
+    border-top: 1px dashed #ccc;
+}
+
+.form-ptn-box p {
+    color: #616360;
+}
+
+.form-ptn-box .hr {
+    border: 0;
+    border-bottom: 1px dashed #ccc;
+    background: #999;
+}
+
+.form-ptn-box .menu {
+    text-align: center;
+}
+
+/* パートナー管理：ログインフォーム */
+.box-login-form {
+    width: 40%;
+    margin: auto;
+}
+
+/* パートナー管理：メインメニュー */
+.main-menu {
+    list-style: none;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.main-menu li {
+    /*
+  display: inline;
+*/
+    margin: 12px;
+}
+
+/*
+.main-menu li div {
+  display: inline;
+}
+*/
+
+.main-menu-btn {
+    width: 180px;
+    padding: 6px;
+}
+
+.action-btn {
+    padding: 6px;
+}
+
+/* パートナー管理：検索汎用フォーム */
+.ptn-search-box {
+    background-color: #f8f8f8;
+    border: 1px solid #cdcdcd;
+    padding: 10px;
+    border-radius: 3px;
+    box-shadow: 0 8px 6px -6px #e9e9e9;
+}
+
+.ptn-search-box hr {
+    color: #ffffff;
+    background-color: #ffffff;
+    border: none;
+    border-top: 1px dashed #ccc;
+}
+
+table.ptn-search-field {
+    width: 100%;
+}
+
+table.ptn-search-field th {
+    background-color: #FFDD99;
+    color: #5c5c5c;
+    padding: 3px;
+    white-space: nowrap;
+}
+
+table.ptn-search-field td {
+    text-align: left;
+    padding: 3px;
+}
+
+hr.contents-margin {
+    color: #ffffff;
+    background-color: #ffffff;
+    border: none;
+    border-top: 1px #ffffff;
+    height: 12px;
+}
+
+/* パートナー管理：アカウント変更フォーム */
+.box-account-form {
+    width: 40%;
+    margin: auto;
+}
+
+/* パートナー管理：戻るボタンメニュー */
+.ptn-back-main-menu-form {
+    text-align: right;
+    margin: 0;
+}
+
+/* パートナー管理：レイアウト設定フォーム */
+.box-layout-form {
+    width: 100%;
+    margin: auto;
+}
+
+.form-box-charge {
+    border: 1px solid #cdcdcd;
+    border-radius: 3px;
+    padding: 4px;
+    width: 990px;
+    margin: 6px 0;
+}
+
+ul.charge-list {
+    width: 990px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    white-space: nowrap;
+}
+
+.form-box-charge ul.charge-list li {
+    float: left;
+    width: 100px;
+}
+
+/* パートナー管理：レイアウト設定メニュー */
+.ptn-layout-color1,
+.ptn-layout-color2,
+.ptn-layout-color3,
+.ptn-layout-color4,
+.ptn-layout-color5,
+.ptn-layout-color6,
+.ptn-layout-color7 {
+    border: 1px solid #3c3c3c;
+    width: 25px;
+    height: 25px;
+    font-size: 200%;
+}
+
+.ptn-layout-color1 {
+    color: #D34304;
+    background-color: #D34304;
+}
+
+.ptn-layout-color2 {
+    color: #0272C6;
+    background-color: #0272C6;
+}
+
+.ptn-layout-color3 {
+    color: #57A60D;
+    background-color: #57A60D;
+}
+
+.ptn-layout-color4 {
+    color: #DAC802;
+    background-color: #DAC802;
+}
+
+.ptn-layout-color5 {
+    color: #F95EA2;
+    background-color: #F95EA2;
+}
+
+.ptn-layout-color6 {
+    color: #8F4487;
+    background-color: #8F4487;
+}
+
+.ptn-layout-color7 {
+    color: #ffffff;
+    background-color: #ffffff;
+}
+
+/* パートナー管理：検索メニュー初期値設定メニュー */
+.ptn-default-form {
+    width: 50%;
+    margin: auto;
+}
+
+/* パートナー管理：DenyList検索条件フォーム */
+.ptn-hotel-deny-form-search {
+    width: 40%;
+    margin: auto;
+    float: left;
+}
+
+/* パートナー管理：DenyList一覧 */
+.ptn-hotel-deny-form {
+    width: 100%;
+    text-align: left;
+    margin: auto;
+}
+
+.ptn-search-box .item-name {
+    background-color: #FFDD99;
+    float: left;
+    width: 120px;
+    display: table-cell;
+    padding: 3px;
+}
+
+/* パートナー管理：汎用リスト */
+table.ptn-list {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.ptn-list tr.odd {
+    background-color: #f8f8f8;
+}
+
+.ptn-list tr.even {
+    background-color: #FFF7DB;
+}
+
+table.ptn-list th {
+    text-align: left;
+    background-color: #FFDD99;
+    color: #3c3c3c;
+    padding: 8px 6px;
+    white-space: nowrap;
+}
+
+table.ptn-list th.fc {
+    border-radius: 3px 0px 0px 0px;
+}
+
+table.ptn-list th.lc {
+    border-radius: 0px 3px 0px 0px;
+}
+
+table.ptn-list td {
+    text-align: left;
+    padding: 6px;
+    margin: 0;
+}
+
+.ptn-list-tail {
+    background-color: #FFDD99;
+    color: #3c3c3c;
+    padding: 3px;
+    border-radius: 0px 0px 3px 3px;
+    text-align: right;
+    box-shadow: 0 8px 6px -6px #cdcdcd;
+}
+
+.pager {
+    list-style: none;
+    text-align: right;
+}
+
+.pager li {
+    display: inline;
+    margin: 3px;
+    padding: 2px;
+}
+
+.pager li#current {
+    color: #ff0000;
+}
+
+.pager li a {
+    text-decoration: none;
+}
+
+/* パートナー管理：明細・表示年月指定フォーム */
+.ptn-details-search {
+    width: 30%;
+    margin: auto;
+    float: left;
+}
+
+/* パートナー管理：明細一覧フォーム */
+.ptn-detail-form {
+    width: 100%;
+    text-align: left;
+    margin: auto;
+}
+
+/* パートナー管理：明細一覧 */
+table.ptn-detail-list {
+    text-align: left;
+    color: #3c3c3c;
+    border: 1px solid #3c3c3c;
+    border-collapse: collapse;
+}
+
+table.ptn-detail-list th {
+    text-align: left;
+    background-color: #FFDD99;
+    color: #3c3c3c;
+    border: 1px solid #cacaca;
+    padding: 3px;
+    white-space: nowrap;
+}
+
+table.ptn-detail-list td {
+    text-align: left;
+    color: #3c3c3c;
+    border: 1px solid #cacaca;
+    padding: 3px;
+}
+
+table.ptn-detail-list td.nowrap {
+    text-align: left;
+    color: #3c3c3c;
+    border: 1px solid #cacaca;
+    padding: 3px;
+    white-space: nowrap;
+}
+
+table.ptn-detail-list td hr {
+    color: #ffffff;
+    background-color: #ffffff;
+    border: none;
+    border-top: 1px dashed #ccc;
+}
+
+table.ptn-detail-list .charge {
+    text-align: right;
+    white-space: nowrap;
+}
+
+/* パートナー管理：送客実績検索条件フォーム */
+.ptn-reserve-form-search {
+    width: 40%;
+    margin: auto;
+    float: left;
+}
+
+/* パートナー管理：送客実績一覧 */
+.ptn-hotel-deny-form {
+    width: 100%;
+    text-align: left;
+    margin: auto;
+}
+
+ul.site-color-list {
+    list-style: none;
+    text-align: left;
+    margin: 0;
+    padding: 0;
+}
+
+ul.site-color-list li {
+    float: left;
+    position: relative;
+    text-align: center;
+    padding: 0 12px;
+}
+
+.site-color-list li p {
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+    text-align: left;
+    white-space: nowrap;
+}
+
+ul.list-menu-side {
+    text-align: center;
+}
+
+ul.list-menu-side li {
+    display: inline;
+    padding-right: 12px;
+}

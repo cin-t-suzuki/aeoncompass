@@ -1,0 +1,813 @@
+/* public\app\ctl\statics\css\style_htl.css */
+
+@charset "UTF-8";
+
+/*------------------------------------------------------------------------------
+  施設管理
+------------------------------------------------------------------------------*/
+/* ヘッダー */
+.hd-base,
+.ft-base {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+.hd-contents {
+    max-width: 1024px;
+    width: expression(document.body.clientWidth > 1024 ? "1024px" : "auto");
+    margin: 0 auto;
+}
+
+/* ヘッダー：社内スタッフ */
+#hd-staff-br {
+    background-color: #eeffee;
+}
+
+/* ヘッダー：日旅スタッフ */
+#hd-staff-nta {
+    background-color: #99ccff;
+}
+
+#hd-staff-htl {
+    float: left;
+    margin: 4px;
+}
+
+#hd-staff-act {
+    float: right;
+    margin: 4px;
+}
+
+#hd-staff-htl p {
+    margin: 0;
+}
+
+#hd-staff-act p {
+    margin: 0;
+    text-align: right;
+}
+
+#hd-htl-adbnr {
+    float: left;
+    margin: 0 4px;
+}
+
+/* ヘッダーメニュー：予約受付 */
+#hd-htl-accept {
+    width: 120px;
+    border: 1px solid;
+    text-align: center;
+    padding: 4px 0px;
+    float: left;
+    margin-left: 2px;
+}
+
+#hd-htl-accept p {
+    font-weight: bold;
+    margin: 0;
+}
+
+#hd-htl-menu {
+    width: 70px;
+    margin: 22px 0px 0px 4px;
+    text-align: center;
+    float: left;
+}
+
+/* ヘッダー：施設 */
+#hd-htl {
+    min-width: 1024px;
+    float: left;
+    background-color: #eeefff;
+    width: 100%;
+    margin-right: -520px;
+}
+
+#hd-htl-nmargin {
+    margin-right: 520px;
+    padding: 4px;
+}
+
+#hd-htl-info {
+    float: left;
+}
+
+#hd-htl-act {
+    float: right;
+    width: 520px;
+}
+
+#hd-htl-info p {
+    margin: 0;
+}
+
+/* フッター:施設 */
+.ft-back {
+    padding: 4px;
+}
+
+#ft-htl {
+    background-color: #eeefff;
+}
+
+#ft-dtm {
+    float: right;
+}
+
+/* プラン情報 */
+.info-plan-base {
+    width: 1024px;
+}
+
+.info-plan-base-back {
+    background-color: #C3E59F;
+    border: solid 1px #6ABD10;
+}
+
+.info-plan-base-back p {
+    margin: 0;
+}
+
+.plan-nm {
+    font-weight: bold;
+}
+
+.info-plan-base-inline {
+    padding: 4px;
+    text-align: left;
+}
+
+/* （プラン/部屋）のスペックアイコン */
+.rp-specs {
+    display: block;
+    float: left;
+    white-space: nowrap;
+    margin: 5px 4px 2px 0px;
+}
+
+/* 部屋情報 */
+.info-room-base-sht {
+    width: 100%;
+}
+
+.info-room-base-sht-back {
+    background-color: #FFE0B2;
+    border: solid 1px #ff9933;
+}
+
+.info-room-base-sht-back .info-room-base-sht-inline {
+    padding: 4px;
+    text-align: left;
+}
+
+/* 料金登録 - 部屋選択フォーム */
+#room-select {
+    width: 1024px;
+}
+
+#room-select-contents {
+    border: 2px solid #cdcdcd;
+    background-color: #FFFEEE;
+    padding: 8px 0px 8px 8px;
+    border-radius: 3px;
+}
+
+#room-select p {
+    margin: 0;
+    white-space: nowrap;
+}
+
+.box-title {
+    width: 496px;
+    border: solid #FFFEEE;
+    border-width: 1px 1px 0px 1px;
+}
+
+.box-title-contents {
+    background-color: #FFEBCD;
+    border: solid #cdcdcd;
+    border-width: 1px 1px 0px 1px;
+}
+
+.box-rooms,
+.box-rooms-low {
+    width: 496px;
+    text-align: left;
+    margin-bottom: 8px;
+    height: 190px;
+    border: solid #FFFEEE;
+    border-width: 1px 1px 1px 1px;
+}
+
+.box-rooms-low {
+    height: 110px;
+}
+
+.box-rooms-contents,
+.box-rooms-contents-low {
+    border: 1px solid #cdcdcd;
+    width: 496px;
+    overflow: scroll;
+    text-align: left;
+    margin-bottom: 8px;
+    height: 190px;
+}
+
+.box-rooms-contents-low {
+    height: 110px;
+}
+
+.box-room-detail {
+    float: left;
+    width: 496px;
+    text-align: left;
+}
+
+.group-box-rooms {
+    float: left;
+    width: 496px;
+    margin-right: 10px;
+}
+
+.room-name-row {
+    width: 660px;
+}
+
+.label-w100 {
+    width: 100%;
+    display: inline-block;
+}
+
+.contents-header {
+    width: 100%;
+    border-left: 10px solid #6666FF;
+    padding: 8px;
+    background-color: #E6E6FA;
+    color: ##171010;
+    text-align: left;
+    font-size: 110%;
+    max-width: 998px;
+    margin: 0;
+}
+
+.submit-l {
+    padding: 12px 48px;
+}
+
+.submit-m {
+    padding: 6px 24px;
+}
+
+#select-ymd {
+    text-align: left;
+}
+
+/* 料金入力BOX */
+.input-charge-box {
+    border: 1px solid #8fbc8b;
+    width: 80px;
+}
+
+/* 料金登録 - 子供料金設定フォーム */
+.annotation-al {
+    text-align: left;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.tbl-child-charge {
+    width: 100%;
+    border: 1px solid #bcbcbc;
+    border-collapse: collapse;
+    margin: 0 auto;
+}
+
+.tbl-child-charge th,
+.tbl-child-charge th-l {
+    border: 1px solid #bcbcbc;
+    background-color: #efefef;
+    padding: 4px;
+    text-align: center;
+}
+
+.tbl-child-charge th.al {
+    text-align: left;
+    white-space: nowrap;
+}
+
+.tbl-child-charge td {
+    border: 1px solid #bcbcbc;
+    padding: 4px;
+    text-align: center;
+    background-color: #ffffff;
+}
+
+.tbl-child-charge td.al {
+    border: 1px solid #bcbcbc;
+    padding: 4px;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.tbl-child-charge td.descript,
+tbl-child-charge th.descript {
+    text-align: left;
+}
+
+.child-charge-type {
+    background-color: #fffaf0;
+}
+
+/* 料金カレンダー */
+.tbl-charge-calendar {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 auto;
+}
+
+.tbl-charge-calendar th {
+    border: 1px solid #bcbcbc;
+    background-color: #efefef;
+    padding: 4px;
+    width: 100px;
+}
+
+.tbl-charge-calendar td {
+    border: 1px solid #bcbcbc;
+    background-color: #fdfdfd;
+    padding: 4px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+th.cap-hd {
+    background-color: #eeeedd;
+    width: 60px;
+}
+
+/* テーブル内見出し */
+td.cap-hd {
+    background-color: #eeeedd;
+    white-space: nowrap;
+    width: 60px;
+}
+
+/* 年月 */
+th.ym-hd {
+    background-color: #E6E6FA;
+    white-space: nowrap;
+}
+
+/* 日曜日 */
+th.wkd-sun {
+    background-color: #FFD8D8;
+}
+
+td.wkd-sun {
+    background-color: #FFEEEE;
+}
+
+/* 土曜日 */
+th.wkd-sat {
+    background-color: #cdeafe;
+}
+
+td.wkd-sat {
+    background-color: #e6f4fe;
+}
+
+/* 休前日 */
+th.wkd-bfo {
+    background-color: #fafa94;
+}
+
+td.wkd-bfo {
+    background-color: #ffffcc;
+}
+
+/* 祝日 */
+th.wkd-hol {
+    background-color: #fdccaa;
+}
+
+td.wkd-hol {
+    background-color: #fee9be;
+}
+
+.week-copy {
+    background-color: #e9e8e8;
+    border: 1px solid #bcbcbc;
+    border-width: 0px 1px 1px 1px;
+    padding: 4px;
+}
+
+.row-menu-button3 {
+    margin: 0;
+    padding: 0px 5px;
+    list-style-type: none;
+    list-style-position: outside;
+}
+
+.row-menu-button3 li {
+    float: left;
+    display: inline-block;
+    width: 330px;
+    margin: 0px 4px;
+}
+
+.row-menu-button2 {
+    margin: 0;
+    padding: 0px 2px;
+    list-style-type: none;
+    list-style-position: outside;
+    white-space: nowrap;
+}
+
+.row-menu-button2 li {
+    float: left;
+    display: inline-block;
+    width: 480px;
+    margin: 0px 15px;
+}
+
+/* ページタイトル */
+.page-title-base {
+    float: left;
+    margin-top: 12px;
+}
+
+.page-title {
+    background-color: #eeefff;
+    border-style: solid;
+    border-width: 4px;
+    border-color: #CCCCFF #6666CC #6666CC #CCCCFF;
+    display: inline;
+    padding: 2px 4px;
+    font-size: 120%;
+    color: #3d3d3d;
+    border-radius: 3px;
+}
+
+/* お問い合わせ先 */
+.info-box-br {
+    width: 250px;
+    float: right;
+    text-align: left;
+}
+
+.info-box-br .info-box-br-back {
+    border-radius: 3px;
+    border: solid 1px #ababab;
+}
+
+.info-box-br .info-box-br-back p {
+    background-color: #ababab;
+    margin: 0px;
+    padding: 2px;
+    text-align: center;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.info-box-br .info-box-br-back .info-box-br-contents {
+    padding: 4px;
+}
+
+.info-box-br .info-box-br-back .info-box-br-contents ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.info-box-br .info-box-br-back .info-box-br-contents ul li #item-mail,
+#item-tel,
+#item-fax,
+#item-days {
+    width: 30px;
+    float: left;
+}
+
+/* 室数調整 */
+.exp-page-under-menu {
+    width: 100%;
+    text-align: right;
+}
+
+.calendar-menu {
+    background-color: #808080;
+    padding: 4px;
+    color: #ffffff;
+    text-align: left;
+}
+
+.calendar-menu form {
+    display: inline;
+}
+
+.calendar-menu .menu {
+    margin: 0;
+}
+
+.calendar-menu .elm {
+    float: left;
+    margin-left: 10px;
+    padding: 0 4px;
+}
+
+.calendar-menu .elm span {
+    margin: 0 8px;
+}
+
+.calendar-menu .elm .btn {
+    margin: 0 12px;
+    padding: 4px 12px;
+}
+
+.tbl-room-plan-list {
+    width: 100%;
+    margin: 0 auto;
+    border: 1px solid #bcbcbc;
+    border-spacing: 0;
+    border-width: 0px 0px 1px 0px;
+}
+
+.tbl-room-plan-list th#menu {
+    background-color: #808080;
+    border: 1px solid #808080;
+}
+
+.tbl-room-plan-list th {
+    background-color: #eeeedd;
+    border: 1px solid #bcbcbc;
+    padding: 4px;
+    font-weight: normal;
+    text-align: left;
+    border-width: 1px 1px 0px 0px;
+    white-space: nowrap;
+}
+
+.tbl-room-plan-list td {
+    border: 1px solid #bcbcbc;
+    text-align: center;
+}
+
+.tbl-room-plan-list th.md {
+    background-color: #fafafa;
+    padding: 4px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* 日曜日 */
+.tbl-room-plan-list th.wkd-sun {
+    background-color: #FFD8D8;
+}
+
+.tbl-room-plan-list td.wkd-sun {
+    background-color: #FFEEEE;
+}
+
+/* 土曜日 */
+.tbl-room-plan-list th.wkd-sat {
+    background-color: #cdeafe;
+}
+
+.tbl-room-plan-list td.wkd-sat {
+    background-color: #e6f4fe;
+}
+
+/* 休前日 */
+.tbl-room-plan-list th.wkd-bfo {
+    background-color: #fafa94;
+}
+
+.tbl-room-plan-list td.wkd-bfo {
+    background-color: #ffffcc;
+}
+
+/* 祝日 */
+.tbl-room-plan-list th.wkd-hol {
+    background-color: #fdccaa;
+}
+
+.tbl-room-plan-list td.wkd-hol {
+    background-color: #fee9be;
+}
+
+.tbl-room-plan-list th.fr,
+.tbl-room-plan-list td.fr {
+    border-color: #ff9933 #bcbcbc #bcbcbc #bcbcbc;
+    border-width: 2px 1px 0px 0px;
+}
+
+.tbl-room-plan-list th.emp {
+    background-color: #cdcdcd;
+    border: 1px solid #bcbcbc;
+}
+
+.tbl-room-plan-list td {
+    background-color: #fdfdfd;
+    border: 1px solid #bcbcbc;
+    border-width: 1px 1px 0px 0px;
+}
+
+.tbl-room-plan-list td a {
+    text-decoration: none;
+    display: block;
+    margin: 0;
+    padding: 0;
+}
+
+.tbl-room-plan-list td a:hover {
+    background-color: #E6E6FA;
+}
+
+.tbl-room-plan-list td.ymd {
+    border: 1px solid #bcbcbc;
+    background-color: #efefef;
+}
+
+.tbl-room-plan-list td.wkd-sun {
+    background-color: #FFEEEE;
+}
+
+.tbl-room-plan-list td.room {
+    width: 360px;
+    border: solid #ff9933;
+    background-color: #FFE0B2;
+    text-align: left;
+    padding: 4px;
+    border-width: 2px 1px 0px 1px;
+    border-color: #ff9933;
+}
+
+.tbl-room-plan-list td.plan {
+    width: 360px;
+    border: 1px solid #6ABD10;
+    background-color: #C3E59F;
+    text-align: left;
+    padding: 4px;
+    border-width: 2px 1px 0px 1px;
+    border-color: #6ABD10;
+}
+
+.tbl-room-plan-list td.plan .alert-msg {
+    white-space: nowrap;
+}
+
+.tbl-room-plan-list th.fp,
+.tbl-room-plan-list td.fp {
+    border-width: 2px 1px 0px 0px;
+    border-color: #6ABD10 #bcbcbc #bcbcbc #bcbcbc;
+}
+
+.tbl-room-plan-list td.room hr {
+    border: none;
+    border-top: 1px dashed #ff9933;
+}
+
+.tbl-room-plan-list td.plan hr {
+    border: none;
+    border-top: 1px dashed #6ABD10;
+}
+
+.tbl-room-plan-list td p {
+    padding: 0;
+    margin: 0;
+}
+
+/* ツールチップ */
+.tooltip {
+    padding: 4px 6px;
+    border: 1px solid #D8000C;
+    position: absolute;
+    text-align: left;
+    display: none;
+    white-space: nowrap;
+    border-radius: 3px;
+    color: #D8000C;
+    background-color: #FFBABA;
+    font-weight: bold;
+}
+
+/* 共通メニュー */
+.ctl-menu {
+    margin: 0;
+}
+
+.ctl-menu form {
+    display: inline;
+}
+
+.ctl-menu .elm-1st {
+    float: left;
+    margin-left: 8px;
+}
+
+.ctl-menu .elm {
+    float: left;
+    margin-left: 2px;
+}
+
+.ctl-menu .elm-w {
+    float: left;
+    margin-left: 60px;
+}
+
+.ctl-menu #expert {
+    float: right;
+    margin-right: 12px;
+}
+
+.ctl-menu .elm-active {
+    line-height: 26px;
+}
+
+/* プラン料金コピー */
+.relation-font {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 10px;
+    color: #C0C0C0;
+    white-space: nowrap;
+}
+
+.plan-room-rel {
+    width: 1024px;
+}
+
+.plan-room-rel th.color-on {
+    text-align: left;
+    background-color: #EEEEDD;
+    border: 1px solid #cdcdcd;
+    padding: 8px;
+}
+
+.plan-room-rel td.color-plan,
+table.plan-room-rel td.color-empty,
+table.plan-room-rel td.color-room,
+.plan-room-rel td.color-menu {
+    text-align: left;
+    padding: 4px;
+}
+
+.plan-room-rel td.color-plan {
+    width: 350px;
+    background-color: #C3E59F;
+    border: solid 1px #6ABD10;
+    vertical-align: top;
+}
+
+.plan-room-rel td.color-empty {
+    width: 350px;
+    background-color: #fafafa;
+    border: solid 1px #cdcdcd;
+}
+
+.plan-room-rel td.color-room {
+    width: 350px;
+    background-color: #FFE0B2;
+    border: solid 1px #ff9933;
+    vertical-align: top;
+}
+
+.plan-room-rel td.color-menu {
+    vertical-align: middle;
+    text-align: left;
+}
+
+.info-empty-base-back {
+    background-color: #fafafa;
+    border: solid 1px #cdcdcd;
+}
+
+#copy-charge-note {
+    text-align: left;
+    border: 1px solid #cdcdcd;
+    border-radius: 3px;
+    padding: 8px;
+    background-color: #fcfcfc;
+    box-shadow: 4px 6px 6px -6px #cdcdcd;
+    margin: 12px 0px 16px 0px;
+}
+
+#copy-charge-note ul {
+    list-style: square;
+}
+
+#copy-charge-note h2 {
+    text-decoration: underline;
+    font-size: 110%;
+    text-align: left;
+    color: #2d9124;
+}
+
+#copy-charge-note .alert {
+    text-align: center;
+    color: #333;
+    font-size: 110%;
+    color: #ED2502;
+    font-weight: bold;
+}
