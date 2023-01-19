@@ -242,6 +242,14 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 	Route::get('/brpartnersite/edit', 'BrPartnerSiteController@edit')->name('ctl.brPartnerSite.edit');
 	Route::post('/brpartnersite/modify', 'BrPartnerSiteController@modify')->name('ctl.brPartnerSite.modify');
 
+    // 重点表示プラン
+    Route::match(['get', 'post'], '/list', 'BrroomPlanPriority2Controller@list')
+        ->name('ctl.brroomplanpriority2.list'); //表示
+    Route::post('/registration', 'BrroomPlanPriority2Controller@registration')
+        ->name('ctl.brroomplanpriority2.registration'); //登録更新処理
+    Route::post('/sort', 'BrroomPlanPriority2Controller@sort')
+        ->name('ctl.brroomplanpriority2.sort'); //登録更新処理
+
     // 迷わずここ！
     Route::match(['get', 'post'], '/brhoteladvert2009000400/list', 'BrhotelAdvert2009000400Controller@list')
         ->name('ctl.brhoteladvert2009000400.list'); //表示
