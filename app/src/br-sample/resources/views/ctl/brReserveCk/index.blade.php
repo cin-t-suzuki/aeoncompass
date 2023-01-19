@@ -7,6 +7,6 @@
   @include ('ctl.brReserveCk._form')
 
 {{-- メッセージbladeの読込 --}}
-@include('ctl.common.message', $messages)
+@include('ctl.common.message')
 <br>
 @endsection

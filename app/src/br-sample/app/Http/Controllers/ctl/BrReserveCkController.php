@@ -10,10 +10,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Demand;
 use App\Models\Hotel;
+use App\Models\Room;
+use App\Models\Plan;
 use App\Models\ChecksheetFix;
 use App\Models\Reserve;
+use App\Models\CorePlan;
 use Exception;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use App\Http\Requests\ChecksheetFixRequest;
 
 class BrReserveCkController extends _commonController
 {
@@ -34,21 +38,19 @@ class BrReserveCkController extends _commonController
     {
         $a_search = $request->input('Search');
 
-        if (session()->has('errors')) {
-            //エラーメッセージの取得、セット
-            $errorList = session()->pull('errors');
-            $this->addErrorMessageArray($errorList);
-        }
+        // エラーメッセージの取得
+        $errors = $request->session()->get('errors', []);
 
         // セレクトボックスの初期値を設定
         $this->reserve_select_year = date('Y') - 5 . '-01-01';
 
-        // データを ビューにセット
-        $this->addViewData("reserve_select_year", $this->reserve_select_year);
-        $this->addViewData("s_cnt", $this->year_loop_cnt);
-        $this->addViewData("search", $a_search);
-        // ビューを表示
-        return view("ctl.brReserveCk.index", $this->getViewData());
+        return view('ctl.brReserveCk.index', [
+            'reserve_select_year'        => $this->reserve_select_year,
+            's_cnt'    => $this->year_loop_cnt,
+            'search'         => $a_search,
+
+            'errors'        => $errors,
+        ]);
     }
 
     // 検索
@@ -58,7 +60,9 @@ class BrReserveCkController extends _commonController
         $a_search = $request->input('Search');
 
         // 検索条件が入力されていなければ
-        if ($this->is_empty($a_search['keywords']) && $this->is_empty($a_search['keywords'])) {
+        $errors = []; //初期化
+        if ($this->is_empty($a_search['keywords'] ?? null) && $this->is_empty($a_search['keywords'] ?? null)) {
+        //バリデーションエラーで戻ってきたときに??null必要
             // エラーメッセージ
             $errorList[] = "施設名か施設コードを入力してください。";
             // エラー時indexへ
@@ -69,11 +73,8 @@ class BrReserveCkController extends _commonController
             ]);
         }
 
-        if (session()->has('guide')) {
-            //ガイドメッセージの取得、セット
-            $guide = session()->pull('guide');
-            $this->addGuideMessage($guide);
-        }
+        // ガイドメッセージの取得
+        $guides = $request->session()->get('guides', []);
 
         // セレクトボックスの初期値を設定
         $this->reserve_select_year = date('Y') - 5 . '-01-01';
@@ -116,7 +117,7 @@ class BrReserveCkController extends _commonController
             'keywords'     => $a_search['keywords'],
         ];
 
-        // $hotelModel->set_partner_cd('0000000000');　不要？？書き換えどうすればいい？？
+        // $hotelModel->set_partner_cd('0000000000');
 
         // Hotelを取得する。
         $errrorArr = []; //第一引数無いとエラーになるので空配列で追記
@@ -141,23 +142,25 @@ class BrReserveCkController extends _commonController
             ]);
         }
 
-        // データを ビューにセット
-        $this->addViewData("reserve_select_year", $this->reserve_select_year);
-        $this->addViewData("s_cnt", $this->year_loop_cnt);
-        $this->addViewData("key", $request->input('key'));
-        $this->addViewData("search_word", $request->input('search_word'));
-        $this->addViewData("search", $a_search);
-        $this->addViewData("checksheet_ym", $s_checksheet_ym);
-        $this->addViewData("hotel_lists", $a_hotel_lists);
-        $this->addViewData("date_ymd", $a_date['date_ymd']);
+        return view('ctl.brReserveCk.search', [
+            'reserve_select_year'        => $this->reserve_select_year,
+            's_cnt'    => $this->year_loop_cnt,
+            'key'   => $request->input('key'),
+            'search_word'    => $request->input('search_word'),
+            'search'         => $a_search,
+            'checksheet_ym' => $s_checksheet_ym,
+            'hotel_lists'     => $a_hotel_lists,
+            'date_ymd'     => $a_date['date_ymd'],
 
-        $this->addViewData("dead_line_ymd", $n_dead_line_ymd);
-        $this->addViewData("send_customers_ymd", $n_send_customers_ymd);
-        // ビューを表示
-        return view("ctl.brReserveCk.search", $this->getViewData());
+            'dead_line_ymd' => $n_dead_line_ymd,
+            'send_customers_ymd'     => $n_send_customers_ymd,
+
+            'guides'        => $guides,
+            'errors'        => $errors,
+        ]);
     }
 
-    public function update(Request $request)
+    public function update(ChecksheetFixRequest $request)
     {
 
         // リクエストの取得
@@ -176,17 +179,6 @@ class BrReserveCkController extends _commonController
             $requestChecksheetFix['fix_dtm'] = null;
         }
 
-        // バリデーション
-        $errorList = $checksheetFixModel->validation($requestChecksheetFix);
-        if (count($errorList) > 0) {
-            $errorList[] = "送客実績チェックを更新できませんでした。 ";
-            return redirect()->route('ctl.brReserveCk.index', [
-                'Search' => $Search
-            ])->with([
-                'errors' => $errorList
-            ]);
-        }
-
         // 新規登録の場合のみ
         if (count($checksheet_fix_buf) == 0) {
             // 共通カラム値設定
@@ -196,7 +188,6 @@ class BrReserveCkController extends _commonController
             // 共通カラム値設定
             $checksheetFixModel->setUpdateCommonColumn($requestChecksheetFix);
         }
-
 
         //Hotel モデルを取得
         $hotelModel = new Hotel();
@@ -216,6 +207,7 @@ class BrReserveCkController extends _commonController
         // データがあれば登録、無ければ更新
         if (count($checksheet_fix_buf) == 0) {
             // コネクション
+            $errorList = []; // 初期化
             try {
                 $con = DB::connection('mysql');
                 $dbErr = $con->transaction(function () use ($con, $checksheetFixModel, $requestChecksheetFix) {
@@ -235,11 +227,12 @@ class BrReserveCkController extends _commonController
                     'errors' => $errorList
                 ]);
             }
-            $guide = $s_msg . '送客実績チェックの登録が完了しました。';
+            $guides = $s_msg . '送客実績チェックの登録が完了しました。';
         } else {
             // 更新件数
             $dbCount = 0;
             // コネクション
+            $errorList = []; // 初期化
             try {
                 $con = DB::connection('mysql');
                 $dbErr = $con->transaction(function () use ($con, $checksheetFixModel, $requestChecksheetFix, &$dbCount) {
@@ -262,14 +255,14 @@ class BrReserveCkController extends _commonController
                 ]);
             }
 
-            $guide = $s_msg . '送客実績チェックの更新が完了しました。';
+            $guides[] = $s_msg . '送客実績チェックの更新が完了しました。';
         }
 
 
         return redirect()->route('ctl.brReserveCk.search', [
             'Search' => $Search
         ])->with([
-            'guide' => $guide
+            'guides' => $guides
         ]);
     }
 
@@ -294,7 +287,7 @@ class BrReserveCkController extends _commonController
             $a_params['date_ymd']['after']  = $a_params['date_ymd_after'];
         }
 
-        // インスタンスの取得
+        // Reserveモデルの取得
         $reserveModel = new Reserve();
 
         // 検索用の予約コードが渡ってくれば検索条件へ
@@ -317,12 +310,16 @@ class BrReserveCkController extends _commonController
         $reserveModel->reserves($a_conditions);
         $a_reserve_data = $reserveModel->getReserveDays(['include_member' => false], $a_order, $a_offsets);
 
-        // // powerの判定
-        // $core_plan   = new Core_Plan();
-
+        // powerの判定
+        $core_plan   = new CorePlan();
+        //書き換え以下でいいか？set~cdは使わないでいい気がする
         // $core_plan->set_hotel_cd($a_reserve_data['values'][0]['hotel_cd']);
         // $core_plan->set_room_cd($a_reserve_data['values'][0]['room_cd']);
         // $core_plan->set_plan_cd($a_reserve_data['values'][0]['plan_cd']);
+        $hotel_cd = $a_reserve_data['values'][0]->hotel_cd;
+        $room_cd = $a_reserve_data['values'][0]->room_cd;
+        $plan_cd = $a_reserve_data['values'][0]->plan_cd;
+        $is_power = $core_plan->isPower($hotel_cd, $room_cd, $plan_cd);
 
         // ホテル情報の取得
         $hotelModel = new Hotel();
@@ -339,7 +336,7 @@ class BrReserveCkController extends _commonController
             $d_last_date = null;
         } //if文追記でいいか？nullでいいか？
 
-        //ページャー設定追加 ※要調整
+        //ページャー設定追加
             $per_page = 10; // 1ページ当りの表示数
             // ページ番号が指定されていなかったら１ページ目
             $page_num = isset($a_params['page']) ? $a_params['page'] : 1;
@@ -353,24 +350,22 @@ class BrReserveCkController extends _commonController
                 $page_num, // 表示するページ
                 ['path' => ''] // ページャーのリンク先のURLを指定
             );
-            $this->addViewData("pager", $pager);
 
+        return view('ctl.brReserveCk.reserveck', [
+            'pager' => $pager,
 
-        // データを ビューにセット
-        // $this->addViewData("is_power", $core_plan->is_power());
-        $this->addViewData("is_power", null); //一時的に確認要
-        $this->addViewData("page", $a_params['page']);
-        $this->addViewData("target_cd", $a_params['target_cd']);
-        $this->addViewData("date_ymd", $a_params['date_ymd']);
-        $this->addViewData("system_charge", $n_system_charge);
-        $this->addViewData("conditions", $a_conditions);
-        $this->addViewData("reserve_data", $a_reserve_data);
-        $this->addViewData("hotel_data", $a_hotel_data);
-        $this->addViewData("search_reserve_cd", $a_params['search_reserve_cd'] ?? null); //null追記でいいか？
-        $this->addViewData("last_date", $d_last_date);
-        $this->addViewData("return_pass", $request->input('controller'));
-        // ビューを表示
-        return view("ctl.brReserveCk.reserveck", $this->getViewData());
+            'is_power'    => $is_power,
+            'page'   => $a_params['page'],
+            'target_cd'    => $a_params['target_cd'],
+            'date_ymd'     => $a_params['date_ymd'],
+            'system_charge' => $n_system_charge,
+            'conditions' => $a_conditions,
+            'reserve_data'     => $a_reserve_data,
+            'hotel_data' => $a_hotel_data,
+            'search_reserve_cd'     => $a_params['search_reserve_cd'] ?? null, //null追記でいいか？
+            'last_date'     => $d_last_date,
+            'return_pass' => $request->input('controller'),
+        ]);
     }
 
     // csvダウンロード
@@ -398,12 +393,6 @@ class BrReserveCkController extends _commonController
         $reserveModel->reserves($a_conditions);
         $a_reserve_data = $reserveModel->getReserveDays(['include_member' => true], $a_order);
 
-        // アサイン登録
-        // $this->box->item->assign->reserve_data  = $a_reserve_data;
-        // $this->set_assign();
-        $this->addViewData("reserve_data", $a_reserve_data);
-
-        //CSV出力方法を元ソースから全般的に変更しているが問題ないか？
         $header = $reserveModel->setCsvHeader($a_reserve_data); //renderでbladeからではなく、モデルからの取得に変更
         $data = $reserveModel->setCsvData($a_reserve_data);
         $csvList = array_merge([$header], $data);
@@ -411,9 +400,6 @@ class BrReserveCkController extends _commonController
         $response = new StreamedResponse(function () use ($request, $csvList) {
             $stream = fopen('php://output', 'w');
 
-            // // 出力用に変換
-            // $s_response = str_replace("####BR####", "\r\n", str_replace("\n", "", $s_response));
-            // $s_response = mb_convert_encoding($s_response, 'sjis-win', 'UTF-8');
             //　文字化け回避
             stream_filter_prepend($stream, 'convert.iconv.utf-8/cp932//TRANSLIT');
 

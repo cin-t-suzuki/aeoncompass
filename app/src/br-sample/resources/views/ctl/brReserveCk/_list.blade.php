@@ -4,12 +4,12 @@
     $total_page = $reserve_data->total_page;
     $total_count = $reserve_data->total_count;
   @endphp
-  @if ($views->page == 1)
+  @if ($page == 1)
     {{-- {assign var="page" value=0} --}}
     @php $page = 0; @endphp
   @else
     {{-- {assign var="page" value=$v->assign->page*20-20} --}}
-    @php $page = $views->page*20-20; @endphp
+    @php $page = $page*20-20; @endphp
   @endif
 <tr>
 <td nowrap align="right">
@@ -17,6 +17,7 @@
 @if ($reserve_data->stock_type == 1)<font color="#0000ff">[買] </font>@endif{{strip_tags($loop->iteration+$page)}} 
 </td>
 @if ($reserve_data->contact_status)
+{{-- 遷移先実装後に以下修正 --}}
 <FORM ACTION="{$v->env.source_path}{$v->env.module}/htlreserve/memberinfo/" METHOD="POST">
   <td><small>
     <input type="hidden" name="target_cd" value="{$reserve_data.hotel_cd}" />
@@ -30,6 +31,7 @@
 @else
   <td><small>予約者</small></td>
 @endif
+{{-- 遷移先実装後に以下修正 --}}
 <FORM ACTION="{$v->env.source_path}{$v->env.module}/htlreservemanagement/reserveinfo/" METHOD="POST">
   <input type="hidden" name="target_cd" value="{$reserve_data.hotel_cd}">
   <input type="hidden" name="reserve_cd" value="{$reserve_data.reserve_cd}">
@@ -107,6 +109,7 @@
     @php $date_ymd =  date('%Y%m%d', strtotime($reserve_data->date_ymd)); @endphp
     {{--TODO userの部分が未実装なので、一旦一方の条件のみで設定 @if ($v->user->operator->is_staff() && date('%Y%m%d') <= $date_ymd) --}}
     @if (date('%Y%m%d') <= $date_ymd)
+    {{-- 遷移先実装後に以下修正 --}}
       <FORM ACTION="{$v->env.source_path}{$v->env.module}/htlreserveuseroperation/index#guide" METHOD="POST">
         <input type="hidden" name="target_cd" value="{strip_tags($reserve_data.hotel_cd)}">
         <input type="hidden" name="reserve_cd" value="{strip_tags($reserve_data.reserve_cd)}">
@@ -123,6 +126,7 @@
     @endif
     {{--料金変更--}}
       @if ($reserve_data->payment_way != 1)
+      {{-- 遷移先実装後に以下修正 --}}
       <FORM ACTION="{$v->env.source_path}{$v->env.module}/htlreservemanagement/modifycharge1#guide" METHOD="POST">
         <input type="hidden" name="target_cd" value="{strip_tags($reserve_data.hotel_cd)}">
         <input type="hidden" name="reserve_cd" value="{strip_tags($reserve_data.reserve_cd)}">
@@ -138,6 +142,7 @@
       </FORM>
       @endif
     {{--TELキャンセル--}}
+        {{-- 遷移先実装後に以下修正 --}}
         <FORM ACTION="{$v->env.source_path}{$v->env.module}/htlreservemanagement/cancel1#guide" METHOD="POST">
         <input type="hidden" name="target_cd" value="{strip_tags($reserve_data.hotel_cd)}">
         <input type="hidden" name="reserve_cd" value="{strip_tags($reserve_data.reserve_cd)}">

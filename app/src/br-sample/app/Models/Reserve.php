@@ -1588,7 +1588,7 @@ SQL;
 
                     //都道府県名の追加
                     if (!$this->is_empty($a_member_free['pref_id'])) {
-                        $a_pref    = $mast_pref->find(array('pref_id' => $a_member_free['pref_id']));
+                        $a_pref    = $mast_pref->find(['pref_id' => $a_member_free['pref_id']]);
                         $a_member_free['pref_nm'] = $a_pref['pref_nm'];
                     }
 
@@ -1607,7 +1607,8 @@ SQL;
 
                 // 会員認証
             } else {
-                //書き換えどうすればいい？？
+                //機能実装後に再修正。今回はこのメソッド基本は使用しないため、空データ戻しで一旦実装
+
                 // $http_client = new Zend_Http_Client();
                 // $http_client->setConfig(array('timeout' => 60));
                 // $client = new Zend_Rest_Client($this->box->config->rpc_server->protect->host . 'member/');

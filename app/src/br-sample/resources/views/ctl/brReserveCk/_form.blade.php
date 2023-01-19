@@ -4,7 +4,7 @@
       <td  bgcolor="#EEFFEE" colspan="2">施設キーワード</td>
       <td>
         {{-- $views->searchでの取得データ、初期表示では値がないためnull追記でいいか --}}
-        <input type="text" name="Search[keywords]" value="{{strip_tags($views->search['keywords'] ?? null)}}" />
+        <input type="text" name="Search[keywords]" value="{{strip_tags($search['keywords'] ?? null)}}" />
       </td>
       <td rowspan="2"><input type="submit" value="施設検索"></td>
     </tr>
@@ -14,20 +14,20 @@
           <select size="1" name="Search[year]">
             {{--書き替えあっている？ {if $v->helper->date->set($v->assign->reserve_select_year)}{/if} --}}
             @php
-              $date = $views->reserve_select_year;       
-              if (!$service->is_empty($views->reserve_select_year)) {
-                $date_Y = date('Y', strtotime($views->reserve_select_year));
+              $date = $reserve_select_year;      
+              if (!$service->is_empty($reserve_select_year ?? '')) {
+                $date_Y = date('Y', strtotime($reserve_select_year));
               } else {
                 $date_Y = null;
               }
             @endphp
             {{--書き替えあっている？ {section name = year start = 0 loop = $v->assign->s_cnt} --}}
-            @for ($year = 0; $year < $views->s_cnt; $year++)
+            @for ($year = 0; $year < $s_cnt; $year++)
               <option value="{{$date_Y}}"
               {{-- $views->searchでの取得データ、初期表示では値がないためnull追記でいいか(monthの方も同様) --}}
-              @if (!$service->is_empty($views->search['year'] ?? null))
+              @if (!$service->is_empty($search['year'] ?? null))
                 {{--書き替えあっている？ {if $v->helper->date->to_format('Y') == $v->assign->search.year} --}}
-                @if ($date_Y == $views->search['year'] ?? null)
+                @if ($date_Y == $search['year'] ?? null)
                   selected="selected"
                 @endif
               @else
@@ -51,9 +51,9 @@
               {{-- 月表示のための12回ループ  --}}
               @for ($m = 1; $m < 13; $m++)
                 <option value="{{sprintf("%02d",strip_tags($m))}}"
-                @if (!$service->is_empty($views->search['month'] ?? null))
+                @if (!$service->is_empty($search['month'] ?? null))
                   {{-- string_format→sprintfでいいか --}}
-                  @if (sprintf("%02d",$m)  == $views->search['month'] ?? null)
+                  @if (sprintf("%02d",$m)  == $search['month'] ?? null)
                     selected="selected"
                   @endif
                 @elseif (sprintf("%02d",$m) == date('m'))
