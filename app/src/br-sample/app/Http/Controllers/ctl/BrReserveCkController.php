@@ -417,5 +417,4 @@ class BrReserveCkController extends _commonController
         return $response;
         exit;
     }
-
 }

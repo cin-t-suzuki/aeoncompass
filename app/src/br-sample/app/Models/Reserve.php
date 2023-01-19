@@ -1382,7 +1382,6 @@ SQL;
     private function getReserveChargeDiscounts($aa_conditions)
     {
         try {
-
             // 初期化
             $s_reserve_cd = '';
             $s_date_ymd = '';
@@ -1716,5 +1715,4 @@ SQL;
 
         return $data;
     }
-
 }
