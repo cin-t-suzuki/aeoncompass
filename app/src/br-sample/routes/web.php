@@ -261,4 +261,15 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
         ->name('ctl.brhoteladvert2009000400.edit'); //編集画面
     Route::post('/brhoteladvert2009000400/update', 'BrhotelAdvert2009000400Controller@update')
         ->name('ctl.brhoteladvert2009000400.update'); //更新
+
+    // 交通アクセス
+    Route::match(['get', 'post'], '/htlHotelStation/list/', [\App\Http\Controllers\ctl\HtlHotelStationController::class, 'list'])->name('ctl.htl_hotel_station.list');
+    Route::match(['get', 'post'], '/htlHotelStation/new/', [\App\Http\Controllers\ctl\HtlHotelStationController::class, 'new'])->name('ctl.htl_hotel_station.new');
+    Route::match(['get', 'post'], '/htlHotelStation/create/', [\App\Http\Controllers\ctl\HtlHotelStationController::class, 'create'])->name('ctl.htl_hotel_station.create');
+    Route::match(['get', 'post'], '/htlHotelStation/edit/', [\App\Http\Controllers\ctl\HtlHotelStationController::class, 'edit'])->name('ctl.htl_hotel_station.edit');
+    Route::match(['get', 'post'], '/htlHotelStation/update/', [\App\Http\Controllers\ctl\HtlHotelStationController::class, 'update'])->name('ctl.htl_hotel_station.update');
+    Route::match(['get', 'post'], '/htlHotelStation/delete/', [\App\Http\Controllers\ctl\HtlHotelStationController::class, 'delete'])->name('ctl.htl_hotel_station.delete');
+    Route::match(['get', 'post'], '/htlHotelStation/move/', [\App\Http\Controllers\ctl\HtlHotelStationController::class, 'move'])->name('ctl.htl_hotel_station.move');
+    Route::match(['get', 'post'], '/htlHotelStation/defaultorder/', [\App\Http\Controllers\ctl\HtlHotelStationController::class, 'defaultorder'])->name('ctl.htl_hotel_station.defaultorder');
+
 });
