@@ -91,7 +91,6 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
     Route::match(['get', 'post'], '/htlHotelInform/list/'       , function(){ return 'TODO:'; })->name('ctl.htl_hotel_inform.list');
     Route::match(['get', 'post'], '/htlHotelLink/list/'         , function(){ return 'TODO:'; })->name('ctl.htl_hotel_link.list');
     Route::match(['get', 'post'], '/htlHotelStation/list/'      , function(){ return 'TODO:'; })->name('ctl.htl_hotel_station.list');
-    Route::match(['get', 'post'], '/htlHotelAmenity/list/'      , function(){ return 'TODO:'; })->name('ctl.htl_hotel_amenity.list');
     Route::match(['get', 'post'], '/htlHotelService/list/'      , function(){ return 'TODO:'; })->name('ctl.htl_hotel_service.list');
     Route::match(['get', 'post'], '/htlHotelNearby/list/'       , function(){ return 'TODO:'; })->name('ctl.htl_hotel_nearby.list');
     Route::match(['get', 'post'], '/htlHotelFacility/list/'     , function(){ return 'TODO:'; })->name('ctl.htl_hotel_facility.list');
@@ -261,4 +260,9 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
         ->name('ctl.brhoteladvert2009000400.edit'); //編集画面
     Route::post('/brhoteladvert2009000400/update', 'BrhotelAdvert2009000400Controller@update')
         ->name('ctl.brhoteladvert2009000400.update'); //更新
+
+
+    // アメニティ
+    Route::match(['get', 'post'], '/htlHotelAmenity/list/', [\App\Http\Controllers\ctl\HtlHotelAmenityController::class, 'list'])->name('ctl.htl_hotel_amenity.list');
+    Route::match(['get', 'post'], '/htlHotelAmenity/create/', [\App\Http\Controllers\ctl\HtlHotelAmenityController::class, 'create'])->name('ctl.htl_hotel_amenity.create');
 });
