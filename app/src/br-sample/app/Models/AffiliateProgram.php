@@ -20,11 +20,11 @@ class AffiliateProgram extends Model
      * テーブルに関連付ける主キー
      *
      * @var string
-     * 
-     * MEMO: (affiliate_cd, reserve_system) で PK になっているが、 
+     *
+     * MEMO: (affiliate_cd, reserve_system) で PK になっているが、
      * Laravel では複合キーに対応していない
      */
-    protected $primaryKey = 'affiliate_cd';
+    // protected $primaryKey = 'affiliate_cd';
 
     /**
      * モデルのIDを自動増分するか
@@ -32,6 +32,4 @@ class AffiliateProgram extends Model
      * @var bool
      */
     public $incrementing = false;
-
-    // TODO: implement __construct
 }

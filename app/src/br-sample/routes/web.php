@@ -21,7 +21,7 @@ Route::get('/', function () {
 /**
  * 宿泊予約
  */
-Route::namespace("App\Http\Controllers\rsv")->prefix("rsv")->group(function(){
+Route::namespace('App\Http\Controllers\rsv')->prefix("rsv")->group(function(){
 	// 施設情報
 	Route::controller(HotelController::class)->prefix("hotel")->group(function(){
 		Route::get('/{hotel_cd}', 'info')->name('rsv.hotel.info');
@@ -36,14 +36,14 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 
 
 	// 社内トップ
-	Route::controller(BrTopController::class)->prefix("brtop")->group(function(){
+	Route::controller(BrtopController::class)->prefix("brtop")->group(function(){
 		Route::get('/', 'index')->name('ctl.brtop.index');
 	});
 
 	// ホテルトップ
-	Route::controller(HotelTopController::class)->prefix("htltop")->group(function(){
-		Route::get('/', 'index')->name('ctl.htltop.index');
-	});
+	// Route::controller(HotelTopController::class)->prefix("htltop")->group(function(){
+	// 	Route::get('/', 'index')->name('ctl.htltop.index');
+	// });
 
 	// 管理画面一覧
 	Route::controller(TopController::class)->prefix("top")->group(function(){
@@ -181,7 +181,6 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 	Route::get('/brpartnersite/search', 'BrPartnerSiteController@search')->name('ctl.brPartnerSite.search');
 	Route::get('/brpartnersite/edit', 'BrPartnerSiteController@edit')->name('ctl.brPartnerSite.edit');
 	Route::post('/brpartnersite/modify', 'BrPartnerSiteController@modify')->name('ctl.brPartnerSite.modify');
-
 });
 
 Route::get('/ctl/htlMedia/', [\App\Http\Controllers\ctl\HtlMediaController::class, 'index'])->name('ctl.htl.media');
