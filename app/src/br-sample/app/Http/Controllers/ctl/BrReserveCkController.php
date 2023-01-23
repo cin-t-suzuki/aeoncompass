@@ -336,24 +336,7 @@ class BrReserveCkController extends _commonController
             $d_last_date = null;
         } //if文追記でいいか？nullでいいか？
 
-        //ページャー設定追加
-            $per_page = 10; // 1ページ当りの表示数
-            // ページ番号が指定されていなかったら１ページ目
-            $page_num = isset($a_params['page']) ? $a_params['page'] : 1;
-            // ページ番号に従い、表示するレコードを切り出す
-            $disp_rec = array_slice($a_reserve_data['values'], ($page_num - 1) * $per_page, $per_page, true);
-            // ページャーオブジェクトを生成
-            $pager = new \Illuminate\Pagination\LengthAwarePaginator(
-                $disp_rec, // ページ番号で指定された表示するレコード配列
-                count($a_reserve_data['values']), // 検索結果の全レコード総数
-                $per_page, // 1ページ当りの表示数
-                $page_num, // 表示するページ
-                ['path' => ''] // ページャーのリンク先のURLを指定
-            );
-
         return view('ctl.brReserveCk.reserveck', [
-            'pager' => $pager,
-
             'is_power'    => $is_power,
             'page'   => $a_params['page'],
             'target_cd'    => $a_params['target_cd'],
