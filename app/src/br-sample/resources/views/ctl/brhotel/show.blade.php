@@ -136,18 +136,22 @@
 						</td>
 					@if ($views->hotel_state_regist == true)
 						{{--新バージョンのみ（htlmedia不使用）--}}
-						<form method="post" action="{$v->env.source_path}{$v->env.module}/htlsmedia/">
-						<td nowrap><input type="submit" value=" 変更 "></td>
-						<input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($views->target_cd)}">
-						</form>
+                        {{ Form::open(['route' => 'ctl.htl.media', 'method' => 'get']) }}
+                            <td nowrap>
+                                <input type="submit" value=" 変更 ">
+                            </td>
+                            {{ Form::hidden('target_cd', $views->target_cd) }}
+                        {{ Form::close() }}
 					@elseif ($views->hotel_regist != true)
 						<td nowrap colspan="2" width="90%">施設画像情報 <font color="red">※</font>施設を登録してください。</td>
 					@else
 						{{--新バージョンのみ（htlmedia不使用）--}}
-						<form method="post" action="{$v->env.source_path}{$v->env.module}/htlsmedia/">
-						<td nowrap><input type="submit" value=" 登録 "></td>
-						<input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($views->target_cd)}">
-						</form>
+                        {{ Form::open(['route' => 'ctl.htl.media', 'method' => 'get']) }}
+                            <td nowrap>
+                                <input type="submit" value=" 登録 ">
+                            </td>
+                            {{ Form::hidden('target_cd', $views->target_cd) }}
+                        {{ Form::close() }}
 					@endif
 					</tr>
 				 <tr>

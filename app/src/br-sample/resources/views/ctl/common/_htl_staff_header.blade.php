@@ -5,7 +5,7 @@
         <tr>
             <td nowrap>
                 {{ strip_tags($v->user->hotel->hotel_nm) }}
-                @if (!$service->is_empty(strip_tags($v->user->hotel->hotel_old_nm)))
+                @if (strip_tags($v->user->hotel->hotel_old_nm) != null)
                     (旧{{ strip_tags($v->user->hotel->hotel_old_nm) }})
                 @endif
                 ({{ strip_tags($v->user->hotel->hotel_cd) }})

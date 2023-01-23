@@ -183,3 +183,18 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 	Route::post('/brpartnersite/modify', 'BrPartnerSiteController@modify')->name('ctl.brPartnerSite.modify');
 
 });
+
+Route::get('/ctl/htlMedia/', [\App\Http\Controllers\ctl\HtlMediaController::class, 'index'])->name('ctl.htl.media');
+Route::get('/ctl/htlMedia/list', [\App\Http\Controllers\ctl\HtlMediaController::class, 'list'])->name('ctl.htl.media.list');
+Route::post('/ctl/htlMedia/upload', [\App\Http\Controllers\ctl\HtlMediaController::class, 'upload'])->name('ctl.htl.media.upload');
+Route::post('/ctl/htlMedia/sortMedia', [\App\Http\Controllers\ctl\HtlMediaController::class, 'sortMedia'])->name('ctl.htl.media.sort_media');
+Route::get('/ctl/htlMedia/editMedia', [\App\Http\Controllers\ctl\HtlMediaController::class, 'editMedia'])->name('ctl.htl.media.edit_media');
+Route::post('/ctl/htlMedia/updateMedia', [\App\Http\Controllers\ctl\HtlMediaController::class, 'updateMedia'])->name('ctl.htl.media.update_media');
+Route::post('/ctl/htlMedia/destroyMedia', [\App\Http\Controllers\ctl\HtlMediaController::class, 'destroyMedia'])->name('ctl.htl.media.destroy_media');
+Route::get('/ctl/htlMedia/editHotel', [\App\Http\Controllers\ctl\HtlMediaController::class, 'editHotel'])->name('ctl.htl.media.edit_hotel');
+Route::get('/ctl/htlMedia/selectMedia', [\App\Http\Controllers\ctl\HtlMediaController::class, 'selectMedia'])->name('ctl.htl.media.select_media');
+Route::post('/ctl/htlMedia/updateHotel', [\App\Http\Controllers\ctl\HtlMediaController::class, 'updateHotel'])->name('ctl.htl.media.update_hotel');
+Route::post('/ctl/htlMedia/updatePlan', [\App\Http\Controllers\ctl\HtlMediaController::class, 'updatePlan'])->name('ctl.htl.media.update_plan');
+Route::post('/ctl/htlMedia/updateRoom', [\App\Http\Controllers\ctl\HtlMediaController::class, 'updateRoom'])->name('ctl.htl.media.update_room');
+Route::post('/ctl/htlMedia/sortGallery', [\App\Http\Controllers\ctl\HtlMediaController::class, 'sortGallery'])->name('ctl.htl.media.sort_gallery');
+Route::post('/ctl/htlMedia/removeGallery', [\App\Http\Controllers\ctl\HtlMediaController::class, 'removeGallery'])->name('ctl.htl.media.remove_gallery');

@@ -20,7 +20,7 @@
             ];
         }
         public function is_staff() { return rand(0,1); }
-        public function is_nta() { return rand(0,1); }
+        public function is_nta() { return 0; }
         public function is_login() { return rand(0,1); }
     }
     $v->user->operator = new Operator(Str::random(16));
@@ -89,6 +89,7 @@
     <meta name="robots" content="none">
 
     <script type="text/javascript" src="/scripts/jquery.js?9465-2"></script>
+    <script type="text/javascript" src="/js/jquery.js"></script>
     <script type="text/javascript" src="/scripts/jquery.cookies.js"></script>
 
     <title>[ストリーム]予約受付管理 [@yield('title')]</title>
@@ -141,7 +142,7 @@
                     {{-- TODO: URL, create Route --}}
                     <a href="{{ $v->env->source_path }}{{ $v->env->module }}/redirect/rsvhotel/?target_cd={{ $v->user->hotel->hotel_cd }}" target="_blank">
                         {{ strip_tags($v->user->hotel->hotel_nm) }}
-                        @if ((!$service->is_empty(strip_tags($v->user->hotel->hotel_old_nm))))
+                        @if (strip_tags($v->user->hotel->hotel_old_nm) != null)
                             (旧{{ strip_tags($v->user->hotel->hotel_old_nm) }})
                         @endif
                     </a> 様
@@ -192,15 +193,15 @@
 
     <div class="{{ $no_print_title == true ? 'noprint' : '' }}">
         {{-- サービスセンター --}}
-        @if (!$service->is_empty($menu_title) || !$service->is_empty($title))
+        @if (View::hasSection('menu_title') || View::hasSection('title'))
             <table border="3" cellspacing="0" cellpadding="2">
                 <tr>
                     <td bgcolor="#EEEEFF" align="center">
                         <big>
-                            @if ($service->is_empty($menu_title))
-                                {{ strip_tags($title) }}
+                            @hasSection('menu_title')
+                                @yield('menu_title')
                             @else
-                                {{ strip_tags($menu_title) }}
+                                @yield('title')
                             @endif
                         </big>
                     </td>

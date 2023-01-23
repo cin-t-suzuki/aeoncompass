@@ -1,126 +1,179 @@
 {{-- MEMO: 移植元 public/app/ctl/view2/htlsmedia/_edithotel_gallery.tpl --}}
 
-<p><font color="cdcdcd">■</font>フォトギャラリー画像</p>
+<p>
+    <font color="cdcdcd">■</font>フォトギャラリー画像
+</p>
 <table border="1" cellpadding="4" cellspacing="0">
-  <tr bgcolor="#EEEEFF">
-    <th>設定画像</th>
-  </tr>
-  <tr>
-    <td class="edit-image">
-      <table>
-        <tr>
-        {assign var=b_is_edit_target value=true}
-        {assign var=b_already_disp_hotel_no_image value=false}
-        {assign var=n_real_display_hotel_img_cnt value=0}
-        {section name=loop_gallerys_media start=0 loop=$v->assign->media_count_inside}
-          {if $n_real_display_hotel_img_cnt % 10 == 0 and $n_real_display_hotel_img_cnt != 0 and $n_real_display_hotel_img_cnt == $smarty.section.loop_gallerys_media.index}
-            </tr></table>
-            <table><tr><td>
-          {/if}
-          {if $n_real_display_hotel_img_cnt == $smarty.section.loop_gallerys_media.index and !$b_already_disp_hotel_no_image}
-          <td>
+    <tr bgcolor="#EEEEFF">
+        <th>設定画像</th>
+    </tr>
+    <tr>
+        <td class="edit-image">
+
+            {{-- TODO: インデントをちゃんとする --}}
+            {{-- HACK: 10画像ごとに改行しようとしたインデントの崩れは、 flexbox で実装することで修正できると思われる --}}
             <table>
-            {if is_empty($v->assign->gallerys[$smarty.section.loop_gallerys_media.index].file_nm) and !$b_already_disp_hotel_no_image}
-              <tr>
-                <td>
-                  <div class="no_image_box" style="padding:2px;text-align: center; font-size: 15px;"><font color="ff0000">NO<br />IMAGE</font></div>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                {if $b_is_edit_target}
-                  <form action="{$v->env.source_path}{$v->env.module}/htlsmedia/selectmedia/" method="post" style="display:inline;">
-                    <input type="hidden" name="target_cd"        value="{$v->assign->form_params.target_cd}" />
-                    <input type="hidden" name="media_type"       value="hotel" />
-                    <input type="hidden" name="label_type"       value="3" />
-                    <input type="hidden" name="target_order_no"  value="{$smarty.section.loop_gallerys_media.iteration}" />
-                    <input type="submit" value="画像設定" />
-                  </form>
-                  {assign var=b_is_edit_target value=false}
-                {else}
-                  <br />
-                {/if}
-                <td>
-              </tr>
-              <tr>
-                <td>
-                  <br />
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <br />
-                </td>
-              </tr>
-              {assign var=b_already_disp_hotel_no_image value=true}
-              {assign var=n_real_display_hotel_img_cnt value="`$n_real_display_hotel_img_cnt+1`"}
-              {elseif !is_empty($v->assign->gallerys[$smarty.section.loop_gallerys_media.index].file_nm)}
-              <tr>
-                <td class="wrap_media_pop_view">
-                  <div class="image_box">
-                    <img border="0" src="/images/hotel/{$v->assign->form_params.target_cd}/trim_054/{$v->assign->gallerys[$smarty.section.loop_gallerys_media.index].file_nm}" width="54" height="54" title="{$v->assign->gallerys[$smarty.section.loop_gallerys_media.index].title}">
-                  </div>
-                  <div class="media_pop_frame">
-                    <img border="1" src="/images/hotel/{$v->assign->form_params.target_cd}/trim_138/{$v->assign->gallerys[$smarty.section.loop_gallerys_media.index].file_nm}" width="1" height="1" title="{$v->assign->gallerys[$smarty.section.loop_gallerys_media.index].title}" class="media_pop_view">
-                  </div>                  
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <form action="{$v->env.source_path}{$v->env.module}/htlsmedia/selectmedia/" method="post" style="display:inline;">
-                    <input type="hidden" name="target_cd"         value="{$v->assign->form_params.target_cd}" />
-                    <input type="hidden" name="media_type"        value="hotel" />
-                    <input type="hidden" name="label_type"        value="3" />
-                    <input type="hidden" name="target_order_no"   value="{$smarty.section.loop_gallerys_media.iteration}" />
-                    <input type="hidden" name="setting_media_no"  value="{$v->assign->gallerys[$smarty.section.loop_gallerys_media.index].media_no}" />
-                    <input type="submit" value="画像変更" />
-                  </form>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <form action="{$v->env.source_path}{$v->env.module}/htlsmedia/updatehotel/" method="post" style="display:inline;">
-                    <input type="hidden" name="target_cd"         value="{$v->assign->form_params.target_cd}" />
-                    <input type="hidden" name="media_type"        value="hotel" />
-                    <input type="hidden" name="label_type"        value="3" />
-                    <input type="hidden" name="target_order_no"   value="{$smarty.section.loop_gallerys_media.iteration}" />
-                    <input type="hidden" name="setting_media_no"  value="{$v->assign->gallerys[$smarty.section.loop_gallerys_media.index].media_no}" />
-                    <input type="submit" value="画像を外す" />
-                  </form>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  {if !$smarty.section.loop_gallerys_media.first}
-                  <form action="{$v->env.source_path}{$v->env.module}/htlsmedia/sortgallery/" method="post" style="display:inline;">
-                    <input type="hidden" name="target_cd"         value="{$v->assign->form_params.target_cd}" />
-                    <input type="hidden" name="target_order_no"   value="{$smarty.section.loop_gallerys_media.iteration}" />
-                    <input type="hidden" name="edit_order_no"   value="{$v->assign->gallerys[$smarty.section.loop_gallerys_media.index].order_no_minus}" />
-                    <input type="hidden" name="setting_media_no"  value="{$v->assign->gallerys[$smarty.section.loop_gallerys_media.index].media_no}" />
-                    <input type="hidden" name="label_type"       value="3" />
-                    <input type="submit" value="←" />
-                  </form>
-                  {/if}
-                  {if !$smarty.section.loop_gallerys_media.last and !is_empty($v->assign->gallerys[$smarty.section.loop_gallerys_media.iteration].media_no)}
-                  <form action="{$v->env.source_path}{$v->env.module}/htlsmedia/sortgallery/" method="post" style="display:inline;">
-                    <input type="hidden" name="target_cd"         value="{$v->assign->form_params.target_cd}" />
-                    <input type="hidden" name="target_order_no"   value="{$smarty.section.loop_gallerys_media.iteration}" />
-                    <input type="hidden" name="edit_order_no"   value="{$v->assign->gallerys[$smarty.section.loop_gallerys_media.index].order_no_plus}" />
-                    <input type="hidden" name="setting_media_no"  value="{$v->assign->gallerys[$smarty.section.loop_gallerys_media.index].media_no}" />
-                    <input type="hidden" name="label_type"       value="3" />
-                    <input type="submit" value="→" />
-                  </form>
-                  {/if}
-                </td>
-              </tr>
-            {assign var=n_real_display_hotel_img_cnt value="`$n_real_display_hotel_img_cnt+1`"}
-            {/if}
+                <tr>
+                    @php
+                        $b_is_edit_target = true;
+                        $b_already_disp_hotel_no_image = false;
+                        $n_real_display_hotel_img_cnt = 0;
+                    @endphp
+
+                    @for ($i = 0; $i < $media_count_inside; $i++)
+                        {{-- {{section name=loop_galleryPhotos[$i]s_media start=0 loop=$media_count_inside}} --}}
+                        @if ($n_real_display_hotel_img_cnt % 10 == 0 &&
+                            $n_real_display_hotel_img_cnt != 0 &&
+                            $n_real_display_hotel_img_cnt == $i)
+                            {{-- 10枚ごとに、テーブルを改行する --}}
+                </tr>
             </table>
-          </td>
-          {/if}
-          {/section}
-        </tr>
-      </table>
-    </td>
-  </tr>
+            <table>
+                <tr>
+                    @endif
+
+                    @if ($n_real_display_hotel_img_cnt == $i && !$b_already_disp_hotel_no_image)
+                        <td>
+                            <table>
+                                @if (!array_key_exists($i, $galleryPhotos) && !$b_already_disp_hotel_no_image)
+                                    {{-- MEMO: 表示する画像が存在せず、NO IMAGE が表示されていない場合、 NO IMAGE を表示 --}}
+                                    {{-- 画像設定 --}}
+                                    <tr>
+                                        <td>
+                                            <div class="no_image_box" style="padding:2px;text-align: center; font-size: 15px;">
+                                                <font color="ff0000">NO<br />IMAGE</font>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @if ($b_is_edit_target)
+                                                {{-- <form action="/ctl/htlsmedia/selectmedia/" method="post" style="display:inline;"> --}}
+                                                {{ Form::open(['route' => 'ctl.htl.media.select_media', 'method' => 'get', 'style' => 'display:inline;']) }}
+                                                    {{ Form::hidden('target_cd', $target_cd) }}
+                                                    {{ Form::hidden('media_type', 'hotel') }}
+                                                    {{ Form::hidden('label_type', '3') }}
+                                                    {{ Form::hidden('target_order_no', $i == 0 ? 1 : $galleryPhotos[$i - 1]->order_no + 1) }}
+                                                    {{ Form::submit('画像設定') }}
+                                                {{-- </form> --}}
+                                                {{ Form::close() }}
+                                                @php
+                                                    $b_is_edit_target = false;
+                                                @endphp
+                                            @else
+                                                <br />
+                                            @endif
+                                        <td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    {{-- /画像設定 --}}
+                                    @php
+                                        $b_already_disp_hotel_no_image = true;
+                                        $n_real_display_hotel_img_cnt++;
+                                    @endphp
+                                @elseif (array_key_exists($i, $galleryPhotos))
+                                    {{-- 表示する画像がある場合、画像（及び変更ボタン、外すボタン、ソートボタン）を表示 --}}
+                                    {{-- 画像 --}}
+                                    <tr>
+                                        <td class="wrap_media_pop_view">
+                                            <div class="image_box">
+                                                {{-- <img border="0" src="/images/hotel/{{ $target_cd }}/trim_054/{{ $galleryPhotos[$i]->file_nm }}" width="54" height="54" title="{{ $galleryPhotos[$i]->title }}"> --}}
+                                                <img border="0" src="{{ asset('storage/images/hotel/' . $target_cd . '/' . $galleryPhotos[$i]->file_nm) }}" width="54" height="54" title="{{ $galleryPhotos[$i]->title }}">
+                                            </div>
+                                            <div class="media_pop_frame">
+                                                {{-- <img border="1" src="/images/hotel/{{ $target_cd }}/trim_138/{{ $galleryPhotos[$i]->file_nm }}" width="1" height="1" title="{{ $galleryPhotos[$i]->title }}" class="media_pop_view"> --}}
+                                                <img border="1" src="{{ asset('storage/images/hotel/' . $target_cd . '/' . $galleryPhotos[$i]->file_nm) }}" width="1" height="1" title="{{ $galleryPhotos[$i]->title }}" class="media_pop_view">
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    {{-- 画像変更 --}}
+                                    <tr>
+                                        <td>
+                                            {{-- <form action="/ctl/htlsmedia/selectmedia/" method="post" style="display:inline;"> --}}
+                                            {{ Form::open(['route' => 'ctl.htl.media.select_media', 'method' => 'get', 'style' => 'display:inline;']) }}
+                                                {{ Form::hidden('target_cd', $target_cd) }}
+                                                {{ Form::hidden('media_type', 'hotel') }}
+                                                {{ Form::hidden('label_type', '3') }}
+                                                {{ Form::hidden('target_order_no', $i + 1) }}
+                                                {{ Form::hidden('setting_media_no', $galleryPhotos[$i]->media_no) }}
+                                                {{ Form::submit('画像変更') }}
+                                            {{-- </form> --}}
+                                            {{ Form::close() }}
+                                        </td>
+                                    </tr>
+
+                                    {{-- 画像を外す --}}
+                                    <tr>
+                                        <td>
+                                            {{-- <form action="/ctl/htlsmedia/updatehotel/" method="post" style="display:inline;"> --}}
+                                            {{ Form::open(['route' => 'ctl.htl.media.remove_gallery', 'method' => 'post', 'style' => 'display:inline;']) }}
+                                                {{ Form::hidden('target_cd', $target_cd) }}
+                                                {{-- {{ Form::hidden('media_type', 'hotel') }} --}}
+                                                {{-- {{ Form::hidden('label_type', '3') }} --}}
+                                                {{-- {{ Form::hidden('target_order_no', $i + 1) }} --}}
+                                                {{ Form::hidden('setting_media_no', $galleryPhotos[$i]->media_no) }}
+                                                {{ Form::submit('画像を外す') }}
+                                            {{-- </form> --}}
+                                            {{ Form::close() }}
+                                        </td>
+                                    </tr>
+
+                                    {{-- 並べ替え --}}
+                                    <tr>
+                                        <td>
+                                            @if ($i != 0)
+                                                {{-- ループの最初ではない $loop->first で書き換えたい --}}
+                                                {{-- <form action="/ctl/htlsmedia/sortgallery/" method="post" style="display:inline;"> --}}
+                                                {{ Form::open(['route' => 'ctl.htl.media.sort_gallery', 'method' => 'post', 'style' => 'display:inline;']) }}
+                                                    {{ Form::hidden('target_cd', $target_cd) }}
+                                                    {{ Form::hidden('media_no', $galleryPhotos[$i]->media_no) }}
+
+                                                    {{ Form::hidden('target_media_no', $galleryPhotos[$i - 1]->media_no) }}
+
+                                                    {{-- {{ Form::hidden('setting_media_no', $galleryPhotos[$i]->media_no) }} --}}
+                                                    {{-- {{ Form::hidden('label_type', '3') }} --}}
+                                                    {{ Form::submit('←') }}
+                                                {{-- </form> --}}
+                                                {{ Form::close() }}
+                                            @endif
+
+                                            @if ($i != $media_count_inside - 1 && array_key_exists($i + 1, $galleryPhotos))
+                                                {{-- ループの最後でなく、 次の画像が存在する場合、並べ替えボタンを表示 --}}
+
+                                                {{-- <form action="/ctl/htlsmedia/sortgallery/" method="post" style="display:inline;"> --}}
+                                                {{ Form::open(['route' => 'ctl.htl.media.sort_gallery', 'method' => 'post', 'style' => 'display:inline;']) }}
+                                                    {{ Form::hidden('target_cd', $target_cd) }}
+                                                    {{ Form::hidden('media_no', $galleryPhotos[$i]->media_no) }}
+
+                                                    {{ Form::hidden('target_media_no', $galleryPhotos[$i + 1]->media_no) }}
+
+                                                    {{-- {{ Form::hidden('setting_media_no', $galleryPhotos[$i]->media_no) }} --}}
+                                                    {{-- {{ Form::hidden('label_type', '3') }} --}}
+                                                    {{ Form::submit('→') }}
+                                                {{-- </form> --}}
+                                                {{ Form::close() }}
+                                            @endif
+                                        </td>
+                                    </tr>
+                                    @php $n_real_display_hotel_img_cnt++; @endphp
+                                @else
+                                    {{-- ignored --}}
+                                @endif
+                            </table>
+                        </td>
+                    @endif
+                    {{-- {{/section}} --}}
+                    @endfor
+                </tr>
+            </table>
+        </td>
+    </tr>
 </table>
