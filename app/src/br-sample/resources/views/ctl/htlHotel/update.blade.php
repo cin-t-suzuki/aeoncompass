@@ -7,14 +7,9 @@
 @section('content')
 
 {{-- TODO コメントアウト外す --}}
-{{-- <a href="{{ route('ctl.htl_top.index', ['target_cd' => $target_cd]) }}"> --}}
-	メインメニュー
-	{{-- </a> --}}
-	&nbsp;&gt;&nbsp;
-	{{-- <a href="{{ route('ctl.htl_top.show', ['target_cd' => $target_cd]) }}"> --}}
-	  施設情報詳細
-	{{-- </a> --}}
-	&nbsp;&gt;&nbsp;施設情報登録内容の変更
+<a href="{{ route('ctl.htl_top.index', ['target_cd' => $target_cd]) }}">メインメニュー</a>&nbsp;&gt;&nbsp;
+<a href="{{ route('ctl.htl_top.show', ['target_cd' => $target_cd]) }}">施設情報詳細</a>&nbsp;&gt;&nbsp;
+施設情報登録内容の変更
 <br>
 <br>
 {{-- メッセージ --}}
