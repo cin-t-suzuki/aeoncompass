@@ -261,4 +261,9 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
         ->name('ctl.brhoteladvert2009000400.edit'); //編集画面
     Route::post('/brhoteladvert2009000400/update', 'BrhotelAdvert2009000400Controller@update')
         ->name('ctl.brhoteladvert2009000400.update'); //更新
+
+    // 部屋設備
+    Route::match(['get', 'post'], '/htlHotelFacilityRoom/list/', [\App\Http\Controllers\ctl\HtlHotelFacilityRoomController::class, 'list'])->name('ctl.htl_hotel_facility_room.list');
+    Route::match(['get', 'post'], '/htlHotelFacilityRoom/create/', [\App\Http\Controllers\ctl\HtlHotelFacilityRoomController::class, 'create'])->name('ctl.htl_hotel_facility_room.create');
+
 });
