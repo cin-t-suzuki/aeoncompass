@@ -2,7 +2,8 @@
 @include('ctl.common.base')
 
 {{-- サブメニュー --}}
-<a href="{$v->env.source_path}{$v->env.module}/brhotel/show/target_cd/{$v->assign->hotelrate.hotel_cd}">施設情報詳細</a>&nbsp;&gt;&nbsp;<a href="{{ route( 'ctl.brhotelRate.index' , ['target_cd'=>$views->target_cd ] ) }}">料率一覧</a>&nbsp;&gt;&nbsp;更新
+<a href="{$v->env.source_path}{$v->env.module}/brhotel/show/target_cd/{$v->assign->hotelrate.hotel_cd}">施設情報詳細</a>&nbsp;&gt;&nbsp;
+<a href="{{ route( 'ctl.brhotelRate.index' , ['target_cd'=>$views->target_cd ] ) }}">料率一覧</a>&nbsp;&gt;&nbsp;更新
 <br>
 {{-- メッセージ --}}
 @section('message')
