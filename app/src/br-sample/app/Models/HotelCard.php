@@ -85,16 +85,15 @@ class HotelCard extends CommonDBModel
     {
 
         $a_attributes = $aa_conditions;
-
         $o_model_hotel_card_save = new HotelCard();
         $hotel_card_insert = $o_model_hotel_card_save->create(
             [
                 'hotel_cd' => $a_attributes['hotel_cd'],
                 'card_id' => $a_attributes['card_id'],
-                'entry_cd' => 'entry_cd', //$this->box->info->env->action_cd,
-                'entry_ts' => now(),
-                'modify_cd' => 'modify_cd', //$this->box->info->env->action_cd,
-                'modify_ts' => now()
+                'entry_cd' => $a_attributes['entry_cd'],
+                'entry_ts' => $a_attributes['entry_ts'],
+                'modify_cd' => $a_attributes['modify_cd'],
+                'modify_ts' => $a_attributes['modify_ts']
             ]
         );
 
@@ -103,7 +102,7 @@ class HotelCard extends CommonDBModel
         }
 
         // 施設情報ページを更新に設定
-        $o_model_hotel_card_save->hotel_modify($a_attributes['hotel_cd'], $a_attributes);
+        $o_model_hotel_card_save->hotel_modify($a_attributes);
 
         return true;
     }
@@ -116,8 +115,8 @@ class HotelCard extends CommonDBModel
     {
         $a_attributes = $aa_conditions;
         // リレーションが存在しないことがあるので最初に更新
-        $o_model_hotel_card_delete = new HotelCard();
-        $o_model_hotel_card_delete->where(
+        $o_model_hotel_card = new HotelCard();
+        $o_model_hotel_card->where(
             [
                 'hotel_cd' => $a_attributes['hotel_cd'],
                 'card_id' => $a_attributes['card_id'],
@@ -125,8 +124,7 @@ class HotelCard extends CommonDBModel
         )->delete();
 
         // 施設情報ページを更新に設定
-        $o_model_hotel_card = new HotelCard();
-        $o_model_hotel_card->hotel_modify($a_attributes['hotel_cd'], $a_attributes);
+        $o_model_hotel_card->hotel_modify($a_attributes);
 
         // 施設属性削除情を更新（外部連携などで削除されたデータを反映）
         $o_model_hotel_card->hotel_element_removed($a_attributes['hotel_cd']);
@@ -139,11 +137,11 @@ class HotelCard extends CommonDBModel
     //
     //  as_hotel_cd       施設コード
     //  aa_attributes     施設*テーブルの登録データ内容
-    protected function hotel_modify($as_hotel_cd, $aa_attributes)
+    public function hotel_modify($aa_attributes)
     {
 
         $hotel_status = new HotelStatus;
-        $a_hotel_status = $hotel_status->find(array('hotel_cd' => $as_hotel_cd))->first();
+        $a_hotel_status = $hotel_status->where(['hotel_cd' => $aa_attributes['hotel_cd']])->first();
 
         // 解約状態の場合は必ず削除依頼
         if ($a_hotel_status['entry_status'] == 2) {
@@ -154,16 +152,16 @@ class HotelCard extends CommonDBModel
 
         // 施設情報ページを更新するに設定
         $hotel_modify = new HotelModify();
-        $a_hotel_modify = $hotel_modify->find(array('hotel_cd' => $as_hotel_cd))->first();
+        $a_hotel_modify = $hotel_modify->where(['hotel_cd' => $aa_attributes['hotel_cd']])->first();
 
         if (empty($a_hotel_modify)) {
             $hotel_modify_create = $hotel_modify->create([
-                'hotel_cd'      => $as_hotel_cd,
+                'hotel_cd'      => $aa_attributes['hotel_cd'],
                 'modify_status' => $modify_status,
-                'entry_cd'      => 'entry_cd',  // TODO $aa_attributes['entry_cd']
-                'entry_ts'      => now(),       // TODO $aa_attributes['entry_ts']
-                'modify_cd'     => 'modify_cd', // TODO $aa_attributes['modify_cd']
-                'modify_ts'     => now(),       // TODO $aa_attributes['modify_ts']
+                'entry_cd'      => $aa_attributes['entry_cd'],
+                'entry_ts'      => $aa_attributes['entry_ts'],
+                'modify_cd'     => $aa_attributes['modify_cd'],
+                'modify_ts'     => $aa_attributes['modify_ts'],
             ]);
             if (!$hotel_modify_create) {
                 return false;
@@ -171,11 +169,12 @@ class HotelCard extends CommonDBModel
 
             // 削除状態で無い場合に設定
         } else {
-
-            $hotel_modify_upadte = $hotel_modify->update([
+            $hotel_modify_upadte = $hotel_modify->where([
+                'hotel_cd'      => $aa_attributes['hotel_cd']
+            ])->update([
                 'modify_status' => $modify_status,
-                'modify_cd'     => 'modify_cd', // TODO $aa_attributes['modify_cd']
-                'modify_ts'     => now(), // TODO $aa_attributes['modify_ts']
+                'modify_cd'     => $aa_attributes['modify_cd'],
+                'modify_ts'     => $aa_attributes['modify_ts'],
             ]);
 
             if (!$hotel_modify_upadte) {
@@ -183,6 +182,7 @@ class HotelCard extends CommonDBModel
             }
         }
     }
+
     // 施設情報ページの更新依頼
     //
     //  as_hotel_cd       施設コード

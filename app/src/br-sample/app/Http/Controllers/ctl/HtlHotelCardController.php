@@ -104,10 +104,14 @@ class HtlHotelCardController extends _commonController
                     }
 
                     //ホテルコードとカードIDに絡むデータを削除
-                    $hotel_card->destroyAction(array(
+                    $hotel_card->destroyAction([
                         'hotel_cd' => $target_cd,
-                        'card_id'  => $value->card_id
-                    ));
+                        'card_id'  => $value->card_id,
+                        'entry_cd' => 'entry_cd',   // $this->box->info->env->action_cd,
+                        'entry_ts' => now(),
+                        'modify_cd' => 'modify_cd', // $this->box->info->env->action_cd,
+                        'modify_ts' => now()
+                    ]);
                 }
             }
             if (is_array($a_request_chk)) {
@@ -127,10 +131,14 @@ class HtlHotelCardController extends _commonController
                     }
 
                     // データ更新
-                    $hotel_card_insert = $hotel_card->saveAction(array(
+                    $hotel_card_insert = $hotel_card->saveAction([
                         'hotel_cd' => $target_cd,
-                        'card_id'  => $value
-                    ));
+                        'card_id'  => $value,
+                        'entry_cd' => 'entry_cd',   // $this->box->info->env->action_cd,
+                        'entry_ts' => now(),
+                        'modify_cd' => 'modify_cd', // $this->box->info->env->action_cd,
+                        'modify_ts' => now()        
+                    ]);
 
                     // 保存に失敗したときエラーメッセージ表示
                     if (!$hotel_card_insert) {
