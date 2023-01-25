@@ -44,7 +44,7 @@ class HotelModify extends CommonDBModel
      */
     protected $fillable = [
         'hotel_cd',
-        'card_id',
+        'modify_status',
         'entry_cd',
         'entry_ts',
         'modify_cd',
