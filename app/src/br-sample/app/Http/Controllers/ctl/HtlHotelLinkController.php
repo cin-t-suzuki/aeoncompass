@@ -114,6 +114,12 @@ class HtlHotelLinkController extends _commonController
             // ホテルコードインスタンス生成
             $Hotel_Link = new HotelLink();
 
+            $a_attributes['hotel_cd'] = $target_cd;
+            $a_attributes['entry_cd'] = 'entry_cd';     // TODO $this->box->info->env->action_cd;
+            $a_attributes['entry_ts'] = now();
+            $a_attributes['modify_cd'] = 'modify_cd';   // TODO $this->box->info->env->action_cd;
+            $a_attributes['modify_ts'] = now();
+
             // データ更新の値を設定
             $link_create = $Hotel_Link->create([
                 'hotel_cd'  => $target_cd, //ホテルコード
@@ -122,10 +128,10 @@ class HtlHotelLinkController extends _commonController
                 'type'      => $a_request_hotel_link['type'], //枝番
                 'title'     => $a_request_hotel_link['title'], //メールアドレス
                 'url'       =>  $a_request_hotel_link['url'], //備考
-                'entry_cd'  => 'entry_cd',  // TODO $this->box->info->env->action_cd
-                'entry_ts'  => now(),
-                'modify_cd' => 'modify_cd', // TODO $this->box->info->env->action_cd
-                'modify_ts' => now(),
+                'entry_cd'  => $a_attributes['entry_cd'],
+                'entry_ts'  => $a_attributes['entry_ts'],
+                'modify_cd' => $a_attributes['modify_cd'],
+                'modify_ts' => $a_attributes['modify_ts'],
             ]);
 
             // 保存に失敗したときエラーメッセージ表示
@@ -138,6 +144,9 @@ class HtlHotelLinkController extends _commonController
                     'target_cd' => $target_cd
                 ])->with(['errors' => 'ご希望のデータを登録できませんでした。']);
             }
+
+            // 施設情報ページの更新依頼
+            $Hotel_Link->hotel_modify($a_attributes);
 
             // コミット
             DB::commit();
@@ -244,6 +253,12 @@ class HtlHotelLinkController extends _commonController
                 ])->with(['errors' => 'ご希望のリンクページデータが見つかりませんでした。']);
             }
 
+            $a_attributes['hotel_cd'] = $target_cd;
+            $a_attributes['entry_cd'] = 'entry_cd';     // TODO $this->box->info->env->action_cd;
+            $a_attributes['entry_ts'] = now();
+            $a_attributes['modify_cd'] = 'modify_cd';   // TODO $this->box->info->env->action_cd;
+            $a_attributes['modify_ts'] = now();
+
             // データ更新の値を設定
             $link_update = $Hotel_Link->where([
                 'hotel_cd'  => $target_cd,                        // ホテルコード
@@ -251,8 +266,8 @@ class HtlHotelLinkController extends _commonController
             ])->update([
                 'title'     => $a_request_hotel_link['title'],    // メールアドレス
                 'url'       =>  $a_request_hotel_link['url'],     // 備考
-                'modify_cd' => 'modify_cd',                       // TODO $this->box->info->env->action_cd
-                'modify_ts' => now(),
+                'modify_cd' => $a_attributes['modify_cd'],
+                'modify_ts' => $a_attributes['modify_ts'],
             ]);
 
 
@@ -266,6 +281,9 @@ class HtlHotelLinkController extends _commonController
                     'target_cd' => $target_cd
                 ])->with(['errors' => 'ご希望のリンクページデータを更新できませんでした。']);
             }
+
+            // 施設情報ページの更新依頼
+            $Hotel_Link->hotel_modify($a_attributes);
 
             // コミット
             DB::commit();
@@ -315,31 +333,25 @@ class HtlHotelLinkController extends _commonController
             )->get();
 
             if (count($a_hotel_link) > 0) {
-                //ホテルコードに絡むデータ全削除
-                $Hotel_Link->where(
-                    [
-                        'hotel_cd'   => $target_cd,
-                        'branch_no'  => $a_request_hotel_link['branch_no']
-                    ]
-                )->delete();
+                //ホテルコードに絡むデータ削除
+                $a_attributes['hotel_cd'] = $target_cd;
+                $a_attributes['branch_no'] = $a_request_hotel_link['branch_no'];
+                $a_attributes['entry_cd'] = 'entry_cd';        // TODO $this->box->info->env->action_cd,;
+                $a_attributes['entry_ts'] = now();
+                $a_attributes['modify_cd'] = 'modify_cd';      // TODO $this->box->info->env->action_cd,;
+                $a_attributes['modify_ts'] = now();
 
-
-                // 削除データのorder_noよりもorder_noが大きいデータは、order_noを-1する。（飛び番号を無くすため）
-                if ($a_request_hotel_link["type"] == 3) {
-                    $Hotel_Link->where('type', 3)->where('order_no', '>', $a_hotel_link[0]['order_no'])
-                        ->decrement('order_no');
-                }
-
-                // コミット
-                DB::commit();
+                $Hotel_Link->destroyAction($a_attributes);
             } else {
                 // エラーメッセージ
                 // list アクションに転送します
-
                 return $this->list($request, [
                     'target_cd' => $target_cd
                 ])->with(['errors' => 'ご希望のリンクページデータが見つかりませんでした。']);
             }
+
+            // コミット
+            DB::commit();
 
             // リンクページの情報取得
             $a_hotel_link_type1['values'] = $Hotel_Link->where(['type' => 1, 'hotel_cd' => $target_cd])->get();
@@ -400,7 +412,14 @@ class HtlHotelLinkController extends _commonController
                     $after_branch_no = $value->branch_no;
                 }
             }
+
             // 更新処理
+            $a_attributes['hotel_cd'] = $target_cd;
+            $a_attributes['entry_cd'] = 'entry_cd';     // TODO $this->box->info->env->action_cd;
+            $a_attributes['entry_ts'] = now();
+            $a_attributes['modify_cd'] = 'modify_cd';   // TODO $this->box->info->env->action_cd;
+            $a_attributes['modify_ts'] = now();
+
             $after_link_update = $Hotel_Link->where(
                 [
                     'hotel_cd'  => $target_cd,
@@ -408,8 +427,8 @@ class HtlHotelLinkController extends _commonController
                 ]
             )->update([
                 'order_no'  => $after_order_no,
-                'modify_cd' => 'modify_cd', // TODO $this->box->info->env->action_cd
-                'modify_ts' => now()
+                'modify_cd' => $a_attributes['modify_cd'],
+                'modify_ts' => $a_attributes['entry_ts']
             ]);
             if (!$after_link_update) {
                 // ロールバック
@@ -430,8 +449,8 @@ class HtlHotelLinkController extends _commonController
                     ]
                 )->update([
                     'order_no'  => $now_order_no,
-                    'modify_cd' => 'modify_cd', // TODO $this->box->info->env->action_cd
-                    'modify_ts' => now()
+                    'modify_cd' => $a_attributes['modify_cd'],
+                    'modify_ts' => $a_attributes['entry_ts']
                 ]);
             } else {
                 $now_link_update = $Hotel_Link->where(
@@ -441,8 +460,8 @@ class HtlHotelLinkController extends _commonController
                     ]
                 )->update([
                     'order_no'  => $now_order_no,
-                    'modify_cd' => 'modify_cd', // TODO $this->box->info->env->action_cd
-                    'modify_ts' => now()
+                    'modify_cd' => $a_attributes['modify_cd'],
+                    'modify_ts' => $a_attributes['entry_ts']
                 ]);
             }
 
@@ -455,6 +474,9 @@ class HtlHotelLinkController extends _commonController
                     'target_cd' => $target_cd
                 ])->with(['errors' => '並べ変える事が出来ませんでした。']);
             }
+
+            // 施設情報ページの更新依頼
+            $Hotel_Link->hotel_modify($a_attributes);
 
             // コミット
             DB::commit();
