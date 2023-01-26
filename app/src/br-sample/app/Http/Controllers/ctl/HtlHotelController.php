@@ -25,8 +25,10 @@ use App\Models\HotelStatus;
 use App\Models\HotelStatusJr;
 use App\Models\MastPref;
 use App\Models\MastCity;
+use App\Models\HotelModify;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Util\Models_Cipher;
 use Exception;
 
 class HtlHotelController extends _commonController
@@ -246,6 +248,9 @@ class HtlHotelController extends _commonController
                 return $this->edit($request, ['target_cd' => $targetCd])->with(['errors' => $errorList]);
             }
 
+            $a_attributes['modify_cd'] = 'modify_cd'; // TODO $this->box->info->env->action_cd
+            $a_attributes['modify_ts'] = now();
+
             $hotel_update = $o_hotel->where(['hotel_cd' => $targetCd])
                 ->update([
                     'hotel_cd' => $a_attributes['hotel_cd'],
@@ -257,8 +262,8 @@ class HtlHotelController extends _commonController
                     'check_in' => $a_attributes['check_in'],
                     'check_in_end' => $a_attributes['check_in_end'],
                     'check_out' => $a_attributes['check_out'],
-                    'modify_cd' => 'action_cd', // TODO $this->box->info->env->action_cd,
-                    'modify_ts'     => now()
+                    'modify_cd' =>  $a_attributes['modify_cd'],
+                    'modify_ts' => $a_attributes['modify_ts']
                 ]);
 
             // 更新後失敗した場合editアクションへ
@@ -269,6 +274,14 @@ class HtlHotelController extends _commonController
                 // editアクションに転送します
                 return $this->edit($request, ['target_cd' => $targetCd])->with(['errors' => '更新に失敗しました。']);
             }
+
+            // 施設情報ページの更新依頼
+            $existsHotelModify = HotelModify::where('hotel_cd', $targetCd)->exists();
+            if (!$existsHotelModify) {
+                $a_attributes['entry_cd'] = 'entry_cd'; // TODO $this->box->info->env->action_cd
+                $a_attributes['entry_ts'] = now();
+            }
+            $o_hotel->hotel_modify($a_attributes);
 
             //-------------------------------
             // JRセット参画施設の場合
@@ -311,12 +324,13 @@ class HtlHotelController extends _commonController
                     }
 
                     // 更新
-                    $hotel_status_jr_update = $o_hotel_status_jr->where(['hotel_cd' => $targetCd])
-                        ->update([
-                            'last_modify_dtm' => now(),
-                            'modify_cd' => 'action_cd', // TODO $this->box->info->env->action_cd
-                            'modify_ts' => now(),
-                        ]);
+                    $hotel_status_jr_update = $o_hotel_status_jr->where([
+                        'hotel_cd' => $targetCd
+                    ])->update([
+                        'last_modify_dtm' => now(),
+                        'modify_cd' => 'action_cd', // TODO $this->box->info->env->action_cd
+                        'modify_ts' => now(),
+                    ]);
 
                     if (!$hotel_status_jr_update) {
                         // ロールバック
@@ -885,6 +899,9 @@ class HtlHotelController extends _commonController
     private function makeNotifyMessages($a_hotel_notify)
     {
         try {
+            // メールアドレス 復号
+            $cipher = new Models_Cipher(config('settings.cipher_key'));
+            $decrypt_email = $cipher->decrypt($a_hotel_notify['notify_email']);
 
             // 初期化
             $s_notify_message = "";
@@ -931,7 +948,7 @@ class HtlHotelController extends _commonController
                         if ($b_device_first != true) {
                             $s_notify_message .= "と";
                         }
-                        $s_notify_message .= "電子メールアドレス「 " . $a_hotel_notify['notify_email'] . " 」";
+                        $s_notify_message .= "電子メールアドレス「 " . $decrypt_email . " 」";
                         $b_device_first = false;
                     }
                 }
