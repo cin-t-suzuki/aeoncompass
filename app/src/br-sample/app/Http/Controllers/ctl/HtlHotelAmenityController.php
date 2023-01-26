@@ -101,6 +101,12 @@ class HtlHotelAmenityController extends _commonController
                         'element_id'       => $key
                     ])->first();
 
+                    $a_attributes['hotel_cd'] = $target_cd;
+                    $a_attributes['entry_cd'] = 'entry_cd';     // TODO $this->box->info->env->action_cd;
+                    $a_attributes['entry_ts'] = now();
+                    $a_attributes['modify_cd'] = 'modify_cd';   // TODO $this->box->info->env->action_cd;
+                    $a_attributes['modify_ts'] = now();
+
                     //データが存在しない場合は新規登録 存在する場合は更新処理
                     if ($Hotel_Amenity_value == "") {
                         // データ更新の値を設定
@@ -108,10 +114,10 @@ class HtlHotelAmenityController extends _commonController
                             'hotel_cd'         => $target_cd,
                             'element_id'       => $key,
                             'element_value_id' => $value,
-                            'entry_cd'         => 'entry_cd',  // TODO $this->box->info->env->action_cd
-                            'entry_ts'         => now(),
-                            'modify_cd'        => 'modify_cd', // TODO $this->box->info->env->action_cd
-                            'modify_ts'        => now(),
+                            'entry_cd'         => $a_attributes['entry_cd'],
+                            'entry_ts'         => $a_attributes['entry_ts'],
+                            'modify_cd'        => $a_attributes['modify_cd'],
+                            'modify_ts'        => $a_attributes['modify_ts']
                         ]);
 
                         // 保存に失敗したときエラーメッセージ表示
@@ -131,8 +137,8 @@ class HtlHotelAmenityController extends _commonController
                             'element_id'       => $key,
                         ])->update([
                             'element_value_id' => $value,
-                            'modify_cd'        => 'modify_cd', // TODO $this->box->info->env->action_cd
-                            'modify_ts'        => now(),
+                            'modify_cd'        => $a_attributes['modify_cd'],
+                            'modify_ts'        => $a_attributes['modify_ts'],
                         ]);
 
                         if (!$Hotel_Amenity_update) {
@@ -147,6 +153,9 @@ class HtlHotelAmenityController extends _commonController
                     }
                 }
             }
+
+            // 施設情報ページの更新依頼
+            $Hotel_Amenity->hotel_modify($a_attributes);
 
             // コミット
             DB::commit();
