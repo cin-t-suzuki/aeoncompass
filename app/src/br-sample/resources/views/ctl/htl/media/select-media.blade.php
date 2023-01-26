@@ -29,6 +29,39 @@
         <p>
             <font color="cdcdcd">■</font>登録画像一覧
         </p>
+        @if ($form_params['list_width'] === '1')
+            @php
+                $table_width = 1170;
+                $disp_order_width = 'width:50px;';
+                $label_width = 'width:50px;';
+                $image_width = 'width:64px;';
+                $title_label_width = 'width:12%;';
+            @endphp
+
+            @if ($form_params['label_cd']['map'])
+                @php
+                    $update_label_width = 'width:13%;';
+                @endphp
+            @else
+                @php
+                    $update_label_width = 'width:11%;';
+                @endphp
+            @endif
+
+            @php
+                $update_width = 'width:15%;';
+                $file_colspan = 3;
+            @endphp
+        @else
+            @php
+                $table_width = 700;
+                $disp_order_width = '';
+                $label_width = '';
+                $image_width = '';
+                $file_colspan = 1;
+                $title_label_width = 'width:24%;';
+            @endphp
+        @endif
         @if (count($medias) === 0)
             <font color="ff0000">現在アップロードされている画像はありません。</font>
         @else
@@ -77,13 +110,13 @@
                             <tr>
                                 <td colspan="6" align="center">
                                     {{ Form::hidden('target_cd', $target_cd) }}
-                                    {{ Form::hidden('room_id', $form_params['room_id']) }}
-                                    {{ Form::hidden('plan_id', $form_params['plan_id']) }}
+                                    {{ Form::hidden('room_id', $room_id) }}
+                                    {{ Form::hidden('plan_id', $plan_id) }}
                                     {{ Form::hidden('label_type', $label_type) }}
                                     {{ Form::hidden('target_order_no', $target_order_no) }}
                                     {{ Form::hidden('setting_media_no', $setting_media_no) }}
                                     {{ Form::hidden('media_type', $media_type) }}
-                                    <input type="hidden" name="list_width_ref" value="1" />
+                                    {{ Form::hidden('list_width_ref', '1') }}
                                     {{ Form::submit('表示') }}
                                     {{ Form::checkbox('list_width', '1', $form_params['list_width'] === '1', ['id' => 'list_width']) }}
                                     <label for="list_width">
@@ -96,36 +129,6 @@
                 </div>
                 <br />
             @endif
-            @if ($form_params['list_width'] === '1')
-                @php
-                    $table_width = 1170;
-                    $disp_order_width = 'width:50px;';
-                    $label_width = 'width:50px;';
-                    $image_width = 'width:64px;';
-                    $title_label_width = 'width:12%;';
-                @endphp
-
-                @if ($form_params['label_cd']['map'])
-                    @php
-                        $update_label_width = 'width:13%;';
-                    @endphp
-                @else
-                    @php
-                        $update_label_width = 'width:11%;';
-                    @endphp
-                @endif
-
-                @php
-                    $update_width = 'width:15%;';
-                    $file_colspan = 3;
-                @endphp
-            @else
-                @php
-                    $table_width = 700;
-                    $file_colspan = 1;
-                    $title_label_width = 'width:24%;';
-                @endphp
-            @endif
             <div class="wrap_media_scroll" style="width:{{ $table_width }}px;">
                 <div class="scroll_button_btm">
                     <a href="#page-bottom">▼画像一覧の最下部へ</a>
@@ -133,16 +136,16 @@
             </div>
             <table border="1" cellpadding="4" cellspacing="0" width="{{ $table_width }}">
                 <tr bgcolor="#EEEEFF">
-                    <th style="{{ $disp_order_width ?? '' }}">表示順</th>{{-- TODO: 誤魔化し実装 --}}
-                    <th style="{{ $label_width ?? '' }}">ラベル</th>{{-- TODO: 誤魔化し実装 --}}
-                    <th style="{{ $image_width ?? '' }}">画像</th>{{-- TODO: 誤魔化し実装 --}}
+                    <th style="{{ $disp_order_width }}">表示順</th>
+                    <th style="{{ $label_width }}">ラベル</th>
+                    <th style="{{ $image_width }}">画像</th>
                     <th>ファイル</th>
                     <th>利用状況</th>
                     <th>設定</th>
                 </tr>
                 @foreach ($medias as $media)
                     <tr>
-                        <td style="{{ $disp_order_width ?? '' }}">{{-- TODO: 誤魔化し実装 --}}
+                        <td style="{{ $disp_order_width }}">
                             @if (!$loop->first)
                             {{-- TODO: 同じコントローラで適応できてるか確認 --}}
                                 {{ Form::open(['route' => 'ctl.htl.media.sort_media', 'method' => 'post', 'style' => 'display:inline;']) }}
@@ -152,8 +155,8 @@
                                     {{ Form::hidden('order_no', $media->order_no) }}
                                     {{ Form::hidden('edit_order_no', $media->order_no_minus) }}
 
-                                    {{ Form::hidden('room_id', $form_params['room_id']) }}
-                                    {{ Form::hidden('plan_id', $form_params['plan_id']) }}
+                                    {{ Form::hidden('room_id', $room_id) }}
+                                    {{ Form::hidden('plan_id', $plan_id) }}
 
                                     {{ Form::hidden('label_type', $label_type) }}
                                     {{ Form::hidden('label_cd[outside]', $form_params['label_cd']['outside']) }}
@@ -178,8 +181,8 @@
                                     {{ Form::hidden('order_no', $media->order_no) }}
                                     {{ Form::hidden('edit_order_no', $media->order_no_plus) }}
 
-                                    {{ Form::hidden('room_id', $form_params['room_id']) }}
-                                    {{ Form::hidden('plan_id', $form_params['plan_id']) }}
+                                    {{ Form::hidden('room_id', $room_id) }}
+                                    {{ Form::hidden('plan_id', $plan_id) }}
 
                                     {{ Form::hidden('label_type', $label_type) }}
                                     {{ Form::hidden('label_cd[outside]', $form_params['label_cd']['outside']) }}
@@ -196,11 +199,11 @@
                                 {{ Form::close() }}
                             @endif
                         </td>
-                        <td style="{{ $label_width ?? '' }}">{{-- TODO: 誤魔化し実装 --}}
+                        <td style="{{ $label_width }}">
                             {{-- {include file=$v->env.module_root|cat:'/view2/htlsmedia/_label_cd_type.tpl' label_cd=$media.label_cd} --}}
                             @include('ctl.htl.media._label_cd_type', ['label_cd' => $media->label_cd])
                         </td>
-                        <td align="center" class="wrap_media_pop_view" style="{{ $image_width ?? '' }}">{{-- TODO: 誤魔化し実装 --}}
+                        <td align="center" class="wrap_media_pop_view" style="{{ $image_width }}">
                             {{-- <img border="0" src="/images/hotel/{{ $target_cd }}/trim_054/{{ $media->file_nm }}" width="54" height="54" title="{{ $media->title }}"> --}}
                             <img border="0" src="{{ asset('storage/images/hotel/' . $target_cd . '/' . $media->file_nm) }}" width="54" height="54" title="{{ $media->title }}">
                             <div class="media_pop_frame">
@@ -248,9 +251,9 @@
                                 {{ Form::hidden('target_order_no', $target_order_no) }}
 
                                 {{-- 部屋・プランメンテナンスからの遷移時 --}}
-                                {{ Form::hidden('room_id', $form_params['room_id']) }}
-                                {{ Form::hidden('plan_id', $form_params['plan_id']) }}
-                                
+                                {{ Form::hidden('room_id', $room_id) }}
+                                {{ Form::hidden('plan_id', $plan_id) }}
+
                                 {{ Form::hidden('label_type', $label_type) }}
                                 {{ Form::submit('設定') }}
                             {{ Form::close() }}

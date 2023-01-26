@@ -11,6 +11,7 @@ use App\Models\MediaOrg;
 use App\Services\HtlMediaService as Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class HtlMediaController extends Controller
 {
@@ -61,6 +62,9 @@ class HtlMediaController extends Controller
             'setting_media_no' => $request->input('setting_media_no'),
             'label_type' => $request->input('label_type'),
 
+            'room_id'           => $request->input('room_id'),
+            'plan_id'           => $request->input('plan_id'),
+
             'guides'    => $request->session()->get('guides', []),
 
             // TODO: 暫定実装、消す方向で修正を進める
@@ -97,11 +101,6 @@ class HtlMediaController extends Controller
     public function upload(MediaUploadRequest $request, Service $service)
     {
         $hotelCd = $request->input('target_cd');
-
-        // TODO: 部屋プランメンテナンス画面から遷移してきた時
-        $room_id                = $request->input('room_id');
-        $plan_id                = $request->input('plan_id');
-        $room_plan_mainte_flg   = $request->input('room_plan_mainte_flg');
 
         // title, label_cd の成型
         $title = '';
@@ -176,12 +175,12 @@ class HtlMediaController extends Controller
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
+            Log::error($e);
         }
 
         $request->session()->regenerateToken(); // 二重送信対策
 
-        // TODO: 画像選択画面 (selectMedia) からのアップロードでは、 selectMedia に返す (redirect back でよい？)
-        return redirect()->route('ctl.htl.media.list', ['target_cd' => $hotelCd])->with([
+        return redirect()->back()->with([
             'guides' => ['アップロードが完了しました。'],
         ]);
     }
@@ -208,10 +207,7 @@ class HtlMediaController extends Controller
             ]);
         }
 
-        return redirect()->route('ctl.htl.media.list', [
-            'target_cd' => $hotelCd,
-            'label_cd'  => $request->input('label_cd'),
-        ])->with([
+        return redirect()->back()->with([
             'guides' => ['画像を並び替えました。'],
         ]);
     }
@@ -309,6 +305,78 @@ class HtlMediaController extends Controller
     }
 
     /**
+     * 画像選択
+     *
+     * @param Request $request
+     * @param Service $service
+     * @return \Illuminate\Http\Response
+     */
+    public function selectMedia(Request $request, Service $service)
+    {
+        $hotelCd = $request->input('target_cd');
+        $mediaType = $request->input('media_type'); // hotel|room|plan
+
+        var_dump('media_type:', $mediaType);
+
+        // ラベル検索用パラメータ設定
+        $conditions = $request->input('label_cd', [
+            'outside'   => true,
+            'map'       => false,
+            'inside'    => true,
+            'room'      => true,
+            'other'     => true,
+            'nothing'   => true,
+        ]);
+        // listページでワイド表示を選択している場合
+
+        // 画像一覧の取得
+        $medias = $service->getAllMediaList($hotelCd, $conditions);
+
+        // メッセージの表示
+        $messageIndex = $request->input('label_type', 0);
+        $messageWords = [
+            'room'  => [0 => '部屋'],
+            'plan'  => [0 => 'プラン'],
+            'hotel' => [
+                HotelMedia::TYPE_HOTEL  => '外観',
+                HotelMedia::TYPE_MAP    => '地図',
+                HotelMedia::TYPE_OTHER  => 'フォトギャラリー',
+            ],
+        ];
+        $guides = [
+            $messageWords[$mediaType][$messageIndex] . 'に設定する画像を選択してください。',
+        ];
+
+        return view('ctl.htl.media.select-media', [
+            'target_cd' => $hotelCd,
+            'medias'    => $medias,
+
+            'guides' => $guides,
+
+            'media_type' => $mediaType,
+            'label_type' => $messageIndex,
+            'target_order_no' => $request->input('target_order_no'),
+            'setting_media_no'  => $request->input('setting_media_no'),
+
+            'room_id' => $request->input('room_id'),
+            'plan_id' => $request->input('plan_id'),
+
+            // TODO: 暫定実装、消す方向で修正を進める
+            'form_params' => [
+                'list_width' => $request->input('list_width'),
+                'label_cd' => [
+                    'outside'   => $request->input('label_cd.outside'),
+                    'map'       => $request->input('label_cd.map'),
+                    'inside'    => $request->input('label_cd.inside'),
+                    'room'      => $request->input('label_cd.room'),
+                    'other'     => $request->input('label_cd.other'),
+                    'nothing'   => $request->input('label_cd.nothing'),
+                ],
+            ],
+            'request' => $request,
+        ]);
+    }
+    /**
      * 施設画像編集
      *
      * @param Request $request
@@ -347,73 +415,77 @@ class HtlMediaController extends Controller
     }
 
     /**
-     * 画像選択
+     * 部屋画像編集
      *
      * @param Request $request
      * @param Service $service
      * @return \Illuminate\Http\Response
      */
-    public function selectMedia(Request $request, Service $service)
+    public function editRoom(Request $request, Service $service)
     {
         $hotelCd = $request->input('target_cd');
-        $mediaType = $request->input('media_type');
+        $roomId = $request->input('room_id');
 
-        // ラベル検索用パラメータ設定
-        $conditions = $request->input('label_cd', [
-            'outside'   => true,
-            'map'       => false,
-            'inside'    => true,
-            'room'      => true,
-            'other'     => true,
-            'nothing'   => true,
-        ]);
-        // listページでワイド表示を選択している場合
+        // 部屋情報と、部屋に設定されている画像を取得
+        $a_room = $service->getRoomMedia($hotelCd, $roomId);
+        // 部屋情報に結びついているプランと、その画像を取得
+        $a_plans = $service->getRoomPlanMedia($hotelCd, $roomId);
 
-        // 画像一覧の取得
-        $medias = $service->getAllMediaList($hotelCd, $conditions);
+        // TODO: 登録可能数(プレミアムは分岐？)
+        $inside_media_count = 30;
+        $room_media_count = 10;
+        $plan_media_count = 10;
 
-        // メッセージの表示
-        $messageIndex = $request->input('label_type', 0);
-        $messageWords = [
-            'room'  => [0 => '部屋'],
-            'plan'  => [0 => 'プラン'],
-            'hotel' => [
-                HotelMedia::TYPE_HOTEL  => '外観',
-                HotelMedia::TYPE_MAP    => '地図',
-                HotelMedia::TYPE_OTHER  => 'フォトギャラリー',
-            ],
-        ];
-        $guides = [
-            $messageWords[$mediaType][$messageIndex] . 'に設定する画像を選択してください。',
-        ];
+        $room_stock_type = $service->isRoomAkf($hotelCd, $roomId);
 
-        return view('ctl.htl.media.select-media', [
+        return view('ctl.htl.media.edit-room', [
             'target_cd' => $hotelCd,
-            'medias'    => $medias,
+            'room_id' => $roomId,
 
-            'guides' => $guides,
+            'room' => $a_room,
+            'plans' => $a_plans,
+            'room_stock_type'  => $room_stock_type,
 
-            'media_type' => $request->input('media_type'),
-            'label_type' => $request->input('label_type'),
-            'target_order_no' => $request->input('target_order_no'),
-            'setting_media_no'  => $request->input('setting_media_no'),
+            'media_count_inside'  => $inside_media_count,
+            'media_count_room' => $room_media_count,
+            'media_count_plan' => $plan_media_count,
 
-            // TODO: 暫定実装、消す方向で修正を進める
-            'form_params' => [
-                'list_width' => $request->input('list_width'),
-                'label_cd' => [
-                    'outside'   => $request->input('label_cd.outside'),
-                    'map'       => $request->input('label_cd.map'),
-                    'inside'    => $request->input('label_cd.inside'),
-                    'room'      => $request->input('label_cd.room'),
-                    'other'     => $request->input('label_cd.other'),
-                    'nothing'   => $request->input('label_cd.nothing'),
-                ],
+            'guides' => $request->session()->get('guides', []),
 
-                // TODO: 適切な値を設定
-                'room_id' => '',
-                'plan_id' => '',
-            ],
+            'form_params' => $request->input(),
+        ]);
+    }
+
+    /**
+     * プラン画像編集
+     *
+     * @param Request $request
+     * @param Service $service
+     * @return \Illuminate\Http\Response
+     */
+    public function editPlan(Request $request, Service $service)
+    {
+        $hotelCd = $request->input('target_cd');
+        $planId = $request->input('plan_id');
+
+        $a_plan  = $service->getPlanMedia($hotelCd, $planId);
+        $a_rooms = $service->getPlanRoomMedia($hotelCd, $planId);
+
+        // TODO: 暫定
+        $_n_inside_media_count = 10;
+        $_n_room_media_count = 10;
+        $_n_plan_media_count = 10;
+
+        return view('ctl.htl.media.edit-plan', [
+            'target_cd' => $hotelCd,
+            'plan_id'   => $planId,
+
+            'plan' => $a_plan,
+            'rooms' => $a_rooms,
+
+            'media_count_inside'  => $_n_inside_media_count,
+            'media_count_room' => $_n_room_media_count,
+            'media_count_plan' => $_n_plan_media_count,
         ]);
     }
 
@@ -445,6 +517,62 @@ class HtlMediaController extends Controller
     }
 
     /**
+     * 部屋画像更新
+     *
+     * @param Request $request
+     * @param Service $service
+     * @return \Illuminate\Http\Response
+     */
+    public function updateRoom(Request $request, Service $service)
+    {
+        $hotelCd    = $request->input('target_cd');
+        $roomId     = $request->input('room_id');
+        $oldMediaNo = $request->input('setting_media_no');
+        $newMediaNo = $request->input('media_no');
+        $orderNo    = $request->input('target_order_no');
+
+        $errorMessages = $service->updateRoom($hotelCd, $roomId, $oldMediaNo, $newMediaNo, $orderNo);
+
+        if (count($errorMessages) > 0) {
+            return redirect()->back()->withErrors($errorMessages);
+        }
+        return redirect()->route('ctl.htl.media.edit_room', [
+            'target_cd' => $hotelCd,
+            'room_id' => $roomId,
+        ])->with([
+            'guides' => ['部屋画像を編集しました。'],
+        ]);
+    }
+
+    /**
+     * プラン画像更新
+     *
+     * @param Request $request
+     * @param Service $service
+     * @return \Illuminate\Http\Response
+     */
+    public function updatePlan(Request $request, Service $service)
+    {
+        $hotelCd    = $request->input('target_cd');
+        $planId     = $request->input('plan_id');
+        $oldMediaNo = $request->input('setting_media_no');
+        $newMediaNo = $request->input('media_no');
+        $orderNo    = $request->input('target_order_no');
+
+        $errorMessages = $service->updatePlan($hotelCd, $planId, $oldMediaNo, $newMediaNo, $orderNo);
+
+        // if (count($errorMessages) > 0) {
+        //     return redirect()->back()->withErrors($errorMessages);
+        // }
+        return redirect()->route('ctl.htl.media.edit_plan', [
+            'target_cd' => $hotelCd,
+            'plan_id' => $planId,
+        ])->with([
+            'guides' => ['施設画像を編集しました。'],
+        ]);
+    }
+
+    /**
      * 施設画像（フォトギャラリー）削除
      *
      * @param Request $request
@@ -455,14 +583,68 @@ class HtlMediaController extends Controller
     {
         $hotelCd = $request->input('target_cd');
         $mediaNoToRemove  = $request->input('setting_media_no');
-        $service->removeGallery($hotelCd, $mediaNoToRemove);
+
+        $succeed = $service->removeGalleryMedia($hotelCd, $mediaNoToRemove);
+        if (!$succeed) {
+            return redirect()->back()->withErrors([
+                '施設画像の編集に失敗しました。',
+            ]);
+        }
         return redirect()->back()->with([
             'guides' => ['施設画像を編集しました。'],
         ]);
     }
 
     /**
-     * 施設画像ソート（フォトギャラリーのみ）
+     * 部屋画像削除
+     *
+     * @param Request $request
+     * @param Service $service
+     * @return \Illuminate\Http\Response
+     */
+    public function removeRoom(Request $request, Service $service)
+    {
+        $hotelCd = $request->input('target_cd');
+        $roomId  = $request->input('room_id');
+        $mediaNoToRemove  = $request->input('setting_media_no');
+
+        $succeed = $service->removeRoomMedia($hotelCd, $roomId, $mediaNoToRemove);
+        if (!$succeed) {
+            return redirect()->back()->withErrors([
+                '部屋画像の編集に失敗しました。',
+            ]);
+        }
+        return redirect()->back()->with([
+            'guides' => ['施設画像を編集しました。'],
+        ]);
+    }
+
+    /**
+     * プラン画像削除
+     *
+     * @param Request $request
+     * @param Service $service
+     * @return \Illuminate\Http\Response
+     */
+    public function removePlan(Request $request, Service $service)
+    {
+        $hotelCd = $request->input('target_cd');
+        $planId = $request->input('plan_id');
+        $mediaNoToRemove  = $request->input('setting_media_no');
+
+        $succeed = $service->removePlanMedia($hotelCd, $planId, $mediaNoToRemove);
+        if (!$succeed) {
+            return redirect()->back()->withErrors([
+                'プラン画像の編集に失敗しました。',
+            ]);
+        }
+        return redirect()->back()->with([
+            'guides' => ['施設画像を編集しました。'],
+        ]);
+    }
+
+    /**
+     * 施設画像（フォトギャラリー）ソート
      *
      * @param Request $request
      * @param Service $service
@@ -486,6 +668,65 @@ class HtlMediaController extends Controller
             'target_cd' => $hotelCd,
         ])->with([
             'guides' => ['施設画像を並び替えました。'],
+        ]);
+    }
+
+    /**
+     * 部屋画像ソート
+     *
+     * @param Request $request
+     * @param Service $service
+     * @return \Illuminate\Http\Response
+     */
+    public function sortRoom(Request $request, Service $service)
+    {
+        $hotelCd        = $request->input('target_cd');
+        $roomId         = $request->input('room_id');
+        $sourceMediaNo  = $request->input('source_media_no');
+        $targetMediaNo  = $request->input('target_media_no');
+
+        $succeeded = $service->sortRoom($hotelCd, $roomId, $sourceMediaNo, $targetMediaNo);
+
+        if (!$succeeded) {
+            return redirect()->back()->withErrors([
+                '部屋画像の並び替えに失敗しました。',
+            ])->withInput();
+        }
+        return redirect()->route('ctl.htl.media.edit_room', [
+            'target_cd' => $hotelCd,
+            'room_id' => $roomId,
+        ])->with([
+            'guides' => ['部屋画像を並び替えました。'],
+        ]);
+    }
+
+    /**
+     * プラン画像ソート
+     *
+     * @param Request $request
+     * @param Service $service
+     * @return \Illuminate\Http\Response
+     */
+    public function sortPlan(Request $request, Service $service)
+    {
+        $hotelCd        = $request->input('target_cd');
+        $planId         = $request->input('plan_id');
+        $mediaNo        = $request->input('source_media_no');
+        $targetMediaNo  = $request->input('target_media_no');
+
+        $succeeded = $service->sortPlan($hotelCd, $planId, $mediaNo, $targetMediaNo);
+
+        if (!$succeeded) {
+            return redirect()->back()->withErrors([
+                'プラン画像の並び替えに失敗しました。',
+            ])->withInput();
+        }
+
+        return redirect()->route('ctl.htl.media.edit_plan', [
+            'target_cd' => $hotelCd,
+            'plan_id' => $planId,
+        ])->with([
+            'guides' => ['プラン画像を並び替えました。'],
         ]);
     }
 }

@@ -5,8 +5,10 @@ namespace App\Services;
 use App\Models\HotelMedia;
 use App\Models\Media;
 use App\Models\MediaOrg;
+use App\Models\Plan;
 use App\Models\PlanMedia;
-use App\Models\RoomMedia;
+use App\Models\Room2;
+use App\Models\RoomMedia2;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -373,7 +375,7 @@ class HtlMediaService
     public function sortMedia($hotelCd, $mediaNo, $targetMediaNo, $up): bool
     {
         try {
-            DB::transaction(function ($hotelCd, $mediaNo, $targetMediaNo, $up) {
+            DB::transaction(function () use ($hotelCd, $mediaNo, $targetMediaNo, $up) {
                 if ($up) {
                     $this->changeOrderUp($hotelCd, $mediaNo, $targetMediaNo);
                 } else {
@@ -462,6 +464,83 @@ class HtlMediaService
                     'type' => HotelMedia::TYPE_OTHER,
                     'media_no' => $targetMediaNo,
                 ])->update(['order_no' => $orderNo]);
+            });
+        } catch (\Exception $e) {
+            Log::error($e);
+            return false;
+        }
+        return true;
+    }
+    public function sortRoom($hotelCd, $roomId, $sourceMediaNo, $targetMediaNo): bool
+    {
+        try {
+            DB::transaction(function () use ($hotelCd, $roomId, $sourceMediaNo, $targetMediaNo) {
+                // 移動元の表示順番号を取得
+                $sourceOrderNo = RoomMedia2::where([
+                    'hotel_cd' => $hotelCd,
+                    'room_id' => $roomId,
+                    'media_no' => $sourceMediaNo,
+                ])->first()->order_no;
+
+                // 移動先の表示順番号を取得
+                $targetOrderNo = RoomMedia2::where([
+                    'hotel_cd' => $hotelCd,
+                    'room_id' => $roomId,
+                    'media_no' => $targetMediaNo,
+                ])->first()->order_no;
+
+                // 移動元の表示順番号を、移動先のものに更新
+                RoomMedia2::where([
+                    'hotel_cd' => $hotelCd,
+                    'room_id' => $roomId,
+                    'media_no' => $sourceMediaNo,
+                ])->update(['order_no' => $targetOrderNo]);
+
+                // 移動先の表示番号を、移動元のものに更新
+                RoomMedia2::where([
+                    'hotel_cd' => $hotelCd,
+                    'room_id' => $roomId,
+                    'media_no' => $targetMediaNo,
+                ])->update(['order_no' => $sourceOrderNo]);
+            });
+        } catch (\Exception $e) {
+            Log::error($e);
+            return false;
+        }
+        return true;
+    }
+    public function sortPlan($hotelCd, $planId, $sourceMediaNo, $targetMediaNo): bool
+    {
+        // dd($hotelCd, $planId, $sourceMediaNo);
+        try {
+            DB::transaction(function () use ($hotelCd, $planId, $sourceMediaNo, $targetMediaNo) {
+                // 移動元の表示順番号を取得
+                $sourceOrderNo = PlanMedia::where([
+                    'hotel_cd'  => $hotelCd,
+                    'plan_id'   => $planId,
+                    'media_no'  => $sourceMediaNo,
+                ])->first()->order_no;
+
+                // 移動先の表示順番号を取得
+                $targetOrderNo = PlanMedia::where([
+                    'hotel_cd'  => $hotelCd,
+                    'plan_id'   => $planId,
+                    'media_no'  => $targetMediaNo,
+                ])->first()->order_no;
+
+                // 移動元の表示順番号を、移動先のものに更新
+                PlanMedia::where([
+                    'hotel_cd'  => $hotelCd,
+                    'plan_id'   => $planId,
+                    'media_no'  => $sourceMediaNo,
+                ])->update(['order_no' => $targetOrderNo]);
+
+                // 移動先の表示番号を、移動元のものに更新
+                PlanMedia::where([
+                    'hotel_cd'  => $hotelCd,
+                    'plan_id'   => $planId,
+                    'media_no'  => $targetMediaNo,
+                ])->update(['order_no' => $sourceOrderNo]);
             });
         } catch (\Exception $e) {
             Log::error($e);
@@ -569,7 +648,108 @@ class HtlMediaService
         }
         return [];
     }
+    public function updateRoom($hotelCd, $roomId, $oldMediaNo, $newMediaNo, $orderNo): array
+    {
+        $errorMessages = [];
+        try {
+            DB::transaction(function () use ($hotelCd, $roomId, $oldMediaNo, $newMediaNo, $orderNo) {
+                // レコードがあるかどうかチェック
+                // MEMO: 存在すれば「更新」、存在しなければ「追加」
+                if (
+                    RoomMedia2::where([
+                        'hotel_cd'  => $hotelCd,
+                        'room_id'   => $roomId,
+                        'media_no'  => $oldMediaNo,
+                    ])->exists()
+                ) {
+                    // 「更新」の場合、削除して登録
+                    RoomMedia2::where([
+                        'hotel_cd'  => $hotelCd,
+                        'room_id'   => $roomId,
+                        'media_no'  => $oldMediaNo,
+                    ])->delete();
+                }
 
+                // 登録画像が重複していないかチェック
+                if (
+                    RoomMedia2::where([
+                        'hotel_cd'  => $hotelCd,
+                        'room_id'   => $roomId,
+                        'media_no'  => $newMediaNo,
+                    ])->exists()
+                ) {
+                    throw new \Exception('error_duplicate_image');
+                }
+
+                // データを登録
+                RoomMedia2::create([
+                    'hotel_cd'  => $hotelCd,
+                    'room_id'   => $roomId,
+                    'media_no'  => $newMediaNo,
+                    'order_no'  => $orderNo,
+                ]);
+            });
+        } catch (\Exception $e) {
+            Log::error($e);
+            if ($e->getMessage() == 'error_duplicate_image') {
+                $errorMessages[] = 'この部屋には既に同じ画像が設定されています。';
+            }
+            $errorMessages[] = '部屋画像の編集に失敗しました。';
+            return $errorMessages;
+        }
+        return [];
+    }
+    public function updatePlan($hotelCd, $planId, $oldMediaNo, $newMediaNo, $orderNo): array
+    {
+        $errorMessages = [];
+        try {
+            DB::transaction(function () use ($hotelCd, $planId, $oldMediaNo, $newMediaNo, $orderNo) {
+                // レコードがあるかどうかチェック
+                // MEMO: 存在すれば「更新」、存在しなければ「追加」
+                if (
+                    PlanMedia::where([
+                        'hotel_cd'  => $hotelCd,
+                        'plan_id'   => $planId,
+                        'media_no'  => $oldMediaNo,
+                    ])->exists()
+                ) {
+                    // 「更新」の場合、削除して登録
+                    PlanMedia::where([
+                        'hotel_cd'  => $hotelCd,
+                        'plan_id'   => $planId,
+                        'media_no'  => $oldMediaNo,
+                    ])->delete();
+                }
+
+                // 登録画像が重複していないかチェック
+                if (
+                    PlanMedia::where([
+                        'hotel_cd'  => $hotelCd,
+                        'plan_id'   => $planId,
+                        'media_no'  => $newMediaNo,
+                    ])->exists()
+                ) {
+                    throw new \Exception('error_duplicate_image');
+                }
+
+                // データを登録
+                PlanMedia::create([
+                    'hotel_cd'  => $hotelCd,
+                    'plan_id'   => $planId,
+                    'media_no'  => $newMediaNo,
+                    'order_no'  => $orderNo,
+                ]);
+            });
+        } catch (\Exception $e) {
+            Log::error($e);
+            if ($e->getMessage() == 'error_duplicate_image') {
+                $errorMessages[] = 'このプランには既に同じ画像が設定されています。';
+            }
+            $errorMessages[] = 'プラン画像の編集に失敗しました。';
+            return $errorMessages;
+        }
+        return [];
+    }
     /**
      * メディア削除
      *
@@ -612,7 +792,7 @@ class HtlMediaService
     private function destroyRelatedMedia($hotelCd, $mediaNo): void
     {
         // 部屋メディア
-        RoomMedia::where([
+        RoomMedia2::where([
             'hotel_cd' => $hotelCd,
             'media_no' => $mediaNo,
         ])->delete();
@@ -657,19 +837,439 @@ class HtlMediaService
         ])->exists();
     }
 
+    // MEMO: 移植元 public\app\ctl\models\Hotel\Media2.php get_room_media
+    public function getRoomMedia($hotelCd, $roomId)
+    {
+        $a_find_room2 = Room2::where([
+            'hotel_cd' => $hotelCd,
+            'room_id' => $roomId,
+        ])->first();
+
+        $s_sql = <<< SQL
+            select
+                q1.media_no,
+                q1.order_no,
+                (q1.order_no + 1) as order_no_plus,
+                (q1.order_no - 1) as order_no_minus,
+                m.label_cd,
+                m.title,
+                m.file_nm,
+                ifnull(mo.org_file_nm, m.file_nm) as disp_file_nm,
+                m.mime_type
+            from
+                media as m
+                inner join room_media2 as q1
+                    on m.hotel_cd = q1.hotel_cd
+                        and m.media_no = q1.media_no
+                        and q1.room_id = :room_id
+                left outer join media_org as mo
+                    on m.hotel_cd = mo.hotel_cd
+                        and m.media_no = mo.media_no
+            where 1 = 1
+                and m.hotel_cd = :hotel_cd
+            order by q1.order_no
+        SQL;
+        $a_rows = DB::select($s_sql, [
+            'hotel_cd' => $hotelCd,
+            'room_id'  => $roomId,
+        ]);
+
+        $a_find_room2->medias = $a_rows;
+        return $a_find_room2;
+    }
+    // MEMO: 移植元 public\app\ctl\models\Hotel\Media2.php get_room_plan_media
+    public function getRoomPlanMedia($hotelCd, $roomId)
+    {
+        $s_sql = <<< SQL
+            select
+                q3.plan_id,
+                q3.plan_nm,
+                q3.plan_type,
+                q3.accept_status,
+                q3.plan_order_no,
+                q3.modify_ts,
+                q3.media_no,
+                q3.order_no,
+                m.label_cd,
+                m.title,
+                m.file_nm,
+                ifnull(mo.org_file_nm, m.file_nm) as disp_file_nm,
+                m.mime_type
+            from
+                (
+                    select
+                        q2.plan_id,
+                        q2.plan_nm,
+                        q2.plan_type,
+                        q2.accept_status,
+                        q2.plan_order_no,
+                        q2.modify_ts,
+                        pm.media_no,
+                        pm.order_no
+                    from
+                        (
+                            select
+                                p.plan_id,
+                                p.plan_nm,
+                                p.plan_type,
+                                p.accept_status,
+                                p.order_no as plan_order_no,
+                                p.modify_ts
+                            from
+                                plan as p
+                                inner join (
+                                    select
+                                        plan_id
+                                    from
+                                        room_plan_match
+                                    where 1 = 1
+                                        and hotel_cd = :hotel_cd1
+                                        and room_id  = :room_id
+                                ) q1
+                                    on 1 = 1
+                                    and p.plan_id = q1.plan_id
+                            where 1 = 1
+                                and p.hotel_cd = :hotel_cd2
+                                and p.display_status = 1
+                        ) q2
+                        left outer join plan_media as pm
+                            on 1 = 1
+                            and q2.plan_id = pm.plan_id
+                            and pm.hotel_cd = :hotel_cd3
+                    where 1 = 1
+                    order by
+                        pm.order_no
+                ) q3
+                left outer join media as m
+                    on 1 = 1
+                        and m.hotel_cd = :hotel_cd4
+                        and q3.media_no = m.media_no
+                left outer join media_org as mo
+                    on 1 = 1
+                        and mo.hotel_cd = :hotel_cd5
+                        and q3.media_no = mo.media_no
+            where 1 = 1
+            order by
+                q3.plan_order_no,
+                q3.order_no
+        SQL;
+        $a_rows = DB::select($s_sql, [
+            'hotel_cd1' => $hotelCd,
+            'hotel_cd2' => $hotelCd,
+            'hotel_cd3' => $hotelCd,
+            'hotel_cd4' => $hotelCd,
+            'hotel_cd5' => $hotelCd,
+            'room_id'  => $roomId,
+        ]);
+
+        $a_result = [];
+
+        // 整形
+        foreach ($a_rows as $a_row) {
+            // // メディア情報
+            // $a_media = array();
+            // $a_media['media_no']  = $a_row['media_no'];
+            // $a_media['order_no']  = $a_row['order_no'];
+            // $a_media['label_cd']  = $a_row['label_cd'];
+            // $a_media['title']     = $a_row['title'];
+            // $a_media['file_nm']   = $a_row['file_nm'];
+            // $a_media['mime_type'] = $a_row['mime_type'];
+
+            // // プランメディア情報
+            // $a_result[$a_row['plan_id']]['plan_id']       = $a_row['plan_id'];
+            // $a_result[$a_row['plan_id']]['plan_nm']       = $a_row['plan_nm'];
+            // $a_result[$a_row['plan_id']]['plan_type']     = $a_row['plan_type'];
+            // $a_result[$a_row['plan_id']]['accept_status'] = $a_row['accept_status'];
+            // $a_result[$a_row['plan_id']]['plan_order_no'] = $a_row['plan_order_no'];
+            // $a_result[$a_row['plan_id']]['modify_ts']     = $a_row['modify_ts'];
+            // $a_result[$a_row['plan_id']]['medias'][]      = $a_media;
+
+            // メディア情報
+            $a_media = [
+                'media_no'  => $a_row->media_no,
+                'order_no'  => $a_row->order_no,
+                'label_cd'  => $a_row->label_cd,
+                'title'     => $a_row->title,
+                'file_nm'   => $a_row->file_nm,
+                'mime_type' => $a_row->mime_type,
+            ];
+
+            // プランメディア情報
+            $a_result[$a_row->plan_id] = [
+                'plan_id'       => $a_row->plan_id,
+                'plan_nm'       => $a_row->plan_nm,
+                'plan_type'     => $a_row->plan_type,
+                'accept_status' => $a_row->accept_status,
+                'plan_order_no' => $a_row->plan_order_no,
+                'modify_ts'     => $a_row->modify_ts,
+            ];
+            $a_result[$a_row->plan_id]['medias'][]      = $a_media;
+        }
+
+        return $a_result;
+    }
+    // MEMO: 移植元 C:\AeonCompass\hotel\svn_trunk\public\app\ctl\models\Hotel\Room2.php is_room_akf
+    public function isRoomAkf($hotelCd, $roomId): bool
+    {
+        $s_sql = <<< SQL
+            select
+                q1.hotel_cd
+            from
+                room_akafu_relation as ra
+                inner join (
+                    select
+                        r2.hotel_cd,
+                        r2.room_id
+                    from
+                        room2 as r2
+                    where
+                        r2.hotel_cd = :hotel_cd
+                        and r2.room_id  = :room_id
+                ) as q1
+                    on ra.hotel_cd = q1.hotel_cd
+                    and ra.room_id  = q1.room_id
+        SQL;
+        $a_rows = DB::select($s_sql, [
+            'hotel_cd' => $hotelCd,
+            'room_id' => $roomId,
+        ]);
+
+        return count($a_rows) > 0;
+    }
+
+    // MEMO: 移植元 C:\AeonCompass\hotel\svn_trunk\public\app\ctl\models\Hotel\Room2.php get_plan_media
+    public function getPlanMedia($hotelCd, $planId)
+    {
+        $a_find_plan = Plan::where([
+            'hotel_cd' => $hotelCd,
+            'plan_id' => $planId
+        ])->first();
+
+        $s_sql = <<< SQL
+            select
+                q1.media_no,
+                    q1.order_no,
+                    (q1.order_no + 1) as order_no_plus,
+                    (q1.order_no - 1) as order_no_minus,
+                    m.label_cd,
+                    m.title,
+                    m.file_nm,
+                    m.mime_type
+            from
+                media m
+                inner join (
+                    select
+                        media_no,
+                        order_no
+                    from
+                        plan_media
+                    where 1 = 1
+                        and hotel_cd = :hotel_cd
+                        and plan_id  = :plan_id
+                ) as q1
+                    on m.media_no = q1.media_no
+            where 1 = 1
+                and m.hotel_cd = :hotel_cd2
+            order by q1.order_no
+        SQL;
+        $a_rows = DB::select($s_sql, [
+            'hotel_cd' => $hotelCd,
+            'hotel_cd2' => $hotelCd,
+            'plan_id'  => $planId
+        ]);
+
+        $a_find_plan->medias = $a_rows;
+
+        return $a_find_plan;
+    }
+
+    // プランに紐付く部屋と部屋メディア情報取得
+    // MEMO: 移植元 C:\AeonCompass\hotel\svn_trunk\public\app\ctl\models\Hotel\Room2.php get_plan_room_media
+    public function getPlanRoomMedia($hotelCd, $planId)
+    {
+        $s_sql = <<< SQL
+            select
+                q3.room_id,
+                q3.room_nm,
+                q3.room_type,
+                q3.accept_status,
+                q3.room_order_no,
+                q3.media_no,
+                q3.order_no,
+                m.label_cd,
+                m.title,
+                m.file_nm,
+                m.mime_type
+            from
+                media as m
+                right outer join (
+                    select
+                        q2.room_id,
+                        q2.room_nm,
+                        q2.room_type,
+                        q2.accept_status,
+                        q2.room_order_no,
+                        rm2.media_no,
+                        rm2.order_no
+                    from
+                        room_media2 as rm2
+                        right outer join (
+                            select
+                                r2.room_id,
+                                r2.room_nl as room_nm,
+                                r2.room_type,
+                                r2.accept_status,
+                                r2.order_no as room_order_no
+                            from
+                                room2 as r2 
+                                inner join (
+                                    select
+                                        room_id
+                                    from
+                                        room_plan_match
+                                    where 1 = 1
+                                        and hotel_cd = :hotel_cd1
+                                        and plan_id  = :plan_id
+                                ) as q1
+                                    on r2.room_id  = q1.room_id
+                            where 1 = 1
+                                and r2.hotel_cd = :hotel_cd2
+                                and r2.display_status = 1
+                        ) as q2
+                            on rm2.room_id = q2.room_id
+                    where 1 = 1
+                        and rm2.hotel_cd = :hotel_cd3
+                    order by
+                        rm2.order_no
+                ) as q3
+                    on m.media_no = q3.media_no
+            where 1 = 1
+                and m.hotel_cd = :hotel_cd4
+            order by
+                q3.room_order_no,
+                q3.order_no
+        SQL;
+        $a_rows = DB::select($s_sql, [
+            'hotel_cd1' => $hotelCd,
+            'hotel_cd2' => $hotelCd,
+            'hotel_cd3' => $hotelCd,
+            'hotel_cd4' => $hotelCd,
+            'plan_id'   => $planId,
+        ]);
+        $a_result = [];
+
+        // 整形
+        foreach ($a_rows as $a_row) {
+            // // メディア情報
+            // $a_media = [];
+            // $a_media['media_no']  = $a_row['media_no'];
+            // $a_media['order_no']  = $a_row['order_no'];
+            // $a_media['label_cd']  = $a_row['label_cd'];
+            // $a_media['title']     = $a_row['title'];
+            // $a_media['file_nm']   = $a_row['file_nm'];
+            // $a_media['mime_type'] = $a_row['mime_type'];
+
+            // // プランメディア情報
+            // $a_result[$a_row['room_id']]['room_id']       = $a_row['room_id'];
+            // $a_result[$a_row['room_id']]['room_nm']       = $a_row['room_nm'];
+            // $a_result[$a_row['room_id']]['room_type']     = $a_row['room_type'];
+            // $a_result[$a_row['room_id']]['accept_status'] = $a_row['accept_status'];
+            // $a_result[$a_row['room_id']]['room_order_no'] = $a_row['room_order_no'];
+            // $a_result[$a_row['room_id']]['medias'][]      = $a_media;
+
+            // メディア情報
+            $a_media = [
+                'media_no'  => $a_row->media_no,
+                'order_no'  => $a_row->order_no,
+                'label_cd'  => $a_row->label_cd,
+                'title'     => $a_row->title,
+                'file_nm'   => $a_row->file_nm,
+                'mime_type' => $a_row->mime_type,
+            ];
+
+            // プランメディア情報
+            $a_result[$a_row->room_id]['room_id']       = $a_row->room_id;
+            $a_result[$a_row->room_id]['room_nm']       = $a_row->room_nm;
+            $a_result[$a_row->room_id]['room_type']     = $a_row->room_type;
+            $a_result[$a_row->room_id]['accept_status'] = $a_row->accept_status;
+            $a_result[$a_row->room_id]['room_order_no'] = $a_row->room_order_no;
+            $a_result[$a_row->room_id]['medias'][]      = $a_media;
+        }
+
+        return $a_result;
+    }
+
     /**
      * フォトギャラリー画像削除
      *
      * @param string $hotelCd
      * @param int $mediaNo
-     * @return void
+     * @return bool
      */
-    public function removeGallery($hotelCd, $mediaNo): void
+    public function removeGalleryMedia($hotelCd, $mediaNo): bool
     {
-        HotelMedia::where([
-            'hotel_cd'  => $hotelCd,
-            'type'      => HotelMedia::TYPE_OTHER,
-            'media_no'  => $mediaNo,
-        ])->delete();
+        try {
+            DB::transaction(function () use ($hotelCd, $mediaNo) {
+                HotelMedia::where([
+                    'hotel_cd'  => $hotelCd,
+                    'type'      => HotelMedia::TYPE_OTHER,
+                    'media_no'  => $mediaNo,
+                ])->delete();
+            });
+        } catch (\Exception $e) {
+            Log::error($e);
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 部屋画像削除
+     *
+     * @param string $hotelCd
+     * @param string $roomId
+     * @param int $mediaNo
+     * @return bool
+     */
+    public function removeRoomMedia($hotelCd, $roomId, $mediaNo): bool
+    {
+        try {
+            DB::transaction(function () use ($hotelCd, $roomId, $mediaNo) {
+                RoomMedia2::where([
+                    'hotel_cd'  => $hotelCd,
+                    'room_id'   => $roomId,
+                    'media_no'  => $mediaNo,
+                ])->delete();
+            });
+        } catch (\Exception $e) {
+            Log::error($e);
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * プラン画像削除
+     *
+     * @param string $hotelCd
+     * @param string $planId
+     * @param int $mediaNo
+     * @return bool
+     */
+    public function removePlanMedia($hotelCd, $planId, $mediaNo): bool
+    {
+        try {
+            DB::transaction(function () use ($hotelCd, $planId, $mediaNo) {
+                PlanMedia::where([
+                    'hotel_cd'  => $hotelCd,
+                    'plan_id'   => $planId,
+                    'media_no'  => $mediaNo,
+                ])->delete();
+            });
+        } catch (\Exception $e) {
+            Log::error($e);
+            return false;
+        }
+        return true;
     }
 }

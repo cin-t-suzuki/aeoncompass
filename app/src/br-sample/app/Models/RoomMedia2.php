@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class RoomMedia extends Model
+class RoomMedia2 extends Model
 {
     use HasFactory;
 
@@ -25,4 +25,25 @@ class RoomMedia extends Model
      * @var string
      */
     // protected $primaryKey = 'hotel_cd';
+
+    /**
+     * モデルにタイムスタンプを付けるか
+     *
+     * @var bool
+     */
+    public $timestamps = true;
+    public const CREATED_AT = 'entry_ts';
+    public const UPDATED_AT = 'modify_ts';
+
+    /**
+     * 複数代入可能な属性
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'hotel_cd',
+        'room_id',
+        'media_no',
+        'order_no',
+    ];
 }

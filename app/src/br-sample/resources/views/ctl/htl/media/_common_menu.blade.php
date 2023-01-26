@@ -12,38 +12,27 @@ $user = (object)[
 @endphp
 
 <br />
+
 <div align="right">
     @if (\Route::CurrentRouteName() != 'ctl.htl.media.list')
-        {{-- <form action="/htlsmedia/list/" method="post"> --}}
         {{ Form::open(['route' => 'ctl.htl.media.list', 'method' => 'get']) }}
-        <input type="submit" value="「画像一覧管理」{{ strip_tags($user->hotel->hotel_nm) }}へ">
-        <input type="hidden" name="target_cd" value="{{ $target_cd }}" />
+            {{ Form::submit('「画像一覧管理」' . strip_tags($user->hotel->hotel_nm) . 'へ') }}
+            {{ Form::hidden('target_cd', $target_cd) }}
         {{ Form::close() }}
-        {{-- </form> --}}
     @endif
     @if (
         \Route::CurrentRouteName() != 'ctl.htl.medil.edit_hotel'
         && \Route::CurrentRouteName() != 'ctl.htl.medil.update_hotel'
         && \Route::CurrentRouteName() != 'ctl.htl.medil.sort_hotel'
     )
-        {{-- <form action="/ctl/htlsmedia/edithotel/" method="post"> --}}
         {{ Form::open(['route' => 'ctl.htl.media.edit_hotel', 'method' => 'get']) }}
-
-            {{-- <input type="submit" value="「施設画像設定」{{ strip_tags($user->hotel->hotel_nm) }}へ"> --}}
             {{ Form::submit('「施設画像設定」' . strip_tags($user->hotel->hotel_nm) . 'へ') }}
-
-            {{-- <input type="hidden" name="target_cd" value="{{ $target_cd }}" /> --}}
             {{ Form::hidden('target_cd', $target_cd) }}
-
         {{ Form::close() }}
-        {{-- </form> --}}
     @endif
 
-    {{-- TODO: 遷移先未実装 --}}
-    <form action="/ctl/htlsroomplan2/list/" method="get">
-    {{-- {{ Form::open(['action' => '/htlsroomplan2/list/', 'method' => 'post']) }} --}}
-    <input type="submit" value="「プランメンテナンス」{{ strip_tags($user->hotel->hotel_nm) }}へ">
-    <input type="hidden" name="target_cd" value="{{ $target_cd }}" />
-    {{-- {{ Form::close() }} --}}
-    </form>
+    {{ Form::open(['route' => 'ctl.htl.room_plan.list', 'method' => 'get']) }}
+        {{ Form::submit('「プランメンテナンス」' . strip_tags($user->hotel->hotel_nm) . 'へ') }}
+        {{ Form::hidden('target_cd', $target_cd) }}
+    {{ Form::close() }}
 </div>

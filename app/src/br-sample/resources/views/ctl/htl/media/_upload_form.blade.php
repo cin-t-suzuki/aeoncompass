@@ -69,9 +69,8 @@
 {{-- <form action="{$v->env.source_path}{$v->env.module}/htlsmedia/upload/" method="post" enctype="multipart/form-data" id="upload_form"> --}}
     {{ Form::hidden('target_cd', $target_cd) }}
     
-    {{-- TODO: select media のときだけ存在する --}}
-    {{ Form::hidden('room_id', $form_params['room_id']) }}
-    {{ Form::hidden('plan_id', $form_params['plan_id']) }}
+    {{ Form::hidden('room_id', $room_id) }}
+    {{ Form::hidden('plan_id', $plan_id) }}
 
     {{-- TODO: この $media はどこから来たものなのか？ --}}
     {{-- {{ Form::hidden('media_no', $media->media_no) }} --}}

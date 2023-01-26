@@ -84,6 +84,7 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 
     Route::get('/htltop/index/target_cd/{target_cd}', function ($targetCd) {return 'TODO: htl top index : ' . $targetCd; })->name('ctl.htl_top.index');
 
+    // TODO: get か post か、適切なほうを選択する。
     Route::get('/htlHotel/show', [\App\Http\Controllers\ctl\HtlHotelController::class, 'show'])->name('ctl.htl_hotel.show');
     Route::match(['get', 'post'], '/htlHotel/edit/'             , function(){ return 'TODO:'; })->name('ctl.htl_hotel.edit');
     Route::match(['get', 'post'], '/htlHotelCard/show/'         , function(){ return 'TODO:'; })->name('ctl.htl_hotel_card.show');
@@ -270,10 +271,21 @@ Route::post('/ctl/htlMedia/sortMedia', [\App\Http\Controllers\ctl\HtlMediaContro
 Route::get('/ctl/htlMedia/editMedia', [\App\Http\Controllers\ctl\HtlMediaController::class, 'editMedia'])->name('ctl.htl.media.edit_media');
 Route::post('/ctl/htlMedia/updateMedia', [\App\Http\Controllers\ctl\HtlMediaController::class, 'updateMedia'])->name('ctl.htl.media.update_media');
 Route::post('/ctl/htlMedia/destroyMedia', [\App\Http\Controllers\ctl\HtlMediaController::class, 'destroyMedia'])->name('ctl.htl.media.destroy_media');
-Route::get('/ctl/htlMedia/editHotel', [\App\Http\Controllers\ctl\HtlMediaController::class, 'editHotel'])->name('ctl.htl.media.edit_hotel');
+
 Route::get('/ctl/htlMedia/selectMedia', [\App\Http\Controllers\ctl\HtlMediaController::class, 'selectMedia'])->name('ctl.htl.media.select_media');
+Route::get('/ctl/htlMedia/editHotel', [\App\Http\Controllers\ctl\HtlMediaController::class, 'editHotel'])->name('ctl.htl.media.edit_hotel');
+Route::get('/ctl/htlMedia/editRoom', [\App\Http\Controllers\ctl\HtlMediaController::class, 'editRoom'])->name('ctl.htl.media.edit_room');
+Route::get('/ctl/htlMedia/editPlan', [\App\Http\Controllers\ctl\HtlMediaController::class, 'editPlan'])->name('ctl.htl.media.edit_plan');
 Route::post('/ctl/htlMedia/updateHotel', [\App\Http\Controllers\ctl\HtlMediaController::class, 'updateHotel'])->name('ctl.htl.media.update_hotel');
-Route::post('/ctl/htlMedia/updatePlan', [\App\Http\Controllers\ctl\HtlMediaController::class, 'updatePlan'])->name('ctl.htl.media.update_plan');
 Route::post('/ctl/htlMedia/updateRoom', [\App\Http\Controllers\ctl\HtlMediaController::class, 'updateRoom'])->name('ctl.htl.media.update_room');
+Route::post('/ctl/htlMedia/updatePlan', [\App\Http\Controllers\ctl\HtlMediaController::class, 'updatePlan'])->name('ctl.htl.media.update_plan');
 Route::post('/ctl/htlMedia/sortGallery', [\App\Http\Controllers\ctl\HtlMediaController::class, 'sortGallery'])->name('ctl.htl.media.sort_gallery');
+Route::post('/ctl/htlMedia/sortRoom', [\App\Http\Controllers\ctl\HtlMediaController::class, 'sortRoom'])->name('ctl.htl.media.sort_room');
+Route::post('/ctl/htlMedia/sortPlan', [\App\Http\Controllers\ctl\HtlMediaController::class, 'sortPlan'])->name('ctl.htl.media.sort_plan');
 Route::post('/ctl/htlMedia/removeGallery', [\App\Http\Controllers\ctl\HtlMediaController::class, 'removeGallery'])->name('ctl.htl.media.remove_gallery');
+Route::post('/ctl/htlMedia/removeRoom', [\App\Http\Controllers\ctl\HtlMediaController::class, 'removeRoom'])->name('ctl.htl.media.remove_room');
+Route::post('/ctl/htlMedia/removePlan', [\App\Http\Controllers\ctl\HtlMediaController::class, 'removePlan'])->name('ctl.htl.media.remove_plan');
+
+Route::get('/ctl/htlsroomplan2/list', function () {
+    return 'TODO: プランメンテナンス画面';
+})->name('ctl.htl.room_plan.list');
