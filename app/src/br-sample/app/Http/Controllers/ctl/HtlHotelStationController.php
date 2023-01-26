@@ -204,17 +204,22 @@ class HtlHotelStationController extends _commonController
             }
 
             // 登録
+            $a_attributes['hotel_cd'] = $target_cd;
+            $a_attributes['entry_cd'] = 'entry_cd';     // TODO $this->box->info->env->action_cd;
+            $a_attributes['entry_ts'] = now();
+            $a_attributes['modify_cd'] = 'modify_cd';   // TODO $this->box->info->env->action_cd;
+            $a_attributes['modify_ts'] = now();
+
             $hotel_stations_create = $hotel_stations_model->create([
                 'hotel_cd'         => $target_cd,                                   // ホテルコード
                 'station_id'       => $a_request_hotel_station['station_id'],       // 駅ID
                 'traffic_way'      => $a_request_hotel_station['traffic_way'],      // 交通手段
                 'order_no'         => $n_order_no,                                  // 表示順
                 'minute'           => $a_request_hotel_station['minute'],           // 分
-                'entry_cd'         => 'entry_cd',                                   // TODO $this->box->info->env->action_cd
-                'entry_ts'         => now(),
-                'modify_cd'        => 'modify_cd',                                  // TODO $this->box->info->env->action_cd
-                'modify_ts'        => now(),
-
+                'entry_cd'         => $a_attributes['entry_cd'],
+                'entry_ts'         => $a_attributes['entry_ts'],
+                'modify_cd'        => $a_attributes['modify_cd'],
+                'modify_ts'        => $a_attributes['modify_ts']
             ]);
 
             if (!$hotel_stations_create) {
@@ -225,6 +230,9 @@ class HtlHotelStationController extends _commonController
                     'target_cd' => $target_cd
                 ])->with(['errors' => 'ご希望の交通アクセスデータを登録できませんでした。']);
             }
+
+            // 施設情報ページの更新依頼
+            $hotel_stations_model->hotel_modify($a_attributes);
 
             // コミット
             DB::commit();
@@ -302,8 +310,15 @@ class HtlHotelStationController extends _commonController
             // トランザクション開始
             DB::beginTransaction();
 
+            $a_attributes['hotel_cd'] = $target_cd;
+            $a_attributes['entry_cd'] = 'entry_cd';     // TODO $this->box->info->env->action_cd;
+            $a_attributes['entry_ts'] = now();
+            $a_attributes['modify_cd'] = 'modify_cd';   // TODO $this->box->info->env->action_cd;
+            $a_attributes['modify_ts'] = now();
+
             // 更新
             $hotel_stations_model = new HotelStation();
+
             // 交通手段を変更する場合、登録済のレコードがないか確認し、登録済みの場合はエラー
             if ($a_request_hotel_station['traffic_way'] != $a_request_hotel_station['old_traffic_way']) {
                 $Hotel_Station_value = $hotel_stations_model->where(
@@ -312,8 +327,8 @@ class HtlHotelStationController extends _commonController
                         'station_id'    => $a_request_hotel_station['station_id'],
                         'traffic_way'   => $a_request_hotel_station['traffic_way']
                     ]
-                )->first();
-                if (!empty($Hotel_Station_value)) {
+                )->exists();
+                if ($Hotel_Station_value) {
                     $errors = ['登録された内容はすでに存在しています。'];
                     $a_hotel_stations['values']  = $this->getHotelStation($target_cd, '', ['station_nm' => '']);    // 交通アクセスリスト取得
 
@@ -334,9 +349,8 @@ class HtlHotelStationController extends _commonController
             ])->update([
                 'traffic_way' => $a_request_hotel_station['traffic_way'],
                 'minute'      => $a_request_hotel_station['minute'],
-                'modify_ts'   => now(),
-                'modify_cd'   => 'modify_cd',   // $this->box->info->env->action_cd
-
+                'modify_cd'   => $a_attributes['modify_cd'],
+                'modify_ts'   => $a_attributes['modify_ts']
             ]);
 
             if (!$hotel_stations_update) {
@@ -347,6 +361,10 @@ class HtlHotelStationController extends _commonController
                     'target_cd' => $target_cd
                 ])->with(['errors' => 'ご希望の交通アクセスデータを登録できませんでした。']);
             }
+
+            // 施設情報ページの更新依頼
+            $hotel_stations_model->hotel_modify($a_attributes);
+
             // コミット
             DB::commit();
 
@@ -392,6 +410,17 @@ class HtlHotelStationController extends _commonController
                     'errors'          => $errors
                 ]);
             }
+
+            // 施設情報ページの更新依頼
+            $hotel_stations_model = new HotelStation();
+            $a_attributes['hotel_cd'] = $target_cd;
+            $a_attributes['entry_cd'] = 'entry_cd';     // TODO $this->box->info->env->action_cd;
+            $a_attributes['entry_ts'] = now();
+            $a_attributes['modify_cd'] = 'modify_cd';   // TODO $this->box->info->env->action_cd;
+            $a_attributes['modify_ts'] = now();
+
+            $hotel_stations_model->hotel_modify($a_attributes);
+
             // コミット
             DB::commit();
 
@@ -439,6 +468,16 @@ class HtlHotelStationController extends _commonController
                 $this->moveStations('down', $a_request_hotel_station['station_id'], $a_request_hotel_station['traffic_way'], $target_cd);
             }
 
+            // 施設情報ページの更新依頼
+            $hotel_stations_model = new HotelStation();
+            $a_attributes['hotel_cd'] = $target_cd;
+            $a_attributes['entry_cd'] = 'entry_cd';     // TODO $this->box->info->env->action_cd;
+            $a_attributes['entry_ts'] = now();
+            $a_attributes['modify_cd'] = 'modify_cd';   // TODO $this->box->info->env->action_cd;
+            $a_attributes['modify_ts'] = now();
+
+            $hotel_stations_model->hotel_modify($a_attributes);
+
             // コミット
             DB::commit();
 
@@ -482,17 +521,28 @@ class HtlHotelStationController extends _commonController
 
             // 並び替え初期化
             $this->defaultOrderStations($target_cd);
+
             // コミット
             DB::commit();
 
+            // 施設情報ページの更新依頼
+            $hotel_stations_model = new HotelStation();
+            $a_attributes['hotel_cd'] = $target_cd;
+            $a_attributes['entry_cd'] = 'entry_cd';     // TODO $this->box->info->env->action_cd;
+            $a_attributes['entry_ts'] = now();
+            $a_attributes['modify_cd'] = 'modify_cd';   // TODO $this->box->info->env->action_cd;
+            $a_attributes['modify_ts'] = now();
+
+            $hotel_stations_model->hotel_modify($a_attributes);
+
             // list アクションに転送します
             $a_hotel_stations['values']  = $this->getHotelStation($target_cd, '', ['station_nm' => '']);    // 交通アクセスリスト取得
-            // dd($a_hotel_stations['values']);
+
             return view('ctl.htlhotelstation.list', [
                 'target_cd'       => $target_cd,
                 'a_hotel_station' => $a_hotel_stations,
                 'a_hotel_link'    => $a_request_hotel_station,
-                'guides'          => ['並び替えが完了致しましたよ。']
+                'guides'          => ['並び替えが完了致しました。']
             ]);
         } catch (Exception $e) {
             throw $e;
