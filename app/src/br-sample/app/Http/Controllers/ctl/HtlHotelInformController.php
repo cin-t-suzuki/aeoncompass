@@ -132,6 +132,12 @@ class HtlHotelInformController extends _commonController
                     'target_cd' => $target_cd,
                 ])->with(['errors' => $errorList]);
             }
+
+            $a_attributes['entry_cd'] = 'entry_cd';     // TODO $this->box->info->env->action_cd;
+            $a_attributes['entry_ts'] = now();
+            $a_attributes['modify_cd'] = 'modify_cd';   // TODO $this->box->info->env->action_cd;
+            $a_attributes['modify_ts'] = now();
+
             // データ登録
             $hotel_inform_insert = $Hotel_Inform->create([
                 'hotel_cd' => $target_cd,
@@ -139,10 +145,10 @@ class HtlHotelInformController extends _commonController
                 'inform_type' => $a_request_Hotel_inform['inform_type'],
                 'inform' => $a_request_Hotel_inform['inform'],
                 'order_no' => $order_no,
-                'entry_cd' => 'entry_cd',   // TODO $this->box->info->env->action_cd
-                'entry_ts' => now(),
-                'modify_cd' => 'modify_cd', // TODO $this->box->info->env->action_cd
-                'modify_ts' => now()
+                'entry_cd' => $a_attributes['entry_cd'],   // TODO $this->box->info->env->action_cd
+                'entry_ts' => $a_attributes['entry_ts'],
+                'modify_cd' => $a_attributes['modify_cd'], // TODO $this->box->info->env->action_cd
+                'modify_ts' => $a_attributes['modify_ts']
             ]);
 
             // 保存に失敗したときエラーメッセージ表示
@@ -154,6 +160,9 @@ class HtlHotelInformController extends _commonController
                     'target_cd' => $target_cd
                 ])->with(['errors' => 'ご希望のデータを登録できませんでした。']);
             }
+
+            // 施設情報ページの更新依頼
+            $Hotel_Inform->hotel_modify($a_attributes);
 
             // コミット
             DB::commit();
@@ -333,6 +342,11 @@ class HtlHotelInformController extends _commonController
                 ])->with(['errors' => $errorList]);
             }
 
+            $a_attributes['entry_cd'] = 'entry_cd';     // TODO $this->box->info->env->action_cd;
+            $a_attributes['entry_ts'] = now();
+            $a_attributes['modify_cd'] = 'modify_cd';   // TODO $this->box->info->env->action_cd;
+            $a_attributes['modify_ts'] = now();
+
             // inform_typeに変更がある場合 delete insert
             if ($a_request_hotel_inform['inform_type'] != $a_hotel_inform['inform_type']) {
                 //inform_typeを注意事項からその他に変更した場合
@@ -360,15 +374,15 @@ class HtlHotelInformController extends _commonController
                     foreach ($a_hotel_inform_cancel['values'] as $key => $value) {
                         // 登録処理
                         $Hotel_Inform->create([
-                            'hotel_cd'    => $target_cd,             // ホテル
-                            'branch_no'   => $value->branch_no,      // 枝番
-                            'order_no'    => $value->order_no,       // 枝番
-                            'inform_type' => '0',                    // 種別
-                            'inform'      => $value->inform,         // コメント
-                            'entry_cd'    => 'entry_cd',             // TODO $this->box->info->env->action_cd
-                            'entry_ts'    => now(),
-                            'modify_cd'   => 'modify_cd',            // TODO $this->box->info->env->action_cd
-                            'modify_ts'   => now(),
+                            'hotel_cd'    => $target_cd,                    // ホテル
+                            'branch_no'   => $value->branch_no,             // 枝番
+                            'order_no'    => $value->order_no,              // 枝番
+                            'inform_type' => '0',                           // 種別
+                            'inform'      => $value->inform,                // コメント
+                            'entry_cd'    => $a_attributes['entry_cd'],
+                            'entry_ts'    => $a_attributes['entry_ts'],
+                            'modify_cd'   => $a_attributes['modify_cd'],
+                            'modify_ts'   => $a_attributes['modify_ts'],
                         ]);
                     }
                     // 変更するデータを更新
@@ -383,8 +397,8 @@ class HtlHotelInformController extends _commonController
                                 'inform_type' => $a_request_hotel_inform['inform_type'],
                                 'inform'      => $a_request_hotel_inform['inform'],
                                 'order_no'    => $order_no,
-                                'modify_cd'   => 'modify_cd', // TODO $this->box->info->env->action_cd
-                                'modify_ts'   => now()
+                                'modify_cd'   => $a_attributes['modify_cd'],
+                                'modify_ts'   => $a_attributes['modify_ts']
                             ]
                         );
                     $a_hotel_inform_cancel = $this->getHotelInformCancel($target_cd);
@@ -428,15 +442,15 @@ class HtlHotelInformController extends _commonController
                     foreach ($a_hotel_inform_free['values'] as $key => $value) {
                         //登録処理
                         $Hotel_Inform->create([
-                            'hotel_cd'    => $target_cd,             // ホテル
-                            'branch_no'   => $value->branch_no,      // 枝番
-                            'order_no'    => $value->order_no,       // 枝番
-                            'inform_type' => '1',                    // 種別
-                            'inform'      => $value->inform,         // コメント
-                            'entry_cd'    => 'entry_cd',             // TODO $this->box->info->env->action_cd
-                            'entry_ts'    => now(),
-                            'modify_cd'   => 'modify_cd',            // TODO $this->box->info->env->action_cd
-                            'modify_ts'   => now(),
+                            'hotel_cd'    => $target_cd,                // ホテル
+                            'branch_no'   => $value->branch_no,         // 枝番
+                            'order_no'    => $value->order_no,          // 枝番
+                            'inform_type' => '1',                       // 種別
+                            'inform'      => $value->inform,            // コメント
+                            'entry_cd'    => $a_attributes['entry_cd'],
+                            'entry_ts'    => $a_attributes['entry_ts'],
+                            'modify_cd'   => $a_attributes['modify_cd'],
+                            'modify_ts'   => $a_attributes['modify_ts'],
                         ]);
                     }
                     // 変更するデータを更新
@@ -451,8 +465,8 @@ class HtlHotelInformController extends _commonController
                                 'inform_type' => $a_request_hotel_inform['inform_type'],
                                 'inform'      => $a_request_hotel_inform['inform'],
                                 'order_no'    => $order_no,
-                                'modify_cd'   => 'modify_cd', // TODO $this->box->info->env->action_cd
-                                'modify_ts'   => now()
+                                'modify_cd'   => $a_attributes['modify_cd'],
+                                'modify_ts'   => $a_attributes['modify_ts']
                             ]
                         );
                     $a_hotel_inform_cancel = $this->getHotelInformCancel($target_cd);
@@ -474,7 +488,7 @@ class HtlHotelInformController extends _commonController
                     }
                 }
             } else {
-            // inform_typeに変更が無い場合 update
+                // inform_typeに変更が無い場合 update
                 $hotel_inform_update = $Hotel_Inform->where(
                     [
                         'hotel_cd'  => $target_cd,
@@ -486,8 +500,8 @@ class HtlHotelInformController extends _commonController
                             'inform_type' => $a_request_hotel_inform['inform_type'],
                             'inform'      => $a_request_hotel_inform['inform'],
                             'order_no'    => $order_no,
-                            'modify_cd'   => 'modify_cd', // TODO $this->box->info->env->action_cd
-                            'modify_ts'   => now()
+                            'modify_cd'   => $a_attributes['modify_cd'],
+                            'modify_ts'   => $a_attributes['modify_ts']
                         ]
                     );
 
@@ -499,6 +513,7 @@ class HtlHotelInformController extends _commonController
                         'target_cd' => $target_cd
                     ])->with(['errors' => 'ご希望の施設連絡事項データを更新できませんでした。']);
                 }
+
 
                 $a_hotel_inform_cancel = $this->getHotelInformCancel($target_cd);
                 //branch_noとorder_noの整形
@@ -518,6 +533,9 @@ class HtlHotelInformController extends _commonController
                     }
                 }
             }
+
+            // 施設情報ページの更新依頼
+            $Hotel_Inform->hotel_modify($a_attributes);
 
             // コミット
             DB::commit();
@@ -556,123 +574,17 @@ class HtlHotelInformController extends _commonController
                 ]
             )->get();
 
+            $a_attributes['branch_no'] = $a_request_hotel_inform['branch_no'];
+            $a_attributes['order_no'] = $a_request_hotel_inform['order_no'];
+            $a_attributes['inform'] = $a_request_hotel_inform['inform'];
+            $a_attributes['hotel_cd'] = $target_cd;
+            $a_attributes['entry_cd'] = 'entry_cd';        // TODO $this->box->info->env->action_cd,;
+            $a_attributes['entry_ts'] = now();
+            $a_attributes['modify_cd'] = 'modify_cd';      // TODO $this->box->info->env->action_cd,;
+            $a_attributes['modify_ts'] = now();
+
             if (count($a_hotel_inform) > 0) {
-                //ホテルコードに関連付くデータを全件取得
-                $a_hotel_inform_free = $this->getHotelInformFree($target_cd);
-                $a_hotel_inform_cancel = $this->getHotelInformCancel($target_cd);
-
-                //ホテルコードに絡むデータキャンセル部分のみ削除
-                foreach ($a_hotel_inform_free['values'] as $key => $hotel_inform_value) {
-                    $Hotel_Inform->where([
-                        'hotel_cd'   => $target_cd,
-                        'branch_no'  => $hotel_inform_value->branch_no
-                    ])->delete();
-                }
-                //ホテルコードに絡むデータキャンセル部分のみ削除
-                foreach ($a_hotel_inform_cancel['values'] as $key => $hotel_inform_value) {
-                    $Hotel_Inform->where([
-                        'hotel_cd'   => $target_cd,
-                        'branch_no'  => $hotel_inform_value->branch_no
-                    ])->delete();
-                }
-
-                //削除したいブランチの要素番号
-                $branchKey = "";
-
-                foreach ($a_hotel_inform_cancel['values'] as $key => $value) {
-                    //削除したいものは省く ブランチＮＯ
-                    if ($a_request_hotel_inform['branch_no'] != $value->branch_no) {
-                        if ($a_request_hotel_inform['branch_no'] < $value->branch_no) {
-                            $a_hotel_inform_cancel['values'][$key]->branch_no = $value->branch_no - 1;
-                        }
-                    } else {
-                        $branchKey = $key;
-                    }
-
-                    //削除したいものは省く order_no
-                    if ($a_request_hotel_inform['order_no'] != $value->order_no) {
-                        if ($a_request_hotel_inform['order_no'] < $value->order_no) {
-                            $a_hotel_inform_cancel['values'][$key]->order_no = $value->order_no - 1;
-                        }
-                    }
-                }
-                //削除したいデータ以外の物を登録
-                foreach ($a_hotel_inform_cancel['values'] as $key => $value) {
-                    if ($branchKey != $key) {
-                        // バリデートを実行
-                        $a_attributes = [];
-                        $a_attributes['hotel_cd'] = $target_cd;
-                        $a_attributes['branch_no'] = $value->branch_no;
-                        $a_attributes['inform_type'] = '0';
-                        $a_attributes['order_no'] = $value->order_no;
-                        $a_attributes['inform'] = $value->inform;
-
-                        $errorList = [];
-                        $errorList = $Hotel_Inform->validation($a_attributes);
-                        if (count($errorList) > 0) {
-                            DB::rollback();
-                            return $this->list($request, [
-                                'target_cd' => $target_cd
-                            ])->with(['errors' => $errorList]);
-                        }
-
-                        // 登録処理
-                        $Hotel_Inform->create([
-                            'hotel_cd'    => $target_cd,        //ホテル
-                            'branch_no'   => $value->branch_no, //枝番
-                            'order_no'    => $value->order_no,  //表示順
-                            'inform_type' => '0',               //種別
-                            'inform'      => $value->inform,    //コメント
-                            'entry_cd'    => 'entry_cd',        // TODO $this->box->info->env->action_cd,
-                            'entry_ts'    => now(),
-                            'modify_cd'   => 'modify_cd',       // TODO $this->box->info->env->action_cd,
-                            'modify_ts'   => now(),
-
-                        ]);
-                    }
-                }
-                foreach ($a_hotel_inform_free['values'] as $key => $value) {
-                    //削除したいものは省く ブランチＮＯ
-                    if ($a_request_hotel_inform['branch_no'] != $value->branch_no) {
-                        if ($a_request_hotel_inform['branch_no'] < $value->branch_no) {
-                            $a_hotel_inform_free['values'][$key]->branch_no = $value->branch_no - 1;
-                        }
-                    }
-                }
-                //削除したいデータ以外の物を登録
-                foreach ($a_hotel_inform_free['values'] as $key => $value) {
-                    // バリデートを実行
-                    $a_attributes = [];
-                    $a_attributes['hotel_cd'] = $target_cd;
-                    $a_attributes['branch_no'] = $value->branch_no;
-                    $a_attributes['inform_type'] = '1';
-                    $a_attributes['order_no'] = $value->order_no;
-                    $a_attributes['inform'] = $value->inform;
-
-                    $errorList = [];
-                    $errorList = $Hotel_Inform->validation($a_attributes);
-                    if (count($errorList) > 0) {
-                        DB::rollback();
-                        return $this->list($request, [
-                            'target_cd' => $target_cd
-                        ])->with(['errors' => $errorList]);
-                    };
-
-                    $Hotel_Inform->create([
-                        'hotel_cd'    => $target_cd,        //ホテル
-                        'branch_no'   => $value->branch_no, //枝番
-                        'order_no'    => $value->order_no,  //表示順
-                        'inform_type' => '1',               //種別
-                        'inform'      => $value->inform,    //コメント
-                        'entry_cd'    => 'entry_cd',        // TODO $this->box->info->env->action_cd,
-                        'entry_ts'    => now(),
-                        'modify_cd'   => 'modify_cd',       // TODO $this->box->info->env->action_cd,
-                        'modify_ts'   => now(),
-
-                    ]);
-                }
-                // コミット
-                DB::commit();
+                $Hotel_Inform->destroyAction($a_attributes);
             } else {
                 // エラーメッセージ
                 // list アクションに転送します
@@ -680,6 +592,8 @@ class HtlHotelInformController extends _commonController
                     'target_cd' => $target_cd
                 ])->with(['errors' => ('ご希望の施設連絡事項データが見つかりませんでした。')]);
             }
+            // コミット
+            DB::commit();
 
             //branch_noとorder_noの整形
             $a_hotel_inform_cancel = $this->getHotelInformCancel($target_cd);
@@ -737,26 +651,35 @@ class HtlHotelInformController extends _commonController
                 $a_hotel_inform_free = $this->getHotelInformFree($target_cd);
                 $a_hotel_inform_cancel = $this->getHotelInformCancel($target_cd);
 
-                //ホテルコードに絡むデータキャンセル部分のみ削除
+                // ホテルコードに絡むデータキャンセル部分のみ削除（その他記入欄情報）
                 foreach ($a_hotel_inform_free['values'] as $key => $hotel_inform_value) {
-                    $Hotel_Inform->where([
-                        'hotel_cd'   => $target_cd,
-                        'branch_no'  => $hotel_inform_value->branch_no
-                    ])->delete();
-                }
-                //ホテルコードに絡むデータキャンセル部分のみ削除
-                foreach ($a_hotel_inform_cancel['values'] as $key => $hotel_inform_value) {
-                    $Hotel_Inform->where([
-                        'hotel_cd'   => $target_cd,
-                        'branch_no'  => $hotel_inform_value->branch_no
-                    ])->delete();
+                    $a_attributes['branch_no'] = $hotel_inform_value->branch_no;
+                    $a_attributes['hotel_cd'] = $target_cd;
+                    $a_attributes['entry_cd'] = 'entry_cd';        // TODO $this->box->info->env->action_cd,;
+                    $a_attributes['entry_ts'] = now();
+                    $a_attributes['modify_cd'] = 'modify_cd';      // TODO $this->box->info->env->action_cd,;
+                    $a_attributes['modify_ts'] = now();
+
+                    $Hotel_Inform->destroyAction($a_attributes);
                 }
 
-                //削除したいブランチの要素番号
+                // ホテルコードに絡むデータキャンセル部分のみ削除（注意事項情報）
+                foreach ($a_hotel_inform_cancel['values'] as $key => $hotel_inform_value) {
+                    $a_attributes['branch_no'] = $hotel_inform_value->branch_no;
+                    $a_attributes['hotel_cd'] = $target_cd;
+                    $a_attributes['entry_cd'] = 'entry_cd';        // TODO $this->box->info->env->action_cd,;
+                    $a_attributes['entry_ts'] = now();
+                    $a_attributes['modify_cd'] = 'modify_cd';      // TODO $this->box->info->env->action_cd,;
+                    $a_attributes['modify_ts'] = now();
+
+                    $Hotel_Inform->destroyAction($a_attributes);
+                }
+
+                // 削除したいブランチの要素番号
                 $branchKey = "";
 
                 foreach ($a_hotel_inform_free['values'] as $key => $value) {
-                    //削除したいものは省く ブランチＮＯ
+                    // 削除したいものは省く ブランチＮＯ
                     if ($a_request_hotel_inform['branch_no'] != $value->branch_no) {
                         if ($a_request_hotel_inform['branch_no'] < $value->branch_no) {
                             $a_hotel_inform_free['values'][$key]->branch_no = $value->branch_no - 1;
@@ -765,14 +688,14 @@ class HtlHotelInformController extends _commonController
                         $branchKey = $key;
                     }
 
-                    //削除したいものは省く order_no
+                    // 削除したいものは省く order_no
                     if ($a_request_hotel_inform['order_no'] != $value->order_no) {
                         if ($a_request_hotel_inform['order_no'] < $value->order_no) {
                             $a_hotel_inform_free['values'][$key]->order_no = $value->order_no - 1;
                         }
                     }
                 }
-                //削除したいデータ以外の物を登録
+                // 削除したいデータ以外の物を登録（その他記入欄情報）
                 foreach ($a_hotel_inform_free['values'] as $key => $value) {
                     if ($branchKey != $key) {
                         // バリデートを実行
@@ -793,11 +716,11 @@ class HtlHotelInformController extends _commonController
                         }
 
                         $Hotel_Inform->create([
-                            'hotel_cd'    => $target_cd,        //ホテル
-                            'branch_no'   => $value->branch_no, //枝番
-                            'order_no'    => $value->order_no,  //表示順
-                            'inform_type' => '1',               //種別
-                            'inform'      => $value->inform,    //コメント
+                            'hotel_cd'    => $target_cd,        // ホテル
+                            'branch_no'   => $value->branch_no, // 枝番
+                            'order_no'    => $value->order_no,  // 表示順
+                            'inform_type' => '1',               // 種別
+                            'inform'      => $value->inform,    // コメント
                             'entry_cd'    => 'entry_cd',        // TODO $this->box->info->env->action_cd,
                             'entry_ts'    => now(),
                             'modify_cd'   => 'modify_cd',       // TODO $this->box->info->env->action_cd,
@@ -807,14 +730,14 @@ class HtlHotelInformController extends _commonController
                     }
                 }
                 foreach ($a_hotel_inform_cancel['values'] as $key => $value) {
-                    //削除したいものは省く ブランチＮＯ
+                    // 削除したいものは省く ブランチＮＯ
                     if ($a_request_hotel_inform['branch_no'] != $value->branch_no) {
                         if ($a_request_hotel_inform['branch_no'] < $value->branch_no) {
                             $a_hotel_inform_cancel['values'][$key]->branch_no = $value->branch_no - 1;
                         }
                     }
                 }
-                //削除したいデータ以外の物を登録
+                // 削除したいデータ以外の物を登録（注意事項情報）
                 foreach ($a_hotel_inform_cancel['values'] as $key => $value) {
                     // バリデートを実行
                     $a_attributes = [];
@@ -845,6 +768,7 @@ class HtlHotelInformController extends _commonController
                         'modify_ts'   => now(),
                     ]);
                 }
+
                 // コミット
                 DB::commit();
             } else {
@@ -855,21 +779,21 @@ class HtlHotelInformController extends _commonController
                 ])->with(['errors' => ('ご希望の施設連絡事項データが見つかりませんでした。')]);
             }
 
-            //branch_noとorder_noの整形
-            $a_hotel_inform_cancel = $this->getHotelInformCancel($target_cd);
-            foreach ($a_hotel_inform_cancel['values'] as $key => $value) {
-                //オーダーNoの整形
-                if ($a_request_hotel_inform['order_no'] < $value->order_no) {
-                    $a_hotel_inform_cancel['values'][$key]->order_no = $value->order_no - 1;
-                }
-            }
-
-            //branch_noとorder_noの整形
+            // branch_noとorder_noの整形（その他記入欄情報）
             $a_hotel_inform_free = $this->getHotelInformFree($target_cd);
             foreach ($a_hotel_inform_free['values'] as $key => $value) {
                 //オーダーNoの整形
                 if ($a_request_hotel_inform['order_no'] < $value->order_no) {
                     $a_hotel_inform_free['values'][$key]->order_no = $value->order_no - 1;
+                }
+            }
+
+            // branch_noとorder_noの整形（注意事項情報）
+            $a_hotel_inform_cancel = $this->getHotelInformCancel($target_cd);
+            foreach ($a_hotel_inform_cancel['values'] as $key => $value) {
+                //オーダーNoの整形
+                if ($a_request_hotel_inform['order_no'] < $value->order_no) {
+                    $a_hotel_inform_cancel['values'][$key]->order_no = $value->order_no - 1;
                 }
             }
 
@@ -885,7 +809,7 @@ class HtlHotelInformController extends _commonController
         }
     }
 
-    //オーダーNO変更処理 注意事項
+    // オーダーNO変更処理 注意事項
     public function changeinformorder(Request $request)
     {
         // リクエストパラメータの取得
@@ -894,7 +818,7 @@ class HtlHotelInformController extends _commonController
         $order = $request->input('order');
 
         try {
-            //ホテルコードセット
+            // ホテルコードセット
             $a_hotel_inform_cancel = $this->getHotelInformCancel($target_cd);
 
             // トランザクション開始
@@ -931,6 +855,7 @@ class HtlHotelInformController extends _commonController
             // バリデート
             $a_attributes = [];
             $a_attributes['order_no'] = $after_order_no; // オーダーナンバー
+            $a_attributes['hotel_cd'] = $target_cd;
 
             $errorList = [];
             $errorList = $Hotel_Inform->validation($a_attributes);
@@ -940,6 +865,12 @@ class HtlHotelInformController extends _commonController
                     'target_cd' => $target_cd
                 ])->with(['errors' => $errorList]);
             }
+
+            $a_attributes['entry_cd'] = 'entry_cd'; // TODO $this->box->info->env->action_cd;
+            $a_attributes['entry_ts'] = now();
+            $a_attributes['modify_cd'] = 'modify_cd'; // TODO $this->box->info->env->action_cd;
+            $a_attributes['modify_ts'] = now();
+
             // 更新処理
             $after_order_no_update = $Hotel_Inform->where(
                 [
@@ -948,8 +879,8 @@ class HtlHotelInformController extends _commonController
                 ]
             )->update([
                 'order_no'  => $after_order_no,
-                'modify_cd' => 'modify_cd', // TODO $this->box->info->env->action_cd
-                'modify_ts' => now()
+                'modify_cd' => $a_attributes['modify_cd'],
+                'modify_ts' => $a_attributes['modify_ts']
             ]);
 
             if (!$after_order_no_update) {
@@ -974,6 +905,7 @@ class HtlHotelInformController extends _commonController
             // バリデートを実行
             $a_attributes = [];
             $a_attributes['order_no'] = $now_order_no; // オーダーナンバー
+            $a_attributes['hotel_cd'] = $target_cd;
 
             $errorList = [];
             $errorList = $Hotel_Inform->validation($a_attributes);
@@ -983,6 +915,10 @@ class HtlHotelInformController extends _commonController
                     'target_cd' => $target_cd
                 ])->with(['errors' => $errorList]);
             };
+            $a_attributes['entry_cd'] = 'entry_cd'; // TODO $this->box->info->env->action_cd;
+            $a_attributes['entry_ts'] = now();
+            $a_attributes['modify_cd'] = 'modify_cd'; // TODO $this->box->info->env->action_cd;
+            $a_attributes['modify_ts'] = now();
 
             $now_order_no_update = $Hotel_Inform->where(
                 [
@@ -991,8 +927,8 @@ class HtlHotelInformController extends _commonController
                 ]
             )->update([
                 'order_no'  => $now_order_no,
-                'modify_cd' => 'modify_cd', // TODO $this->box->info->env->action_cd
-                'modify_ts' => now()
+                'modify_cd' => $a_attributes['modify_cd'],
+                'modify_ts' => $a_attributes['modify_ts']
             ]);
 
             // 更新処理
@@ -1005,6 +941,9 @@ class HtlHotelInformController extends _commonController
                     'target_cd' => $target_cd
                 ])->with(['errors' => '並べ変える事が出来ませんでした。']);
             }
+
+            // 施設情報ページの更新依頼
+            $Hotel_Inform->hotel_modify($a_attributes);
 
             // コミット
             DB::commit();
@@ -1031,7 +970,8 @@ class HtlHotelInformController extends _commonController
                 'target_cd' => $target_cd,
                 'a_hotel_inform' => $a_request_hotel_inform,
                 'a_hotel_inform_cancel' => $a_hotel_inform_cancel,
-                'a_hotel_inform_free' => $a_hotel_inform_free
+                'a_hotel_inform_free' => $a_hotel_inform_free,
+                'guides' => ['並び替えが完了しました。']
             ]);
         } catch (Exception $e) {
             throw $e;
@@ -1085,6 +1025,7 @@ class HtlHotelInformController extends _commonController
             // バリデートを実行
             $a_attributes = [];
             $a_attributes['order_no'] = $after_order_no; // オーダーナンバー
+            $a_attributes['hotel_cd'] = $target_cd;
 
             $errorList = [];
             $errorList = $Hotel_Inform->validation($a_attributes);
@@ -1094,6 +1035,10 @@ class HtlHotelInformController extends _commonController
                     'target_cd' => $target_cd
                 ])->with(['errors' => $errorList]);
             }
+            $a_attributes['entry_cd'] = 'entry_cd'; // TODO $this->box->info->env->action_cd;
+            $a_attributes['entry_ts'] = now();
+            $a_attributes['modify_cd'] = 'modify_cd'; // TODO $this->box->info->env->action_cd;
+            $a_attributes['modify_ts'] = now();
 
             // 更新処理
             $after_order_no_update = $Hotel_Inform->where(
@@ -1103,8 +1048,8 @@ class HtlHotelInformController extends _commonController
                 ]
             )->update([
                 'order_no'  => $after_order_no,
-                'modify_cd' => 'modify_cd', // TODO $this->box->info->env->action_cd
-                'modify_ts' => now()
+                'modify_cd' => $a_attributes['modify_cd'], // TODO $this->box->info->env->action_cd
+                'modify_ts' => $a_attributes['modify_ts']
             ]);
 
             if (!$after_order_no_update) {
@@ -1130,6 +1075,7 @@ class HtlHotelInformController extends _commonController
             // バリデートを実行
             $a_attributes = [];
             $a_attributes['order_no'] = $now_order_no; // オーダーナンバー
+            $a_attributes['hotel_cd'] = $target_cd;
 
             $errorList = [];
             $errorList = $Hotel_Inform->validation($a_attributes);
@@ -1139,9 +1085,12 @@ class HtlHotelInformController extends _commonController
                     'target_cd' => $target_cd
                 ])->with(['errors' => $errorList]);
             };
+            $a_attributes['entry_cd'] = 'entry_cd'; // TODO $this->box->info->env->action_cd;
+            $a_attributes['entry_ts'] = now();
+            $a_attributes['modify_cd'] = 'modify_cd'; // TODO $this->box->info->env->action_cd;
+            $a_attributes['modify_ts'] = now();
 
             // バリデート結果を判断
-
             $now_order_no_update = $Hotel_Inform->where(
                 [
                     'hotel_cd'  => $target_cd,
@@ -1149,8 +1098,8 @@ class HtlHotelInformController extends _commonController
                 ]
             )->update([
                 'order_no'  => $now_order_no,
-                'modify_cd' => 'modify_cd', // TODO $this->box->info->env->action_cd
-                'modify_ts' => now()
+                'modify_cd' => $a_attributes['modify_cd'], // TODO $this->box->info->env->action_cd
+                'modify_ts' => $a_attributes['modify_ts']
             ]);
 
             // 更新処理
@@ -1164,7 +1113,9 @@ class HtlHotelInformController extends _commonController
                 ])->with(['errors' => '並べ変える事が出来ませんでした。']);
             }
 
-            // コミット
+            // 施設情報ページの更新依頼
+            $Hotel_Inform->hotel_modify($a_attributes);
+
             // コミット
             DB::commit();
 
@@ -1190,7 +1141,8 @@ class HtlHotelInformController extends _commonController
                 'target_cd' => $target_cd,
                 'a_hotel_inform' => $a_request_hotel_inform,
                 'a_hotel_inform_cancel' => $a_hotel_inform_cancel,
-                'a_hotel_inform_free' => $a_hotel_inform_free
+                'a_hotel_inform_free' => $a_hotel_inform_free,
+                'guides' => ['並び替えが完了しました。']
             ]);
         } catch (Exception $e) {
             throw $e;

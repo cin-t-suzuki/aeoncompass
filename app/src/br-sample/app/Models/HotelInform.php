@@ -89,4 +89,109 @@ class HotelInform extends CommonDBModel
 
         parent::setColumnDataArray([$colHotelCd, $colBranchNo, $ColInformType, $colInform, $colOrderNo]);
     }
+
+    // 削除処理
+    //
+    public function destroyAction($aa_conditions)
+    {
+
+        $a_attributes = $aa_conditions;
+
+        // 表示順序を繰り上げます。
+        $s_sql =
+            <<<SQL
+				select	hotel_inform.hotel_cd,
+						hotel_inform.branch_no
+				from	hotel_inform,
+					(
+						select	hotel_cd,
+								order_no,
+								inform_type
+						from	hotel_inform
+						where	hotel_cd    = :hotel_cd
+							and	branch_no   = :branch_no
+					) q1
+				where	hotel_inform.hotel_cd    = q1.hotel_cd
+					and	hotel_inform.inform_type = q1.inform_type
+					and	hotel_inform.order_no    > q1.order_no
+SQL;
+
+        $a_target = DB::select($s_sql, ['hotel_cd' => $a_attributes['hotel_cd'], 'branch_no'   => $a_attributes['branch_no']]);
+
+        $this->where([
+            'hotel_cd'   => $aa_conditions['hotel_cd'],
+            'branch_no'  => $aa_conditions['branch_no']
+        ])->delete();
+
+        for ($i = 0; $i < count($a_target); $i++) {
+            $hotel_inform = $this->where(array('hotel_cd' => $a_target[$i]->hotel_cd, 'branch_no' => $a_target[$i]->branch_no))->first();
+
+            $decrement_inform_update = $this->where([
+                'hotel_cd'   => $hotel_inform['hotel_cd'],
+                'branch_no'  => $hotel_inform['branch_no']
+
+            ])->update([
+                'order_no'    => $hotel_inform['order_no'] - 1,
+                'modify_cd'   => basename(__FILE__) . '->' . __METHOD__,
+                'modify_ts'   => now()
+            ]);
+            if (!$decrement_inform_update) {
+                return false;
+            }
+        }
+
+        // 施設情報ページを更新に設定
+        $this->hotel_modify($a_attributes);
+
+        return true;
+    }
+
+    // 施設情報ページの更新依頼
+    //
+    //  as_hotel_cd       施設コード
+    //  aa_attributes     施設*テーブルの登録データ内容
+    public function hotel_modify($aa_attributes)
+    {
+        $hotel_status = new HotelStatus;
+        $a_hotel_status = $hotel_status->where(['hotel_cd' => $aa_attributes['hotel_cd']])->first();
+
+        // 解約状態の場合は必ず削除依頼
+        if ($a_hotel_status['entry_status'] == 2) {
+            $modify_status = 2;
+        } else {
+            $modify_status = 1;
+        }
+
+        // 施設情報ページを更新するに設定
+        $hotel_modify = new HotelModify();
+        $a_hotel_modify = $hotel_modify->where(['hotel_cd' => $aa_attributes['hotel_cd']])->first();
+
+        if (empty($a_hotel_modify)) {
+            $hotel_modify_create = $hotel_modify->create([
+                'hotel_cd'      => $aa_attributes['hotel_cd'],
+                'modify_status' => $modify_status,
+                'entry_cd'      => $aa_attributes['entry_cd'],
+                'entry_ts'      => $aa_attributes['entry_ts'],
+                'modify_cd'     => $aa_attributes['modify_cd'],
+                'modify_ts'     => $aa_attributes['modify_ts'],
+            ]);
+            if (!$hotel_modify_create) {
+                return false;
+            }
+
+            // 削除状態で無い場合に設定
+        } else {
+            $hotel_modify_upadte = $hotel_modify->where([
+                'hotel_cd'      => $aa_attributes['hotel_cd']
+            ])->update([
+                'modify_status' => $modify_status,
+                'modify_cd'     => $aa_attributes['modify_cd'],
+                'modify_ts'     => $aa_attributes['modify_ts'],
+            ]);
+
+            if (!$hotel_modify_upadte) {
+                return false;
+            }
+        }
+    }
 }
