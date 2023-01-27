@@ -23,15 +23,13 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        {{-- <form action="/ctl/htlsmedia/selectmedia/" method="post" style="display:inline;"> --}}
-                                        {{ Form::open(['route' => 'ctl.htl.media.select_media', 'method' => 'get', 'style' => 'display:inline;'])}}
-                                            {{ Form::hidden('target_cd', $target_cd) }}
-                                            {{ Form::hidden('media_type', 'hotel') }}
-                                            {{ Form::hidden('label_type', '1') }}
-                                            {{ Form::hidden('target_order_no', '1') }}
+                                        {{ Form::open(['route' => 'ctl.htl.media.select_media', 'method' => 'get', 'style' => 'display:inline;']) }}
+                                        {{ Form::hidden('target_cd', $target_cd) }}
+                                        {{ Form::hidden('media_type', 'hotel') }}
+                                        {{ Form::hidden('label_type', '1') }}
+                                        {{ Form::hidden('target_order_no', '1') }}
 
-                                            {{ Form::submit('画像設定') }}
-                                        {{-- </form> --}}
+                                        {{ Form::submit('画像設定') }}
                                         {{ Form::close() }}
                                     <td>
                                 </tr>
@@ -40,26 +38,24 @@
                                     <td class="wrap_media_pop_view">
                                         <div class="image_box">
                                             {{-- <img border="0" src="/images/hotel/{{ $target_cd }}/trim_054/{{ $outside[0]->file_nm }}" width="54" height="54" title="{{ $outside[0]->title }}"> --}}
-                                            <img border="0" src="{{ asset('storage/images/hotel/' . $target_cd . '/' . $outside[0]->file_nm) }}" width="54" height="54" title="{{ $outside[0]->title }}">
+                                            <img src="{{ asset('storage/images/hotel/' . $target_cd . '/' . $outside[0]->file_nm) }}" title="{{ $outside[0]->title }}" border="0" width="54" height="54">
                                         </div>
                                         <div class="media_pop_frame">
-                                            <img border="1" src="{{ asset('storage/images/hotel/' . $target_cd . '/' . $outside[0]->file_nm) }}" width="1" height="1" title="{{ $outside[0]->title }}" class="media_pop_view">
+                                            <img class="media_pop_view" src="{{ asset('storage/images/hotel/' . $target_cd . '/' . $outside[0]->file_nm) }}" title="{{ $outside[0]->title }}" border="1" width="1" height="1">
                                             {{-- <img border="1" src="/images/hotel/{{ $target_cd }}/trim_138/{{ $outside[0]->file_nm }}" width="1" height="1" title="{{ $outside[0]->title }}" class="media_pop_view"> --}}
                                         </div>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        {{-- <form action="/ctl/htlsmedia/selectmedia/" method="post" style="display:inline;"> --}}
-                                        {{ Form::open(['route' => 'ctl.htl.media.select_media', 'method' => 'get', 'style' => 'display:inline;'])}}
-                                            {{ Form::hidden('target_cd', $target_cd) }}
-                                            {{ Form::hidden('media_type', 'hotel') }}
-                                            {{ Form::hidden('label_type', '1') }}
-                                            {{ Form::hidden('target_order_no', '1') }}
+                                        {{ Form::open(['route' => 'ctl.htl.media.select_media', 'method' => 'get', 'style' => 'display:inline;']) }}
+                                        {{ Form::hidden('target_cd', $target_cd) }}
+                                        {{ Form::hidden('media_type', 'hotel') }}
+                                        {{ Form::hidden('label_type', '1') }}
+                                        {{ Form::hidden('target_order_no', '1') }}
 
-                                            {{ Form::hidden('setting_media_no', $outside[0]->media_no) }}
-                                            {{ Form::submit('画像変更') }}
-                                        {{-- </form> --}}
+                                        {{ Form::hidden('setting_media_no', $outside[0]->media_no) }}
+                                        {{ Form::submit('画像変更') }}
                                         {{ Form::close() }}
                                     </td>
                                 </tr>

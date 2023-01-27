@@ -24,7 +24,6 @@
         <p>
             <font color="cdcdcd">■</font>部屋画像情報
         </p>
-        {{-- <form action="{$v->env.source_path}{$v->env.module}/htlsmedia/updatemedia/" method="post" style="display:inline;"> --}}
         {{ Form::open(['route' => 'ctl.htl.media.update_media', 'method' => 'post', 'style' => 'display:inline;']) }}
         <table border="1" cellspacing="0" cellpadding="4">
             <tr style="background-color: #EEEEFF;">
@@ -34,7 +33,7 @@
             <tr>
                 <td>
                     {{-- <img border="0" src="/images/hotel/{{ $target_cd }}/{{ $media->file_nm }}" title="{{ $media->title }}"> --}}
-                    <img border="0" src="{{ asset('storage/images/hotel/' . $target_cd . '/' . $media->file_nm) }}" title="{{ $media->title }}">
+                    <img src="{{ asset('storage/images/hotel/' . $target_cd . '/' . $media->file_nm) }}" title="{{ $media->title }}" border="0">
                 </td>
                 <td>
                     <table border="1" cellspacing="0" cellpadding="4">
@@ -69,22 +68,22 @@
                                     {{-- <input type="checkbox" id="label_outside" name="label_cd[outside]" value="1" {if !is_empty($v->assign->form_params.label_cd.outside)}checked="checked"{/if} /> --}}
                                     {{ Form::checkbox('label_cd[outside]', '1', $label_cd['outside'], ['id' => 'label_outside']) }}
                                     <label for="label_outside">
-                                        <font color="#FF9999" title="外観">■</font>外観
+                                        <font title="外観" color="#FF9999">■</font>外観
                                     </label>
                                     {{-- <input type="checkbox" id="label_inside" name="label_cd[inside]" value="1" {if !is_empty($v->assign->form_params.label_cd.inside)}checked="checked"{/if} /> --}}
                                     {{ Form::checkbox('label_cd[inside]', '1', $label_cd['inside'], ['id' => 'label_inside']) }}
                                     <label for="label_inside">
-                                        <font color="#99FF99" title="フォトギャラリー">■</font>フォトギャラリー
+                                        <font title="フォトギャラリー" color="#99FF99">■</font>フォトギャラリー
                                     </label>
                                     {{-- <input type="checkbox" id="label_room" name="label_cd[room]" value="1" {if !is_empty($v->assign->form_params.label_cd.room)}checked="checked"{/if} /> --}}
                                     {{ Form::checkbox('label_cd[room]', '1', $label_cd['room'], ['id' => 'label_room']) }}
                                     <label for="label_room">
-                                        <font color="#66CCFF" title="客室">■</font>客室
+                                        <font title="客室" color="#66CCFF">■</font>客室
                                     </label>
                                     {{-- <input type="checkbox" id="label_other" name="label_cd[other]" value="1" {if !is_empty($v->assign->form_params.label_cd.other)}checked="checked"{/if} /> --}}
                                     {{ Form::checkbox('label_cd[other]', '1', $label_cd['other'], ['id' => 'label_other']) }}
                                     <label for="label_other">
-                                        <font color="#FF99FF" title="その他">■</font>その他
+                                        <font title="その他" color="#FF99FF">■</font>その他
                                     </label>
                                 @endif
                             </td>
@@ -104,7 +103,6 @@
             </tr>
         </table>
         {{ Form::close() }}
-        {{-- </form> --}}
     </div>
     {{-- {include file=$v->env.module_root|cat:'/view2/htlsmedia/_common_menu.tpl'} --}}
     @include('ctl.htl.media._common_menu')

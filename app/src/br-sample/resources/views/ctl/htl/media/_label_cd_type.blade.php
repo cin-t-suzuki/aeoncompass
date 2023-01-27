@@ -8,25 +8,25 @@
 
 {{-- 外観: 1____ --}}
 @if ($label_cd[\App\Models\Media::LABEL_CD_OUTSIDE] == '1')
-    <font color="#FF9999" title="外観">■</font>
+    <font title="外観" color="#FF9999">■</font>
 @endif
 {{-- 地図: _1___ --}}
 @if ($label_cd[\App\Models\Media::LABEL_CD_MAP] == '1')
-    <font color="#FFCC66" title="地図">■</font>
+    <font title="地図" color="#FFCC66">■</font>
 @endif
 {{-- フォトギャラリー: __1__ --}}
 @if ($label_cd[\App\Models\Media::LABEL_CD_INSIDE] == '1')
-    <font color="#99FF99" title="フォトギャラリー">■</font>
+    <font title="フォトギャラリー" color="#99FF99">■</font>
 @endif
 {{-- 客室: ___1_ --}}
 @if ($label_cd[\App\Models\Media::LABEL_CD_ROOM] == '1')
-    <font color="#66CCFF" title="客室">■</font>
+    <font title="客室" color="#66CCFF">■</font>
 @endif
 {{-- その他: ____1 --}}
 @if ($label_cd[\App\Models\Media::LABEL_CD_OTHER] == '1')
-    <font color="#FF99FF" title="その他">■</font>
+    <font title="その他" color="#FF99FF">■</font>
 @endif
 {{-- ラベル無し --}}
 @if ($label_cd == '00000')
-    <font color="#cccccc" title="ラベル無し">■</font>
+    <font title="ラベル無し" color="#cccccc">■</font>
 @endif
