@@ -52,12 +52,12 @@ class HtlMediaController extends Controller
         $hotelMediaMap      = $service->getHotelMedia($hotelCd, HotelMedia::TYPE_MAP);
 
         // 幅広表示の設定
-        $wide_list_check    = $request->input('wide_list_check', '0');
-        $wide_list_ref      = $request->input('wide_list_ref', '0');
-        if ($wide_list_ref) {
-            $request->session()->put('wide_list', $wide_list_check);
+        $wideListCheck    = $request->input('wide_list_check', '0');
+        $wideListRef      = $request->input('wide_list_ref', '0');
+        if ($wideListRef) {
+            $request->session()->put('wide_list', $wideListCheck);
         }
-        $wide_list = $request->session()->get('wide_list', '0');
+        $wideList = $request->session()->get('wide_list', '0');
 
         return view('ctl.htl.media.list', [
             'target_cd'     => $hotelCd,
@@ -66,7 +66,7 @@ class HtlMediaController extends Controller
             'outside'       => $hotelMediaOutside,
             'map'           => $hotelMediaMap,
 
-            'wide_list' => $wide_list,
+            'wide_list' => $wideList,
 
             'media_type'        => $request->input('media_type'),
             'target_order_no'   => $request->input('target_order_no'),
@@ -76,8 +76,6 @@ class HtlMediaController extends Controller
             'room_id'   => $request->input('room_id'),
             'plan_id'   => $request->input('plan_id'),
 
-            'guides'    => $request->session()->get('guides', []),
-
             'label_cd' => [
                 'outside'   => $request->input('label_cd.outside'),
                 'map'       => $request->input('label_cd.map'),
@@ -86,6 +84,8 @@ class HtlMediaController extends Controller
                 'other'     => $request->input('label_cd.other'),
                 'nothing'   => $request->input('label_cd.nothing'),
             ],
+
+            'guides'    => $request->session()->get('guides', []),
         ]);
     }
 
@@ -346,18 +346,18 @@ class HtlMediaController extends Controller
         ];
 
         // 幅広表示の設定
-        $wide_list_check    = $request->input('wide_list_check', '0');
-        $wide_list_ref      = $request->input('wide_list_ref', '0');
-        if ($wide_list_ref) {
-            $request->session()->put('wide_list', $wide_list_check);
+        $wideListCheck    = $request->input('wide_list_check', '0');
+        $wideListRef      = $request->input('wide_list_ref', '0');
+        if ($wideListRef) {
+            $request->session()->put('wide_list', $wideListCheck);
         }
-        $wide_list = $request->session()->get('wide_list', '0');
+        $wideList = $request->session()->get('wide_list', '0');
 
         return view('ctl.htl.media.select-media', [
             'target_cd'     => $hotelCd,
             'media_list'    => $medias,
 
-            'wide_list' => $wide_list,
+            'wide_list' => $wideList,
 
             'media_type' => $mediaType,
             'label_type' => $messageIndex,
@@ -399,10 +399,8 @@ class HtlMediaController extends Controller
         // フォトギャラリー画像取得
         $hotelMediaGalleryPhotos    = $service->getHotelMedia($hotelCd, HotelMedia::TYPE_OTHER);
 
-        // TODO: 登録可能数(プレミアムは分岐？)
-        $inside_media_count = 30;
-        $room_media_count = 10;
-        $plan_media_count = 10;
+        // ギャラリー画像の枚数制限
+        $galleryMediaLimit = 30;
 
         return view('ctl.htl.media.edit-hotel', [
             'target_cd'     => $hotelCd,
@@ -411,9 +409,7 @@ class HtlMediaController extends Controller
             'map'           => $hotelMediaMap,
             'galleryPhotos' => $hotelMediaGalleryPhotos,
 
-            'media_count_inside'    => $inside_media_count,
-            'media_count_room'      => $room_media_count,
-            'media_count_plan'      => $plan_media_count,
+            'gallery_media_limit'    => $galleryMediaLimit,
 
             'guides' => $request->session()->get('guides', []),
         ]);
@@ -432,29 +428,27 @@ class HtlMediaController extends Controller
         $roomId = $request->input('room_id');
 
         // 部屋情報と、部屋に設定されている画像を取得
-        $a_room = $service->getRoomMedia($hotelCd, $roomId);
+        $room = $service->getRoomMedia($hotelCd, $roomId);
         // 部屋情報に結びついているプランと、その画像を取得
-        $a_plans = $service->getRoomPlanMedia($hotelCd, $roomId);
+        $plans = $service->getRoomPlanMedia($hotelCd, $roomId);
 
-        // TODO: 登録可能数(プレミアムは分岐？)
-        $inside_media_count = 30;
-        $room_media_count = 10;
-        $plan_media_count = 10;
+        // 画像の枚数制限
+        $roomMediaLimit = 10;
+        $planMediaLimit = 10;
 
-        $room_stock_type = $service->isRoomAkf($hotelCd, $roomId);
+        $roomStockType = $service->isRoomAkf($hotelCd, $roomId);
 
         return view('ctl.htl.media.edit-room', [
             'target_cd' => $hotelCd,
             'room_id'   => $roomId,
 
-            'room'  => $a_room,
-            'plans' => $a_plans,
+            'room'  => $room,
+            'plans' => $plans,
 
-            'room_stock_type'  => $room_stock_type,
+            'room_stock_type'  => $roomStockType,
 
-            'media_count_inside'    => $inside_media_count,
-            'media_count_room'      => $room_media_count,
-            'media_count_plan'      => $plan_media_count,
+            'room_media_limit'      => $roomMediaLimit,
+            'plan_media_limit'      => $planMediaLimit,
 
             'guides' => $request->session()->get('guides', []),
         ]);
@@ -472,24 +466,24 @@ class HtlMediaController extends Controller
         $hotelCd = $request->input('target_cd');
         $planId = $request->input('plan_id');
 
-        $a_plan  = $service->getPlanMedia($hotelCd, $planId);
-        $a_rooms = $service->getPlanRoomMedia($hotelCd, $planId);
+        $plan  = $service->getPlanMedia($hotelCd, $planId);
+        $rooms = $service->getPlanRoomMedia($hotelCd, $planId);
 
-        // TODO: 暫定
-        $_n_inside_media_count = 10;
-        $_n_room_media_count = 10;
-        $_n_plan_media_count = 10;
+        // 画像の枚数制限
+        $roomMediaLimit = 10;
+        $planMediaLimit = 10;
 
         return view('ctl.htl.media.edit-plan', [
             'target_cd' => $hotelCd,
             'plan_id'   => $planId,
 
-            'plan'  => $a_plan,
-            'rooms' => $a_rooms,
+            'plan'  => $plan,
+            'rooms' => $rooms,
 
-            'media_count_inside'    => $_n_inside_media_count,
-            'media_count_room'      => $_n_room_media_count,
-            'media_count_plan'      => $_n_plan_media_count,
+            'room_media_limit'      => $roomMediaLimit,
+            'plan_media_limit'      => $planMediaLimit,
+
+            'guides' => $request->session()->get('guides', []),
         ]);
     }
 

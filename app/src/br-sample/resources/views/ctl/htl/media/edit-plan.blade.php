@@ -38,7 +38,7 @@
                                 $b_already_disp_plan_no_image = false;
                                 $n_real_display_plan_img_cnt = 0;
                             @endphp
-                            @for ($i = 0; $i < $media_count_plan; $i++)
+                            @for ($i = 0; $i < $plan_media_limit; $i++)
                                 @if ($n_real_display_plan_img_cnt == $i && !$b_already_disp_plan_no_image)
                                     <td>
                                         <table>
@@ -138,7 +138,7 @@
                                                             {{ Form::submit('←') }}
                                                             {{ Form::close() }}
                                                         @endif
-                                                        @if ($i + 1 < $media_count_plan && array_key_exists($i + 1, $plan->medias))
+                                                        @if ($i + 1 < $plan_media_limit && array_key_exists($i + 1, $plan->medias))
                                                             {{ Form::open(['route' => 'ctl.htl.media.sort_plan', 'method' => 'post', 'style' => 'display:inline;']) }}
                                                             {{ Form::hidden('target_cd', $target_cd) }}
                                                             {{ Form::hidden('plan_id', $plan_id) }}
@@ -157,7 +157,7 @@
                                                 @endphp
                                             @endif
                                         </table>
-                                        @if ($n_real_display_plan_img_cnt % 10 == 0 && $i + 1 < $media_count_plan)
+                                        @if ($n_real_display_plan_img_cnt % 10 == 0 && $i + 1 < $plan_media_limit)
                     </table>
                     <table>
                         @endif
@@ -194,7 +194,7 @@
                                     @php
                                         $b_already_disp_room_no_image = false;
                                     @endphp
-                                    @for ($i = 0; $i < $media_count_room; $i++)
+                                    @for ($i = 0; $i < $room_media_limit; $i++)
                                         @if (!array_key_exists($i, $room->medias) && !$b_already_disp_room_no_image && $i == 0)
                                             <td class="edit-image2 wrap_media_pop_view">
                                                 <div class="no_image_box" style="padding:2px;text-align: center; font-size: 15px;">
@@ -220,7 +220,7 @@
                                                 $n_real_display_room_img_cnt = $n_real_display_room_img_cnt + 1;
                                             @endphp
                                         @endif
-                                        @if ($n_real_display_room_img_cnt % 10 == 0 && $i + 1 < $media_count_room)
+                                        @if ($n_real_display_room_img_cnt % 10 == 0 && $i + 1 < $room_media_limit)
                                 </tr>
                                 <tr>
                 @endif

@@ -10,7 +10,7 @@
     <tr>
         <td class="edit-image">
 
-            {{-- TODO: インデントをちゃんとする --}}
+            {{-- HACK: インデントをちゃんとする --}}
             {{-- HACK: 10画像ごとに改行しようとしたインデントの崩れは、 flexbox で実装することで修正できると思われる --}}
             <table>
                 <tr>
@@ -20,8 +20,8 @@
                         $n_real_display_hotel_img_cnt = 0;
                     @endphp
 
-                    {{-- {{section name=loop_galleryPhotos[$i]s_media start=0 loop=$media_count_inside}} --}}
-                    @for ($i = 0; $i < $media_count_inside; $i++)
+                    {{-- {{section name=loop_galleryPhotos[$i]s_media start=0 loop=$gallery_media_limit}} --}}
+                    @for ($i = 0; $i < $gallery_media_limit; $i++)
                         @if ($n_real_display_hotel_img_cnt % 10 == 0 && $n_real_display_hotel_img_cnt != 0 && $n_real_display_hotel_img_cnt == $i)
                             {{-- 10枚ごとに、テーブルを改行する --}}
                 </tr>
@@ -135,7 +135,7 @@
                                                 {{ Form::close() }}
                                             @endif
 
-                                            @if ($i != $media_count_inside - 1 && array_key_exists($i + 1, $galleryPhotos))
+                                            @if ($i != $gallery_media_limit - 1 && array_key_exists($i + 1, $galleryPhotos))
                                                 {{-- ループの最後でなく、 次の画像が存在する場合、並べ替えボタンを表示 --}}
 
                                                 {{ Form::open(['route' => 'ctl.htl.media.sort_gallery', 'method' => 'post', 'style' => 'display:inline;']) }}
