@@ -313,12 +313,14 @@ class BrReserveCkController extends _commonController
         // powerの判定
         $core_plan   = new CorePlan();
         //書き換え以下でいいか？set~cdは使わないでいい気がする
-        // $core_plan->set_hotel_cd($a_reserve_data['values'][0]['hotel_cd']);
-        // $core_plan->set_room_cd($a_reserve_data['values'][0]['room_cd']);
-        // $core_plan->set_plan_cd($a_reserve_data['values'][0]['plan_cd']);
-        $hotel_cd = $a_reserve_data['values'][0]->hotel_cd;
-        $room_cd = $a_reserve_data['values'][0]->room_cd;
-        $plan_cd = $a_reserve_data['values'][0]->plan_cd;
+            //元ソース
+            // $core_plan->set_hotel_cd($a_reserve_data['values'][0]['hotel_cd']);
+            // $core_plan->set_room_cd($a_reserve_data['values'][0]['room_cd']);
+            // $core_plan->set_plan_cd($a_reserve_data['values'][0]['plan_cd']);
+        //$a_reserve_data自体がない場合のためのnull追記
+        $hotel_cd = $a_reserve_data['values'][0]->hotel_cd ?? null;
+        $room_cd = $a_reserve_data['values'][0]->room_cd ?? null;
+        $plan_cd = $a_reserve_data['values'][0]->plan_cd ?? null;
         $is_power = $core_plan->isPower($hotel_cd, $room_cd, $plan_cd);
 
         // ホテル情報の取得
