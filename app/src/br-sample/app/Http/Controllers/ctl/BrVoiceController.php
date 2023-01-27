@@ -147,6 +147,10 @@ class BrVoiceController extends _commonController
         // 宿泊体験の一覧を取得
         $a_voice_data = $voiceModel->voiceLists($a_conditions, $a_offsets);
 
+        //エラーorガイドメッセージがあれば取得
+        $errors = $request->session()->get('errors', []);
+        $guides = $request->session()->get('guides', []);
+
         return view('ctl.brvoice.search', [
             'search' => $a_params['search'],
             'target_cd' => $a_params['target_cd'],
@@ -160,7 +164,11 @@ class BrVoiceController extends _commonController
             'rep_after_dtm' => $a_params['rep_after_dtm'],
             'rep_before_dtm' => $a_params['rep_before_dtm'],
             'voice_data' => $a_voice_data,
-            'conditions' => $a_conditions
+            'conditions' => $a_conditions,
+
+            'errors' => $errors,
+            'guides' => $guides
+
         ]);
     }
     public function create(VoiceReplyRequest $request)
