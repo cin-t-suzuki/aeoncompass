@@ -65,22 +65,18 @@
                                     <span style="color:#ff0000;">地図画像の為、変更できません。</span>
                                     {{ Form::hidden('label_cd[map]', '1') }}
                                 @else
-                                    {{-- <input type="checkbox" id="label_outside" name="label_cd[outside]" value="1" {if !is_empty($v->assign->form_params.label_cd.outside)}checked="checked"{/if} /> --}}
                                     {{ Form::checkbox('label_cd[outside]', '1', $label_cd['outside'], ['id' => 'label_outside']) }}
                                     <label for="label_outside">
                                         <font title="外観" color="#FF9999">■</font>外観
                                     </label>
-                                    {{-- <input type="checkbox" id="label_inside" name="label_cd[inside]" value="1" {if !is_empty($v->assign->form_params.label_cd.inside)}checked="checked"{/if} /> --}}
                                     {{ Form::checkbox('label_cd[inside]', '1', $label_cd['inside'], ['id' => 'label_inside']) }}
                                     <label for="label_inside">
                                         <font title="フォトギャラリー" color="#99FF99">■</font>フォトギャラリー
                                     </label>
-                                    {{-- <input type="checkbox" id="label_room" name="label_cd[room]" value="1" {if !is_empty($v->assign->form_params.label_cd.room)}checked="checked"{/if} /> --}}
                                     {{ Form::checkbox('label_cd[room]', '1', $label_cd['room'], ['id' => 'label_room']) }}
                                     <label for="label_room">
                                         <font title="客室" color="#66CCFF">■</font>客室
                                     </label>
-                                    {{-- <input type="checkbox" id="label_other" name="label_cd[other]" value="1" {if !is_empty($v->assign->form_params.label_cd.other)}checked="checked"{/if} /> --}}
                                     {{ Form::checkbox('label_cd[other]', '1', $label_cd['other'], ['id' => 'label_other']) }}
                                     <label for="label_other">
                                         <font title="その他" color="#FF99FF">■</font>その他
@@ -90,11 +86,8 @@
                         </tr>
                         <tr>
                             <td colspan="2" align="center">
-                                {{-- <input type="hidden" name="target_cd" value="{{ $form_params['target_cd'] }}" /> --}}
                                 {{ Form::hidden('target_cd', $target_cd) }}
-                                {{-- <input type="hidden" name="media_no" value="{{ $form_params['media_no'] }}" /> --}}
                                 {{ Form::hidden('media_no', $media_no) }}
-                                {{-- <input type="submit" value="更新" /> --}}
                                 {{ Form::submit('更新') }}
                             </td>
                         </tr>

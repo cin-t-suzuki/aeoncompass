@@ -22,7 +22,7 @@
             <font color="cdcdcd">■</font>部屋画像
         </p>
         {{--
-            HACK: インデントちゃんとしたい 
+            HACK: インデントちゃんとしたい
                 1行に表示する横並びの画像数を制限（10枚まで）してるようだが、
                 flexbox で実装したほうがでふさわしいと思われる
         --}}
@@ -148,7 +148,6 @@
 
                                                             {{-- {{ Form::hidden('setting_media_no', $room->medias[$i]->media_no) }} --}}
                                                             {{-- {{ Form::hidden('target_order_no', $i + 1) }} --}}
-                                                            {{-- {{ Form::hidden('edit_order_no', $room->medias[$i]->order_no_minus) }} --}}
                                                             {{-- {{ Form::hidden('media_type', 'room') }} --}}
                                                             {{ Form::submit('←') }}
                                                             {{ Form::close() }}
@@ -161,7 +160,6 @@
                                                             {{ Form::hidden('target_media_no', $room->medias[$i + 1]->media_no) }}
 
                                                             {{-- {{ Form::hidden('target_order_no', $i + 1) }} --}}
-                                                            {{-- {{ Form::hidden('edit_order_no', $room->medias[$i]->order_no_plus) }} --}}
                                                             {{-- {{ Form::hidden('media_type', 'room') }} --}}
                                                             {{-- {{ Form::hidden('setting_media_no', $room->medias[$i]->media_no) }} --}}
                                                             {{ Form::submit('→') }}

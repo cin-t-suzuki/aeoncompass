@@ -73,30 +73,18 @@ class HtlMediaController extends Controller
             'setting_media_no'  => $request->input('setting_media_no'),
             'label_type'        => $request->input('label_type'),
 
-            'room_id'           => $request->input('room_id'),
-            'plan_id'           => $request->input('plan_id'),
+            'room_id'   => $request->input('room_id'),
+            'plan_id'   => $request->input('plan_id'),
 
             'guides'    => $request->session()->get('guides', []),
 
-            // TODO: 暫定実装、消す方向で修正を進める
-            'form_params' => [
-                'label_cd' => [
-                    'outside'   => $request->input('label_cd.outside'),
-                    'map'       => $request->input('label_cd.map'),
-                    'inside'    => $request->input('label_cd.inside'),
-                    'room'      => $request->input('label_cd.room'),
-                    'other'     => $request->input('label_cd.other'),
-                    'nothing'   => $request->input('label_cd.nothing'),
-                ],
-
-                'target_cd'         => $hotelCd,
-                'room_id'           => '',
-                'plan_id'           => '',
-
-                'media_type' => $request->input('media_type'),
-                'target_order_no' => $request->input('target_order_no'),
-                'setting_media_no' => $request->input('setting_media_no'),
-                'label_type' => $request->input('label_type'),
+            'label_cd' => [
+                'outside'   => $request->input('label_cd.outside'),
+                'map'       => $request->input('label_cd.map'),
+                'inside'    => $request->input('label_cd.inside'),
+                'room'      => $request->input('label_cd.room'),
+                'other'     => $request->input('label_cd.other'),
+                'nothing'   => $request->input('label_cd.nothing'),
             ],
         ]);
     }
@@ -205,11 +193,11 @@ class HtlMediaController extends Controller
     public function sortMedia(Request $request, Service $service)
     {
         $hotelCd = $request->input('target_cd');
-        $mediaNo = $request->input('media_no');
+        $sourceMediaNo = $request->input('media_no');
         $targetMediaNo = $request->input('target_media_no');
         $up = $request->input('change_flg') == 'up';
 
-        $succeeded = $service->sortMedia($hotelCd, $mediaNo, $targetMediaNo, $up);
+        $succeeded = $service->sortMedia($hotelCd, $sourceMediaNo, $targetMediaNo, $up);
 
         if (!$succeeded) {
             return redirect()->back()->withErrors([
@@ -366,35 +354,33 @@ class HtlMediaController extends Controller
         $wide_list = $request->session()->get('wide_list', '0');
 
         return view('ctl.htl.media.select-media', [
-            'target_cd' => $hotelCd,
-            'medias'    => $medias,
+            'target_cd'     => $hotelCd,
+            'media_list'    => $medias,
 
             'wide_list' => $wide_list,
 
-            'guides' => $guides,
-
             'media_type' => $mediaType,
             'label_type' => $messageIndex,
-            'target_order_no' => $request->input('target_order_no'),
+
+            'target_order_no'   => $request->input('target_order_no'),
             'setting_media_no'  => $request->input('setting_media_no'),
 
             'room_id' => $request->input('room_id'),
             'plan_id' => $request->input('plan_id'),
 
-            // TODO: 暫定実装、消す方向で修正を進める
-            'form_params' => [
-                'label_cd' => [
-                    'outside'   => $request->input('label_cd.outside'),
-                    'map'       => $request->input('label_cd.map'),
-                    'inside'    => $request->input('label_cd.inside'),
-                    'room'      => $request->input('label_cd.room'),
-                    'other'     => $request->input('label_cd.other'),
-                    'nothing'   => $request->input('label_cd.nothing'),
-                ],
+            'label_cd' => [
+                'outside'   => $request->input('label_cd.outside'),
+                'map'       => $request->input('label_cd.map'),
+                'inside'    => $request->input('label_cd.inside'),
+                'room'      => $request->input('label_cd.room'),
+                'other'     => $request->input('label_cd.other'),
+                'nothing'   => $request->input('label_cd.nothing'),
             ],
-            'request' => $request,
+
+            'guides' => $guides,
         ]);
     }
+
     /**
      * 施設画像編集
      *
@@ -459,19 +445,18 @@ class HtlMediaController extends Controller
 
         return view('ctl.htl.media.edit-room', [
             'target_cd' => $hotelCd,
-            'room_id' => $roomId,
+            'room_id'   => $roomId,
 
-            'room' => $a_room,
+            'room'  => $a_room,
             'plans' => $a_plans,
+
             'room_stock_type'  => $room_stock_type,
 
-            'media_count_inside'  => $inside_media_count,
-            'media_count_room' => $room_media_count,
-            'media_count_plan' => $plan_media_count,
+            'media_count_inside'    => $inside_media_count,
+            'media_count_room'      => $room_media_count,
+            'media_count_plan'      => $plan_media_count,
 
             'guides' => $request->session()->get('guides', []),
-
-            'form_params' => $request->input(),
         ]);
     }
 
@@ -499,12 +484,12 @@ class HtlMediaController extends Controller
             'target_cd' => $hotelCd,
             'plan_id'   => $planId,
 
-            'plan' => $a_plan,
+            'plan'  => $a_plan,
             'rooms' => $a_rooms,
 
-            'media_count_inside'  => $_n_inside_media_count,
-            'media_count_room' => $_n_room_media_count,
-            'media_count_plan' => $_n_plan_media_count,
+            'media_count_inside'    => $_n_inside_media_count,
+            'media_count_room'      => $_n_room_media_count,
+            'media_count_plan'      => $_n_plan_media_count,
         ]);
     }
 

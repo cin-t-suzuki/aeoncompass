@@ -42,43 +42,37 @@
                 <table border="1" cellpadding="4" cellspacing="0" width="700">
                     <tr>
                         <td>
-                            {{-- <input type="checkbox" id="label_outside" name="label_cd[outside]" value="1" {if !is_empty($v->assign->form_params->label_cd->outside)}checked="checked"{/if} /> --}}
-                            {{ Form::checkbox('label_cd[outside]', '1', !is_null($form_params['label_cd']['outside']), ['id' => 'label_outside']) }}
+                            {{ Form::checkbox('label_cd[outside]', '1', !is_null($label_cd['outside']), ['id' => 'label_outside']) }}
                             <label for="label_outside">
                                 <font title="外観" color="#FF9999">■</font>外観
                             </label>
                         </td>
                         <td>
-                            {{-- <input type="checkbox" id="label_map" name="label_cd[map]" value="1" {if !is_empty($v->assign->form_params->label_cd->map)}checked="checked"{/if} /> --}}
-                            {{ Form::checkbox('label_cd[map]', '1', !is_null($form_params['label_cd']['map']), ['id' => 'label_map']) }}
+                            {{ Form::checkbox('label_cd[map]', '1', !is_null($label_cd['map']), ['id' => 'label_map']) }}
                             <label for="label_map">
                                 <font title="地図" color="#FFCC66">■</font>地図
                             </label>
                         </td>
                         <td>
-                            {{-- <input type="checkbox" id="label_inside" name="label_cd[inside]" value="1" {if !is_empty($v->assign->form_params->label_cd->inside)}checked="checked"{/if} /> --}}
-                            {{ Form::checkbox('label_cd[inside]', '1', !is_null($form_params['label_cd']['inside']), ['id' => 'label_inside']) }}
+                            {{ Form::checkbox('label_cd[inside]', '1', !is_null($label_cd['inside']), ['id' => 'label_inside']) }}
                             <label for="label_inside">
                                 <font title="フォトギャラリー" color="#99FF99">■</font>フォトギャラリー
                             </label>
                         </td>
                         <td>
-                            {{-- <input type="checkbox" id="label_room" name="label_cd[room]" value="1" {if !is_empty($v->assign->form_params->label_cd->room)}checked="checked"{/if} /> --}}
-                            {{ Form::checkbox('label_cd[room]', '1', !is_null($form_params['label_cd']['room']), ['id' => 'label_room']) }}
+                            {{ Form::checkbox('label_cd[room]', '1', !is_null($label_cd['room']), ['id' => 'label_room']) }}
                             <label for="label_room">
                                 <font title="客室" color="#66CCFF">■</font>客室
                             </label>
                         </td>
                         <td>
-                            {{-- <input type="checkbox" id="label_other" name="label_cd[other]" value="1" {if !is_empty($v->assign->form_params->label_cd->other)}checked="checked"{/if} /> --}}
-                            {{ Form::checkbox('label_cd[other]', '1', !is_null($form_params['label_cd']['other']), ['id' => 'label_other']) }}
+                            {{ Form::checkbox('label_cd[other]', '1', !is_null($label_cd['other']), ['id' => 'label_other']) }}
                             <label for="label_other">
                                 <font title="その他" color="#FF99FF">■</font>その他
                             </label>
                         </td>
                         <td>
-                            {{-- <input type="checkbox" id="label_nothing" name="label_cd[nothing]" value="1" {if !is_empty($v->assign->form_params->label_cd->nothing)}checked="checked"{/if} /> --}}
-                            {{ Form::checkbox('label_cd[nothing]', '1', !is_null($form_params['label_cd']['nothing']), ['id' => 'label_nothing']) }}
+                            {{ Form::checkbox('label_cd[nothing]', '1', !is_null($label_cd['nothing']), ['id' => 'label_nothing']) }}
                             <label for="label_nothing">
                                 <font title="ラベル無し" color="#cccccc">■</font>ラベル無し
                             </label>
@@ -86,8 +80,8 @@
                     </tr>
                     <tr>
                         <td colspan="6" align="center">
-                            {{ Form::hidden('target_cd', $form_params['target_cd']) }}
-                            {{ Form::hidden('media_type', $form_params['media_type']) }}
+                            {{ Form::hidden('target_cd', $target_cd) }}
+                            {{ Form::hidden('media_type', $media_type) }}
                             {{ Form::hidden('target_order_no', $target_order_no) }}
                             {{ Form::hidden('wide_list_ref', '1') }}
                             {{ Form::submit('表示') }}
@@ -147,38 +141,38 @@
                             @if (!$loop->first)
                                 {{ Form::open(['route' => 'ctl.htl.media.sort_media', 'method' => 'post', 'style' => 'display:inline;']) }}
                                 {{ Form::submit('↑') }}
-                                {{ Form::hidden('target_cd', $form_params['target_cd']) }}
+
+                                {{ Form::hidden('target_cd', $target_cd) }}
                                 {{ Form::hidden('media_no', $media->media_no) }}
-                                {{-- {{ Form::hidden('order_no', $media->order_no) }} --}}
                                 {{ Form::hidden('target_media_no', $media_list[$loop->index - 1]->media_no) }}
                                 {{ Form::hidden('change_flg', 'up') }}
 
                                 {{ Form::hidden('label_type', $label_type) }}
-                                {{ Form::hidden('label_cd[outside]', $form_params['label_cd']['outside']) }}
-                                {{ Form::hidden('label_cd[map]', $form_params['label_cd']['map']) }}
-                                {{ Form::hidden('label_cd[inside]', $form_params['label_cd']['inside']) }}
-                                {{ Form::hidden('label_cd[room]', $form_params['label_cd']['room']) }}
-                                {{ Form::hidden('label_cd[other]', $form_params['label_cd']['other']) }}
-                                {{ Form::hidden('label_cd[nothing]', $form_params['label_cd']['nothing']) }}
+                                {{ Form::hidden('label_cd[outside]', $label_cd['outside']) }}
+                                {{ Form::hidden('label_cd[map]', $label_cd['map']) }}
+                                {{ Form::hidden('label_cd[inside]', $label_cd['inside']) }}
+                                {{ Form::hidden('label_cd[room]', $label_cd['room']) }}
+                                {{ Form::hidden('label_cd[other]', $label_cd['other']) }}
+                                {{ Form::hidden('label_cd[nothing]', $label_cd['nothing']) }}
                                 {{ Form::close() }}
                             @endif
 
                             @if (!$loop->last)
                                 {{ Form::open(['route' => 'ctl.htl.media.sort_media', 'method' => 'post', 'style' => 'display:inline;']) }}
                                 {{ Form::submit('↓') }}
-                                {{ Form::hidden('target_cd', $form_params['target_cd']) }}
+
+                                {{ Form::hidden('target_cd', $target_cd) }}
                                 {{ Form::hidden('media_no', $media->media_no) }}
-                                {{-- {{ Form::hidden('order_no', $media->order_no) }} --}}
                                 {{ Form::hidden('target_media_no', $media_list[$loop->index + 1]->media_no) }}
                                 {{ Form::hidden('change_flg', 'down') }}
 
                                 {{ Form::hidden('label_type', $label_type) }}
-                                {{ Form::hidden('label_cd[outside]', $form_params['label_cd']['outside']) }}
-                                {{ Form::hidden('label_cd[map]', $form_params['label_cd']['map']) }}
-                                {{ Form::hidden('label_cd[inside]', $form_params['label_cd']['inside']) }}
-                                {{ Form::hidden('label_cd[room]', $form_params['label_cd']['room']) }}
-                                {{ Form::hidden('label_cd[other]', $form_params['label_cd']['other']) }}
-                                {{ Form::hidden('label_cd[nothing]', $form_params['label_cd']['nothing']) }}
+                                {{ Form::hidden('label_cd[outside]', $label_cd['outside']) }}
+                                {{ Form::hidden('label_cd[map]', $label_cd['map']) }}
+                                {{ Form::hidden('label_cd[inside]', $label_cd['inside']) }}
+                                {{ Form::hidden('label_cd[room]', $label_cd['room']) }}
+                                {{ Form::hidden('label_cd[other]', $label_cd['other']) }}
+                                {{ Form::hidden('label_cd[nothing]', $label_cd['nothing']) }}
                                 {{ Form::close() }}
                             @endif
                         </td>
@@ -193,10 +187,10 @@
 
                         {{-- 画像 --}}
                         <td class="wrap_media_pop_view" style="{{ $image_width }}" align="center">
-                            {{-- <img border="0" src="/images/hotel/{{ $form_params['target_cd'] }}/trim_054/{{ $media->file_nm }}" width="54" height="54" title="{{ $media->title }}"> --}}
+                            {{-- <img border="0" src="/images/hotel/{{ $target_cd }}/trim_054/{{ $media->file_nm }}" width="54" height="54" title="{{ $media->title }}"> --}}
                             <img src="{{ asset('storage/images/hotel/' . $target_cd . '/' . $media->file_nm) }}" title="{{ $media->title }}" border="0" width="54" height="54">
                             <div class="media_pop_frame">
-                                {{-- <img border="1" src="/images/hotel/{{ $form_params['target_cd'] }}/trim_138/{{ $media->file_nm }}" width="1" height="1" title="{{ $media->title }}" class="media_pop_view"> --}}
+                                {{-- <img border="1" src="/images/hotel/{{ $target_cd }}/trim_138/{{ $media->file_nm }}" width="1" height="1" title="{{ $media->title }}" class="media_pop_view"> --}}
                                 <img class="media_pop_view" src="{{ asset('storage/images/hotel/' . $target_cd . '/' . $media->file_nm) }}" title="{{ $media->title }}" border="1" width="1" height="1">
                             </div>
                         </td>
@@ -238,7 +232,7 @@
                         {{-- 編集 --}}
                         <td>
                             {{ Form::open(['route' => 'ctl.htl.media.edit_media', 'method' => 'get', 'style' => 'display:inline;']) }}
-                            {{ Form::hidden('target_cd', $form_params['target_cd']) }}
+                            {{ Form::hidden('target_cd', $target_cd) }}
                             {{ Form::hidden('media_no', $media->media_no) }}
                             {{ Form::submit('編集') }}
                             {{ Form::close() }}
@@ -247,7 +241,7 @@
                         {{-- 削除 --}}
                         <td>
                             {{ Form::open(['route' => 'ctl.htl.media.destroy_media', 'method' => 'post', 'style' => 'display:inline;', 'onSubmit' => 'return is_confirm();']) }}
-                            {{ Form::hidden('target_cd', $form_params['target_cd']) }}
+                            {{ Form::hidden('target_cd', $target_cd) }}
                             {{ Form::hidden('media_no', $media->media_no) }}
 
                             {{-- <input type="submit" value="削除" {if $media->media_no == $v->assign->outside[0].media_no or $media->media_no == $v->assign->map[0].media_no}disabled="true"{/if} /> --}}

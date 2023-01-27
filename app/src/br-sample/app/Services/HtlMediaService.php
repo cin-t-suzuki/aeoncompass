@@ -60,68 +60,7 @@ class HtlMediaService
                 media.file_nm,
                 ifnull(media_org.org_file_nm, media.file_nm) as disp_file_nm,
                 media.order_no,
-                media.order_no + 1 as order_no_plus,
-                media.order_no - 1 as order_no_minus
-                -- , media.upload_dtm
-                , media.modify_ts
-                -- ,
-                -- TODO: これは何をやっている？ -> UNIX タイムスタンプに変換しているように見える
-                -- to_number(
-                --     to_date(
-                --         to_char(
-                --             cast(
-                --                 SYS_EXTRACT_UTC(
-                --                     to_timestamp(
-                --                         to_char(media.upload_dtm, 'YYYY-MM-DD HH24:MI:SS'),
-                --                         'YYYY-MM-DD HH24:MI:SS'
-                --                     )
-                --                 ) as date
-                --             ),
-                --             'YYYY-MM-DD'
-                --         ),
-                --         'YYYY-MM-DD'
-                --     ) - to_date('1970-01-01', 'YYYY-MM-DD')
-                -- ) * 24 * 60 * 60 + to_number(
-                --     to_char(
-                --         cast(
-                --             SYS_EXTRACT_UTC(
-                --                 to_timestamp(
-                --                     to_char(media.upload_dtm, 'YYYY-MM-DD HH24:MI:SS'),
-                --                     'YYYY-MM-DD HH24:MI:SS'
-                --                 )
-                --             ) as date
-                --         ),
-                --         'SSSSS'
-                --     )
-                -- ) as upload_dtm,
-                -- to_number(
-                --     to_date(
-                --         to_char(
-                --             cast(
-                --                 SYS_EXTRACT_UTC(
-                --                     to_timestamp(
-                --                         to_char(media.modify_ts, 'YYYY-MM-DD HH24:MI:SS'),
-                --                         'YYYY-MM-DD HH24:MI:SS'
-                --                     )
-                --                 ) as date
-                --             ),
-                --             'YYYY-MM-DD'
-                --         ),
-                --         'YYYY-MM-DD'
-                --     ) - to_date('1970-01-01', 'YYYY-MM-DD')
-                -- ) * 24 * 60 * 60 + to_number(
-                --     to_char(
-                --         cast(
-                --             SYS_EXTRACT_UTC(
-                --                 to_timestamp(
-                --                     to_char(media.modify_ts, 'YYYY-MM-DD HH24:MI:SS'),
-                --                     'YYYY-MM-DD HH24:MI:SS'
-                --                 )
-                --             ) as date
-                --         ),
-                --         'SSSSS'
-                --     )
-                -- ) as modify_ts
+                media.modify_ts
             from
                 media
                 left outer join media_org
@@ -289,8 +228,6 @@ class HtlMediaService
             select
                 q1.media_no,
                 q1.order_no,
-                (q1.order_no + 1) as order_no_plus,
-                (q1.order_no - 1) as order_no_minus,
                 m.label_cd,
                 m.title,
                 m.file_nm,
@@ -372,14 +309,14 @@ class HtlMediaService
      * @param bool $up:             true:繰上げ（順位を上げる） false 繰り下げ（順位を下げる）
      * @return bool
      */
-    public function sortMedia($hotelCd, $mediaNo, $targetMediaNo, $up): bool
+    public function sortMedia($hotelCd, $sourceMediaNo, $targetMediaNo, $up): bool
     {
         try {
-            DB::transaction(function () use ($hotelCd, $mediaNo, $targetMediaNo, $up) {
+            DB::transaction(function () use ($hotelCd, $sourceMediaNo, $targetMediaNo, $up) {
                 if ($up) {
-                    $this->changeOrderUp($hotelCd, $mediaNo, $targetMediaNo);
+                    $this->changeOrderUp($hotelCd, $sourceMediaNo, $targetMediaNo);
                 } else {
-                    $this->changeOrderDown($hotelCd, $mediaNo, $targetMediaNo);
+                    $this->changeOrderDown($hotelCd, $sourceMediaNo, $targetMediaNo);
                 }
             });
         } catch (\Exception $e) {
@@ -388,9 +325,9 @@ class HtlMediaService
         }
         return true;
     }
-    private function changeOrderUp($hotelCd, $mediaNo, $targetMediaNo): void
+    private function changeOrderUp($hotelCd, $sourceMediaNo, $targetMediaNo): void
     {
-        $media = $this->findMedia($hotelCd, $mediaNo);
+        $media = $this->findMedia($hotelCd, $sourceMediaNo);
         $targetMedia = $this->findMedia($hotelCd, $targetMediaNo);
 
         $targetOrderNo = $targetMedia->order_no;
@@ -403,12 +340,12 @@ class HtlMediaService
 
         Media::where([
             'hotel_cd' => $hotelCd,
-            'media_no' => $mediaNo,
+            'media_no' => $sourceMediaNo,
         ])->update(['order_no' => $targetOrderNo]);
     }
-    private function changeOrderDown($hotelCd, $mediaNo, $targetMediaNo): void
+    private function changeOrderDown($hotelCd, $sourceMediaNo, $targetMediaNo): void
     {
-        $media = $this->findMedia($hotelCd, $mediaNo);
+        $media = $this->findMedia($hotelCd, $sourceMediaNo);
         $targetMedia = $this->findMedia($hotelCd, $targetMediaNo);
 
         $targetOrderNo = $targetMedia->order_no;
@@ -421,7 +358,7 @@ class HtlMediaService
 
         Media::where([
             'hotel_cd' => $hotelCd,
-            'media_no' => $mediaNo,
+            'media_no' => $sourceMediaNo,
         ])->update(['order_no' => $targetOrderNo]);
     }
 
@@ -849,8 +786,6 @@ class HtlMediaService
             select
                 q1.media_no,
                 q1.order_no,
-                (q1.order_no + 1) as order_no_plus,
-                (q1.order_no - 1) as order_no_minus,
                 m.label_cd,
                 m.title,
                 m.file_nm,
@@ -1049,8 +984,6 @@ class HtlMediaService
             select
                 q1.media_no,
                     q1.order_no,
-                    (q1.order_no + 1) as order_no_plus,
-                    (q1.order_no - 1) as order_no_minus,
                     m.label_cd,
                     m.title,
                     m.file_nm,

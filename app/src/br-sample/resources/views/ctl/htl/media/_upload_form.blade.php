@@ -89,8 +89,7 @@
         );
     }
     document.write('<a href="#" onclick="window_open()">－ ご利用について －</a>');
-    // 
-    -->
+    // -->
 </script>
 <noscript>
     <a href="/ctl/htlmedia/rule/target_cd/{{ strip_tags($target_cd) }}/" target="_blank">－ ご利用について －</a>
@@ -119,35 +118,35 @@
                 {{-- HACK: refactor (工数次第) 共通化したうえで、呼び出し元を条件に分岐するのは、筋が悪いように思われる。 --}}
 
                 {{-- 「画像一覧画面」と「地図画像以外の編集画面」でのみ表示 --}}
-                @if (\Route::CurrentRouteName() === 'ctl.htl.media.list' || $form_params['label_cd']['map'] !== '1')
+                @if (\Route::CurrentRouteName() === 'ctl.htl.media.list' || $label_cd['map'] !== '1')
                     <tr>
                         <td style="background-color: #FFFFFF;">
-                            {{ Form::radio('select', 'normal', old('select') === 'normal' || $form_params['label_cd']['map'] !== '1', ['id' => 'normal']) }}
+                            {{ Form::radio('select', 'normal', old('select') === 'normal' || $label_cd['map'] !== '1', ['id' => 'normal']) }}
                             <label for="normal">地図以外</label>
 
                             {{-- HACK: (refactor, 工数次第) ただの横並びにテーブルレイアウトを使うのは違和感がある --}}
                             <table id="el" style="margin-left:50px" border="0" cellpadding="0" cellspacing="0" width="100%">
                                 <tr class="visible-normal">
                                     <td style="background-color: #FFFFFF;">
-                                        {{ Form::checkbox('label_cd[outside]', '1', old('label_cd.outside', $form_params['label_cd']['outside']) === '1', ['id' => 'outside']) }}
+                                        {{ Form::checkbox('label_cd[outside]', '1', old('label_cd.outside', $label_cd['outside']) === '1', ['id' => 'outside']) }}
                                         <label for="outside">
                                             <font color="#FF9999">■</font>外観
                                         </label>
                                     </td>
                                     <td style="background-color: #FFFFFF;">
-                                        {{ Form::checkbox('label_cd[inside]', '1', old('label_cd.inside', $form_params['label_cd']['inside']) === '1', ['id' => 'inside']) }}
+                                        {{ Form::checkbox('label_cd[inside]', '1', old('label_cd.inside', $label_cd['inside']) === '1', ['id' => 'inside']) }}
                                         <label for="inside">
                                             <font color="#99FF99">■</font>フォトギャラリー
                                         </label>
                                     </td>
                                     <td style="background-color: #FFFFFF;">
-                                        {{ Form::checkbox('label_cd[room]', '1', old('label_cd.room', $form_params['label_cd']['room']) === '1', ['id' => 'room']) }}
+                                        {{ Form::checkbox('label_cd[room]', '1', old('label_cd.room', $label_cd['room']) === '1', ['id' => 'room']) }}
                                         <label for="room">
                                             <font color="#66CCFF">■</font>客室
                                         </label>
                                     </td>
                                     <td style="background-color: #FFFFFF;">
-                                        {{ Form::checkbox('label_cd[other]', '1', old('label_cd.other', $form_params['label_cd']['other']) === '1', ['id' => 'other']) }}
+                                        {{ Form::checkbox('label_cd[other]', '1', old('label_cd.other', $label_cd['other']) === '1', ['id' => 'other']) }}
                                         <label for="other">
                                             <font color="#FF99FF">■</font>その他
                                         </label>
@@ -159,10 +158,10 @@
                 @endif
 
                 {{-- 「画像一覧画面」と「地図画像の編集画面」でのみ表示 --}}
-                @if (\Route::CurrentRouteName() === 'ctl.htl.media.list' || ($form_params['label_cd']['map'] === '1' && ($form_params['label_cd']['outside'] !== '1' && $form_params['label_cd']['inside'] !== '1' && $form_params['label_cd']['room'] !== '1' && $form_params['label_cd']['other'] !== '1')))
+                @if (\Route::CurrentRouteName() === 'ctl.htl.media.list' || ($label_cd['map'] === '1' && ($label_cd['outside'] !== '1' && $label_cd['inside'] !== '1' && $label_cd['room'] !== '1' && $label_cd['other'] !== '1')))
                     <tr>
                         <td style="background-color: #FFFFFF" colspan="5;">
-                            {{ Form::radio('select', 'map', old('select') === 'map' || $form_params['label_cd']['map'] === '1', ['id' => 'map']) }}
+                            {{ Form::radio('select', 'map', old('select') === 'map' || $label_cd['map'] === '1', ['id' => 'map']) }}
                             <label for="map">
                                 <font color="#FFCC66">■</font>地図
                             </label>

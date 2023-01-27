@@ -134,7 +134,6 @@
                                                             {{ Form::hidden('target_media_no', $plan->medias[$i - 1]->media_no) }}
 
                                                             {{-- {{ Form::hidden('target_order_no', $i + 1) }} --}}
-                                                            {{-- {{ Form::hidden('edit_order_no', $plan->medias[$i]->order_no_minus) }} --}}
                                                             {{-- {{ Form::hidden('media_type', 'plan') }} --}}
                                                             {{ Form::submit('←') }}
                                                             {{ Form::close() }}
@@ -147,7 +146,6 @@
                                                             {{ Form::hidden('target_media_no', $plan->medias[$i + 1]->media_no) }}
 
                                                             {{-- {{ Form::hidden('target_order_no', $i + 1) }} --}}
-                                                            {{-- {{ Form::hidden('edit_order_no', $plan->medias[$i]->order_no_plus) }} --}}
                                                             {{-- {{ Form::hidden('media_type', 'plan') }} --}}
                                                             {{ Form::submit('→') }}
                                                             {{ Form::close() }}
