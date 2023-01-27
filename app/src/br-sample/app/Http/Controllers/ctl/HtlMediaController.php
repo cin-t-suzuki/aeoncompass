@@ -51,16 +51,27 @@ class HtlMediaController extends Controller
         $hotelMediaOutside  = $service->getHotelMedia($hotelCd, HotelMedia::TYPE_HOTEL);
         $hotelMediaMap      = $service->getHotelMedia($hotelCd, HotelMedia::TYPE_MAP);
 
+        // 幅広表示の設定
+        $wide_list_check    = $request->input('wide_list_check', '0');
+        $wide_list_ref      = $request->input('wide_list_ref', '0');
+        if ($wide_list_ref) {
+            $request->session()->put('wide_list', $wide_list_check);
+        }
+        $wide_list = $request->session()->get('wide_list', '0');
+
         return view('ctl.htl.media.list', [
             'target_cd'     => $hotelCd,
+
             'media_list'    => $mediaList,
             'outside'       => $hotelMediaOutside,
             'map'           => $hotelMediaMap,
 
-            'media_type' => $request->input('media_type'),
-            'target_order_no' => $request->input('target_order_no'),
-            'setting_media_no' => $request->input('setting_media_no'),
-            'label_type' => $request->input('label_type'),
+            'wide_list' => $wide_list,
+
+            'media_type'        => $request->input('media_type'),
+            'target_order_no'   => $request->input('target_order_no'),
+            'setting_media_no'  => $request->input('setting_media_no'),
+            'label_type'        => $request->input('label_type'),
 
             'room_id'           => $request->input('room_id'),
             'plan_id'           => $request->input('plan_id'),
@@ -69,7 +80,6 @@ class HtlMediaController extends Controller
 
             // TODO: 暫定実装、消す方向で修正を進める
             'form_params' => [
-                'list_width' => $request->input('list_width'),
                 'label_cd' => [
                     'outside'   => $request->input('label_cd.outside'),
                     'map'       => $request->input('label_cd.map'),
@@ -347,9 +357,19 @@ class HtlMediaController extends Controller
             $messageWords[$mediaType][$messageIndex] . 'に設定する画像を選択してください。',
         ];
 
+        // 幅広表示の設定
+        $wide_list_check    = $request->input('wide_list_check', '0');
+        $wide_list_ref      = $request->input('wide_list_ref', '0');
+        if ($wide_list_ref) {
+            $request->session()->put('wide_list', $wide_list_check);
+        }
+        $wide_list = $request->session()->get('wide_list', '0');
+
         return view('ctl.htl.media.select-media', [
             'target_cd' => $hotelCd,
             'medias'    => $medias,
+
+            'wide_list' => $wide_list,
 
             'guides' => $guides,
 
@@ -363,7 +383,6 @@ class HtlMediaController extends Controller
 
             // TODO: 暫定実装、消す方向で修正を進める
             'form_params' => [
-                'list_width' => $request->input('list_width'),
                 'label_cd' => [
                     'outside'   => $request->input('label_cd.outside'),
                     'map'       => $request->input('label_cd.map'),

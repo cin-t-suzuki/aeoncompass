@@ -20,7 +20,7 @@
         {{ Form::hidden('target_cd', $target_cd) }}
         {{ Form::close() }}
     @endif
-    @if (\Route::CurrentRouteName() != 'ctl.htl.medil.edit_hotel' && \Route::CurrentRouteName() != 'ctl.htl.medil.update_hotel' && \Route::CurrentRouteName() != 'ctl.htl.medil.sort_hotel')
+    @if (\Route::CurrentRouteName() != 'ctl.htl.media.edit_hotel')
         {{ Form::open(['route' => 'ctl.htl.media.edit_hotel', 'method' => 'get']) }}
         {{ Form::submit('「施設画像設定」' . strip_tags($user->hotel->hotel_nm) . 'へ') }}
         {{ Form::hidden('target_cd', $target_cd) }}

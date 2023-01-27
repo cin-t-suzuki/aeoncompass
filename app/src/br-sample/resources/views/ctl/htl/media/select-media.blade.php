@@ -29,7 +29,7 @@
         <p>
             <font color="cdcdcd">■</font>登録画像一覧
         </p>
-        @if ($form_params['list_width'] === '1')
+        @if ($wide_list)
             @php
                 $table_width = 1170;
                 $disp_order_width = 'width:50px;';
@@ -116,10 +116,10 @@
                                 {{ Form::hidden('target_order_no', $target_order_no) }}
                                 {{ Form::hidden('setting_media_no', $setting_media_no) }}
                                 {{ Form::hidden('media_type', $media_type) }}
-                                {{ Form::hidden('list_width_ref', '1') }}
+                                {{ Form::hidden('wide_list_ref', '1') }}
                                 {{ Form::submit('表示') }}
-                                {{ Form::checkbox('list_width', '1', $form_params['list_width'] === '1', ['id' => 'list_width']) }}
-                                <label for="list_width">
+                                {{ Form::checkbox('wide_list_check', '1', $wide_list, ['id' => 'wide_list_check']) }}
+                                <label for="wide_list_check">
                                     <span style="color:#2655a0; font-size: 13px;">画像一覧をワイド表示にする</span>
                                 </label>
                             </td>
@@ -216,7 +216,7 @@
                                 <tr>
                                     <td class="title_label" style="{{ $title_label_width }}">タイトル</td>
                                     <td>{{ $media->title }}</td>
-                                    @if ($form_params['list_width'] === '1')
+                                    @if ($wide_list)
                                         <td class="update_label" style="{{ $update_label_width }}">更新日時</td>
                                         <td style="{{ $update_width }}">{{ date('Y-m-d', strtotime($media->modify_ts)) }}
                                         </td>
@@ -228,7 +228,7 @@
                                         <span style="font-size:18px; display:block; margin-bottom: 3px; ">{{ $media->disp_file_nm }}</span>
                                     </td>
                                 </tr>
-                                @if ($form_params['list_width'] !== '1')
+                                @if (!$wide_list)
                                     <tr>
                                         <td class="update_label">更新日時</td>
                                         <td>{{ date('Y-m-d', strtotime($media->modify_ts)) }}</td>

@@ -37,6 +37,7 @@
             <font color="ff0000">現在アップロードされている画像はありません。</font>
         @else
             <div>
+                {{-- 絞込フォーム --}}
                 {{ Form::open(['route' => 'ctl.htl.media.list', 'method' => 'get', 'style' => 'display:inline;']) }}
                 <table border="1" cellpadding="4" cellspacing="0" width="700">
                     <tr>
@@ -88,11 +89,10 @@
                             {{ Form::hidden('target_cd', $form_params['target_cd']) }}
                             {{ Form::hidden('media_type', $form_params['media_type']) }}
                             {{ Form::hidden('target_order_no', $target_order_no) }}
-                            {{ Form::hidden('list_width_ref', '1') }}
+                            {{ Form::hidden('wide_list_ref', '1') }}
                             {{ Form::submit('表示') }}
-                            {{-- <input type="checkbox" id="list_width" name="list_width" value="1" {if $v->assign->form_params->list_width === '1'} checked="checked" {/if}/> --}}
-                            {{ Form::checkbox('list_width', 1, $form_params['list_width'] == '1', ['id' => 'list_width']) }}
-                            <label for="list_width">
+                            {{ Form::checkbox('wide_list_check', '1', $wide_list, ['id' => 'wide_list_check']) }}
+                            <label for="wide_list_check">
                                 <span style="color:#2655a0; font-size: 13px;">画像一覧をワイド表示にする</span>
                             </label>
                         </td>
@@ -103,7 +103,7 @@
             <br />
 
             {{-- HACK: (refactor, 工数次第) 装飾は css にまとめて、 class の分岐で実装できないか？ --}}
-            @if ($form_params['list_width'] === '1')
+            @if ($wide_list)
                 @php
                     $table_width = '1170';
                     $disp_order_width = 'width:50px;';
@@ -209,7 +209,7 @@
                                     <td>{{ $media->title }}</td>
 
                                     {{-- HACK: 暫定実装 --}}
-                                    @if (old('list_width', $form_params['list_width']) == '1')
+                                    @if ($wide_list)
                                         <td class="update_label" style="{{ $update_label_width }}">更新日時</td>
                                         <td style="{{ $update_width }}">{{ date('Y-m-d', strtotime($media->modify_ts)) }}</td>
                                     @endif
@@ -218,7 +218,7 @@
                                     <td class="file_label">ファイル名</td>
                                     <td colspan="{{ $file_colspan }}">{{ $media->disp_file_nm }}</td>
                                 </tr>
-                                @if (old('list_width', $form_params['list_width']) != '1')
+                                @if (!$wide_list)
                                     <tr>
                                         <td class="update_label">更新日時</td>
                                         <td>{{ date('Y-m-d', strtotime($media->modify_ts)) }}</td>
