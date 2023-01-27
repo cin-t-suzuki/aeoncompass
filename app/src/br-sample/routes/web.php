@@ -261,4 +261,11 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
         ->name('ctl.brhoteladvert2009000400.edit'); //編集画面
     Route::post('/brhoteladvert2009000400/update', 'BrhotelAdvert2009000400Controller@update')
         ->name('ctl.brhoteladvert2009000400.update'); //更新
+
+    // 会員からの意見
+    Route::get('/brvoice/', 'BrVoiceController@index');
+    Route::get('/brvoice/search', 'BrVoiceController@search')->name('ctl.brvoice.search');
+    Route::post('/brvoice/create', 'BrVoiceController@create')->name('ctl.brvoice.create');
+    Route::post('/brvoice/update', 'BrVoiceController@update')->name('ctl.brvoice.update');
+    Route::post('/brvoice/switch', 'BrVoiceController@switch')->name('ctl.brvoice.switch');
 });

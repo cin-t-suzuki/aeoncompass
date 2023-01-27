@@ -6,6 +6,7 @@ use App\Common\Traits;
 use App\Models\common\CommonDBModel;
 use App\Models\common\ValidationColumn;
 use Illuminate\Support\Facades\DB;
+use Exception;
 
 /** 
  * ホテル
@@ -13,6 +14,11 @@ use Illuminate\Support\Facades\DB;
 class Hotel extends CommonDBModel
 {
     use Traits;
+
+    protected $s_hotel_cd = null;  // 施設コード //一番最初の_は削除（phpcs黄エラー）
+    // キャッシュ用変数
+    private $a_get_hotel_medias = [];
+    private $a_get_hotel_inform_cancel    = [];
 
     /**
      * モデルに関連付けるテーブル
@@ -187,6 +193,13 @@ class Hotel extends CommonDBModel
             $colCheckInEnd  , $colCheckInInfo   , $colCheckOut      , $colMidnightStatus, $colAcceptStatus,
             $colAcceptAuto  , $colAcceptDtm
         ]);
+    }
+
+    // 施設コードの設定
+    //
+    public function setHotelCd($as_hotel_cd)
+    {
+        $this->s_hotel_cd = $as_hotel_cd;
     }
 
     /**
@@ -630,4 +643,120 @@ SQL;
 
 	}
 
+    // 特定施設のメディア情報の取得 //実装はしたが、voiceではblade側で取得した値は使っていなさそう？？（使用する機能があれば出力は要確認）
+    //
+    // this->_s_hotel_cd 施設コード
+    // aa_conditions
+    //   type     画像タイプ
+    //   media_no メディアNO
+    //
+    public function getHotelMedias($aa_conditions = [])
+    {
+        try {
+            // キーが同じ場合キャッシュを利用
+            if (
+                $this->s_hotel_cd             == ($this->a_get_hotel_medias['hotel_cd'] ?? null) // ?? null追記でいいか？
+                &&    $aa_conditions['type']     == ($this->a_get_hotel_medias['type'] ?? null)
+                &&    ($aa_conditions['media_no'] ?? null) == ($this->a_get_hotel_medias['media_no'] ?? null)
+            ) {
+                return $this->a_get_hotel_medias['values'];
+            }
+
+            $aa_conditions['hotel_cd'] = $this->s_hotel_cd;
+
+            // 条件を定義
+            // 画像タイプを設定
+            $s_type = ''; //初期化
+            if (!$this->is_empty($aa_conditions['type'] ?? null)) { //null追記でいいか？
+                $s_type = 'and	hotel_media.type = :type';
+            }
+
+            // メディアNOを設定
+            $s_media_no = ''; //初期化
+            if (!$this->is_empty($aa_conditions['media_no'] ?? null)) { //null追記でいいか？
+                $s_media_no = 'and	hotel_media.media_no = :media_no';
+            }
+
+            $s_sql =
+            <<<SQL
+					select	q1.hotel_cd,
+							q1.type,
+							q1.media_no,
+							q1.order_no,
+							media.title,
+							media.file_nm,
+							media.mime_type,
+							media.width,
+							media.height,
+							media.upload_dtm as upload_dtm,
+							q1.modify_ts as modify_ts
+					from	media,
+						(
+							select	hotel_media.hotel_cd,
+									hotel_media.type,
+									hotel_media.media_no,
+									hotel_media.order_no,
+									hotel_media.modify_ts
+							from	hotel_media
+							where	hotel_media.hotel_cd = :hotel_cd
+								{$s_type}
+								{$s_media_no}
+						) q1
+					where	media.hotel_cd = q1.hotel_cd
+						and	media.media_no = q1.media_no
+					order by q1.order_no
+SQL;
+
+
+            // データの取得
+            $this->a_get_hotel_medias = $aa_conditions;
+            $this->a_get_hotel_medias['values'] = [
+                'values'     => DB::select($s_sql, $aa_conditions),
+            ];
+
+            return $this->a_get_hotel_medias['values'];
+
+            // 各メソッドで Exception が投げられた場合
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
+    // 施設注意事項情報の取得 //Htlhotelでも同じ名前がある。実装はしたが、voiceではblade側で取得した値は使っていなさそう？？（使用する機能があれば出力は要確認）
+    //
+    // this->_s_hotel_cd 施設コード
+    //
+    public function getHotelInformCancel()
+    {
+        try {
+            // キーが同じ場合キャッシュを利用
+            if ($this->s_hotel_cd == ($this->a_get_hotel_inform_cancel['hotel_cd'] ?? null)) { // ?? null追記でいいか？
+                return $this->a_get_hotel_inform_cancel['values'];
+            }
+
+            $s_sql =
+            <<<SQL
+					select	hotel_inform.hotel_cd,
+							hotel_inform.branch_no,
+							hotel_inform.inform,
+							hotel_inform.order_no
+					from	hotel_inform
+					where	hotel_inform.hotel_cd = :hotel_cd
+						and	hotel_inform.inform_type = 0
+					order by hotel_inform.order_no
+SQL;
+
+            // データの取得
+            $this->a_get_hotel_inform_cancel['hotel_cd'] = $this->s_hotel_cd;
+            $this->a_get_hotel_inform_cancel['values'] = [
+                'values'     => DB::select($s_sql, ['hotel_cd' => $this->s_hotel_cd])
+            ];
+
+            return $this->a_get_hotel_inform_cancel['values'];
+
+            // 各メソッドで Exception が投げられた場合
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
 }
