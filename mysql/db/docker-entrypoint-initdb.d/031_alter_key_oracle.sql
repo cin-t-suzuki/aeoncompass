@@ -9,4423 +9,4423 @@ USE ac_travel;
 --  *** Table REPORT_WEEK_HOTEL2
 --   *** ------------------------------------
 
-  ALTER TABLE `REPORT_WEEK_HOTEL2` ADD CONSTRAINT `REPORT_WEEK_HOTEL2_PKY` PRIMARY KEY (`HOTEL_CD`, `RESERVE_YMD`, `DATE_YMD`, `CHARGE_TYPE`, `CAPACITY`)
+  ALTER TABLE `report_week_hotel2` ADD CONSTRAINT `report_week_hotel2_pky` PRIMARY KEY (`hotel_cd`, `reserve_ymd`, `date_ymd`, `charge_type`, `capacity`)
   ;
 --   *** ------------------------------------
 --  *** Table VOICE_REPLY
 --   *** ------------------------------------
 
-  ALTER TABLE `VOICE_REPLY` ADD CONSTRAINT `VOICE_REPLY_PKY` PRIMARY KEY (`HOTEL_CD`, `VOICE_CD`)
+  ALTER TABLE `voice_reply` ADD CONSTRAINT `voice_reply_pky` PRIMARY KEY (`hotel_cd`, `voice_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table EPARK_REFRESH_TOKEN
 --   *** ------------------------------------
 
-  ALTER TABLE `EPARK_REFRESH_TOKEN` ADD CONSTRAINT `EPARK_REFRESH_TOKEN_PKY` PRIMARY KEY (`EPARK_ID`)
+  ALTER TABLE `epark_refresh_token` ADD CONSTRAINT `epark_refresh_token_pky` PRIMARY KEY (`epark_id`)
   ;
 --   *** ------------------------------------
 --  *** Table YDP_ITEM_CONTROL
 --   *** ------------------------------------
 
-  ALTER TABLE `YDP_ITEM_CONTROL` ADD CONSTRAINT `YDP_ITEM_CONTROL_PKY` PRIMARY KEY (`AFFILIATE_ID`, `COOPERATION_CD`, `ITEM_CD`)
+  ALTER TABLE `ydp_item_control` ADD CONSTRAINT `ydp_item_control_pky` PRIMARY KEY (`affiliate_id`, `cooperation_cd`, `item_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_CHARGE_YHO_BAT_TMP_9
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_CHARGE_YHO_BAT_TMP_9` ADD CONSTRAINT `ROOM_CHARGE_YHO_BAT_TMP_9_PKY` PRIMARY KEY (`REC_TYPE`, `HOTEL_CD`, `ROOM_CD`, `PLAN_CD`, `DATE_YMD`)
+  ALTER TABLE `room_charge_yho_bat_tmp_9` ADD CONSTRAINT `room_charge_yho_bat_tmp_9_pky` PRIMARY KEY (`rec_type`, `hotel_cd`, `room_cd`, `plan_cd`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_POWERDOWN
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_POWERDOWN` ADD CONSTRAINT `HOTEL_POWERDOWN_PKY` PRIMARY KEY (`HOTEL_CD`, `POWERDOWN_SEQ`)
+  ALTER TABLE `hotel_powerdown` ADD CONSTRAINT `hotel_powerdown_pky` PRIMARY KEY (`hotel_cd`, `powerdown_seq`)
   ;
 --   *** ------------------------------------
 --  *** Table PLAN_POINT
 --   *** ------------------------------------
 
-  ALTER TABLE `PLAN_POINT` ADD CONSTRAINT `PLAN_POINT_PKY` PRIMARY KEY (`HOTEL_CD`, `PLAN_ID`)
+  ALTER TABLE `plan_point` ADD CONSTRAINT `plan_point_pky` PRIMARY KEY (`hotel_cd`, `plan_id`)
   ;
 --   *** ------------------------------------
 --  *** Table PARTNER_SITE_RATE
 --   *** ------------------------------------
 
-  ALTER TABLE `PARTNER_SITE_RATE` ADD CONSTRAINT `PARTNER_SITE_RATE_PKY` PRIMARY KEY (`SITE_CD`, `ACCEPT_S_YMD`, `FEE_TYPE`, `STOCK_CLASS`)
+  ALTER TABLE `partner_site_rate` ADD CONSTRAINT `partner_site_rate_pky` PRIMARY KEY (`site_cd`, `accept_s_ymd`, `fee_type`, `stock_class`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_PLAN
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_PLAN` ADD CONSTRAINT `RESERVE_PLAN_PKY` PRIMARY KEY (`RESERVE_CD`)
+  ALTER TABLE `reserve_plan` ADD CONSTRAINT `reserve_plan_pky` PRIMARY KEY (`reserve_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_POINT
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_POINT` ADD CONSTRAINT `RESERVE_POINT_PKY` PRIMARY KEY (`RESERVE_CD`)
+  ALTER TABLE `reserve_point` ADD CONSTRAINT `reserve_point_pky` PRIMARY KEY (`reserve_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table ZAP_ROOM
 --   *** ------------------------------------
 
-  ALTER TABLE `ZAP_ROOM` ADD CONSTRAINT `ZAP_ROOM_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_CD`)
+  ALTER TABLE `zap_room` ADD CONSTRAINT `zap_room_pky` PRIMARY KEY (`hotel_cd`, `room_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table MAIL_MAGAZINE_BACK_NUMBER
 --   *** ------------------------------------
 
-  ALTER TABLE `MAIL_MAGAZINE_BACK_NUMBER` ADD CONSTRAINT `MAIL_MAGAZINE_BACK_NUMBER_PKY` PRIMARY KEY (`MAGAZINE_NO`)
+  ALTER TABLE `mail_magazine_back_number` ADD CONSTRAINT `mail_magazine_back_number_pky` PRIMARY KEY (`magazine_no`)
   ;
 --   *** ------------------------------------
 --  *** Table ZAP_PLAN_PARTNER_GROUP
 --   *** ------------------------------------
 
-  ALTER TABLE `ZAP_PLAN_PARTNER_GROUP` ADD CONSTRAINT `ZAP_PLAN_PARTNER_GROUP_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_CD`, `PLAN_CD`, `PARTNER_GROUP_ID`)
+  ALTER TABLE `zap_plan_partner_group` ADD CONSTRAINT `zap_plan_partner_group_pky` PRIMARY KEY (`hotel_cd`, `room_cd`, `plan_cd`, `partner_group_id`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_PLAN_CAPACITY
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_PLAN_CAPACITY` ADD CONSTRAINT `ROOM_PLAN_CAPACITY_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_ID`, `PLAN_ID`, `DATE_YM`, `CAPACITY`)
+  ALTER TABLE `room_plan_capacity` ADD CONSTRAINT `room_plan_capacity_pky` PRIMARY KEY (`hotel_cd`, `room_id`, `plan_id`, `date_ym`, `capacity`)
   ;
 --   *** ------------------------------------
 --  *** Table NOTIFY_RIZAPULI_STAY
 --   *** ------------------------------------
 
-  ALTER TABLE `NOTIFY_RIZAPULI_STAY` ADD CONSTRAINT `NOTIFY_RIZAPULI_STAY_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`)
+  ALTER TABLE `notify_rizapuli_stay` ADD CONSTRAINT `notify_rizapuli_stay_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_CHARGE_YHO_BAT_TMP_5
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_CHARGE_YHO_BAT_TMP_5` ADD CONSTRAINT `ROOM_CHARGE_YHO_BAT_TMP_5_PKY` PRIMARY KEY (`REC_TYPE`, `HOTEL_CD`, `ROOM_CD`, `PLAN_CD`, `DATE_YMD`)
+  ALTER TABLE `room_charge_yho_bat_tmp_5` ADD CONSTRAINT `room_charge_yho_bat_tmp_5_pky` PRIMARY KEY (`rec_type`, `hotel_cd`, `room_cd`, `plan_cd`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table PLAN_TYK
 --   *** ------------------------------------
 
-  ALTER TABLE `PLAN_TYK` ADD CONSTRAINT `PLAN_TYK_PKY` PRIMARY KEY (`HOTEL_CD`, `PLAN_ID`)
+  ALTER TABLE `plan_tyk` ADD CONSTRAINT `plan_tyk_pky` PRIMARY KEY (`hotel_cd`, `plan_id`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_AKF →修正
 --   *** ------------------------------------
 
---  ALTER TABLE `ROOM_AKF` MODIFY (`HOTEL_CD` NOT NULL ENABLE);
- ALTER TABLE `ROOM_AKF` MODIFY `HOTEL_CD` varchar(10) BINARY NOT NULL;
+--  ALTER TABLE `room_akf` MODIFY (`hotel_cd` NOT NULL ENABLE);
+ ALTER TABLE `room_akf` MODIFY `hotel_cd` varchar(10) BINARY NOT NULL;
  
---  ALTER TABLE `ROOM_AKF` MODIFY (`ROOM_ID` NOT NULL ENABLE);
- ALTER TABLE `ROOM_AKF` MODIFY `ROOM_ID` varchar(10) BINARY NOT NULL;
+--  ALTER TABLE `room_akf` MODIFY (`room_id` NOT NULL ENABLE);
+ ALTER TABLE `room_akf` MODIFY `room_id` varchar(10) BINARY NOT NULL;
 --   *** ------------------------------------
 --  *** Table PARTNER_BOOK_CUSTOMER
 --   *** ------------------------------------
 
-  ALTER TABLE `PARTNER_BOOK_CUSTOMER` ADD CONSTRAINT `PARTNER_BOOK_CUSTOMER_PKY` PRIMARY KEY (`CUSTOMER_ID`)
+  ALTER TABLE `partner_book_customer` ADD CONSTRAINT `partner_book_customer_pky` PRIMARY KEY (`customer_id`)
   ;
 --   *** ------------------------------------
 --  *** Table GIFT_SUPPLIER
 --   *** ------------------------------------
 
-  ALTER TABLE `GIFT_SUPPLIER` ADD CONSTRAINT `GIFT_SUPPLIER_PKY` PRIMARY KEY (`GIFT_SUPPLIER_ID`)
+  ALTER TABLE `gift_supplier` ADD CONSTRAINT `gift_supplier_pky` PRIMARY KEY (`gift_supplier_id`)
   ;
 --   *** ------------------------------------
 --  *** Table MAST_WARDZONE
 --   *** ------------------------------------
 
-  ALTER TABLE `MAST_WARDZONE` ADD CONSTRAINT `MAST_WARDZONE_PKY` PRIMARY KEY (`WARDZONE_ID`)
+  ALTER TABLE `mast_wardzone` ADD CONSTRAINT `mast_wardzone_pky` PRIMARY KEY (`wardzone_id`)
   ;
 --   *** ------------------------------------
 --  *** Table AFFILIATE_PROGRAM
 --   *** ------------------------------------
 
-  ALTER TABLE `AFFILIATE_PROGRAM` ADD CONSTRAINT `AFFILIATE_PROGRAM_PKY` PRIMARY KEY (`AFFILIATE_CD`, `RESERVE_SYSTEM`)
+  ALTER TABLE `affiliate_program` ADD CONSTRAINT `affiliate_program_pky` PRIMARY KEY (`affiliate_cd`, `reserve_system`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_STATIONS
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_STATIONS` ADD CONSTRAINT `HOTEL_STATIONS_PKY` PRIMARY KEY (`HOTEL_CD`, `STATION_ID`, `TRAFFIC_WAY`)
+  ALTER TABLE `hotel_stations` ADD CONSTRAINT `hotel_stations_pky` PRIMARY KEY (`hotel_cd`, `station_id`, `traffic_way`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE` ADD CONSTRAINT `RESERVE_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`)
+  ALTER TABLE `reserve` ADD CONSTRAINT `reserve_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table SERVICE_HUNTING
 --   *** ------------------------------------
 
-  ALTER TABLE `SERVICE_HUNTING` ADD CONSTRAINT `SERVICE_HUNTING_PKY` PRIMARY KEY (`HUNTING_ID`)
+  ALTER TABLE `service_hunting` ADD CONSTRAINT `service_hunting_pky` PRIMARY KEY (`hunting_id`)
   ;
  
-  ALTER TABLE `SERVICE_HUNTING` ADD CONSTRAINT `SERVICE_HUNTING_UNQ_01` UNIQUE (`HOTEL_CD`, `OPEN_YMD`)
+  ALTER TABLE `service_hunting` ADD CONSTRAINT `service_hunting_unq_01` UNIQUE (`hotel_cd`, `open_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table MEMBER_YDP
 --   *** ------------------------------------
 
-  ALTER TABLE `MEMBER_YDP` ADD CONSTRAINT `MEMBER_YDP_PKY` PRIMARY KEY (`MEMBER_ID`)
+  ALTER TABLE `member_ydp` ADD CONSTRAINT `member_ydp_pky` PRIMARY KEY (`member_id`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_PLAN_YDP2
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_PLAN_YDP2` ADD CONSTRAINT `ROOM_PLAN_YDP2_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_ID`, `PLAN_ID`)
+  ALTER TABLE `room_plan_ydp2` ADD CONSTRAINT `room_plan_ydp2_pky` PRIMARY KEY (`hotel_cd`, `room_id`, `plan_id`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_MSC_LOGIN
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_MSC_LOGIN` ADD CONSTRAINT `HOTEL_MSC_LOGIN_PKY` PRIMARY KEY (`HOTEL_CD`, `MSC_TYPE`)
+  ALTER TABLE `hotel_msc_login` ADD CONSTRAINT `hotel_msc_login_pky` PRIMARY KEY (`hotel_cd`, `msc_type`)
   ;
 --   *** ------------------------------------
 --  *** Table YAHOO_POINT_CANCEL_QUEUE
 --   *** ------------------------------------
 
-  ALTER TABLE `YAHOO_POINT_CANCEL_QUEUE` ADD CONSTRAINT `YAHOO_POINT_CANCEL_QUEUE_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`)
+  ALTER TABLE `yahoo_point_cancel_queue` ADD CONSTRAINT `yahoo_point_cancel_queue_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table PLAN_POINT_20170101
 --   *** ------------------------------------
 
-  ALTER TABLE `PLAN_POINT_20170101` ADD CONSTRAINT `PLAN_POINT_20170101_PKY` PRIMARY KEY (`HOTEL_CD`, `PLAN_ID`)
+  ALTER TABLE `plan_point_20170101` ADD CONSTRAINT `plan_point_20170101_pky` PRIMARY KEY (`hotel_cd`, `plan_id`)
   ;
 --   *** ------------------------------------
 --  *** Table LOG_RIZAPULI_NOTIFY
 --   *** ------------------------------------
 
-  ALTER TABLE `LOG_RIZAPULI_NOTIFY` ADD CONSTRAINT `LOG_RIZAPULI_NOTIFY_PKY` PRIMARY KEY (`RIZAPULI_REQUEST_ID`)
+  ALTER TABLE `log_rizapuli_notify` ADD CONSTRAINT `log_rizapuli_notify_pky` PRIMARY KEY (`rizapuli_request_id`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_CHARGE_DETAIL
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_CHARGE_DETAIL` ADD CONSTRAINT `RESERVE_CHARGE_DETAIL_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`, `CAPACITY_TYPE`)
+  ALTER TABLE `reserve_charge_detail` ADD CONSTRAINT `reserve_charge_detail_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`, `capacity_type`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_TICKET
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_TICKET` ADD CONSTRAINT `RESERVE_TICKET_PKY` PRIMARY KEY (`RESERVE_CD`)
+  ALTER TABLE `reserve_ticket` ADD CONSTRAINT `reserve_ticket_pky` PRIMARY KEY (`reserve_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table CHECKSHEET_YAHOO
 --   *** ------------------------------------
 
-  ALTER TABLE `CHECKSHEET_YAHOO` ADD CONSTRAINT `CHECKSHEET_YAHOO_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`)
+  ALTER TABLE `checksheet_yahoo` ADD CONSTRAINT `checksheet_yahoo_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table FAX_PR
 --   *** ------------------------------------
 
-  ALTER TABLE `FAX_PR` ADD CONSTRAINT `FAX_PR_PKY` PRIMARY KEY (`FAX_PR_ID`)
+  ALTER TABLE `fax_pr` ADD CONSTRAINT `fax_pr_pky` PRIMARY KEY (`fax_pr_id`)
   ;
 --   *** ------------------------------------
 --  *** Table MAST_LANDMARK
 --   *** ------------------------------------
 
-  ALTER TABLE `MAST_LANDMARK` ADD CONSTRAINT `MAST_LANDMARK_PKY` PRIMARY KEY (`LANDMARK_ID`)
+  ALTER TABLE `mast_landmark` ADD CONSTRAINT `mast_landmark_pky` PRIMARY KEY (`landmark_id`)
   ;
 --   *** ------------------------------------
 --  *** Table LOG_SECURITY_11
 --   *** ------------------------------------
 
-  ALTER TABLE `LOG_SECURITY_11` ADD CONSTRAINT `LOG_SECURITY_11_PKY` PRIMARY KEY (`SECURITY_CD`)
+  ALTER TABLE `log_security_11` ADD CONSTRAINT `log_security_11_pky` PRIMARY KEY (`security_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table PARTNER_DEFAULT
 --   *** ------------------------------------
 
-  ALTER TABLE `PARTNER_DEFAULT` ADD CONSTRAINT `PARTNER_DEFAULT_PKY` PRIMARY KEY (`PARTNER_CD`)
+  ALTER TABLE `partner_default` ADD CONSTRAINT `partner_default_pky` PRIMARY KEY (`partner_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table MAST_ROUTE
 --   *** ------------------------------------
 
-  ALTER TABLE `MAST_ROUTE` ADD CONSTRAINT `MAST_ROUTE_PKY` PRIMARY KEY (`ROUTE_ID`)
+  ALTER TABLE `mast_route` ADD CONSTRAINT `mast_route_pky` PRIMARY KEY (`route_id`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_ADDED_GOTO
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_ADDED_GOTO` ADD CONSTRAINT `RESERVE_ADDED_GOTO_PKY` PRIMARY KEY (`RESERVE_CD`)
+  ALTER TABLE `reserve_added_goto` ADD CONSTRAINT `reserve_added_goto_pky` PRIMARY KEY (`reserve_cd`)
   ;
  
---  ALTER TABLE `RESERVE_ADDED_GOTO` MODIFY (`ADDED_TYPE` NOT NULL ENABLE);
-  ALTER TABLE `RESERVE_ADDED_GOTO` MODIFY `ADDED_TYPE` smallint NOT NULL ;
+--  ALTER TABLE `reserve_added_goto` MODIFY (`added_type` NOT NULL ENABLE);
+  ALTER TABLE `reserve_added_goto` MODIFY `added_type` smallint NOT NULL ;
 
 --   *** ------------------------------------
 --  *** Table LANDMARK_CAMPAIGN
 --   *** ------------------------------------
 
-  ALTER TABLE `LANDMARK_CAMPAIGN` ADD CONSTRAINT `LANDMARK_CAMPAIGN_PKY` PRIMARY KEY (`CAMPAIGN_ID`);
+  ALTER TABLE `landmark_campaign` ADD CONSTRAINT `landmark_campaign_pky` PRIMARY KEY (`campaign_id`);
 --   *** ------------------------------------
 --  *** Table HOTEL_YDP2_YAHOO
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_YDP2_YAHOO` ADD CONSTRAINT `HOTEL_YDP2_YAHOO_PKY` PRIMARY KEY (`YDP_HOTEL_CD`)
+  ALTER TABLE `hotel_ydp2_yahoo` ADD CONSTRAINT `hotel_ydp2_yahoo_pky` PRIMARY KEY (`ydp_hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_RECOMMEND
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_RECOMMEND` ADD CONSTRAINT `HOTEL_RECOMMEND_PKY` PRIMARY KEY (`MEMBER_CD`, `RESERVE_CD`, `RECOMMEND_ID`)
+  ALTER TABLE `hotel_recommend` ADD CONSTRAINT `hotel_recommend_pky` PRIMARY KEY (`member_cd`, `reserve_cd`, `recommend_id`)
   ;
 --   *** ------------------------------------
 --  *** Table EXTEND_SETTING_PLAN
 --   *** ------------------------------------
 
-  ALTER TABLE `EXTEND_SETTING_PLAN` ADD CONSTRAINT `EXTEND_SETTING_PLAN_PKY` PRIMARY KEY (`HOTEL_CD`, `PLAN_ID`)
+  ALTER TABLE `extend_setting_plan` ADD CONSTRAINT `extend_setting_plan_pky` PRIMARY KEY (`hotel_cd`, `plan_id`)
   ;
 --   *** ------------------------------------
 --  *** Table LOG_SECURITY_08
 --   *** ------------------------------------
 
-  ALTER TABLE `LOG_SECURITY_08` ADD CONSTRAINT `LOG_SECURITY_08_PKY` PRIMARY KEY (`SECURITY_CD`)
+  ALTER TABLE `log_security_08` ADD CONSTRAINT `log_security_08_pky` PRIMARY KEY (`security_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table ALERT_POST
 --   *** ------------------------------------
 
-  ALTER TABLE `ALERT_POST` ADD CONSTRAINT `ALERT_POST_PKY` PRIMARY KEY (`PERSON_CD`)
+  ALTER TABLE `alert_post` ADD CONSTRAINT `alert_post_pky` PRIMARY KEY (`person_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_RECEIPT
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_RECEIPT` ADD CONSTRAINT `HOTEL_RECEIPT_PKY` PRIMARY KEY (`HOTEL_CD`)
+  ALTER TABLE `hotel_receipt` ADD CONSTRAINT `hotel_receipt_pky` PRIMARY KEY (`hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table PAYMENT_MATCH
 --   *** ------------------------------------
 
-  ALTER TABLE `PAYMENT_MATCH` ADD CONSTRAINT `PAYMENT_MATCH_PKY` PRIMARY KEY (`PAYMENT_MATCH_ID`)
+  ALTER TABLE `payment_match` ADD CONSTRAINT `payment_match_pky` PRIMARY KEY (`payment_match_id`)
   ;
  
---  ALTER TABLE `PAYMENT_MATCH` MODIFY (`PAYMENT_MATCH_DTM` NOT NULL ENABLE);
-   ALTER TABLE `PAYMENT_MATCH` MODIFY `PAYMENT_MATCH_DTM` datetime  NOT NULL ;
+--  ALTER TABLE `payment_match` MODIFY (`payment_match_dtm` NOT NULL ENABLE);
+   ALTER TABLE `payment_match` MODIFY `payment_match_dtm` datetime  NOT NULL ;
 
---  ALTER TABLE `PAYMENT_MATCH` MODIFY (`PAYMENT_ID` NOT NULL ENABLE);
-  ALTER TABLE `PAYMENT_MATCH` MODIFY `PAYMENT_ID` decimal(32,0) NOT NULL;
+--  ALTER TABLE `payment_match` MODIFY (`payment_id` NOT NULL ENABLE);
+  ALTER TABLE `payment_match` MODIFY `payment_id` decimal(32,0) NOT NULL;
  
---  ALTER TABLE `PAYMENT_MATCH` MODIFY (`MATCH_CHARGE` NOT NULL ENABLE);
-  ALTER TABLE `PAYMENT_MATCH` MODIFY `MATCH_CHARGE` decimal(32,0)  NOT NULL ;
+--  ALTER TABLE `payment_match` MODIFY (`match_charge` NOT NULL ENABLE);
+  ALTER TABLE `payment_match` MODIFY `match_charge` decimal(32,0)  NOT NULL ;
  
---  ALTER TABLE `PAYMENT_MATCH` MODIFY (`ENTRY_CD` NOT NULL ENABLE);
-  ALTER TABLE `PAYMENT_MATCH` MODIFY `ENTRY_CD` varchar(64) BINARY NOT NULL ;
+--  ALTER TABLE `payment_match` MODIFY (`entry_cd` NOT NULL ENABLE);
+  ALTER TABLE `payment_match` MODIFY `entry_cd` varchar(64) BINARY NOT NULL ;
  
---  ALTER TABLE `PAYMENT_MATCH` MODIFY (`ENTRY_TS` NOT NULL ENABLE);
-  ALTER TABLE `PAYMENT_MATCH` MODIFY `ENTRY_TS` datetime NOT NULL ;
+--  ALTER TABLE `payment_match` MODIFY (`entry_ts` NOT NULL ENABLE);
+  ALTER TABLE `payment_match` MODIFY `entry_ts` datetime NOT NULL ;
  
---  ALTER TABLE `PAYMENT_MATCH` MODIFY (`MODIFY_CD` NOT NULL ENABLE);
-  ALTER TABLE `PAYMENT_MATCH` MODIFY `MODIFY_CD` varchar(64) BINARY NOT NULL ;
+--  ALTER TABLE `payment_match` MODIFY (`modify_cd` NOT NULL ENABLE);
+  ALTER TABLE `payment_match` MODIFY `modify_cd` varchar(64) BINARY NOT NULL ;
  
---  ALTER TABLE `PAYMENT_MATCH` MODIFY (`MODIFY_TS` NOT NULL ENABLE);
-  ALTER TABLE `PAYMENT_MATCH` MODIFY `MODIFY_TS` datetime NOT NULL ;
+--  ALTER TABLE `payment_match` MODIFY (`modify_ts` NOT NULL ENABLE);
+  ALTER TABLE `payment_match` MODIFY `modify_ts` datetime NOT NULL ;
 --   *** ------------------------------------
 --  *** Table CHECKSHEET_FIX
 --   *** ------------------------------------
 
-  ALTER TABLE `CHECKSHEET_FIX` ADD CONSTRAINT `CHECKSHEET_FIX_PKY` PRIMARY KEY (`CHECKSHEET_YM`, `HOTEL_CD`)
+  ALTER TABLE `checksheet_fix` ADD CONSTRAINT `checksheet_fix_pky` PRIMARY KEY (`checksheet_ym`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table ALERT_MAIL_OPC
 --   *** ------------------------------------
 
-  ALTER TABLE `ALERT_MAIL_OPC` ADD CONSTRAINT `ALERT_MAIL_OPC_PKY` PRIMARY KEY (`PERSON_CD`, `BRANCH_NO`)
+  ALTER TABLE `alert_mail_opc` ADD CONSTRAINT `alert_mail_opc_pky` PRIMARY KEY (`person_cd`, `branch_no`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAY_HOTEL
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAY_HOTEL` ADD CONSTRAINT `BILLPAY_HOTEL_PKY` PRIMARY KEY (`BILLPAY_YM`, `HOTEL_CD`)
+  ALTER TABLE `billpay_hotel` ADD CONSTRAINT `billpay_hotel_pky` PRIMARY KEY (`billpay_ym`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table SPOT_NEARBY
 --   *** ------------------------------------
 
-  ALTER TABLE `SPOT_NEARBY` ADD CONSTRAINT `SPOT_NEARBY_PKY` PRIMARY KEY (`SPOT_ID`, `SPOT_NEARBY_ID`)
+  ALTER TABLE `spot_nearby` ADD CONSTRAINT `spot_nearby_pky` PRIMARY KEY (`spot_id`, `spot_nearby_id`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_PLAN_CANCEL_POLICY
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_PLAN_CANCEL_POLICY` ADD CONSTRAINT `ROOM_PLAN_CANCEL_POLICY_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_CD`, `PLAN_CD`)
+  ALTER TABLE `room_plan_cancel_policy` ADD CONSTRAINT `room_plan_cancel_policy_pky` PRIMARY KEY (`hotel_cd`, `room_cd`, `plan_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAYED_PTN_TYPE_STOCK
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAYED_PTN_TYPE_STOCK` ADD CONSTRAINT `BILLPAYED_PTN_TYPE_STOCK_PKY` PRIMARY KEY (`BILLPAY_YM`, `SITE_CD`, `STOCK_TYPE`, `STOCK_RATE`)
+  ALTER TABLE `billpayed_ptn_type_stock` ADD CONSTRAINT `billpayed_ptn_type_stock_pky` PRIMARY KEY (`billpay_ym`, `site_cd`, `stock_type`, `stock_rate`)
   ;
 --   *** ------------------------------------
 --  *** Table FEATURE_DETAIL
 --   *** ------------------------------------
 
-  ALTER TABLE `FEATURE_DETAIL` ADD CONSTRAINT `FEATURE_DETAIL_PKY` PRIMARY KEY (`FEATURE_ID`, `FEATURE_DETAIL_ID`)
+  ALTER TABLE `feature_detail` ADD CONSTRAINT `feature_detail_pky` PRIMARY KEY (`feature_id`, `feature_detail_id`)
   ;
  
---  ALTER TABLE `FEATURE_DETAIL` MODIFY (`FEATURE_GROUP_ID` NOT NULL ENABLE);
-  ALTER TABLE `FEATURE_DETAIL` MODIFY `FEATURE_GROUP_ID` varchar(3) BINARY NOT NULL ;
+--  ALTER TABLE `feature_detail` MODIFY (`feature_group_id` NOT NULL ENABLE);
+  ALTER TABLE `feature_detail` MODIFY `feature_group_id` varchar(3) BINARY NOT NULL ;
  
---  ALTER TABLE `FEATURE_DETAIL` MODIFY (`HOTEL_CD` NOT NULL ENABLE);
-  ALTER TABLE `FEATURE_DETAIL` MODIFY `HOTEL_CD` varchar(10) BINARY NOT NULL ;
+--  ALTER TABLE `feature_detail` MODIFY (`hotel_cd` NOT NULL ENABLE);
+  ALTER TABLE `feature_detail` MODIFY `hotel_cd` varchar(10) BINARY NOT NULL ;
 
 --   *** ------------------------------------
 --  *** Table ROOM_COUNT_INITIAL
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_COUNT_INITIAL` ADD CONSTRAINT `ROOM_COUNT_INITIAL_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_CD`)
+  ALTER TABLE `room_count_initial` ADD CONSTRAINT `room_count_initial_pky` PRIMARY KEY (`hotel_cd`, `room_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table TEMP_YAHOO_POINT_BOOK
 --   *** ------------------------------------
 
-  ALTER TABLE `TEMP_YAHOO_POINT_BOOK` ADD CONSTRAINT `TEMP_YAHOO_POINT_BOOK_PKY` PRIMARY KEY (`RESERVE_CD`)
+  ALTER TABLE `temp_yahoo_point_book` ADD CONSTRAINT `temp_yahoo_point_book_pky` PRIMARY KEY (`reserve_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_PLAN_RANKING_BASE
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_PLAN_RANKING_BASE` ADD CONSTRAINT `ROOM_PLAN_RANKING_BASE_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_CD`, `PLAN_CD`)
+  ALTER TABLE `room_plan_ranking_base` ADD CONSTRAINT `room_plan_ranking_base_pky` PRIMARY KEY (`hotel_cd`, `room_cd`, `plan_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_JR
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_JR` ADD CONSTRAINT `RESERVE_JR_PKY` PRIMARY KEY (`RESERVE_CD`)
+  ALTER TABLE `reserve_jr` ADD CONSTRAINT `reserve_jr_pky` PRIMARY KEY (`reserve_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table MAST_AREA_NEARBY
 --   *** ------------------------------------
 
-  ALTER TABLE `MAST_AREA_NEARBY` ADD CONSTRAINT `MAST_AREA_NEARBY_PKY` PRIMARY KEY (`ID`)
+  ALTER TABLE `mast_area_nearby` ADD CONSTRAINT `mast_area_nearby_pky` PRIMARY KEY (`id`)
   ;
 --   *** ------------------------------------
 --  *** Table YAHOO_POINT_PLUS_HOTEL
 --   *** ------------------------------------
 
-  ALTER TABLE `YAHOO_POINT_PLUS_HOTEL` ADD CONSTRAINT `YAHOO_POINT_PLUS_HOTEL_PKY` PRIMARY KEY (`POINT_PLUS_ID`, `HOTEL_CD`)
+  ALTER TABLE `yahoo_point_plus_hotel` ADD CONSTRAINT `yahoo_point_plus_hotel_pky` PRIMARY KEY (`point_plus_id`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table PLAN_AKF_RELATION
 --   *** ------------------------------------
 
-  ALTER TABLE `PLAN_AKF_RELATION` ADD CONSTRAINT `PLAN_AKF_RELATION_PKY` PRIMARY KEY (`HOTEL_CD`, `PLAN_ID`)
+  ALTER TABLE `plan_akf_relation` ADD CONSTRAINT `plan_akf_relation_pky` PRIMARY KEY (`hotel_cd`, `plan_id`)
   ;
 --   *** ------------------------------------
 --  *** Table SERVICE_VOTE_CHOICES
 --   *** ------------------------------------
 
-  ALTER TABLE `SERVICE_VOTE_CHOICES` ADD CONSTRAINT `SERVICE_VOTE_CHOICES_PKY` PRIMARY KEY (`VOTE_CD`, `CHOICE_CD`)
+  ALTER TABLE `service_vote_choices` ADD CONSTRAINT `service_vote_choices_pky` PRIMARY KEY (`vote_cd`, `choice_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_ELEMENT_REMOVED
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_ELEMENT_REMOVED` ADD CONSTRAINT `HOTEL_ELEMENT_REMOVED_PKY` PRIMARY KEY (`HOTEL_CD`, `TABLE_NAME`)
+  ALTER TABLE `hotel_element_removed` ADD CONSTRAINT `hotel_element_removed_pky` PRIMARY KEY (`hotel_cd`, `table_name`)
   ;
 --   *** ------------------------------------
 --  *** Table PARTNER_ACCOUNT
 --   *** ------------------------------------
 
-  ALTER TABLE `PARTNER_ACCOUNT` ADD CONSTRAINT `PARTNER_ACCOUNT_PKY` PRIMARY KEY (`PARTNER_CD`, `ACCOUNT_TYPE`)
+  ALTER TABLE `partner_account` ADD CONSTRAINT `partner_account_pky` PRIMARY KEY (`partner_cd`, `account_type`)
   ;
 --   *** ------------------------------------
 --  *** Table SUBMIT_FORM_CHECK
 --   *** ------------------------------------
 
-  ALTER TABLE `SUBMIT_FORM_CHECK` ADD CONSTRAINT `SUBMIT_FORM_CHECK_UNQ_01` UNIQUE (`CHECK_CD`)
+  ALTER TABLE `submit_form_check` ADD CONSTRAINT `submit_form_check_unq_01` UNIQUE (`check_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table YAHOO_POINT_BOOK
 --   *** ------------------------------------
 
-  ALTER TABLE `YAHOO_POINT_BOOK` ADD CONSTRAINT `YAHOO_POINT_BOOK_PKY` PRIMARY KEY (`YAHOO_POINT_CD`)
+  ALTER TABLE `yahoo_point_book` ADD CONSTRAINT `yahoo_point_book_pky` PRIMARY KEY (`yahoo_point_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_MEDIA2
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_MEDIA2` ADD CONSTRAINT `ROOM_MEDIA2_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_ID`, `MEDIA_NO`)
+  ALTER TABLE `room_media2` ADD CONSTRAINT `room_media2_pky` PRIMARY KEY (`hotel_cd`, `room_id`, `media_no`)
   ;
 --   *** ------------------------------------
 --  *** Table PARTNER_CUSTOMER_SITE
 --   *** ------------------------------------
 
-  ALTER TABLE `PARTNER_CUSTOMER_SITE` ADD CONSTRAINT `PARTNER_CUSTOMER_SITE_PKY` PRIMARY KEY (`CUSTOMER_ID`, `SITE_CD`, `FEE_TYPE`)
+  ALTER TABLE `partner_customer_site` ADD CONSTRAINT `partner_customer_site_pky` PRIMARY KEY (`customer_id`, `site_cd`, `fee_type`)
   ;
 --   *** ------------------------------------
 --  *** Table PARTNER_DENY_KEYWORDS
 --   *** ------------------------------------
 
-  ALTER TABLE `PARTNER_DENY_KEYWORDS` ADD CONSTRAINT `PARTNER_DENY_KEYWORDS_PKY` PRIMARY KEY (`PARTNER_CD`, `KEYWORD_GROUP_ID`)
+  ALTER TABLE `partner_deny_keywords` ADD CONSTRAINT `partner_deny_keywords_pky` PRIMARY KEY (`partner_cd`, `keyword_group_id`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_AKAFU
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_AKAFU` ADD CONSTRAINT `ROOM_AKAFU_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOMTYPE_CD`)
+  ALTER TABLE `room_akafu` ADD CONSTRAINT `room_akafu_pky` PRIMARY KEY (`hotel_cd`, `roomtype_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table NOTIFY_RIZAPULI
 --   *** ------------------------------------
 
-  ALTER TABLE `NOTIFY_RIZAPULI` ADD CONSTRAINT `NOTIFY_RIZAPULI_PKY` PRIMARY KEY (`NOTIFY_RIZAPULI_ID`)
+  ALTER TABLE `notify_rizapuli` ADD CONSTRAINT `notify_rizapuli_pky` PRIMARY KEY (`notify_rizapuli_id`)
   ;
 --   *** ------------------------------------
 --  *** Table CONTACT_SENDBOX
 --   *** ------------------------------------
 
-  ALTER TABLE `CONTACT_SENDBOX` ADD CONSTRAINT `CONTACT_SENDBOX_PKY` PRIMARY KEY (`SENDBOX_CD`)
+  ALTER TABLE `contact_sendbox` ADD CONSTRAINT `contact_sendbox_pky` PRIMARY KEY (`sendbox_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table PARTNER
 --   *** ------------------------------------
 
-  ALTER TABLE `PARTNER` ADD CONSTRAINT `PARTNER_PKY` PRIMARY KEY (`PARTNER_CD`)
+  ALTER TABLE `partner` ADD CONSTRAINT `partner_pky` PRIMARY KEY (`partner_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAY_FEE_DRAFT
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAY_FEE_DRAFT` ADD CONSTRAINT `BILLPAY_FEE_DRAFT_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`)
+  ALTER TABLE `billpay_fee_draft` ADD CONSTRAINT `billpay_fee_draft_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAYED_HOTEL_CREDIT
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAYED_HOTEL_CREDIT` ADD CONSTRAINT `BILLPAYED_HOTEL_CREDIT_PKY` PRIMARY KEY (`BILLPAY_YM`, `HOTEL_CD`)
+  ALTER TABLE `billpayed_hotel_credit` ADD CONSTRAINT `billpayed_hotel_credit_pky` PRIMARY KEY (`billpay_ym`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_PLAN_RANKING_CALC
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_PLAN_RANKING_CALC` ADD CONSTRAINT `ROOM_PLAN_RANKING_CALC_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_CD`, `PLAN_CD`, `WDAY`)
+  ALTER TABLE `room_plan_ranking_calc` ADD CONSTRAINT `room_plan_ranking_calc_pky` PRIMARY KEY (`hotel_cd`, `room_cd`, `plan_cd`, `wday`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAYED_RSV_9XG
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAYED_RSV_9XG` ADD CONSTRAINT `BILLPAYED_RSV_9XG_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`, `OPERATION_YMD`)
+  ALTER TABLE `billpayed_rsv_9xg` ADD CONSTRAINT `billpayed_rsv_9xg_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`, `operation_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAYED_HOTEL_CREDIT_9XG
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAYED_HOTEL_CREDIT_9XG` ADD CONSTRAINT `BILLPAYED_HOTEL_CREDIT_9XG_PKY` PRIMARY KEY (`BILLPAY_YM`, `HOTEL_CD`)
+  ALTER TABLE `billpayed_hotel_credit_9xg` ADD CONSTRAINT `billpayed_hotel_credit_9xg_pky` PRIMARY KEY (`billpay_ym`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAYED_CREDIT
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAYED_CREDIT` ADD CONSTRAINT `BILLPAYED_CREDIT_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`, `OPERATION_YMD`)
+  ALTER TABLE `billpayed_credit` ADD CONSTRAINT `billpayed_credit_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`, `operation_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table WELFARE_DEST_HISTORY
 --   *** ------------------------------------
 
-  ALTER TABLE `WELFARE_DEST_HISTORY` ADD CONSTRAINT `WELFARE_DEST_HISTORY_PKY` PRIMARY KEY (`WELFARE_DEST_HISTORY_ID`)
+  ALTER TABLE `welfare_dest_history` ADD CONSTRAINT `welfare_dest_history_pky` PRIMARY KEY (`welfare_dest_history_id`)
   ;
 --   *** ------------------------------------
 --  *** Table MEMBER_SP
 --   *** ------------------------------------
 
-  ALTER TABLE `MEMBER_SP` ADD CONSTRAINT `MEMBER_SP_PKY` PRIMARY KEY (`MEMBER_CD`)
+  ALTER TABLE `member_sp` ADD CONSTRAINT `member_sp_pky` PRIMARY KEY (`member_cd`)
   ;
  
---  ALTER TABLE `MEMBER_SP` MODIFY (`MEMBER_CD` NOT NULL ENABLE);
-  ALTER TABLE `MEMBER_SP` MODIFY `MEMBER_CD` varchar(128) BINARY NOT NULL ;
+--  ALTER TABLE `member_sp` MODIFY (`member_cd` NOT NULL ENABLE);
+  ALTER TABLE `member_sp` MODIFY `member_cd` varchar(128) BINARY NOT NULL ;
 --   *** ------------------------------------
 --  *** Table HOTEL_ACCOUNT
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_ACCOUNT` ADD CONSTRAINT `HOTEL_ACCOUNT_PKY` PRIMARY KEY (`HOTEL_CD`)
+  ALTER TABLE `hotel_account` ADD CONSTRAINT `hotel_account_pky` PRIMARY KEY (`hotel_cd`)
   ;
  
-  ALTER TABLE `HOTEL_ACCOUNT` ADD CONSTRAINT `HOTEL_ACCOUNT_UNQ_01` UNIQUE (`ACCOUNT_ID`)
+  ALTER TABLE `hotel_account` ADD CONSTRAINT `hotel_account_unq_01` UNIQUE (`account_id`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_TYK
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_TYK` ADD CONSTRAINT `ROOM_TYK_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_ID`)
+  ALTER TABLE `room_tyk` ADD CONSTRAINT `room_tyk_pky` PRIMARY KEY (`hotel_cd`, `room_id`)
   ;
 --   *** ------------------------------------
 --  *** Table MEMBER_CARD
 --   *** ------------------------------------
 
-  ALTER TABLE `MEMBER_CARD` ADD CONSTRAINT `MEMBER_CARD_PKY` PRIMARY KEY (`MEMBER_CD`, `BRANCH_NO`)
+  ALTER TABLE `member_card` ADD CONSTRAINT `member_card_pky` PRIMARY KEY (`member_cd`, `branch_no`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_PLAN_GRANTS
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_PLAN_GRANTS` ADD CONSTRAINT `ROOM_PLAN_GRANTS_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_CD`, `PLAN_CD`)
+  ALTER TABLE `room_plan_grants` ADD CONSTRAINT `room_plan_grants_pky` PRIMARY KEY (`hotel_cd`, `room_cd`, `plan_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAY_HOTEL_RSV_9XG
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAY_HOTEL_RSV_9XG` ADD CONSTRAINT `BILLPAY_HOTEL_RSV_9XG_PKY` PRIMARY KEY (`BILLPAY_YM`, `HOTEL_CD`)
+  ALTER TABLE `billpay_hotel_rsv_9xg` ADD CONSTRAINT `billpay_hotel_rsv_9xg_pky` PRIMARY KEY (`billpay_ym`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table WEATHER_AREA_CITY
 --   *** ------------------------------------
 
-  ALTER TABLE `WEATHER_AREA_CITY` ADD CONSTRAINT `WEATHER_AREA_CITY_PKY` PRIMARY KEY (`CITY_ID`)
+  ALTER TABLE `weather_area_city` ADD CONSTRAINT `weather_area_city_pky` PRIMARY KEY (`city_id`)
   ;
 --   *** ------------------------------------
 --  *** Table CONFIRM_HOTEL_PERSON
 --   *** ------------------------------------
 
-  ALTER TABLE `CONFIRM_HOTEL_PERSON` ADD CONSTRAINT `CONFIRM_HOTEL_PERSON_PKY` PRIMARY KEY (`HOTEL_CD`)
+  ALTER TABLE `confirm_hotel_person` ADD CONSTRAINT `confirm_hotel_person_pky` PRIMARY KEY (`hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_CHARGE_YHO_BAT_TMP_3
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_CHARGE_YHO_BAT_TMP_3` ADD CONSTRAINT `ROOM_CHARGE_YHO_BAT_TMP_3_PKY` PRIMARY KEY (`REC_TYPE`, `HOTEL_CD`, `ROOM_CD`, `PLAN_CD`, `DATE_YMD`)
+  ALTER TABLE `room_charge_yho_bat_tmp_3` ADD CONSTRAINT `room_charge_yho_bat_tmp_3_pky` PRIMARY KEY (`rec_type`, `hotel_cd`, `room_cd`, `plan_cd`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_CAMP
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_CAMP` ADD CONSTRAINT `HOTEL_CAMP_PKY` PRIMARY KEY (`CAMP_CD`)
+  ALTER TABLE `hotel_camp` ADD CONSTRAINT `hotel_camp_pky` PRIMARY KEY (`camp_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table ZAP_MEMBER_YAHOO
 --   *** ------------------------------------
 
-  ALTER TABLE `ZAP_MEMBER_YAHOO` ADD CONSTRAINT `ZAP_MEMBER_YAHOO_PKY` PRIMARY KEY (`MEMBER_CD`)
+  ALTER TABLE `zap_member_yahoo` ADD CONSTRAINT `zap_member_yahoo_pky` PRIMARY KEY (`member_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAY_SALES
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAY_SALES` ADD CONSTRAINT `BILLPAY_SALES_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`, `SITE_CD`)
+  ALTER TABLE `billpay_sales` ADD CONSTRAINT `billpay_sales_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`, `site_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_MEDIA
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_MEDIA` ADD CONSTRAINT `ROOM_MEDIA_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_CD`, `MEDIA_NO`)
+  ALTER TABLE `room_media` ADD CONSTRAINT `room_media_pky` PRIMARY KEY (`hotel_cd`, `room_cd`, `media_no`)
   ;
 --   *** ------------------------------------
 --  *** Table SEND_MAIL_QUEUE
 --   *** ------------------------------------
 
-  ALTER TABLE `SEND_MAIL_QUEUE` ADD CONSTRAINT `SEND_MAIL_QUEUE_PKY` PRIMARY KEY (`MAIL_CD`)
+  ALTER TABLE `send_mail_queue` ADD CONSTRAINT `send_mail_queue_pky` PRIMARY KEY (`mail_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAY_HOTEL_GRANTS_9XG
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAY_HOTEL_GRANTS_9XG` ADD CONSTRAINT `BILLPAY_HOTEL_GRANTS_9XG_PKY` PRIMARY KEY (`BILLPAY_YM`, `HOTEL_CD`)
+  ALTER TABLE `billpay_hotel_grants_9xg` ADD CONSTRAINT `billpay_hotel_grants_9xg_pky` PRIMARY KEY (`billpay_ym`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_AKAFU_RELATION
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_AKAFU_RELATION` ADD CONSTRAINT `ROOM_AKAFU_RELATION_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_ID`)
+  ALTER TABLE `room_akafu_relation` ADD CONSTRAINT `room_akafu_relation_pky` PRIMARY KEY (`hotel_cd`, `room_id`)
   ;
 --   *** ------------------------------------
 --  *** Table ORICO_RESERVE
 --   *** ------------------------------------
 
-  ALTER TABLE `ORICO_RESERVE` ADD CONSTRAINT `ORICO_RESERVE_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`)
+  ALTER TABLE `orico_reserve` ADD CONSTRAINT `orico_reserve_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_LINK
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_LINK` ADD CONSTRAINT `HOTEL_LINK_PKY` PRIMARY KEY (`HOTEL_CD`, `BRANCH_NO`)
+  ALTER TABLE `hotel_link` ADD CONSTRAINT `hotel_link_pky` PRIMARY KEY (`hotel_cd`, `branch_no`)
   ;
 --   *** ------------------------------------
 --  *** Table CHECKSHEET_RSV
 --   *** ------------------------------------
 
-  ALTER TABLE `CHECKSHEET_RSV` ADD CONSTRAINT `CHECKSHEET_RSV_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`)
+  ALTER TABLE `checksheet_rsv` ADD CONSTRAINT `checksheet_rsv_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAY_FIX
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAY_FIX` ADD CONSTRAINT `BILLPAY_FIX_PKY` PRIMARY KEY (`HOTEL_CD`)
+  ALTER TABLE `billpay_fix` ADD CONSTRAINT `billpay_fix_pky` PRIMARY KEY (`hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table MMS_SEND_EXTRACT_CONDITION
 --   *** ------------------------------------
 
-  ALTER TABLE `MMS_SEND_EXTRACT_CONDITION` ADD CONSTRAINT `MMS_SEND_EXTRACT_CONDITION_PKY` PRIMARY KEY (`CONDITION_ID`)
+  ALTER TABLE `mms_send_extract_condition` ADD CONSTRAINT `mms_send_extract_condition_pky` PRIMARY KEY (`condition_id`)
   ;
 --   *** ------------------------------------
 --  *** Table PLAN_STATUS_POOL2
 --   *** ------------------------------------
 
-  ALTER TABLE `PLAN_STATUS_POOL2` ADD CONSTRAINT `PLAN_STATUS_POOL2_PKY` PRIMARY KEY (`HOTEL_CD`, `PLAN_ID`, `ROOM_ID`, `PARTNER_GROUP_ID`)
+  ALTER TABLE `plan_status_pool2` ADD CONSTRAINT `plan_status_pool2_pky` PRIMARY KEY (`hotel_cd`, `plan_id`, `room_id`, `partner_group_id`)
   ;
 --   *** ------------------------------------
 --  *** Table BR_POINT_STAY_COUNT
 --   *** ------------------------------------
 
-  ALTER TABLE `BR_POINT_STAY_COUNT` ADD CONSTRAINT `BR_POINT_STAY_COUNT_PKY` PRIMARY KEY (`MEMBER_CD`)
+  ALTER TABLE `br_point_stay_count` ADD CONSTRAINT `br_point_stay_count_pky` PRIMARY KEY (`member_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAYED_PTN
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAYED_PTN` ADD CONSTRAINT `BILLPAYED_PTN_PKY` PRIMARY KEY (`BILLPAY_YM`, `SITE_CD`, `FEE_TYPE`)
+  ALTER TABLE `billpayed_ptn` ADD CONSTRAINT `billpayed_ptn_pky` PRIMARY KEY (`billpay_ym`, `site_cd`, `fee_type`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_COUNT
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_COUNT` ADD CONSTRAINT `ROOM_COUNT_CHK_01` CHECK (ROOMS - RESERVE_ROOMS >= 0 and ROOMS >= 0);
+  ALTER TABLE `room_count` ADD CONSTRAINT `room_count_chk_01` CHECK (ROOMS - RESERVE_ROOMS >= 0 and ROOMS >= 0);
  
-  ALTER TABLE `ROOM_COUNT` ADD CONSTRAINT `ROOM_COUNT_CHK_02` CHECK (ROOMS >= 0 and RESERVE_ROOMS >= 0);
+  ALTER TABLE `room_count` ADD CONSTRAINT `room_count_chk_02` CHECK (ROOMS >= 0 and RESERVE_ROOMS >= 0);
  
-  ALTER TABLE `ROOM_COUNT` ADD CONSTRAINT `ROOM_COUNT_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_CD`, `DATE_YMD`)
+  ALTER TABLE `room_count` ADD CONSTRAINT `room_count_pky` PRIMARY KEY (`hotel_cd`, `room_cd`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table MAIL_MAGAZINE
 --   *** ------------------------------------
 
-  ALTER TABLE `MAIL_MAGAZINE` ADD CONSTRAINT `MAIL_MAGAZINE_PKY` PRIMARY KEY (`MAIL_MAGAZINE_ID`)
+  ALTER TABLE `mail_magazine` ADD CONSTRAINT `mail_magazine_pky` PRIMARY KEY (`mail_magazine_id`)
   ;
 --   *** ------------------------------------
 --  *** Table ALERT_VACANT
 --   *** ------------------------------------
 
-  ALTER TABLE `ALERT_VACANT` ADD CONSTRAINT `ALERT_VACANT_PKY` PRIMARY KEY (`PERSON_CD`, `HOTEL_CD`)
+  ALTER TABLE `alert_vacant` ADD CONSTRAINT `alert_vacant_pky` PRIMARY KEY (`person_cd`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table MEMBER_SSO
 --   *** ------------------------------------
 
-  ALTER TABLE `MEMBER_SSO` ADD CONSTRAINT `MEMBER_SSO_PKY` PRIMARY KEY (`MEMBER_CD`)
+  ALTER TABLE `member_sso` ADD CONSTRAINT `member_sso_pky` PRIMARY KEY (`member_cd`)
   ;
  
-  ALTER TABLE `MEMBER_SSO` ADD CONSTRAINT `MEMBER_SSO_UNQ_01` UNIQUE (`SSO_CD`)
+  ALTER TABLE `member_sso` ADD CONSTRAINT `member_sso_unq_01` UNIQUE (`sso_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAY_PR_GRANTS
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAY_PR_GRANTS` ADD CONSTRAINT `BILLPAY_PR_GRANTS_UNQ_01` UNIQUE (`RESERVE_CD`, `DATE_YMD`, `SITE_CD`, `WELFARE_GRANTS_ID`)
+  ALTER TABLE `billpay_pr_grants` ADD CONSTRAINT `billpay_pr_grants_unq_01` UNIQUE (`reserve_cd`, `date_ymd`, `site_cd`, `welfare_grants_id`)
   ;
 --   *** ------------------------------------
 --  *** Table PLAN_CANCEL_POLICY
 --   *** ------------------------------------
 
-  ALTER TABLE `PLAN_CANCEL_POLICY` ADD CONSTRAINT `PLAN_CANCEL_POLICY_PKY` PRIMARY KEY (`HOTEL_CD`, `PLAN_ID`)
+  ALTER TABLE `plan_cancel_policy` ADD CONSTRAINT `plan_cancel_policy_pky` PRIMARY KEY (`hotel_cd`, `plan_id`)
   ;
 --   *** ------------------------------------
 --  *** Table TOP_ATTENTION
 --   *** ------------------------------------
 
-  ALTER TABLE `TOP_ATTENTION` ADD CONSTRAINT `TOP_ATTENTION_PKY` PRIMARY KEY (`ATTENTION_ID`)
+  ALTER TABLE `top_attention` ADD CONSTRAINT `top_attention_pky` PRIMARY KEY (`attention_id`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_YDP_FACTORING
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_YDP_FACTORING` ADD CONSTRAINT `HOTEL_YDP_FACTORING_PKY` PRIMARY KEY (`YDP_HOTEL_CD`)
+  ALTER TABLE `hotel_ydp_factoring` ADD CONSTRAINT `hotel_ydp_factoring_pky` PRIMARY KEY (`ydp_hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table PARTNER_YDP
 --   *** ------------------------------------
 
-  ALTER TABLE `PARTNER_YDP` ADD CONSTRAINT `PARTNER_YDP_PKY` PRIMARY KEY (`PARTNER_CD`)
+  ALTER TABLE `partner_ydp` ADD CONSTRAINT `partner_ydp_pky` PRIMARY KEY (`partner_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table BR_POINT_BOOK_V3
 --   *** ------------------------------------
 
-  ALTER TABLE `BR_POINT_BOOK_V3` ADD CONSTRAINT `BR_POINT_BOOK_V3_PKY` PRIMARY KEY (`BR_POINT_CD`)
+  ALTER TABLE `br_point_book_v3` ADD CONSTRAINT `br_point_book_v3_pky` PRIMARY KEY (`br_point_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table MEMBER_EPKP
 --   *** ------------------------------------
 
-  ALTER TABLE `MEMBER_EPKP` ADD CONSTRAINT `MEMBER_EPKP_PKY` PRIMARY KEY (`MEMBER_CD`)
+  ALTER TABLE `member_epkp` ADD CONSTRAINT `member_epkp_pky` PRIMARY KEY (`member_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table MEMBER_FREE_TRACE
 --   *** ------------------------------------
 
-  ALTER TABLE `MEMBER_FREE_TRACE` ADD CONSTRAINT `MEMBER_FREE_TRACE_PKY` PRIMARY KEY (`MEMBER_CD`)
+  ALTER TABLE `member_free_trace` ADD CONSTRAINT `member_free_trace_pky` PRIMARY KEY (`member_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table MEMBER_SEARCH_MAIL
 --   *** ------------------------------------
 
-  ALTER TABLE `MEMBER_SEARCH_MAIL` ADD CONSTRAINT `MEMBER_SEARCH_MAIL_PKY` PRIMARY KEY (`MEMBER_CD`, `ENTRY_TYPE`)
+  ALTER TABLE `member_search_mail` ADD CONSTRAINT `member_search_mail_pky` PRIMARY KEY (`member_cd`, `entry_type`)
   ;
 --   *** ------------------------------------
 --  *** Table MAST_AREA
 --   *** ------------------------------------
 
-  ALTER TABLE `MAST_AREA` ADD CONSTRAINT `MAST_AREA_PKY` PRIMARY KEY (`AREA_ID`)
+  ALTER TABLE `mast_area` ADD CONSTRAINT `mast_area_pky` PRIMARY KEY (`area_id`)
   ;
 --   *** ------------------------------------
 --  *** Table POINT_CAMP
 --   *** ------------------------------------
 
-  ALTER TABLE `POINT_CAMP` ADD CONSTRAINT `POINT_CAMP_PKY` PRIMARY KEY (`POINT_CAMP_CD`)
+  ALTER TABLE `point_camp` ADD CONSTRAINT `point_camp_pky` PRIMARY KEY (`point_camp_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table FM_AFFILIATE
 --   *** ------------------------------------
 
-  ALTER TABLE `FM_AFFILIATE` ADD CONSTRAINT `FM_AFFILIATE_PKY` PRIMARY KEY (`AFFILIATE_ID`)
+  ALTER TABLE `fm_affiliate` ADD CONSTRAINT `fm_affiliate_pky` PRIMARY KEY (`affiliate_id`)
   ;
  
---  ALTER TABLE `FM_AFFILIATE` MODIFY (`AFFILIATE_NM` NOT NULL ENABLE);
-   ALTER TABLE `FM_AFFILIATE` MODIFY `AFFILIATE_NM` varchar(100) BINARY NOT NULL ;
+--  ALTER TABLE `fm_affiliate` MODIFY (`affiliate_nm` NOT NULL ENABLE);
+   ALTER TABLE `fm_affiliate` MODIFY `affiliate_nm` varchar(100) BINARY NOT NULL ;
 
---  ALTER TABLE `FM_AFFILIATE` MODIFY (`PASSWD` NOT NULL ENABLE);
-   ALTER TABLE `FM_AFFILIATE` MODIFY `PASSWD` varchar(10) BINARY NOT NULL ;
+--  ALTER TABLE `fm_affiliate` MODIFY (`passwd` NOT NULL ENABLE);
+   ALTER TABLE `fm_affiliate` MODIFY `passwd` varchar(10) BINARY NOT NULL ;
 
---  ALTER TABLE `FM_AFFILIATE` MODIFY (`STATUS` NOT NULL ENABLE);
-   ALTER TABLE `FM_AFFILIATE` MODIFY `STATUS` varchar(2) BINARY NOT NULL ;
+--  ALTER TABLE `fm_affiliate` MODIFY (`status` NOT NULL ENABLE);
+   ALTER TABLE `fm_affiliate` MODIFY `status` varchar(2) BINARY NOT NULL ;
 
---  ALTER TABLE `FM_AFFILIATE` MODIFY (`FEERATIO_RT` NOT NULL ENABLE);
-  ALTER TABLE `FM_AFFILIATE` MODIFY `FEERATIO_RT` decimal(4,1) NOT NULL;
+--  ALTER TABLE `fm_affiliate` MODIFY (`feeratio_rt` NOT NULL ENABLE);
+  ALTER TABLE `fm_affiliate` MODIFY `feeratio_rt` decimal(4,1) NOT NULL;
  
---  ALTER TABLE `FM_AFFILIATE` MODIFY (`ZIP1` NOT NULL ENABLE);
-  ALTER TABLE `FM_AFFILIATE` MODIFY `ZIP1`  varchar(3) BINARY NOT NULL ;
+--  ALTER TABLE `fm_affiliate` MODIFY (`zip1` NOT NULL ENABLE);
+  ALTER TABLE `fm_affiliate` MODIFY `zip1`  varchar(3) BINARY NOT NULL ;
  
---  ALTER TABLE `FM_AFFILIATE` MODIFY (`ZIP2` NOT NULL ENABLE);
-  ALTER TABLE `FM_AFFILIATE` MODIFY `ZIP2` varchar(4) BINARY NOT NULL ;
+--  ALTER TABLE `fm_affiliate` MODIFY (`zip2` NOT NULL ENABLE);
+  ALTER TABLE `fm_affiliate` MODIFY `zip2` varchar(4) BINARY NOT NULL ;
  
---  ALTER TABLE `FM_AFFILIATE` MODIFY (`PREFECTURE_CD` NOT NULL ENABLE);
-   ALTER TABLE `FM_AFFILIATE` MODIFY `PREFECTURE_CD` varchar(2) BINARY NOT NULL ;
+--  ALTER TABLE `fm_affiliate` MODIFY (`prefecture_cd` NOT NULL ENABLE);
+   ALTER TABLE `fm_affiliate` MODIFY `prefecture_cd` varchar(2) BINARY NOT NULL ;
 
---  ALTER TABLE `FM_AFFILIATE` MODIFY (`TEL` NOT NULL ENABLE);
-   ALTER TABLE `FM_AFFILIATE` MODIFY `TEL` varchar(15) BINARY NOT NULL ;
+--  ALTER TABLE `fm_affiliate` MODIFY (`tel` NOT NULL ENABLE);
+   ALTER TABLE `fm_affiliate` MODIFY `tel` varchar(15) BINARY NOT NULL ;
 
---  ALTER TABLE `FM_AFFILIATE` MODIFY (`EMAIL` NOT NULL ENABLE);
-   ALTER TABLE `FM_AFFILIATE` MODIFY `EMAIL` varchar(100) BINARY NOT NULL ;
+--  ALTER TABLE `fm_affiliate` MODIFY (`email` NOT NULL ENABLE);
+   ALTER TABLE `fm_affiliate` MODIFY `email` varchar(100) BINARY NOT NULL ;
 
---  ALTER TABLE `FM_AFFILIATE` MODIFY (`BANK_NM` NOT NULL ENABLE);
-   ALTER TABLE `FM_AFFILIATE` MODIFY `BANK_NM` varchar(60) BINARY NOT NULL ;
+--  ALTER TABLE `fm_affiliate` MODIFY (`bank_nm` NOT NULL ENABLE);
+   ALTER TABLE `fm_affiliate` MODIFY `bank_nm` varchar(60) BINARY NOT NULL ;
 
---  ALTER TABLE `FM_AFFILIATE` MODIFY (`ACCOUNT_NM` NOT NULL ENABLE);
-   ALTER TABLE `FM_AFFILIATE` MODIFY `ACCOUNT_NM` varchar(60) BINARY NOT NULL ;
+--  ALTER TABLE `fm_affiliate` MODIFY (`account_nm` NOT NULL ENABLE);
+   ALTER TABLE `fm_affiliate` MODIFY `account_nm` varchar(60) BINARY NOT NULL ;
 
---  ALTER TABLE `FM_AFFILIATE` MODIFY (`ACCOUNT_NO` NOT NULL ENABLE);
-   ALTER TABLE `FM_AFFILIATE` MODIFY `ACCOUNT_NO` varchar(10) BINARY NOT NULL ;
+--  ALTER TABLE `fm_affiliate` MODIFY (`account_no` NOT NULL ENABLE);
+   ALTER TABLE `fm_affiliate` MODIFY `account_no` varchar(10) BINARY NOT NULL ;
 
---  ALTER TABLE `FM_AFFILIATE` MODIFY (`UPD_ID` NOT NULL ENABLE);
-   ALTER TABLE `FM_AFFILIATE` MODIFY `UPD_ID` varchar(10) BINARY NOT NULL ;
+--  ALTER TABLE `fm_affiliate` MODIFY (`upd_id` NOT NULL ENABLE);
+   ALTER TABLE `fm_affiliate` MODIFY `upd_id` varchar(10) BINARY NOT NULL ;
 
---  ALTER TABLE `FM_AFFILIATE` MODIFY (`UPD_DT` NOT NULL ENABLE);
-   ALTER TABLE `FM_AFFILIATE` MODIFY `UPD_DT` datetime NOT NULL ;
+--  ALTER TABLE `fm_affiliate` MODIFY (`upd_dt` NOT NULL ENABLE);
+   ALTER TABLE `fm_affiliate` MODIFY `upd_dt` datetime NOT NULL ;
 
---  ALTER TABLE `FM_AFFILIATE` MODIFY (`SITE_TYPE` NOT NULL ENABLE);
-   ALTER TABLE `FM_AFFILIATE` MODIFY `SITE_TYPE` varchar(1) BINARY NOT NULL ;
+--  ALTER TABLE `fm_affiliate` MODIFY (`site_type` NOT NULL ENABLE);
+   ALTER TABLE `fm_affiliate` MODIFY `site_type` varchar(1) BINARY NOT NULL ;
 
---  ALTER TABLE `FM_AFFILIATE` MODIFY (`CID_FG` NOT NULL ENABLE);
-   ALTER TABLE `FM_AFFILIATE` MODIFY `CID_FG` varchar(1) BINARY NOT NULL ;
+--  ALTER TABLE `fm_affiliate` MODIFY (`cid_fg` NOT NULL ENABLE);
+   ALTER TABLE `fm_affiliate` MODIFY `cid_fg` varchar(1) BINARY NOT NULL ;
 
---  ALTER TABLE `FM_AFFILIATE` MODIFY (`MEMBER_TYPE` NOT NULL ENABLE);
-   ALTER TABLE `FM_AFFILIATE` MODIFY `MEMBER_TYPE` varchar(1) BINARY NOT NULL;
+--  ALTER TABLE `fm_affiliate` MODIFY (`member_type` NOT NULL ENABLE);
+   ALTER TABLE `fm_affiliate` MODIFY `member_type` varchar(1) BINARY NOT NULL;
 
---  ALTER TABLE `FM_AFFILIATE` MODIFY (`POINTUSE_FG` NOT NULL ENABLE);
-   ALTER TABLE `FM_AFFILIATE` MODIFY `POINTUSE_FG` varchar(1) BINARY NOT NULL ;
+--  ALTER TABLE `fm_affiliate` MODIFY (`pointuse_fg` NOT NULL ENABLE);
+   ALTER TABLE `fm_affiliate` MODIFY `pointuse_fg` varchar(1) BINARY NOT NULL ;
 
---  ALTER TABLE `FM_AFFILIATE` MODIFY (`COLORUSE_FG` NOT NULL ENABLE);
-   ALTER TABLE `FM_AFFILIATE` MODIFY `COLORUSE_FG` varchar(1) BINARY NOT NULL ;
+--  ALTER TABLE `fm_affiliate` MODIFY (`coloruse_fg` NOT NULL ENABLE);
+   ALTER TABLE `fm_affiliate` MODIFY `coloruse_fg` varchar(1) BINARY NOT NULL ;
 
---  ALTER TABLE `FM_AFFILIATE` MODIFY (`SPRATE_FG` NOT NULL ENABLE);
-   ALTER TABLE `FM_AFFILIATE` MODIFY `SPRATE_FG` varchar(1) BINARY NOT NULL ;
+--  ALTER TABLE `fm_affiliate` MODIFY (`sprate_fg` NOT NULL ENABLE);
+   ALTER TABLE `fm_affiliate` MODIFY `sprate_fg` varchar(1) BINARY NOT NULL ;
 
---  ALTER TABLE `FM_AFFILIATE` MODIFY (`MYPAGESHOW_FG` NOT NULL ENABLE);
-   ALTER TABLE `FM_AFFILIATE` MODIFY `MYPAGESHOW_FG` varchar(1) BINARY NOT NULL ;
+--  ALTER TABLE `fm_affiliate` MODIFY (`mypageshow_fg` NOT NULL ENABLE);
+   ALTER TABLE `fm_affiliate` MODIFY `mypageshow_fg` varchar(1) BINARY NOT NULL ;
 
---  ALTER TABLE `FM_AFFILIATE` MODIFY (`RESERVE_CID_FG` NOT NULL ENABLE);
-   ALTER TABLE `FM_AFFILIATE` MODIFY `RESERVE_CID_FG` varchar(1) BINARY NOT NULL ;
+--  ALTER TABLE `fm_affiliate` MODIFY (`reserve_cid_fg` NOT NULL ENABLE);
+   ALTER TABLE `fm_affiliate` MODIFY `reserve_cid_fg` varchar(1) BINARY NOT NULL ;
 
---  ALTER TABLE `FM_AFFILIATE` MODIFY (`SCREEN_TYPE_CD` NOT NULL ENABLE);
-   ALTER TABLE `FM_AFFILIATE` MODIFY `SCREEN_TYPE_CD` varchar(1) BINARY NOT NULL ;
+--  ALTER TABLE `fm_affiliate` MODIFY (`screen_type_cd` NOT NULL ENABLE);
+   ALTER TABLE `fm_affiliate` MODIFY `screen_type_cd` varchar(1) BINARY NOT NULL ;
 
---  ALTER TABLE `FM_AFFILIATE` MODIFY (`PAYMENT_CD` NOT NULL ENABLE);
-  ALTER TABLE `FM_AFFILIATE` MODIFY `PAYMENT_CD` varchar(1) BINARY NOT NULL ;
+--  ALTER TABLE `fm_affiliate` MODIFY (`payment_cd` NOT NULL ENABLE);
+  ALTER TABLE `fm_affiliate` MODIFY `payment_cd` varchar(1) BINARY NOT NULL ;
 
 --   *** ------------------------------------
 --  *** Table RESERVE_DISPOSE_GRANTS_9XG
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_DISPOSE_GRANTS_9XG` ADD CONSTRAINT `RESERVE_DISPOSE_GRANTS_9XG_PKY` PRIMARY KEY (`DISPOSE_GRANTS_ID`)
+  ALTER TABLE `reserve_dispose_grants_9xg` ADD CONSTRAINT `reserve_dispose_grants_9xg_pky` PRIMARY KEY (`dispose_grants_id`)
   ;
 --   *** ------------------------------------
 --  *** Table MAST_STATION_COMPANY
 --   *** ------------------------------------
 
-  ALTER TABLE `MAST_STATION_COMPANY` ADD CONSTRAINT `MAST_STATION_COMPANY_PKY` PRIMARY KEY (`COMPANY_CD`)
+  ALTER TABLE `mast_station_company` ADD CONSTRAINT `mast_station_company_pky` PRIMARY KEY (`company_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table GROUP_BUYING_DELIVERY
 --   *** ------------------------------------
 
-  ALTER TABLE `GROUP_BUYING_DELIVERY` ADD CONSTRAINT `GROUP_BUYING_DELIVERY_PKY` PRIMARY KEY (`ORDER_ID`)
+  ALTER TABLE `group_buying_delivery` ADD CONSTRAINT `group_buying_delivery_pky` PRIMARY KEY (`order_id`)
   ;
  
---  ALTER TABLE `GROUP_BUYING_DELIVERY` MODIFY (`POSTAL_CD` NOT NULL ENABLE);
-   ALTER TABLE `GROUP_BUYING_DELIVERY` MODIFY `POSTAL_CD` varchar(10) BINARY NOT NULL ;
+--  ALTER TABLE `group_buying_delivery` MODIFY (`postal_cd` NOT NULL ENABLE);
+   ALTER TABLE `group_buying_delivery` MODIFY `postal_cd` varchar(10) BINARY NOT NULL ;
 
---  ALTER TABLE `GROUP_BUYING_DELIVERY` MODIFY (`CITY` NOT NULL ENABLE);
-   ALTER TABLE `GROUP_BUYING_DELIVERY` MODIFY `CITY` varchar(375) BINARY NOT NULL ;
+--  ALTER TABLE `group_buying_delivery` MODIFY (`city` NOT NULL ENABLE);
+   ALTER TABLE `group_buying_delivery` MODIFY `city` varchar(375) BINARY NOT NULL ;
 
---  ALTER TABLE `GROUP_BUYING_DELIVERY` MODIFY (`PERSON_FAMILY` NOT NULL ENABLE);
-   ALTER TABLE `GROUP_BUYING_DELIVERY` MODIFY `PERSON_FAMILY` varchar(51) BINARY NOT NULL ;
+--  ALTER TABLE `group_buying_delivery` MODIFY (`person_family` NOT NULL ENABLE);
+   ALTER TABLE `group_buying_delivery` MODIFY `person_family` varchar(51) BINARY NOT NULL ;
  
---  ALTER TABLE `GROUP_BUYING_DELIVERY` MODIFY (`TEL` NOT NULL ENABLE);
-   ALTER TABLE `GROUP_BUYING_DELIVERY` MODIFY `TEL` varchar(32) BINARY NOT NULL ;
+--  ALTER TABLE `group_buying_delivery` MODIFY (`tel` NOT NULL ENABLE);
+   ALTER TABLE `group_buying_delivery` MODIFY `tel` varchar(32) BINARY NOT NULL ;
  
---  ALTER TABLE `GROUP_BUYING_DELIVERY` MODIFY (`ENTRY_CD` NOT NULL ENABLE);
-   ALTER TABLE `GROUP_BUYING_DELIVERY` MODIFY `ENTRY_CD` varchar(64) BINARY NOT NULL ;
+--  ALTER TABLE `group_buying_delivery` MODIFY (`entry_cd` NOT NULL ENABLE);
+   ALTER TABLE `group_buying_delivery` MODIFY `entry_cd` varchar(64) BINARY NOT NULL ;
 
---  ALTER TABLE `GROUP_BUYING_DELIVERY` MODIFY (`ENTRY_TS` NOT NULL ENABLE);
-   ALTER TABLE `GROUP_BUYING_DELIVERY` MODIFY `ENTRY_TS` datetime NOT NULL ;
+--  ALTER TABLE `group_buying_delivery` MODIFY (`entry_ts` NOT NULL ENABLE);
+   ALTER TABLE `group_buying_delivery` MODIFY `entry_ts` datetime NOT NULL ;
 
---  ALTER TABLE `GROUP_BUYING_DELIVERY` MODIFY (`MODIFY_CD` NOT NULL ENABLE);
-   ALTER TABLE `GROUP_BUYING_DELIVERY` MODIFY `MODIFY_CD` varchar(64) BINARY NOT NULL ;
+--  ALTER TABLE `group_buying_delivery` MODIFY (`modify_cd` NOT NULL ENABLE);
+   ALTER TABLE `group_buying_delivery` MODIFY `modify_cd` varchar(64) BINARY NOT NULL ;
 
---  ALTER TABLE `GROUP_BUYING_DELIVERY` MODIFY (`MODIFY_TS` NOT NULL ENABLE);
-   ALTER TABLE `GROUP_BUYING_DELIVERY` MODIFY `MODIFY_TS` datetime NOT NULL ;
+--  ALTER TABLE `group_buying_delivery` MODIFY (`modify_ts` NOT NULL ENABLE);
+   ALTER TABLE `group_buying_delivery` MODIFY `modify_ts` datetime NOT NULL ;
 
 --   *** ------------------------------------
 --  *** Table BR_POINT_SHORT_TERM
 --   *** ------------------------------------
 
-  ALTER TABLE `BR_POINT_SHORT_TERM` ADD CONSTRAINT `BR_POINT_SHORT_TERM_PKY` PRIMARY KEY (`SHORT_TERM_ID`)
+  ALTER TABLE `br_point_short_term` ADD CONSTRAINT `br_point_short_term_pky` PRIMARY KEY (`short_term_id`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAYED_RSV
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAYED_RSV` ADD CONSTRAINT `BILLPAYED_RSV_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`, `OPERATION_YMD`)
+  ALTER TABLE `billpayed_rsv` ADD CONSTRAINT `billpayed_rsv_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`, `operation_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table DISPOSE_VOUCHER
 --   *** ------------------------------------
 
-  ALTER TABLE `DISPOSE_VOUCHER` ADD CONSTRAINT `DISPOSE_VOUCHER_PKY` PRIMARY KEY (`HOTEL_CD`, `OPERATION_YMD`, `RESERVE_CD`, `DATE_YMD`)
+  ALTER TABLE `dispose_voucher` ADD CONSTRAINT `dispose_voucher_pky` PRIMARY KEY (`hotel_cd`, `operation_ymd`, `reserve_cd`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table EXTEND_SWITCH_PLAN2
 --   *** ------------------------------------
 
-  ALTER TABLE `EXTEND_SWITCH_PLAN2` ADD CONSTRAINT `EXTEND_SWITCH_PLAN2_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_ID`, `PLAN_ID`)
+  ALTER TABLE `extend_switch_plan2` ADD CONSTRAINT `extend_switch_plan2_pky` PRIMARY KEY (`hotel_cd`, `room_id`, `plan_id`)
   ;
 --   *** ------------------------------------
 --  *** Table PARTNER_CUSTOMER
 --   *** ------------------------------------
 
-  ALTER TABLE `PARTNER_CUSTOMER` ADD CONSTRAINT `PARTNER_CUSTOMER_PKY` PRIMARY KEY (`CUSTOMER_ID`)
+  ALTER TABLE `partner_customer` ADD CONSTRAINT `partner_customer_pky` PRIMARY KEY (`customer_id`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_RECOMMEND_RESULT
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_RECOMMEND_RESULT` ADD CONSTRAINT `HOTEL_RECOMMEND_RESULT_PKY` PRIMARY KEY (`HOTEL_CD`, `RECOMMEND_ID`)
+  ALTER TABLE `hotel_recommend_result` ADD CONSTRAINT `hotel_recommend_result_pky` PRIMARY KEY (`hotel_cd`, `recommend_id`)
   ;
 --   *** ------------------------------------
 --  *** Table LOG_SECURITY_01
 --   *** ------------------------------------
 
-  ALTER TABLE `LOG_SECURITY_01` ADD CONSTRAINT `LOG_SECURITY_01_PKY` PRIMARY KEY (`SECURITY_CD`)
+  ALTER TABLE `log_security_01` ADD CONSTRAINT `log_security_01_pky` PRIMARY KEY (`security_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table EPARK_STATE_TOKEN
 --   *** ------------------------------------
 
-  ALTER TABLE `EPARK_STATE_TOKEN` ADD CONSTRAINT `EPARK_STATE_TOKEN_PKY` PRIMARY KEY (`STATE_TOKEN_KEY`)
+  ALTER TABLE `epark_state_token` ADD CONSTRAINT `epark_state_token_pky` PRIMARY KEY (`state_token_key`)
   ;
 --   *** ------------------------------------
 --  *** Table POINT
 --   *** ------------------------------------
 
-  ALTER TABLE `POINT` ADD CONSTRAINT `POINT_PKY` PRIMARY KEY (`POINT_ID`)
+  ALTER TABLE `point` ADD CONSTRAINT `point_pky` PRIMARY KEY (`point_id`)
   ;
 --   *** ------------------------------------
 --  *** Table EPARK_ACCESS_TOKEN
 --   *** ------------------------------------
 
-  ALTER TABLE `EPARK_ACCESS_TOKEN` ADD CONSTRAINT `EPARK_ACCESS_TOKEN_PKY` PRIMARY KEY (`EPARK_ID`)
+  ALTER TABLE `epark_access_token` ADD CONSTRAINT `epark_access_token_pky` PRIMARY KEY (`epark_id`)
   ;
 --   *** ------------------------------------
 --  *** Table RECORD_MOBILE_VARIOUS
 --   *** ------------------------------------
 
-  ALTER TABLE `RECORD_MOBILE_VARIOUS` ADD CONSTRAINT `RECORD_MOBILE_VARIOUS_PKY` PRIMARY KEY (`DATE_YMD`)
+  ALTER TABLE `record_mobile_various` ADD CONSTRAINT `record_mobile_various_pky` PRIMARY KEY (`date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_PAY_PER_CALL
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_PAY_PER_CALL` ADD CONSTRAINT `HOTEL_PAY_PER_CALL_PKY` PRIMARY KEY (`HOTEL_CD`, `PARTNER_CD`)
+  ALTER TABLE `hotel_pay_per_call` ADD CONSTRAINT `hotel_pay_per_call_pky` PRIMARY KEY (`hotel_cd`, `partner_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_DISPOSE_YAHOO
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_DISPOSE_YAHOO` ADD CONSTRAINT `RESERVE_DISPOSE_YAHOO_PKY` PRIMARY KEY (`DISPOSE_YAHOO_ID`)
+  ALTER TABLE `reserve_dispose_yahoo` ADD CONSTRAINT `reserve_dispose_yahoo_pky` PRIMARY KEY (`dispose_yahoo_id`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_NOTIFY
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_NOTIFY` ADD CONSTRAINT `HOTEL_NOTIFY_PKY` PRIMARY KEY (`HOTEL_CD`)
+  ALTER TABLE `hotel_notify` ADD CONSTRAINT `hotel_notify_pky` PRIMARY KEY (`hotel_cd`)
   ;
  
---  ALTER TABLE `HOTEL_NOTIFY` MODIFY (`HOTEL_CD` NOT NULL ENABLE);
-  ALTER TABLE `HOTEL_NOTIFY` MODIFY `HOTEL_CD` varchar(10) BINARY NOT NULL ;
+--  ALTER TABLE `hotel_notify` MODIFY (`hotel_cd` NOT NULL ENABLE);
+  ALTER TABLE `hotel_notify` MODIFY `hotel_cd` varchar(10) BINARY NOT NULL ;
   
 --   *** ------------------------------------
 --  *** Table PARTNER_CLOCK
 --   *** ------------------------------------
 
-  ALTER TABLE `PARTNER_CLOCK` ADD CONSTRAINT `PARTNER_CLOCK_PKY` PRIMARY KEY (`PARTNER_CD`, `TABLE_NAME`)
+  ALTER TABLE `partner_clock` ADD CONSTRAINT `partner_clock_pky` PRIMARY KEY (`partner_cd`, `table_name`)
   ;
 --   *** ------------------------------------
 --  *** Table MEMBER_COUPON
 --   *** ------------------------------------
 
-  ALTER TABLE `MEMBER_COUPON` ADD CONSTRAINT `MEMBER_COUPON_PKY` PRIMARY KEY (`MEMBER_COUPON_ID`)
+  ALTER TABLE `member_coupon` ADD CONSTRAINT `member_coupon_pky` PRIMARY KEY (`member_coupon_id`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_EXTENSION
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_EXTENSION` ADD CONSTRAINT `RESERVE_EXTENSION_PKY` PRIMARY KEY (`RESERVE_CD`)
+  ALTER TABLE `reserve_extension` ADD CONSTRAINT `reserve_extension_pky` PRIMARY KEY (`reserve_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_STATION_WK
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_STATION_WK` ADD CONSTRAINT `HOTEL_STATION_WK_PKY` PRIMARY KEY (`HOTEL_CD`, `STATION_ID`, `TRAFFIC_WAY`)
+  ALTER TABLE `hotel_station_wk` ADD CONSTRAINT `hotel_station_wk_pky` PRIMARY KEY (`hotel_cd`, `station_id`, `traffic_way`)
   ;
 --   *** ------------------------------------
 --  *** Table BROADCAST_MESSAGES_HOTEL
 --   *** ------------------------------------
 
-  ALTER TABLE `BROADCAST_MESSAGES_HOTEL` ADD CONSTRAINT `BROADCAST_MESSAGES_HOTEL_PKY` PRIMARY KEY (`BROADCAST_MESSAGES_HOTEL_ID`)
+  ALTER TABLE `broadcast_messages_hotel` ADD CONSTRAINT `broadcast_messages_hotel_pky` PRIMARY KEY (`broadcast_messages_hotel_id`)
   ;
 --   *** ------------------------------------
 --  *** Table ORICO
 --   *** ------------------------------------
 
-  ALTER TABLE `ORICO` ADD CONSTRAINT `ORICO_PKY` PRIMARY KEY (`ORDER_ID`)
+  ALTER TABLE `orico` ADD CONSTRAINT `orico_pky` PRIMARY KEY (`order_id`)
   ;
 --   *** ------------------------------------
 --  *** Table CHECKSHEET_HOTEL_FEE_BASE
 --   *** ------------------------------------
 
-  ALTER TABLE `CHECKSHEET_HOTEL_FEE_BASE` ADD CONSTRAINT `CHECKSHEET_HOTEL_FEE_BASE_PKY` PRIMARY KEY (`CHECKSHEET_YM`, `HOTEL_CD`)
+  ALTER TABLE `checksheet_hotel_fee_base` ADD CONSTRAINT `checksheet_hotel_fee_base_pky` PRIMARY KEY (`checksheet_ym`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_NTA_RELATION
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_NTA_RELATION` ADD CONSTRAINT `ROOM_NTA_RELATION_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_ID`)
+  ALTER TABLE `room_nta_relation` ADD CONSTRAINT `room_nta_relation_pky` PRIMARY KEY (`hotel_cd`, `room_id`)
   ;
 --   *** ------------------------------------
 --  *** Table SSO_COMPARE
 --   *** ------------------------------------
 
-  ALTER TABLE `SSO_COMPARE` ADD CONSTRAINT `SSO_COMPARE_PKY` PRIMARY KEY (`ACCOUNT_TYPE`, `ACCOUNT_KEY`)
+  ALTER TABLE `sso_compare` ADD CONSTRAINT `sso_compare_pky` PRIMARY KEY (`account_type`, `account_key`)
   ;
  
-  ALTER TABLE `SSO_COMPARE` ADD CONSTRAINT `SSO_COMPARE_UNQ_01` UNIQUE (`COMPARE_CD`)
+  ALTER TABLE `sso_compare` ADD CONSTRAINT `sso_compare_unq_01` UNIQUE (`compare_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_SYSTEM_VERSION
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_SYSTEM_VERSION` ADD CONSTRAINT `HOTEL_SYSTEM_VERSION_PKY` PRIMARY KEY (`HOTEL_CD`, `SYSTEM_TYPE`)
+  ALTER TABLE `hotel_system_version` ADD CONSTRAINT `hotel_system_version_pky` PRIMARY KEY (`hotel_cd`, `system_type`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_NETWORK
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_NETWORK` ADD CONSTRAINT `ROOM_NETWORK_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_CD`)
+  ALTER TABLE `room_network` ADD CONSTRAINT `room_network_pky` PRIMARY KEY (`hotel_cd`, `room_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_PLAN_CHILD
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_PLAN_CHILD` ADD CONSTRAINT `ROOM_PLAN_CHILD_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_ID`, `PLAN_ID`)
+  ALTER TABLE `room_plan_child` ADD CONSTRAINT `room_plan_child_pky` PRIMARY KEY (`hotel_cd`, `room_id`, `plan_id`)
   ;
 --   *** ------------------------------------
 --  *** Table PARTNER_LINKS
 --   *** ------------------------------------
 
-  ALTER TABLE `PARTNER_LINKS` ADD CONSTRAINT `PARTNER_LINKS_PKY` PRIMARY KEY (`PARTNER_CD`)
+  ALTER TABLE `partner_links` ADD CONSTRAINT `partner_links_pky` PRIMARY KEY (`partner_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_JR_ENTRY_STATUS
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_JR_ENTRY_STATUS` ADD CONSTRAINT `HOTEL_JR_ENTRY_STATUS_PKY` PRIMARY KEY (`HOTEL_CD`)
+  ALTER TABLE `hotel_jr_entry_status` ADD CONSTRAINT `hotel_jr_entry_status_pky` PRIMARY KEY (`hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM` ADD CONSTRAINT `ROOM_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_CD`)
+  ALTER TABLE `room` ADD CONSTRAINT `room_pky` PRIMARY KEY (`hotel_cd`, `room_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table BR_POINT_BOOK_V4_LOG
 --   *** ------------------------------------
 
-  ALTER TABLE `BR_POINT_BOOK_V4_LOG` ADD CONSTRAINT `BR_POINT_BOOK_V4_LOG_PKY` PRIMARY KEY (`BR_POINT_CD`)
+  ALTER TABLE `br_point_book_v4_log` ADD CONSTRAINT `br_point_book_v4_log_pky` PRIMARY KEY (`br_point_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table MAST_AREA_STATION
 --   *** ------------------------------------
 
-  ALTER TABLE `MAST_AREA_STATION` ADD CONSTRAINT `MAST_AREA_STATION_PKY` PRIMARY KEY (`ID`)
+  ALTER TABLE `mast_area_station` ADD CONSTRAINT `mast_area_station_pky` PRIMARY KEY (`id`)
   ;
 --   *** ------------------------------------
 --  *** Table BR_POINT_BOOK
 --   *** ------------------------------------
 
-  ALTER TABLE `BR_POINT_BOOK` ADD CONSTRAINT `BR_POINT_BOOK_PKY` PRIMARY KEY (`BR_POINT_CD`)
+  ALTER TABLE `br_point_book` ADD CONSTRAINT `br_point_book_pky` PRIMARY KEY (`br_point_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_MSC
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_MSC` ADD CONSTRAINT `HOTEL_MSC_PKY` PRIMARY KEY (`HOTEL_CD`)
+  ALTER TABLE `hotel_msc` ADD CONSTRAINT `hotel_msc_pky` PRIMARY KEY (`hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table MIGRATION
 --   *** ------------------------------------
 
-  ALTER TABLE `MIGRATION` ADD CONSTRAINT `MIGRATION_PKY` PRIMARY KEY (`HOTEL_CD`)
+  ALTER TABLE `migration` ADD CONSTRAINT `migration_pky` PRIMARY KEY (`hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_FACILITY
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_FACILITY` ADD CONSTRAINT `HOTEL_FACILITY_PKY` PRIMARY KEY (`HOTEL_CD`, `ELEMENT_ID`)
+  ALTER TABLE `hotel_facility` ADD CONSTRAINT `hotel_facility_pky` PRIMARY KEY (`hotel_cd`, `element_id`)
   ;
 --   *** ------------------------------------
 --  *** Table TEMP_KEI_MONTH_DISCOUNT
 --   *** ------------------------------------
 
-  ALTER TABLE `TEMP_KEI_MONTH_DISCOUNT` ADD CONSTRAINT `TEMP_KEI_MONTH_DISCOUNT_PKY` PRIMARY KEY (`HOTEL_CD`, `DATE_YM`, `DISCOUNT_CD`)
+  ALTER TABLE `temp_kei_month_discount` ADD CONSTRAINT `temp_kei_month_discount_pky` PRIMARY KEY (`hotel_cd`, `date_ym`, `discount_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table PLAN_CANCEL_RATE
 --   *** ------------------------------------
 
-  ALTER TABLE `PLAN_CANCEL_RATE` ADD CONSTRAINT `PLAN_CANCEL_RATE_PKY` PRIMARY KEY (`HOTEL_CD`, `PLAN_ID`, `DAYS`)
+  ALTER TABLE `plan_cancel_rate` ADD CONSTRAINT `plan_cancel_rate_pky` PRIMARY KEY (`hotel_cd`, `plan_id`, `days`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_STATUS_JR
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_STATUS_JR` ADD CONSTRAINT `HOTEL_STATUS_JR_PKY` PRIMARY KEY (`HOTEL_CD`)
+  ALTER TABLE `hotel_status_jr` ADD CONSTRAINT `hotel_status_jr_pky` PRIMARY KEY (`hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table NOTIFY_PAGE
 --   *** ------------------------------------
 
-  ALTER TABLE `NOTIFY_PAGE` ADD CONSTRAINT `NOTIFY_PAGE_PKY` PRIMARY KEY (`NOTIFY_CD`)
+  ALTER TABLE `notify_page` ADD CONSTRAINT `notify_page_pky` PRIMARY KEY (`notify_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_SPEC
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_SPEC` ADD CONSTRAINT `ROOM_SPEC_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_CD`, `ELEMENT_ID`)
+  ALTER TABLE `room_spec` ADD CONSTRAINT `room_spec_pky` PRIMARY KEY (`hotel_cd`, `room_cd`, `element_id`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_YDK
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_YDK` ADD CONSTRAINT `HOTEL_YDK_PKY` PRIMARY KEY (`HOTEL_CD`)
+  ALTER TABLE `hotel_ydk` ADD CONSTRAINT `hotel_ydk_pky` PRIMARY KEY (`hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAY_PTN_CSTMRSITE
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAY_PTN_CSTMRSITE` ADD CONSTRAINT `BILLPAY_PTN_CSTMRSITE_PKY` PRIMARY KEY (`BILLPAY_YM`, `CUSTOMER_ID`, `SITE_CD`, `FEE_TYPE`)
+  ALTER TABLE `billpay_ptn_cstmrsite` ADD CONSTRAINT `billpay_ptn_cstmrsite_pky` PRIMARY KEY (`billpay_ym`, `customer_id`, `site_cd`, `fee_type`)
   ;
 --   *** ------------------------------------
 --  *** Table GROUP_BUYING_COUPON
 --   *** ------------------------------------
 
-  ALTER TABLE `GROUP_BUYING_COUPON` ADD CONSTRAINT `GROUP_BUYING_COUPON_PKY` PRIMARY KEY (`ORDER_ID`, `COUPON_ID`)
+  ALTER TABLE `group_buying_coupon` ADD CONSTRAINT `group_buying_coupon_pky` PRIMARY KEY (`order_id`, `coupon_id`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAY_HOTEL_RSV
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAY_HOTEL_RSV` ADD CONSTRAINT `BILLPAY_HOTEL_RSV_PKY` PRIMARY KEY (`BILLPAY_YM`, `HOTEL_CD`)
+  ALTER TABLE `billpay_hotel_rsv` ADD CONSTRAINT `billpay_hotel_rsv_pky` PRIMARY KEY (`billpay_ym`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAYED_HOTEL_GRANTS
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAYED_HOTEL_GRANTS` ADD CONSTRAINT `BILLPAYED_HOTEL_GRANTS_PKY` PRIMARY KEY (`BILLPAY_YM`, `HOTEL_CD`)
+  ALTER TABLE `billpayed_hotel_grants` ADD CONSTRAINT `billpayed_hotel_grants_pky` PRIMARY KEY (`billpay_ym`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAYED_HOTEL
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAYED_HOTEL` ADD CONSTRAINT `BILLPAYED_HOTEL_PKY` PRIMARY KEY (`BILLPAY_YM`, `HOTEL_CD`)
+  ALTER TABLE `billpayed_hotel` ADD CONSTRAINT `billpayed_hotel_pky` PRIMARY KEY (`billpay_ym`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table REPORT_GENDER_AGE
 --   *** ------------------------------------
 
-  ALTER TABLE `REPORT_GENDER_AGE` ADD CONSTRAINT `REPORT_GENDER_AGE_PKY` PRIMARY KEY (`HOTEL_CD`, `DATE_YMD`, `AGE`, `GENDER`)
+  ALTER TABLE `report_gender_age` ADD CONSTRAINT `report_gender_age_pky` PRIMARY KEY (`hotel_cd`, `date_ymd`, `age`, `gender`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_DISPOSE_RSV_9XG
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_DISPOSE_RSV_9XG` ADD CONSTRAINT `RESERVE_DISPOSE_RSV_9XG_PKY` PRIMARY KEY (`DISPOSE_RSV_ID`)
+  ALTER TABLE `reserve_dispose_rsv_9xg` ADD CONSTRAINT `reserve_dispose_rsv_9xg_pky` PRIMARY KEY (`dispose_rsv_id`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_PLAN_NEW
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_PLAN_NEW` ADD CONSTRAINT `ROOM_PLAN_NEW_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_CD`, `PLAN_CD`)
+  ALTER TABLE `room_plan_new` ADD CONSTRAINT `room_plan_new_pky` PRIMARY KEY (`hotel_cd`, `room_cd`, `plan_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_CHARGE_INITIAL2
 --   *** ------------------------------------
 
---  ALTER TABLE `ROOM_CHARGE_INITIAL2` ADD CONSTRAINT `ROOM_CHARGE_INITIAL2_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_ID`, `PLAN_ID`, `PARTNER_GROUP_ID`)
+--  ALTER TABLE `room_charge_initial2` ADD CONSTRAINT `room_charge_initial2_pky` PRIMARY KEY (`hotel_cd`, `room_id`, `plan_id`, `partner_group_id`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_GOTO_REGIST
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_GOTO_REGIST` ADD CONSTRAINT `HOTEL_GOTO_REGIST_PKY` PRIMARY KEY (`HOTEL_CD`)
+  ALTER TABLE `hotel_goto_regist` ADD CONSTRAINT `hotel_goto_regist_pky` PRIMARY KEY (`hotel_cd`)
   ;
  
---  ALTER TABLE `HOTEL_GOTO_REGIST` MODIFY (`REGIST_STATUS` NOT NULL ENABLE);
-  ALTER TABLE `HOTEL_GOTO_REGIST` MODIFY `REGIST_STATUS` tinyint NOT NULL ;
+--  ALTER TABLE `hotel_goto_regist` MODIFY (`regist_status` NOT NULL ENABLE);
+  ALTER TABLE `hotel_goto_regist` MODIFY `regist_status` tinyint NOT NULL ;
 
 --   *** ------------------------------------
 --  *** Table ZAP_MSC
 --   *** ------------------------------------
 
-  ALTER TABLE `ZAP_MSC` ADD CONSTRAINT `ZAP_MSC_PKY` PRIMARY KEY (`RANDOM_CD`)
+  ALTER TABLE `zap_msc` ADD CONSTRAINT `zap_msc_pky` PRIMARY KEY (`random_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table MAST_AREA_LANDMARK
 --   *** ------------------------------------
 
-  ALTER TABLE `MAST_AREA_LANDMARK` ADD CONSTRAINT `MAST_AREA_LANDMARK_PKY` PRIMARY KEY (`ID`)
+  ALTER TABLE `mast_area_landmark` ADD CONSTRAINT `mast_area_landmark_pky` PRIMARY KEY (`id`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_POWERDOWN_S
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_POWERDOWN_S` ADD CONSTRAINT `HOTEL_POWERDOWN_S_PKY` PRIMARY KEY (`HOTEL_CD`, `POWERDOWN_SEQ`)
+  ALTER TABLE `hotel_powerdown_s` ADD CONSTRAINT `hotel_powerdown_s_pky` PRIMARY KEY (`hotel_cd`, `powerdown_seq`)
   ;
 --   *** ------------------------------------
 --  *** Table ORDER_GRANTS
 --   *** ------------------------------------
 
-  ALTER TABLE `ORDER_GRANTS` ADD CONSTRAINT `ORDER_GRANTS_PKY` PRIMARY KEY (`ORDER_CD`, `WELFARE_GRANTS_HISTORY_ID`)
+  ALTER TABLE `order_grants` ADD CONSTRAINT `order_grants_pky` PRIMARY KEY (`order_cd`, `welfare_grants_history_id`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAYED_HOTEL_RSV_9XG
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAYED_HOTEL_RSV_9XG` ADD CONSTRAINT `BILLPAYED_HOTEL_RSV_9XG_PKY` PRIMARY KEY (`BILLPAY_YM`, `HOTEL_CD`)
+  ALTER TABLE `billpayed_hotel_rsv_9xg` ADD CONSTRAINT `billpayed_hotel_rsv_9xg_pky` PRIMARY KEY (`billpay_ym`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table CHECKSHEET_FEE
 --   *** ------------------------------------
 
-  ALTER TABLE `CHECKSHEET_FEE` ADD CONSTRAINT `CHECKSHEET_FEE_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`)
+  ALTER TABLE `checksheet_fee` ADD CONSTRAINT `checksheet_fee_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table MEDIA_REMOVED
 --   *** ------------------------------------
 
-  ALTER TABLE `MEDIA_REMOVED` ADD CONSTRAINT `MEDIA_REMOVED_PKY` PRIMARY KEY (`MEDIA_REMOVED_ID`)
+  ALTER TABLE `media_removed` ADD CONSTRAINT `media_removed_pky` PRIMARY KEY (`media_removed_id`)
   ;
 --   *** ------------------------------------
 --  *** Table ADDITIONAL_ZENGIN
 --   *** ------------------------------------
 
-  ALTER TABLE `ADDITIONAL_ZENGIN` ADD CONSTRAINT `ADDITIONAL_ZENGIN_PKY` PRIMARY KEY (`ZENGIN_YM`, `BRANCH_ID`)
+  ALTER TABLE `additional_zengin` ADD CONSTRAINT `additional_zengin_pky` PRIMARY KEY (`zengin_ym`, `branch_id`)
   ;
 --   *** ------------------------------------
 --  *** Table WELFARE_OP_HISTORY
 --   *** ------------------------------------
 
---  ALTER TABLE `WELFARE_OP_HISTORY` MODIFY (`WELFARE_MATCH_ID` NOT NULL ENABLE);
-   ALTER TABLE `WELFARE_OP_HISTORY` MODIFY `WELFARE_MATCH_ID` bigint  NOT NULL ;
+--  ALTER TABLE `welfare_op_history` MODIFY (`welfare_match_id` NOT NULL ENABLE);
+   ALTER TABLE `welfare_op_history` MODIFY `welfare_match_id` bigint  NOT NULL ;
 
---  ALTER TABLE `WELFARE_OP_HISTORY` MODIFY (`WELFARE_MATCH_HISTORY_ID` NOT NULL ENABLE);
-   ALTER TABLE `WELFARE_OP_HISTORY` MODIFY `WELFARE_MATCH_HISTORY_ID` bigint  NOT NULL ;
+--  ALTER TABLE `welfare_op_history` MODIFY (`welfare_match_history_id` NOT NULL ENABLE);
+   ALTER TABLE `welfare_op_history` MODIFY `welfare_match_history_id` bigint  NOT NULL ;
 
---  ALTER TABLE `WELFARE_OP_HISTORY` MODIFY (`WELFARE_GRANTS_ID` NOT NULL ENABLE);
-   ALTER TABLE `WELFARE_OP_HISTORY` MODIFY `WELFARE_GRANTS_ID` bigint  NOT NULL ;
+--  ALTER TABLE `welfare_op_history` MODIFY (`welfare_grants_id` NOT NULL ENABLE);
+   ALTER TABLE `welfare_op_history` MODIFY `welfare_grants_id` bigint  NOT NULL ;
 
---  ALTER TABLE `WELFARE_OP_HISTORY` MODIFY (`WELFARE_GRANTS_HISTORY_ID` NOT NULL ENABLE);
-   ALTER TABLE `WELFARE_OP_HISTORY` MODIFY `WELFARE_GRANTS_HISTORY_ID` bigint  NOT NULL ;
+--  ALTER TABLE `welfare_op_history` MODIFY (`welfare_grants_history_id` NOT NULL ENABLE);
+   ALTER TABLE `welfare_op_history` MODIFY `welfare_grants_history_id` bigint  NOT NULL ;
 
-  ALTER TABLE `WELFARE_OP_HISTORY` ADD CONSTRAINT `WELFARE_OP_HISTORY_PKY` PRIMARY KEY (`WELFARE_OP_HISTORY_ID`)
+  ALTER TABLE `welfare_op_history` ADD CONSTRAINT `welfare_op_history_pky` PRIMARY KEY (`welfare_op_history_id`)
   ;
  
-  ALTER TABLE `WELFARE_OP_HISTORY` ADD CONSTRAINT `WELFARE_OP_HISTORY_UNQ_01` UNIQUE (`WELFARE_MATCH_HISTORY_ID`, `WELFARE_GRANTS_ID`, `WELFARE_GRANTS_HISTORY_ID`)
+  ALTER TABLE `welfare_op_history` ADD CONSTRAINT `welfare_op_history_unq_01` UNIQUE (`welfare_match_history_id`, `welfare_grants_id`, `welfare_grants_history_id`)
   ;
 --   *** ------------------------------------
 --  *** Table AKF_STOCK_FRAME_NO
 --   *** ------------------------------------
 
-  ALTER TABLE `AKF_STOCK_FRAME_NO` ADD CONSTRAINT `AKF_STOCK_FRAME_NO_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`)
+  ALTER TABLE `akf_stock_frame_no` ADD CONSTRAINT `akf_stock_frame_no_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table CUSTOMER
 --   *** ------------------------------------
 
-  ALTER TABLE `CUSTOMER` ADD CONSTRAINT `CUSTOMER_PKY` PRIMARY KEY (`CUSTOMER_ID`)
+  ALTER TABLE `customer` ADD CONSTRAINT `customer_pky` PRIMARY KEY (`customer_id`)
   ;
 --   *** ------------------------------------
 --  *** Table NTA_STAFF
 --   *** ------------------------------------
 
-  ALTER TABLE `NTA_STAFF` ADD CONSTRAINT `NTA_STAFF_PKY` PRIMARY KEY (`NTA_STAFF_ID`)
+  ALTER TABLE `nta_staff` ADD CONSTRAINT `nta_staff_pky` PRIMARY KEY (`nta_staff_id`)
   ;
 --   *** ------------------------------------
 --  *** Table PARTNER_CLOUT
 --   *** ------------------------------------
 
-  ALTER TABLE `PARTNER_CLOUT` ADD CONSTRAINT `PARTNER_CLOUT_PKY` PRIMARY KEY (`PARTNER_CD`)
+  ALTER TABLE `partner_clout` ADD CONSTRAINT `partner_clout_pky` PRIMARY KEY (`partner_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_CREDIT_FLUCTUATE
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_CREDIT_FLUCTUATE` ADD CONSTRAINT `RESERVE_CREDIT_FLUCTUATE_PKY` PRIMARY KEY (`ID`)
+  ALTER TABLE `reserve_credit_fluctuate` ADD CONSTRAINT `reserve_credit_fluctuate_pky` PRIMARY KEY (`id`)
   ;
 --   *** ------------------------------------
 --  *** Table VOICE_REVIEW
 --   *** ------------------------------------
 
-  ALTER TABLE `VOICE_REVIEW` ADD CONSTRAINT `VOICE_REVIEW_PKY` PRIMARY KEY (`MEMBER_CD`, `RESERVE_CD`, `REVIEW_ID`)
+  ALTER TABLE `voice_review` ADD CONSTRAINT `voice_review_pky` PRIMARY KEY (`member_cd`, `reserve_cd`, `review_id`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_PLAN_YAHOO_POINT
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_PLAN_YAHOO_POINT` ADD CONSTRAINT `ROOM_PLAN_YAHOO_POINT_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_CD`, `PLAN_CD`)
+  ALTER TABLE `room_plan_yahoo_point` ADD CONSTRAINT `room_plan_yahoo_point_pky` PRIMARY KEY (`hotel_cd`, `room_cd`, `plan_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAYED_CREDIT_9XG
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAYED_CREDIT_9XG` ADD CONSTRAINT `BILLPAYED_CREDIT_9XG_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`, `OPERATION_YMD`)
+  ALTER TABLE `billpayed_credit_9xg` ADD CONSTRAINT `billpayed_credit_9xg_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`, `operation_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table STAFF
 --   *** ------------------------------------
 
-  ALTER TABLE `STAFF` ADD CONSTRAINT `STAFF_PKY` PRIMARY KEY (`STAFF_ID`)
+  ALTER TABLE `staff` ADD CONSTRAINT `staff_pky` PRIMARY KEY (`staff_id`)
   ;
 --   *** ------------------------------------
 --  *** Table MAST_WARD
 --   *** ------------------------------------
 
-  ALTER TABLE `MAST_WARD` ADD CONSTRAINT `MAST_WARD_PKY` PRIMARY KEY (`WARD_ID`)
+  ALTER TABLE `mast_ward` ADD CONSTRAINT `mast_ward_pky` PRIMARY KEY (`ward_id`)
   ;
 --   *** ------------------------------------
 --  *** Table CARD_PAYMENT_CREDIT
 --   *** ------------------------------------
 
-  ALTER TABLE `CARD_PAYMENT_CREDIT` ADD CONSTRAINT `CARD_PAYMENT_CREDIT_PKY` PRIMARY KEY (`CARD_PAYMENT_ID`)
+  ALTER TABLE `card_payment_credit` ADD CONSTRAINT `card_payment_credit_pky` PRIMARY KEY (`card_payment_id`)
   ;
  
-  ALTER TABLE `CARD_PAYMENT_CREDIT` ADD CONSTRAINT `CARD_PAYMENT_CREDIT_UNQ_01` UNIQUE (`PAYMENT_SYSTEM`, `DEMAND_DTM`, `RESERVE_CD`, `DATE_YMD`)
+  ALTER TABLE `card_payment_credit` ADD CONSTRAINT `card_payment_credit_unq_01` UNIQUE (`payment_system`, `demand_dtm`, `reserve_cd`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_NETWORK2
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_NETWORK2` ADD CONSTRAINT `ROOM_NETWORK2_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_ID`)
+  ALTER TABLE `room_network2` ADD CONSTRAINT `room_network2_pky` PRIMARY KEY (`hotel_cd`, `room_id`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_CANCEL_POLICY
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_CANCEL_POLICY` ADD CONSTRAINT `RESERVE_CANCEL_POLICY_PKY` PRIMARY KEY (`RESERVE_CD`)
+  ALTER TABLE `reserve_cancel_policy` ADD CONSTRAINT `reserve_cancel_policy_pky` PRIMARY KEY (`reserve_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table EXTEND_SETTING
 --   *** ------------------------------------
 
-  ALTER TABLE `EXTEND_SETTING` ADD CONSTRAINT `EXTEND_SETTING_PKY` PRIMARY KEY (`HOTEL_CD`)
+  ALTER TABLE `extend_setting` ADD CONSTRAINT `extend_setting_pky` PRIMARY KEY (`hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_COUNT_INITIAL2
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_COUNT_INITIAL2` ADD CONSTRAINT `ROOM_COUNT_INITIAL2_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_ID`)
+  ALTER TABLE `room_count_initial2` ADD CONSTRAINT `room_count_initial2_pky` PRIMARY KEY (`hotel_cd`, `room_id`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAY_HR_GRANTS
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAY_HR_GRANTS` ADD CONSTRAINT `BILLPAY_HR_GRANTS_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`, `WELFARE_GRANTS_ID`)
+  ALTER TABLE `billpay_hr_grants` ADD CONSTRAINT `billpay_hr_grants_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`, `welfare_grants_id`)
   ;
 --   *** ------------------------------------
 --  *** Table MEMBER_YAHOO
 --   *** ------------------------------------
 
-  ALTER TABLE `MEMBER_YAHOO` ADD CONSTRAINT `MEMBER_YAHOO_PKY` PRIMARY KEY (`TRANSACTION_CD`, `MEMBER_CD`)
+  ALTER TABLE `member_yahoo` ADD CONSTRAINT `member_yahoo_pky` PRIMARY KEY (`transaction_cd`, `member_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table MAST_LANDMARK_CATEGORY_2ND
 --   *** ------------------------------------
 
-  ALTER TABLE `MAST_LANDMARK_CATEGORY_2ND` ADD CONSTRAINT `MAST_LANDMARK_CATEGORY_2ND_PKY` PRIMARY KEY (`CATEGORY_2ND_ID`)
+  ALTER TABLE `mast_landmark_category_2nd` ADD CONSTRAINT `mast_landmark_category_2nd_pky` PRIMARY KEY (`category_2nd_id`)
   ;
 --   *** ------------------------------------
 --  *** Table ZAP_PLAN_POINT
 --   *** ------------------------------------
 
-  ALTER TABLE `ZAP_PLAN_POINT` ADD CONSTRAINT `ZAP_PLAN_POINT_PKY` PRIMARY KEY (`HOTEL_CD`, `PLAN_ID`)
+  ALTER TABLE `zap_plan_point` ADD CONSTRAINT `zap_plan_point_pky` PRIMARY KEY (`hotel_cd`, `plan_id`)
   ;
 --   *** ------------------------------------
 --  *** Table MEMBER_STAFF_NOTE
 --   *** ------------------------------------
 
-  ALTER TABLE `MEMBER_STAFF_NOTE` ADD CONSTRAINT `MEMBER_STAFF_NOTE_PKY` PRIMARY KEY (`MEMBER_CD`)
+  ALTER TABLE `member_staff_note` ADD CONSTRAINT `member_staff_note_pky` PRIMARY KEY (`member_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_BATH_TAX
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_BATH_TAX` ADD CONSTRAINT `RESERVE_BATH_TAX_PKY` PRIMARY KEY (`RESERVE_CD`)
+  ALTER TABLE `reserve_bath_tax` ADD CONSTRAINT `reserve_bath_tax_pky` PRIMARY KEY (`reserve_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table RECORD_HOTEL_RESERVE
 --   *** ------------------------------------
 
-  ALTER TABLE `RECORD_HOTEL_RESERVE` ADD CONSTRAINT `RECORD_HOTEL_RESERVE_PKY` PRIMARY KEY (`DATE_YMD`, `HOTEL_CD`, `CAPACITY`)
+  ALTER TABLE `record_hotel_reserve` ADD CONSTRAINT `record_hotel_reserve_pky` PRIMARY KEY (`date_ymd`, `hotel_cd`, `capacity`)
   ;
 --   *** ------------------------------------
 --  *** Table ORICO_RETRY
 --   *** ------------------------------------
 
-  ALTER TABLE `ORICO_RETRY` ADD CONSTRAINT `ORICO_RETRY_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`, `BRANCH_NO`)
+  ALTER TABLE `orico_retry` ADD CONSTRAINT `orico_retry_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`, `branch_no`)
   ;
 --   *** ------------------------------------
 --  *** Table GROUP_BUYING
 --   *** ------------------------------------
 
-  ALTER TABLE `GROUP_BUYING` ADD CONSTRAINT `GROUP_BUYING_PKY` PRIMARY KEY (`DEAL_ID`)
+  ALTER TABLE `group_buying` ADD CONSTRAINT `group_buying_pky` PRIMARY KEY (`deal_id`)
   ;
  
---  ALTER TABLE `GROUP_BUYING` MODIFY (`COUPON_GOAL` NOT NULL ENABLE);
-   ALTER TABLE `GROUP_BUYING` MODIFY `COUPON_GOAL` int NOT NULL ;
+--  ALTER TABLE `group_buying` MODIFY (`coupon_goal` NOT NULL ENABLE);
+   ALTER TABLE `group_buying` MODIFY `coupon_goal` int NOT NULL ;
 
---  ALTER TABLE `GROUP_BUYING` MODIFY (`COUPON_COUNT` NOT NULL ENABLE);
-   ALTER TABLE `GROUP_BUYING` MODIFY `COUPON_COUNT` int NOT NULL ;
+--  ALTER TABLE `group_buying` MODIFY (`coupon_count` NOT NULL ENABLE);
+   ALTER TABLE `group_buying` MODIFY `coupon_count` int NOT NULL ;
 
---  ALTER TABLE `GROUP_BUYING` MODIFY (`STATUS` NOT NULL ENABLE);
-   ALTER TABLE `GROUP_BUYING` MODIFY `STATUS` tinyint NOT NULL ;
+--  ALTER TABLE `group_buying` MODIFY (`status` NOT NULL ENABLE);
+   ALTER TABLE `group_buying` MODIFY `status` tinyint NOT NULL ;
 
---  ALTER TABLE `GROUP_BUYING` MODIFY (`SUPPLIER_CD` NOT NULL ENABLE);
-   ALTER TABLE `GROUP_BUYING` MODIFY `SUPPLIER_CD` varchar(10) BINARY NOT NULL ;
+--  ALTER TABLE `group_buying` MODIFY (`supplier_cd` NOT NULL ENABLE);
+   ALTER TABLE `group_buying` MODIFY `supplier_cd` varchar(10) BINARY NOT NULL ;
 
---  ALTER TABLE `GROUP_BUYING` MODIFY (`ENTRY_CD` NOT NULL ENABLE);
-   ALTER TABLE `GROUP_BUYING` MODIFY `ENTRY_CD` varchar(64) BINARY NOT NULL ;
+--  ALTER TABLE `group_buying` MODIFY (`entry_cd` NOT NULL ENABLE);
+   ALTER TABLE `group_buying` MODIFY `entry_cd` varchar(64) BINARY NOT NULL ;
 
---  ALTER TABLE `GROUP_BUYING` MODIFY (`MODIFY_CD` NOT NULL ENABLE);
-   ALTER TABLE `GROUP_BUYING` MODIFY `MODIFY_CD` varchar(64) BINARY NOT NULL ;
+--  ALTER TABLE `group_buying` MODIFY (`modify_cd` NOT NULL ENABLE);
+   ALTER TABLE `group_buying` MODIFY `modify_cd` varchar(64) BINARY NOT NULL ;
 
---  ALTER TABLE `GROUP_BUYING` MODIFY (`ENTRY_TS` NOT NULL ENABLE);
-   ALTER TABLE `GROUP_BUYING` MODIFY `ENTRY_TS` datetime NOT NULL ;
+--  ALTER TABLE `group_buying` MODIFY (`entry_ts` NOT NULL ENABLE);
+   ALTER TABLE `group_buying` MODIFY `entry_ts` datetime NOT NULL ;
 
---  ALTER TABLE `GROUP_BUYING` MODIFY (`MODIFY_TS` NOT NULL ENABLE);
-   ALTER TABLE `GROUP_BUYING` MODIFY `MODIFY_TS` datetime NOT NULL ;
+--  ALTER TABLE `group_buying` MODIFY (`modify_ts` NOT NULL ENABLE);
+   ALTER TABLE `group_buying` MODIFY `modify_ts` datetime NOT NULL ;
 
 --   *** ------------------------------------
 --  *** Table RECORD_HOTEL_PLAN_COUNT
 --   *** ------------------------------------
 
-  ALTER TABLE `RECORD_HOTEL_PLAN_COUNT` ADD CONSTRAINT `RECORD_HOTEL_PLAN_COUNT_PKY` PRIMARY KEY (`RECORD_DTM`, `HOTEL_CD`)
+  ALTER TABLE `record_hotel_plan_count` ADD CONSTRAINT `record_hotel_plan_count_pky` PRIMARY KEY (`record_dtm`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_LEGACY
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_LEGACY` ADD CONSTRAINT `ROOM_LEGACY_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_CD`)
+  ALTER TABLE `room_legacy` ADD CONSTRAINT `room_legacy_pky` PRIMARY KEY (`hotel_cd`, `room_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table MMS_SEND_EXTRACT_RERATION
 --   *** ------------------------------------
 
-  ALTER TABLE `MMS_SEND_EXTRACT_RERATION` ADD CONSTRAINT `MMS_SEND_EXTRACT_RERATION_PKY` PRIMARY KEY (`MAIL_MAGAZINE_SIMPLE_ID`)
+  ALTER TABLE `mms_send_extract_reration` ADD CONSTRAINT `mms_send_extract_reration_pky` PRIMARY KEY (`mail_magazine_simple_id`)
   ;
 --   *** ------------------------------------
 --  *** Table LOG_POWER
 --   *** ------------------------------------
 
-  ALTER TABLE `LOG_POWER` ADD CONSTRAINT `LOG_POWER_PKY` PRIMARY KEY (`RESERVE_CD`, `BRANCH_NO`)
+  ALTER TABLE `log_power` ADD CONSTRAINT `log_power_pky` PRIMARY KEY (`reserve_cd`, `branch_no`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_COUNT_AKAFU
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_COUNT_AKAFU` ADD CONSTRAINT `ROOM_COUNT_AKAFU_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOMTYPE_CD`, `USE_DT`)
+  ALTER TABLE `room_count_akafu` ADD CONSTRAINT `room_count_akafu_pky` PRIMARY KEY (`hotel_cd`, `roomtype_cd`, `use_dt`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAY_PTN_BOOK
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAY_PTN_BOOK` ADD CONSTRAINT `BILLPAY_PTN_BOOK_PKY` PRIMARY KEY (`BILLPAY_PTN_CD`, `BILLPAY_BRANCH_NO`)
+  ALTER TABLE `billpay_ptn_book` ADD CONSTRAINT `billpay_ptn_book_pky` PRIMARY KEY (`billpay_ptn_cd`, `billpay_branch_no`)
   ;
 --   *** ------------------------------------
 --  *** Table MEDIA
 --   *** ------------------------------------
 
-  ALTER TABLE `MEDIA` ADD CONSTRAINT `MEDIA_PKY` PRIMARY KEY (`HOTEL_CD`, `MEDIA_NO`)
+  ALTER TABLE `media` ADD CONSTRAINT `media_pky` PRIMARY KEY (`hotel_cd`, `media_no`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_CONTROL_NOTE
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_CONTROL_NOTE` ADD CONSTRAINT `HOTEL_CONTROL_NOTE_PKY` PRIMARY KEY (`HOTEL_CD`)
+  ALTER TABLE `hotel_control_note` ADD CONSTRAINT `hotel_control_note_pky` PRIMARY KEY (`hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_YDP_RECEIVE
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_YDP_RECEIVE` ADD CONSTRAINT `RESERVE_YDP_RECEIVE_PKY` PRIMARY KEY (`RESERVE_CD`)
+  ALTER TABLE `reserve_ydp_receive` ADD CONSTRAINT `reserve_ydp_receive_pky` PRIMARY KEY (`reserve_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table MAIL_MAGAZINE_SIMPLE_COND
 --   *** ------------------------------------
 
-  ALTER TABLE `MAIL_MAGAZINE_SIMPLE_COND` ADD CONSTRAINT `MAIL_MAGAZINE_SIMPLE_COND_PKY` PRIMARY KEY (`MAIL_MAGAZINE_SIMPLE_ID`)
+  ALTER TABLE `mail_magazine_simple_cond` ADD CONSTRAINT `mail_magazine_simple_cond_pky` PRIMARY KEY (`mail_magazine_simple_id`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAY_HOTEL_CREDIT_9XG
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAY_HOTEL_CREDIT_9XG` ADD CONSTRAINT `BILLPAY_HOTEL_CREDIT_9XG_PKY` PRIMARY KEY (`BILLPAY_YM`, `HOTEL_CD`)
+  ALTER TABLE `billpay_hotel_credit_9xg` ADD CONSTRAINT `billpay_hotel_credit_9xg_pky` PRIMARY KEY (`billpay_ym`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table LOG_SECURITY_04
 --   *** ------------------------------------
 
-  ALTER TABLE `LOG_SECURITY_04` ADD CONSTRAINT `LOG_SECURITY_04_PKY` PRIMARY KEY (`SECURITY_CD`)
+  ALTER TABLE `log_security_04` ADD CONSTRAINT `log_security_04_pky` PRIMARY KEY (`security_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table MAIL_MAGAZINE_SIMPLE
 --   *** ------------------------------------
 
-  ALTER TABLE `MAIL_MAGAZINE_SIMPLE` ADD CONSTRAINT `MAIL_MAGAZINE_SIMPLE_PKY` PRIMARY KEY (`MAIL_MAGAZINE_SIMPLE_ID`)
+  ALTER TABLE `mail_magazine_simple` ADD CONSTRAINT `mail_magazine_simple_pky` PRIMARY KEY (`mail_magazine_simple_id`)
   ;
 --   *** ------------------------------------
 --  *** Table EXTEND_TASK
 --   *** ------------------------------------
 
-  ALTER TABLE `EXTEND_TASK` ADD CONSTRAINT `EXTEND_TASK_PKY` PRIMARY KEY (`HOTEL_CD`, `TARGET_YM`, `TYPE`)
+  ALTER TABLE `extend_task` ADD CONSTRAINT `extend_task_pky` PRIMARY KEY (`hotel_cd`, `target_ym`, `type`)
   ;
 --   *** ------------------------------------
 --  *** Table OTA_HOTEL_RELATION
 --   *** ------------------------------------
 
-  ALTER TABLE `OTA_HOTEL_RELATION` ADD CONSTRAINT `OTA_HOTEL_RELATION_PKY` PRIMARY KEY (`OTA_HOTEL_RELATION_ID`)
+  ALTER TABLE `ota_hotel_relation` ADD CONSTRAINT `ota_hotel_relation_pky` PRIMARY KEY (`ota_hotel_relation_id`)
   ;
 --   *** ------------------------------------
 --  *** Table CHECKSHEET_FIX_9XG
 --   *** ------------------------------------
 
-  ALTER TABLE `CHECKSHEET_FIX_9XG` ADD CONSTRAINT `CHECKSHEET_FIX_9XG_PKY` PRIMARY KEY (`CHECKSHEET_YM`, `HOTEL_CD`)
+  ALTER TABLE `checksheet_fix_9xg` ADD CONSTRAINT `checksheet_fix_9xg_pky` PRIMARY KEY (`checksheet_ym`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table PARTNER_BOOK_CUSTOMER_DTL
 --   *** ------------------------------------
 
-  ALTER TABLE `PARTNER_BOOK_CUSTOMER_DTL` ADD CONSTRAINT `PARTNER_BOOK_CUSTOMER_DTL_PKY` PRIMARY KEY (`SITE_CD`)
+  ALTER TABLE `partner_book_customer_dtl` ADD CONSTRAINT `partner_book_customer_dtl_pky` PRIMARY KEY (`site_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table MEMBER_MAIL
 --   *** ------------------------------------
 
-  ALTER TABLE `MEMBER_MAIL` ADD CONSTRAINT `MEMBER_MAIL_PKY` PRIMARY KEY (`MEMBER_MAIL_CD`)
+  ALTER TABLE `member_mail` ADD CONSTRAINT `member_mail_pky` PRIMARY KEY (`member_mail_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table MEMBER_FORCED_STOP_MAIL
 --   *** ------------------------------------
 
-  ALTER TABLE `MEMBER_FORCED_STOP_MAIL` ADD CONSTRAINT `MEMBER_FORCED_STOP_MAIL_PKY` PRIMARY KEY (`MEMBER_CD`)
+  ALTER TABLE `member_forced_stop_mail` ADD CONSTRAINT `member_forced_stop_mail_pky` PRIMARY KEY (`member_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_YDP_BR
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_YDP_BR` ADD CONSTRAINT `HOTEL_YDP_BR_PKY` PRIMARY KEY (`HOTEL_CD`)
+  ALTER TABLE `hotel_ydp_br` ADD CONSTRAINT `hotel_ydp_br_pky` PRIMARY KEY (`hotel_cd`)
   ;
  
---  ALTER TABLE `HOTEL_YDP_BR` MODIFY (`HOTEL_CD_YDP` NOT NULL ENABLE);
-  ALTER TABLE `HOTEL_YDP_BR` MODIFY `HOTEL_CD_YDP` varchar(10) BINARY NOT NULL ;
+--  ALTER TABLE `hotel_ydp_br` MODIFY (`hotel_cd_ydp` NOT NULL ENABLE);
+  ALTER TABLE `hotel_ydp_br` MODIFY `hotel_cd_ydp` varchar(10) BINARY NOT NULL ;
 
 --   *** ------------------------------------
 --  *** Table BILLPAY_PTN_TYPE_STOCK
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAY_PTN_TYPE_STOCK` ADD CONSTRAINT `BILLPAY_PTN_TYPE_STOCK_PKY` PRIMARY KEY (`BILLPAY_YM`, `SITE_CD`, `STOCK_TYPE`, `STOCK_RATE`)
+  ALTER TABLE `billpay_ptn_type_stock` ADD CONSTRAINT `billpay_ptn_type_stock_pky` PRIMARY KEY (`billpay_ym`, `site_cd`, `stock_type`, `stock_rate`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAYED_HR_GRANTS_9XG
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAYED_HR_GRANTS_9XG` ADD CONSTRAINT `BILLPAYED_HR_GRANTS_9XG_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`, `OPERATION_YMD`, `WELFARE_GRANTS_ID`)
+  ALTER TABLE `billpayed_hr_grants_9xg` ADD CONSTRAINT `billpayed_hr_grants_9xg_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`, `operation_ymd`, `welfare_grants_id`)
   ;
 --   *** ------------------------------------
 --  *** Table GROUP_BUYING_AUTHORI
 --   *** ------------------------------------
 
-  ALTER TABLE `GROUP_BUYING_AUTHORI` ADD CONSTRAINT `GROUP_BUYING_AUTHORI_PKY` PRIMARY KEY (`ORDER_ID`)
+  ALTER TABLE `group_buying_authori` ADD CONSTRAINT `group_buying_authori_pky` PRIMARY KEY (`order_id`)
   ;
 --   *** ------------------------------------
 --  *** Table LOG_SECURITY_07
 --   *** ------------------------------------
 
-  ALTER TABLE `LOG_SECURITY_07` ADD CONSTRAINT `LOG_SECURITY_07_PKY` PRIMARY KEY (`SECURITY_CD`)
+  ALTER TABLE `log_security_07` ADD CONSTRAINT `log_security_07_pky` PRIMARY KEY (`security_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table POINT_CAMP_WINNING_RSV
 --   *** ------------------------------------
 
-  ALTER TABLE `POINT_CAMP_WINNING_RSV` ADD CONSTRAINT `POINT_CAMP_WINNING_RSV_PKY` PRIMARY KEY (`RESERVE_CD`, `POINT_CAMP_CD`)
+  ALTER TABLE `point_camp_winning_rsv` ADD CONSTRAINT `point_camp_winning_rsv_pky` PRIMARY KEY (`reserve_cd`, `point_camp_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAYED_HR_GRANTS
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAYED_HR_GRANTS` ADD CONSTRAINT `BILLPAYED_HR_GRANTS_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`, `OPERATION_YMD`, `WELFARE_GRANTS_ID`)
+  ALTER TABLE `billpayed_hr_grants` ADD CONSTRAINT `billpayed_hr_grants_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`, `operation_ymd`, `welfare_grants_id`)
   ;
 --   *** ------------------------------------
 --  *** Table CHECKSHEET_BOOK
 --   *** ------------------------------------
 
-  ALTER TABLE `CHECKSHEET_BOOK` ADD CONSTRAINT `CHECKSHEET_BOOK_PKY` PRIMARY KEY (`CHECKSHEET_YM`, `HOTEL_CD`)
+  ALTER TABLE `checksheet_book` ADD CONSTRAINT `checksheet_book_pky` PRIMARY KEY (`checksheet_ym`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table CHECKSHEET_HOTEL_FEE_BASE2
 --   *** ------------------------------------
 
-  ALTER TABLE `CHECKSHEET_HOTEL_FEE_BASE2` ADD CONSTRAINT `CHECKSHEET_HOTEL_FEE_BASE2_PKY` PRIMARY KEY (`CHECKSHEET_YM`, `HOTEL_CD`)
+  ALTER TABLE `checksheet_hotel_fee_base2` ADD CONSTRAINT `checksheet_hotel_fee_base2_pky` PRIMARY KEY (`checksheet_ym`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table LANDMARK_CATEGORY_MATCH
 --   *** ------------------------------------
 
-  ALTER TABLE `LANDMARK_CATEGORY_MATCH` ADD CONSTRAINT `LANDMARK_CATEGORY_MATCH_PKY` PRIMARY KEY (`LANDMARK_ID`, `CATEGORY_2ND_ID`)
+  ALTER TABLE `landmark_category_match` ADD CONSTRAINT `landmark_category_match_pky` PRIMARY KEY (`landmark_id`, `category_2nd_id`)
   ;
 --   *** ------------------------------------
 --  *** Table RANKING_HOTEL
 --   *** ------------------------------------
 
-  ALTER TABLE `RANKING_HOTEL` ADD CONSTRAINT `RANKING_HOTEL_PKY` PRIMARY KEY (`HOTEL_CD`, `RANKING_UNIT`)
+  ALTER TABLE `ranking_hotel` ADD CONSTRAINT `ranking_hotel_pky` PRIMARY KEY (`hotel_cd`, `ranking_unit`)
   ;
 --   *** ------------------------------------
 --  *** Table YAHOO_POINT_PLUS_PLAN
 --   *** ------------------------------------
 
-  ALTER TABLE `YAHOO_POINT_PLUS_PLAN` ADD CONSTRAINT `YAHOO_POINT_PLUS_PLAN_PKY` PRIMARY KEY (`POINT_PLUS_ID`, `PLAN_ID`)
+  ALTER TABLE `yahoo_point_plus_plan` ADD CONSTRAINT `yahoo_point_plus_plan_pky` PRIMARY KEY (`point_plus_id`, `plan_id`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_CHARGE_DISCOUNT
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_CHARGE_DISCOUNT` ADD CONSTRAINT `RESERVE_CHARGE_DISCOUNT_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`, `DISCOUNT_FACTOR_ID`)
+  ALTER TABLE `reserve_charge_discount` ADD CONSTRAINT `reserve_charge_discount_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`, `discount_factor_id`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_SPEC2
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_SPEC2` ADD CONSTRAINT `ROOM_SPEC2_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_ID`, `ELEMENT_ID`)
+  ALTER TABLE `room_spec2` ADD CONSTRAINT `room_spec2_pky` PRIMARY KEY (`hotel_cd`, `room_id`, `element_id`)
   ;
 --   *** ------------------------------------
 --  *** Table POINT_CAMP_ORDER
 --   *** ------------------------------------
 
-  ALTER TABLE `POINT_CAMP_ORDER` ADD CONSTRAINT `POINT_CAMP_ORDER_PKY` PRIMARY KEY (`POINT_CAMP_CD`, `MEMBER_CD`)
+  ALTER TABLE `point_camp_order` ADD CONSTRAINT `point_camp_order_pky` PRIMARY KEY (`point_camp_cd`, `member_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_CHARGE2
 --   *** ------------------------------------
 
--- 存在しない  ALTER TABLE `ROOM_CHARGE2` ADD CONSTRAINT `ROOM_CHARGE2_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_CD`, `PLAN_CD`, `PARTNER_GROUP_ID`, `DATE_YMD`)  ;
+-- 存在しない  ALTER TABLE `room_charge2` ADD CONSTRAINT `room_charge2_pky` PRIMARY KEY (`hotel_cd`, `room_cd`, `plan_cd`, `partner_group_id`, `date_ymd`)  ;
 --   *** ------------------------------------
 --  *** Table RECEIPT_POWER
 --   *** ------------------------------------
 
-  ALTER TABLE `RECEIPT_POWER` ADD CONSTRAINT `RECEIPT_POWER_PKY` PRIMARY KEY (`ID`)
+  ALTER TABLE `receipt_power` ADD CONSTRAINT `receipt_power_pky` PRIMARY KEY (`id`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_CAMP_PLAN_GOTO
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_CAMP_PLAN_GOTO` ADD CONSTRAINT `HOTEL_CAMP_PLAN_GOTO_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_CD`, `PLAN_CD`, `CAMP_CD`)
+  ALTER TABLE `hotel_camp_plan_goto` ADD CONSTRAINT `hotel_camp_plan_goto_pky` PRIMARY KEY (`hotel_cd`, `room_cd`, `plan_cd`, `camp_cd`)
   ;
  
---  ALTER TABLE `HOTEL_CAMP_PLAN_GOTO` MODIFY (`DISPLAY_STATUS` NOT NULL ENABLE);
-  ALTER TABLE `HOTEL_CAMP_PLAN_GOTO` MODIFY `DISPLAY_STATUS` tinyint NOT NULL ;
+--  ALTER TABLE `hotel_camp_plan_goto` MODIFY (`display_status` NOT NULL ENABLE);
+  ALTER TABLE `hotel_camp_plan_goto` MODIFY `display_status` tinyint NOT NULL ;
 
 --   *** ------------------------------------
 --  *** Table BILLPAYED_YAHOO_9XG
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAYED_YAHOO_9XG` ADD CONSTRAINT `BILLPAYED_YAHOO_9XG_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`, `OPERATION_YMD`)
+  ALTER TABLE `billpayed_yahoo_9xg` ADD CONSTRAINT `billpayed_yahoo_9xg_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`, `operation_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_CANCEL_RATE
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_CANCEL_RATE` ADD CONSTRAINT `RESERVE_CANCEL_RATE_PKY` PRIMARY KEY (`RESERVE_CD`, `DAYS`)
+  ALTER TABLE `reserve_cancel_rate` ADD CONSTRAINT `reserve_cancel_rate_pky` PRIMARY KEY (`reserve_cd`, `days`)
   ;
 --   *** ------------------------------------
 --  *** Table OTA_PLAN_RELATION
 --   *** ------------------------------------
 
-  ALTER TABLE `OTA_PLAN_RELATION` ADD CONSTRAINT `OTA_PLAN_RELATION_PKY` PRIMARY KEY (`OTA_PLAN_RELATION_ID`)
+  ALTER TABLE `ota_plan_relation` ADD CONSTRAINT `ota_plan_relation_pky` PRIMARY KEY (`ota_plan_relation_id`)
   ;
 --   *** ------------------------------------
 --  *** Table RECORD_HOTEL_VIEW
 --   *** ------------------------------------
 
-  ALTER TABLE `RECORD_HOTEL_VIEW` ADD CONSTRAINT `RECORD_HOTEL_VIEW_PKY` PRIMARY KEY (`DATE_YMD`, `HOTEL_CD`, `PAGE_TYPE`)
+  ALTER TABLE `record_hotel_view` ADD CONSTRAINT `record_hotel_view_pky` PRIMARY KEY (`date_ymd`, `hotel_cd`, `page_type`)
   ;
 --   *** ------------------------------------
 --  *** Table BR_POINT_BOOK_V4_DRAFT
 --   *** ------------------------------------
 
-  ALTER TABLE `BR_POINT_BOOK_V4_DRAFT` ADD CONSTRAINT `BR_POINT_BOOK_V4_DRAFT_PKY` PRIMARY KEY (`BR_POINT_CD`)
+  ALTER TABLE `br_point_book_v4_draft` ADD CONSTRAINT `br_point_book_v4_draft_pky` PRIMARY KEY (`br_point_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAYED_HOTEL_9XG
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAYED_HOTEL_9XG` ADD CONSTRAINT `BILLPAYED_HOTEL_9XG_PKY` PRIMARY KEY (`BILLPAY_YM`, `HOTEL_CD`)
+  ALTER TABLE `billpayed_hotel_9xg` ADD CONSTRAINT `billpayed_hotel_9xg_pky` PRIMARY KEY (`billpay_ym`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table MAST_STATIONS
 --   *** ------------------------------------
 
-  ALTER TABLE `MAST_STATIONS` ADD CONSTRAINT `MAST_STATIONS_PKY` PRIMARY KEY (`STATION_ID`)
+  ALTER TABLE `mast_stations` ADD CONSTRAINT `mast_stations_pky` PRIMARY KEY (`station_id`)
   ;
   
---  ALTER TABLE `MAST_STATIONS` MODIFY (`STATION_ID` NOT NULL ENABLE);
-  ALTER TABLE `MAST_STATIONS` MODIFY `STATION_ID` varchar(7) BINARY NOT NULL ;
+--  ALTER TABLE `mast_stations` MODIFY (`station_id` NOT NULL ENABLE);
+  ALTER TABLE `mast_stations` MODIFY `station_id` varchar(7) BINARY NOT NULL ;
 
 --   *** ------------------------------------
 --  *** Table HOTEL_INSURANCE_WEATHER
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_INSURANCE_WEATHER` ADD CONSTRAINT `HOTEL_INSURANCE_WEATHER_PKY` PRIMARY KEY (`HOTEL_CD`)
+  ALTER TABLE `hotel_insurance_weather` ADD CONSTRAINT `hotel_insurance_weather_pky` PRIMARY KEY (`hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_SPOT
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_SPOT` ADD CONSTRAINT `HOTEL_SPOT_PKY` PRIMARY KEY (`SPOT_ID`, `HOTEL_CD`)
+  ALTER TABLE `hotel_spot` ADD CONSTRAINT `hotel_spot_pky` PRIMARY KEY (`spot_id`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_GUEST
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_GUEST` ADD CONSTRAINT `RESERVE_GUEST_PKY` PRIMARY KEY (`RESERVE_CD`)
+  ALTER TABLE `reserve_guest` ADD CONSTRAINT `reserve_guest_pky` PRIMARY KEY (`reserve_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table LOG_SECURITY_05
 --   *** ------------------------------------
 
-  ALTER TABLE `LOG_SECURITY_05` ADD CONSTRAINT `LOG_SECURITY_05_PKY` PRIMARY KEY (`SECURITY_CD`)
+  ALTER TABLE `log_security_05` ADD CONSTRAINT `log_security_05_pky` PRIMARY KEY (`security_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_PLAN_RANKING2
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_PLAN_RANKING2` ADD CONSTRAINT `ROOM_PLAN_RANKING2_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_ID`, `PLAN_ID`, `WDAY`)
+  ALTER TABLE `room_plan_ranking2` ADD CONSTRAINT `room_plan_ranking2_pky` PRIMARY KEY (`hotel_cd`, `room_id`, `plan_id`, `wday`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_RECEIPT
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_RECEIPT` ADD CONSTRAINT `RESERVE_RECEIPT_PKY` PRIMARY KEY (`RESERVE_CD`)
+  ALTER TABLE `reserve_receipt` ADD CONSTRAINT `reserve_receipt_pky` PRIMARY KEY (`reserve_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table MAST_REVIEW
 --   *** ------------------------------------
 
-  ALTER TABLE `MAST_REVIEW` ADD CONSTRAINT `MAST_REVIEW_PKY` PRIMARY KEY (`REVIEW_ID`)
+  ALTER TABLE `mast_review` ADD CONSTRAINT `mast_review_pky` PRIMARY KEY (`review_id`)
   ;
 --   *** ------------------------------------
 --  *** Table GROUP_BUYING_HOTEL
 --   *** ------------------------------------
 
-  ALTER TABLE `GROUP_BUYING_HOTEL` ADD CONSTRAINT `GROUP_BUYING_HOTEL_PKY` PRIMARY KEY (`DEAL_ID`)
+  ALTER TABLE `group_buying_hotel` ADD CONSTRAINT `group_buying_hotel_pky` PRIMARY KEY (`deal_id`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_PLAN_REMOVED
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_PLAN_REMOVED` ADD CONSTRAINT `ROOM_PLAN_REMOVED_PKY` PRIMARY KEY (`ROOM_PLAN_REMOVED_ID`)
+  ALTER TABLE `room_plan_removed` ADD CONSTRAINT `room_plan_removed_pky` PRIMARY KEY (`room_plan_removed_id`)
   ;
 --   *** ------------------------------------
 --  *** Table CHECKSHEET_CUSTOMER
 --   *** ------------------------------------
 
-  ALTER TABLE `CHECKSHEET_CUSTOMER` ADD CONSTRAINT `CHECKSHEET_CUSTOMER_PKY` PRIMARY KEY (`CHECKSHEET_YM`, `CUSTOMER_ID`)
+  ALTER TABLE `checksheet_customer` ADD CONSTRAINT `checksheet_customer_pky` PRIMARY KEY (`checksheet_ym`, `customer_id`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_AKAFU
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_AKAFU` ADD CONSTRAINT `RESERVE_AKAFU_PKY` PRIMARY KEY (`RESERVE_CD`)
+  ALTER TABLE `reserve_akafu` ADD CONSTRAINT `reserve_akafu_pky` PRIMARY KEY (`reserve_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_JR
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_JR` ADD CONSTRAINT `ROOM_JR_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_ID`)
+  ALTER TABLE `room_jr` ADD CONSTRAINT `room_jr_pky` PRIMARY KEY (`hotel_cd`, `room_id`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_STATIONS_SURVEY
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_STATIONS_SURVEY` ADD CONSTRAINT `HOTEL_STATIONS_SURVEY_PKY` PRIMARY KEY (`STATION_ID`, `HOTEL_CD`)
+  ALTER TABLE `hotel_stations_survey` ADD CONSTRAINT `hotel_stations_survey_pky` PRIMARY KEY (`station_id`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table MEMBER_CREDITCARD
 --   *** ------------------------------------
 
-  ALTER TABLE `MEMBER_CREDITCARD` ADD CONSTRAINT `MEMBER_CREDITCARD_PKY` PRIMARY KEY (`PARTNER_CD`, `MEMBER_CD`, `BRANCH_NO`)
+  ALTER TABLE `member_creditcard` ADD CONSTRAINT `member_creditcard_pky` PRIMARY KEY (`partner_cd`, `member_cd`, `branch_no`)
   ;
 --   *** ------------------------------------
 --  *** Table MAST_RECOMMEND
 --   *** ------------------------------------
 
-  ALTER TABLE `MAST_RECOMMEND` ADD CONSTRAINT `MAST_RECOMMEND_PKY` PRIMARY KEY (`RECOMMEND_ID`)
+  ALTER TABLE `mast_recommend` ADD CONSTRAINT `mast_recommend_pky` PRIMARY KEY (`recommend_id`)
   ;
 --   *** ------------------------------------
 --  *** Table PARTNER_BOOK
 --   *** ------------------------------------
 
-  ALTER TABLE `PARTNER_BOOK` ADD CONSTRAINT `PARTNER_BOOK_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`)
+  ALTER TABLE `partner_book` ADD CONSTRAINT `partner_book_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table PARTNER_BOOK_PARTNER
 --   *** ------------------------------------
 
-  ALTER TABLE `PARTNER_BOOK_PARTNER` ADD CONSTRAINT `PARTNER_BOOK_PARTNER_PKY` PRIMARY KEY (`CUSTOMER_ID`, `SITE_CD`, `SITE_TYPE`)
+  ALTER TABLE `partner_book_partner` ADD CONSTRAINT `partner_book_partner_pky` PRIMARY KEY (`customer_id`, `site_cd`, `site_type`)
   ;
 --   *** ------------------------------------
 --  *** Table PARTNER_OAUTH2_MEMBER
 --   *** ------------------------------------
 
-  ALTER TABLE `PARTNER_OAUTH2_MEMBER` ADD CONSTRAINT `PARTNER_OAUTH2_MEMBER_PKY` PRIMARY KEY (`CLIENT_ID`, `MEMBER_CD`)
+  ALTER TABLE `partner_oauth2_member` ADD CONSTRAINT `partner_oauth2_member_pky` PRIMARY KEY (`client_id`, `member_cd`)
   ;
  
-  ALTER TABLE `PARTNER_OAUTH2_MEMBER` ADD CONSTRAINT `PARTNER_OAUTH2_MEMBER_UNQ_01` UNIQUE (`AUTHORIZATION_CD`)
+  ALTER TABLE `partner_oauth2_member` ADD CONSTRAINT `partner_oauth2_member_unq_01` UNIQUE (`authorization_cd`)
   ;
  
-  ALTER TABLE `PARTNER_OAUTH2_MEMBER` ADD CONSTRAINT `PARTNER_OAUTH2_MEMBER_UNQ_02` UNIQUE (`ACCESS_TOKEN`)
+  ALTER TABLE `partner_oauth2_member` ADD CONSTRAINT `partner_oauth2_member_unq_02` UNIQUE (`access_token`)
   ;
  
-  ALTER TABLE `PARTNER_OAUTH2_MEMBER` ADD CONSTRAINT `PARTNER_OAUTH2_MEMBER_UNQ_03` UNIQUE (`CLIENT_ID`, `RELATION_MEMBER_CD`)
+  ALTER TABLE `partner_oauth2_member` ADD CONSTRAINT `partner_oauth2_member_unq_03` UNIQUE (`client_id`, `relation_member_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAY_RSV
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAY_RSV` ADD CONSTRAINT `BILLPAY_RSV_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`)
+  ALTER TABLE `billpay_rsv` ADD CONSTRAINT `billpay_rsv_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_YDP
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_YDP` ADD CONSTRAINT `ROOM_YDP_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_CD`)
+  ALTER TABLE `room_ydp` ADD CONSTRAINT `room_ydp_pky` PRIMARY KEY (`hotel_cd`, `room_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAY_HOTEL_9XG
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAY_HOTEL_9XG` ADD CONSTRAINT `BILLPAY_HOTEL_9XG_PKY` PRIMARY KEY (`BILLPAY_YM`, `HOTEL_CD`)
+  ALTER TABLE `billpay_hotel_9xg` ADD CONSTRAINT `billpay_hotel_9xg_pky` PRIMARY KEY (`billpay_ym`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table CHECKSHEET_HOTEL_GRANTS_9XG
 --   *** ------------------------------------
 
-  ALTER TABLE `CHECKSHEET_HOTEL_GRANTS_9XG` ADD CONSTRAINT `CHECKSHEET_HTL_GRANTS_9XG_PKY` PRIMARY KEY (`CHECKSHEET_YM`, `HOTEL_CD`)
+  ALTER TABLE `checksheet_hotel_grants_9xg` ADD CONSTRAINT `checksheet_htl_grants_9xg_pky` PRIMARY KEY (`checksheet_ym`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table ORICOPAYMENT
 --   *** ------------------------------------
 
-  ALTER TABLE `ORICOPAYMENT` ADD CONSTRAINT `ORICOPAYMENT_PKY` PRIMARY KEY (`DEMAND_DTM`, `SHOP_NM`, `ORDER_CD`)
+  ALTER TABLE `oricopayment` ADD CONSTRAINT `oricopayment_pky` PRIMARY KEY (`demand_dtm`, `shop_nm`, `order_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_CAMP
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_CAMP` ADD CONSTRAINT `RESERVE_CAMP_PKY` PRIMARY KEY (`RESERVE_CD`, `CAMP_CD`)
+  ALTER TABLE `reserve_camp` ADD CONSTRAINT `reserve_camp_pky` PRIMARY KEY (`reserve_cd`, `camp_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_CAMP_GOTO
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_CAMP_GOTO` ADD CONSTRAINT `HOTEL_CAMP_GOTO_PKY` PRIMARY KEY (`CAMP_CD`)
+  ALTER TABLE `hotel_camp_goto` ADD CONSTRAINT `hotel_camp_goto_pky` PRIMARY KEY (`camp_cd`)
   ;
  
---  ALTER TABLE `HOTEL_CAMP_GOTO` MODIFY (`HOTEL_CD` NOT NULL ENABLE);
-  ALTER TABLE `HOTEL_CAMP_GOTO` MODIFY `HOTEL_CD` varchar(10) BINARY NOT NULL ;
+--  ALTER TABLE `hotel_camp_goto` MODIFY (`hotel_cd` NOT NULL ENABLE);
+  ALTER TABLE `hotel_camp_goto` MODIFY `hotel_cd` varchar(10) BINARY NOT NULL ;
  
---  ALTER TABLE `HOTEL_CAMP_GOTO` MODIFY (`CAMP_NM` NOT NULL ENABLE);
-   ALTER TABLE `HOTEL_CAMP_GOTO` MODIFY `CAMP_NM` varchar(96) BINARY NOT NULL ;
+--  ALTER TABLE `hotel_camp_goto` MODIFY (`camp_nm` NOT NULL ENABLE);
+   ALTER TABLE `hotel_camp_goto` MODIFY `camp_nm` varchar(96) BINARY NOT NULL ;
 
---  ALTER TABLE `HOTEL_CAMP_GOTO` MODIFY (`DISPLAY_STATUS` NOT NULL ENABLE);
-   ALTER TABLE `HOTEL_CAMP_GOTO` MODIFY `DISPLAY_STATUS` tinyint NOT NULL ;
+--  ALTER TABLE `hotel_camp_goto` MODIFY (`display_status` NOT NULL ENABLE);
+   ALTER TABLE `hotel_camp_goto` MODIFY `display_status` tinyint NOT NULL ;
 
 --   *** ------------------------------------
 --  *** Table PARTNER_BOOK_ACCOUNT
 --   *** ------------------------------------
 
-  ALTER TABLE `PARTNER_BOOK_ACCOUNT` ADD CONSTRAINT `PARTNER_BOOK_ACCOUNT_PKY` PRIMARY KEY (`CUSTOMER_ID`)
+  ALTER TABLE `partner_book_account` ADD CONSTRAINT `partner_book_account_pky` PRIMARY KEY (`customer_id`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAY_RSV_9XG
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAY_RSV_9XG` ADD CONSTRAINT `BILLPAY_RSV_9XG_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`)
+  ALTER TABLE `billpay_rsv_9xg` ADD CONSTRAINT `billpay_rsv_9xg_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table PLAN_PARTNER_GROUP
 --   *** ------------------------------------
 
-  ALTER TABLE `PLAN_PARTNER_GROUP` ADD CONSTRAINT `PLAN_PARTNER_GROUP_PKY` PRIMARY KEY (`HOTEL_CD`, `PLAN_ID`, `PARTNER_GROUP_ID`)
+  ALTER TABLE `plan_partner_group` ADD CONSTRAINT `plan_partner_group_pky` PRIMARY KEY (`hotel_cd`, `plan_id`, `partner_group_id`)
   ;
 --   *** ------------------------------------
 --  *** Table MEMBER_JWEST
 --   *** ------------------------------------
 
-  ALTER TABLE `MEMBER_JWEST` ADD CONSTRAINT `MEMBER_JWEST_PKY` PRIMARY KEY (`MEMBER_CD`)
+  ALTER TABLE `member_jwest` ADD CONSTRAINT `member_jwest_pky` PRIMARY KEY (`member_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_YDP2
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_YDP2` ADD CONSTRAINT `ROOM_YDP2_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_ID`)
+  ALTER TABLE `room_ydp2` ADD CONSTRAINT `room_ydp2_pky` PRIMARY KEY (`hotel_cd`, `room_id`)
   ;
 --   *** ------------------------------------
 --  *** Table ZAP_MEMBER_EPARK
 --   *** ------------------------------------
 
-  ALTER TABLE `ZAP_MEMBER_EPARK` ADD CONSTRAINT `ZAP_MEMBER_EPARK_PKY` PRIMARY KEY (`MEMBER_CD`)
+  ALTER TABLE `zap_member_epark` ADD CONSTRAINT `zap_member_epark_pky` PRIMARY KEY (`member_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table MAST_PLAN_ELEMENT_VALUE
 --   *** ------------------------------------
 
-  ALTER TABLE `MAST_PLAN_ELEMENT_VALUE` ADD CONSTRAINT `MAST_PLAN_ELEMENT_VALUE_PKY` PRIMARY KEY (`ELEMENT_ID`, `ELEMENT_VALUE_ID`)
+  ALTER TABLE `mast_plan_element_value` ADD CONSTRAINT `mast_plan_element_value_pky` PRIMARY KEY (`element_id`, `element_value_id`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_DISPOSE
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_DISPOSE` ADD CONSTRAINT `RESERVE_DISPOSE_PKY` PRIMARY KEY (`DISPOSE_ID`)
+  ALTER TABLE `reserve_dispose` ADD CONSTRAINT `reserve_dispose_pky` PRIMARY KEY (`dispose_id`)
   ;
 --   *** ------------------------------------
 --  *** Table BR_POINT_BOOK_V4_WK
 --   *** ------------------------------------
 
-  ALTER TABLE `BR_POINT_BOOK_V4_WK` ADD CONSTRAINT `BR_POINT_BOOK_V4_WK_PKY` PRIMARY KEY (`BR_POINT_CD`)
+  ALTER TABLE `br_point_book_v4_wk` ADD CONSTRAINT `br_point_book_v4_wk_pky` PRIMARY KEY (`br_point_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_PLAN_MATCH_REMOVED
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_PLAN_MATCH_REMOVED` ADD CONSTRAINT `ROOM_PLAN_MATCH_REMOVED_PKY` PRIMARY KEY (`ROOM_PLAN_MATCH_REMOVED_ID`)
+  ALTER TABLE `room_plan_match_removed` ADD CONSTRAINT `room_plan_match_removed_pky` PRIMARY KEY (`room_plan_match_removed_id`)
   ;
 --   *** ------------------------------------
 --  *** Table LANDMARK_BASIC_INFO
 --   *** ------------------------------------
 
-  ALTER TABLE `LANDMARK_BASIC_INFO` ADD CONSTRAINT `LANDMARK_BASIC_INFO_PKY` PRIMARY KEY (`LANDMARK_ID`, `ITEM_ID`)
+  ALTER TABLE `landmark_basic_info` ADD CONSTRAINT `landmark_basic_info_pky` PRIMARY KEY (`landmark_id`, `item_id`)
   ;
 --   *** ------------------------------------
 --  *** Table MAST_TAX
 --   *** ------------------------------------
 
-  ALTER TABLE `MAST_TAX` ADD CONSTRAINT `MAST_TAX_PKY` PRIMARY KEY (`TAX_ID`)
+  ALTER TABLE `mast_tax` ADD CONSTRAINT `mast_tax_pky` PRIMARY KEY (`tax_id`)
   ;
 --   *** ------------------------------------
 --  *** Table LOG_NOTIFY
 --   *** ------------------------------------
 
-  ALTER TABLE `LOG_NOTIFY` ADD CONSTRAINT `LOG_NOTIFY_PKY` PRIMARY KEY (`REQUEST_ID`)
+  ALTER TABLE `log_notify` ADD CONSTRAINT `log_notify_pky` PRIMARY KEY (`request_id`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAYED_PTN_TYPE_GRANTS
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAYED_PTN_TYPE_GRANTS` ADD CONSTRAINT `BILLPAYED_PTN_TYPE_GRANTS_PKY` PRIMARY KEY (`BILLPAY_YM`, `SITE_CD`, `WELFARE_GRANTS_ID`)
+  ALTER TABLE `billpayed_ptn_type_grants` ADD CONSTRAINT `billpayed_ptn_type_grants_pky` PRIMARY KEY (`billpay_ym`, `site_cd`, `welfare_grants_id`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_POWER_DEV
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_POWER_DEV` ADD CONSTRAINT `RESERVE_POWER_DEV_PKY` PRIMARY KEY (`RESERVE_CD`)
+  ALTER TABLE `reserve_power_dev` ADD CONSTRAINT `reserve_power_dev_pky` PRIMARY KEY (`reserve_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table WELFARE_GRANTS
 --   *** ------------------------------------
 
-  ALTER TABLE `WELFARE_GRANTS` ADD CONSTRAINT `WELFARE_GRANTS_PKY` PRIMARY KEY (`WELFARE_GRANTS_ID`)
+  ALTER TABLE `welfare_grants` ADD CONSTRAINT `welfare_grants_pky` PRIMARY KEY (`welfare_grants_id`)
   ;
 --   *** ------------------------------------
 --  *** Table MAST_WARDZONE_DETAIL
 --   *** ------------------------------------
 
-  ALTER TABLE `MAST_WARDZONE_DETAIL` ADD CONSTRAINT `MAST_WARDZONE_DETAIL_PKY` PRIMARY KEY (`WARDZONE_ID`, `WARD_ID`)
+  ALTER TABLE `mast_wardzone_detail` ADD CONSTRAINT `mast_wardzone_detail_pky` PRIMARY KEY (`wardzone_id`, `ward_id`)
   ;
 --   *** ------------------------------------
 --  *** Table PARTNER_GROUP
 --   *** ------------------------------------
 
-  ALTER TABLE `PARTNER_GROUP` ADD CONSTRAINT `PARTNER_GROUP_PKY` PRIMARY KEY (`PARTNER_GROUP_ID`)
+  ALTER TABLE `partner_group` ADD CONSTRAINT `partner_group_pky` PRIMARY KEY (`partner_group_id`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAY_BOOK_9XG
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAY_BOOK_9XG` ADD CONSTRAINT `BILLPAY_BOOK_9XG_PKY` PRIMARY KEY (`BILLPAY_CD`, `BILLPAY_BRANCH_NO`)
+  ALTER TABLE `billpay_book_9xg` ADD CONSTRAINT `billpay_book_9xg_pky` PRIMARY KEY (`billpay_cd`, `billpay_branch_no`)
   ;
 --   *** ------------------------------------
 --  *** Table YDP_BASE_TIME
 --   *** ------------------------------------
 
-  ALTER TABLE `YDP_BASE_TIME` ADD CONSTRAINT `YDP_BASE_TIME_PKY` PRIMARY KEY (`PARTNER_CD`, `COOPERATION_CD`)
+  ALTER TABLE `ydp_base_time` ADD CONSTRAINT `ydp_base_time_pky` PRIMARY KEY (`partner_cd`, `cooperation_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table CHECKSHEET_HOTEL_CREDIT
 --   *** ------------------------------------
 
-  ALTER TABLE `CHECKSHEET_HOTEL_CREDIT` ADD CONSTRAINT `CHECKSHEET_HOTEL_CREDIT_PKY` PRIMARY KEY (`CHECKSHEET_YM`, `HOTEL_CD`)
+  ALTER TABLE `checksheet_hotel_credit` ADD CONSTRAINT `checksheet_hotel_credit_pky` PRIMARY KEY (`checksheet_ym`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table CHARGE_REMIND
 --   *** ------------------------------------
 
-  ALTER TABLE `CHARGE_REMIND` ADD CONSTRAINT `CHARGE_REMIND_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_ID`, `PLAN_ID`, `PARTNER_GROUP_ID`, `CAPACITY`)
+  ALTER TABLE `charge_remind` ADD CONSTRAINT `charge_remind_pky` PRIMARY KEY (`hotel_cd`, `room_id`, `plan_id`, `partner_group_id`, `capacity`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_TRACE
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_TRACE` ADD CONSTRAINT `RESERVE_TRACE_PKY` PRIMARY KEY (`TRANSACTION_CD`, `TYPE`)
+  ALTER TABLE `reserve_trace` ADD CONSTRAINT `reserve_trace_pky` PRIMARY KEY (`transaction_cd`, `type`)
   ;
 --   *** ------------------------------------
 --  *** Table PARTNER_OPENID_MEMBER
 --   *** ------------------------------------
 
-  ALTER TABLE `PARTNER_OPENID_MEMBER` ADD CONSTRAINT `PARTNER_OPENID_MEMBER_PKY` PRIMARY KEY (`CLIENT_ID`, `MEMBER_CD`)
+  ALTER TABLE `partner_openid_member` ADD CONSTRAINT `partner_openid_member_pky` PRIMARY KEY (`client_id`, `member_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table MAST_VR_HOTEL_CATEGORY
 --   *** ------------------------------------
 
-  ALTER TABLE `MAST_VR_HOTEL_CATEGORY` ADD CONSTRAINT `MAST_VR_HOTEL_CATEGORY_PKY` PRIMARY KEY (`CATEGORY_CD`)
+  ALTER TABLE `mast_vr_hotel_category` ADD CONSTRAINT `mast_vr_hotel_category_pky` PRIMARY KEY (`category_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table GIFT_ORDER
 --   *** ------------------------------------
 
-  ALTER TABLE `GIFT_ORDER` ADD CONSTRAINT `GIFT_ORDER_PKY` PRIMARY KEY (`GIFT_ORDER_CD`)
+  ALTER TABLE `gift_order` ADD CONSTRAINT `gift_order_pky` PRIMARY KEY (`gift_order_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table NOTIFY_STAY
 --   *** ------------------------------------
 
-  ALTER TABLE `NOTIFY_STAY` ADD CONSTRAINT `NOTIFY_STAY_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`)
+  ALTER TABLE `notify_stay` ADD CONSTRAINT `notify_stay_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_CHARGE_YHO_BAT_TMP_8
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_CHARGE_YHO_BAT_TMP_8` ADD CONSTRAINT `ROOM_CHARGE_YHO_BAT_TMP_8_PKY` PRIMARY KEY (`REC_TYPE`, `HOTEL_CD`, `ROOM_CD`, `PLAN_CD`, `DATE_YMD`)
+  ALTER TABLE `room_charge_yho_bat_tmp_8` ADD CONSTRAINT `room_charge_yho_bat_tmp_8_pky` PRIMARY KEY (`rec_type`, `hotel_cd`, `room_cd`, `plan_cd`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table MAST_HOTEL_ELEMENT
 --   *** ------------------------------------
 
-  ALTER TABLE `MAST_HOTEL_ELEMENT` ADD CONSTRAINT `MAST_HOTEL_ELEMENT_PKY` PRIMARY KEY (`ELEMENT_ID`)
+  ALTER TABLE `mast_hotel_element` ADD CONSTRAINT `mast_hotel_element_pky` PRIMARY KEY (`element_id`)
   ;
 --   *** ------------------------------------
 --  *** Table WELFARE_MATCH
 --   *** ------------------------------------
 
-  ALTER TABLE `WELFARE_MATCH` ADD CONSTRAINT `WELFARE_MATCH_PKY` PRIMARY KEY (`WELFARE_MATCH_ID`)
+  ALTER TABLE `welfare_match` ADD CONSTRAINT `welfare_match_pky` PRIMARY KEY (`welfare_match_id`)
   ;
 --   *** ------------------------------------
 --  *** Table LOG_EXTEND
 --   *** ------------------------------------
 
-  ALTER TABLE `LOG_EXTEND` ADD CONSTRAINT `LOG_EXTEND_PKY` PRIMARY KEY (`HOTEL_CD`, `AFTER_YM`)
+  ALTER TABLE `log_extend` ADD CONSTRAINT `log_extend_pky` PRIMARY KEY (`hotel_cd`, `after_ym`)
   ;
 --   *** ------------------------------------
 --  *** Table REPORT_LEAD_TIME
 --   *** ------------------------------------
 
-  ALTER TABLE `REPORT_LEAD_TIME` ADD CONSTRAINT `REPORT_LEAD_TIME_PKY` PRIMARY KEY (`HOTEL_CD`, `DATE_YMD`, `LEAD_DAY`)
+  ALTER TABLE `report_lead_time` ADD CONSTRAINT `report_lead_time_pky` PRIMARY KEY (`hotel_cd`, `date_ymd`, `lead_day`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_PLAN_MEDIA
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_PLAN_MEDIA` ADD CONSTRAINT `ROOM_PLAN_MEDIA_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_CD`, `PLAN_CD`, `MEDIA_NO`)
+  ALTER TABLE `room_plan_media` ADD CONSTRAINT `room_plan_media_pky` PRIMARY KEY (`hotel_cd`, `room_cd`, `plan_cd`, `media_no`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_CHARGE_YHO_BAT_TMP_10
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_CHARGE_YHO_BAT_TMP_10` ADD CONSTRAINT `ROOM_CHARGE_YHO_BAT_TMP_10_PKY` PRIMARY KEY (`REC_TYPE`, `HOTEL_CD`, `ROOM_CD`, `PLAN_CD`, `DATE_YMD`)
+  ALTER TABLE `room_charge_yho_bat_tmp_10` ADD CONSTRAINT `room_charge_yho_bat_tmp_10_pky` PRIMARY KEY (`rec_type`, `hotel_cd`, `room_cd`, `plan_cd`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_SERVICE
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_SERVICE` ADD CONSTRAINT `HOTEL_SERVICE_PKY` PRIMARY KEY (`HOTEL_CD`, `ELEMENT_ID`)
+  ALTER TABLE `hotel_service` ADD CONSTRAINT `hotel_service_pky` PRIMARY KEY (`hotel_cd`, `element_id`)
   ;
 --   *** ------------------------------------
 --  *** Table PLAN_MEDIA
 --   *** ------------------------------------
 
-  ALTER TABLE `PLAN_MEDIA` ADD CONSTRAINT `PLAN_MEDIA_PKY` PRIMARY KEY (`HOTEL_CD`, `PLAN_ID`, `MEDIA_NO`)
+  ALTER TABLE `plan_media` ADD CONSTRAINT `plan_media_pky` PRIMARY KEY (`hotel_cd`, `plan_id`, `media_no`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_PLAN_MATCH
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_PLAN_MATCH` ADD CONSTRAINT `ROOM_PLAN_MATCH_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_ID`, `PLAN_ID`)
+  ALTER TABLE `room_plan_match` ADD CONSTRAINT `room_plan_match_pky` PRIMARY KEY (`hotel_cd`, `room_id`, `plan_id`)
   ;
 --   *** ------------------------------------
 --  *** Table REPORT_PLAN2
 --   *** ------------------------------------
 
-  ALTER TABLE `REPORT_PLAN2` ADD CONSTRAINT `REPORT_PLAN2_PKY` PRIMARY KEY (`HOTEL_CD`, `DATE_YMD`, `ROOM_ID`, `PLAN_ID`)
+  ALTER TABLE `report_plan2` ADD CONSTRAINT `report_plan2_pky` PRIMARY KEY (`hotel_cd`, `date_ymd`, `room_id`, `plan_id`)
   ;
 --   *** ------------------------------------
 --  *** Table MY_HOTEL_RESERVED
 --   *** ------------------------------------
 
-  ALTER TABLE `MY_HOTEL_RESERVED` ADD CONSTRAINT `MY_HOTEL_RESERVED_PKY` PRIMARY KEY (`MEMBER_CD`, `HOTEL_CD`)
+  ALTER TABLE `my_hotel_reserved` ADD CONSTRAINT `my_hotel_reserved_pky` PRIMARY KEY (`member_cd`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_CHARGE_EARLY
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_CHARGE_EARLY` ADD CONSTRAINT `ROOM_CHARGE_EARLY_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_CD`, `PLAN_CD`, `PARTNER_GROUP_ID`, `DATE_YMD`)
+  ALTER TABLE `room_charge_early` ADD CONSTRAINT `room_charge_early_pky` PRIMARY KEY (`hotel_cd`, `room_cd`, `plan_cd`, `partner_group_id`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table PLAN_GRANTS
 --   *** ------------------------------------
 
-  ALTER TABLE `PLAN_GRANTS` ADD CONSTRAINT `PLAN_GRANTS_PKY` PRIMARY KEY (`HOTEL_CD`, `PLAN_ID`)
+  ALTER TABLE `plan_grants` ADD CONSTRAINT `plan_grants_pky` PRIMARY KEY (`hotel_cd`, `plan_id`)
   ;
 --   *** ------------------------------------
 --  *** Table BR_POINT_SERVICE
 --   *** ------------------------------------
 
-  ALTER TABLE `BR_POINT_SERVICE` ADD CONSTRAINT `BR_POINT_SERVICE_PKY` PRIMARY KEY (`SERVICE_CD`)
+  ALTER TABLE `br_point_service` ADD CONSTRAINT `br_point_service_pky` PRIMARY KEY (`service_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_CHARGE_YHO_BAT_TMP_4
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_CHARGE_YHO_BAT_TMP_4` ADD CONSTRAINT `ROOM_CHARGE_YHO_BAT_TMP_4_PKY` PRIMARY KEY (`REC_TYPE`, `HOTEL_CD`, `ROOM_CD`, `PLAN_CD`, `DATE_YMD`)
+  ALTER TABLE `room_charge_yho_bat_tmp_4` ADD CONSTRAINT `room_charge_yho_bat_tmp_4_pky` PRIMARY KEY (`rec_type`, `hotel_cd`, `room_cd`, `plan_cd`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table LOG_SECURITY_06
 --   *** ------------------------------------
 
-  ALTER TABLE `LOG_SECURITY_06` ADD CONSTRAINT `LOG_SECURITY_06_PKY` PRIMARY KEY (`SECURITY_CD`)
+  ALTER TABLE `log_security_06` ADD CONSTRAINT `log_security_06_pky` PRIMARY KEY (`security_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_SUPERVISOR_HOTEL
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_SUPERVISOR_HOTEL` ADD CONSTRAINT `HOTEL_SUPERVISOR_HOTEL_PKY` PRIMARY KEY (`ID`)
+  ALTER TABLE `hotel_supervisor_hotel` ADD CONSTRAINT `hotel_supervisor_hotel_pky` PRIMARY KEY (`id`)
   ;
 --   *** ------------------------------------
 --  *** Table CHARGE_INITIAL
 --   *** ------------------------------------
 
-  ALTER TABLE `CHARGE_INITIAL` ADD CONSTRAINT `CHARGE_INITIAL_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_ID`, `PLAN_ID`, `PARTNER_GROUP_ID`, `CAPACITY`)
+  ALTER TABLE `charge_initial` ADD CONSTRAINT `charge_initial_pky` PRIMARY KEY (`hotel_cd`, `room_id`, `plan_id`, `partner_group_id`, `capacity`)
   ;
 --   *** ------------------------------------
 --  *** Table MEMBER_FREE_RELATION
 --   *** ------------------------------------
 
-  ALTER TABLE `MEMBER_FREE_RELATION` ADD CONSTRAINT `MEMBER_FREE_RELATION_PKY` PRIMARY KEY (`MEMBER_CD`)
+  ALTER TABLE `member_free_relation` ADD CONSTRAINT `member_free_relation_pky` PRIMARY KEY (`member_cd`)
   ;
  
-  ALTER TABLE `MEMBER_FREE_RELATION` ADD CONSTRAINT `MEMBER_FREE_RELATION_UNQ_01` UNIQUE (`MEMBER_FREE_CD`)
+  ALTER TABLE `member_free_relation` ADD CONSTRAINT `member_free_relation_unq_01` UNIQUE (`member_free_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table LOG_BOUNCED_MAIL
 --   *** ------------------------------------
 
-  ALTER TABLE `LOG_BOUNCED_MAIL` ADD CONSTRAINT `LOG_BOUNCED_MAIL_PKY` PRIMARY KEY (`LOG_BOUNCED_MAIL_ID`)
+  ALTER TABLE `log_bounced_mail` ADD CONSTRAINT `log_bounced_mail_pky` PRIMARY KEY (`log_bounced_mail_id`)
   ;
 --   *** ------------------------------------
 --  *** Table GROUP_BUYING_CARD
 --   *** ------------------------------------
 
-  ALTER TABLE `GROUP_BUYING_CARD` ADD CONSTRAINT `GROUP_BUYING_CARD_PKY` PRIMARY KEY (`ORDER_ID`)
+  ALTER TABLE `group_buying_card` ADD CONSTRAINT `group_buying_card_pky` PRIMARY KEY (`order_id`)
   ;
  
---  ALTER TABLE `GROUP_BUYING_CARD` MODIFY (`CARD_NO` NOT NULL ENABLE);
-   ALTER TABLE `GROUP_BUYING_CARD` MODIFY `CARD_NO` varchar(32) BINARY NOT NULL ;
+--  ALTER TABLE `group_buying_card` MODIFY (`card_no` NOT NULL ENABLE);
+   ALTER TABLE `group_buying_card` MODIFY `card_no` varchar(32) BINARY NOT NULL ;
 
---  ALTER TABLE `GROUP_BUYING_CARD` MODIFY (`CARD_LIMIT_YM` NOT NULL ENABLE);
-   ALTER TABLE `GROUP_BUYING_CARD` MODIFY `CARD_LIMIT_YM` datetime NOT NULL ;
+--  ALTER TABLE `group_buying_card` MODIFY (`card_limit_ym` NOT NULL ENABLE);
+   ALTER TABLE `group_buying_card` MODIFY `card_limit_ym` datetime NOT NULL ;
 
---  ALTER TABLE `GROUP_BUYING_CARD` MODIFY (`ENTRY_CD` NOT NULL ENABLE);
-   ALTER TABLE `GROUP_BUYING_CARD` MODIFY `ENTRY_CD` varchar(64) BINARY NOT NULL ;
+--  ALTER TABLE `group_buying_card` MODIFY (`entry_cd` NOT NULL ENABLE);
+   ALTER TABLE `group_buying_card` MODIFY `entry_cd` varchar(64) BINARY NOT NULL ;
 
---  ALTER TABLE `GROUP_BUYING_CARD` MODIFY (`ENTRY_TS` NOT NULL ENABLE);
-   ALTER TABLE `GROUP_BUYING_CARD` MODIFY `ENTRY_TS` datetime NOT NULL ;
+--  ALTER TABLE `group_buying_card` MODIFY (`entry_ts` NOT NULL ENABLE);
+   ALTER TABLE `group_buying_card` MODIFY `entry_ts` datetime NOT NULL ;
 
---  ALTER TABLE `GROUP_BUYING_CARD` MODIFY (`MODIFY_CD` NOT NULL ENABLE);
-   ALTER TABLE `GROUP_BUYING_CARD` MODIFY `MODIFY_CD` varchar(64) BINARY NOT NULL ;
+--  ALTER TABLE `group_buying_card` MODIFY (`modify_cd` NOT NULL ENABLE);
+   ALTER TABLE `group_buying_card` MODIFY `modify_cd` varchar(64) BINARY NOT NULL ;
 
---  ALTER TABLE `GROUP_BUYING_CARD` MODIFY (`MODIFY_TS` NOT NULL ENABLE);
-   ALTER TABLE `GROUP_BUYING_CARD` MODIFY `MODIFY_TS` datetime NOT NULL ;
+--  ALTER TABLE `group_buying_card` MODIFY (`modify_ts` NOT NULL ENABLE);
+   ALTER TABLE `group_buying_card` MODIFY `modify_ts` datetime NOT NULL ;
 
 --   *** ------------------------------------
 --  *** Table REPORT_PREF
 --   *** ------------------------------------
 
-  ALTER TABLE `REPORT_PREF` ADD CONSTRAINT `REPORT_PREF_PKY` PRIMARY KEY (`HOTEL_CD`, `DATE_YMD`, `PREF_ID`)
+  ALTER TABLE `report_pref` ADD CONSTRAINT `report_pref_pky` PRIMARY KEY (`hotel_cd`, `date_ymd`, `pref_id`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAY_PTN
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAY_PTN` ADD CONSTRAINT `BILLPAY_PTN_PKY` PRIMARY KEY (`FEE_TYPE`, `SITE_CD`, `BILLPAY_YM`)
+  ALTER TABLE `billpay_ptn` ADD CONSTRAINT `billpay_ptn_pky` PRIMARY KEY (`fee_type`, `site_cd`, `billpay_ym`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_PLAN_LOWEST
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_PLAN_LOWEST` ADD CONSTRAINT `ROOM_PLAN_LOWEST_PKY` PRIMARY KEY (`HOTEL_CD`, `PLAN_CD`, `ROOM_CD`, `CHARGE_CONDITION`)
+  ALTER TABLE `room_plan_lowest` ADD CONSTRAINT `room_plan_lowest_pky` PRIMARY KEY (`hotel_cd`, `plan_cd`, `room_cd`, `charge_condition`)
   ;
 --   *** ------------------------------------
 --  *** Table LOG_AUTHORI
 --   *** ------------------------------------
 
-  ALTER TABLE `LOG_AUTHORI` ADD CONSTRAINT `LOG_AUTHORI_PKY` PRIMARY KEY (`RESERVE_CD`, `BRANCH_NO`)
+  ALTER TABLE `log_authori` ADD CONSTRAINT `log_authori_pky` PRIMARY KEY (`reserve_cd`, `branch_no`)
   ;
 --   *** ------------------------------------
 --  *** Table LOG_SECURITY_10
 --   *** ------------------------------------
 
-  ALTER TABLE `LOG_SECURITY_10` ADD CONSTRAINT `LOG_SECURITY_10_PKY` PRIMARY KEY (`SECURITY_CD`)
+  ALTER TABLE `log_security_10` ADD CONSTRAINT `log_security_10_pky` PRIMARY KEY (`security_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAY_CUSTOMER_9XG
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAY_CUSTOMER_9XG` ADD CONSTRAINT `BILLPAY_CUSTOMER_9XG_PKY` PRIMARY KEY (`BILLPAY_YM`, `CUSTOMER_ID`)
+  ALTER TABLE `billpay_customer_9xg` ADD CONSTRAINT `billpay_customer_9xg_pky` PRIMARY KEY (`billpay_ym`, `customer_id`)
   ;
 --   *** ------------------------------------
 --  *** Table MEDIA_ORG
 --   *** ------------------------------------
 
-  ALTER TABLE `MEDIA_ORG` ADD CONSTRAINT `MEDIA_ORG_PKY` PRIMARY KEY (`HOTEL_CD`, `MEDIA_NO`)
+  ALTER TABLE `media_org` ADD CONSTRAINT `media_org_pky` PRIMARY KEY (`hotel_cd`, `media_no`)
   ;
 --   *** ------------------------------------
 --  *** Table NTA_STAFF_ACCOUNT
 --   *** ------------------------------------
 
-  ALTER TABLE `NTA_STAFF_ACCOUNT` ADD CONSTRAINT `NTA_STAFF_ACCOUNT_PKY` PRIMARY KEY (`NTA_STAFF_ID`)
+  ALTER TABLE `nta_staff_account` ADD CONSTRAINT `nta_staff_account_pky` PRIMARY KEY (`nta_staff_id`)
   ;
 --   *** ------------------------------------
 --  *** Table POINT_BONUS
 --   *** ------------------------------------
 
-  ALTER TABLE `POINT_BONUS` ADD CONSTRAINT `POINT_BONUS_PKY` PRIMARY KEY (`POINT_BONUS_ID`)
+  ALTER TABLE `point_bonus` ADD CONSTRAINT `point_bonus_pky` PRIMARY KEY (`point_bonus_id`)
   ;
 --   *** ------------------------------------
 --  *** Table PARTNER_GROUP_JOIN
 --   *** ------------------------------------
 
-  ALTER TABLE `PARTNER_GROUP_JOIN` ADD CONSTRAINT `PARTNER_GROUP_JOIN_PKY` PRIMARY KEY (`PARTNER_GROUP_ID`, `PARTNER_CD`)
+  ALTER TABLE `partner_group_join` ADD CONSTRAINT `partner_group_join_pky` PRIMARY KEY (`partner_group_id`, `partner_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_MODIFY_RIZAPULI
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_MODIFY_RIZAPULI` ADD CONSTRAINT `RESERVE_MODIFY_RIZAPULI_PKY` PRIMARY KEY (`RESERVE_CD`, `BRANCH_NO`)
+  ALTER TABLE `reserve_modify_rizapuli` ADD CONSTRAINT `reserve_modify_rizapuli_pky` PRIMARY KEY (`reserve_cd`, `branch_no`)
   ;
 --   *** ------------------------------------
 --  *** Table MIGRATION_PLAN_TEMP
 --   *** ------------------------------------
 
-  ALTER TABLE `MIGRATION_PLAN_TEMP` ADD CONSTRAINT `MIGRATION_PLAN_TEMP_PKY` PRIMARY KEY (`HOTEL_CD`, `PLAN_ID`)
+  ALTER TABLE `migration_plan_temp` ADD CONSTRAINT `migration_plan_temp_pky` PRIMARY KEY (`hotel_cd`, `plan_id`)
   ;
 --   *** ------------------------------------
 --  *** Table MEMBER_POINT
 --   *** ------------------------------------
 
-  ALTER TABLE `MEMBER_POINT` ADD CONSTRAINT `MEMBER_POINT_PKY` PRIMARY KEY (`MEMBER_CD`)
+  ALTER TABLE `member_point` ADD CONSTRAINT `member_point_pky` PRIMARY KEY (`member_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_AUTHORI
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_AUTHORI` ADD CONSTRAINT `RESERVE_AUTHORI_PKY` PRIMARY KEY (`RESERVE_CD`)
+  ALTER TABLE `reserve_authori` ADD CONSTRAINT `reserve_authori_pky` PRIMARY KEY (`reserve_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table MIGRATION_MEDIA
 --   *** ------------------------------------
 
-  ALTER TABLE `MIGRATION_MEDIA` ADD CONSTRAINT `MIGRATION_MEDIA_PKY` PRIMARY KEY (`HOTEL_CD`, `PLAN_ID`, `MEDIA_NO`)
+  ALTER TABLE `migration_media` ADD CONSTRAINT `migration_media_pky` PRIMARY KEY (`hotel_cd`, `plan_id`, `media_no`)
   ;
 --   *** ------------------------------------
 --  *** Table LOG_CREDIT
 --   *** ------------------------------------
 
-  ALTER TABLE `LOG_CREDIT` ADD CONSTRAINT `LOG_CREDIT_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`, `BRANCH_NO`)
+  ALTER TABLE `log_credit` ADD CONSTRAINT `log_credit_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`, `branch_no`)
   ;
 --   *** ------------------------------------
 --  *** Table LOG_ALERT_STOCK
 --   *** ------------------------------------
 
-  ALTER TABLE `LOG_ALERT_STOCK` ADD CONSTRAINT `LOG_ALERT_STOCK_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_CD`, `DATE_YMD`, `RESERVE_CD`)
+  ALTER TABLE `log_alert_stock` ADD CONSTRAINT `log_alert_stock_pky` PRIMARY KEY (`hotel_cd`, `room_cd`, `date_ymd`, `reserve_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM2
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM2` ADD CONSTRAINT `ROOM2_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_ID`)
+  ALTER TABLE `room2` ADD CONSTRAINT `room2_pky` PRIMARY KEY (`hotel_cd`, `room_id`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_ACCEPT_HISTORY
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_ACCEPT_HISTORY` ADD CONSTRAINT `HOTEL_ACCEPT_HISTORY_PKY` PRIMARY KEY (`HOTEL_ACCEPT_ID`)
+  ALTER TABLE `hotel_accept_history` ADD CONSTRAINT `hotel_accept_history_pky` PRIMARY KEY (`hotel_accept_id`)
   ;
 --   *** ------------------------------------
 --  *** Table PARTNER_POOL
 --   *** ------------------------------------
 
-  ALTER TABLE `PARTNER_POOL` ADD CONSTRAINT `PARTNER_POOL_PKY` PRIMARY KEY (`PARTNER_CD`)
+  ALTER TABLE `partner_pool` ADD CONSTRAINT `partner_pool_pky` PRIMARY KEY (`partner_cd`)
   ;
  
---  ALTER TABLE `PARTNER_POOL` MODIFY (`PASSWORD` NOT NULL ENABLE);
-  ALTER TABLE `PARTNER_POOL` MODIFY `PASSWORD` varchar(64) BINARY NOT NULL ;
+--  ALTER TABLE `partner_pool` MODIFY (`password` NOT NULL ENABLE);
+  ALTER TABLE `partner_pool` MODIFY `password` varchar(64) BINARY NOT NULL ;
 
 --   *** ------------------------------------
 --  *** Table PARTNER_OPENID
 --   *** ------------------------------------
 
-  ALTER TABLE `PARTNER_OPENID` ADD CONSTRAINT `PARTNER_OPENID_PKY` PRIMARY KEY (`CLIENT_ID`)
+  ALTER TABLE `partner_openid` ADD CONSTRAINT `partner_openid_pky` PRIMARY KEY (`client_id`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAYED_SALES
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAYED_SALES` ADD CONSTRAINT `BILLPAYED_SALES_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`, `SITE_CD`, `OPERATION_YMD`)
+  ALTER TABLE `billpayed_sales` ADD CONSTRAINT `billpayed_sales_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`, `site_cd`, `operation_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table CHARGE_CONDITION
 --   *** ------------------------------------
 
-  ALTER TABLE `CHARGE_CONDITION` ADD CONSTRAINT `CHARGE_CONDITION_PKY` PRIMARY KEY (`HOTEL_CD`, `PLAN_ID`, `ROOM_ID`, `CAPACITY`, `LOGIN_CONDITION`)
+  ALTER TABLE `charge_condition` ADD CONSTRAINT `charge_condition_pky` PRIMARY KEY (`hotel_cd`, `plan_id`, `room_id`, `capacity`, `login_condition`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_CHARGE
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_CHARGE` ADD CONSTRAINT `ROOM_CHARGE_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_CD`, `PLAN_CD`, `PARTNER_GROUP_ID`, `DATE_YMD`)
+  ALTER TABLE `room_charge` ADD CONSTRAINT `room_charge_pky` PRIMARY KEY (`hotel_cd`, `room_cd`, `plan_cd`, `partner_group_id`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table PARTNER_SECTION
 --   *** ------------------------------------
 
-  ALTER TABLE `PARTNER_SECTION` ADD CONSTRAINT `PARTNER_SECTION_PKY` PRIMARY KEY (`PARTNER_CD`, `SECTION_ID`)
+  ALTER TABLE `partner_section` ADD CONSTRAINT `partner_section_pky` PRIMARY KEY (`partner_cd`, `section_id`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_CAMP_PLAN2
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_CAMP_PLAN2` ADD CONSTRAINT `HOTEL_CAMP_PLAN2_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_ID`, `PLAN_ID`, `CAMP_CD`)
+  ALTER TABLE `hotel_camp_plan2` ADD CONSTRAINT `hotel_camp_plan2_pky` PRIMARY KEY (`hotel_cd`, `room_id`, `plan_id`, `camp_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table DENY_LIST_RETURN
 --   *** ------------------------------------
 
-  ALTER TABLE `DENY_LIST_RETURN` ADD CONSTRAINT `DENY_LIST_RETURN_PKY` PRIMARY KEY (`DENY_CD`)
+  ALTER TABLE `deny_list_return` ADD CONSTRAINT `deny_list_return_pky` PRIMARY KEY (`deny_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_VERIFY_YDP
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_VERIFY_YDP` ADD CONSTRAINT `RESERVE_VERIFY_YDP_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`)
+  ALTER TABLE `reserve_verify_ydp` ADD CONSTRAINT `reserve_verify_ydp_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table CHARGE_EARLY
 --   *** ------------------------------------
 
-  ALTER TABLE `CHARGE_EARLY` ADD CONSTRAINT `CHARGE_EARLY_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_ID`, `PLAN_ID`, `PARTNER_GROUP_ID`, `CAPACITY`, `DATE_YMD`)
+  ALTER TABLE `charge_early` ADD CONSTRAINT `charge_early_pky` PRIMARY KEY (`hotel_cd`, `room_id`, `plan_id`, `partner_group_id`, `capacity`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_DISPOSE_RSV
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_DISPOSE_RSV` ADD CONSTRAINT `RESERVE_DISPOSE_RSV_PKY` PRIMARY KEY (`DISPOSE_RSV_ID`)
+  ALTER TABLE `reserve_dispose_rsv` ADD CONSTRAINT `reserve_dispose_rsv_pky` PRIMARY KEY (`dispose_rsv_id`)
   ;
 --   *** ------------------------------------
 --  *** Table MEMBER
 --   *** ------------------------------------
 
-  ALTER TABLE `MEMBER` ADD CONSTRAINT `MEMBER_PKY` PRIMARY KEY (`MEMBER_CD`)
+  ALTER TABLE `member` ADD CONSTRAINT `member_pky` PRIMARY KEY (`member_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table PLAN
 --   *** ------------------------------------
 
-  ALTER TABLE `PLAN` ADD CONSTRAINT `PLAN_PKY` PRIMARY KEY (`HOTEL_CD`, `PLAN_ID`)
+  ALTER TABLE `plan` ADD CONSTRAINT `plan_pky` PRIMARY KEY (`hotel_cd`, `plan_id`)
   ;
 --   *** ------------------------------------
 --  *** Table CHECKSHEET_GRANTS
 --   *** ------------------------------------
 
-  ALTER TABLE `CHECKSHEET_GRANTS` ADD CONSTRAINT `CHECKSHEET_GRANTS_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`, `WELFARE_GRANTS_ID`)
+  ALTER TABLE `checksheet_grants` ADD CONSTRAINT `checksheet_grants_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`, `welfare_grants_id`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAY_HR_GRANTS_9XG
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAY_HR_GRANTS_9XG` ADD CONSTRAINT `BILLPAY_HR_GRANTS_9XG_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`, `WELFARE_GRANTS_ID`)
+  ALTER TABLE `billpay_hr_grants_9xg` ADD CONSTRAINT `billpay_hr_grants_9xg_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`, `welfare_grants_id`)
   ;
 --   *** ------------------------------------
 --  *** Table FACTORING_ZENGIN_REQUEST
 --   *** ------------------------------------
 
-  ALTER TABLE `FACTORING_ZENGIN_REQUEST` ADD CONSTRAINT `FACTORING_ZENGIN_REQUEST_PKY` PRIMARY KEY (`FACTORING_CD`)
+  ALTER TABLE `factoring_zengin_request` ADD CONSTRAINT `factoring_zengin_request_pky` PRIMARY KEY (`factoring_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table MONEY_SCHEDULE
 --   *** ------------------------------------
 
-  ALTER TABLE `MONEY_SCHEDULE` ADD CONSTRAINT `MONEY_SCHEDULE_PKY` PRIMARY KEY (`YM`, `MONEY_SCHEDULE_ID`)
+  ALTER TABLE `money_schedule` ADD CONSTRAINT `money_schedule_pky` PRIMARY KEY (`ym`, `money_schedule_id`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_PLAN_RANKING_CALC2
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_PLAN_RANKING_CALC2` ADD CONSTRAINT `ROOM_PLAN_RANKING_CALC2_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_ID`, `PLAN_ID`, `WDAY`)
+  ALTER TABLE `room_plan_ranking_calc2` ADD CONSTRAINT `room_plan_ranking_calc2_pky` PRIMARY KEY (`hotel_cd`, `room_id`, `plan_id`, `wday`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_YAHOO
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_YAHOO` ADD CONSTRAINT `HOTEL_YAHOO_PKY` PRIMARY KEY (`HOTEL_CD`)
+  ALTER TABLE `hotel_yahoo` ADD CONSTRAINT `hotel_yahoo_pky` PRIMARY KEY (`hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAY_HOTEL_CREDIT
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAY_HOTEL_CREDIT` ADD CONSTRAINT `BILLPAY_HOTEL_CREDIT_PKY` PRIMARY KEY (`HOTEL_CD`, `BILLPAY_YM`)
+  ALTER TABLE `billpay_hotel_credit` ADD CONSTRAINT `billpay_hotel_credit_pky` PRIMARY KEY (`hotel_cd`, `billpay_ym`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAY_HOTEL_FEE_9XG
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAY_HOTEL_FEE_9XG` ADD CONSTRAINT `BILLPAY_HOTEL_FEE_9XG_PKY` PRIMARY KEY (`BILLPAY_YM`, `HOTEL_CD`)
+  ALTER TABLE `billpay_hotel_fee_9xg` ADD CONSTRAINT `billpay_hotel_fee_9xg_pky` PRIMARY KEY (`billpay_ym`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAY_PTN_STOCK
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAY_PTN_STOCK` ADD CONSTRAINT `BILLPAY_PTN_STOCK_PKY` PRIMARY KEY (`BILLPAY_YM`, `SITE_CD`, `STOCK_RATE`)
+  ALTER TABLE `billpay_ptn_stock` ADD CONSTRAINT `billpay_ptn_stock_pky` PRIMARY KEY (`billpay_ym`, `site_cd`, `stock_rate`)
   ;
 --   *** ------------------------------------
 --  *** Table MAST_PLAN_ELEMENT
 --   *** ------------------------------------
 
-  ALTER TABLE `MAST_PLAN_ELEMENT` ADD CONSTRAINT `MAST_PLAN_ELEMENT_PKY` PRIMARY KEY (`ELEMENT_ID`)
+  ALTER TABLE `mast_plan_element` ADD CONSTRAINT `mast_plan_element_pky` PRIMARY KEY (`element_id`)
   ;
 --   *** ------------------------------------
 --  *** Table LOG_CUSTOMER
 --   *** ------------------------------------
 
-  ALTER TABLE `LOG_CUSTOMER` ADD CONSTRAINT `LOG_CUSTOMER_PKY` PRIMARY KEY (`CUSTOMER_ID`, `BRANCH_NO`)
+  ALTER TABLE `log_customer` ADD CONSTRAINT `log_customer_pky` PRIMARY KEY (`customer_id`, `branch_no`)
   ;
 --   *** ------------------------------------
 --  *** Table ALERT_MAIL_HOTEL
 --   *** ------------------------------------
 
-  ALTER TABLE `ALERT_MAIL_HOTEL` ADD CONSTRAINT `ALERT_MAIL_HOTEL_PKY` PRIMARY KEY (`HOTEL_CD`, `BRANCH_NO`)
+  ALTER TABLE `alert_mail_hotel` ADD CONSTRAINT `alert_mail_hotel_pky` PRIMARY KEY (`hotel_cd`, `branch_no`)
   ;
 --   *** ------------------------------------
 --  *** Table LOG_GROUP_BUYING
 --   *** ------------------------------------
 
-  ALTER TABLE `LOG_GROUP_BUYING` ADD CONSTRAINT `LOG_GROUP_BUYING_PKY` PRIMARY KEY (`ORDER_ID`, `BRANCH_NO`)
+  ALTER TABLE `log_group_buying` ADD CONSTRAINT `log_group_buying_pky` PRIMARY KEY (`order_id`, `branch_no`)
   ;
 --   *** ------------------------------------
 --  *** Table MAST_CARD
 --   *** ------------------------------------
 
-  ALTER TABLE `MAST_CARD` ADD CONSTRAINT `MAST_CARD_PKY` PRIMARY KEY (`CARD_ID`)
+  ALTER TABLE `mast_card` ADD CONSTRAINT `mast_card_pky` PRIMARY KEY (`card_id`)
   ;
 --   *** ------------------------------------
 --  *** Table ZAP_RAKUJAN
 --   *** ------------------------------------
 
-  ALTER TABLE `ZAP_RAKUJAN` ADD CONSTRAINT `ZAP_RAKUJAN_PKY` PRIMARY KEY (`RANDOM_CD`, `CHECK_POINT`)
+  ALTER TABLE `zap_rakujan` ADD CONSTRAINT `zap_rakujan_pky` PRIMARY KEY (`random_cd`, `check_point`)
   ;
 --   *** ------------------------------------
 --  *** Table MAST_VR_ITEM
 --   *** ------------------------------------
 
-  ALTER TABLE `MAST_VR_ITEM` ADD CONSTRAINT `MAST_VR_ITEM_PKY` PRIMARY KEY (`ITEM_ID`)
+  ALTER TABLE `mast_vr_item` ADD CONSTRAINT `mast_vr_item_pky` PRIMARY KEY (`item_id`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_CHARGE_EARLY2
 --   *** ------------------------------------
 
--- 存在しない  ALTER TABLE `ROOM_CHARGE_EARLY2` ADD CONSTRAINT `ROOM_CHARGE_EARLY2_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_ID`, `PLAN_ID`, `PARTNER_GROUP_ID`, `DATE_YMD`)
+-- 存在しない  ALTER TABLE `room_charge_early2` ADD CONSTRAINT `room_charge_early2_pky` PRIMARY KEY (`hotel_cd`, `room_id`, `plan_id`, `partner_group_id`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_PLAN_POINT
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_PLAN_POINT` ADD CONSTRAINT `RESERVE_PLAN_POINT_PKY` PRIMARY KEY (`RESERVE_CD`)
+  ALTER TABLE `reserve_plan_point` ADD CONSTRAINT `reserve_plan_point_pky` PRIMARY KEY (`reserve_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_PRIORITY
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_PRIORITY` ADD CONSTRAINT `HOTEL_PRIORITY_PKY` PRIMARY KEY (`CTRL_NO`)
+  ALTER TABLE `hotel_priority` ADD CONSTRAINT `hotel_priority_pky` PRIMARY KEY (`ctrl_no`)
   ;
 --   *** ------------------------------------
 --  *** Table MAST_REGION
 --   *** ------------------------------------
 
-  ALTER TABLE `MAST_REGION` ADD CONSTRAINT `MAST_REGION_PKY` PRIMARY KEY (`REGION_ID`)
+  ALTER TABLE `mast_region` ADD CONSTRAINT `mast_region_pky` PRIMARY KEY (`region_id`)
   ;
 --   *** ------------------------------------
 --  *** Table ZAP_ROOM_PLAN
 --   *** ------------------------------------
 
-  ALTER TABLE `ZAP_ROOM_PLAN` ADD CONSTRAINT `ZAP_ROOM_PLAN_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_CD`, `PLAN_CD`)
+  ALTER TABLE `zap_room_plan` ADD CONSTRAINT `zap_room_plan_pky` PRIMARY KEY (`hotel_cd`, `room_cd`, `plan_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table ENQUETE_6315
 --   *** ------------------------------------
 
-  ALTER TABLE `ENQUETE_6315` ADD CONSTRAINT `ENQUETE_6315_PKY` PRIMARY KEY (`ID`, `MEMBER_CD`)
+  ALTER TABLE `enquete_6315` ADD CONSTRAINT `enquete_6315_pky` PRIMARY KEY (`id`, `member_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_AKF_RELATION
 --   *** ------------------------------------
 
---  ALTER TABLE `ROOM_AKF_RELATION` MODIFY (`HOTEL_CD` NOT NULL ENABLE);
-   ALTER TABLE `ROOM_AKF_RELATION` MODIFY `HOTEL_CD` varchar(10) BINARY NOT NULL ;
+--  ALTER TABLE `room_akf_relation` MODIFY (`hotel_cd` NOT NULL ENABLE);
+   ALTER TABLE `room_akf_relation` MODIFY `hotel_cd` varchar(10) BINARY NOT NULL ;
 
---  ALTER TABLE `ROOM_AKF_RELATION` MODIFY (`ROOM_ID` NOT NULL ENABLE);
-   ALTER TABLE `ROOM_AKF_RELATION` MODIFY `ROOM_ID` varchar(10) BINARY NOT NULL ;
+--  ALTER TABLE `room_akf_relation` MODIFY (`room_id` NOT NULL ENABLE);
+   ALTER TABLE `room_akf_relation` MODIFY `room_id` varchar(10) BINARY NOT NULL ;
 
 --   *** ------------------------------------
 --  *** Table MAST_STATION_JUNCTION
 --   *** ------------------------------------
 
-  ALTER TABLE `MAST_STATION_JUNCTION` ADD CONSTRAINT `MAST_STATION_JUNCTION_PKY` PRIMARY KEY (`JUNCTION_ID`)
+  ALTER TABLE `mast_station_junction` ADD CONSTRAINT `mast_station_junction_pky` PRIMARY KEY (`junction_id`)
   ;
 --   *** ------------------------------------
 --  *** Table BR_POINT_GIFT_TICKET
 --   *** ------------------------------------
 
-  ALTER TABLE `BR_POINT_GIFT_TICKET` ADD CONSTRAINT `BR_POINT_GIFT_TICKET_PKY` PRIMARY KEY (`BR_POINT_GIFT_ID`)
+  ALTER TABLE `br_point_gift_ticket` ADD CONSTRAINT `br_point_gift_ticket_pky` PRIMARY KEY (`br_point_gift_id`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_CHARGE_YHO_BAT_TMP_1
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_CHARGE_YHO_BAT_TMP_1` ADD CONSTRAINT `ROOM_CHARGE_YHO_BAT_TMP_1_PKY` PRIMARY KEY (`REC_TYPE`, `HOTEL_CD`, `ROOM_CD`, `PLAN_CD`, `DATE_YMD`)
+  ALTER TABLE `room_charge_yho_bat_tmp_1` ADD CONSTRAINT `room_charge_yho_bat_tmp_1_pky` PRIMARY KEY (`rec_type`, `hotel_cd`, `room_cd`, `plan_cd`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table BR_POINT_PLUS_HOTEL
 --   *** ------------------------------------
 
-  ALTER TABLE `BR_POINT_PLUS_HOTEL` ADD CONSTRAINT `BR_POINT_PLUS_HOTEL_PKY` PRIMARY KEY (`POINT_PLUS_ID`, `HOTEL_CD`)
+  ALTER TABLE `br_point_plus_hotel` ADD CONSTRAINT `br_point_plus_hotel_pky` PRIMARY KEY (`point_plus_id`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table ZAP_ROOM_PLAN_CHARGE
 --   *** ------------------------------------
 
-  ALTER TABLE `ZAP_ROOM_PLAN_CHARGE` ADD CONSTRAINT `ZAP_ROOM_PLAN_CHARGE_PKY` PRIMARY KEY (`ID`)
+  ALTER TABLE `zap_room_plan_charge` ADD CONSTRAINT `zap_room_plan_charge_pky` PRIMARY KEY (`id`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_HOTEL
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_HOTEL` ADD CONSTRAINT `RESERVE_HOTEL_PKY` PRIMARY KEY (`RESERVE_CD`)
+  ALTER TABLE `reserve_hotel` ADD CONSTRAINT `reserve_hotel_pky` PRIMARY KEY (`reserve_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_PLAN_INFO
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_PLAN_INFO` ADD CONSTRAINT `RESERVE_PLAN_INFO_PKY` PRIMARY KEY (`RESERVE_CD`)
+  ALTER TABLE `reserve_plan_info` ADD CONSTRAINT `reserve_plan_info_pky` PRIMARY KEY (`reserve_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table MAST_VR_ROOM_TYPE
 --   *** ------------------------------------
 
-  ALTER TABLE `MAST_VR_ROOM_TYPE` ADD CONSTRAINT `MAST_VR_ROOM_TYPE_PKY` PRIMARY KEY (`CATEGORY_ID`)
+  ALTER TABLE `mast_vr_room_type` ADD CONSTRAINT `mast_vr_room_type_pky` PRIMARY KEY (`category_id`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_MESSAGE
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_MESSAGE` ADD CONSTRAINT `RESERVE_MESSAGE_PKY` PRIMARY KEY (`RESERVE_CD`)
+  ALTER TABLE `reserve_message` ADD CONSTRAINT `reserve_message_pky` PRIMARY KEY (`reserve_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_PLAN_POINT_20170101
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_PLAN_POINT_20170101` ADD CONSTRAINT `ROOM_PLAN_POINT_20170101_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_CD`, `PLAN_CD`)
+  ALTER TABLE `room_plan_point_20170101` ADD CONSTRAINT `room_plan_point_20170101_pky` PRIMARY KEY (`hotel_cd`, `room_cd`, `plan_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAY_YAHOO_9XG
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAY_YAHOO_9XG` ADD CONSTRAINT `BILLPAY_YAHOO_9XG_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`)
+  ALTER TABLE `billpay_yahoo_9xg` ADD CONSTRAINT `billpay_yahoo_9xg_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_GRANTS
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_GRANTS` ADD CONSTRAINT `RESERVE_GRANTS_PKY` PRIMARY KEY (`WELFARE_GRANTS_HISTORY_ID`, `ORDER_CD`, `RESERVE_CD`, `DATE_YMD`)
+  ALTER TABLE `reserve_grants` ADD CONSTRAINT `reserve_grants_pky` PRIMARY KEY (`welfare_grants_history_id`, `order_cd`, `reserve_cd`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_TOUR
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_TOUR` ADD CONSTRAINT `RESERVE_TOUR_PKY` PRIMARY KEY (`RESERVE_CD`)
+  ALTER TABLE `reserve_tour` ADD CONSTRAINT `reserve_tour_pky` PRIMARY KEY (`reserve_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_TYPE_20170101
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_TYPE_20170101` ADD CONSTRAINT `HOTEL_TYPE_20170101_PKY` PRIMARY KEY (`HOTEL_CD`)
+  ALTER TABLE `hotel_type_20170101` ADD CONSTRAINT `hotel_type_20170101_pky` PRIMARY KEY (`hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table CHECKSHEET_GRANTS_9XG
 --   *** ------------------------------------
 
-  ALTER TABLE `CHECKSHEET_GRANTS_9XG` ADD CONSTRAINT `CHECKSHEET_GRANTS_9XG_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`, `WELFARE_GRANTS_ID`)
+  ALTER TABLE `checksheet_grants_9xg` ADD CONSTRAINT `checksheet_grants_9xg_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`, `welfare_grants_id`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_CAMP_PLAN2_GOTO
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_CAMP_PLAN2_GOTO` ADD CONSTRAINT `HOTEL_CAMP_PLAN2_GOTO_PKY` PRIMARY KEY (`HOTEL_CD`, `PLAN_ID`, `CAMP_CD`)
+  ALTER TABLE `hotel_camp_plan2_goto` ADD CONSTRAINT `hotel_camp_plan2_goto_pky` PRIMARY KEY (`hotel_cd`, `plan_id`, `camp_cd`)
   ;
  
---  ALTER TABLE `HOTEL_CAMP_PLAN2_GOTO` MODIFY (`DISPLAY_STATUS` NOT NULL ENABLE);
-  ALTER TABLE `HOTEL_CAMP_PLAN2_GOTO` MODIFY `DISPLAY_STATUS` tinyint NOT NULL ;
+--  ALTER TABLE `hotel_camp_plan2_goto` MODIFY (`display_status` NOT NULL ENABLE);
+  ALTER TABLE `hotel_camp_plan2_goto` MODIFY `display_status` tinyint NOT NULL ;
 
 --   *** ------------------------------------
 --  *** Table BILLPAYED_FEE_9XG
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAYED_FEE_9XG` ADD CONSTRAINT `BILLPAYED_FEE_9XG_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`, `OPERATION_YMD`)
+  ALTER TABLE `billpayed_fee_9xg` ADD CONSTRAINT `billpayed_fee_9xg_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`, `operation_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table PARTNER_LAYOUT
 --   *** ------------------------------------
 
-  ALTER TABLE `PARTNER_LAYOUT` ADD CONSTRAINT `PARTNER_LAYOUT_PKY` PRIMARY KEY (`PARTNER_CD`)
+  ALTER TABLE `partner_layout` ADD CONSTRAINT `partner_layout_pky` PRIMARY KEY (`partner_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table LOG_CANCEL
 --   *** ------------------------------------
 
-  ALTER TABLE `LOG_CANCEL` ADD CONSTRAINT `LOG_CANCEL_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`, `CANCEL_DTM`)
+  ALTER TABLE `log_cancel` ADD CONSTRAINT `log_cancel_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`, `cancel_dtm`)
   ;
 --   *** ------------------------------------
 --  *** Table CARD_PAYMENT_GBY
 --   *** ------------------------------------
 
-  ALTER TABLE `CARD_PAYMENT_GBY` ADD CONSTRAINT `CARD_PAYMENT_GBY_PKY` PRIMARY KEY (`CARD_PAYMENT_ID`)
+  ALTER TABLE `card_payment_gby` ADD CONSTRAINT `card_payment_gby_pky` PRIMARY KEY (`card_payment_id`)
   ;
  
-  ALTER TABLE `CARD_PAYMENT_GBY` ADD CONSTRAINT `CARD_PAYMENT_GBY_UNQ_01` UNIQUE (`PAYMENT_SYSTEM`, `DEMAND_DTM`, `ORDER_ID`)
+  ALTER TABLE `card_payment_gby` ADD CONSTRAINT `card_payment_gby_unq_01` UNIQUE (`payment_system`, `demand_dtm`, `order_id`)
   ;
 --   *** ------------------------------------
 --  *** Table AFFILIATER
 --   *** ------------------------------------
 
-  ALTER TABLE `AFFILIATER` ADD CONSTRAINT `AFFILIATER_PKY` PRIMARY KEY (`AFFILIATER_CD`)
+  ALTER TABLE `affiliater` ADD CONSTRAINT `affiliater_pky` PRIMARY KEY (`affiliater_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table PLAN_HOLD_KEYWORDS
 --   *** ------------------------------------
 
-  ALTER TABLE `PLAN_HOLD_KEYWORDS` ADD CONSTRAINT `PLAN_HOLD_KEYWORDS_PKY` PRIMARY KEY (`HOTEL_CD`, `PLAN_ID`, `KEYWORD_ID`)
+  ALTER TABLE `plan_hold_keywords` ADD CONSTRAINT `plan_hold_keywords_pky` PRIMARY KEY (`hotel_cd`, `plan_id`, `keyword_id`)
   ;
 --   *** ------------------------------------
 --  *** Table SECURE_LICENSE
 --   *** ------------------------------------
 
-  ALTER TABLE `SECURE_LICENSE` ADD CONSTRAINT `SECURE_LICENSE_PKY` PRIMARY KEY (`LICENSE_ID`)
+  ALTER TABLE `secure_license` ADD CONSTRAINT `secure_license_pky` PRIMARY KEY (`license_id`)
   ;
 --   *** ------------------------------------
 --  *** Table CHARGE2
 --   *** ------------------------------------
 
--- 存在しない  ALTER TABLE `CHARGE2` ADD CONSTRAINT `CHARGE2_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_ID`, `PLAN_ID`, `PARTNER_GROUP_ID`, `CAPACITY`, `DATE_YMD`)  ;
+-- 存在しない  ALTER TABLE `charge2` ADD CONSTRAINT `charge2_pky` PRIMARY KEY (`hotel_cd`, `room_id`, `plan_id`, `partner_group_id`, `capacity`, `date_ymd`)  ;
 
 --   *** ------------------------------------
 --  *** Table HOTEL_REVIEW
 --   *** ------------------------------------
 
-	  ALTER TABLE `HOTEL_REVIEW` ADD CONSTRAINT `HOTEL_REVIEW_PKY` PRIMARY KEY (`HOTEL_CD`, `REVIEW_TYPE`, `REVIEW_ID`) ;
+	  ALTER TABLE `hotel_review` ADD CONSTRAINT `hotel_review_pky` PRIMARY KEY (`hotel_cd`, `review_type`, `review_id`) ;
 
 --   *** ------------------------------------
 --  *** Table ROOM_CHARGE_YHO_BAT_TMP
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_CHARGE_YHO_BAT_TMP` ADD CONSTRAINT `ROOM_CHARGE_YHO_BAT_TMP_PKY` PRIMARY KEY (`REC_TYPE`, `HOTEL_CD`, `ROOM_CD`, `PLAN_CD`)
+  ALTER TABLE `room_charge_yho_bat_tmp` ADD CONSTRAINT `room_charge_yho_bat_tmp_pky` PRIMARY KEY (`rec_type`, `hotel_cd`, `room_cd`, `plan_cd`)
   ;
  
---  ALTER TABLE `ROOM_CHARGE_YHO_BAT_TMP` MODIFY (`REC_TYPE` NOT NULL ENABLE);
-   ALTER TABLE `ROOM_CHARGE_YHO_BAT_TMP` MODIFY `REC_TYPE` tinyint NOT NULL ;
+--  ALTER TABLE `room_charge_yho_bat_tmp` MODIFY (`rec_type` NOT NULL ENABLE);
+   ALTER TABLE `room_charge_yho_bat_tmp` MODIFY `rec_type` tinyint NOT NULL ;
 
---  ALTER TABLE `ROOM_CHARGE_YHO_BAT_TMP` MODIFY (`HOTEL_CD` NOT NULL ENABLE);
-   ALTER TABLE `ROOM_CHARGE_YHO_BAT_TMP` MODIFY `HOTEL_CD` varchar(10) BINARY NOT NULL ;
+--  ALTER TABLE `room_charge_yho_bat_tmp` MODIFY (`hotel_cd` NOT NULL ENABLE);
+   ALTER TABLE `room_charge_yho_bat_tmp` MODIFY `hotel_cd` varchar(10) BINARY NOT NULL ;
 
---  ALTER TABLE `ROOM_CHARGE_YHO_BAT_TMP` MODIFY (`ROOM_CD` NOT NULL ENABLE);
-   ALTER TABLE `ROOM_CHARGE_YHO_BAT_TMP` MODIFY `ROOM_CD` varchar(10) BINARY NOT NULL ;
+--  ALTER TABLE `room_charge_yho_bat_tmp` MODIFY (`room_cd` NOT NULL ENABLE);
+   ALTER TABLE `room_charge_yho_bat_tmp` MODIFY `room_cd` varchar(10) BINARY NOT NULL ;
 
---  ALTER TABLE `ROOM_CHARGE_YHO_BAT_TMP` MODIFY (`PLAN_CD` NOT NULL ENABLE);
-   ALTER TABLE `ROOM_CHARGE_YHO_BAT_TMP` MODIFY `PLAN_CD` varchar(10) BINARY NOT NULL ;
+--  ALTER TABLE `room_charge_yho_bat_tmp` MODIFY (`plan_cd` NOT NULL ENABLE);
+   ALTER TABLE `room_charge_yho_bat_tmp` MODIFY `plan_cd` varchar(10) BINARY NOT NULL ;
 
---  ALTER TABLE `ROOM_CHARGE_YHO_BAT_TMP` MODIFY (`DATE_YMD` NOT NULL ENABLE);
-   ALTER TABLE `ROOM_CHARGE_YHO_BAT_TMP` MODIFY `DATE_YMD` datetime NOT NULL ;
+--  ALTER TABLE `room_charge_yho_bat_tmp` MODIFY (`date_ymd` NOT NULL ENABLE);
+   ALTER TABLE `room_charge_yho_bat_tmp` MODIFY `date_ymd` datetime NOT NULL ;
 
 --   *** ------------------------------------
 --  *** Table MIGRATION_SPEC
 --   *** ------------------------------------
 
-  ALTER TABLE `MIGRATION_SPEC` ADD CONSTRAINT `MIGRATION_SPEC_PKY` PRIMARY KEY (`HOTEL_CD`, `PLAN_ID`, `ELEMENT_ID`)
+  ALTER TABLE `migration_spec` ADD CONSTRAINT `migration_spec_pky` PRIMARY KEY (`hotel_cd`, `plan_id`, `element_id`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_STATION
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_STATION` ADD CONSTRAINT `HOTEL_STATION_PKY` PRIMARY KEY (`HOTEL_CD`, `STATION_ID`, `TRAFFIC_WAY`)
+  ALTER TABLE `hotel_station` ADD CONSTRAINT `hotel_station_pky` PRIMARY KEY (`hotel_cd`, `station_id`, `traffic_way`)
   ;
 --   *** ------------------------------------
 --  *** Table STAFF_ACCOUNT
 --   *** ------------------------------------
 
-  ALTER TABLE `STAFF_ACCOUNT` ADD CONSTRAINT `STAFF_ACCOUNT_PKY` PRIMARY KEY (`STAFF_ID`)
+  ALTER TABLE `staff_account` ADD CONSTRAINT `staff_account_pky` PRIMARY KEY (`staff_id`)
   ;
 --   *** ------------------------------------
 --  *** Table AKAFU_CANCEL_QUEUE
 --   *** ------------------------------------
 
-  ALTER TABLE `AKAFU_CANCEL_QUEUE` ADD CONSTRAINT `AKAFU_CANCEL_QUEUE_PKY` PRIMARY KEY (`ID`)
+  ALTER TABLE `akafu_cancel_queue` ADD CONSTRAINT `akafu_cancel_queue_pky` PRIMARY KEY (`id`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAYED_HOTEL_FEE_9XG
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAYED_HOTEL_FEE_9XG` ADD CONSTRAINT `BILLPAYED_HOTEL_FEE_9XG_PKY` PRIMARY KEY (`BILLPAY_YM`, `HOTEL_CD`)
+  ALTER TABLE `billpayed_hotel_fee_9xg` ADD CONSTRAINT `billpayed_hotel_fee_9xg_pky` PRIMARY KEY (`billpay_ym`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAY_PTN_SALES
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAY_PTN_SALES` ADD CONSTRAINT `BILLPAY_PTN_SALES_PKY` PRIMARY KEY (`BILLPAY_YM`, `SITE_CD`, `SALES_RATE`)
+  ALTER TABLE `billpay_ptn_sales` ADD CONSTRAINT `billpay_ptn_sales_pky` PRIMARY KEY (`billpay_ym`, `site_cd`, `sales_rate`)
   ;
 --   *** ------------------------------------
 --  *** Table REPORT_PLAN
 --   *** ------------------------------------
 
-  ALTER TABLE `REPORT_PLAN` ADD CONSTRAINT `REPORT_PLAN_PKY` PRIMARY KEY (`HOTEL_CD`, `DATE_YMD`, `ROOM_CD`, `PLAN_CD`)
+  ALTER TABLE `report_plan` ADD CONSTRAINT `report_plan_pky` PRIMARY KEY (`hotel_cd`, `date_ymd`, `room_cd`, `plan_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAY_FIX_9XG
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAY_FIX_9XG` ADD CONSTRAINT `BILLPAY_FIX_9XG_PKY` PRIMARY KEY (`HOTEL_CD`, `FIX_STATUS`)
+  ALTER TABLE `billpay_fix_9xg` ADD CONSTRAINT `billpay_fix_9xg_pky` PRIMARY KEY (`hotel_cd`, `fix_status`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_PLAN_RANKING_BASE2
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_PLAN_RANKING_BASE2` ADD CONSTRAINT `ROOM_PLAN_RANKING_BASE2_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_ID`, `PLAN_ID`)
+  ALTER TABLE `room_plan_ranking_base2` ADD CONSTRAINT `room_plan_ranking_base2_pky` PRIMARY KEY (`hotel_cd`, `room_id`, `plan_id`)
   ;
 --   *** ------------------------------------
 --  *** Table YAHOO_POINT_PLUS_INFO
 --   *** ------------------------------------
 
-  ALTER TABLE `YAHOO_POINT_PLUS_INFO` ADD CONSTRAINT `YAHOO_POINT_PLUS_INFO_PKY` PRIMARY KEY (`POINT_PLUS_ID`)
+  ALTER TABLE `yahoo_point_plus_info` ADD CONSTRAINT `yahoo_point_plus_info_pky` PRIMARY KEY (`point_plus_id`)
   ;
 --   *** ------------------------------------
 --  *** Table VERIFY_YAHOO_POINT
 --   *** ------------------------------------
 
-  ALTER TABLE `VERIFY_YAHOO_POINT` ADD CONSTRAINT `VERIFY_YAHOO_POINT_PKY` PRIMARY KEY (`VERIFY_POINT_CD`)
+  ALTER TABLE `verify_yahoo_point` ADD CONSTRAINT `verify_yahoo_point_pky` PRIMARY KEY (`verify_point_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_COUNT2
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_COUNT2` ADD CONSTRAINT `ROOM_COUNT2_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_ID`, `DATE_YMD`)
+  ALTER TABLE `room_count2` ADD CONSTRAINT `room_count2_pky` PRIMARY KEY (`hotel_cd`, `room_id`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_INSURANCE_WEATHER
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_INSURANCE_WEATHER` ADD CONSTRAINT `RESERVE_INSURANCE_WEATHER_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`)
+  ALTER TABLE `reserve_insurance_weather` ADD CONSTRAINT `reserve_insurance_weather_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table MAST_PREF
 --   *** ------------------------------------
 
-  ALTER TABLE `MAST_PREF` ADD CONSTRAINT `MAST_PREF_PKY` PRIMARY KEY (`PREF_ID`)
+  ALTER TABLE `mast_pref` ADD CONSTRAINT `mast_pref_pky` PRIMARY KEY (`pref_id`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_DISPOSE_9XG
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_DISPOSE_9XG` ADD CONSTRAINT `RESERVE_DISPOSE_9XG_PKY` PRIMARY KEY (`DISPOSE_ID`)
+  ALTER TABLE `reserve_dispose_9xg` ADD CONSTRAINT `reserve_dispose_9xg_pky` PRIMARY KEY (`dispose_id`)
   ;
 --   *** ------------------------------------
 --  *** Table RECORD_VARIOUS
 --   *** ------------------------------------
 
-  ALTER TABLE `RECORD_VARIOUS` ADD CONSTRAINT `RECORD_VARIOUS_PKY` PRIMARY KEY (`DATE_YMD`)
+  ALTER TABLE `record_various` ADD CONSTRAINT `record_various_pky` PRIMARY KEY (`date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table TEMP_HOTEL_VS_MTN
 --   *** ------------------------------------
 
-  ALTER TABLE `TEMP_HOTEL_VS_MTN` ADD CONSTRAINT `TEMP_HOTEL_VS_MTN_PKY` PRIMARY KEY (`HOTEL_CD`)
+  ALTER TABLE `temp_hotel_vs_mtn` ADD CONSTRAINT `temp_hotel_vs_mtn_pky` PRIMARY KEY (`hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table TEMP_GROUP_RESERVE
 --   *** ------------------------------------
 
-  ALTER TABLE `TEMP_GROUP_RESERVE` ADD CONSTRAINT `TEMP_GROUP_RESERVE_PKY` PRIMARY KEY (`HOTEL_CD`, `ORDER_NO`, `REPLY_NO`)
+  ALTER TABLE `temp_group_reserve` ADD CONSTRAINT `temp_group_reserve_pky` PRIMARY KEY (`hotel_cd`, `order_no`, `reply_no`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAY_PTN_CSTMR
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAY_PTN_CSTMR` ADD CONSTRAINT `BILLPAY_PTN_CSTMR_PKY` PRIMARY KEY (`BILLPAY_YM`, `CUSTOMER_ID`)
+  ALTER TABLE `billpay_ptn_cstmr` ADD CONSTRAINT `billpay_ptn_cstmr_pky` PRIMARY KEY (`billpay_ym`, `customer_id`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAYED_HOTEL_RSV
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAYED_HOTEL_RSV` ADD CONSTRAINT `BILLPAYED_HOTEL_RSV_PKY` PRIMARY KEY (`BILLPAY_YM`, `HOTEL_CD`)
+  ALTER TABLE `billpayed_hotel_rsv` ADD CONSTRAINT `billpayed_hotel_rsv_pky` PRIMARY KEY (`billpay_ym`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table MAST_AREA_SURVEY
 --   *** ------------------------------------
 
-  ALTER TABLE `MAST_AREA_SURVEY` ADD CONSTRAINT `MAST_AREA_SURVEY_PKY` PRIMARY KEY (`SURVEY_CLASS`, `SURVEY_CD`)
+  ALTER TABLE `mast_area_survey` ADD CONSTRAINT `mast_area_survey_pky` PRIMARY KEY (`survey_class`, `survey_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table GIFT
 --   *** ------------------------------------
 
-  ALTER TABLE `GIFT` ADD CONSTRAINT `GIFT_PKY` PRIMARY KEY (`GIFT_ID`)
+  ALTER TABLE `gift` ADD CONSTRAINT `gift_pky` PRIMARY KEY (`gift_id`)
   ;
 --   *** ------------------------------------
 --  *** Table WELFARE_OP
 --   *** ------------------------------------
 
-  ALTER TABLE `WELFARE_OP` ADD CONSTRAINT `WELFARE_OP_PKY` PRIMARY KEY (`WELFARE_OP_ID`)
+  ALTER TABLE `welfare_op` ADD CONSTRAINT `welfare_op_pky` PRIMARY KEY (`welfare_op_id`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_BATH_TAX
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_BATH_TAX` ADD CONSTRAINT `HOTEL_BATH_TAX_PKY` PRIMARY KEY (`HOTEL_CD`)
+  ALTER TABLE `hotel_bath_tax` ADD CONSTRAINT `hotel_bath_tax_pky` PRIMARY KEY (`hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table SPOT
 --   *** ------------------------------------
 
-  ALTER TABLE `SPOT` ADD CONSTRAINT `SPOT_PKY` PRIMARY KEY (`SPOT_ID`)
+  ALTER TABLE `spot` ADD CONSTRAINT `spot_pky` PRIMARY KEY (`spot_id`)
   ;
 --   *** ------------------------------------
 --  *** Table CHARGE
 --   *** ------------------------------------
 
-  ALTER TABLE `CHARGE` ADD CONSTRAINT `CHARGE_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_ID`, `PLAN_ID`, `PARTNER_GROUP_ID`, `CAPACITY`, `DATE_YMD`)
+  ALTER TABLE `charge` ADD CONSTRAINT `charge_pky` PRIMARY KEY (`hotel_cd`, `room_id`, `plan_id`, `partner_group_id`, `capacity`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table GROUP_BUYING_DETAIL
 --   *** ------------------------------------
 
-  ALTER TABLE `GROUP_BUYING_DETAIL` ADD CONSTRAINT `GROUP_BUYING_DETAIL_PKY` PRIMARY KEY (`DEAL_ID`)
+  ALTER TABLE `group_buying_detail` ADD CONSTRAINT `group_buying_detail_pky` PRIMARY KEY (`deal_id`)
   ;
  
---  ALTER TABLE `GROUP_BUYING_DETAIL` MODIFY (`DEAL_NM` NOT NULL ENABLE);
-  ALTER TABLE `GROUP_BUYING_DETAIL` MODIFY `DEAL_NM` varchar(768) BINARY NOT NULL ;
+--  ALTER TABLE `group_buying_detail` MODIFY (`deal_nm` NOT NULL ENABLE);
+  ALTER TABLE `group_buying_detail` MODIFY `deal_nm` varchar(768) BINARY NOT NULL ;
  
---  ALTER TABLE `GROUP_BUYING_DETAIL` MODIFY (`USUAL_CHARGE` NOT NULL ENABLE);
-   ALTER TABLE `GROUP_BUYING_DETAIL` MODIFY `USUAL_CHARGE` int NOT NULL ;
+--  ALTER TABLE `group_buying_detail` MODIFY (`usual_charge` NOT NULL ENABLE);
+   ALTER TABLE `group_buying_detail` MODIFY `usual_charge` int NOT NULL ;
 
---  ALTER TABLE `GROUP_BUYING_DETAIL` MODIFY (`DEAL_CHARGE` NOT NULL ENABLE);
-   ALTER TABLE `GROUP_BUYING_DETAIL` MODIFY `DEAL_CHARGE` int NOT NULL ;
+--  ALTER TABLE `group_buying_detail` MODIFY (`deal_charge` NOT NULL ENABLE);
+   ALTER TABLE `group_buying_detail` MODIFY `deal_charge` int NOT NULL ;
 
---  ALTER TABLE `GROUP_BUYING_DETAIL` MODIFY (`ENTRY_CD` NOT NULL ENABLE);
-   ALTER TABLE `GROUP_BUYING_DETAIL` MODIFY `ENTRY_CD` varchar(64) BINARY NOT NULL ;
+--  ALTER TABLE `group_buying_detail` MODIFY (`entry_cd` NOT NULL ENABLE);
+   ALTER TABLE `group_buying_detail` MODIFY `entry_cd` varchar(64) BINARY NOT NULL ;
 
---  ALTER TABLE `GROUP_BUYING_DETAIL` MODIFY (`ENTRY_TS` NOT NULL ENABLE);
-   ALTER TABLE `GROUP_BUYING_DETAIL` MODIFY `ENTRY_TS` datetime NOT NULL ;
+--  ALTER TABLE `group_buying_detail` MODIFY (`entry_ts` NOT NULL ENABLE);
+   ALTER TABLE `group_buying_detail` MODIFY `entry_ts` datetime NOT NULL ;
 
---  ALTER TABLE `GROUP_BUYING_DETAIL` MODIFY (`MODIFY_CD` NOT NULL ENABLE);
-   ALTER TABLE `GROUP_BUYING_DETAIL` MODIFY `MODIFY_CD` varchar(64) BINARY NOT NULL ;
+--  ALTER TABLE `group_buying_detail` MODIFY (`modify_cd` NOT NULL ENABLE);
+   ALTER TABLE `group_buying_detail` MODIFY `modify_cd` varchar(64) BINARY NOT NULL ;
 
---  ALTER TABLE `GROUP_BUYING_DETAIL` MODIFY (`MODIFY_TS` NOT NULL ENABLE);
-   ALTER TABLE `GROUP_BUYING_DETAIL` MODIFY `MODIFY_TS` datetime NOT NULL ;
+--  ALTER TABLE `group_buying_detail` MODIFY (`modify_ts` NOT NULL ENABLE);
+   ALTER TABLE `group_buying_detail` MODIFY `modify_ts` datetime NOT NULL ;
 
 --   *** ------------------------------------
 --  *** Table HOTEL_SURVEY
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_SURVEY` ADD CONSTRAINT `HOTEL_SURVEY_PKY` PRIMARY KEY (`HOTEL_CD`)
+  ALTER TABLE `hotel_survey` ADD CONSTRAINT `hotel_survey_pky` PRIMARY KEY (`hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table DENY_LIST
 --   *** ------------------------------------
 
-  ALTER TABLE `DENY_LIST` ADD CONSTRAINT `DENY_LIST_PKY` PRIMARY KEY (`DENY_CD`)
+  ALTER TABLE `deny_list` ADD CONSTRAINT `deny_list_pky` PRIMARY KEY (`deny_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_JWEST
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_JWEST` ADD CONSTRAINT `RESERVE_JWEST_PKY` PRIMARY KEY (`RESERVE_CD`)
+  ALTER TABLE `reserve_jwest` ADD CONSTRAINT `reserve_jwest_pky` PRIMARY KEY (`reserve_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table MEMBER_MOBILE_MAIL
 --   *** ------------------------------------
 
-  ALTER TABLE `MEMBER_MOBILE_MAIL` ADD CONSTRAINT `MEMBER_MOBILE_MAIL_PKY` PRIMARY KEY (`MEMBER_CD`, `SEND_MAIL_TYPE`)
+  ALTER TABLE `member_mobile_mail` ADD CONSTRAINT `member_mobile_mail_pky` PRIMARY KEY (`member_cd`, `send_mail_type`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_MEDIA
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_MEDIA` ADD CONSTRAINT `HOTEL_MEDIA_PKY` PRIMARY KEY (`HOTEL_CD`, `TYPE`, `MEDIA_NO`)
+  ALTER TABLE `hotel_media` ADD CONSTRAINT `hotel_media_pky` PRIMARY KEY (`hotel_cd`, `type`, `media_no`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_PERSON
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_PERSON` ADD CONSTRAINT `HOTEL_PERSON_PKY` PRIMARY KEY (`HOTEL_CD`)
+  ALTER TABLE `hotel_person` ADD CONSTRAINT `hotel_person_pky` PRIMARY KEY (`hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAY_HOTEL_YAHOO_9XG
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAY_HOTEL_YAHOO_9XG` ADD CONSTRAINT `BILLPAY_HOTEL_YAHOO_9XG_PKY` PRIMARY KEY (`BILLPAY_YM`, `HOTEL_CD`)
+  ALTER TABLE `billpay_hotel_yahoo_9xg` ADD CONSTRAINT `billpay_hotel_yahoo_9xg_pky` PRIMARY KEY (`billpay_ym`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table SERVICE_VOTE_ANSWER
 --   *** ------------------------------------
 
-  ALTER TABLE `SERVICE_VOTE_ANSWER` ADD CONSTRAINT `SERVICE_VOTE_ANSWER_PKY` PRIMARY KEY (`VOTE_CD`, `MEMBER_CD`)
+  ALTER TABLE `service_vote_answer` ADD CONSTRAINT `service_vote_answer_pky` PRIMARY KEY (`vote_cd`, `member_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table AREA_YDP_MATCH
 --   *** ------------------------------------
 
-  ALTER TABLE `AREA_YDP_MATCH` ADD CONSTRAINT `AREA_YDP_MATCH_PKY` PRIMARY KEY (`YDP_AREA_CD`)
+  ALTER TABLE `area_ydp_match` ADD CONSTRAINT `area_ydp_match_pky` PRIMARY KEY (`ydp_area_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table MY_SEARCH_SETTING
 --   *** ------------------------------------
 
-  ALTER TABLE `MY_SEARCH_SETTING` ADD CONSTRAINT `MY_SEARCH_SETTING_PKY` PRIMARY KEY (`MY_SEARCH_SETTING_CD`)
+  ALTER TABLE `my_search_setting` ADD CONSTRAINT `my_search_setting_pky` PRIMARY KEY (`my_search_setting_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_SUPERVISOR
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_SUPERVISOR` ADD CONSTRAINT `HOTEL_SUPERVISOR_PKY` PRIMARY KEY (`SUPERVISOR_CD`)
+  ALTER TABLE `hotel_supervisor` ADD CONSTRAINT `hotel_supervisor_pky` PRIMARY KEY (`supervisor_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table BROADCAST_MESSAGE
 --   *** ------------------------------------
 
-  ALTER TABLE `BROADCAST_MESSAGE` ADD CONSTRAINT `BROADCAST_MESSAGE_PKY` PRIMARY KEY (`ID`)
+  ALTER TABLE `broadcast_message` ADD CONSTRAINT `broadcast_message_pky` PRIMARY KEY (`id`)
   ;
 --   *** ------------------------------------
 --  *** Table PREVENT_ACCESSES
 --   *** ------------------------------------
 
-  ALTER TABLE `PREVENT_ACCESSES` ADD CONSTRAINT `PREVENT_ACCESSES_PKY` PRIMARY KEY (`ACCOUNT_KEY`, `URI`)
+  ALTER TABLE `prevent_accesses` ADD CONSTRAINT `prevent_accesses_pky` PRIMARY KEY (`account_key`, `uri`)
   ;
 --   *** ------------------------------------
 --  *** Table CARD_PAYMENT_POWER
 --   *** ------------------------------------
 
-  ALTER TABLE `CARD_PAYMENT_POWER` ADD CONSTRAINT `CARD_PAYMENT_POWER_PKY` PRIMARY KEY (`CARD_PAYMENT_ID`)
+  ALTER TABLE `card_payment_power` ADD CONSTRAINT `card_payment_power_pky` PRIMARY KEY (`card_payment_id`)
   ;
  
-  ALTER TABLE `CARD_PAYMENT_POWER` ADD CONSTRAINT `CARD_PAYMENT_POWER_UNQ_01` UNIQUE (`PAYMENT_SYSTEM`, `DEMAND_DTM`, `RESERVE_CD`)
+  ALTER TABLE `card_payment_power` ADD CONSTRAINT `card_payment_power_unq_01` UNIQUE (`payment_system`, `demand_dtm`, `reserve_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_YDP2
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_YDP2` ADD CONSTRAINT `HOTEL_YDP2_PKY` PRIMARY KEY (`YDP_HOTEL_CD`)
+  ALTER TABLE `hotel_ydp2` ADD CONSTRAINT `hotel_ydp2_pky` PRIMARY KEY (`ydp_hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAY_HOTEL_GRANTS
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAY_HOTEL_GRANTS` ADD CONSTRAINT `BILLPAY_HOTEL_GRANTS_PKY` PRIMARY KEY (`BILLPAY_YM`, `HOTEL_CD`)
+  ALTER TABLE `billpay_hotel_grants` ADD CONSTRAINT `billpay_hotel_grants_pky` PRIMARY KEY (`billpay_ym`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_PLAN_LEGACY
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_PLAN_LEGACY` ADD CONSTRAINT `ROOM_PLAN_LEGACY_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_CD`, `PLAN_CD`)
+  ALTER TABLE `room_plan_legacy` ADD CONSTRAINT `room_plan_legacy_pky` PRIMARY KEY (`hotel_cd`, `room_cd`, `plan_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table PARTNER_CONTROL
 --   *** ------------------------------------
 
-  ALTER TABLE `PARTNER_CONTROL` ADD CONSTRAINT `PARTNER_CONTROL_PKY` PRIMARY KEY (`PARTNER_CD`)
+  ALTER TABLE `partner_control` ADD CONSTRAINT `partner_control_pky` PRIMARY KEY (`partner_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table PARTNER_KEYWORD_EXAMPLE
 --   *** ------------------------------------
 
-  ALTER TABLE `PARTNER_KEYWORD_EXAMPLE` ADD CONSTRAINT `PARTNER_KEYWORD_EXAMPLE_PKY` PRIMARY KEY (`PARTNER_CD`, `LAYOUT_TYPE`, `BRANCH_NO`)
+  ALTER TABLE `partner_keyword_example` ADD CONSTRAINT `partner_keyword_example_pky` PRIMARY KEY (`partner_cd`, `layout_type`, `branch_no`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_MATERIAL
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_MATERIAL` ADD CONSTRAINT `RESERVE_MATERIAL_PKY` PRIMARY KEY (`PARTNER_CD`, `CCD`, `ROOM`)
+  ALTER TABLE `reserve_material` ADD CONSTRAINT `reserve_material_pky` PRIMARY KEY (`partner_cd`, `ccd`, `room`)
   ;
 --   *** ------------------------------------
 --  *** Table VOICE_STAY
 --   *** ------------------------------------
 
-  ALTER TABLE `VOICE_STAY` ADD CONSTRAINT `VOICE_STAY_PKY` PRIMARY KEY (`VOICE_CD`)
+  ALTER TABLE `voice_stay` ADD CONSTRAINT `voice_stay_pky` PRIMARY KEY (`voice_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table CHECKSHEET_CREDIT
 --   *** ------------------------------------
 
-  ALTER TABLE `CHECKSHEET_CREDIT` ADD CONSTRAINT `CHECKSHEET_CREDIT_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`)
+  ALTER TABLE `checksheet_credit` ADD CONSTRAINT `checksheet_credit_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAY_BOOK
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAY_BOOK` ADD CONSTRAINT `BILLPAY_BOOK_PKY` PRIMARY KEY (`BILLPAY_CD`, `BILLPAY_BRANCH_NO`)
+  ALTER TABLE `billpay_book` ADD CONSTRAINT `billpay_book_pky` PRIMARY KEY (`billpay_cd`, `billpay_branch_no`)
   ;
 --   *** ------------------------------------
 --  *** Table PARTNER_POOL2
 --   *** ------------------------------------
 
-  ALTER TABLE `PARTNER_POOL2` ADD CONSTRAINT `PARTNER_POOL2_PKY` PRIMARY KEY (`PARTNER_CD`)
+  ALTER TABLE `partner_pool2` ADD CONSTRAINT `partner_pool2_pky` PRIMARY KEY (`partner_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table CHECKSHEET_HOTEL_FEE
 --   *** ------------------------------------
 
-  ALTER TABLE `CHECKSHEET_HOTEL_FEE` ADD CONSTRAINT `CHECKSHEET_HOTEL_FEE_PKY` PRIMARY KEY (`CHECKSHEET_YM`, `HOTEL_CD`)
+  ALTER TABLE `checksheet_hotel_fee` ADD CONSTRAINT `checksheet_hotel_fee_pky` PRIMARY KEY (`checksheet_ym`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAY_FEE
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAY_FEE` ADD CONSTRAINT `BILLPAY_FEE_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`)
+  ALTER TABLE `billpay_fee` ADD CONSTRAINT `billpay_fee_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_PLAN_SPEC
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_PLAN_SPEC` ADD CONSTRAINT `ROOM_PLAN_SPEC_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_CD`, `PLAN_CD`, `ELEMENT_ID`)
+  ALTER TABLE `room_plan_spec` ADD CONSTRAINT `room_plan_spec_pky` PRIMARY KEY (`hotel_cd`, `room_cd`, `plan_cd`, `element_id`)
   ;
 --   *** ------------------------------------
 --  *** Table WK_ROOM_PLAN_SALES
 --   *** ------------------------------------
 
-  ALTER TABLE `WK_ROOM_PLAN_SALES` ADD CONSTRAINT `WK_ROOM_PLAN_SALES_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_CD`, `PLAN_CD`)
+  ALTER TABLE `wk_room_plan_sales` ADD CONSTRAINT `wk_room_plan_sales_pky` PRIMARY KEY (`hotel_cd`, `room_cd`, `plan_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table YDP_ITEM
 --   *** ------------------------------------
 
-  ALTER TABLE `YDP_ITEM` ADD CONSTRAINT `YDP_ITEM_PKY` PRIMARY KEY (`COOPERATION_CD`, `ITEM_CD`)
+  ALTER TABLE `ydp_item` ADD CONSTRAINT `ydp_item_pky` PRIMARY KEY (`cooperation_cd`, `item_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_GOTO_EXCEL
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_GOTO_EXCEL` ADD CONSTRAINT `HOTEL_GOTO_EXCEL_PKY` PRIMARY KEY (`HOTEL_GOTO_EXCEL_ID`)
+  ALTER TABLE `hotel_goto_excel` ADD CONSTRAINT `hotel_goto_excel_pky` PRIMARY KEY (`hotel_goto_excel_id`)
   ;
 --   *** ------------------------------------
 --  *** Table NOTIFY
 --   *** ------------------------------------
 
-  ALTER TABLE `NOTIFY` ADD CONSTRAINT `NOTIFY_PKY` PRIMARY KEY (`NOTIFY_ID`)
+  ALTER TABLE `notify` ADD CONSTRAINT `notify_pky` PRIMARY KEY (`notify_id`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_ADVERT_2009000400
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_ADVERT_2009000400` ADD CONSTRAINT `HOTEL_ADVERT_2009000400_PKY` PRIMARY KEY (`RECORD_ID`)
+  ALTER TABLE `hotel_advert_2009000400` ADD CONSTRAINT `hotel_advert_2009000400_pky` PRIMARY KEY (`record_id`)
   ;
 --   *** ------------------------------------
 --  *** Table CHECKSHEET_HOTEL_RSV
 --   *** ------------------------------------
 
-  ALTER TABLE `CHECKSHEET_HOTEL_RSV` ADD CONSTRAINT `CHECKSHEET_HOTEL_RSV_PKY` PRIMARY KEY (`CHECKSHEET_YM`, `HOTEL_CD`)
+  ALTER TABLE `checksheet_hotel_rsv` ADD CONSTRAINT `checksheet_hotel_rsv_pky` PRIMARY KEY (`checksheet_ym`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAY_HOTEL_YAHOO
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAY_HOTEL_YAHOO` ADD CONSTRAINT `BILLPAY_HOTEL_YAHOO_PKY` PRIMARY KEY (`BILLPAY_YM`, `HOTEL_CD`)
+  ALTER TABLE `billpay_hotel_yahoo` ADD CONSTRAINT `billpay_hotel_yahoo_pky` PRIMARY KEY (`billpay_ym`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_PLAN_JR
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_PLAN_JR` ADD CONSTRAINT `RESERVE_PLAN_JR_PKY` PRIMARY KEY (`RESERVE_CD`)
+  ALTER TABLE `reserve_plan_jr` ADD CONSTRAINT `reserve_plan_jr_pky` PRIMARY KEY (`reserve_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table MEMBER_SENDING_MAIL
 --   *** ------------------------------------
 
-  ALTER TABLE `MEMBER_SENDING_MAIL` ADD CONSTRAINT `MEMBER_SENDING_MAIL_PKY` PRIMARY KEY (`MEMBER_CD`, `SEND_MAIL_TYPE`)
+  ALTER TABLE `member_sending_mail` ADD CONSTRAINT `member_sending_mail_pky` PRIMARY KEY (`member_cd`, `send_mail_type`)
   ;
 --   *** ------------------------------------
 --  *** Table MY_HOTEL_LIST
 --   *** ------------------------------------
 
-  ALTER TABLE `MY_HOTEL_LIST` ADD CONSTRAINT `MY_HOTEL_LIST_PKY` PRIMARY KEY (`MEMBER_CD`, `HOTEL_CD`)
+  ALTER TABLE `my_hotel_list` ADD CONSTRAINT `my_hotel_list_pky` PRIMARY KEY (`member_cd`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_COUNT_REMOVED
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_COUNT_REMOVED` ADD CONSTRAINT `ROOM_COUNT_REMOVED_PKY` PRIMARY KEY (`ROOM_COUNT_REMOVED_ID`)
+  ALTER TABLE `room_count_removed` ADD CONSTRAINT `room_count_removed_pky` PRIMARY KEY (`room_count_removed_id`)
   ;
 --   *** ------------------------------------
 --  *** Table BR_POINT_PLUS_PLAN
 --   *** ------------------------------------
 
-  ALTER TABLE `BR_POINT_PLUS_PLAN` ADD CONSTRAINT `BR_POINT_PLUS_PLAN_PKY` PRIMARY KEY (`POINT_PLUS_ID`, `PLAN_ID`)
+  ALTER TABLE `br_point_plus_plan` ADD CONSTRAINT `br_point_plus_plan_pky` PRIMARY KEY (`point_plus_id`, `plan_id`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_CHARGE_YHO_BAT_TMP_7
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_CHARGE_YHO_BAT_TMP_7` ADD CONSTRAINT `ROOM_CHARGE_YHO_BAT_TMP_7_PKY` PRIMARY KEY (`REC_TYPE`, `HOTEL_CD`, `ROOM_CD`, `PLAN_CD`, `DATE_YMD`)
+  ALTER TABLE `room_charge_yho_bat_tmp_7` ADD CONSTRAINT `room_charge_yho_bat_tmp_7_pky` PRIMARY KEY (`rec_type`, `hotel_cd`, `room_cd`, `plan_cd`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table RECORD_MOBILE_RESERVE
 --   *** ------------------------------------
 
-  ALTER TABLE `RECORD_MOBILE_RESERVE` ADD CONSTRAINT `RECORD_MOBILE_RESERVE_PKY` PRIMARY KEY (`DATE_YMD`, `CAREER_TYPE`)
+  ALTER TABLE `record_mobile_reserve` ADD CONSTRAINT `record_mobile_reserve_pky` PRIMARY KEY (`date_ymd`, `career_type`)
   ;
 --   *** ------------------------------------
 --  *** Table RECORD_RESERVE2
 --   *** ------------------------------------
 
-  ALTER TABLE `RECORD_RESERVE2` ADD CONSTRAINT `RECORD_RESERVE2_PKY` PRIMARY KEY (`DATE_YMD`, `RECORD_TYPE`)
+  ALTER TABLE `record_reserve2` ADD CONSTRAINT `record_reserve2_pky` PRIMARY KEY (`date_ymd`, `record_type`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_PLAN_GRANTS
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_PLAN_GRANTS` ADD CONSTRAINT `RESERVE_PLAN_GRANTS_PKY` PRIMARY KEY (`RESERVE_CD`)
+  ALTER TABLE `reserve_plan_grants` ADD CONSTRAINT `reserve_plan_grants_pky` PRIMARY KEY (`reserve_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table MAST_LANDMARK_BASIC
 --   *** ------------------------------------
 
-  ALTER TABLE `MAST_LANDMARK_BASIC` ADD CONSTRAINT `MAST_LANDMARK_BASIC_PKY` PRIMARY KEY (`ITEM_ID`)
+  ALTER TABLE `mast_landmark_basic` ADD CONSTRAINT `mast_landmark_basic_pky` PRIMARY KEY (`item_id`)
   ;
  
-  ALTER TABLE `MAST_LANDMARK_BASIC` ADD CONSTRAINT `MAST_LANDMARK_BASIC_UNQ_01` UNIQUE (`ITEM_NM`)
+  ALTER TABLE `mast_landmark_basic` ADD CONSTRAINT `mast_landmark_basic_unq_01` UNIQUE (`item_nm`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_MODIFY_HISTORY
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_MODIFY_HISTORY` ADD CONSTRAINT `RESERVE_MODIFY_HISTORY_PKY` PRIMARY KEY (`RESERVE_CD`, `BRANCH_NO`)
+  ALTER TABLE `reserve_modify_history` ADD CONSTRAINT `reserve_modify_history_pky` PRIMARY KEY (`reserve_cd`, `branch_no`)
   ;
 --   *** ------------------------------------
 --  *** Table LOG_HOTEL_PERSON
 --   *** ------------------------------------
 
-  ALTER TABLE `LOG_HOTEL_PERSON` ADD CONSTRAINT `LOG_HOTEL_PERSON_PKY` PRIMARY KEY (`HOTEL_CD`, `BRANCH_NO`)
+  ALTER TABLE `log_hotel_person` ADD CONSTRAINT `log_hotel_person_pky` PRIMARY KEY (`hotel_cd`, `branch_no`)
   ;
 --   *** ------------------------------------
 --  *** Table PLAN_YDK
 --   *** ------------------------------------
 
-  ALTER TABLE `PLAN_YDK` ADD CONSTRAINT `PLAN_YDK_PKY` PRIMARY KEY (`HOTEL_CD`, `PLAN_ID`)
+  ALTER TABLE `plan_ydk` ADD CONSTRAINT `plan_ydk_pky` PRIMARY KEY (`hotel_cd`, `plan_id`)
   ;
 --   *** ------------------------------------
 --  *** Table LOG_SECURITY_03
 --   *** ------------------------------------
 
-  ALTER TABLE `LOG_SECURITY_03` ADD CONSTRAINT `LOG_SECURITY_03_PKY` PRIMARY KEY (`SECURITY_CD`)
+  ALTER TABLE `log_security_03` ADD CONSTRAINT `log_security_03_pky` PRIMARY KEY (`security_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table MAST_ROUTES
 --   *** ------------------------------------
 
-  ALTER TABLE `MAST_ROUTES` ADD CONSTRAINT `MAST_ROUTES_PKY` PRIMARY KEY (`ROUTE_ID`)
+  ALTER TABLE `mast_routes` ADD CONSTRAINT `mast_routes_pky` PRIMARY KEY (`route_id`)
   ;
  
---  ALTER TABLE `MAST_ROUTES` MODIFY (`ROUTE_ID` NOT NULL ENABLE);
-  ALTER TABLE `MAST_ROUTES` MODIFY `ROUTE_ID` varchar(5) BINARY NOT NULL ;
+--  ALTER TABLE `mast_routes` MODIFY (`route_id` NOT NULL ENABLE);
+  ALTER TABLE `mast_routes` MODIFY `route_id` varchar(5) BINARY NOT NULL ;
 
 --   *** ------------------------------------
 --  *** Table ROOM_PLAN_POINT
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_PLAN_POINT` ADD CONSTRAINT `ROOM_PLAN_POINT_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_CD`, `PLAN_CD`)
+  ALTER TABLE `room_plan_point` ADD CONSTRAINT `room_plan_point_pky` PRIMARY KEY (`hotel_cd`, `room_cd`, `plan_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_PLAN_INFO
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_PLAN_INFO` ADD CONSTRAINT `ROOM_PLAN_INFO_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_CD`, `PLAN_CD`)
+  ALTER TABLE `room_plan_info` ADD CONSTRAINT `room_plan_info_pky` PRIMARY KEY (`hotel_cd`, `room_cd`, `plan_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_ADDED_MESSAGE
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_ADDED_MESSAGE` ADD CONSTRAINT `RESERVE_ADDED_MESSAGE_PKY` PRIMARY KEY (`RESERVE_CD`, `MSG_TYPE`)
+  ALTER TABLE `reserve_added_message` ADD CONSTRAINT `reserve_added_message_pky` PRIMARY KEY (`reserve_cd`, `msg_type`)
   ;
 --   *** ------------------------------------
 --  *** Table SERVICE_VOTE
 --   *** ------------------------------------
 
-  ALTER TABLE `SERVICE_VOTE` ADD CONSTRAINT `SERVICE_VOTE_PKY` PRIMARY KEY (`VOTE_CD`)
+  ALTER TABLE `service_vote` ADD CONSTRAINT `service_vote_pky` PRIMARY KEY (`vote_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_SEARCH_WORDS
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_SEARCH_WORDS` ADD CONSTRAINT `HOTEL_SEARCH_WORDS_PKY` PRIMARY KEY (`HOTEL_CD`)
+  ALTER TABLE `hotel_search_words` ADD CONSTRAINT `hotel_search_words_pky` PRIMARY KEY (`hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table MEMBER_DETAIL
 --   *** ------------------------------------
 
-  ALTER TABLE `MEMBER_DETAIL` ADD CONSTRAINT `MEMBER_DETAIL_PKY` PRIMARY KEY (`MEMBER_CD`)
+  ALTER TABLE `member_detail` ADD CONSTRAINT `member_detail_pky` PRIMARY KEY (`member_cd`)
   ;
  
-  ALTER TABLE `MEMBER_DETAIL` ADD CONSTRAINT `MEMBER_DETAIL_UNQ_01` UNIQUE (`ACCOUNT_ID`)
+  ALTER TABLE `member_detail` ADD CONSTRAINT `member_detail_unq_01` UNIQUE (`account_id`)
   ;
  
---  ALTER TABLE `MEMBER_DETAIL` MODIFY (`MEMBER_CD` NOT NULL ENABLE);
-  ALTER TABLE `MEMBER_DETAIL` MODIFY `MEMBER_CD` varchar(128) BINARY NOT NULL ;
+--  ALTER TABLE `member_detail` MODIFY (`member_cd` NOT NULL ENABLE);
+  ALTER TABLE `member_detail` MODIFY `member_cd` varchar(128) BINARY NOT NULL ;
 
 --   *** ------------------------------------
 --  *** Table RSV_TOP_CONTENTS
 --   *** ------------------------------------
 
-  ALTER TABLE `RSV_TOP_CONTENTS` ADD CONSTRAINT `RSV_TOP_CONTENTS_PKY` PRIMARY KEY (`CONTENT_CD`)
+  ALTER TABLE `rsv_top_contents` ADD CONSTRAINT `rsv_top_contents_pky` PRIMARY KEY (`content_cd`)
   ;
  
---  ALTER TABLE `RSV_TOP_CONTENTS` MODIFY (`PLACE` NOT NULL ENABLE);
-   ALTER TABLE `RSV_TOP_CONTENTS` MODIFY `PLACE` varchar(10) BINARY  NOT NULL ;
+--  ALTER TABLE `rsv_top_contents` MODIFY (`place` NOT NULL ENABLE);
+   ALTER TABLE `rsv_top_contents` MODIFY `place` varchar(10) BINARY  NOT NULL ;
 
---  ALTER TABLE `RSV_TOP_CONTENTS` MODIFY (`TITLE` NOT NULL ENABLE);
-   ALTER TABLE `RSV_TOP_CONTENTS` MODIFY `TITLE` varchar(300) BINARY  NOT NULL ;
+--  ALTER TABLE `rsv_top_contents` MODIFY (`title` NOT NULL ENABLE);
+   ALTER TABLE `rsv_top_contents` MODIFY `title` varchar(300) BINARY  NOT NULL ;
 
 --   *** ------------------------------------
 --  *** Table EXTEND_SWITCH
 --   *** ------------------------------------
 
-  ALTER TABLE `EXTEND_SWITCH` ADD CONSTRAINT `EXTEND_SWITCH_PKY` PRIMARY KEY (`HOTEL_CD`)
+  ALTER TABLE `extend_switch` ADD CONSTRAINT `extend_switch_pky` PRIMARY KEY (`hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_YDP
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_YDP` ADD CONSTRAINT `HOTEL_YDP_PKY` PRIMARY KEY (`HOTEL_CD`)
+  ALTER TABLE `hotel_ydp` ADD CONSTRAINT `hotel_ydp_pky` PRIMARY KEY (`hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_CHARGE_INITIAL
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_CHARGE_INITIAL` ADD CONSTRAINT `ROOM_CHARGE_INITIAL_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_CD`, `PLAN_CD`, `PARTNER_GROUP_ID`)
+  ALTER TABLE `room_charge_initial` ADD CONSTRAINT `room_charge_initial_pky` PRIMARY KEY (`hotel_cd`, `room_cd`, `plan_cd`, `partner_group_id`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAYED_HOTEL_YAHOO
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAYED_HOTEL_YAHOO` ADD CONSTRAINT `BILLPAYED_HOTEL_YAHOO_PKY` PRIMARY KEY (`BILLPAY_YM`, `HOTEL_CD`)
+  ALTER TABLE `billpayed_hotel_yahoo` ADD CONSTRAINT `billpayed_hotel_yahoo_pky` PRIMARY KEY (`billpay_ym`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table WELFARE_MATCH_HISTORY
 --   *** ------------------------------------
 
-  ALTER TABLE `WELFARE_MATCH_HISTORY` ADD CONSTRAINT `WELFARE_MATCH_HISTORY_PKY` PRIMARY KEY (`WELFARE_MATCH_HISTORY_ID`)
+  ALTER TABLE `welfare_match_history` ADD CONSTRAINT `welfare_match_history_pky` PRIMARY KEY (`welfare_match_history_id`)
   ;
  
-  ALTER TABLE `WELFARE_MATCH_HISTORY` ADD CONSTRAINT `WELFARE_MATCH_HISTORY_UNQ_01` UNIQUE (`WELFARE_MATCH_ID`, `BRANCH_NO`)
+  ALTER TABLE `welfare_match_history` ADD CONSTRAINT `welfare_match_history_unq_01` UNIQUE (`welfare_match_id`, `branch_no`)
   ;
 --   *** ------------------------------------
 --  *** Table MAST_AMEDAS
 --   *** ------------------------------------
 
-  ALTER TABLE `MAST_AMEDAS` ADD CONSTRAINT `MAST_AMEDAS_PKY` PRIMARY KEY (`JBR_ID`)
+  ALTER TABLE `mast_amedas` ADD CONSTRAINT `mast_amedas_pky` PRIMARY KEY (`jbr_id`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_PLAN
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_PLAN` ADD CONSTRAINT `ROOM_PLAN_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_CD`, `PLAN_CD`)
+  ALTER TABLE `room_plan` ADD CONSTRAINT `room_plan_pky` PRIMARY KEY (`hotel_cd`, `room_cd`, `plan_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table GROUP_BUYING_GENRE
 --   *** ------------------------------------
 
-  ALTER TABLE `GROUP_BUYING_GENRE` ADD CONSTRAINT `GROUP_BUYING_GENRE_PKY` PRIMARY KEY (`GENRE_ID`)
+  ALTER TABLE `group_buying_genre` ADD CONSTRAINT `group_buying_genre_pky` PRIMARY KEY (`genre_id`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAYED_HOTEL_GRANTS_9XG
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAYED_HOTEL_GRANTS_9XG` ADD CONSTRAINT `BILLPAYED_HOTEL_GRANTS_9XG_PKY` PRIMARY KEY (`BILLPAY_YM`, `HOTEL_CD`)
+  ALTER TABLE `billpayed_hotel_grants_9xg` ADD CONSTRAINT `billpayed_hotel_grants_9xg_pky` PRIMARY KEY (`billpay_ym`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAY_CUSTOMER_HOTEL_9XG
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAY_CUSTOMER_HOTEL_9XG` ADD CONSTRAINT `BILLPAY_CUSTOMER_HOTEL_9XG_PKY` PRIMARY KEY (`BILLPAY_YM`, `HOTEL_CD`)
+  ALTER TABLE `billpay_customer_hotel_9xg` ADD CONSTRAINT `billpay_customer_hotel_9xg_pky` PRIMARY KEY (`billpay_ym`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table KEYWORDS_HOTEL
 --   *** ------------------------------------
 
-  ALTER TABLE `KEYWORDS_HOTEL` ADD CONSTRAINT `KEYWORDS_HOTEL_PKY` PRIMARY KEY (`HOTEL_CD`, `FIELD_NM`)
+  ALTER TABLE `keywords_hotel` ADD CONSTRAINT `keywords_hotel_pky` PRIMARY KEY (`hotel_cd`, `field_nm`)
   ;
 --   *** ------------------------------------
 --  *** Table CHECKSHEET_HOTEL_YAHOO
 --   *** ------------------------------------
 
-  ALTER TABLE `CHECKSHEET_HOTEL_YAHOO` ADD CONSTRAINT `CHECKSHEET_HOTEL_YAHOO_PKY` PRIMARY KEY (`CHECKSHEET_YM`, `HOTEL_CD`)
+  ALTER TABLE `checksheet_hotel_yahoo` ADD CONSTRAINT `checksheet_hotel_yahoo_pky` PRIMARY KEY (`checksheet_ym`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAY_FEE_9XG
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAY_FEE_9XG` ADD CONSTRAINT `BILLPAY_FEE_9XG_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`)
+  ALTER TABLE `billpay_fee_9xg` ADD CONSTRAINT `billpay_fee_9xg_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table MAST_CITY
 --   *** ------------------------------------
 
-  ALTER TABLE `MAST_CITY` ADD CONSTRAINT `MAST_CITY_PKY` PRIMARY KEY (`CITY_ID`)
+  ALTER TABLE `mast_city` ADD CONSTRAINT `mast_city_pky` PRIMARY KEY (`city_id`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_PREMIUM
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_PREMIUM` ADD CONSTRAINT `HOTEL_PREMIUM_PKY` PRIMARY KEY (`HOTEL_CD`, `OPEN_YMD`)
+  ALTER TABLE `hotel_premium` ADD CONSTRAINT `hotel_premium_pky` PRIMARY KEY (`hotel_cd`, `open_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table MEMBER_HOTELS
 --   *** ------------------------------------
 
-  ALTER TABLE `MEMBER_HOTELS` ADD CONSTRAINT `MEMBER_HOTELS_PKY` PRIMARY KEY (`MEMBER_CD`, `ENTRY_TYPE`, `HOTEL_CD`)
+  ALTER TABLE `member_hotels` ADD CONSTRAINT `member_hotels_pky` PRIMARY KEY (`member_cd`, `entry_type`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table MIGRATION_BASE
 --   *** ------------------------------------
 
-  ALTER TABLE `MIGRATION_BASE` ADD CONSTRAINT `MIGRATION_BASE_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_ID`, `PLAN_ID`)
+  ALTER TABLE `migration_base` ADD CONSTRAINT `migration_base_pky` PRIMARY KEY (`hotel_cd`, `room_id`, `plan_id`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_FACILITY_ROOM
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_FACILITY_ROOM` ADD CONSTRAINT `HOTEL_FACILITY_ROOM_PKY` PRIMARY KEY (`HOTEL_CD`, `ELEMENT_ID`)
+  ALTER TABLE `hotel_facility_room` ADD CONSTRAINT `hotel_facility_room_pky` PRIMARY KEY (`hotel_cd`, `element_id`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_INFO
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_INFO` ADD CONSTRAINT `HOTEL_INFO_PKY` PRIMARY KEY (`HOTEL_CD`)
+  ALTER TABLE `hotel_info` ADD CONSTRAINT `hotel_info_pky` PRIMARY KEY (`hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_RELATION
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_RELATION` ADD CONSTRAINT `HOTEL_RELATION_PKY` PRIMARY KEY (`HOTEL_RELATION_CD`)
+  ALTER TABLE `hotel_relation` ADD CONSTRAINT `hotel_relation_pky` PRIMARY KEY (`hotel_relation_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table TWITTER
 --   *** ------------------------------------
 
-  ALTER TABLE `TWITTER` ADD CONSTRAINT `TWITTER_PKY` PRIMARY KEY (`TWITTER_CD`)
+  ALTER TABLE `twitter` ADD CONSTRAINT `twitter_pky` PRIMARY KEY (`twitter_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_DISPOSE_GRANTS
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_DISPOSE_GRANTS` ADD CONSTRAINT `RESERVE_DISPOSE_GRANTS_PKY` PRIMARY KEY (`DISPOSE_GRANTS_ID`)
+  ALTER TABLE `reserve_dispose_grants` ADD CONSTRAINT `reserve_dispose_grants_pky` PRIMARY KEY (`dispose_grants_id`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_AREA
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_AREA` ADD CONSTRAINT `HOTEL_AREA_PKY` PRIMARY KEY (`HOTEL_CD`, `ENTRY_NO`, `AREA_ID`)
+  ALTER TABLE `hotel_area` ADD CONSTRAINT `hotel_area_pky` PRIMARY KEY (`hotel_cd`, `entry_no`, `area_id`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_CHARGE_TODAY2
 --   *** ------------------------------------
 
--- 存在しない  ALTER TABLE `ROOM_CHARGE_TODAY2` ADD CONSTRAINT `ROOM_CHARGE_TODAY2_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_ID`, `PLAN_ID`, `PARTNER_GROUP_ID`, `DATE_YMD`, `TIMETABLE`)  ;
+-- 存在しない  ALTER TABLE `room_charge_today2` ADD CONSTRAINT `room_charge_today2_pky` PRIMARY KEY (`hotel_cd`, `room_id`, `plan_id`, `partner_group_id`, `date_ymd`, `timetable`)  ;
 --   *** ------------------------------------
 --  *** Table MAST_MONEY_SCHEDULE
 --   *** ------------------------------------
 
-  ALTER TABLE `MAST_MONEY_SCHEDULE` ADD CONSTRAINT `MAST_MONEY_SCHEDULE_PKY` PRIMARY KEY (`ID`)
+  ALTER TABLE `mast_money_schedule` ADD CONSTRAINT `mast_money_schedule_pky` PRIMARY KEY (`id`)
   ;
 --   *** ------------------------------------
 --  *** Table MEMBER_FREE
 --   *** ------------------------------------
 
-  ALTER TABLE `MEMBER_FREE` ADD CONSTRAINT `MEMBER_FREE_PKY` PRIMARY KEY (`MEMBER_CD`)
+  ALTER TABLE `member_free` ADD CONSTRAINT `member_free_pky` PRIMARY KEY (`member_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_TYK
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_TYK` ADD CONSTRAINT `HOTEL_TYK_PKY` PRIMARY KEY (`HOTEL_CD`)
+  ALTER TABLE `hotel_tyk` ADD CONSTRAINT `hotel_tyk_pky` PRIMARY KEY (`hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table BR_POINT_BOOK_V4
 --   *** ------------------------------------
 
-  ALTER TABLE `BR_POINT_BOOK_V4` ADD CONSTRAINT `BR_POINT_BOOK_V4_PKY` PRIMARY KEY (`BR_POINT_CD`)
+  ALTER TABLE `br_point_book_v4` ADD CONSTRAINT `br_point_book_v4_pky` PRIMARY KEY (`br_point_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table KEYWORDS_PLAN
 --   *** ------------------------------------
 
-  ALTER TABLE `KEYWORDS_PLAN` ADD CONSTRAINT `KEYWORDS_PLAN_PKY` PRIMARY KEY (`HOTEL_CD`, `PLAN_ID`, `FIELD_NM`)
+  ALTER TABLE `keywords_plan` ADD CONSTRAINT `keywords_plan_pky` PRIMARY KEY (`hotel_cd`, `plan_id`, `field_nm`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_STATION_SURVEY
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_STATION_SURVEY` ADD CONSTRAINT `HOTEL_STATION_SURVEY_PKY` PRIMARY KEY (`STATION_CD`, `HOTEL_CD`)
+  ALTER TABLE `hotel_station_survey` ADD CONSTRAINT `hotel_station_survey_pky` PRIMARY KEY (`station_cd`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_YDP
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_YDP` ADD CONSTRAINT `RESERVE_YDP_PKY` PRIMARY KEY (`RESERVE_CD`)
+  ALTER TABLE `reserve_ydp` ADD CONSTRAINT `reserve_ydp_pky` PRIMARY KEY (`reserve_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_CONTROL
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_CONTROL` ADD CONSTRAINT `HOTEL_CONTROL_PKY` PRIMARY KEY (`HOTEL_CD`)
+  ALTER TABLE `hotel_control` ADD CONSTRAINT `hotel_control_pky` PRIMARY KEY (`hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAYED_PTN_STOCK
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAYED_PTN_STOCK` ADD CONSTRAINT `BILLPAYED_PTN_STOCK_PKY` PRIMARY KEY (`BILLPAY_YM`, `SITE_CD`, `STOCK_RATE`)
+  ALTER TABLE `billpayed_ptn_stock` ADD CONSTRAINT `billpayed_ptn_stock_pky` PRIMARY KEY (`billpay_ym`, `site_cd`, `stock_rate`)
   ;
 --   *** ------------------------------------
 --  *** Table TOP_ATTENTION_DETAIL
 --   *** ------------------------------------
 
-  ALTER TABLE `TOP_ATTENTION_DETAIL` ADD CONSTRAINT `TOP_ATTENTION_DETAIL_PKY` PRIMARY KEY (`ATTENTION_DETAIL_ID`)
+  ALTER TABLE `top_attention_detail` ADD CONSTRAINT `top_attention_detail_pky` PRIMARY KEY (`attention_detail_id`)
   ;
 --   *** ------------------------------------
 --  *** Table STOCK_POWER
 --   *** ------------------------------------
 
-  ALTER TABLE `STOCK_POWER` ADD CONSTRAINT `STOCK_POWER_PKY` PRIMARY KEY (`ID`)
+  ALTER TABLE `stock_power` ADD CONSTRAINT `stock_power_pky` PRIMARY KEY (`id`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_STATUS
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_STATUS` ADD CONSTRAINT `HOTEL_STATUS_PKY` PRIMARY KEY (`HOTEL_CD`)
+  ALTER TABLE `hotel_status` ADD CONSTRAINT `hotel_status_pky` PRIMARY KEY (`hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table MEMBER_LIVEDOOR
 --   *** ------------------------------------
 
-  ALTER TABLE `MEMBER_LIVEDOOR` ADD CONSTRAINT `MEMBER_LIVEDOOR_PKY` PRIMARY KEY (`TRANSACTION_CD`)
+  ALTER TABLE `member_livedoor` ADD CONSTRAINT `member_livedoor_pky` PRIMARY KEY (`transaction_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table LOG_SECURITY_12
 --   *** ------------------------------------
 
-  ALTER TABLE `LOG_SECURITY_12` ADD CONSTRAINT `LOG_SECURITY_12_PKY` PRIMARY KEY (`SECURITY_CD`)
+  ALTER TABLE `log_security_12` ADD CONSTRAINT `log_security_12_pky` PRIMARY KEY (`security_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table GROUP_BUYING_SUPPLIER
 --   *** ------------------------------------
 
-  ALTER TABLE `GROUP_BUYING_SUPPLIER` ADD CONSTRAINT `GROUP_BUYING_SUPPLIER_PKY` PRIMARY KEY (`SUPPLIER_CD`)
+  ALTER TABLE `group_buying_supplier` ADD CONSTRAINT `group_buying_supplier_pky` PRIMARY KEY (`supplier_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table GROUP_BUYING_ORDER
 --   *** ------------------------------------
 
-  ALTER TABLE `GROUP_BUYING_ORDER` ADD CONSTRAINT `GROUP_BUYING_ORDER_PKY` PRIMARY KEY (`ORDER_ID`)
+  ALTER TABLE `group_buying_order` ADD CONSTRAINT `group_buying_order_pky` PRIMARY KEY (`order_id`)
   ;
  
---  ALTER TABLE `GROUP_BUYING_ORDER` MODIFY (`SUPPLIER_CD` NOT NULL ENABLE);
-   ALTER TABLE `GROUP_BUYING_ORDER` MODIFY `SUPPLIER_CD` varchar(10) BINARY NOT NULL ;
+--  ALTER TABLE `group_buying_order` MODIFY (`supplier_cd` NOT NULL ENABLE);
+   ALTER TABLE `group_buying_order` MODIFY `supplier_cd` varchar(10) BINARY NOT NULL ;
 
---  ALTER TABLE `GROUP_BUYING_ORDER` MODIFY (`SUPPLIER_ORDER_ID` NOT NULL ENABLE);
-   ALTER TABLE `GROUP_BUYING_ORDER` MODIFY `SUPPLIER_ORDER_ID` varchar(32) BINARY NOT NULL ;
+--  ALTER TABLE `group_buying_order` MODIFY (`supplier_order_id` NOT NULL ENABLE);
+   ALTER TABLE `group_buying_order` MODIFY `supplier_order_id` varchar(32) BINARY NOT NULL ;
 
---  ALTER TABLE `GROUP_BUYING_ORDER` MODIFY (`DEAL_ID` NOT NULL ENABLE);
-   ALTER TABLE `GROUP_BUYING_ORDER` MODIFY `DEAL_ID` varchar(10) BINARY NOT NULL ;
+--  ALTER TABLE `group_buying_order` MODIFY (`deal_id` NOT NULL ENABLE);
+   ALTER TABLE `group_buying_order` MODIFY `deal_id` varchar(10) BINARY NOT NULL ;
 
---  ALTER TABLE `GROUP_BUYING_ORDER` MODIFY (`MEMBER_CD` NOT NULL ENABLE);
-   ALTER TABLE `GROUP_BUYING_ORDER` MODIFY `MEMBER_CD` varchar(128) BINARY NOT NULL ;
+--  ALTER TABLE `group_buying_order` MODIFY (`member_cd` NOT NULL ENABLE);
+   ALTER TABLE `group_buying_order` MODIFY `member_cd` varchar(128) BINARY NOT NULL ;
 
---  ALTER TABLE `GROUP_BUYING_ORDER` MODIFY (`ORDER_DTM` NOT NULL ENABLE);
-   ALTER TABLE `GROUP_BUYING_ORDER` MODIFY `ORDER_DTM` datetime NOT NULL ;
+--  ALTER TABLE `group_buying_order` MODIFY (`order_dtm` NOT NULL ENABLE);
+   ALTER TABLE `group_buying_order` MODIFY `order_dtm` datetime NOT NULL ;
 
---  ALTER TABLE `GROUP_BUYING_ORDER` MODIFY (`ORDER_STATUS` NOT NULL ENABLE);
-   ALTER TABLE `GROUP_BUYING_ORDER` MODIFY `ORDER_STATUS` tinyint NOT NULL ;
+--  ALTER TABLE `group_buying_order` MODIFY (`order_status` NOT NULL ENABLE);
+   ALTER TABLE `group_buying_order` MODIFY `order_status` tinyint NOT NULL ;
 
---  ALTER TABLE `GROUP_BUYING_ORDER` MODIFY (`ENTRY_CD` NOT NULL ENABLE);
-   ALTER TABLE `GROUP_BUYING_ORDER` MODIFY `ENTRY_CD` varchar(64) BINARY NOT NULL ;
+--  ALTER TABLE `group_buying_order` MODIFY (`entry_cd` NOT NULL ENABLE);
+   ALTER TABLE `group_buying_order` MODIFY `entry_cd` varchar(64) BINARY NOT NULL ;
 
---  ALTER TABLE `GROUP_BUYING_ORDER` MODIFY (`ENTRY_TS` NOT NULL ENABLE);
-   ALTER TABLE `GROUP_BUYING_ORDER` MODIFY `ENTRY_TS` datetime NOT NULL ;
+--  ALTER TABLE `group_buying_order` MODIFY (`entry_ts` NOT NULL ENABLE);
+   ALTER TABLE `group_buying_order` MODIFY `entry_ts` datetime NOT NULL ;
 
---  ALTER TABLE `GROUP_BUYING_ORDER` MODIFY (`MODIFY_CD` NOT NULL ENABLE);
-  ALTER TABLE `GROUP_BUYING_ORDER` MODIFY `MODIFY_CD` varchar(64) BINARY NOT NULL ;
+--  ALTER TABLE `group_buying_order` MODIFY (`modify_cd` NOT NULL ENABLE);
+  ALTER TABLE `group_buying_order` MODIFY `modify_cd` varchar(64) BINARY NOT NULL ;
  
---  ALTER TABLE `GROUP_BUYING_ORDER` MODIFY (`MODIFY_TS` NOT NULL ENABLE);
-   ALTER TABLE `GROUP_BUYING_ORDER` MODIFY `MODIFY_TS` datetime NOT NULL ;
+--  ALTER TABLE `group_buying_order` MODIFY (`modify_ts` NOT NULL ENABLE);
+   ALTER TABLE `group_buying_order` MODIFY `modify_ts` datetime NOT NULL ;
 
 --   *** ------------------------------------
 --  *** Table JOURNAL
 --   *** ------------------------------------
 
-  ALTER TABLE `JOURNAL` ADD CONSTRAINT `JOURNAL_PKY` PRIMARY KEY (`JOURNAL_CD`)
+  ALTER TABLE `journal` ADD CONSTRAINT `journal_pky` PRIMARY KEY (`journal_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_CREDIT_DEV
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_CREDIT_DEV` ADD CONSTRAINT `RESERVE_CREDIT_DEV_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`)
+  ALTER TABLE `reserve_credit_dev` ADD CONSTRAINT `reserve_credit_dev_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_CHARGE_YHO_BAT_TMP_6
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_CHARGE_YHO_BAT_TMP_6` ADD CONSTRAINT `ROOM_CHARGE_YHO_BAT_TMP_6_PKY` PRIMARY KEY (`REC_TYPE`, `HOTEL_CD`, `ROOM_CD`, `PLAN_CD`, `DATE_YMD`)
+  ALTER TABLE `room_charge_yho_bat_tmp_6` ADD CONSTRAINT `room_charge_yho_bat_tmp_6_pky` PRIMARY KEY (`rec_type`, `hotel_cd`, `room_cd`, `plan_cd`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table ALERT_SYSTEM
 --   *** ------------------------------------
 
-  ALTER TABLE `ALERT_SYSTEM` ADD CONSTRAINT `ALERT_SYSTEM_PKY` PRIMARY KEY (`ALERT_SYSTEM_CD`)
+  ALTER TABLE `alert_system` ADD CONSTRAINT `alert_system_pky` PRIMARY KEY (`alert_system_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAY_CREDIT
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAY_CREDIT` ADD CONSTRAINT `BILLPAY_CREDIT_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`)
+  ALTER TABLE `billpay_credit` ADD CONSTRAINT `billpay_credit_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table MAST_BANK
 --   *** ------------------------------------
 
-  ALTER TABLE `MAST_BANK` ADD CONSTRAINT `MAST_BANK_PKY` PRIMARY KEY (`BANK_CD`)
+  ALTER TABLE `mast_bank` ADD CONSTRAINT `mast_bank_pky` PRIMARY KEY (`bank_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table HIKARI_ACCOUNT
 --   *** ------------------------------------
 
-  ALTER TABLE `HIKARI_ACCOUNT` ADD CONSTRAINT `HIKARI_ACCOUNT_PKY` PRIMARY KEY (`ID`)
+  ALTER TABLE `hikari_account` ADD CONSTRAINT `hikari_account_pky` PRIMARY KEY (`id`)
   ;
  
-  ALTER TABLE `HIKARI_ACCOUNT` ADD CONSTRAINT `HIKARI_ACCOUNT_UNQ_01` UNIQUE (`ACCOUNT_ID`)
+  ALTER TABLE `hikari_account` ADD CONSTRAINT `hikari_account_unq_01` UNIQUE (`account_id`)
   ;
 --   *** ------------------------------------
 --  *** Table LOG_SECURITY_09
 --   *** ------------------------------------
 
-  ALTER TABLE `LOG_SECURITY_09` ADD CONSTRAINT `LOG_SECURITY_09_PKY` PRIMARY KEY (`SECURITY_CD`)
+  ALTER TABLE `log_security_09` ADD CONSTRAINT `log_security_09_pky` PRIMARY KEY (`security_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table SPOT_GROUP_MATCH
 --   *** ------------------------------------
 
-  ALTER TABLE `SPOT_GROUP_MATCH` ADD CONSTRAINT `SPOT_GROUP_MATCH_PKY` PRIMARY KEY (`SPOT_GROUP_ID`, `SPOT_ID`)
+  ALTER TABLE `spot_group_match` ADD CONSTRAINT `spot_group_match_pky` PRIMARY KEY (`spot_group_id`, `spot_id`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAYED_PTN_SALES
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAYED_PTN_SALES` ADD CONSTRAINT `BILLPAYED_PTN_SALES_PKY` PRIMARY KEY (`BILLPAY_YM`, `SITE_CD`, `SALES_RATE`)
+  ALTER TABLE `billpayed_ptn_sales` ADD CONSTRAINT `billpayed_ptn_sales_pky` PRIMARY KEY (`billpay_ym`, `site_cd`, `sales_rate`)
   ;
 --   *** ------------------------------------
 --  *** Table RECORD_RESERVE
 --   *** ------------------------------------
 
-  ALTER TABLE `RECORD_RESERVE` ADD CONSTRAINT `RECORD_RESERVE_PKY` PRIMARY KEY (`DATE_YMD`, `SYSTEM_TYPE`)
+  ALTER TABLE `record_reserve` ADD CONSTRAINT `record_reserve_pky` PRIMARY KEY (`date_ymd`, `system_type`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAY_HOTEL_FEE
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAY_HOTEL_FEE` ADD CONSTRAINT `BILLPAY_HOTEL_FEE_PKY` PRIMARY KEY (`BILLPAY_YM`, `HOTEL_CD`)
+  ALTER TABLE `billpay_hotel_fee` ADD CONSTRAINT `billpay_hotel_fee_pky` PRIMARY KEY (`billpay_ym`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table ORICO_SALES_HISTORY
 --   *** ------------------------------------
 
-  ALTER TABLE `ORICO_SALES_HISTORY` ADD CONSTRAINT `ORICO_SALES_HISTORY_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`, `BRANCH_NO`)
+  ALTER TABLE `orico_sales_history` ADD CONSTRAINT `orico_sales_history_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`, `branch_no`)
   ;
 --   *** ------------------------------------
 --  *** Table EXTEND_SWITCH_PLAN
 --   *** ------------------------------------
 
-  ALTER TABLE `EXTEND_SWITCH_PLAN` ADD CONSTRAINT `EXTEND_SWITCH_PLAN_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_CD`, `PLAN_CD`)
+  ALTER TABLE `extend_switch_plan` ADD CONSTRAINT `extend_switch_plan_pky` PRIMARY KEY (`hotel_cd`, `room_cd`, `plan_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAYED_YAHOO
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAYED_YAHOO` ADD CONSTRAINT `BILLPAYED_YAHOO_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`, `OPERATION_YMD`)
+  ALTER TABLE `billpayed_yahoo` ADD CONSTRAINT `billpayed_yahoo_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`, `operation_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_CHARGE_REMOVED
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_CHARGE_REMOVED` ADD CONSTRAINT `ROOM_CHARGE_REMOVED_PKY` PRIMARY KEY (`ROOM_CHARGE_REMOVED_ID`)
+  ALTER TABLE `room_charge_removed` ADD CONSTRAINT `room_charge_removed_pky` PRIMARY KEY (`room_charge_removed_id`)
   ;
 --   *** ------------------------------------
 --  *** Table PLAN_JR
 --   *** ------------------------------------
 
-  ALTER TABLE `PLAN_JR` ADD CONSTRAINT `PLAN_JR_PKY` PRIMARY KEY (`HOTEL_CD`, `PLAN_ID`)
+  ALTER TABLE `plan_jr` ADD CONSTRAINT `plan_jr_pky` PRIMARY KEY (`hotel_cd`, `plan_id`)
   ;
 --   *** ------------------------------------
 --  *** Table CHARGE_TODAY
 --   *** ------------------------------------
 
-  ALTER TABLE `CHARGE_TODAY` ADD CONSTRAINT `CHARGE_TODAY_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_ID`, `PLAN_ID`, `PARTNER_GROUP_ID`, `CAPACITY`, `DATE_YMD`, `TIMETABLE`)
+  ALTER TABLE `charge_today` ADD CONSTRAINT `charge_today_pky` PRIMARY KEY (`hotel_cd`, `room_id`, `plan_id`, `partner_group_id`, `capacity`, `date_ymd`, `timetable`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_YDP_MATCH
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_YDP_MATCH` ADD CONSTRAINT `HOTEL_YDP_REDIRECT_PKY` PRIMARY KEY (`YDP_HOTEL_CD`)
+  ALTER TABLE `hotel_ydp_match` ADD CONSTRAINT `hotel_ydp_redirect_pky` PRIMARY KEY (`ydp_hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAY_YAHOO
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAY_YAHOO` ADD CONSTRAINT `BILLPAY_YAHOO_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`)
+  ALTER TABLE `billpay_yahoo` ADD CONSTRAINT `billpay_yahoo_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table ROUTE_MAP
 --   *** ------------------------------------
 
-  ALTER TABLE `ROUTE_MAP` ADD CONSTRAINT `ROUTE_MAP_PKY` PRIMARY KEY (`ROUTE_ID`, `STATION_ID1`, `STATION_ID2`)
+  ALTER TABLE `route_map` ADD CONSTRAINT `route_map_pky` PRIMARY KEY (`route_id`, `station_id1`, `station_id2`)
   ;
  
---  ALTER TABLE `ROUTE_MAP` MODIFY (`ROUTE_ID` NOT NULL ENABLE);
-   ALTER TABLE `ROUTE_MAP` MODIFY `ROUTE_ID` varchar(5) BINARY NOT NULL ;
+--  ALTER TABLE `route_map` MODIFY (`route_id` NOT NULL ENABLE);
+   ALTER TABLE `route_map` MODIFY `route_id` varchar(5) BINARY NOT NULL ;
 
---  ALTER TABLE `ROUTE_MAP` MODIFY (`STATION_ID1` NOT NULL ENABLE);
-   ALTER TABLE `ROUTE_MAP` MODIFY `STATION_ID1` varchar(7) BINARY NOT NULL ;
+--  ALTER TABLE `route_map` MODIFY (`station_id1` NOT NULL ENABLE);
+   ALTER TABLE `route_map` MODIFY `station_id1` varchar(7) BINARY NOT NULL ;
 
---  ALTER TABLE `ROUTE_MAP` MODIFY (`STATION_ID2` NOT NULL ENABLE);
-   ALTER TABLE `ROUTE_MAP` MODIFY `STATION_ID2` varchar(7) BINARY NOT NULL ;
+--  ALTER TABLE `route_map` MODIFY (`station_id2` NOT NULL ENABLE);
+   ALTER TABLE `route_map` MODIFY `station_id2` varchar(7) BINARY NOT NULL ;
 
 --   *** ------------------------------------
 --  *** Table RESERVE_POWER
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_POWER` ADD CONSTRAINT `RESERVE_POWER_PKY` PRIMARY KEY (`RESERVE_CD`)
+  ALTER TABLE `reserve_power` ADD CONSTRAINT `reserve_power_pky` PRIMARY KEY (`reserve_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table AKAFU_STOCK_FRAME_NO
 --   *** ------------------------------------
 
-  ALTER TABLE `AKAFU_STOCK_FRAME_NO` ADD CONSTRAINT `AKAFU_STOCK_FRAME_NO_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`)
+  ALTER TABLE `akafu_stock_frame_no` ADD CONSTRAINT `akafu_stock_frame_no_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_CHARGE_TODAY
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_CHARGE_TODAY` ADD CONSTRAINT `ROOM_CHARGE_TODAY_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_CD`, `PLAN_CD`, `PARTNER_GROUP_ID`, `DATE_YMD`, `TIMETABLE`)
+  ALTER TABLE `room_charge_today` ADD CONSTRAINT `room_charge_today_pky` PRIMARY KEY (`hotel_cd`, `room_cd`, `plan_cd`, `partner_group_id`, `date_ymd`, `timetable`)
   ;
 --   *** ------------------------------------
 --  *** Table BR_SS_IMPORT
 --   *** ------------------------------------
 
-  ALTER TABLE `BR_SS_IMPORT` ADD CONSTRAINT `BR_SS_IMPORT_PKY` PRIMARY KEY (`BR_SS_IMPORT_ID`)
+  ALTER TABLE `br_ss_import` ADD CONSTRAINT `br_ss_import_pky` PRIMARY KEY (`br_ss_import_id`)
   ;
  
-  ALTER TABLE `BR_SS_IMPORT` ADD CONSTRAINT `BR_SS_IMPORT_UNQ_01` UNIQUE (`MEMBER_CD`)
+  ALTER TABLE `br_ss_import` ADD CONSTRAINT `br_ss_import_unq_01` UNIQUE (`member_cd`)
   ;
  
-  ALTER TABLE `BR_SS_IMPORT` ADD CONSTRAINT `BR_SS_IMPORT_UNQ_02` UNIQUE (`CONFIRM_PAGE_URL`)
+  ALTER TABLE `br_ss_import` ADD CONSTRAINT `br_ss_import_unq_02` UNIQUE (`confirm_page_url`)
   ;
  
---  ALTER TABLE `BR_SS_IMPORT` MODIFY (`BR_SS_IMPORT_NM` NOT NULL ENABLE);
-   ALTER TABLE `BR_SS_IMPORT` MODIFY `BR_SS_IMPORT_NM` varchar(60) BINARY NOT NULL ;
+--  ALTER TABLE `br_ss_import` MODIFY (`br_ss_import_nm` NOT NULL ENABLE);
+   ALTER TABLE `br_ss_import` MODIFY `br_ss_import_nm` varchar(60) BINARY NOT NULL ;
 
---  ALTER TABLE `BR_SS_IMPORT` MODIFY (`MEMBER_CD` NOT NULL ENABLE);
-   ALTER TABLE `BR_SS_IMPORT` MODIFY `MEMBER_CD` varchar(128) BINARY NOT NULL ;
+--  ALTER TABLE `br_ss_import` MODIFY (`member_cd` NOT NULL ENABLE);
+   ALTER TABLE `br_ss_import` MODIFY `member_cd` varchar(128) BINARY NOT NULL ;
 
---  ALTER TABLE `BR_SS_IMPORT` MODIFY (`CONFIRM_PAGE_URL` NOT NULL ENABLE);
-   ALTER TABLE `BR_SS_IMPORT` MODIFY `CONFIRM_PAGE_URL` varchar(255) BINARY NOT NULL ;
+--  ALTER TABLE `br_ss_import` MODIFY (`confirm_page_url` NOT NULL ENABLE);
+   ALTER TABLE `br_ss_import` MODIFY `confirm_page_url` varchar(255) BINARY NOT NULL ;
 
 --   *** ------------------------------------
 --  *** Table BILLPAYED_STOCK
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAYED_STOCK` ADD CONSTRAINT `BILLPAYED_STOCK_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`, `SITE_CD`, `OPERATION_YMD`)
+  ALTER TABLE `billpayed_stock` ADD CONSTRAINT `billpayed_stock_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`, `site_cd`, `operation_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table MIGRATION_CANCEL_RATE_TEMP
 --   *** ------------------------------------
 
-  ALTER TABLE `MIGRATION_CANCEL_RATE_TEMP` ADD CONSTRAINT `MIGRATION_CANCEL_RATE_TEMP_PKY` PRIMARY KEY (`HOTEL_CD`, `PLAN_ID`, `DAYS`)
+  ALTER TABLE `migration_cancel_rate_temp` ADD CONSTRAINT `migration_cancel_rate_temp_pky` PRIMARY KEY (`hotel_cd`, `plan_id`, `days`)
   ;
 --   *** ------------------------------------
 --  *** Table MAST_LANDMARK_CATEGORY_1ST
 --   *** ------------------------------------
 
-  ALTER TABLE `MAST_LANDMARK_CATEGORY_1ST` ADD CONSTRAINT `MAST_LANDMARK_CATEGORY_1ST_PKY` PRIMARY KEY (`CATEGORY_1ST_ID`)
+  ALTER TABLE `mast_landmark_category_1st` ADD CONSTRAINT `mast_landmark_category_1st_pky` PRIMARY KEY (`category_1st_id`)
   ;
 --   *** ------------------------------------
 --  *** Table MAILMAG_V2_SET
 --   *** ------------------------------------
 
-  ALTER TABLE `MAILMAG_V2_SET` ADD CONSTRAINT `MAILMAG_V2_SET_PKY` PRIMARY KEY (`MAILMAG_V2_SET_ID`)
+  ALTER TABLE `mailmag_v2_set` ADD CONSTRAINT `mailmag_v2_set_pky` PRIMARY KEY (`mailmag_v2_set_id`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAYED_PR_GRANTS
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAYED_PR_GRANTS` ADD CONSTRAINT `BILLPAYED_PR_GRANTS_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`, `SITE_CD`, `OPERATION_YMD`, `WELFARE_GRANTS_ID`)
+  ALTER TABLE `billpayed_pr_grants` ADD CONSTRAINT `billpayed_pr_grants_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`, `site_cd`, `operation_ymd`, `welfare_grants_id`)
   ;
 --   *** ------------------------------------
 --  *** Table MEMBER_ZAP
 --   *** ------------------------------------
 
-  ALTER TABLE `MEMBER_ZAP` ADD CONSTRAINT `MEMBER_ZAP_PKY` PRIMARY KEY (`MEMBER_CD`)
+  ALTER TABLE `member_zap` ADD CONSTRAINT `member_zap_pky` PRIMARY KEY (`member_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table MAST_KEYWORD_MATCH
 --   *** ------------------------------------
 
-  ALTER TABLE `MAST_KEYWORD_MATCH` ADD CONSTRAINT `MAST_KEYWORD_MATCH_PKY` PRIMARY KEY (`KEYWORD_GROUP_ID`, `KEYWORD_ID`)
+  ALTER TABLE `mast_keyword_match` ADD CONSTRAINT `mast_keyword_match_pky` PRIMARY KEY (`keyword_group_id`, `keyword_id`)
   ;
 --   *** ------------------------------------
 --  *** Table LANDMARK_PREF_MATCH
 --   *** ------------------------------------
 
-  ALTER TABLE `LANDMARK_PREF_MATCH` ADD CONSTRAINT `LANDMARK_PREF_MATCH_PKY` PRIMARY KEY (`LANDMARK_ID`, `PREF_ID`)
+  ALTER TABLE `landmark_pref_match` ADD CONSTRAINT `landmark_pref_match_pky` PRIMARY KEY (`landmark_id`, `pref_id`)
   ;
 --   *** ------------------------------------
 --  *** Table NOTIFY_DETAIL
 --   *** ------------------------------------
 
-  ALTER TABLE `NOTIFY_DETAIL` ADD CONSTRAINT `NOTIFY_DETAIL_PKY` PRIMARY KEY (`NOTIFY_CD`, `NOTIFY_DEVICE`)
+  ALTER TABLE `notify_detail` ADD CONSTRAINT `notify_detail_pky` PRIMARY KEY (`notify_cd`, `notify_device`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAY_PTN_GRANTS
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAY_PTN_GRANTS` ADD CONSTRAINT `BILLPAY_PTN_GRANTS_PKY` PRIMARY KEY (`BILLPAY_YM`, `SITE_CD`)
+  ALTER TABLE `billpay_ptn_grants` ADD CONSTRAINT `billpay_ptn_grants_pky` PRIMARY KEY (`billpay_ym`, `site_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table MEMBER_MOBILE
 --   *** ------------------------------------
 
-  ALTER TABLE `MEMBER_MOBILE` ADD CONSTRAINT `MEMBER_MOBILE_PKY` PRIMARY KEY (`MEMBER_CD`)
+  ALTER TABLE `member_mobile` ADD CONSTRAINT `member_mobile_pky` PRIMARY KEY (`member_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table GOUDA_AR_TEST
 --   *** ------------------------------------
 
-  ALTER TABLE `GOUDA_AR_TEST` ADD CONSTRAINT `GOUDA_AR_TEST_PKY` PRIMARY KEY (`ID`, `CD`, `DATE_YMD`)
+  ALTER TABLE `gouda_ar_test` ADD CONSTRAINT `gouda_ar_test_pky` PRIMARY KEY (`id`, `cd`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table CHECKSHEET_HOTEL_GRANTS
 --   *** ------------------------------------
 
-  ALTER TABLE `CHECKSHEET_HOTEL_GRANTS` ADD CONSTRAINT `CHECKSHEET_HOTEL_GRANTS_PKY` PRIMARY KEY (`CHECKSHEET_YM`, `HOTEL_CD`)
+  ALTER TABLE `checksheet_hotel_grants` ADD CONSTRAINT `checksheet_hotel_grants_pky` PRIMARY KEY (`checksheet_ym`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table ORICO_RESERVE_HISTORY
 --   *** ------------------------------------
 
-  ALTER TABLE `ORICO_RESERVE_HISTORY` ADD CONSTRAINT `ORICO_RESERVE_HISTORY_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`, `BRANCH_NO`)
+  ALTER TABLE `orico_reserve_history` ADD CONSTRAINT `orico_reserve_history_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`, `branch_no`)
   ;
 --   *** ------------------------------------
 --  *** Table PLAN_INFO
 --   *** ------------------------------------
 
-  ALTER TABLE `PLAN_INFO` ADD CONSTRAINT `PLAN_INFO_PKY` PRIMARY KEY (`HOTEL_CD`, `PLAN_ID`)
+  ALTER TABLE `plan_info` ADD CONSTRAINT `plan_info_pky` PRIMARY KEY (`hotel_cd`, `plan_id`)
   ;
 --   *** ------------------------------------
 --  *** Table PARTNER_CLUTCH
 --   *** ------------------------------------
 
-  ALTER TABLE `PARTNER_CLUTCH` ADD CONSTRAINT `PARTNER_CLUTCH_PKY` PRIMARY KEY (`PARTNER_CD`)
+  ALTER TABLE `partner_clutch` ADD CONSTRAINT `partner_clutch_pky` PRIMARY KEY (`partner_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table MEMBER_HOTELS2
 --   *** ------------------------------------
 
-  ALTER TABLE `MEMBER_HOTELS2` ADD CONSTRAINT `MEMBER_HOTELS2_PKY` PRIMARY KEY (`MEMBER_CD`, `ENTRY_TYPE`, `HOTEL_CD`)
+  ALTER TABLE `member_hotels2` ADD CONSTRAINT `member_hotels2_pky` PRIMARY KEY (`member_cd`, `entry_type`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAY_CUSTOMER_HOTEL
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAY_CUSTOMER_HOTEL` ADD CONSTRAINT `BILLPAY_CUSTOMER_HOTEL_PKY` PRIMARY KEY (`BILLPAY_YM`, `HOTEL_CD`)
+  ALTER TABLE `billpay_customer_hotel` ADD CONSTRAINT `billpay_customer_hotel_pky` PRIMARY KEY (`billpay_ym`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table PARTNER_SITE
 --   *** ------------------------------------
 
-  ALTER TABLE `PARTNER_SITE` ADD CONSTRAINT `PARTNER_SITE_PKY` PRIMARY KEY (`SITE_CD`)
+  ALTER TABLE `partner_site` ADD CONSTRAINT `partner_site_pky` PRIMARY KEY (`site_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table MAST_KEYWORD_GROUP
 --   *** ------------------------------------
 
-  ALTER TABLE `MAST_KEYWORD_GROUP` ADD CONSTRAINT `MAST_KEYWORD_GROUP_PKY` PRIMARY KEY (`KEYWORD_GROUP_ID`)
+  ALTER TABLE `mast_keyword_group` ADD CONSTRAINT `mast_keyword_group_pky` PRIMARY KEY (`keyword_group_id`)
   ;
 --   *** ------------------------------------
 --  *** Table PLAN_SPEC
 --   *** ------------------------------------
 
-  ALTER TABLE `PLAN_SPEC` ADD CONSTRAINT `PLAN_SPEC_PKY` PRIMARY KEY (`HOTEL_CD`, `PLAN_ID`, `ELEMENT_ID`)
+  ALTER TABLE `plan_spec` ADD CONSTRAINT `plan_spec_pky` PRIMARY KEY (`hotel_cd`, `plan_id`, `element_id`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_CHARGE
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_CHARGE` ADD CONSTRAINT `RESERVE_CHARGE_CHK_01` CHECK (sales_charge is not null);
+  ALTER TABLE `reserve_charge` ADD CONSTRAINT `reserve_charge_chk_01` CHECK (sales_charge is not null);
  
-  ALTER TABLE `RESERVE_CHARGE` ADD CONSTRAINT `RESERVE_CHARGE_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`)
+  ALTER TABLE `reserve_charge` ADD CONSTRAINT `reserve_charge_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_CREDIT
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_CREDIT` ADD CONSTRAINT `RESERVE_CREDIT_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`)
+  ALTER TABLE `reserve_credit` ADD CONSTRAINT `reserve_credit_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table PARTNER_OAUTH2
 --   *** ------------------------------------
 
-  ALTER TABLE `PARTNER_OAUTH2` ADD CONSTRAINT `PARTNER_OAUTH2_PKY` PRIMARY KEY (`CLIENT_ID`)
+  ALTER TABLE `partner_oauth2` ADD CONSTRAINT `partner_oauth2_pky` PRIMARY KEY (`client_id`)
   ;
  
-  ALTER TABLE `PARTNER_OAUTH2` ADD CONSTRAINT `PARTNER_OAUTH2_UNQ_01` UNIQUE (`CLIENT_SECRET`)
+  ALTER TABLE `partner_oauth2` ADD CONSTRAINT `partner_oauth2_unq_01` UNIQUE (`client_secret`)
   ;
 --   *** ------------------------------------
 --  *** Table MEMBER_EPARK
 --   *** ------------------------------------
 
-  ALTER TABLE `MEMBER_EPARK` ADD CONSTRAINT `MEMBER_EPARK_PKY` PRIMARY KEY (`EPARK_ID`)
+  ALTER TABLE `member_epark` ADD CONSTRAINT `member_epark_pky` PRIMARY KEY (`epark_id`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_CANCEL_RATE
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_CANCEL_RATE` ADD CONSTRAINT `HOTEL_CANCEL_RATE_PKY` PRIMARY KEY (`HOTEL_CD`, `DAYS`)
+  ALTER TABLE `hotel_cancel_rate` ADD CONSTRAINT `hotel_cancel_rate_pky` PRIMARY KEY (`hotel_cd`, `days`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAY_PTN_TYPE_GRANTS
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAY_PTN_TYPE_GRANTS` ADD CONSTRAINT `BILLPAY_PTN_TYPE_GRANTS_PKY` PRIMARY KEY (`BILLPAY_YM`, `SITE_CD`, `WELFARE_GRANTS_ID`)
+  ALTER TABLE `billpay_ptn_type_grants` ADD CONSTRAINT `billpay_ptn_type_grants_pky` PRIMARY KEY (`billpay_ym`, `site_cd`, `welfare_grants_id`)
   ;
 --   *** ------------------------------------
 --  *** Table MIGRATION_MATCH
 --   *** ------------------------------------
 
-  ALTER TABLE `MIGRATION_MATCH` ADD CONSTRAINT `MIGRATION_MATCH_PKY` PRIMARY KEY (`ID`)
+  ALTER TABLE `migration_match` ADD CONSTRAINT `migration_match_pky` PRIMARY KEY (`id`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL` ADD CONSTRAINT `HOTEL_PKY` PRIMARY KEY (`HOTEL_CD`)
+  ALTER TABLE `hotel` ADD CONSTRAINT `hotel_pky` PRIMARY KEY (`hotel_cd`)
   ;
  
---  ALTER TABLE `HOTEL` MODIFY (`HOTEL_CD` NOT NULL ENABLE);
-   ALTER TABLE `HOTEL` MODIFY `HOTEL_CD` varchar(10) BINARY NOT NULL ;
+--  ALTER TABLE `hotel` MODIFY (`hotel_cd` NOT NULL ENABLE);
+   ALTER TABLE `hotel` MODIFY `hotel_cd` varchar(10) BINARY NOT NULL ;
 
 --   *** ------------------------------------
 --  *** Table MAST_STATION
 --   *** ------------------------------------
 
-  ALTER TABLE `MAST_STATION` ADD CONSTRAINT `MAST_STATION_PKY` PRIMARY KEY (`STATION_ID`)
+  ALTER TABLE `mast_station` ADD CONSTRAINT `mast_station_pky` PRIMARY KEY (`station_id`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_PLAN_RANKING
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_PLAN_RANKING` ADD CONSTRAINT `ROOM_PLAN_RANKING_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_CD`, `PLAN_CD`, `WDAY`)
+  ALTER TABLE `room_plan_ranking` ADD CONSTRAINT `room_plan_ranking_pky` PRIMARY KEY (`hotel_cd`, `room_cd`, `plan_cd`, `wday`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_PLAN_PRIORITY
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_PLAN_PRIORITY` ADD CONSTRAINT `ROOM_PLAN_PRIORITY_PKY` PRIMARY KEY (`PREF_ID`, `SPAN`, `WDAY`, `PRIORITY`)
+  ALTER TABLE `room_plan_priority` ADD CONSTRAINT `room_plan_priority_pky` PRIMARY KEY (`pref_id`, `span`, `wday`, `priority`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_BASE_CHILD
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_BASE_CHILD` ADD CONSTRAINT `RESERVE_BASE_CHILD_PKY` PRIMARY KEY (`RESERVE_CD`)
+  ALTER TABLE `reserve_base_child` ADD CONSTRAINT `reserve_base_child_pky` PRIMARY KEY (`reserve_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAY_CUSTOMER
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAY_CUSTOMER` ADD CONSTRAINT `BILLPAY_CUSTOMER_PKY` PRIMARY KEY (`BILLPAY_YM`, `CUSTOMER_ID`)
+  ALTER TABLE `billpay_customer` ADD CONSTRAINT `billpay_customer_pky` PRIMARY KEY (`billpay_ym`, `customer_id`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_RATE
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_RATE` ADD CONSTRAINT `HOTEL_RATE_PKY` PRIMARY KEY (`HOTEL_CD`, `BRANCH_NO`)
+  ALTER TABLE `hotel_rate` ADD CONSTRAINT `hotel_rate_pky` PRIMARY KEY (`hotel_cd`, `branch_no`)
   ;
 --   *** ------------------------------------
 --  *** Table MAST_HOTEL_ELEMENT_VALUE
 --   *** ------------------------------------
 
-  ALTER TABLE `MAST_HOTEL_ELEMENT_VALUE` ADD CONSTRAINT `MAST_HOTEL_ELEMENT_VALUE_PKY` PRIMARY KEY (`ELEMENT_ID`, `ELEMENT_VALUE_ID`)
+  ALTER TABLE `mast_hotel_element_value` ADD CONSTRAINT `mast_hotel_element_value_pky` PRIMARY KEY (`element_id`, `element_value_id`)
   ;
 --   *** ------------------------------------
 --  *** Table OTA_ROOM_RELATION
 --   *** ------------------------------------
 
-  ALTER TABLE `OTA_ROOM_RELATION` ADD CONSTRAINT `OTA_ROOM_RELATION_PKY` PRIMARY KEY (`OTA_ROOM_RELATION_ID`)
+  ALTER TABLE `ota_room_relation` ADD CONSTRAINT `ota_room_relation_pky` PRIMARY KEY (`ota_room_relation_id`)
   ;
 --   *** ------------------------------------
 --  *** Table MEMBER_DETAIL_SP
 --   *** ------------------------------------
 
-  ALTER TABLE `MEMBER_DETAIL_SP` ADD CONSTRAINT `MEMBER_DETAIL_SP_PKY` PRIMARY KEY (`MEMBER_CD`)
+  ALTER TABLE `member_detail_sp` ADD CONSTRAINT `member_detail_sp_pky` PRIMARY KEY (`member_cd`)
   ;
  
-  ALTER TABLE `MEMBER_DETAIL_SP` ADD CONSTRAINT `MEMBER_DETAIL_SP_UNQ_01` UNIQUE (`ACCOUNT_ID`)
+  ALTER TABLE `member_detail_sp` ADD CONSTRAINT `member_detail_sp_unq_01` UNIQUE (`account_id`)
   ;
  
---  ALTER TABLE `MEMBER_DETAIL_SP` MODIFY (`MEMBER_CD` NOT NULL ENABLE);
-  ALTER TABLE `MEMBER_DETAIL_SP` MODIFY `MEMBER_CD` varchar(128) BINARY NOT NULL ;
+--  ALTER TABLE `member_detail_sp` MODIFY (`member_cd` NOT NULL ENABLE);
+  ALTER TABLE `member_detail_sp` MODIFY `member_cd` varchar(128) BINARY NOT NULL ;
 
 --   *** ------------------------------------
 --  *** Table MAST_BANK_BRANCH
 --   *** ------------------------------------
 
-  ALTER TABLE `MAST_BANK_BRANCH` ADD CONSTRAINT `MAST_BANK_BRANCH_PKY` PRIMARY KEY (`BANK_CD`, `BANK_BRANCH_CD`)
+  ALTER TABLE `mast_bank_branch` ADD CONSTRAINT `mast_bank_branch_pky` PRIMARY KEY (`bank_cd`, `bank_branch_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAY_PTN_TYPE_SALES
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAY_PTN_TYPE_SALES` ADD CONSTRAINT `BILLPAY_PTN_TYPE_SALES_PKY` PRIMARY KEY (`BILLPAY_YM`, `SITE_CD`, `STOCK_TYPE`, `SALES_RATE`)
+  ALTER TABLE `billpay_ptn_type_sales` ADD CONSTRAINT `billpay_ptn_type_sales_pky` PRIMARY KEY (`billpay_ym`, `site_cd`, `stock_type`, `sales_rate`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_PLAN_SPEC
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_PLAN_SPEC` ADD CONSTRAINT `RESERVE_PLAN_SPEC_PKY` PRIMARY KEY (`RESERVE_CD`, `ELEMENT_ID`)
+  ALTER TABLE `reserve_plan_spec` ADD CONSTRAINT `reserve_plan_spec_pky` PRIMARY KEY (`reserve_cd`, `element_id`)
   ;
 --   *** ------------------------------------
 --  *** Table CUSTOMER_HIKARI
 --   *** ------------------------------------
 
---  ALTER TABLE `CUSTOMER_HIKARI` MODIFY (`CUSTOMER_ID` NOT NULL ENABLE);
-  ALTER TABLE `CUSTOMER_HIKARI` MODIFY `CUSTOMER_ID` bigint NOT NULL ;
+--  ALTER TABLE `customer_hikari` MODIFY (`customer_id` NOT NULL ENABLE);
+  ALTER TABLE `customer_hikari` MODIFY `customer_id` bigint NOT NULL ;
 
 --   *** ------------------------------------
 --  *** Table BILLPAYED_FEE
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAYED_FEE` ADD CONSTRAINT `BILLPAYED_FEE_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`, `OPERATION_YMD`)
+  ALTER TABLE `billpayed_fee` ADD CONSTRAINT `billpayed_fee_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`, `operation_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table MAIL_MAGAZINE_SIMPLE_BCC
 --   *** ------------------------------------
 
-  ALTER TABLE `MAIL_MAGAZINE_SIMPLE_BCC` ADD CONSTRAINT `MAIL_MAGAZINE_SIMPLE_BCC_PKY` PRIMARY KEY (`MAIL_MAGAZINE_SIMPLE_ID`, `MEMBER_CD`)
+  ALTER TABLE `mail_magazine_simple_bcc` ADD CONSTRAINT `mail_magazine_simple_bcc_pky` PRIMARY KEY (`mail_magazine_simple_id`, `member_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_CAMP_PLAN
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_CAMP_PLAN` ADD CONSTRAINT `HOTEL_CAMP_PLAN_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_CD`, `PLAN_CD`, `CAMP_CD`)
+  ALTER TABLE `hotel_camp_plan` ADD CONSTRAINT `hotel_camp_plan_pky` PRIMARY KEY (`hotel_cd`, `room_cd`, `plan_cd`, `camp_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_CONTACT
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_CONTACT` ADD CONSTRAINT `RESERVE_CONTACT_PKY` PRIMARY KEY (`RESERVE_CD`)
+  ALTER TABLE `reserve_contact` ADD CONSTRAINT `reserve_contact_pky` PRIMARY KEY (`reserve_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_MODIFY
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_MODIFY` ADD CONSTRAINT `HOTEL_MODIFY_PKY` PRIMARY KEY (`HOTEL_CD`)
+  ALTER TABLE `hotel_modify` ADD CONSTRAINT `hotel_modify_pky` PRIMARY KEY (`hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table LANDMARKS
 --   *** ------------------------------------
 
-  ALTER TABLE `LANDMARKS` ADD CONSTRAINT `LANDMARKS_PKY` PRIMARY KEY (`LANDMARK_ID`)
+  ALTER TABLE `landmarks` ADD CONSTRAINT `landmarks_pky` PRIMARY KEY (`landmark_id`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_LANDMARK_SURVEY
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_LANDMARK_SURVEY` ADD CONSTRAINT `HOTEL_LANDMARK_SURVEY_PKY` PRIMARY KEY (`LANDMARK_ID`, `HOTEL_CD`)
+  ALTER TABLE `hotel_landmark_survey` ADD CONSTRAINT `hotel_landmark_survey_pky` PRIMARY KEY (`landmark_id`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table MAST_CALENDAR
 --   *** ------------------------------------
 
-  ALTER TABLE `MAST_CALENDAR` ADD CONSTRAINT `MAST_CALENDAR_PKY` PRIMARY KEY (`DATE_YMD`)
+  ALTER TABLE `mast_calendar` ADD CONSTRAINT `mast_calendar_pky` PRIMARY KEY (`date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table CUSTOMER_HOTEL
 --   *** ------------------------------------
 
-  ALTER TABLE `CUSTOMER_HOTEL` ADD CONSTRAINT `CUSTOMER_HOTEL_PKY` PRIMARY KEY (`HOTEL_CD`)
+  ALTER TABLE `customer_hotel` ADD CONSTRAINT `customer_hotel_pky` PRIMARY KEY (`hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table BR_POINT_SHORT_TERM_COND
 --   *** ------------------------------------
 
-  ALTER TABLE `BR_POINT_SHORT_TERM_COND` ADD CONSTRAINT `BR_POINT_SHORT_TERM_COND_PKY` PRIMARY KEY (`MEMBER_TYPE`)
+  ALTER TABLE `br_point_short_term_cond` ADD CONSTRAINT `br_point_short_term_cond_pky` PRIMARY KEY (`member_type`)
   ;
 --   *** ------------------------------------
 --  *** Table GROUP_BUYING_5273
 --   *** ------------------------------------
 
-  ALTER TABLE `GROUP_BUYING_5273` ADD CONSTRAINT `GROUP_BUYING_5273_PKY` PRIMARY KEY (`MEMBER_CD`)
+  ALTER TABLE `group_buying_5273` ADD CONSTRAINT `group_buying_5273_pky` PRIMARY KEY (`member_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table SPOT_GROUP
 --   *** ------------------------------------
 
-  ALTER TABLE `SPOT_GROUP` ADD CONSTRAINT `SPOT_GROUP_PKY` PRIMARY KEY (`SPOT_GROUP_ID`)
+  ALTER TABLE `spot_group` ADD CONSTRAINT `spot_group_pky` PRIMARY KEY (`spot_group_id`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_LANDMARK
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_LANDMARK` ADD CONSTRAINT `HOTEL_LANDMARK_PKY` PRIMARY KEY (`HOTEL_CD`, `LANDMARK_ID`)
+  ALTER TABLE `hotel_landmark` ADD CONSTRAINT `hotel_landmark_pky` PRIMARY KEY (`hotel_cd`, `landmark_id`)
   ;
 --   *** ------------------------------------
 --  *** Table BR_POINT_PLUS_INFO
 --   *** ------------------------------------
 
-  ALTER TABLE `BR_POINT_PLUS_INFO` ADD CONSTRAINT `BR_POINT_PLUS_INFO_PKY` PRIMARY KEY (`POINT_PLUS_ID`)
+  ALTER TABLE `br_point_plus_info` ADD CONSTRAINT `br_point_plus_info_pky` PRIMARY KEY (`point_plus_id`)
   ;
 --   *** ------------------------------------
 --  *** Table LOG_PLAN_STATUS_POOL2
 --   *** ------------------------------------
 
-  ALTER TABLE `LOG_PLAN_STATUS_POOL2` ADD CONSTRAINT `LOG_PLAN_STATUS_POOL2_PKY` PRIMARY KEY (`ID`)
+  ALTER TABLE `log_plan_status_pool2` ADD CONSTRAINT `log_plan_status_pool2_pky` PRIMARY KEY (`id`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_SUPERVISOR_ACCOUNT
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_SUPERVISOR_ACCOUNT` ADD CONSTRAINT `HOTEL_SUPERVISOR_ACCOUNT_PKY` PRIMARY KEY (`SUPERVISOR_CD`)
+  ALTER TABLE `hotel_supervisor_account` ADD CONSTRAINT `hotel_supervisor_account_pky` PRIMARY KEY (`supervisor_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAYED_HOTEL_YAHOO_9XG
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAYED_HOTEL_YAHOO_9XG` ADD CONSTRAINT `BILLPAYED_HOTEL_YAHOO_9XG_PKY` PRIMARY KEY (`BILLPAY_YM`, `HOTEL_CD`)
+  ALTER TABLE `billpayed_hotel_yahoo_9xg` ADD CONSTRAINT `billpayed_hotel_yahoo_9xg_pky` PRIMARY KEY (`billpay_ym`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_CARD
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_CARD` ADD CONSTRAINT `HOTEL_CARD_PKY` PRIMARY KEY (`HOTEL_CD`, `CARD_ID`)
+  ALTER TABLE `hotel_card` ADD CONSTRAINT `hotel_card_pky` PRIMARY KEY (`hotel_cd`, `card_id`)
   ;
 --   *** ------------------------------------
 --  *** Table MY_SETTING
 --   *** ------------------------------------
 
-  ALTER TABLE `MY_SETTING` ADD CONSTRAINT `MY_SETTING_PKY` PRIMARY KEY (`MEMBER_CD`, `ITEM_CD`)
+  ALTER TABLE `my_setting` ADD CONSTRAINT `my_setting_pky` PRIMARY KEY (`member_cd`, `item_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table EXTEND_SETTING_ROOM
 --   *** ------------------------------------
 
-  ALTER TABLE `EXTEND_SETTING_ROOM` ADD CONSTRAINT `EXTEND_SETTING_ROOM_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_ID`)
+  ALTER TABLE `extend_setting_room` ADD CONSTRAINT `extend_setting_room_pky` PRIMARY KEY (`hotel_cd`, `room_id`)
   ;
 --   *** ------------------------------------
 --  *** Table MAST_KEYWORDS
 --   *** ------------------------------------
 
-  ALTER TABLE `MAST_KEYWORDS` ADD CONSTRAINT `MAST_KEYWORDS_PKY` PRIMARY KEY (`KEYWORD_ID`)
+  ALTER TABLE `mast_keywords` ADD CONSTRAINT `mast_keywords_pky` PRIMARY KEY (`keyword_id`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAY_STOCK
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAY_STOCK` ADD CONSTRAINT `BILLPAY_STOCK_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`, `SITE_CD`)
+  ALTER TABLE `billpay_stock` ADD CONSTRAINT `billpay_stock_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`, `site_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_INFORM
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_INFORM` ADD CONSTRAINT `HOTEL_INFORM_PKY` PRIMARY KEY (`HOTEL_CD`, `BRANCH_NO`)
+  ALTER TABLE `hotel_inform` ADD CONSTRAINT `hotel_inform_pky` PRIMARY KEY (`hotel_cd`, `branch_no`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_STAFF_NOTE
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_STAFF_NOTE` ADD CONSTRAINT `HOTEL_STAFF_NOTE_PKY` PRIMARY KEY (`HOTEL_CD`)
+  ALTER TABLE `hotel_staff_note` ADD CONSTRAINT `hotel_staff_note_pky` PRIMARY KEY (`hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table MMS_GENRE
 --   *** ------------------------------------
 
-  ALTER TABLE `MMS_GENRE` ADD CONSTRAINT `MMS_GENRE_PKY` PRIMARY KEY (`MAIL_MAGAZINE_SIMPLE_ID`, `GENRE`)
+  ALTER TABLE `mms_genre` ADD CONSTRAINT `mms_genre_pky` PRIMARY KEY (`mail_magazine_simple_id`, `genre`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_NEARBY
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_NEARBY` ADD CONSTRAINT `HOTEL_NEARBY_PKY` PRIMARY KEY (`HOTEL_CD`, `ELEMENT_ID`)
+  ALTER TABLE `hotel_nearby` ADD CONSTRAINT `hotel_nearby_pky` PRIMARY KEY (`hotel_cd`, `element_id`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_PLAN_CANCEL_RATE
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_PLAN_CANCEL_RATE` ADD CONSTRAINT `ROOM_PLAN_CANCEL_RATE_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_CD`, `PLAN_CD`, `DAYS`)
+  ALTER TABLE `room_plan_cancel_rate` ADD CONSTRAINT `room_plan_cancel_rate_pky` PRIMARY KEY (`hotel_cd`, `room_cd`, `plan_cd`, `days`)
   ;
 --   *** ------------------------------------
 --  *** Table MEMBER_SEARCH_MAIL_SP
 --   *** ------------------------------------
 
-  ALTER TABLE `MEMBER_SEARCH_MAIL_SP` ADD CONSTRAINT `MEMBER_SEARCH_MAIL_SP_PKY` PRIMARY KEY (`MEMBER_CD`, `ENTRY_TYPE`)
+  ALTER TABLE `member_search_mail_sp` ADD CONSTRAINT `member_search_mail_sp_pky` PRIMARY KEY (`member_cd`, `entry_type`)
   ;
  
---  ALTER TABLE `MEMBER_SEARCH_MAIL_SP` MODIFY (`MEMBER_CD` NOT NULL ENABLE);
-   ALTER TABLE `MEMBER_SEARCH_MAIL_SP` MODIFY `MEMBER_CD` varchar(128) BINARY NOT NULL ;
+--  ALTER TABLE `member_search_mail_sp` MODIFY (`member_cd` NOT NULL ENABLE);
+   ALTER TABLE `member_search_mail_sp` MODIFY `member_cd` varchar(128) BINARY NOT NULL ;
 
---  ALTER TABLE `MEMBER_SEARCH_MAIL_SP` MODIFY (`ENTRY_TYPE` NOT NULL ENABLE);
-   ALTER TABLE `MEMBER_SEARCH_MAIL_SP` MODIFY `ENTRY_TYPE` tinyint NOT NULL ;
+--  ALTER TABLE `member_search_mail_sp` MODIFY (`entry_type` NOT NULL ENABLE);
+   ALTER TABLE `member_search_mail_sp` MODIFY `entry_type` tinyint NOT NULL ;
 
 --   *** ------------------------------------
 --  *** Table MAST_HOLIDAY
 --   *** ------------------------------------
 
-  ALTER TABLE `MAST_HOLIDAY` ADD CONSTRAINT `MAST_HOLIDAY_PKY` PRIMARY KEY (`HOLIDAY`)
+  ALTER TABLE `mast_holiday` ADD CONSTRAINT `mast_holiday_pky` PRIMARY KEY (`holiday`)
   ;
 --   *** ------------------------------------
 --  *** Table GROUP_BUYING_AUTHORI_DEV
 --   *** ------------------------------------
 
-  ALTER TABLE `GROUP_BUYING_AUTHORI_DEV` ADD CONSTRAINT `GROUP_BUYING_AUTHORI_DEV_PKY` PRIMARY KEY (`ORDER_ID`)
+  ALTER TABLE `group_buying_authori_dev` ADD CONSTRAINT `group_buying_authori_dev_pky` PRIMARY KEY (`order_id`)
   ;
 --   *** ------------------------------------
 --  *** Table PAYMENT
 --   *** ------------------------------------
 
-  ALTER TABLE `PAYMENT` ADD CONSTRAINT `PAYMENT_PKY` PRIMARY KEY (`PAYMENT_ID`)
+  ALTER TABLE `payment` ADD CONSTRAINT `payment_pky` PRIMARY KEY (`payment_id`)
   ;
  
-  ALTER TABLE `PAYMENT` ADD CONSTRAINT `PAYMENT_UNQ_01` UNIQUE (`TRANSFER_YMD`, `IN_OUT_TYPE`, `ACCOUNT_TYPE`, `ACCOUNT_CHARGE`, `ACC_CLIENT_CD`, `ACC_CLIENT_BANK_NM`, `ACC_CLIENT_BRANCH_NM`)
+  ALTER TABLE `payment` ADD CONSTRAINT `payment_unq_01` UNIQUE (`transfer_ymd`, `in_out_type`, `account_type`, `account_charge`, `acc_client_cd`, `acc_client_bank_nm`, `acc_client_branch_nm`)
   ;
  
---  ALTER TABLE `PAYMENT` MODIFY (`TRANSFER_YMD` NOT NULL ENABLE);
-   ALTER TABLE `PAYMENT` MODIFY `TRANSFER_YMD` datetime NOT NULL ;
+--  ALTER TABLE `payment` MODIFY (`transfer_ymd` NOT NULL ENABLE);
+   ALTER TABLE `payment` MODIFY `transfer_ymd` datetime NOT NULL ;
 
---  ALTER TABLE `PAYMENT` MODIFY (`ACCOUNT_CHARGE` NOT NULL ENABLE);
-   ALTER TABLE `PAYMENT` MODIFY`ACCOUNT_CHARGE` decimal(32,0) NOT NULL ;
+--  ALTER TABLE `payment` MODIFY (`account_charge` NOT NULL ENABLE);
+   ALTER TABLE `payment` MODIFY`account_charge` decimal(32,0) NOT NULL ;
 
---  ALTER TABLE `PAYMENT` MODIFY (`ENTRY_CD` NOT NULL ENABLE);
-   ALTER TABLE `PAYMENT` MODIFY `ENTRY_CD` varchar(64) BINARY NOT NULL ;
+--  ALTER TABLE `payment` MODIFY (`entry_cd` NOT NULL ENABLE);
+   ALTER TABLE `payment` MODIFY `entry_cd` varchar(64) BINARY NOT NULL ;
 
---  ALTER TABLE `PAYMENT` MODIFY (`ENTRY_TS` NOT NULL ENABLE);
-   ALTER TABLE `PAYMENT` MODIFY `ENTRY_TS` datetime NOT NULL ;
+--  ALTER TABLE `payment` MODIFY (`entry_ts` NOT NULL ENABLE);
+   ALTER TABLE `payment` MODIFY `entry_ts` datetime NOT NULL ;
 
---  ALTER TABLE `PAYMENT` MODIFY (`MODIFY_CD` NOT NULL ENABLE);
-   ALTER TABLE `PAYMENT` MODIFY `MODIFY_CD` varchar(64) BINARY NOT NULL ;
+--  ALTER TABLE `payment` MODIFY (`modify_cd` NOT NULL ENABLE);
+   ALTER TABLE `payment` MODIFY `modify_cd` varchar(64) BINARY NOT NULL ;
 
---  ALTER TABLE `PAYMENT` MODIFY (`MODIFY_TS` NOT NULL ENABLE);
-   ALTER TABLE `PAYMENT` MODIFY `MODIFY_TS` datetime NOT NULL ;
+--  ALTER TABLE `payment` MODIFY (`modify_ts` NOT NULL ENABLE);
+   ALTER TABLE `payment` MODIFY `modify_ts` datetime NOT NULL ;
 
 --   *** ------------------------------------
 --  *** Table PARTNER_LAYOUT2
 --   *** ------------------------------------
 
-  ALTER TABLE `PARTNER_LAYOUT2` ADD CONSTRAINT `PARTNER_LAYOUT2_PKY` PRIMARY KEY (`PARTNER_CD`)
+  ALTER TABLE `partner_layout2` ADD CONSTRAINT `partner_layout2_pky` PRIMARY KEY (`partner_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAY_CREDIT_9XG
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAY_CREDIT_9XG` ADD CONSTRAINT `BILLPAY_CREDIT_9XG_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`)
+  ALTER TABLE `billpay_credit_9xg` ADD CONSTRAINT `billpay_credit_9xg_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table LOG_SECURITY_02
 --   *** ------------------------------------
 
-  ALTER TABLE `LOG_SECURITY_02` ADD CONSTRAINT `LOG_SECURITY_02_PKY` PRIMARY KEY (`SECURITY_CD`)
+  ALTER TABLE `log_security_02` ADD CONSTRAINT `log_security_02_pky` PRIMARY KEY (`security_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_CANCEL_POLICY
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_CANCEL_POLICY` ADD CONSTRAINT `HOTEL_CANCEL_POLICY_PKY` PRIMARY KEY (`HOTEL_CD`)
+  ALTER TABLE `hotel_cancel_policy` ADD CONSTRAINT `hotel_cancel_policy_pky` PRIMARY KEY (`hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAYED_PTN_GRANTS
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAYED_PTN_GRANTS` ADD CONSTRAINT `BILLPAYED_PTN_GRANTS_UNQ_01` UNIQUE (`BILLPAY_YM`, `SITE_CD`)
+  ALTER TABLE `billpayed_ptn_grants` ADD CONSTRAINT `billpayed_ptn_grants_unq_01` UNIQUE (`billpay_ym`, `site_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_AMENITY
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_AMENITY` ADD CONSTRAINT `HOTEL_AMENITY_PKY` PRIMARY KEY (`HOTEL_CD`, `ELEMENT_ID`)
+  ALTER TABLE `hotel_amenity` ADD CONSTRAINT `hotel_amenity_pky` PRIMARY KEY (`hotel_cd`, `element_id`)
   ;
 --   *** ------------------------------------
 --  *** Table FD_BASE_TIME
 --   *** ------------------------------------
 
-  ALTER TABLE `FD_BASE_TIME` ADD CONSTRAINT `FD_BASE_TIME_PKY` PRIMARY KEY (`AFFILIATE_ID`, `COOPERATION_CD`)
+  ALTER TABLE `fd_base_time` ADD CONSTRAINT `fd_base_time_pky` PRIMARY KEY (`affiliate_id`, `cooperation_cd`)
   ;
  
---  ALTER TABLE `FD_BASE_TIME` MODIFY (`BASE_TM` NOT NULL ENABLE);
-   ALTER TABLE `FD_BASE_TIME` MODIFY `BASE_TM` datetime NOT NULL ;
+--  ALTER TABLE `fd_base_time` MODIFY (`base_tm` NOT NULL ENABLE);
+   ALTER TABLE `fd_base_time` MODIFY `base_tm` datetime NOT NULL ;
 
---  ALTER TABLE `FD_BASE_TIME` MODIFY (`TIME_RANGE` NOT NULL ENABLE);
-   ALTER TABLE `FD_BASE_TIME` MODIFY `TIME_RANGE` smallint NOT NULL ;
+--  ALTER TABLE `fd_base_time` MODIFY (`time_range` NOT NULL ENABLE);
+   ALTER TABLE `fd_base_time` MODIFY `time_range` smallint NOT NULL ;
 
---  ALTER TABLE `FD_BASE_TIME` MODIFY (`ACTIV_FG` NOT NULL ENABLE);
-   ALTER TABLE `FD_BASE_TIME` MODIFY `ACTIV_FG` varchar(1) BINARY NOT NULL ;
+--  ALTER TABLE `fd_base_time` MODIFY (`activ_fg` NOT NULL ENABLE);
+   ALTER TABLE `fd_base_time` MODIFY `activ_fg` varchar(1) BINARY NOT NULL ;
 
---  ALTER TABLE `FD_BASE_TIME` MODIFY (`UPD_ID` NOT NULL ENABLE);
-   ALTER TABLE `FD_BASE_TIME` MODIFY `UPD_ID` varchar(10) BINARY NOT NULL ;
+--  ALTER TABLE `fd_base_time` MODIFY (`upd_id` NOT NULL ENABLE);
+   ALTER TABLE `fd_base_time` MODIFY `upd_id` varchar(10) BINARY NOT NULL ;
 
---  ALTER TABLE `FD_BASE_TIME` MODIFY (`UPD_DT` NOT NULL ENABLE);
-   ALTER TABLE `FD_BASE_TIME` MODIFY `UPD_DT` datetime NOT NULL ;
+--  ALTER TABLE `fd_base_time` MODIFY (`upd_dt` NOT NULL ENABLE);
+   ALTER TABLE `fd_base_time` MODIFY `upd_dt` datetime NOT NULL ;
 
---  ALTER TABLE `FD_BASE_TIME` MODIFY (`STOCK_FG` NOT NULL ENABLE);
-   ALTER TABLE `FD_BASE_TIME` MODIFY`STOCK_FG` varchar(1) BINARY NOT NULL ;
+--  ALTER TABLE `fd_base_time` MODIFY (`stock_fg` NOT NULL ENABLE);
+   ALTER TABLE `fd_base_time` MODIFY`stock_fg` varchar(1) BINARY NOT NULL ;
 
---  ALTER TABLE `FD_BASE_TIME` MODIFY (`COOPERATION_TYPE_CD` NOT NULL ENABLE);
-   ALTER TABLE `FD_BASE_TIME` MODIFY `COOPERATION_TYPE_CD` tinyint NOT NULL ;
+--  ALTER TABLE `fd_base_time` MODIFY (`cooperation_type_cd` NOT NULL ENABLE);
+   ALTER TABLE `fd_base_time` MODIFY `cooperation_type_cd` tinyint NOT NULL ;
 
---  ALTER TABLE `FD_BASE_TIME` MODIFY (`TIMEOUT` NOT NULL ENABLE);
-   ALTER TABLE `FD_BASE_TIME` MODIFY `TIMEOUT` smallint NOT NULL ;
+--  ALTER TABLE `fd_base_time` MODIFY (`timeout` NOT NULL ENABLE);
+   ALTER TABLE `fd_base_time` MODIFY `timeout` smallint NOT NULL ;
 
 --   *** ------------------------------------
 --  *** Table ROOM_CHARGE_YHO_BAT_TMP_2
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_CHARGE_YHO_BAT_TMP_2` ADD CONSTRAINT `ROOM_CHARGE_YHO_BAT_TMP_2_PKY` PRIMARY KEY (`REC_TYPE`, `HOTEL_CD`, `ROOM_CD`, `PLAN_CD`, `DATE_YMD`)
+  ALTER TABLE `room_charge_yho_bat_tmp_2` ADD CONSTRAINT `room_charge_yho_bat_tmp_2_pky` PRIMARY KEY (`rec_type`, `hotel_cd`, `room_cd`, `plan_cd`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table ZAP_ROOM_CHARGE
 --   *** ------------------------------------
 
-  ALTER TABLE `ZAP_ROOM_CHARGE` ADD CONSTRAINT `ZAP_ROOM_CHARGE_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_CD`, `PLAN_CD`, `PARTNER_GROUP_ID`, `DATE_YMD`)
+  ALTER TABLE `zap_room_charge` ADD CONSTRAINT `zap_room_charge_pky` PRIMARY KEY (`hotel_cd`, `room_cd`, `plan_cd`, `partner_group_id`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table NOTIFY_RIZAPULI_DETAIL
 --   *** ------------------------------------
 
-  ALTER TABLE `NOTIFY_RIZAPULI_DETAIL` ADD CONSTRAINT `NOTIFY_RIZAPULI_DETAIL_PKY` PRIMARY KEY (`NOTIFY_RIZAPULI_CD`)
+  ALTER TABLE `notify_rizapuli_detail` ADD CONSTRAINT `notify_rizapuli_detail_pky` PRIMARY KEY (`notify_rizapuli_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_BASE_CHARGE
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_BASE_CHARGE` ADD CONSTRAINT `RESERVE_BASE_CHARGE_PKY` PRIMARY KEY (`RESERVE_CD`, `CAPACITY`, `DATE_YMD`)
+  ALTER TABLE `reserve_base_charge` ADD CONSTRAINT `reserve_base_charge_pky` PRIMARY KEY (`reserve_cd`, `capacity`, `date_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table PARTNER_INQUIRY
 --   *** ------------------------------------
 
-  ALTER TABLE `PARTNER_INQUIRY` ADD CONSTRAINT `PARTNER_INQUIRY_PKY` PRIMARY KEY (`PARTNER_CD`)
+  ALTER TABLE `partner_inquiry` ADD CONSTRAINT `partner_inquiry_pky` PRIMARY KEY (`partner_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table CHECKSHEET_ORDER
 --   *** ------------------------------------
 
-  ALTER TABLE `CHECKSHEET_ORDER` ADD CONSTRAINT `CHECKSHEET_ORDER_PKY` PRIMARY KEY (`ORDER_NO`)
+  ALTER TABLE `checksheet_order` ADD CONSTRAINT `checksheet_order_pky` PRIMARY KEY (`order_no`)
   ;
  
-  ALTER TABLE `CHECKSHEET_ORDER` ADD CONSTRAINT `CHECKSHEET_ORDER_UNQ_01` UNIQUE (`HOTEL_CD`)
+  ALTER TABLE `checksheet_order` ADD CONSTRAINT `checksheet_order_unq_01` UNIQUE (`hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table CHECKSHEET_CUSTOMER_9XG
 --   *** ------------------------------------
 
-  ALTER TABLE `CHECKSHEET_CUSTOMER_9XG` ADD CONSTRAINT `CHECKSHEET_CUSTOMER_9XG_PKY` PRIMARY KEY (`CHECKSHEET_YM`, `CUSTOMER_ID`)
+  ALTER TABLE `checksheet_customer_9xg` ADD CONSTRAINT `checksheet_customer_9xg_pky` PRIMARY KEY (`checksheet_ym`, `customer_id`)
   ;
 --   *** ------------------------------------
 --  *** Table MMS_LINK_ANALYZE
 --   *** ------------------------------------
 
-  ALTER TABLE `MMS_LINK_ANALYZE` ADD CONSTRAINT `MMS_LINK_ANALYZE_PKY` PRIMARY KEY (`MAIL_MAGAZINE_SIMPLE_ID`, `LINK_NO`)
+  ALTER TABLE `mms_link_analyze` ADD CONSTRAINT `mms_link_analyze_pky` PRIMARY KEY (`mail_magazine_simple_id`, `link_no`)
   ;
 --   *** ------------------------------------
 --  *** Table FEATURE
 --   *** ------------------------------------
 
-  ALTER TABLE `FEATURE` ADD CONSTRAINT `FEATURE_PKY` PRIMARY KEY (`FEATURE_ID`)
+  ALTER TABLE `feature` ADD CONSTRAINT `feature_pky` PRIMARY KEY (`feature_id`)
   ;
 --   *** ------------------------------------
 --  *** Table WELFARE_GRANTS_HISTORY
 --   *** ------------------------------------
 
-  ALTER TABLE `WELFARE_GRANTS_HISTORY` ADD CONSTRAINT `WELFARE_GRANTS_HISTORY_PKY` PRIMARY KEY (`WELFARE_GRANTS_HISTORY_ID`)
+  ALTER TABLE `welfare_grants_history` ADD CONSTRAINT `welfare_grants_history_pky` PRIMARY KEY (`welfare_grants_history_id`)
   ;
  
-  ALTER TABLE `WELFARE_GRANTS_HISTORY` ADD CONSTRAINT `WELFARE_GRANTS_HISTORY_UNQ_01` UNIQUE (`WELFARE_GRANTS_ID`, `BRANCH_NO`)
+  ALTER TABLE `welfare_grants_history` ADD CONSTRAINT `welfare_grants_history_unq_01` UNIQUE (`welfare_grants_id`, `branch_no`)
   ;
 --   *** ------------------------------------
 --  *** Table REPORT_WEEK_HOTEL
 --   *** ------------------------------------
 
-  ALTER TABLE `REPORT_WEEK_HOTEL` ADD CONSTRAINT `REPORT_WEEK_HOTEL_PKY` PRIMARY KEY (`HOTEL_CD`, `DATE_YMD`, `CHARGE_TYPE`, `CAPACITY`)
+  ALTER TABLE `report_week_hotel` ADD CONSTRAINT `report_week_hotel_pky` PRIMARY KEY (`hotel_cd`, `date_ymd`, `charge_type`, `capacity`)
   ;
 --   *** ------------------------------------
 --  *** Table RSV_PUSH_AREAS
 --   *** ------------------------------------
 
-  ALTER TABLE `RSV_PUSH_AREAS` ADD CONSTRAINT `RSV_PUSH_AREAS_PKY` PRIMARY KEY (`AREA_ID`)
+  ALTER TABLE `rsv_push_areas` ADD CONSTRAINT `rsv_push_areas_pky` PRIMARY KEY (`area_id`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_DISPOSE_YAHOO_9XG
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_DISPOSE_YAHOO_9XG` ADD CONSTRAINT `RESERVE_DISPOSE_YAHOO_9XG_PKY` PRIMARY KEY (`DISPOSE_YAHOO_ID`)
+  ALTER TABLE `reserve_dispose_yahoo_9xg` ADD CONSTRAINT `reserve_dispose_yahoo_9xg_pky` PRIMARY KEY (`dispose_yahoo_id`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_PLAN_LOWEST2
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_PLAN_LOWEST2` ADD CONSTRAINT `ROOM_PLAN_LOWEST2_PKY` PRIMARY KEY (`HOTEL_CD`, `PLAN_ID`, `ROOM_ID`, `CAPACITY`, `CHARGE_CONDITION`)
+  ALTER TABLE `room_plan_lowest2` ADD CONSTRAINT `room_plan_lowest2_pky` PRIMARY KEY (`hotel_cd`, `plan_id`, `room_id`, `capacity`, `charge_condition`)
   ;
 --   *** ------------------------------------
 --  *** Table HOTEL_VISUAL
 --   *** ------------------------------------
 
-  ALTER TABLE `HOTEL_VISUAL` ADD CONSTRAINT `HOTEL_VISUAL_PKY` PRIMARY KEY (`HOTEL_CD`, `OPEN_YMD`)
+  ALTER TABLE `hotel_visual` ADD CONSTRAINT `hotel_visual_pky` PRIMARY KEY (`hotel_cd`, `open_ymd`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAYED_HOTEL_FEE
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAYED_HOTEL_FEE` ADD CONSTRAINT `BILLPAYED_HOTEL_FEE_PKY` PRIMARY KEY (`BILLPAY_YM`, `HOTEL_CD`)
+  ALTER TABLE `billpayed_hotel_fee` ADD CONSTRAINT `billpayed_hotel_fee_pky` PRIMARY KEY (`billpay_ym`, `hotel_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table YAHOO_POINT_BOOK_PRE
 --   *** ------------------------------------
 
-  ALTER TABLE `YAHOO_POINT_BOOK_PRE` ADD CONSTRAINT `YAHOO_POINT_BOOK_PRE_PKY` PRIMARY KEY (`YAHOO_POINT_CD`)
+  ALTER TABLE `yahoo_point_book_pre` ADD CONSTRAINT `yahoo_point_book_pre_pky` PRIMARY KEY (`yahoo_point_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table MAST_AREA_MATCH
 --   *** ------------------------------------
 
-  ALTER TABLE `MAST_AREA_MATCH` ADD CONSTRAINT `MAST_AREA_MATCH_PKY` PRIMARY KEY (`ID`)
+  ALTER TABLE `mast_area_match` ADD CONSTRAINT `mast_area_match_pky` PRIMARY KEY (`id`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAYED_PTN_TYPE_SALES
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAYED_PTN_TYPE_SALES` ADD CONSTRAINT `BILLPAYED_PTN_TYPE_SALES_PKY` PRIMARY KEY (`BILLPAY_YM`, `SITE_CD`, `STOCK_TYPE`, `SALES_RATE`)
+  ALTER TABLE `billpayed_ptn_type_sales` ADD CONSTRAINT `billpayed_ptn_type_sales_pky` PRIMARY KEY (`billpay_ym`, `site_cd`, `stock_type`, `sales_rate`)
   ;
 --   *** ------------------------------------
 --  *** Table ROOM_YDK
 --   *** ------------------------------------
 
-  ALTER TABLE `ROOM_YDK` ADD CONSTRAINT `ROOM_YDK_PKY` PRIMARY KEY (`HOTEL_CD`, `ROOM_ID`)
+  ALTER TABLE `room_ydk` ADD CONSTRAINT `room_ydk_pky` PRIMARY KEY (`hotel_cd`, `room_id`)
   ;
 --   *** ------------------------------------
 --  *** Table ORICO_WEBSERVICE
 --   *** ------------------------------------
 
-  ALTER TABLE `ORICO_WEBSERVICE` ADD CONSTRAINT `ORICO_WEBSERVICE_PKY` PRIMARY KEY (`SERVICE_CD`, `RESERVE_CD`)
+  ALTER TABLE `orico_webservice` ADD CONSTRAINT `orico_webservice_pky` PRIMARY KEY (`service_cd`, `reserve_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table MIGRATION_CANCEL_RATE
 --   *** ------------------------------------
 
-  ALTER TABLE `MIGRATION_CANCEL_RATE` ADD CONSTRAINT `MIGRATION_CANCEL_RATE_PKY` PRIMARY KEY (`HOTEL_CD`, `PLAN_ID`, `DAYS`)
+  ALTER TABLE `migration_cancel_rate` ADD CONSTRAINT `migration_cancel_rate_pky` PRIMARY KEY (`hotel_cd`, `plan_id`, `days`)
   ;
 --   *** ------------------------------------
 --  *** Table BILLPAY_PTN_SITE
 --   *** ------------------------------------
 
-  ALTER TABLE `BILLPAY_PTN_SITE` ADD CONSTRAINT `BILLPAY_PTN_SITE_PKY` PRIMARY KEY (`BILLPAY_YM`, `SITE_CD`)
+  ALTER TABLE `billpay_ptn_site` ADD CONSTRAINT `billpay_ptn_site_pky` PRIMARY KEY (`billpay_ym`, `site_cd`)
   ;
 --   *** ------------------------------------
 --  *** Table RESERVE_FIX
 --   *** ------------------------------------
 
-  ALTER TABLE `RESERVE_FIX` ADD CONSTRAINT `RESERVE_FIX_PKY` PRIMARY KEY (`RESERVE_CD`, `DATE_YMD`, `FIX_TYPE`)
+  ALTER TABLE `reserve_fix` ADD CONSTRAINT `reserve_fix_pky` PRIMARY KEY (`reserve_cd`, `date_ymd`, `fix_type`)
   ;
