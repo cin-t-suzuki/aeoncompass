@@ -261,4 +261,18 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
         ->name('ctl.brhoteladvert2009000400.edit'); //編集画面
     Route::post('/brhoteladvert2009000400/update', 'BrhotelAdvert2009000400Controller@update')
         ->name('ctl.brhoteladvert2009000400.update'); //更新
+
+    // 精算サイト
+    Route::get('/brmodifymember/mailsearch', 'BrModifyMemberController@mailSearch')
+        ->name('ctl.brmodifymember.mailsearch');
+    Route::get('/brmodifymember/editmagazine', 'BrModifyMemberController@editMagazine')
+        ->name('ctl.brmodifymember.editmagazine');
+    Route::post('/brmodifymember/modifymagazine', 'BrModifyMemberController@modifymagazine')
+        ->name('ctl.brmodifymember.modifymagazine');
+    Route::get('/brmodifymember/mailremove', 'BrModifyMemberController@mailremove')
+        ->name('ctl.brmodifymember.mailremove');
+    Route::get('/brmodifymember/editmailremove', 'BrModifyMemberController@editmailremove')
+        ->name('ctl.brmodifymember.editmailremove');
+    Route::post('/brmodifymember/modifymailremove', 'BrModifyMemberController@modifymailremove')
+        ->name('ctl.brmodifymember.modifymailremove');
 });
