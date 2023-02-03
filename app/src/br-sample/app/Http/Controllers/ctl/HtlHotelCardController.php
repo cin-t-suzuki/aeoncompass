@@ -137,7 +137,7 @@ class HtlHotelCardController extends _commonController
                         'entry_cd' => 'entry_cd',   // $this->box->info->env->action_cd,
                         'entry_ts' => now(),
                         'modify_cd' => 'modify_cd', // $this->box->info->env->action_cd,
-                        'modify_ts' => now()        
+                        'modify_ts' => now()
                     ]);
 
                     // 保存に失敗したときエラーメッセージ表示

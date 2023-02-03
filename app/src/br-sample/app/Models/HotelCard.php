@@ -86,7 +86,7 @@ class HotelCard extends CommonDBModel
 
         $a_attributes = $aa_conditions;
         $o_model_hotel_card_save = new HotelCard();
-        $hotel_card_insert = $o_model_hotel_card_save->create(
+        $hotel_card_insert = $o_model_hotel_card_save->insert(
             [
                 'hotel_cd' => $a_attributes['hotel_cd'],
                 'card_id' => $a_attributes['card_id'],
@@ -102,7 +102,7 @@ class HotelCard extends CommonDBModel
         }
 
         // 施設情報ページを更新に設定
-        $o_model_hotel_card_save->hotel_modify($a_attributes);
+        $o_model_hotel_card_save->hotelModify($a_attributes);
 
         return true;
     }
@@ -124,7 +124,7 @@ class HotelCard extends CommonDBModel
         )->delete();
 
         // 施設情報ページを更新に設定
-        $o_model_hotel_card->hotel_modify($a_attributes);
+        $o_model_hotel_card->hotelModify($a_attributes);
 
         // 施設属性削除情を更新（外部連携などで削除されたデータを反映）
         $o_model_hotel_card->hotel_element_removed($a_attributes['hotel_cd']);
@@ -137,10 +137,10 @@ class HotelCard extends CommonDBModel
     //
     //  as_hotel_cd       施設コード
     //  aa_attributes     施設*テーブルの登録データ内容
-    public function hotel_modify($aa_attributes)
+    public function hotelModify($aa_attributes)
     {
 
-        $hotel_status = new HotelStatus;
+        $hotel_status = new HotelStatus();
         $a_hotel_status = $hotel_status->where(['hotel_cd' => $aa_attributes['hotel_cd']])->first();
 
         // 解約状態の場合は必ず削除依頼
@@ -155,7 +155,7 @@ class HotelCard extends CommonDBModel
         $a_hotel_modify = $hotel_modify->where(['hotel_cd' => $aa_attributes['hotel_cd']])->first();
 
         if (empty($a_hotel_modify)) {
-            $hotel_modify_create = $hotel_modify->create([
+            $hotel_modify_create = $hotel_modify->insert([
                 'hotel_cd'      => $aa_attributes['hotel_cd'],
                 'modify_status' => $modify_status,
                 'entry_cd'      => $aa_attributes['entry_cd'],
@@ -177,7 +177,7 @@ class HotelCard extends CommonDBModel
                 'modify_ts'     => $aa_attributes['modify_ts'],
             ]);
 
-            if (!$hotel_modify_upadte) {
+            if ($hotel_modify_upadte == 0) {
                 return false;
             }
         }
@@ -195,7 +195,7 @@ class HotelCard extends CommonDBModel
 
         if (is_null($a_hotel_element_removed)) {
 
-            $hotel_element_removed_create = $hotel_element_removed->create([
+            $hotel_element_removed_create = $hotel_element_removed->insert([
                 'hotel_cd'      => $as_hotel_cd,
                 'table_name'    => $this->table,
                 'destroy_dtm'   => now(),
@@ -223,7 +223,7 @@ class HotelCard extends CommonDBModel
                     'modify_ts'     => now(),
                 ]);
 
-            if (!$hotel_element_removed_update) {
+            if ($hotel_element_removed_update == 0) {
                 return false;
             }
 
