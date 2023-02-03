@@ -28,7 +28,7 @@ class HtlHotelReceiptController extends _commonController
             if (is_null($a_hotel_receipt)) {
                 $a_hotel_receipt['receipt_policy'] = 1;
             };
-            // dd($a_hotel_receipt);
+
             return view('ctl.htlhotelreceipt.index', [
                 'hotel_receipt'  => $a_hotel_receipt,
                 'target_cd'      => $target_cd
