@@ -634,9 +634,9 @@ SQL;
 	//
 	//  as_hotel_cd       施設コード
 	//  aa_attributes     施設*テーブルの登録データ内容
-	public function hotel_modify($aa_attributes)
+	public function hotelModify($aa_attributes)
 	{
-		$hotel_status = new HotelStatus;
+		$hotel_status = new HotelStatus();
 		$a_hotel_status = $hotel_status->where(['hotel_cd' => $aa_attributes['hotel_cd']])->first();
 
 		// 解約状態の場合は必ず削除依頼
@@ -651,7 +651,7 @@ SQL;
 		$a_hotel_modify = $hotel_modify->where(['hotel_cd' => $aa_attributes['hotel_cd']])->first();
 
 		if (empty($a_hotel_modify)) {
-			$hotel_modify_create = $hotel_modify->create([
+			$hotel_modify_create = $hotel_modify->insert([
 				'hotel_cd'      => $aa_attributes['hotel_cd'],
 				'modify_status' => $modify_status,
 				'entry_cd'      => $aa_attributes['entry_cd'],
@@ -673,7 +673,7 @@ SQL;
 				'modify_ts'     => $aa_attributes['modify_ts'],
 			]);
 
-			if (!$hotel_modify_upadte) {
+			if ($hotel_modify_upadte == 0) {
 				return false;
 			}
 		}

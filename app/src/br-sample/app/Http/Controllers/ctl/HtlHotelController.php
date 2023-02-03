@@ -156,7 +156,7 @@ class HtlHotelController extends _commonController
                 }
             }
 
-            // 特定施設のリンクの取得
+            // 特定施設のリンクの取得dd
             $a_hotel_links = DB::table('hotel_link')->where('type', 1)->where('hotel_cd', $targetCd)->get(); //   type ウェブサイトタイプ  1:施設トップページ 2:携帯トップページ 3:その他ページ
 
             // 施設情報取得
@@ -253,7 +253,6 @@ class HtlHotelController extends _commonController
 
             $hotel_update = $o_hotel->where(['hotel_cd' => $targetCd])
                 ->update([
-                    'hotel_cd' => $a_attributes['hotel_cd'],
                     'postal_cd' => $a_attributes['postal_cd'],
                     'address' => $a_attributes['address'],
                     'tel' => $a_attributes['tel'],
@@ -267,7 +266,7 @@ class HtlHotelController extends _commonController
                 ]);
 
             // 更新後失敗した場合editアクションへ
-            if (!$hotel_update) {
+            if ($hotel_update == 0) {
                 // ロールバック
                 DB::rollback();
 
@@ -281,7 +280,7 @@ class HtlHotelController extends _commonController
                 $a_attributes['entry_cd'] = 'entry_cd'; // TODO $this->box->info->env->action_cd
                 $a_attributes['entry_ts'] = now();
             }
-            $o_hotel->hotel_modify($a_attributes);
+            $o_hotel->hotelModify($a_attributes);
 
             //-------------------------------
             // JRセット参画施設の場合
@@ -332,7 +331,7 @@ class HtlHotelController extends _commonController
                         'modify_ts' => now(),
                     ]);
 
-                    if (!$hotel_status_jr_update) {
+                    if ($hotel_status_jr_update == 0) {
                         // ロールバック
                         DB::rollback();
 
