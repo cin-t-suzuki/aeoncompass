@@ -261,4 +261,12 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
         ->name('ctl.brhoteladvert2009000400.edit'); //編集画面
     Route::post('/brhoteladvert2009000400/update', 'BrhotelAdvert2009000400Controller@update')
         ->name('ctl.brhoteladvert2009000400.update'); //更新
+
+    // 会員コード・パスワード案内
+    Route::get('/brremindermember/', 'BrReminderMemberController@index')
+        ->name('ctl.brremindermember.index');
+    Route::get('/brremindermember/search', 'BrReminderMemberController@search')
+        ->name('ctl.brremindermember.search');
+    Route::get('/brremindermember/send', 'BrReminderMemberController@send')
+        ->name('ctl.brremindermember.send');
 });
