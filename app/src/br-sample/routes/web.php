@@ -97,7 +97,6 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
     Route::match(['get', 'post'], '/htlHotelFacility/list/'     , function(){ return 'TODO:'; })->name('ctl.htl_hotel_facility.list');
     Route::match(['get', 'post'], '/htlHotelFacilityRoom/list/' , function(){ return 'TODO:'; })->name('ctl.htl_hotel_facility_room.list');
     Route::match(['get', 'post'], '/htlHotelChargeRound/index/' , function(){ return 'TODO:'; })->name('ctl.htl_hotel_charge_round.index');
-    Route::match(['get', 'post'], '/htlHotelCancel/index/'      , function(){ return 'TODO:'; })->name('ctl.htl_hotel_cancel.index');
     Route::match(['get', 'post'], '/htlHotelReceipt/index/'     , function(){ return 'TODO:'; })->name('ctl.htl_hotel_receipt.index');
     Route::match(['get', 'post'], '/htlBathTax/'                , function(){ return 'TODO:'; })->name('ctl.htl_bath_tax.index');
 
@@ -261,4 +260,13 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
         ->name('ctl.brhoteladvert2009000400.edit'); //編集画面
     Route::post('/brhoteladvert2009000400/update', 'BrhotelAdvert2009000400Controller@update')
         ->name('ctl.brhoteladvert2009000400.update'); //更新
+
+    // 施設キャンセルポリシー 登録更新
+    Route::match(['get', 'post'], '/htlHotelCancel/index/', [\App\Http\Controllers\ctl\HtlHotelCancelController::class, 'index'])->name('ctl.htl_hotel_cancel.index');
+    Route::match(['get', 'post'], '/htlHotelCancel/create/', [\App\Http\Controllers\ctl\HtlHotelCancelController::class, 'create'])->name('ctl.htl_hotel_cancel.create');
+    Route::match(['get', 'post'], '/htlHotelCancel/delete/', [\App\Http\Controllers\ctl\HtlHotelCancelController::class, 'delete'])->name('ctl.htl_hotel_cancel.delete');
+    Route::match(['get', 'post'], '/htlHotelCancel/switch/', [\App\Http\Controllers\ctl\HtlHotelCancelController::class, 'switch'])->name('ctl.htl_hotel_cancel.switch');
+    Route::match(['get', 'post'], '/htlHotelCancel/cancelpolicy/', [\App\Http\Controllers\ctl\HtlHotelCancelController::class, 'cancelpolicy'])->name('ctl.htl_hotel_cancel.cancelpolicy');
+    Route::match(['get', 'post'], '/htlHotelCancel/deletecancelpolicy/', [\App\Http\Controllers\ctl\HtlHotelCancelController::class, 'deletecancelpolicy'])->name('ctl.htl_hotel_cancel.deletecancelpolicy');
+
 });
