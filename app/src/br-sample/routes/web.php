@@ -261,4 +261,10 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
         ->name('ctl.brhoteladvert2009000400.edit'); //編集画面
     Route::post('/brhoteladvert2009000400/update', 'BrhotelAdvert2009000400Controller@update')
         ->name('ctl.brhoteladvert2009000400.update'); //更新
+
+    // 部屋登録状況一覧
+    Route::get('/brroomdemand/search', 'BrRoomDemandController@search')
+        ->name('ctl.brroomdemand.search');
+    Route::get('/brroomdemand/download', 'BrRoomDemandController@download')
+        ->name('ctl.brroomdemand.download');
 });
