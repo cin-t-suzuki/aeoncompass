@@ -83,7 +83,6 @@ return [
     |
     */
 
-    //'locale' => 'en',
     'locale' => 'ja',
 
     /*
@@ -95,14 +94,9 @@ return [
     | is not available. You may change the value to correspond to any of
     | the language folders that are provided through your application.
     |
-    | フォールバック ロケールは、現在のロケールが利用できない場合に使用する
-    | ロケールを決定します。 アプリケーションを通じて提供される任意の言語フォルダーに
-    | 対応するように値を変更できます。
-    |
     */
 
     'fallback_locale' => 'en',
-    // 'fallback_locale' => 'ja',
 
     /*
     |--------------------------------------------------------------------------
