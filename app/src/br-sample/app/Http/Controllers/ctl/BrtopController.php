@@ -78,11 +78,11 @@
 		}
 
 		// 登録
-		public function registrationAction()
+		public function registration()
 		{
 			try {
 
-				$this->set_assign();
+				return view("ctl.brtop.registration");
 
 			// 各メソッドで Exception が投げられた場合
 			} catch (\Exception $e) {
@@ -104,11 +104,11 @@
 		}
 
 		// 支払
-		public function paymentAction()
+		public function payment()
 		{
 			try {
 
-				$this->set_assign();
+				return view("ctl.brtop.payment");
 
 			// 各メソッドで Exception が投げられた場合
 			} catch (\Exception $e) {
@@ -144,11 +144,11 @@
 		}
 
 		// 会員情報閲覧
-		public function inspectAction()
+		public function inspect()
 		{
 			try {
 
-				$this->set_assign();
+				return view("ctl.brtop.inspect");
 
 			// 各メソッドで Exception が投げられた場合
 			} catch (\Exception $e) {
