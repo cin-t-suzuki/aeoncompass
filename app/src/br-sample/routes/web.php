@@ -264,7 +264,7 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 
     // 部屋登録状況一覧
     Route::get('/brroomdemand/search', 'BrRoomDemandController@search')
-        ->name('ctl.brroomdemand.search');
+        ->name('ctl.brRoomdemand.search');
     Route::get('/brroomdemand/download', 'BrRoomDemandController@download')
-        ->name('ctl.brroomdemand.download');
+        ->name('ctl.brRoomdemand.download');
 });

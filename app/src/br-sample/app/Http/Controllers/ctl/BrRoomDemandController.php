@@ -27,7 +27,7 @@ class BrRoomDemandController extends _commonController
         // // エラーメッセージがあれば取得
         // $errors = $request->session()->get('errors', []);
 
-        return view('ctl.brroomdemand.search', [
+        return view('ctl.brRoomDemand.search', [
             'room_demand_list' => $a_room_demand['values'],
 
             // 'errors' => $errors
