@@ -1,23 +1,26 @@
 <?php
+
 namespace App\Http\Controllers\ctl;
 
 use App\Common\Traits;
-use App\Common\DateUtil;
 use App\Http\Controllers\ctl\_commonController;
-use App\Models\CustomerHotel;
-use App\Models\Hotel;
-use App\Models\HotelAccount;
-use App\Models\HotelControl;
-use App\Models\HotelMscLogin;
-use App\Models\HotelNotify;
-use App\Models\HotelPerson;
-use App\Models\HotelRate;
-use App\Models\HotelStaffNote;
-use App\Models\HotelStatus;
-use App\Models\HotelSurvey;
-use App\Models\MastPref;
-use App\Models\MastCity;
-use App\Models\MastWard;
+use App\Http\Requests\UpdateManagementRequest;
+use App\Models\{
+    CustomerHotel,
+    Hotel,
+    HotelAccount,
+    HotelControl,
+    HotelMscLogin,
+    HotelNotify,
+    HotelPerson,
+    HotelRate,
+    HotelStaffNote,
+    HotelStatus,
+    HotelSurvey,
+    MastCity,
+    MastPref,
+    MastWard
+};
 use App\Util\Models_Cipher;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -108,15 +111,17 @@ class BrhotelController extends _commonController
 
 		// 登録されているかの判断
 		$isRegistHotelManagement = false;
-		// 施設情報取得
-		$hotelAccountData = (new HotelAccount())->selectByKey($hotelCd);
-		$hotelPersonData = (new HotelPerson())->selectByKey($hotelCd);
-		$hotelStatusData = (new HotelStatus())->selectByKey($hotelCd);
-		if (count($hotelAccountData) != 0	||  count($hotelPersonData) != 0
-				||  count($hotelStatusData) != 0
-		){
-			$isRegistHotelManagement = true;
-		}
+        // 施設情報取得
+        $hotelAccountData = HotelAccount::find($hotelCd);
+        $hotelPersonData = (new HotelPerson())->selectByKey($hotelCd);
+        $hotelStatusData = (new HotelStatus())->selectByKey($hotelCd);
+        if (
+            !is_null($hotelAccountData)
+            || count($hotelPersonData) != 0
+            ||  count($hotelStatusData) != 0
+        ) {
+            $isRegistHotelManagement = true;
+        }
 
 		// 登録されているかの判断
 		$isRegistHotelState = false;
@@ -699,7 +704,7 @@ class BrhotelController extends _commonController
      *
      * @return \Illuminate\Http\Response
      */
-    public function updateManagement()
+    public function updateManagement(UpdateManagementRequest $request)
     {
         $errorList = [];
 
@@ -745,12 +750,11 @@ class BrhotelController extends _commonController
             }
         }
 
-        $hotelAccountModel = new HotelAccount();
         $hotelPersonModel = new HotelPerson();
         $hotelStatusModel = new HotelStatus();
 
         // validation
-        $errorList = array_merge($errorList, $hotelAccountModel->validation($inputHotelAccount));
+        // MEMO: hotel_account のバリデーションのみ、 FormRequest で行うよう変更済み。
         $errorList = array_merge($errorList, $hotelPersonModel->validation($inputHotelPerson));
         $errorList = array_merge($errorList, $hotelStatusModel->validation($inputHotelStatus));
 
@@ -771,7 +775,6 @@ class BrhotelController extends _commonController
         }
 
         // 共通カラム設定
-        $hotelAccountModel->setUpdateCommonColumn($inputHotelAccount);
         $hotelStatusModel->setUpdateCommonColumn($inputHotelStatus);
         $hotelPersonModel->setUpdateCommonColumn($inputHotelPerson);
 
@@ -785,8 +788,6 @@ class BrhotelController extends _commonController
             'accept_status'    => $inputHotelAccount['accept_status'],
             'account_id_begin' => $inputHotelAccount['account_id_begin'],
             'account_id'       => strtoupper($inputHotelAccount['account_id_begin']),
-            'modify_cd'        => $inputHotelAccount['modify_cd'],
-            'modify_ts'        => $inputHotelAccount['modify_ts'],
         ]);
         $hotelPerson->fill($inputHotelPerson);
         $hotelStatus->fill($inputHotelStatus);
