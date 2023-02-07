@@ -131,11 +131,11 @@
 		}
 
 		// 請求
-		public function claimAction()
+		public function claim()
 		{
 			try {
-
-				$this->set_assign();
+				
+				return view("ctl.brtop.claim");
 
 			// 各メソッドで Exception が投げられた場合
 			} catch (\Exception $e) {

@@ -290,9 +290,7 @@ Route::post('/ctl/brtop/confirmation/', function () {return 'TODO: 【未実装�
 Route::post('/ctl/brtop/registration/', function () {return 'TODO: 【未実装】 /ctl/brtop/registration/'; })->name('ctl.br.top.registration');
 Route::post('/ctl/brtop/offer/', function () {return 'TODO: 【未実装】 /ctl/brtop/offer/'; })->name('ctl.br.top.offer');
 Route::post('/ctl/brtop/stock/', function () {return 'TODO: 【未実装】 /ctl/brtop/stock/'; })->name('ctl.br.top.stock');
-Route::post('/ctl/brtop/claim/', function () {return 'TODO: 【未実装】 /ctl/brtop/claim/'; })->name('ctl.br.top.claim');
 Route::post('/ctl/brgroupbuying/deals/', function () {return 'TODO: 【未実装】 /ctl/brgroupbuying/deals/'; })->name('ctl.br.group.buying.deals');
-
 Route::post('/ctl/brtop/inspect/', function () {return 'TODO: 【未実装】 /ctl/brtop/inspect/'; })->name('ctl.br.top.inspect');
 Route::post('/ctl/brvoice/', function () {return 'TODO: 【未実装】 /ctl/brvoice/'; })->name('ctl.br.voice');
 Route::post('/ctl/brpoint/', function () {return 'TODO: 【未実装】 /ctl/brpoint/'; })->name('ctl.br.point');
@@ -304,3 +302,21 @@ Route::get('/ctl/brmoneyschedule/new', function (\Illuminate\Http\Request $reque
     var_dump($request->input());
     return 'TODO: 未実装';
 })->name('ctl.br.money.schedule.new');
+
+//請求
+Route::get('/ctl/brtop/claim/', [\App\Http\Controllers\ctl\BrtopController::class, 'claim'])->name('ctl.br.top.claim');
+//TODO実装後に削除
+Route::post('/ctl/brmoneyschedule/', function () {return 'TODO: 【未実装】 /ctl/brmoneyschedule/';})->name('ctl.br.moneyschedule');
+Route::post('/ctl/brchecksheet/', function () {return 'TODO: 【未実装】 /ctl/brchecksheet/';})->name('ctl.br.checksheet');
+Route::post('/ctl/brbillpay/', function () {return 'TODO: 【未実装】 /ctl/brbillpay/';})->name('ctl.br.billpay');
+Route::post('/ctl/brbillpayptn/', function () {return 'TODO: 【未実装】 /ctl/brbillpayptn/';})->name('ctl.br.billpayptn');//パートナー清算確認merge完了後に削除
+Route::post('/ctl/bradditionalzengin/', function () {return 'TODO: 【未実装】 /ctl/bradditionalzengin/';})->name('ctl.br.additionalzengin');//口座振替merge完了後に削除
+Route::post('/ctl/braccounting/', function () {return 'TODO: 【未実装】 /ctl/braccounting/';})->name('ctl.br.accounting');
+
+
+
+
+
+
+
+
