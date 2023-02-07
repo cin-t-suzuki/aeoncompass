@@ -40,6 +40,10 @@ Route::get('ctl/brTop', [\App\Http\Controllers\ctl\BrTopController::class, 'inde
 Route::get('/ctl/brChangePassword/', [\App\Http\Controllers\ctl\BrChangePasswordController::class, 'index'])->name('ctl.br.change.password')->middleware('auth:staff');
 Route::post('/ctl/brChangePassword/update', [\App\Http\Controllers\ctl\BrChangePasswordController::class, 'update'])->name('ctl.br.change.password.update')->middleware('auth:staff');
 
+// 施設管理者ログイン
+Route::get('/ctl/htlLogin', [\App\Http\Controllers\ctl\HtlLoginController::class, 'index'])->name('ctl.htl.login');
+Route::post('/ctl/htlLogin', [\App\Http\Controllers\ctl\HtlLoginController::class, 'login'])->name('ctl.htl.login.authenticate');
+
 /**
  * 管理システム
  */

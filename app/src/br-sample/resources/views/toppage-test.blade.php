@@ -10,7 +10,7 @@
 		<a href="{{ route('ctl.brbroadcastMessage.index') }}">施設管理TOPお知らせ情報管理</a><br>
 		<a href="{{ route('ctl.top.index') }}">管理画面一覧</a><br>
 		<a href="{{ route('ctl.brtop.index') }}">社内TOP</a><br>
-		
+
 		{!! Form::open(['route' => ['ctl.brfaxPr.edit'], 'method' => 'post']) !!}
 			<input type="submit" value="予約通知ＦＡＸ広告 掲載文章"><br>
 		{!! Form::close() !!}
@@ -24,10 +24,12 @@
 
 		<a href="{{ route('ctl.brhotelRate.index', ['target_cd'=>'2015060001']) }}">料率一覧</a><br>
 
-		<a href="{{ route('ctl.brhotel.show', ['target_cd'=>'2015060001']) }}">詳細変更 施設各情報ハブ		</a><br>
+        <a href="{{ route('ctl.brhotel.show', ['target_cd'=>'2015060001']) }}">詳細変更 施設各情報ハブ</a><br>
 
-		<a href="{{ route('ctl.br.login.index') }}">ログイン画面(既にログインしている場合は社内管理トップ)</a>
-		<a href="{{ route('ctl.br_hotel.new') }}">施設情報登録</a>
-	</body>
+        <a href="{{ route('ctl.br.login.index') }}">ログイン画面(既にログインしている場合は社内管理トップ)</a><br>
+        <a href="{{ route('ctl.br_hotel.new') }}">施設情報登録</a><br>
+
+        <a href="{{ route('ctl.htl.login') }}">施設管理者ログイン画面(未ログイン時)</a><br>
+    </body>
 
 </html>
