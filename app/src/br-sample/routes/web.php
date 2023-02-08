@@ -261,4 +261,9 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
         ->name('ctl.brhoteladvert2009000400.edit'); //編集画面
     Route::post('/brhoteladvert2009000400/update', 'BrhotelAdvert2009000400Controller@update')
         ->name('ctl.brhoteladvert2009000400.update'); //更新
+
+    // 各種メール設定 一覧登録更新
+    Route::match(['get', 'post'], '/htlmaillist/list/', [\App\Http\Controllers\ctl\HtlMailListController::class, 'list'])->name('ctl.htl_mail_list.list');
+    Route::match(['get', 'post'], '/htlmaillist/edit/', [\App\Http\Controllers\ctl\HtlMailListController::class, 'edit'])->name('ctl.htl_mail_list.edit');
+
 });
