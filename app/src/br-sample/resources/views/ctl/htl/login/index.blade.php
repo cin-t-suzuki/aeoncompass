@@ -22,20 +22,17 @@
             <tr>
                 <td>ＩＤ</td>
                 <td colspan="2">
-                    {{-- <input type="text" name="account_id" value="{{ strip_tags($account_id) }}" size="26" maxlength="10"> --}}
                     {{ Form::text('account_id', old('account_id'), ['size' => '26', 'maxlength' => '10']) }}
                 </td>
             </tr>
             <tr>
                 <td>パスワード</td>
                 <td colspan="2">
-                    {{-- <input name="password" type="password" value="" size="26" maxlength="10"> --}}
                     {{ Form::password('password', ['size' => '26', 'maxlength' => '10']) }}
                 </td>
             </tr>
         </table>
-        {{-- <input type="checkbox" name="keep" value="1" @if (!is_null($keep)) checked @endif id="keep_1"> --}}
-        {{ Form::checkbox('keep', '1', old('keep') == '1', ['id' => 'keep_1']) }}
+        {{ Form::checkbox('remember_me', '1', old('remember_me') == '1', ['id' => 'keep_1']) }}
         <label for="keep_1">ログイン情報を持続する</label>
         <br>
         <br>

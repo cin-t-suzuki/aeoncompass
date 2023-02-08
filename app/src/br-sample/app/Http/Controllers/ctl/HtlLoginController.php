@@ -31,8 +31,7 @@ class HtlLoginController extends Controller
             'password',
         );
 
-        // MEMO: 移植元ではかなり長いあいだログインを保持している。
-        $remember = true;
+        $remember = $request->input('remember_me') == '1';
 
         if (!Auth::guard('hotel')->attempt($credentials, $remember)) {
             return back()->withErrors([
@@ -48,7 +47,7 @@ class HtlLoginController extends Controller
      * ログアウトを実行する
      *
      * @param Request $request
-     * @return void
+     * @return \Illuminate\Http\Response
      */
     public function logout(Request $request)
     {
