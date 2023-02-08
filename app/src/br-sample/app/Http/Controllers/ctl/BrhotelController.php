@@ -90,9 +90,8 @@ class BrhotelController extends _commonController
 		$hotelStaffNoteData = Request::input('Hotel_Staff_Note');
 		$hotelCd = Request::input('target_cd');
 
-		// 料率の一覧データを配列で取得
-		$hotelRateModel = new HotelRate();
-		$hotelRateData = $hotelRateModel->selectByHotelCd($hotelCd);
+        // 料率の一覧データを配列で取得
+        $hotelRateData = HotelRate::where('hotel_cd', $hotelCd)->orderBy('accept_s_ymd', 'desc')->get();
 
 		$this->getHotelInfo($hotelCd, $hotelData, $mastPrefData, $mastCityData, $mastWardData);
 		$this->addViewData("hotel", $hotelData);
@@ -134,11 +133,10 @@ class BrhotelController extends _commonController
 
 		// 登録されているかの判断
 		$isRegistHotelSurvey = false;
-		$hotelSurveyData = (new HotelSurvey())->selectByKey($hotelCd);
-		if (count($hotelSurveyData) != 0
-		){
-			$isRegistHotelSurvey = true;
-		}
+        $hotelSurveyData = HotelSurvey::find($hotelCd);
+        if (!is_null($hotelSurveyData)) {
+            $isRegistHotelSurvey = true;
+        }
 
 		// 特記事項 リクエストに無ければDBから取得（ある場合は特記事項 関連処理の戻り）
 		if ($this->is_empty($hotelStaffNoteData)){
@@ -150,7 +148,7 @@ class BrhotelController extends _commonController
 		$hotelMscInfoData = (new HotelMscLogin)->getMscUsageSituation($hotelCd);
 
 		$this->addViewData("target_cd", $hotelCd);
-		$this->addViewData("customer_hotel", $customerHotelData['values'][0]);
+        $this->addViewData("customer_hotel", $customerHotelData['values'][0] ?? []);
 
 		$this->addViewData("hotel_regist", $isRegistHotel);
 		$this->addViewData("hotel_management_regist", $isRegistHotelManagement);

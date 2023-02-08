@@ -8,8 +8,7 @@ use App\Models\common\CommonDBModel;
 use App\Models\common\ValidationColumn;
 use Illuminate\Support\Facades\DB;
 
-
-/** 
+/**
  * システム利用料率マスタ
  */
 class HotelRate extends CommonDBModel
@@ -154,7 +153,7 @@ class HotelRate extends CommonDBModel
 	public function selectByHotelCd($hotelCd){
 		$data = $this->where($this->COL_HOTEL_CD, $hotelCd)->orderBy($this->COL_ACCEPT_S_YMD,'desc')->get();
 
-		$result = null;
+        $result = [];
 
 		if(!empty($data) && count($data) > 0){
 			foreach($data as $row){
@@ -169,6 +168,4 @@ class HotelRate extends CommonDBModel
 		}
 		return $result;
 	}
-
-
 }

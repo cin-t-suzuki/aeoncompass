@@ -7,7 +7,6 @@ use App\Models\common\CommonDBModel;
 use App\Models\common\ValidationColumn;
 use Illuminate\Support\Facades\DB;
 
-
 /**
  * 施設測地
  * 東京測地系と正解測地系の緯度経度。
@@ -42,8 +41,8 @@ class HotelSurvey extends CommonDBModel
      * @var bool
      */
     public $timestamps = false;
-    const CREATED_AT = 'entry_ts';
-    const UPDATED_AT = 'modify_ts';
+    public const CREATED_AT = 'entry_ts';
+    public const UPDATED_AT = 'modify_ts';
 
     /**
      * 複数代入可能な属性
@@ -64,19 +63,19 @@ class HotelSurvey extends CommonDBModel
     ];
 
     // カラム
-    const COL_HOTEL_CD  = "hotel_cd";
-    const COL_WGS_LAT   = "wgs_lat";
-    const COL_WGS_LNG   = "wgs_lng";
-    const COL_WGS_LAT_D = "wgs_lat_d";
-    const COL_WGS_LNG_D = "wgs_lng_d";
-    const COL_TD_LAT    = "td_lat";
-    const COL_TD_LNG    = "td_lng";
-    const COL_TD_LAT_D  = "td_lat_d";
-    const COL_TD_LNG_D  = "td_lng_d";
+    private const COL_HOTEL_CD  = "hotel_cd";
+    private const COL_WGS_LAT   = "wgs_lat";
+    private const COL_WGS_LNG   = "wgs_lng";
+    private const COL_WGS_LAT_D = "wgs_lat_d";
+    private const COL_WGS_LNG_D = "wgs_lng_d";
+    private const COL_TD_LAT    = "td_lat";
+    private const COL_TD_LNG    = "td_lng";
+    private const COL_TD_LAT_D  = "td_lat_d";
+    private const COL_TD_LNG_D  = "td_lng_d";
 
     /** コンストラクタ
      */
-    function __construct()
+    public function __construct()
     {
         // カラム情報の設定
         $colHotelCd = new ValidationColumn();
@@ -172,5 +171,4 @@ class HotelSurvey extends CommonDBModel
         }
         return null;
     }
-
 }
