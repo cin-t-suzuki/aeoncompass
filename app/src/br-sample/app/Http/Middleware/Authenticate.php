@@ -39,7 +39,10 @@ class Authenticate extends Middleware
         if (! $request->expectsJson()) {
             // ガード名から、各ログイン画面にリダイレクトする
             if (in_array('staff', $this->guards, true)) {
-                return route('ctl.br.login.index');
+                return route('ctl.br.login');
+            }
+            if (in_array('hotel', $this->guards, true)) {
+                return route('ctl.htl.login');
             }
             // TODO: ↑ 各ロールについて、未認証時に遷移先とするログイン画面を追加
 

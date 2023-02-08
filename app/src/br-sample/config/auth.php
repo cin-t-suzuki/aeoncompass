@@ -79,6 +79,10 @@ return [
     |
     | Supported: "database", "eloquent"
     |
+    | MEMO: パスワード を Laravel 標準のハッシュロジックでハッシュ化するのではなく、
+    |     旧ソースの暗号ロジックで暗号化する場合は、 'driver' に 'custom' を指定。
+    |     これは、 app/Providers/AuthServiceProvider.php で定義されている。
+    |
     */
 
     'providers' => [
@@ -101,8 +105,8 @@ return [
             'model' => App\Models\User::class, // TODO: 各ログイン機能実装時、対応するモデルに書き換える
         ],
         'hotel' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\User::class, // TODO: 各ログイン機能実装時、対応するモデルに書き換える
+            'driver' => 'custom',
+            'model' => App\Models\HotelAccount::class,
         ],
         'partner' => [
             'driver' => 'eloquent',

@@ -28,21 +28,28 @@ Route::namespace('App\Http\Controllers\rsv')->prefix('rsv')->group(function () {
 	});
 });
 
-Route::middleware(['guest:staff' /* TODO: 各ロールについて guest ミドルウェアを追加 */])->group(function () {
-    Route::get('ctl/brLogin', [\App\Http\Controllers\ctl\BrLoginController::class, 'index'])->name('ctl.br.login.index');
-    Route::post('ctl/brLogin/login', [\App\Http\Controllers\ctl\BrLoginController::class, 'login'])->name('ctl.br.login.authenticate');
+Route::middleware(['guest:staff', 'guest:hotel' /* TODO: 各ロールについて guest ミドルウェアを追加 */])->group(function () {
+    Route::get('/ctl/brLogin', [\App\Http\Controllers\ctl\BrLoginController::class, 'index'])->name('ctl.br.login');
+    Route::post('/ctl/brLogin', [\App\Http\Controllers\ctl\BrLoginController::class, 'login'])->name('ctl.br.login.authenticate');
+    Route::get('/ctl/htlLogin', [\App\Http\Controllers\ctl\HtlLoginController::class, 'index'])->name('ctl.htl.login');
+    Route::post('/ctl/htlLogin', [\App\Http\Controllers\ctl\HtlLoginController::class, 'login'])->name('ctl.htl.login.authenticate');
     // TODO: 各種ロールのログインのルートを追加
 });
 
-Route::get('ctl/logout', [\App\Http\Controllers\ctl\BrLoginController::class, 'logout'])->name('ctl.logout')->middleware('auth:staff');
-Route::get('ctl/brTop', [\App\Http\Controllers\ctl\BrTopController::class, 'index'])->name('ctl.br.top')->middleware('auth:staff');
+Route::middleware('auth:staff')->group(function () {
+    Route::get('/ctl/br/logout', [\App\Http\Controllers\ctl\BrLoginController::class, 'logout'])->name('ctl.br.logout');
+    Route::get('/ctl/brTop', [\App\Http\Controllers\ctl\BrTopController::class, 'index'])->name('ctl.br.top');
 
-Route::get('/ctl/brChangePassword/', [\App\Http\Controllers\ctl\BrChangePasswordController::class, 'index'])->name('ctl.br.change.password')->middleware('auth:staff');
-Route::post('/ctl/brChangePassword/update', [\App\Http\Controllers\ctl\BrChangePasswordController::class, 'update'])->name('ctl.br.change.password.update')->middleware('auth:staff');
+    Route::get('/ctl/brChangePassword/', [\App\Http\Controllers\ctl\BrChangePasswordController::class, 'index'])->name('ctl.br.change.password');
+    Route::post('/ctl/brChangePassword/update', [\App\Http\Controllers\ctl\BrChangePasswordController::class, 'update'])->name('ctl.br.change.password.update');
+});
 
-// 施設管理者ログイン
-Route::get('/ctl/htlLogin', [\App\Http\Controllers\ctl\HtlLoginController::class, 'index'])->name('ctl.htl.login');
-Route::post('/ctl/htlLogin', [\App\Http\Controllers\ctl\HtlLoginController::class, 'login'])->name('ctl.htl.login.authenticate');
+Route::middleware('auth:hotel')->group(function () {
+    Route::get('/ctl/htl/logout', [\App\Http\Controllers\ctl\HtlLoginController::class, 'logout'])->name('ctl.htl.logout');
+
+    // TODO: pull request #20 (メインメニュー施設情報) が merge されたら修正する
+    Route::get('/ctl/htlTop', [\App\Http\Controllers\ctl\HtlTopController::class, 'index'])->name('ctl.htl.top');
+});
 
 /**
  * 管理システム
@@ -54,12 +61,6 @@ Route::namespace('App\Http\Controllers\ctl')->prefix('ctl')->group(function () {
     Route::post('brtop/inspect', [\App\Http\Controllers\ctl\BrtopController::class, 'inspect'])->name('ctl.brtop.inspect');
     Route::post('brtop/registration', [\App\Http\Controllers\ctl\BrtopController::class, 'registration'])->name('ctl.brtop.registration');
     Route::post('brtop/payment', [\App\Http\Controllers\ctl\BrtopController::class, 'payment'])->name('ctl.brtop.payment');
-
-    // ホテルトップ
-    // TODO: 存在しないコントローラ。エラーになるためコメントアウト
-    // Route::controller(HotelTopController::class)->prefix("htltop")->group(function () {
-    //     Route::get('/', 'index')->name('ctl.htltop.index');
-    // });
 
 	// 管理画面一覧
 	Route::controller(TopController::class)->prefix("top")->group(function(){

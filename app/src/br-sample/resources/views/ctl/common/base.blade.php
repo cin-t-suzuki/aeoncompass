@@ -135,7 +135,7 @@
                     <td bgcolor="#EEFFEE">
                         @if ($isStaff)
                             <small>
-                                操作者変更（<a href="{{ route('ctl.logout') }}">Logout</a>）
+                                操作者変更（<a href="{{ route('ctl.br.logout') }}">Logout</a>）
                             </small>
                         @else
                             @if (\Route::currentRouteName() == 'ctl.index')

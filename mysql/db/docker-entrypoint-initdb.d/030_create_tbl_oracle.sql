@@ -4613,6 +4613,7 @@ CREATE TABLE `hotel_account` (
     `account_id` VARCHAR(20) BINARY COMMENT '2;アカウントID;',
     `password` VARCHAR(64) BINARY COMMENT '3;パスワード;暗号化した値',
     `accept_status` TINYINT COMMENT '4;ステータス;0:利用不可 1:利用可',
+    `remember_token` VARCHAR(100) COMMENT 'ログイン状態保持トークン',
     `entry_cd` VARCHAR(64) BINARY COMMENT '5;登録者コード;/controller/action.(user_id) または 更新者メールアドレス',
     `entry_ts` DATETIME COMMENT '6;登録日時;',
     `modify_cd` VARCHAR(64) BINARY COMMENT '7;更新者コード;/controller/action.(user_id) または 更新者メールアドレス',

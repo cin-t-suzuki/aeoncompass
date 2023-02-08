@@ -55,8 +55,8 @@ class StoreManagementRequest extends FormRequest
                 },
             ],
             'Hotel_Account.accept_status'       => ['required', Rule::in([
-                HotelAccount::ACCEPT_STATUS_FALSE,
-                HotelAccount::ACCEPT_STATUS_TRUE,
+                HotelAccount::ACCEPT_STATUS_NG,
+                HotelAccount::ACCEPT_STATUS_OK,
             ])],
 
             // hotel_person すべて、半角カナ禁止バリデーション

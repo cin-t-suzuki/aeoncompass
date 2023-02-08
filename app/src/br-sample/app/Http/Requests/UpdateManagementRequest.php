@@ -36,8 +36,8 @@ class UpdateManagementRequest extends FormRequest
                 Rule::unique('hotel_account')->ignore($this->target_cd, 'hotel_cd'),
             ],
             'Hotel_Account.accept_status' => ['required', Rule::in([
-                HotelAccount::ACCEPT_STATUS_FALSE,
-                HotelAccount::ACCEPT_STATUS_TRUE,
+                HotelAccount::ACCEPT_STATUS_NG,
+                HotelAccount::ACCEPT_STATUS_OK,
             ])],
         ];
     }

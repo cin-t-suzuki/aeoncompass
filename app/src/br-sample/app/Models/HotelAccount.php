@@ -46,6 +46,13 @@ class HotelAccount extends Authenticatable
     public const UPDATED_AT = 'modify_ts';
 
     /**
+     * ガードの設定
+     *
+     * @var string
+     */
+    protected $guard = 'hotel';
+
+    /**
      * 複数代入可能な属性
      *
      * @var array
@@ -60,7 +67,17 @@ class HotelAccount extends Authenticatable
         'modify_cd',
     ];
 
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
     // カラム定数
-    public const ACCEPT_STATUS_FALSE    = 0; // 利用不可
-    public const ACCEPT_STATUS_TRUE     = 1; // 利用可
+    public const ACCEPT_STATUS_NG   = 0; // 利用不可
+    public const ACCEPT_STATUS_OK   = 1; // 利用可
 }
