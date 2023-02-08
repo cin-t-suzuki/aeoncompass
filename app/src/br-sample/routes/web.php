@@ -40,11 +40,45 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
     Route::post('brtop/inspect', [\App\Http\Controllers\ctl\BrtopController::class, 'inspect'])->name('ctl.brtop.inspect');
     Route::post('brtop/registration', [\App\Http\Controllers\ctl\BrtopController::class, 'registration'])->name('ctl.brtop.registration');
     Route::post('brtop/payment', [\App\Http\Controllers\ctl\BrtopController::class, 'payment'])->name('ctl.brtop.payment');
+    Route::get('brtop/confirmation', [\App\Http\Controllers\ctl\BrtopController::class, 'confirmation'])->name('ctl.brtop.confirmation');
+
+    //セキュリティログ
+    Route::post('/brsecurity/search', [\App\Http\Controllers\ctl\BrSecurityController::class, 'search'])->name('ctl.brsecurity.search');
+
+    //予約通知 （実装後、削除）
+    Route::post('/ctl/brnotify/search', function () {return 'TODO: 【未実装】 /ctl/brnotify/search'; })->name('ctl.brnotify.search');
+
+   //メール送信　（実装後、削除）
+    Route::post('/ctl/brmailbuffer/search', function () {return 'TODO: 【未実装】 /ctl/brmailbuffer/search'; })->name('ctl.brmailbuffer.search');
+
+    //提携先別専用料金登録プラン
+    Route::post('/brpartnertotal/search', [\App\Http\Controllers\ctl\BrPartnerTotalController::class, 'search'])->name('ctl.brpartnertotal.search');
+
+    //部屋登録状況一覧 （実装後、削除）
+    Route::post('/ctl/brroomdemand/search', function () {return 'TODO: 【未実装】 /ctl/brroomdemand/search'; })->name('ctl.brroomdemand.search');
+    Route::post('/ctl/brroomdemand/download', function () {return 'TODO: 【未実装】 /ctl/brroomdemand/download'; })->name('ctl.brroomdemand.download');
+
+    //部屋プラン情報
+    Route::post('/brroomplaninfo/index', [\App\Http\Controllers\ctl\BrRoomPlanInfoController::class, 'index'])->name('ctl.brroomplaninfo.index');
+
+    //MSD専用プラン
+    Route::post('/brmsd/planlist', [\App\Http\Controllers\ctl\BrmsdController::class, 'planlist'])->name('ctl.brmsd.planlist');
+  
+    //監視者対象予約状況
+    Route::post('/brblacklist', [\App\Http\Controllers\ctl\BrBlackListController::class, 'brblacklist'])->name('ctl.brblacklist');
+       
+    //基礎集計（ベータ）（実装後、削除）
+    Route::post('/ctl/brrecord', function () {return 'TODO: 【未実装】 /ctl/brrecord'; })->name('ctl.brrecord');
+   
+    //パワーホテル売上表（ベータ）（実装後、削除）
+    Route::post('/ctl/braccounting/salespowerhotels', function () {return 'TODO: 【未実装】 /ctl/braccounting/salespowerhotels'; })->name('ctl.braccounting.salespowerhotels');
+
 
 	// ホテルトップ
 	Route::controller(HotelTopController::class)->prefix("htltop")->group(function(){
 		Route::get('/', 'index')->name('ctl.htltop.index');
 	});
+
 
 	// 管理画面一覧
 	Route::controller(TopController::class)->prefix("top")->group(function(){

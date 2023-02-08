@@ -59,16 +59,10 @@
 		}
 
 		// 確認
-		public function confirmationAction()
+		public function confirmation()
 		{
-			try {
+			return view("ctl.brtop.confirmation", $this->getViewData());
 
-				$this->set_assign();
-
-			// 各メソッドで Exception が投げられた場合
-			} catch (\Exception $e) {
-				throw $e;
-			}
 		}
 
 		// 登録
