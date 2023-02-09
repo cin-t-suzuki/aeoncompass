@@ -62,7 +62,6 @@
 		public function confirmation()
 		{
 			return view("ctl.brtop.confirmation", $this->getViewData());
-
 		}
 
 		// 登録

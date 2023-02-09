@@ -7,100 +7,67 @@ use Illuminate\Support\Facades\DB;
 use Exception;
 use App\Services\BrSecurityService;
 
-
-// use App\Models\Br_Models_Date.php;
-
-// use App\Models\models_System.php;
-	
 	class BrSecurityController extends _commonController
 	{
-
-		
-
 		// // セキュリティログ一覧 
 		public function search(Request $request,BrSecurityService $brSecurityService)
 		{
 			$errors=null;
 			$a_search = $request['Search'];
 			$log_securities=null;
+			$search=array();
 
-				// dd($a_search);
+			
 			try{	
-				// Member モデルを生成
-				// $o_models_system = new models_System();
 				
 				// 検索条件が存在すれば
 				if ($this->zap_is_empty($a_search) == false){
-						// dd('detayo');
 					// 検索条件の送信日の整形
-					// $o_after_date  = new Br_Models_Date($a_search['request_dtm_after']);
-					// $o_before_date = new Br_Models_Date($a_search['request_dtm_before']);
 					$o_after_date  = strtotime($a_search['request_dtm_after']);
 					$o_before_date =strtotime($a_search['request_dtm_before']);
 
-					// dd($o_before_date);
-					// dd($a_search['request_dtm_before']);
-					// 23:59:59の設定
-					// $o_before_date->add('h', 23);
-					// $o_before_date->add('i', 59);
-					// $o_before_date->add('s', 59);
 
 					// 検索条件の設定
 					$a_conditions['account_class']         = $a_search['account_class'];
 					$a_conditions['account_key']           = $a_search['account_key'];
-					// $a_conditions['request_dtm']['before'] = $o_before_date->to_format('Y-m-d H:i:s');
-					// $a_conditions['request_dtm']['after']  = $o_after_date->to_format('Y-m-d H:i:s');
-					$a_conditions['request_dtm']['before'] = date('Y-m-d 23:59:59', $o_after_date);
-					$a_conditions['request_dtm']['after']  = date('Y-m-d 23:59:59', $o_before_date );
+					$a_conditions['request_dtm']['after'] = date('Y-m-d 00:00:00', $o_after_date);
+					$a_conditions['request_dtm']['before']  = date('Y-m-d 23:59:59', $o_before_date );
 
-					// dd($a_conditions['request_dtm']['before']  );
-
-						// $log_securities=array(	1=>['security_cd' => "hotel",
-						// 							'session_id' => "hotel",
-						// 							'request_dtm' => "hotel",
-						// 							'account_class' => "hotel",
-						// 							'account_key' => "hotel",
-						// 							'ip_address' => "hotel",
-						// 							'uri' => "hotel"],
-						// 						2=>['security_cd' => "hotel",
-						// 							'session_id' => "hotel",
-						// 							'request_dtm' => "hotel",
-						// 							'account_class' => "hotel",
-						// 							'account_key' => "hotel",
-						// 							'ip_address' => "hotel",
-						// 							'uri' => "hotel"],);
+					
+					// ビュー再表示の検索条件の改更
+					$search=$a_search;
 
 					// 送信日チェック
-					// if ($o_before_date->get() > $o_after_date->get()){
 					if ($o_after_date <= $o_before_date ){
 						
 						// 送信電子メールキュー一覧取得
-						// $a_log_securities = $o_models_system->get_log_securities($a_conditions);
-						$a_log_securities = $brSecurityService->get_log_securities($a_conditions);
+						if($brSecurityService->get_log_securities($a_conditions) != null){
 
-						// データが存在しない場合
-						// if (count($log_securities['values']) == 0){
-						if (!isset($log_securities) ){
+							$log_securities = $brSecurityService->get_log_securities($a_conditions)['values'];
+						}
+
+						if ($log_securities== null ){
 							$errors=array('データが見つかりません。<br>入力された条件に該当するデータが見つかりませんでした。<br>条件を見直して、再度、検索してください。');
 						}
-					} else {
-						// dd('detayo');
+					} else {	
 						$errors=array('送信日を正しく入力してください。');
-						// $this->box->item->error->add('送信日を正しく入力してください。');
 					}
+				}else{
+					// ビュー再表示の検索条件の改更
+					$search=[
+						'account_class' => '',
+						'account_key' => '',
+						'request_dtm_after' => '',
+						'request_dtm_before' => ''
+					];
 				}
 				
-				// アサイン登録
-				// $this->box->item->assign->log_securities = $a_log_securities;
-				// $this->box->item->assign->search         = $a_search;
-				
-				// $this->set_assign();
-				$search=array('account_class' => "partner",'account_key' => "hotel");
-				$zap_is_empty=$this->zap_is_empty($search['account_class']);
+				//検索条件の有無
+				$zap_is_empty=$this->zap_is_empty($a_search);
 
 
 
-				//リクエスト日時のプルダウンの中身
+				//リクエスト日時のプルダウンの中身の生成
 				$date = date('Y-m-d');
 				$date_request_option=array($date);
 				
@@ -109,8 +76,7 @@ use App\Services\BrSecurityService;
 					$date_request_option[]=$date;
 				}
 				
-
-				 // ビューを表示
+				// ビューを表示、パラメータの受け渡し
 				 return view("ctl.brsecurity.search",compact('errors','zap_is_empty','log_securities','search','date_request_option',));
 
 
@@ -154,66 +120,72 @@ use App\Services\BrSecurityService;
 		
 		
 		// セキュリティログ内容(詳細)
-		public function showAction()
+		public function show(Request $request,BrSecurityService $brSecurityService)
 		{
 			try{
-				
-				// 検索条件の送信日の設定
-				$o_after_date = new Br_Models_Date($this->_request->getParam('request_dtm'));
+
+				//検索条件などパラメータの初期化
+				$errors=null;
+				$o_after_date =$request['request_dtm'];
+				$security_cd =$request['security_cd'];
+				$sql_param_month='';
+
 
 				// セキュリティログのインスタンスを取得　※月毎に違う
-				switch ($o_after_date->to_format('m')) {
+				switch (date('m', strtotime($o_after_date))) {
 					case '01':
-						$o_log_security = log_security_01::getInstance();
+						$sql_param_month='01';
 						break;
 					case '02':
-						$o_log_security = log_security_02::getInstance();
+						$sql_param_month='02';
 						break;
 					case '03':
-						$o_log_security = log_security_03::getInstance();
+						$sql_param_month='03';
 						break;
 					case '04':
-						$o_log_security = log_security_04::getInstance();
+						$sql_param_month='04';
 						break;
 					case '05':
-						$o_log_security = log_security_05::getInstance();
+						$sql_param_month='05';
 						break;
 					case '06':
-						$o_log_security = log_security_06::getInstance();
+						$sql_param_month='06';
 						break;
 					case '07':
-						$o_log_security = log_security_07::getInstance();
+						$sql_param_month='07';
 						break;
 					case '08':
-						$o_log_security = log_security_08::getInstance();
+						$sql_param_month='08';
 						break;
 					case '09':
-						$o_log_security = log_security_09::getInstance();
+						$sql_param_month='09';
 						break;
 					case '10':
-						$o_log_security = log_security_10::getInstance();
+						$sql_param_month='10';
 						break;
 					case '11':
-						$o_log_security = log_security_11::getInstance();
+						$sql_param_month='11';
 						break;
 					case '12':
-						$o_log_security = log_security_12::getInstance();
+						$sql_param_month='12';
 						break;
 				}
-				
-				$a_log_security = $o_log_security->find(array(
-															'security_cd'  => $this->_request->getParam('security_cd'),
-				));
+
+
+				// 検索条件の設定
+				$a_conditions['sql_param_month'] = $sql_param_month;
+				$a_conditions['security_cd'] = $security_cd;
+
+				//該当データの検索
+				$log_securities = $brSecurityService->get_log_securities_show($a_conditions);
 
 				// データが存在しない場合
-				if (count($a_log_security) == 0){
-					$this->box->item->error->add('データが見つかりません。');
+				if ($log_securities== null ){
+					$errors=array('データが見つかりません。');
 				}
 				
-				// アサイン登録
-				$this->box->item->assign->log_security = $a_log_security;
-				
-				$this->set_assign();
+			return view('ctl.brsecurity.show',compact('log_securities','errors'));
+
 
 			// 各メソッドで Exception が投げられた場合
 			} catch (Exception $e) {
@@ -221,44 +193,25 @@ use App\Services\BrSecurityService;
 			}
 		}
 
-		// 文字列が NULL または空文字または要素を持たない配列かを判断します。
-	// 0 は true と判断します。
-	// ※この関数は今後利用してはいけません 2009/05/12
-	//
-	// example
-	//   ''       -> true
-	//   null     -> true
-	//   array    -> true
-	//   0        -> true
-	//   'a'      -> false
-	//   array(0) -> false
-	function zap_is_empty($a_val)
-	{
-
-		// $o_controller = Zend_Controller_Front::getInstance();
-		// $box  = & $o_controller->getPlugin('Box')->box;
-
-		// if ($box->config->environment->status == 'development'){
-		// 	$x = debug_backtrace();
-		// 	print('<div style="border:1px solid #f00; margin:1px">新しい【is_empty】を利用しなさい。<br>'.$x[1]['file'] .'(' .$x[1]['line'].')</div>');
-		// }
-
-		if (is_null($a_val)) {
-			return true;
-		}
-
-		if ($a_val == '') {
-			return true;
-		}
-
-		if (is_array($a_val)) {
-			if (count($a_val) == 0){
+		// 文字列が NULL または空文字または要素を持たない配列かを判断。
+		function zap_is_empty($a_val)
+		{
+			if (is_null($a_val)) {
 				return true;
 			}
-		}
 
-		return false;
-	}
+			if ($a_val == '') {
+				return true;
+			}
+
+			if (is_array($a_val)) {
+				if (count($a_val) == 0){
+					return true;
+				}
+			}
+
+			return false;
+		}
 
 
 	

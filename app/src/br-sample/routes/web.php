@@ -44,6 +44,7 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 
     //セキュリティログ
     Route::post('/brsecurity/search', [\App\Http\Controllers\ctl\BrSecurityController::class, 'search'])->name('ctl.brsecurity.search');
+    Route::post('/brsecurity/show', [\App\Http\Controllers\ctl\BrSecurityController::class, 'show'])->name('ctl.brsecurity.show');
 
     //予約通知 （実装後、削除）
     Route::post('/ctl/brnotify/search', function () {return 'TODO: 【未実装】 /ctl/brnotify/search'; })->name('ctl.brnotify.search');

@@ -3,7 +3,7 @@
 namespace App\Services;
 
 // use App\Models\DenyList;
-// use App\Models\Hotel;
+use App\Models\Partner;
 // use App\Models\HotelAccount;
 // use App\Models\HotelControl;
 // use App\Models\HotelInsuranceWeather;
@@ -32,79 +32,105 @@ class BrSecurityService
 		public function get_log_securities($aa_conditions = array()){
 			try {
 
-                // dd($aa_conditions);
-		// 		// $_oracle   = _Oracle::getInstance();
+				//SQL内で使用のパラメータの初期化
+                $s_account_key ='';
+                $s_account_class='';
+				$as_result=array();
+				$a_conditions = array();
+             
 
-		// 		$a_conditions = array();
+		 		// アカウントクラスを設定
+				if (!empty($aa_conditions['account_class'])){
+					$a_conditions['account_class'] = $aa_conditions['account_class'];
+					$s_account_class = '	and	account_class = :account_class';
+				}
 
-		// 		// アカウントクラスを設定
-		// 		if (!is_empty($aa_conditions['account_class'])){
-		// 			$a_conditions['account_class'] = $aa_conditions['account_class'];
-		// 			$s_account_class = '	and	account_class = :account_class';
-		// 		}
+				// アカウント認証キーを設定
+				if (!empty($aa_conditions['account_key'])){
+					$a_conditions['account_key'] = $aa_conditions['account_key'];
+					$s_account_key = '	and	account_key = :account_key';
+				}
 
-		// 		// アカウント認証キーを設定
-		// 		if (!is_empty($aa_conditions['account_key'])){
-		// 			$a_conditions['account_key'] = $aa_conditions['account_key'];
-		// 			$s_account_key = '	and	account_key = :account_key';
-		// 		}
+		 		// リクエスト日時を設定
+				if (!empty($aa_conditions['request_dtm']['after'])){
+					$s_after_request_dtm = "	and	request_dtm >= :after_request_dtm";
+					$a_conditions['after_request_dtm'] = $aa_conditions['request_dtm']['after'];
+				}
 
-		// 		// リクエスト日時を設定
-		// 		if (!is_empty($aa_conditions['request_dtm']['after'])){
-		// 			$s_after_request_dtm = "	and	request_dtm >= to_date(:after_request_dtm, 'YYYY-MM-DD HH24:MI:SS')";
-		// 			$a_conditions['after_request_dtm'] = $aa_conditions['request_dtm']['after'];
-		// 		}
+				if (!empty($aa_conditions['request_dtm']['before'])){
+					$s_before_request_dtm = "	and	request_dtm <= :before_request_dtm";
+					$a_conditions['before_request_dtm'] = $aa_conditions['request_dtm']['before'];
+				}
 
-		// 		if (!is_empty($aa_conditions['request_dtm']['before'])){
-		// 			$s_before_request_dtm = "	and	request_dtm <= to_date(:before_request_dtm, 'YYYY-MM-DD HH24:MI:SS')";
-		// 			$a_conditions['before_request_dtm'] = $aa_conditions['request_dtm']['before'];
-		// 		}
+				$o_after = date('m', strtotime($aa_conditions['request_dtm']['after']));
+				$o_before = date('m', strtotime($aa_conditions['request_dtm']['before']));
+				
 
-		// 		$o_after = new Br_Models_Date($aa_conditions['request_dtm']['after']);
-		// 		$o_before = new Br_Models_Date($aa_conditions['request_dtm']['before']);
-
-				while ($o_after->to_format('Ym') <= $o_before->to_format('Ym')){
+				//テーブルlog_security_01~12　のレコードを繰り返し取得
+				while ($o_after <= $o_before){
+                    
 
 					// 最低料金を取得
-					$s_sql =<<< SQL
-						select	security_cd,
-								session_id,
-								to_char(request_dtm, 'YYYY-MM-DD HH24:MI:SS') as request_dtm,
-								account_class,
-								account_key,
-								ip_address,
-								uri
-						from	log_security_{$o_after->to_format('m')}
-						where	null is null
-							{$s_account_class}
-							{$s_account_key}
-							{$s_after_request_dtm}
-							{$s_before_request_dtm}
-						order by request_dtm
-                    SQL;
+					$s_sql = 
+<<< SQL
+                    select
+                                security_cd,
+                                session_id,
+                                request_dtm,
+                                account_class,
+                                account_key,
+                                ip_address,
+                                uri
+                        from  log_security_{$o_after}
 
+                        where   null is null
+                        {$s_account_class}
+                        {$s_account_key}  
+                        {$s_after_request_dtm}
+						{$s_before_request_dtm}
+                        order by request_dtm
+SQL;
+					//クエリの発行
+                    $a_row = DB::select($s_sql, $a_conditions);
 
-                                        // $resultHotelInfo = DB::select($sql, ['hotel_cd' => $hotelCd]);
-                                        // if (count($resultHotelInfo) > 0) {
-                                        //     return $resultHotelInfo[0];
-                                        // } else {
-                                        //     // データがヒットしないときは、必要なプロパティを設定した空の stdClass を返す
-                                        //     // MEMO: 設定しておかないと、 undefined array key で処理が止まる
-                                        //     return (object)[
-                                        //         'hotel_cd'  => null,
-                                        //         'hotel_nm'  => null,
-                                        //         'postal_cd' => null,
-                                        //         'pref_nm'   => null,
-                                        //         'address'   => null,
-                                        //         'tel'       => null,
-                                        //         'fax'       => null,
-                                        //     ];
-                                        // }
+					
+
+					//ここにスタッフからメンバーのデータクレンジングをする
 
 
 
+					//結果内容を配列に詰める
+					for ($n_cnt = 0; $n_cnt < count($a_row); $n_cnt++){
+						$as_result[] = $a_row[$n_cnt];
+						// dd($a_row[$n_cnt]);
+					}
 
-					$a_row = $_oracle->find_by_sql($s_sql, $a_conditions);
+					//01~12の月の繰り上げ、うるう年対策で関数不使用
+					if($o_after != '12'){
+						$o_after=sprintf('%02d', $o_after+1);
+					}else{
+						 $o_after='01';
+					}
+				}
+
+				// dd(Partner::getInstance());
+
+                    //後で消す部分
+                    if (count($as_result) > 0) {
+                     
+						// return $as_result;
+						return array(
+							'values'     => $as_result,
+							// 'reference' => $this->set_reference('セキュリティログ一覧取得', __METHOD__)
+						);
+
+                        
+                    } else {
+
+                        return  null;
+                     
+                    }
+                
 
 					$staff            = Staff::getInstance();
 					$hotel            = Hotel::getInstance();
@@ -114,7 +140,7 @@ class BrSecurityService
 					$models_member    = new models_Member();
 
 					for ($n_cnt = 0; $n_cnt < count($a_row); $n_cnt++){
-
+						dd($a_row[$n_cnt]);
 						switch ($a_row[$n_cnt]['account_class']) {
 						case 'staff':
 							$a_row[$n_cnt]['staff'] = $staff->find(array('staff_id' => $a_row[$n_cnt]['account_key']));
@@ -140,14 +166,72 @@ class BrSecurityService
 
 					}
 
-					$o_after->add('m', 1);
-				}
+				
+			// 各メソッドで Exception が投げられた場合
+			} catch (Exception $e) {
+					throw $e;
+			}
+		}
 
-				// return array(
-				// 			'values'     => $as_result,
-				// 			'reference' => $this->set_reference('セキュリティログ一覧取得', __METHOD__)
-				// 		);
+		public function get_log_securities_show($aa_conditions = array()){
+			try {
 
+				// dd($aa_conditions);
+
+
+				//SQL内で使用のパラメータの初期化
+                // $security_cd =$aa_conditions['security_cd'];
+				$sql_param_month=$aa_conditions['sql_param_month'];;
+             
+				// if (!empty($aa_conditions['request_dtm']['before'])){
+					$security_cd ='	and	account_key = :security_cd';
+					$a_conditions['security_cd'] = $aa_conditions['security_cd'];
+				// }
+				
+
+			
+					$s_sql = 
+<<< SQL
+                    select
+                                security_cd,
+                                session_id,
+                                request_dtm,
+                                account_class,
+                                account_key,
+                                ip_address,
+                                uri,
+								parameter
+
+                        from  log_security_{$sql_param_month}
+
+                        where   null is null
+                        {$security_cd}
+                        order by request_dtm
+SQL;
+					//クエリの発行
+                    $a_row = DB::select($s_sql, $a_conditions);
+
+
+	
+				
+
+				// dd(Partner::getInstance());
+
+                    //後で消す部分
+                    if (count($a_row) > 0) {
+                     
+						// return $as_result;
+						return $a_row[0];
+
+                        
+                    } else {
+
+                        return  null;
+                     
+                    }
+                
+
+				
 			// 各メソッドで Exception が投げられた場合
 			} catch (Exception $e) {
 					throw $e;

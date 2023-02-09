@@ -29,7 +29,7 @@
         </tr>
     
         {!! Form::close() !!}
-<!--
+<!--旧コードのコメントアウト　念のため保管
         <form action="kbs_brv_check_rate.html" method="POST">
         <tr>
           <td>料率確認リスト<br>
@@ -48,15 +48,14 @@
         </form>
 -->
         {{ Form::open(['route' => 'ctl.brmailbuffer.search', 'method' => 'post']) }}
-        <form action="{$v->env.source_path}{$v->env.module}/brmailbuffer/search/" method="POST">
         <tr>
           <td>メール送信ログ<br>
-            　<small style="color:#336">メール送信ログの一覧や詳細等が確認できます。</small>
+            <small style="color:#336">メール送信ログの一覧や詳細等が確認できます。</small>
           <td><input type="submit" style="margin: 0px 10px;" value=" 確認 "></td>
         </tr>
-        </form>
+      
         {!! Form::close() !!}
-<!--
+<!--旧コードのコメントアウト　念のため保管
         <form action="{$v->env.source_path}{$v->env.module}/brreservepower/search/" method="POST">
         <tr>
           <td>売り上げ料金確認画面<br>
@@ -64,7 +63,7 @@
           <td><input type="submit" style="margin: 0px 10px;" value=" 確認 "></td>
         </tr>
         </form>
-<!--
+
         <form action="{$v->env.source_path}{$v->env.module}/brdatum/stream/" method="POST">
         <tr>
           <td>ストリーム日別実績一覧<br>
@@ -78,7 +77,7 @@
        
         <tr>
           <td>提携先別専用料金登録プラン一覧<br>
-            　<small style="color:#336">提携先別専用料金登録プラン一覧（HS007）が確認できます。</small>
+            <small style="color:#336">提携先別専用料金登録プラン一覧（HS007）が確認できます。</small>
           <td><input type="submit" style="margin: 0px 10px;" value=" 確認 "></td>
         </tr>
        
@@ -86,7 +85,7 @@
 
         <tr>
           <td>部屋登録状況一覧<br>
-            　<small style="color:#336">部屋登録状況一覧が確認できます。<br />　抽出には１・２分かかりますので表示されるまでしばらくお待ちください。</small>
+            <small style="color:#336">部屋登録状況一覧が確認できます。<br />　抽出には１・２分かかりますので表示されるまでしばらくお待ちください。</small>
           <td>
           {{ Form::open(['route' => 'ctl.brroomdemand.search', 'method' => 'post']) }}
           	
@@ -104,7 +103,7 @@
         {{ Form::open(['route' => 'ctl.brroomplaninfo.index', 'method' => 'post']) }}
        <tr>
           <td>部屋プラン情報一覧<br>
-            　<small style="color:#336">ホテル単位毎の部屋プラン情報が確認できます。</small>
+            <small style="color:#336">ホテル単位毎の部屋プラン情報が確認できます。</small>
           <td><input type="submit" style="margin: 0px 10px;" value=" 確認 "></td>
         </tr>
        
@@ -113,7 +112,7 @@
      
         <tr>
           <td>MSD専用プラン一覧<br>
-            　<small style="color:#336">MSD専用プランの一覧が確認できます。</small>
+            <small style="color:#336">MSD専用プランの一覧が確認できます。</small>
           <td><input type="submit" style="margin: 0px 10px;" value=" 確認 "></td>
         </tr>
     
@@ -139,7 +138,7 @@
       <table border="1" cellspacing="0" cellpadding="4" width="100%">
         <tr>
           <td width="100%" nowrap>基礎集計（ベータ）<br>
-            　<small style="color:#336">基礎となる予約数、会員数、施設数、訪問数の集計結果</small>
+            <small style="color:#336">基礎となる予約数、会員数、施設数、訪問数の集計結果</small>
           </td>
           <td>
             {{ Form::open(['route' => 'ctl.brrecord', 'method' => 'post']) }}
@@ -149,7 +148,7 @@
             {!! Form::close() !!}
         </td>
         </tr>
-<!--
+<!--旧コードのコメントアウト　念のため保管
         <form action="kbs_brv_addr_hotel.main" method="POST">
         <tr>
           <td width="100%" nowrap>住所別ホテルリスト<br>
@@ -183,7 +182,7 @@
     
         <tr>
           <td width="100%">パワーホテル売上表（ベータ）<br>
-            　<small style="color:#336">買取・事前カード決済対象施設の売上実績表が確認できます。</small>
+            <small style="color:#336">買取・事前カード決済対象施設の売上実績表が確認できます。</small>
           </td>
           <td><input type="submit" value=" 確認 " /></td>
         </tr>
@@ -197,5 +196,6 @@
     </td>
   </tr>
 </table>
+<br>
 
 @include('ctl.common.footer')
