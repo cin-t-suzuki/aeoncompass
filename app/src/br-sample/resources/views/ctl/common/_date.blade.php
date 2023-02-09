@@ -12,6 +12,7 @@
 //           ymd(w) : 2008年08月05日（火）  : Y年m月d日（j）
 //           ymd    : 2008年08月05日        : Y年m月d日
 //           ym     : 2008年08月            : Y年m月
+//           y      : 2008年                : Y年
 //           d      : 05                    : d
 //           J      : 火曜日                : J
 //           ------- ----------------------- ---------------
@@ -50,7 +51,8 @@
 		$class_holiday = ' holiday';
 		$holiday_nm = $dateUtil->to_holiday_nm();
 	}else{
-		$holiday_nm = '';
+		$class_holiday = null; //初期化追記nullでいいか？（130行目のundifined対応）
+		$holiday_nm = null; //''だとissetでtrueになる→nullへ変更でいいか？
 	}
 
 	// formatで指定した形式で日付と曜日を文字列で取得 
@@ -71,11 +73,14 @@
 	elseif ( $format == 'ym' )
 	{
 		$day = $dateUtil->to_format('Y年m月');
+	}
+	// Y年 
+	elseif ( $format == 'y' )
+	{
+		$day = $dateUtil->to_format('Y年');
+		 
 	
-		/* Y年 
-		elseif ( $format == 'y' )
-		  assign var='day' value=$v->helper->date->to_format('Y年')
-		 日付：0～31 
+		/* 日付：0～31 
 		elseif ( ($format == 'j') )
 		  assign var='day' value=$v->helper->date->to_format('j')
 		 日付：00～31 
@@ -105,24 +110,26 @@
 	// 指定formatの文字列取得
 	// font_color の設定  
 	if ( isset($color_on) ) {
-		//  祝日 --
-		if ( isset($holiday_nm) )		{
-				$font_color = 'red' ;
-		//   日曜日 
-		}elseif ( $dateUtil->to_week('n') == 1 )		{
-			$font_color='red';
-		//   土曜日 
-		}elseif ( $dateUtil->to_week('n') == 7 )		{
-			$font_color='blue';
+		if ( $color_on ) { //falseがわたってきたときの判定を追記していいか？
+			//  祝日 --
+			if ( isset($holiday_nm) )		{
+					$font_color = 'red' ;
+			//   日曜日 
+			}elseif ( $dateUtil->to_week('n') == 1 )		{
+				$font_color='red';
+			//   土曜日 
+			}elseif ( $dateUtil->to_week('n') == 7 )		{
+				$font_color='blue';
+			}
 		}
 	}
 
 @endphp
 
 {{-- 日付を表示 --}}
-<span class="date"><span class="{$class_week}{$class_holiday}{$class_color}" title="{{ $holiday_nm }}">
+<span class="date"><span class="{{$class_week}}{{$class_holiday}}{{$class_color}}" title="{{ $holiday_nm }}">
 	@if ( isset($font_color) )
-		<font color="{$font_color}">
+		<font color="{{$font_color}}">
 	@endif
 	{{ $day }}
 	@if ( isset($font_color) )

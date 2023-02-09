@@ -261,4 +261,8 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
         ->name('ctl.brhoteladvert2009000400.edit'); //編集画面
     Route::post('/brhoteladvert2009000400/update', 'BrhotelAdvert2009000400Controller@update')
         ->name('ctl.brhoteladvert2009000400.update'); //更新
+
+    // 予約・会員・アクセス数 一覧
+    Route::get('/brrecord/{param1?}/{param2?}/{param3?}/{param4?}', 'BrRecordController@view')
+        ->name('ctl.BrRecord.view');    //パスパラメータ？の設定は↑でいいか？
 });
