@@ -94,7 +94,7 @@ Route::namespace('App\Http\Controllers\ctl')->prefix('ctl')->group(function () {
 	});
 
     // TODO: 不要なルーティングか？ PR#20 が merge されたら確認
-    Route::get('/htltop/index/target_cd/{hotel_cd}', function ($targetCd) {return 'TODO: htl top index : ' . $targetCd; })->name('ctl.htltop.index');
+    Route::get('/htltop/index/target_cd/{hotel_cd}', function ($targetCd) {return 'TODO: htl top index : ' . $targetCd; })->name('ctl.htl_top.index');
 
     Route::get('/htlHotel/show', [\App\Http\Controllers\ctl\HtlHotelController::class, 'show'])->name('ctl.htl_hotel.show');
     Route::match(['get', 'post'], '/htlHotel/edit/'             , function(){ return 'TODO:'; })->name('ctl.htl_hotel.edit');
