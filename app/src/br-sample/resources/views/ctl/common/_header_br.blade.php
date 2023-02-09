@@ -5,10 +5,10 @@
         <div class="header-br-contents">
             <div id="system-name">STREAM社内管理</div>
             <div id="main-menu">
-                <form action="{{ $v->env->source_path }}{{ $v->env->module }}/brtop/" method="post">
+                <form action="{{ route('ctl.br.top') }}" method="post">
                     <div>
                         <input type="submit" value="メインメニュー" />
-                        担当：{{ $v->user->operator->staff_nm }}
+                        担当：{{ $staffName }}
                     </div>
                 </form>
             </div>

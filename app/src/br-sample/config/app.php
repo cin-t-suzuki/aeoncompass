@@ -83,7 +83,6 @@ return [
     |
     */
 
-    //'locale' => 'en',
     'locale' => 'ja',
 
     /*
@@ -97,8 +96,7 @@ return [
     |
     */
 
-    //'fallback_locale' => 'en',
-    'fallback_locale' => 'ja',
+    'fallback_locale' => 'en',
 
     /*
     |--------------------------------------------------------------------------
