@@ -93,7 +93,8 @@ Route::namespace('App\Http\Controllers\ctl')->prefix('ctl')->group(function () {
 		Route::get('/show', 'show')->name('ctl.brfaxPr.show');
 	});
 
-    Route::get('/htltop/index/target_cd/{target_cd}', function ($targetCd) {return 'TODO: htl top index : ' . $targetCd; })->name('ctl.htl_top.index');
+    // TODO: 不要なルーティングか？ PR#20 が merge されたら確認
+    Route::get('/htltop/index/target_cd/{hotel_cd}', function ($targetCd) {return 'TODO: htl top index : ' . $targetCd; })->name('ctl.htl_top.index');
 
     Route::get('/htlHotel/show', [\App\Http\Controllers\ctl\HtlHotelController::class, 'show'])->name('ctl.htl_hotel.show');
     Route::match(['get', 'post'], '/htlHotel/edit/'             , function(){ return 'TODO:'; })->name('ctl.htl_hotel.edit');
@@ -304,3 +305,7 @@ Route::get('/ctl/brmoneyschedule/new', function (\Illuminate\Http\Request $reque
     var_dump($request->input());
     return 'TODO: 未実装';
 })->name('ctl.br.money.schedule.new');
+
+// TODO: pull request #25 (精算先、施設情報：請求関連（請求先）精算先（登録施設）) が merge されたら削除
+Route::post('/ctl/brCustomer/list', function () {return 'TODO'; })->name('ctl.brCustomer.list');
+Route::post('/ctl/brCustomer/csv', function () {return 'TODO'; })->name('ctl.brCustomer.csv');
