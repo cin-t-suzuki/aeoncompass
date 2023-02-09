@@ -26,8 +26,8 @@
             </td>
             <td>
                 <select name="AlertMailHotel[email_type]">
-                <option value="{{old('AlertMailHotel.email_type' , 0)}}" @if($alert_mail_hotel['email_type'] == 0) selected @endif>詳細なメール文章</option>
-                <option value="{{old('AlertMailHotel.email_type' , 1)}}" @if($alert_mail_hotel['email_type'] == 1) selected @endif>簡易なメール文章</option>
+                    <option value= "0" @if(0 == old('AlertMailHotel.email_type')) selected @endif>詳細なメール文章</option>
+                    <option value= "1" @if(1 == old('AlertMailHotel.email_type')) selected @endif>簡易なメール文章</option>
                 </select>
             </td>
             </tr>
