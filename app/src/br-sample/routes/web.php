@@ -272,6 +272,12 @@ Route::namespace('App\Http\Controllers\ctl')->prefix('ctl')->group(function () {
         ->name('ctl.brhoteladvert2009000400.edit'); //編集画面
     Route::post('/brhoteladvert2009000400/update', 'BrhotelAdvert2009000400Controller@update')
         ->name('ctl.brhoteladvert2009000400.update'); //更新
+
+    // 満室通知メール設定
+    Route::match(['get', 'post'], '/htlalertmailhotel/list/', [\App\Http\Controllers\ctl\HtlAlertMailHotelController::class, 'list'])->name('ctl.htl_alert_mail_hotel.list');
+    Route::match(['get', 'post'], '/htlalertmailhotel/create/', [\App\Http\Controllers\ctl\HtlAlertMailHotelController::class, 'create'])->name('ctl.htl_alert_mail_hotel.create');
+    Route::match(['get', 'post'], '/htlalertmailhotel/update/', [\App\Http\Controllers\ctl\HtlAlertMailHotelController::class, 'update'])->name('ctl.htl_alert_mail_hotel.update');
+    Route::match(['get', 'post'], '/htlalertmailhotel/delete/', [\App\Http\Controllers\ctl\HtlAlertMailHotelController::class, 'delete'])->name('ctl.htl_alert_mail_hotel.delete');
 });
 
 // TODO: to be deleted 社内スタッフ登録 移植元では存在していない(？)
@@ -304,3 +310,4 @@ Route::get('/ctl/brmoneyschedule/new', function (\Illuminate\Http\Request $reque
     var_dump($request->input());
     return 'TODO: 未実装';
 })->name('ctl.br.money.schedule.new');
+
