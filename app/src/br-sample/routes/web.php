@@ -274,6 +274,7 @@ Route::namespace('App\Http\Controllers\ctl')->prefix('ctl')->group(function () {
         ->name('ctl.brhoteladvert2009000400.update'); //更新
 });
 
+
 // TODO: to be deleted 社内スタッフ登録 移植元では存在していない(？)
 Route::get('create', [\App\Http\Controllers\ctl\BrLoginController::class, 'create'])->middleware('guest:staff');
 Route::post('register', [\App\Http\Controllers\ctl\BrLoginController::class, 'register'])->middleware('guest:staff')->name('register');
@@ -304,3 +305,10 @@ Route::get('/ctl/brmoneyschedule/new', function (\Illuminate\Http\Request $reque
     var_dump($request->input());
     return 'TODO: 未実装';
 })->name('ctl.br.money.schedule.new');
+
+
+// MAIL_BUFFER一覧
+Route::get('/ctl/brmailbuffer/search', [\App\Http\Controllers\ctl\BrMailBufferController::class, 'search'])
+    ->name('ctl.brMailBuffer.search');
+Route::get('/ctl/brmailbuffer/show', [\App\Http\Controllers\ctl\BrMailBufferController::class, 'show'])
+    ->name('ctl.brMailBuffer.show');
