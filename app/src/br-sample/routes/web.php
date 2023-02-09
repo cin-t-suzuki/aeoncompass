@@ -272,6 +272,12 @@ Route::namespace('App\Http\Controllers\ctl')->prefix('ctl')->group(function () {
         ->name('ctl.brhoteladvert2009000400.edit'); //編集画面
     Route::post('/brhoteladvert2009000400/update', 'BrhotelAdvert2009000400Controller@update')
         ->name('ctl.brhoteladvert2009000400.update'); //更新
+
+    // 宿泊体験通知メール設定
+    Route::match(['get', 'post'], '/htlalertmailvoice/list/', [\App\Http\Controllers\ctl\HtlAlertMailVoiceController::class, 'list'])->name('ctl.htl_alert_mail_voice.list');
+    Route::match(['get', 'post'], '/htlalertmailvoice/create/', [\App\Http\Controllers\ctl\HtlAlertMailVoiceController::class, 'create'])->name('ctl.htl_alert_mail_voice.create');
+    Route::match(['get', 'post'], '/htlalertmailvoice/update/', [\App\Http\Controllers\ctl\HtlAlertMailVoiceController::class, 'update'])->name('ctl.htl_alert_mail_voice.update');
+    Route::match(['get', 'post'], '/htlalertmailvoice/delete/', [\App\Http\Controllers\ctl\HtlAlertMailVoiceController::class, 'delete'])->name('ctl.htl_alert_mail_voice.delete');
 });
 
 // TODO: to be deleted 社内スタッフ登録 移植元では存在していない(？)
