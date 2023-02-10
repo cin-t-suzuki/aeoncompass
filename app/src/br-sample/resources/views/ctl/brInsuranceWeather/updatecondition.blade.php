@@ -1,16 +1,19 @@
-{{--  css  --}}
-@include('ctl.brinsuranceweather._css')
-
-@inject('service', 'App\Http\Controllers\ctl\BrInsuranceWeatherController')
+@inject('service', 'App\Http\Controllers\ctl\brInsuranceWeatherController')
 
 {{--削除でいい？ {strip} --}}
   {{-- 提携先管理ヘッダー --}}
+  @extends('ctl.common.base2')
   @section('title', 'お天気保険成立者設定更新結果')
-  @include('ctl.common.base')
 
-    {{-- メッセージ --}}
-    @section('message')
-    @include('ctl.common.message', $messages)
+  {{--  css  --}}
+  @section('headScript')
+    @include('ctl.brInsuranceWeather._css')
+  @endsection
+
+  @section('content')
+
+  {{-- メッセージbladeの読込 --}}
+  @include('ctl.common.message')
 
     <hr class="contents-margin" />
 
@@ -27,7 +30,7 @@
       <th>予約状態</th>
       <th>結果内容</th>
     </tr>
-    @foreach ($views->result as $result)
+    @foreach ($result as $result)
     <tr>
         <td>20{{sprintf('%08d',$result['jbr_no'])}}</td>
         {{-- ↑元ソースには即しているが、実運用的にこれでいいのか？ --}}
@@ -75,14 +78,12 @@
     </table>
 
     <hr class="contents-margin" />
-    {!! Form::open(['route' => ['ctl.brinsuranceweather.index'], 'method' => 'get']) !!}
-    <input type="hidden" name="jbr_no" value="{{$views->jbr_no}}" />
+    {!! Form::open(['route' => ['ctl.brInsuranceWeather.index'], 'method' => 'get']) !!}
+    <input type="hidden" name="jbr_no" value="{{$jbr_no}}" />
     <input type="submit" value="お天気保険成立者設定画面に戻る" />
     {!! Form::close() !!}
     <hr class="contents-margin" />
 
-  {{-- 提携先管理フッター --}}
-  @section('title', 'footer')
-  @include('ctl.common.footer')
-  {{-- /提携先管理フッター --}}
+    @endsection
+
 {{--削除でいい？ {/strip} --}}

@@ -1,21 +1,27 @@
-{{--  css  --}}
-@include('ctl.brinsuranceweather._css')
 {{--削除でいい？ {strip} --}}
+
   {{-- 提携先管理ヘッダー --}}
+  @extends('ctl.common.base2')
   @section('title', 'お天気保険成立者設定')
-  @include('ctl.common.base')
+
+  {{--  css  --}}
+  @section('headScript')
+    @include('ctl.brInsuranceWeather._css')
+  @endsection
+
+  @section('content')
 
     <hr class="contents-margin" />
 
     <div style="text-align:left;">
-  {!! Form::open(['route' => ['ctl.brinsuranceweather.updatecondition'], 'method' => 'post']) !!}
+  {!! Form::open(['route' => ['ctl.brInsuranceWeather.updatecondition'], 'method' => 'post']) !!}
   成立分の 「お天気保証番号」 と 「保険金」 を スペース区切りで入力してください。
     <table class="br-detail-list">
       <tr>
         <th>お天気保証番号 保険金</th>
       </tr>
       <tr>
-        <td><textarea cols="40" rows="10" name="jbr_no" wrap="off">{{$views->jbr_no}}</textarea></td>
+        <td><textarea cols="40" rows="10" name="jbr_no" wrap="off">{{$jbr_no}}</textarea></td>
       </tr>
       <tr>
         <td>
@@ -34,8 +40,5 @@
 
     <hr class="contents-margin" />
 
-  {{-- 提携先管理フッター --}}
-  @section('title', 'footer')
-  @include('ctl.common.footer')
-  {{-- /提携先管理フッター --}}
+  @endsection
 {{--削除でいい？ {/strip} --}}

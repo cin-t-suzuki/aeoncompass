@@ -20,16 +20,14 @@ class BrInsuranceWeatherController extends _commonController
         // データを取得
         $requestInsuranceWeather = Request::all();
 
-        // データを ビューにセット
-        $this->addViewData("jbr_no", $requestInsuranceWeather['jbr_no'] ?? null); //null追記
-
-        // ビューを表示
-        return view("ctl.brinsuranceweather.index", $this->getViewData());
+        return view('ctl.brInsuranceWeather.index', [
+            'jbr_no' => $requestInsuranceWeather['jbr_no'] ?? null //null追記
+        ]);
     }
 
 
     // 成立設定
-    public function updateCondition() //修正途中
+    public function updateCondition()
     {
         try {
             //データを取得
@@ -37,24 +35,25 @@ class BrInsuranceWeatherController extends _commonController
             $jbr_no = $requestInsuranceWeather['jbr_no'] ?? null; //null追記;
 
             // 対象未設定
-            // if (is_empty(trim($this->_a_request_params['jbr_no']))) {
             if ($this->is_empty(trim($jbr_no))) {
                 $errors[] = "成立対象の値を設定してください。";
                 $this->addErrorMessageArray($errors);
 
-                $a_result = array(); //追記
+                $a_result = [];
 
-                // データを ビューにセット
-                $this->addViewData("jbr_no", $jbr_no);
-                $this->addViewData('result', $a_result);
-                return view("ctl.brinsuranceweather.updatecondition", $this->getViewData());
+                return view('ctl.brInsuranceWeather.updatecondition', [
+                    'jbr_no' => $jbr_no,
+                    'result' => $a_result,
+
+                    'errors' => $errors
+                ]);
             }
 
             $a_rows = explode("\n", $jbr_no);
 
             for ($n_cnt = 0; $n_cnt < count($a_rows); $n_cnt++) {
                 $a_clms = preg_split("/[\s]+/", str_replace(',', '', $a_rows[$n_cnt]));
-                $a_clm = array();
+                $a_clm = [];
                 if (!$this->is_empty($a_clms[0])) {
                     $a_clm['jbr_no'] = (int)substr($a_clms[0], 2);
                 }
@@ -89,11 +88,10 @@ SQL;
 
                 $a_reserve = DB::select(
                     $s_sql,
-                    array(
+                    [
                         'jbr_no'     => $a_result[$n_cnt]['jbr_no'],
-                    )
+                    ]
                 );
-                $a_reserve = json_decode(json_encode($a_reserve), true); //json~追記しないとviewでエラー
 
                 $a_result[$n_cnt]['error'] = null; //追記
 
@@ -101,36 +99,37 @@ SQL;
                     $a_result[$n_cnt]['error'] = 'NotJbrNo';
                     // $this->_s_error = $a_result[$n_cnt]['error'];
                     $errors[] = "更新できない情報が含まれてます。下記エラー状況を確認の上正しい「お天気保証番号」 と 「保険金」 の指定をお願いいたします。";
-                } elseif ($a_reserve[0]['present_charge'] != $a_result[$n_cnt]['valid_charge']) {
+                } elseif ($a_reserve[0]->present_charge != $a_result[$n_cnt]['valid_charge']) {
                     $a_result[$n_cnt]['error'] = 'NotCharge';
                     // $this->_s_error = $a_result[$n_cnt]['error'];
                     $errors[] = "更新できない情報が含まれてます。下記エラー状況を確認の上正しい「お天気保証番号」 と 「保険金」 の指定をお願いいたします。";
-                } elseif ($a_reserve[0]['status'] == 0) {
+                } elseif ($a_reserve[0]->status == 0) {
                     $a_result[$n_cnt]['error'] = 'NotValid';
                     // $this->_s_error = $a_result[$n_cnt]['error'];
                     $errors[] = "更新できない情報が含まれてます。下記エラー状況を確認の上正しい「お天気保証番号」 と 「保険金」 の指定をお願いいたします。";
-                } elseif ($a_reserve[0]['reserve_status'] <> 0) {
+                } elseif ($a_reserve[0]->reserve_status <> 0) {
                     $a_result[$n_cnt]['error'] = 'Canceled';
                     // $this->_s_error = $a_result[$n_cnt]['error'];
                     $errors[] = "更新できない情報が含まれてます。下記エラー状況を確認の上正しい「お天気保証番号」 と 「保険金」 の指定をお願いいたします。";
                 }
-                $a_result[$n_cnt]['reserve_cd']       = $a_reserve[0]['reserve_cd'] ?? null; //??null追記
-                $a_result[$n_cnt]['date_ymd']         = $a_reserve[0]['date_ymd'] ?? null; //??null追記
-                $a_result[$n_cnt]['present_charge']   = $a_reserve[0]['present_charge'] ?? null; //??null追記
-                $a_result[$n_cnt]['status']           = $a_reserve[0]['status'] ?? null; //??null追記
-                $a_result[$n_cnt]['condition']        = $a_reserve[0]['condition'] ?? null; //??null追記
-                $a_result[$n_cnt]['action_condition'] = $a_reserve[0]['action_condition'] ?? null; //??null追記
-                $a_result[$n_cnt]['reserve_status']   = $a_reserve[0]['reserve_status'] ?? null; //??null追記
+                $a_result[$n_cnt]['reserve_cd']       = $a_reserve[0]->reserve_cd ?? null; //??null追記
+                $a_result[$n_cnt]['date_ymd']         = $a_reserve[0]->date_ymd ?? null; //??null追記
+                $a_result[$n_cnt]['present_charge']   = $a_reserve[0]->present_charge ?? null; //??null追記
+                $a_result[$n_cnt]['status']           = $a_reserve[0]->status ?? null; //??null追記
+                $a_result[$n_cnt]['condition']        = $a_reserve[0]->condition ?? null; //??null追記
+                $a_result[$n_cnt]['action_condition'] = $a_reserve[0]->action_condition ?? null; //??null追記
+                $a_result[$n_cnt]['reserve_status']   = $a_reserve[0]->reserve_status ?? null; //??null追記
             }
 
 
             // エラーの予約があったら
             if (!$this->is_empty($errors ?? null)) { //??null追記
-                $this->addErrorMessageArray($errors);
-                // データを ビューにセット
-                $this->addViewData("jbr_no", $jbr_no);
-                $this->addViewData('result', $a_result);
-                return view("ctl.brinsuranceweather.updatecondition", $this->getViewData());
+                return view('ctl.brInsuranceWeather.updatecondition', [
+                    'jbr_no' => $jbr_no,
+                    'result' => $a_result,
+
+                    'errors' => $errors
+                ]);
             }
 
             // 成立の更新
@@ -161,23 +160,22 @@ SQL;
 
                 DB::update(
                     $s_sql,
-                    array(
+                    [
                         'action_condition'  => $a_result[$n_cnt]['action_condition'],
                         'modify_cd'         => $modify_cd,
                         'jbr_no'            => $a_result[$n_cnt]['jbr_no'],
-                    )
+                    ]
                 );
             }
 
-            // 結果をビューにセット
-            $this->addViewData('result', $a_result);
-
             if (!$b_update) {
                 $errors[] = "すでに「成立」へ更新済みですので、更新いたしませんでした。";
-                $this->addErrorMessageArray($errors);
-                // データを ビューにセット
-                $this->addViewData("jbr_no", $jbr_no);
-                return view("ctl.brinsuranceweather.updatecondition", $this->getViewData());
+                return view('ctl.brInsuranceWeather.updatecondition', [
+                    'jbr_no' => $jbr_no,
+                    'result' => $a_result,
+
+                    'errors' => $errors
+                ]);
             }
 
 
@@ -205,20 +203,22 @@ SQL;
 
             DB::update(
                 $s_sql,
-                array(
+                [
                     'action_condition' => 0,
                     'modify_cd'        => $modify_cd,
                     // 'date_ymd'         => $a_result[0]['date_ymd'], //上のSQLにしかないので、下で上書きされたときは不要（あるとエラー）
-                )
+                ]
             );
 
             // ガイドメッセージの設定
-            $guides = "翌月1日に成立状態を「成立」に更新し、「成立メール」の送信をいたします。";
-            $this->addGuideMessage($guides);
-            // データを ビューにセット
-            $this->addViewData("jbr_no", $jbr_no); //値あっている？
-            $this->addViewData('result', $a_result);
-            return view("ctl.brinsuranceweather.updatecondition", $this->getViewData());
+            $guides[] = "翌月1日に成立状態を「成立」に更新し、「成立メール」の送信をいたします。";
+
+            return view('ctl.brInsuranceWeather.updatecondition', [
+                'jbr_no' => $jbr_no,
+                'result' => $a_result,
+
+                'guides' => $guides
+            ]);
         } catch (Exception $e) {
             throw $e;
         }

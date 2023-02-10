@@ -216,9 +216,9 @@ Route::post('/ctl/brhoteladvert2009000400/update', [\App\Http\Controllers\ctl\Br
 
 // お天気保証
 Route::get('/ctl/brinsuranceweather/', [\App\Http\Controllers\ctl\BrInsuranceWeatherController::class, 'index'])
-    ->name('ctl.brinsuranceweather.index');
+    ->name('ctl.brInsuranceWeather.index');
 Route::post('/ctl/brinsuranceweather/updatecondition', [\App\Http\Controllers\ctl\BrInsuranceWeatherController::class, 'updatecondition'])
-    ->name('ctl.brinsuranceweather.updatecondition');
+    ->name('ctl.brInsuranceWeather.updatecondition');
 
 
 // 参考として一応残す。
