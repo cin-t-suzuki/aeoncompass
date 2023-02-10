@@ -1,33 +1,31 @@
-{{-- header start --}}
-@section('title', '管理画面一覧')
 @extends('ctl.common.base')
-{{-- header end --}}
+@section('title', '管理画面一覧')
 
-
+@section('page_blade')
 <table border="3" cellspacing="0" cellpadding="2"><tr><td  bgcolor="#EEEEFF"  align="center">
 <big>管理画面一覧</big></td></tr></table><br>
 <table border="0" cellspacing="12" cellpadding="8" width="600">
 <tr><td valign="top">
 <table border="1" cellspacing="0" cellpadding="4">
 
-  <tr>
-    <form method="POST" action="{$v->env.source_path}{$v->env.module}/brlogin/">
-    <td nowrap width="100%">社内管理ログイン</td>
-    <td nowrap>
-      <input type="submit" value=" 確認 ">
-    </td>
-    </form>
-  </tr>
+    <tr>
+        <form method="get" action="{{ route('ctl.br.login') }}">
+            <td nowrap width="100%">社内管理ログイン</td>
+            <td nowrap>
+                <input type="submit" value=" 確認 ">
+            </td>
+        </form>
+    </tr>
 
 
-  <tr>
-    <form method="POST" action="{$v->env.source_path}{$v->env.module}/htllogin/">
-    <td nowrap width="100%">施設管理ログイン</td>
-    <td nowrap>
-      <input type="submit" value=" 確認 ">
-    </td>
-    </form>
-  </tr>
+    <tr>
+        <form method="get" action="{{ route('ctl.htl.login') }}">
+            <td nowrap width="100%">施設管理ログイン</td>
+            <td nowrap>
+                <input type="submit" value=" 確認 ">
+            </td>
+        </form>
+    </tr>
 
   <tr>
     <form method="POST" action="{$v->env.source_path}{$v->env.module}/mbllogin/">
@@ -89,6 +87,5 @@
 <td></tr>
 </table>
 
-{{-- footer start --}}
-	{{--TODO include file=$v->env.module_root|cat:'/views/_common/_footer.tpl'}}
-{{-- footer end --}}
+{{--TODO include file=$v->env.module_root|cat:'/views/_common/_footer.tpl'}} --}}
+@endsection

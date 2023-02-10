@@ -1,21 +1,20 @@
 <?php
+
 namespace App\Http\Controllers\ctl;
-use App\Http\Controllers\ctl\_commonController;
-	
-	class TopController extends _commonController
-	{
 
-		// インデックス
-		public function index()
-		{
+use App\Http\Controllers\Controller;
 
-				if (env('APP_ENV') == 'product') {
-					return $this->_forward('output', 'error', null, array('error_no' => '404'));
-				}
-
-				 // ビューを表示
-				 return view("ctl.top.index");
-
-		}
-	}
-?>
+class TopController extends Controller
+{
+    // インデックス
+    public function index()
+    {
+        // 本番環境の場合、表示しない
+        if (config('app.env') == 'product') {
+            return 'not found';
+            // return $this->_forward('output', 'error', null, array('error_no' => '404'));
+        }
+        // ビューを表示
+        return view("ctl.top.index");
+    }
+}
