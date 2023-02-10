@@ -35,15 +35,21 @@
 
 			// 経理関係スケジュールの一覧を取得
 			$o_date = new DateUtil();
-			//当月
-			$a_schedules['this_month'] = $modelsSchedule->get_schedules(array('date_ym' => $o_date->to_format('Y-m')));
-			//前月
-			$o_date->add('m', -1);
-			$a_schedules['pre_month'] = $modelsSchedule->get_schedules(array('date_ym' => $o_date->to_format('Y-m')));
-			//翌月
-			$o_date->add('m', 2);
-			$a_schedules['next_month'] = $modelsSchedule->get_schedules(array('date_ym' => $o_date->to_format('Y-m')));
-			
+            //当月
+            // $a_schedules['this_month'] = $modelsSchedule->get_schedules(array('date_ym' => $o_date->to_format('Y-m')));
+            //前月
+            $o_date->add('m', -1);
+            // $a_schedules['pre_month'] = $modelsSchedule->get_schedules(array('date_ym' => $o_date->to_format('Y-m')));
+            //翌月
+            $o_date->add('m', 2);
+            // $a_schedules['next_month'] = $modelsSchedule->get_schedules(array('date_ym' => $o_date->to_format('Y-m')));
+
+            // TODO:
+            $a_schedules = [
+                'pre_month' => [],
+                'this_month' => [],
+                'next_month' => [],
+            ];
 			// 自身に許可されているライセンストークン取得
 			//TODO ユーザー情報から取得し移送
 			$operator_cd='1';
@@ -72,11 +78,11 @@
 		}
 
 		// 登録
-		public function registrationAction()
+		public function registration()
 		{
 			try {
 
-				$this->set_assign();
+				return view("ctl.brtop.registration");
 
 			// 各メソッドで Exception が投げられた場合
 			} catch (\Exception $e) {
@@ -98,11 +104,11 @@
 		}
 
 		// 支払
-		public function paymentAction()
+		public function payment()
 		{
 			try {
 
-				$this->set_assign();
+				return view("ctl.brtop.payment");
 
 			// 各メソッドで Exception が投げられた場合
 			} catch (\Exception $e) {
@@ -138,11 +144,11 @@
 		}
 
 		// 会員情報閲覧
-		public function inspectAction()
+		public function inspect()
 		{
 			try {
 
-				$this->set_assign();
+				return view("ctl.brtop.inspect");
 
 			// 各メソッドで Exception が投げられた場合
 			} catch (\Exception $e) {
