@@ -75,7 +75,7 @@
     </table>
 
     <hr class="contents-margin" />
-    {!! Form::open(['route' => ['ctl.brinsuranceweather.index'], 'method' => 'post']) !!}
+    {!! Form::open(['route' => ['ctl.brinsuranceweather.index'], 'method' => 'get']) !!}
     <input type="hidden" name="jbr_no" value="{{$views->jbr_no}}" />
     <input type="submit" value="お天気保険成立者設定画面に戻る" />
     {!! Form::close() !!}

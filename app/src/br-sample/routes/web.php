@@ -187,4 +187,9 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
         ->name('ctl.brinsuranceweather.index');
     Route::match(['get', 'post'], '/brinsuranceweather/updatecondition', 'BrInsuranceWeatherController@updateCondition')
         ->name('ctl.brinsuranceweather.updatecondition');
+
+    Route::get('/ctl/brinsuranceweather/', [\App\Http\Controllers\ctl\BrInsuranceWeatherController::class, 'index'])
+        ->name('ctl.brinsuranceweather.index');
+    Route::post('/ctl/brinsuranceweather/updatecondition', [\App\Http\Controllers\ctl\BrInsuranceWeatherController::class, 'updatecondition'])
+        ->name('ctl.brinsuranceweather.updatecondition');
 });
