@@ -51,7 +51,7 @@ class HtlLoginController extends Controller
      */
     public function logout(Request $request)
     {
-        Auth::logout();
+        Auth::guard('hotel')->logout();
         $request->session()->invalidate();      // ユーザーのセッションを無効に
         $request->session()->regenerateToken(); // CSRFトークンを再生成
         return redirect()->route('ctl.htl.top');
