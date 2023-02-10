@@ -54,7 +54,7 @@
 	<tr>
 		<td>
 			<small>
-				{!! Form::open(['route' => ['ctl.brhotel.show'], 'method' => 'post']) !!}
+				{!! Form::open(['route' => ['ctl.brhotel.show'], 'method' => 'get']) !!}
 					<input type="hidden" name="target_cd" value="{strip_tags($views->target_cd)}" />
 					<INPUT TYPE="submit" VALUE="施設情報変更へ">
 				{!! Form::close() !!}

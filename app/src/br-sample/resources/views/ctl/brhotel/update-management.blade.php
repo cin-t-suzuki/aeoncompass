@@ -13,7 +13,7 @@
 
     <br>
 
-    {{ Form::open(['route' => 'ctl.brhotel.show', 'method' => 'post']) }}
+    {{ Form::open(['route' => 'ctl.brhotel.show', 'method' => 'get']) }}
         @include('ctl.brhotel._info_management_form')
         <input type="submit" value="詳細変更へ">
     {{ Form::close() }}

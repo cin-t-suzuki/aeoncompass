@@ -6,7 +6,7 @@
 @include('ctl.common.message', $messages)
 
 <!--TODO form method="post" action="{$v->env.source_path}{$v->env.module}/brhotel/show/"-->
-{!! Form::open(['route' => ['ctl.brhotel.show'], 'method' => 'post']) !!}
+{!! Form::open(['route' => ['ctl.brhotel.show'], 'method' => 'get']) !!}
 
 	{{--include file=$v->env.module_root|cat:'/views/brhotel/_info_hotel_form.tpl'--}}
 	@section('detail')
@@ -23,7 +23,7 @@
 
 <hr size="1">
 <!--TODO form method="post" action="{$v->env.source_path}{$v->env.module}/brhotel/"-->
-{!! Form::open(['route' => ['ctl.brhotel.index'], 'method' => 'post']) !!}
+{!! Form::open(['route' => ['ctl.brhotel.index'], 'method' => 'get']) !!}
 	<small>
 		<input type="submit" value="施設情報メインへ">
 	</small>

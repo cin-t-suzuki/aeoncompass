@@ -150,7 +150,7 @@ Route::middleware('auth:staff')->group(function () {
     Route::get('/ctl/brhotel/hotelsearch', [\App\Http\Controllers\ctl\BrhotelController::class, 'hotelsearch'])->name('ctl.brhotel.hotelsearch'); //宿泊施設検索
     Route::match(['get','post'], '/ctl/brhotel/edit', [\App\Http\Controllers\ctl\BrhotelController::class, 'edit'])->name('ctl.brhotel.edit');
     Route::post('/ctl/brhotel/update', [\App\Http\Controllers\ctl\BrhotelController::class, 'update'])->name('ctl.brhotel.update'); //施設更新？
-    Route::match(['get', 'post'], '/ctl/brhotel/show', [\App\Http\Controllers\ctl\BrhotelController::class, 'show'])->name('ctl.brhotel.show')->middleware('auth:staff'); // 詳細変更 施設各情報ハブ
+    Route::get('/ctl/brhotel/show', [\App\Http\Controllers\ctl\BrhotelController::class, 'show'])->name('ctl.brhotel.show'); // 詳細変更 施設各情報ハブ
     Route::get('/ctl/brhotel/searchcity', [\App\Http\Controllers\ctl\BrhotelController::class, 'searchcity'])->name('ctl.brhotel.searchcity'); // 検索部品 市プルダウン
     Route::get('/ctl/brhotel/searchward', [\App\Http\Controllers\ctl\BrhotelController::class, 'searchward'])->name('ctl.brhotel.searchward'); // 検索部品 区プルダウン
     Route::post('/ctl/brhotel/createnote', [\App\Http\Controllers\ctl\BrhotelController::class, 'createnote'])->name('ctl.brhotel.createnote'); //施設管理特記事項

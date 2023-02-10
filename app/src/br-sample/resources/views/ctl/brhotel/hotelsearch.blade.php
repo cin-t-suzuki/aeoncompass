@@ -103,7 +103,7 @@
 			</form>
 		</td>
 		<td nowrap align="middle">{{--詳細変更 施設各情報ハブ--}}
-			{!! Form::open(['route' => ['ctl.brhotel.show'], 'method' => 'post']) !!}
+			{!! Form::open(['route' => ['ctl.brhotel.show'], 'method' => 'get']) !!}
 				<input type="submit" value="設定">
 				<input type="hidden" name="target_cd" value="{{$hotel_list->hotel_cd}}" />
 			{!! Form::close() !!}
