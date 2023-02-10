@@ -26,7 +26,7 @@
 						施設情報
 						</td>
 					@if ($views->hotel_regist == true)
-						{!! Form::open(['route' => ['ctl.brhotel.edit'], 'method' => 'post']) !!}
+						{!! Form::open(['route' => ['ctl.brhotel.edit'], 'method' => 'get']) !!}
 						<td nowrap><input type="submit" value=" 変更 "></td>
 						<input type="hidden" name="target_cd" value="{{strip_tags($views->target_cd)}}">
 						{!! Form::close() !!}

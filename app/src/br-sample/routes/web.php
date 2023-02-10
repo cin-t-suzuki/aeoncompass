@@ -148,7 +148,7 @@ Route::middleware('auth:staff')->group(function () {
 Route::middleware('auth:staff')->group(function () {
     Route::get('/ctl/brhotel/', [\App\Http\Controllers\ctl\BrhotelController::class, 'index'])->name('ctl.brhotel.index'); // 検索 初期表示
     Route::get('/ctl/brhotel/hotelsearch', [\App\Http\Controllers\ctl\BrhotelController::class, 'hotelsearch'])->name('ctl.brhotel.hotelsearch'); //宿泊施設検索
-    Route::match(['get','post'], '/ctl/brhotel/edit', [\App\Http\Controllers\ctl\BrhotelController::class, 'edit'])->name('ctl.brhotel.edit');
+    Route::get('/ctl/brhotel/edit', [\App\Http\Controllers\ctl\BrhotelController::class, 'edit'])->name('ctl.brhotel.edit');
     Route::post('/ctl/brhotel/update', [\App\Http\Controllers\ctl\BrhotelController::class, 'update'])->name('ctl.brhotel.update'); //施設更新？
     Route::get('/ctl/brhotel/show', [\App\Http\Controllers\ctl\BrhotelController::class, 'show'])->name('ctl.brhotel.show'); // 詳細変更 施設各情報ハブ
     Route::get('/ctl/brhotel/searchcity', [\App\Http\Controllers\ctl\BrhotelController::class, 'searchcity'])->name('ctl.brhotel.searchcity'); // 検索部品 市プルダウン
