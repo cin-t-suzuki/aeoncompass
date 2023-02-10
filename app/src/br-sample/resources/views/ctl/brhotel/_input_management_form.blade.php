@@ -15,7 +15,7 @@
         <td>
             {{ Form::text('Hotel_Account[account_id_begin]', strip_tags($hotel_account->account_id_begin), ['size' => '15', 'maxlength' => '10',]) }}
         </td>
-        <td><small>10文字<font color="#0000ff">（必須）</font></small></td>
+        <td><small>半角英数字で10文字以内<font color="#0000ff">（必須）</font></small></td>
     </tr>
 
     <tr>
@@ -34,7 +34,7 @@
                 </span>
             @endif
         </td>
-        <td><small>10文字<font color="#0000ff">（必須）</font></small></td>
+        <td><small>大文字半角英字・半角数字で10文字以内<font color="#0000ff">（必須）</font></small></td>
     </tr>
 
     <tr>
@@ -91,7 +91,7 @@
 
     <tr>
         <td bgcolor="#EEFFEE">登録状態</td>
-        @if ($new_flg == 1)
+        @if ($new_flg)
             <td>
                 {{ Form::hidden('Hotel_Status[entry_status]', 1) }}
                 登録作業中
