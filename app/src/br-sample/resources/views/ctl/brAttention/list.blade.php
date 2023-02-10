@@ -6,7 +6,7 @@
 
   {{--  css  --}}
   @section('headScript')
-    @include('ctl.brattention._css')
+    @include('ctl.brAttention._css')
   @endsection
 
   @section('content')
@@ -29,7 +29,7 @@
     {{-- 新規登録 --}}
     <div style="width:960px; overflow: hidden;">
         <div style="width:150px; float: right; margin-bottom: 5px;">
-            {!! Form::open(['route' => ['ctl.brattention.new'], 'method' => 'post']) !!} 
+            {!! Form::open(['route' => ['ctl.brAttention.new'], 'method' => 'get']) !!} 
               <small>
                 <input type="submit" style="width:100px; height: 35px; border-radius: 4px; background-color: #a0d8ef" value="新規登録">
               </small>
@@ -58,13 +58,13 @@
             </ul>
           @endforeach
           <td style="text-align:center;@if ($message_list->display_flag == 0)background: #aaa @elseif ($views->now_display_attention->attention_id == $message_list->attention_id)background: #F6FEC0 @endif">
-            {!! Form::open(['route' => ['ctl.brattention.edit'], 'method' => 'post']) !!} 
+            {!! Form::open(['route' => ['ctl.brAttention.edit'], 'method' => 'get']) !!} 
               <input type="hidden" name="attention_id"      value="{{$message_list->attention_id}}" />
               <input type="hidden" name="send_edit" value= 1 />
               <input type="submit" style="border-radius: 4px; background-color: #FF6633" value=" 編集 ">
             {!! Form::close() !!}
             <br>
-            {!! Form::open(['route' => ['ctl.brattention.change'], 'method' => 'post']) !!} 
+            {!! Form::open(['route' => ['ctl.brAttention.change'], 'method' => 'post']) !!} 
               <input type="hidden" name="attention_id" value="{{$message_list->attention_id}}" />
               <input type="hidden" name="display_flag" value="{{$message_list->display_flag}}" />
               <input type="hidden" name="title" value="{{$message_list->title}}" />

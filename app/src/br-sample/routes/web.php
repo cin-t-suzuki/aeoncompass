@@ -182,17 +182,18 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 	Route::get('/brpartnersite/edit', 'BrPartnerSiteController@edit')->name('ctl.brPartnerSite.edit');
 	Route::post('/brpartnersite/modify', 'BrPartnerSiteController@modify')->name('ctl.brPartnerSite.modify');
 
-    // 注目文言管理
-    Route::match(['get', 'post'], '/brattention/list', 'BrattentionController@list')
-        ->name('ctl.brattention.list'); //表示
-    Route::match(['get', 'post'], '/brattention/edit', 'BrattentionController@edit')
-        ->name('ctl.brattention.edit'); //編集画面
-    Route::post('/brattention/update', 'BrattentionController@update')
-        ->name('ctl.brattention.update'); //更新
-    Route::match(['get', 'post'], '/brattention/new', 'BrattentionController@new')
-        ->name('ctl.brattention.new'); //新規登録画面
-    Route::post('/brattention/create', 'BrattentionController@create')
-        ->name('ctl.brattention.create'); //登録
-    Route::post('/brattention/change', 'BrattentionController@change')
-        ->name('ctl.brattention.change'); //表示ステータス変更
 });
+
+// 注目文言管理
+Route::get('/ctl/brattention/index', [\App\Http\Controllers\ctl\BrAttentionController::class, 'list'])
+    ->name('ctl.brAttention.list');
+Route::get('/ctl/brattention/edit', [\App\Http\Controllers\ctl\BrAttentionController::class, 'edit'])
+    ->name('ctl.brAttention.edit');
+Route::post('/ctl/brattention/update', [\App\Http\Controllers\ctl\BrAttentionController::class, 'update'])
+    ->name('ctl.brAttention.update');
+Route::get('/ctl/brattention/new', [\App\Http\Controllers\ctl\BrAttentionController::class, 'new'])
+    ->name('ctl.brAttention.new');
+Route::post('/ctl/brattention/create', [\App\Http\Controllers\ctl\BrAttentionController::class, 'create'])
+    ->name('ctl.brAttention.create');
+Route::post('/ctl/brattention/change', [\App\Http\Controllers\ctl\BrAttentionController::class, 'change'])
+    ->name('ctl.brAttention.change');

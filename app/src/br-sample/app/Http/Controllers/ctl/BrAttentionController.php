@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 use App\Common\Traits;
 use App\Models\Attention;
 
-class BrattentionController extends _commonController
+class BrAttentionController extends _commonController
 {
     use Traits;
 
@@ -81,7 +81,6 @@ SQL;
 
         $now_display_attention = DB::select($s_sql, []);
 
-
         // redirect時のguideメッセージを取得
         if (session()->has('guide')) {
             $guide = session()->pull('guide');
@@ -93,7 +92,7 @@ SQL;
         $this->addViewData("now_display_attention", $now_display_attention[0]);
 
         // ビューを表示
-        return view("ctl.brattention.list", $this->getViewData());
+        return view("ctl.brAttention.list", $this->getViewData());
     }
 
     //======================================================================
@@ -158,7 +157,7 @@ SQL;
         $this->addViewData("form_params", $form_params);
 
         // ビューを表示
-        return view("ctl.brattention.new", $this->getViewData());
+        return view("ctl.brAttention.new", $this->getViewData());
     }
 
     //======================================================================
@@ -262,7 +261,7 @@ SQL;
         }
 
         // ビューを表示
-        return view("ctl.brattention.edit", $this->getViewData());
+        return view("ctl.brAttention.edit", $this->getViewData());
     }
 
     //======================================================================
@@ -283,7 +282,7 @@ SQL;
             //editへ戻る
             session()->put('error', $insertCheck_result);
             session()->put('return_data', $requestAttention);
-            return redirect()->route('ctl.brattention.edit');
+            return redirect()->route('ctl.brAttention.edit');
         }
 
         $start_date_year = $requestAttention['start_date_year'];
@@ -351,7 +350,7 @@ SQL;
 
             //listへ
             session()->put('return_data', $requestAttention);
-            return redirect()->route('ctl.brattention.list');
+            return redirect()->route('ctl.brAttention.list');
         } catch (Exception $e) {
             throw $e;
         }
@@ -380,7 +379,7 @@ SQL;
             //newへ戻る
             session()->put('error', $insertCheck_result);
             session()->put('return_data', $requestAttention);
-            return redirect()->route('ctl.brattention.new');
+            return redirect()->route('ctl.brAttention.new');
         }
 
         //nextvalの取得、これで大丈夫？（下非表示は元ソース）
@@ -495,7 +494,7 @@ SQL;
             }
             //listへ
             session()->put('return_data', $requestAttention);
-            return redirect()->route('ctl.brattention.list');
+            return redirect()->route('ctl.brAttention.list');
         } catch (Exception $e) {
             throw $e;
         }
@@ -533,7 +532,7 @@ SQL;
             //listへ
             session()->put('return_data', $requestAttention);
             session()->put('guide', $guide);
-            return redirect()->route('ctl.brattention.list');
+            return redirect()->route('ctl.brAttention.list');
         } catch (Exception $e) {
             throw $e;
         }
