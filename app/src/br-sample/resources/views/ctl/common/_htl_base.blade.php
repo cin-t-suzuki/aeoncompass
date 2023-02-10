@@ -133,6 +133,7 @@
             環境不明
         </div>
 @endif
+    @include('ctl.common._auth'){{-- TODO: to be deleted--}}
 
     <div class="{{ $no_print == true ? 'noprint' : '' }}">
         {{-- staffのみ情報を表示 --}}

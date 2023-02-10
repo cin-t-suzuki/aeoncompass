@@ -53,6 +53,7 @@
         {{-- /Googleアナリティクス --}}
     </head>
     <body>
+        @include('ctl.common._auth'){{-- TODO: to be deleted--}}
         {{-- 環境表示 --}}
         @include('ctl.common._env_info')
         <div class="wrap{{ $v->config->environment->status }}">

@@ -45,6 +45,7 @@
 @endphp
 
 <body @if (config('app.env') != 'product') style="margin-top:0;margin-left:0;padding-left:8px;border-left:4px solid {{ $coloring }};" @endif topmargin="0" marginheight="0">
+    @include('ctl.common._auth'){{-- TODO: to be deleted--}}
 
     @if (config('app.env') != 'product')
         <div style="margin-left:-12px;padding:0.25em 0;background-color: {{ $coloring }};color:#fff;font-weifht:bold;width:6em;text-align:center;">{{ $environment }}</div>

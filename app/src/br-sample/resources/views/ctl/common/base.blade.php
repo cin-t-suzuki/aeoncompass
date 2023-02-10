@@ -64,6 +64,7 @@
         style="margin-top:0;margin-left:0;padding-left:8px;border-left:4px solid #A63;"
     @endif
 >
+    @include('ctl.common._auth'){{-- TODO: to be deleted--}}
     @if (config('app.env') == 'test')
         <div style="margin-left:-12px;padding:0.25em 0;background-color:#297;color:#fff;font-weight:bold;width:6em;text-align:center;">
             検証環境
