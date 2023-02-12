@@ -214,6 +214,13 @@ Route::post('/ctl/brhoteladvert2009000400/create', [\App\Http\Controllers\ctl\Br
 Route::post('/ctl/brhoteladvert2009000400/edit', [\App\Http\Controllers\ctl\BrhotelAdvert2009000400Controller::class, 'edit'])->name('ctl.brhoteladvert2009000400.edit'); //編集画面
 Route::post('/ctl/brhoteladvert2009000400/update', [\App\Http\Controllers\ctl\BrhotelAdvert2009000400Controller::class, 'update'])->name('ctl.brhoteladvert2009000400.update'); //更新
 
+// お天気保証
+Route::get('/ctl/brinsuranceweather/', [\App\Http\Controllers\ctl\BrInsuranceWeatherController::class, 'index'])
+    ->name('ctl.brInsuranceWeather.index');
+Route::post('/ctl/brinsuranceweather/updatecondition', [\App\Http\Controllers\ctl\BrInsuranceWeatherController::class, 'updatecondition'])
+    ->name('ctl.brInsuranceWeather.updatecondition');
+
+
 // 参考として一応残す。
 // Route::namespace('App\Http\Controllers\ctl')->prefix('ctl')->group(function () {
 // });
@@ -252,3 +259,4 @@ Route::get('/ctl/brmoneyschedule/new', function (\Illuminate\Http\Request $reque
 // TODO: pull request #25 (精算先、施設情報：請求関連（請求先）精算先（登録施設）) が merge されたら削除
 Route::post('/ctl/brCustomer/list', function () {return 'TODO'; })->name('ctl.brCustomer.list');
 Route::post('/ctl/brCustomer/csv', function () {return 'TODO'; })->name('ctl.brCustomer.csv');
+
