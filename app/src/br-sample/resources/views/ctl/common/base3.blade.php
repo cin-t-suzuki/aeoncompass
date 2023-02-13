@@ -40,45 +40,43 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 @php
+    // TODO: 他の guard で認証しているとき、これを追加
+    // 他の guard: hotel(施設管理者), supervisor(施設統括), partner, affiliate
+    // MEMO: 移植元では、 lib\Br\Models\Authorize\Operator.php の is_login() で判定
+    $isLogin = Auth::guard('staff')->check();
+
+    $isStaff = Auth::guard('staff')->check();
+    if ($isStaff) {
+        $staffName = Auth::guard('staff')->user()->staffInfo->staff_nm;
+    } else {
+        $staffName = 'TODO: ロール未実装';
+    }
+
     // TODO: 認証関連、環境変数関連
     $assign = (object) [
         'is_migration' => rand(0, 1),
     ];
     class Operator
     {
-        public $staff_nm = '';
         public $nta_login_data;
         public function __construct($staffName)
         {
-            $this->staff_nm = $staffName;
             $this->nta_login_data = (object) [
                 'staff_nm' => 'staff_nm' . Str::random(3, 6),
             ];
-        }
-        public function is_staff()
-        {
-            return rand(0, 1);
-        }
-        public function is_nta()
-        {
-            return rand(0, 1);
-        }
-        public function is_login()
-        {
-            return rand(0, 1);
         }
     }
     $user = (object) [
         'operator' => new Operator(Str::random(16)),
         'hotel' => (object) [
-            'hotel_nm' => 'hotel_nm_' . Str::random(rand(3, 8)),
-            'hotel_cd' => 'hotel_cd_' . Str::random(rand(3, 8)),
-            'hotel_old_nm' => [null, 'hotel_old_nm_' . Str::random(rand(3, 8))][rand(0, 1)],
-            'ydp2_status' => rand(0, 1) == 0,
-            'premium_status' => rand(0, 1) == 0,
+            'hotel_nm'              => 'hotel_nm_' . Str::random(rand(3, 8)),
+            'hotel_cd'              => 'hotel_cd_' . Str::random(rand(3, 8)),
+            'hotel_old_nm'          => [null, 'hotel_old_nm_' . Str::random(rand(3, 8))][rand(0, 1)],
+            'ydp2_status'           => rand(0, 1) == 0,
+            'premium_status'        => rand(0, 1) == 0,
             'visual_package_status' => rand(0, 1) == 0,
-            'accept_status' => rand(0, 1),
-            'jrset_status' => rand(0, 5),
+            'accept_status'         => rand(0, 1),
+            'jrset_status'          => rand(0, 5),
         ],
         'hotel_status' => (object) [
             'entry_status' => rand(0, 1),
@@ -87,21 +85,21 @@
             'stock_type' => rand(0, 2),
         ],
         'hotel_person' => (object) [
-            'person_nm' => 'person_nm_' . Str::random(rand(8, 16)),
-            'person_post' => 'person_post_' . Str::random(rand(8, 16)),
-            'person_tel' => 'person_tel_' . rand(1000000, 9999999),
-            'person_fax' => 'person_fax_' . rand(1000000, 9999999),
+            'person_nm'     => 'person_nm_'     . Str::random(rand(8, 16)),
+            'person_post'   => 'person_post_'   . Str::random(rand(8, 16)),
+            'person_tel'    => 'person_tel_'    . rand(1000000, 9999999),
+            'person_fax'    => 'person_fax_'    . rand(1000000, 9999999),
         ],
         'hotel_system_version' => (object) [
             'version' => rand(0, 2),
         ],
     ];
     $env = (object) [
-        'controller' => ['brtop', 'htlsroomoffer', 'htlsroomplan2', 'htlreserve', 'htlsroomplandp', 'pmscode'][rand(0, 5)],
-        'action' => 'index',
-        'source_path' => '',
-        'module' => '/ctl',
-        'path_base_module' => 'ctl/statics',
+        'controller'        => ['brtop', 'htlsroomoffer', 'htlsroomplan2', 'htlreserve', 'htlsroomplandp', 'pmscode'][rand(0, 5)],
+        'action'            => 'index',
+        'source_path'       => '',
+        'module'            => '/ctl',
+        'path_base_module'  => 'ctl/statics',
     ];
     $config = (object) [
         'environment' => (object) [
@@ -212,13 +210,8 @@
         @if ($is_staff_navi)
 
             {{-- BRスタッフ --}}
-            @if ($v->user->operator->is_staff())
+            @if ($isStaff)
                 @include('ctl.common._header_staff_br')
-            @endif
-
-            {{-- NTAスタッフ --}}
-            @if ($v->user->operator->is_nta())
-                @include('ctl.common._header_staff_nta')
             @endif
 
         @endif
@@ -426,9 +419,9 @@
                 {{-- ログアウトメニュー                                                   --}}
                 {{-- ---------------------------------------------------------------------- --}}
                 {{-- ログイン中 --}}
-                @if ($v->user->operator->is_login())
+                @if ($isLogin)
                     {{-- スタッフ以外 --}}
-                    @if (!$v->user->operator->is_staff())
+                    @if (!$isStaff)
                         <div id="ft-logout">
                             <a href="{{ $v->env->source_path }}{{ $v->env->module }}/logout/">ログアウト</a>
                         </div>

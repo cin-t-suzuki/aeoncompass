@@ -31,12 +31,13 @@ class HotelPerson extends CommonDBModel
      *
      * MEMO: 独自実装でタイムスタンプを設定しているため、Laravel 側では設定しない。
      * HACK: (工数次第) Laravel の機能を使ったほうがよい気もする。
+     * 使えるところでは自動入力を有効にするため、 true に設定。
      *
      * @var bool
      */
-    public $timestamps = false;
-    const CREATED_AT = 'entry_ts';
-    const UPDATED_AT = 'modify_ts';
+    public $timestamps = true;
+    public const CREATED_AT = 'entry_ts';
+    public const UPDATED_AT = 'modify_ts';
 
     /**
      * 複数代入可能な属性
@@ -44,15 +45,16 @@ class HotelPerson extends CommonDBModel
      * @var array
      */
     protected $fillable = [
+        'hotel_cd',
         'person_post',
         'person_nm',
         'person_tel',
         'person_fax',
         'person_email',
         'entry_cd',
-        'entry_ts',
+        // 'entry_ts',
         'modify_cd',
-        'modify_ts',
+        // 'modify_ts',
     ];
 
 	// カラム

@@ -2,14 +2,66 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\common\CommonDBModel;
 use App\Models\common\ValidationColumn;
 use Illuminate\Support\Facades\DB;
 
 class HotelSystemVersion extends CommonDBModel
 {
+    use HasFactory;
+
     // テーブル名称
     protected $table = 'hotel_system_version';
+    /**
+     * テーブルに関連付ける主キー
+     *
+     * MEMO: (hotel_cd, system_type) で PK になっているが、
+     * Laravel では複合キーに対応していない
+     *
+     * @var string
+     */
+    // protected $primaryKey = 'hotel_cd';
+
+    /**
+     * モデルのIDを自動増分するか
+     *
+     * @var bool
+     */
+    public $incrementing = false;
+
+    /**
+     * モデルにタイムスタンプを付けるか
+     *
+     * @var bool
+     */
+    public $timestamps = true;
+    public const CREATED_AT = 'entry_ts';
+    public const UPDATED_AT = 'modify_ts';
+
+    /**
+     * 複数代入可能な属性
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'hotel_cd',
+        'system_type',
+        'version',
+        'entry_cd',
+        // 'entry_ts',
+        'modify_cd',
+        // 'modify_ts',
+    ];
+
+    // カラム定数
+    // システムページタイプ
+    public const SYSTEM_TYPE_PLAN = 'plan'; // プランメンテナンス
+
+    // システムバージョン（複数選択可）
+    // ビット列による集合表現で管理
+    // public const VERSION_1 = 1; // Ver1 (旧システム) 使用しない
+    public const VERSION_2 = 2; // Ver2 (新システム)
 
     // カラム
     public string $COL_HOTEL_CD = "hotel_cd";
@@ -19,7 +71,6 @@ class HotelSystemVersion extends CommonDBModel
     public string $COL_ENTRY_TS = "entry_ts";
     public string $COL_MODIFY_CD = "modify_cd";
     public string $COL_MODIFY_TS = "modify_ts";
-
 
     function __construct()
     {
@@ -39,16 +90,5 @@ class HotelSystemVersion extends CommonDBModel
             $colSystemType,
             $colVersion
         ]);
-    }
-
-
-    // シングルトンインスタンスを実装
-    private static $_o_instance = null;
-    public static function getInstance()
-    {
-        if (null === self::$_o_instance) {
-            self::$_o_instance = new self();
-        }
-        return self::$_o_instance;
     }
 }
