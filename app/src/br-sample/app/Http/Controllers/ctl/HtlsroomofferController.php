@@ -7,8 +7,6 @@ use App\Models\HotelSystemVersion;
 use App\Models\Room2;
 use App\Models\RoomCount;
 use App\Models\RoomCount2;
-use App\Models\HotelNotify;
-use App\Models\PartnerGroup;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -44,19 +42,6 @@ class HtlsRoomOfferController extends _commonController
     // 土曜日
     const SATDAY_NUM = 6; 
 
-
-    //==========================================================================================
-    // 事前処理
-    //==========================================================================================
-    public function preDispatch()
-    {
-        try {
-            // ログインチェック（ホテル）
-            parent::htlDispatch();
-        } catch (Exception $e) {
-            throw $e;
-        }
-    }
 
     //==========================================================================================
     // インデックス
@@ -3383,54 +3368,7 @@ SQL;
         }
     }
 
-    // TODO
-    //==========================================================================================
-    // 初期化
-    //==========================================================================================
-    public function init()
-    {
-
-        try {
-
-            // 事前処理
-            parent::init();
-
-            // パートナーコード設定
-            $this->set_partner_cd($this->_partner_cd);
-            $this->_partner_group_id = empty($this->_request->getParam('partner_group_id')) ? $this->get_partner_group_id() : $this->_request->getParam('partner_group_id');
-            // 現在設定されているパートナーグループIDがデフォルトの値を違う場合
-            if ($this->_partner_group_id != $this->get_partner_group_id()) {
-                // インスタンスの生成
-                $o_partner_group =  new PartnerGroup();
-                // TODO 提携先のget&set
-                $this->box->user->partner_group = $o_partner_group->where(['partner_group_id' => $this->_partner_group_id])->first();
-            }
-
-            // リンカーン利用施設かどうか
-            $o_hotel_notify = new HotelNotify();
-            $a_hotel_notify = $o_hotel_notify->find(
-                ['hotel_cd' => $this->params('target_cd')]
-            );
-            $a_notify_devices = $this->to_shift($a_hotel_notify['notify_device'], true);
-            // 通知媒体にリンカーンが含まれている
-            if (in_array(8, $a_notify_devices ?? [])) {
-                $this->_assign->is_cooperate_cd  = true; // TODO 
-            }
-
-            $this->_assign->is_migration = $this->box->user->migration_status; // TODO 
-        } catch (Exception $e) {
-
-            throw $e;
-        }
-    }
-    // 提携先コードの設定
-    //
-    public function set_partner_cd($as_partner_cd){
-        $this->_s_partner_cd = $as_partner_cd;
-    }
-
     // パートナーグループIDを取得
-    //
     public function get_partner_group_id()
     {
         try {
@@ -3459,26 +3397,4 @@ SQL;
             throw $e;
         }
     }
-
-    //==========================================================================================
-    // インデックス
-    //==========================================================================================
-    protected function indexMethod()
-    {
-
-        try {
-            $target_cd = Request::input('target_cd');
-            // 「新部屋プランメンテナンス」メニューの表示・非表示判定
-            $a_system_versions = $this->_set_disp_room_plan_list($target_cd);
-
-            // アサインの登録
-            $this->addViewData("target_cd", $target_cd);
-            $this->addViewData("partner_group_id", $this->_partner_group_id);
-            $this->addViewData("a_system_versions", $a_system_versions);
-
-        } catch (Exception $e) {
-            throw $e;
-        }
-    }
-
 }
