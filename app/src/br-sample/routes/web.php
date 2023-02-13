@@ -304,3 +304,7 @@ Route::get('/ctl/brmoneyschedule/new', function (\Illuminate\Http\Request $reque
     var_dump($request->input());
     return 'TODO: 未実装';
 })->name('ctl.br.money.schedule.new');
+
+// 施設 IDとパスワードの変更
+Route::match(['get', 'post'], 'ctl/htlchangepass/index', [\App\Http\Controllers\ctl\HtlChangePassController::class, 'index'])->name('ctl.htl_change_pass.index');
+Route::match(['get', 'post'], 'ctl/htlchangepass/update', [\App\Http\Controllers\ctl\HtlChangePassController::class, 'update'])->name('ctl.htl_change_pass.update');
