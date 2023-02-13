@@ -260,3 +260,7 @@ Route::get('/ctl/brmoneyschedule/new', function (\Illuminate\Http\Request $reque
 Route::post('/ctl/brCustomer/list', function () {return 'TODO'; })->name('ctl.brCustomer.list');
 Route::post('/ctl/brCustomer/csv', function () {return 'TODO'; })->name('ctl.brCustomer.csv');
 
+// 利用可能カード
+Route::match(['get', 'post'], '/ctl/htlHotelCard/show/', [\App\Http\Controllers\ctl\HtlHotelCardController::class, 'show'])->name('ctl.htl_hotel_card.show');
+Route::match(['get', 'post'], '/ctl/htlHotelCard/update/', [\App\Http\Controllers\ctl\HtlHotelCardController::class, 'update'])->name('ctl.htl_hotel_card.update');
+
