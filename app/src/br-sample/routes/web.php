@@ -230,6 +230,20 @@ Route::post('/ctl/brhoteladvert2009000400/create', [\App\Http\Controllers\ctl\Br
 Route::post('/ctl/brhoteladvert2009000400/edit', [\App\Http\Controllers\ctl\BrhotelAdvert2009000400Controller::class, 'edit'])->name('ctl.brhoteladvert2009000400.edit'); //編集画面
 Route::post('/ctl/brhoteladvert2009000400/update', [\App\Http\Controllers\ctl\BrhotelAdvert2009000400Controller::class, 'update'])->name('ctl.brhoteladvert2009000400.update'); //更新
 
+// 注目文言管理
+Route::get('/ctl/brattention/index', [\App\Http\Controllers\ctl\BrAttentionController::class, 'list'])
+    ->name('ctl.brAttention.list');
+Route::get('/ctl/brattention/edit', [\App\Http\Controllers\ctl\BrAttentionController::class, 'edit'])
+    ->name('ctl.brAttention.edit');
+Route::post('/ctl/brattention/update', [\App\Http\Controllers\ctl\BrAttentionController::class, 'update'])
+    ->name('ctl.brAttention.update');
+Route::get('/ctl/brattention/new', [\App\Http\Controllers\ctl\BrAttentionController::class, 'new'])
+    ->name('ctl.brAttention.new');
+Route::post('/ctl/brattention/create', [\App\Http\Controllers\ctl\BrAttentionController::class, 'create'])
+    ->name('ctl.brAttention.create');
+Route::post('/ctl/brattention/change', [\App\Http\Controllers\ctl\BrAttentionController::class, 'change'])
+    ->name('ctl.brAttention.change');
+
 // お天気保証
 Route::get('/ctl/brinsuranceweather/', [\App\Http\Controllers\ctl\BrInsuranceWeatherController::class, 'index'])
     ->name('ctl.brInsuranceWeather.index');

@@ -23,6 +23,7 @@
 //           ym     : 2008年08月            : Y年m月
 //           d      : 05                    : d
 //           J      : 火曜日                : J
+//	         ymdhi  : 2008-08-05 12:59
 //           ------- ----------------------- ---------------
 //          ※ 必要に応じてパターンの追加する。
 //
@@ -79,6 +80,9 @@
     } elseif ($format == 'ym') {
         // Y年m月
         $day = $dateUtil->to_format('Y年m月');
+    } elseif ( $format == 'ymdhi' ) {
+        // Y年m月d日 
+		$day = $dateUtil->to_format('Y-m-d H:i');
     } elseif ($format == 'y-m-d') {
         // Y-m-d
         $day = $dateUtil->to_format('Y-m-d');
