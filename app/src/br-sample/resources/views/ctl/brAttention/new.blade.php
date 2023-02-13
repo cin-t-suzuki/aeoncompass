@@ -14,8 +14,7 @@
   @section('content')
 
     {{-- メッセージ --}}
-    {{-- content内の書き換えあっている？ --}}
-    @include('ctl.common.message', $messages)
+    @include('ctl.common.message')
 
    <hr class="contents-margin" />
 

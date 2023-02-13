@@ -14,9 +14,9 @@ class BrAttentionController extends _commonController
 {
     use Traits;
 
-    //======================================================================
-    // 一覧
-    //======================================================================
+    /**
+     * 一覧
+     */
     public function list()
     {
         //親テーブルの配列の取得  //modify_tsはブレード側でformat調整
@@ -54,10 +54,10 @@ SQL;
             foreach ($a_child_rows as $child_key => $child_value) {
                 if ($a_rows[$parent_key]->attention_id == $child_value->attention_id) {
                     if ($a_rows[$parent_key]->display_status > count($a_rows[$parent_key]->child_value)) {
-                        $set_value = array(
+                        $set_value = [
                             'word' => $child_value->word,
                             'url'  => $child_value->url,
-                        );
+                        ];
                         $a_rows[$parent_key]->child_value[] = $set_value;
                     }
                 }
@@ -82,22 +82,23 @@ SQL;
         $now_display_attention = DB::select($s_sql, []);
 
         // redirect時のguideメッセージを取得
-        if (session()->has('guide')) {
-            $guide = session()->pull('guide');
-            $this->addGuideMessage($guide);
+        if (session()->has('guides')) {
+            $guides = session()->pull('guides');
         }
 
-        // データを ビューにセット
-        $this->addViewData("message_list", $a_rows);
-        $this->addViewData("now_display_attention", $now_display_attention[0]);
-
         // ビューを表示
-        return view("ctl.brAttention.list", $this->getViewData());
+        return view('ctl.brAttention.list', [
+            'message_list' => $a_rows,
+            'now_display_attention' => $now_display_attention[0],
+
+            //guideメッセージがない時は空の配列を返す
+            'guides' => $guides ?? []
+        ]);
     }
 
-    //======================================================================
-    // 新規入力
-    //======================================================================
+    /**
+     * 新規入力
+     */
     public function new()
     {
 
@@ -107,13 +108,11 @@ SQL;
         //別アクションからのredirectの場合は渡されたデータを反映する
         if (session()->has('return_data')) {
             $requestAttention = session()->pull('return_data');
-            if (session()->has('guide')) {
-                $guide = session()->pull('guide');
-                $this->addGuideMessage($guide);
+            if (session()->has('guides')) {
+                $guides = session()->pull('guides');
             }
-            if (session()->has('error')) {
-                $error = session()->pull('error');
-                $this->addErrorMessageArray($error);
+            if (session()->has('errors')) {
+                $errors = session()->pull('errors');
             }
         } else {
             //それ以外（初期表示）
@@ -140,29 +139,31 @@ SQL;
             $jwest_word = $requestAttention['jwest_word'] ?? []; //同上
             $jwest_url = $requestAttention['jwest_url'] ?? []; //同上
             foreach ($word as $key => $value) {
-                $a_start_set_array[] = array(
+                $a_start_set_array[] = [
                     "word" => $value,
                     "url" => $url[$key],
                     "jwest_word" => $jwest_word[$key],
                     "jwest_url" => $jwest_url[$key],
-                );
+                ];
             }
             $form_params['start_set_array'] = $a_start_set_array;
             $form_params['note'] = $requestAttention['note'] ?? null; //null追記
         }
 
-
-        // データを ビューにセット
-        $this->addViewData("accept_header_ymd_selecter", $accept_header_ymd_selecter);
-        $this->addViewData("form_params", $form_params);
-
         // ビューを表示
-        return view("ctl.brAttention.new", $this->getViewData());
+        return view('ctl.brAttention.new', [
+            'accept_header_ymd_selecter' => $accept_header_ymd_selecter,
+            'form_params' => $form_params,
+
+            //guide,errorメッセージがない時は空の配列を返す
+            'guides' => $guides ?? [],
+            'errors' => $errors ?? []
+        ]);
     }
 
-    //======================================================================
-    // 編集
-    //======================================================================
+    /**
+     * 編集
+     */
     public function edit()
     {
 
@@ -186,7 +187,7 @@ SQL;
 
             $a_main_attention = DB::select($s_sql, $set_param);
 
-            $a_main_param =  json_decode(json_encode($a_main_attention[0]), true); //json~追記しないとviewでエラー
+            $a_main_param =  json_decode(json_encode($a_main_attention[0]), true); //elseでは配列で渡すので、json~追記しないとviewでエラー
             $a_main_param['start_date_year'] = date('Y', strtotime($a_main_param['start_date']));
             $a_main_param['start_date_month'] = date('m', strtotime($a_main_param['start_date']));
             $a_main_param['start_date_day'] = date('d', strtotime($a_main_param['start_date']));
@@ -207,24 +208,20 @@ SQL;
             $a_sub_param = DB::select($s_sql, $set_param);
 
             $accept_header_ymd_selecter  = $attentionModel->makeYmdSelecter();
-            $form_detail_params['start_set_array'] = json_decode(json_encode($a_sub_param), true); //json~追記しないとviewでエラー
+            $form_detail_params['start_set_array'] = json_decode(json_encode($a_sub_param), true); //elseでは配列で渡すので、json~追記しないとviewでエラー
 
             // データを ビューにセット
-            $this->addViewData("accept_header_ymd_selecter", $accept_header_ymd_selecter);
-            $this->addViewData("form_params", $a_main_param);
-            $this->addViewData("form_detail_params", $form_detail_params);
+            $form_params = $a_main_param;
         } else {
             // データを取得
             //別アクションからのredirectの場合は渡されたデータを反映する
             if (session()->has('return_data')) {
                 $requestAttention = session()->pull('return_data');
-                if (session()->has('guide')) {
-                    $guide = session()->pull('guide');
-                    $this->addGuideMessage($guide);
+                if (session()->has('guides')) {
+                    $guides = session()->pull('guides');
                 }
-                if (session()->has('error')) {
-                    $error = session()->pull('error');
-                    $this->addErrorMessageArray($error);
+                if (session()->has('errors')) {
+                    $errors = session()->pull('errors');
                 }
             }
 
@@ -243,30 +240,33 @@ SQL;
             $jwest_word = $requestAttention['jwest_word'];
             $jwest_url = $requestAttention['jwest_url'];
             foreach ($word as $key => $value) {
-                $a_start_set_array[] = array(
+                $a_start_set_array[] = [
                     "attention_detail_id" => $attention_detail_id[$key],
                     "order_no" => $order_no[$key],
                     "word" => $value,
                     "url" => $url[$key],
                     "jwest_word" => $jwest_word[$key],
                     "jwest_url" => $jwest_url[$key],
-                );
+                ];
             }
             $form_detail_params['start_set_array'] = $a_start_set_array;
-
-            // データを ビューにセット
-            $this->addViewData("accept_header_ymd_selecter", $accept_header_ymd_selecter);
-            $this->addViewData("form_params", $form_params);
-            $this->addViewData("form_detail_params", $form_detail_params);
         }
 
         // ビューを表示
-        return view("ctl.brAttention.edit", $this->getViewData());
+        return view('ctl.brAttention.edit', [
+            'accept_header_ymd_selecter' => $accept_header_ymd_selecter,
+            'form_params' => $form_params,
+            'form_detail_params' => $form_detail_params,
+
+            //guide,errorメッセージがない時は空の配列を返す
+            'guides' => $guides ?? [],
+            'errors' => $errors ?? []
+        ]);
     }
 
-    //======================================================================
-    // update
-    //======================================================================
+    /**
+     * Update
+     */
     public function update()
     {
 
@@ -280,7 +280,7 @@ SQL;
         $insertCheck_result = $attentionModel->insertCheck($requestAttention);
         if ($insertCheck_result !== true) {
             //editへ戻る
-            session()->put('error', $insertCheck_result);
+            session()->put('errors', $insertCheck_result);
             session()->put('return_data', $requestAttention);
             return redirect()->route('ctl.brAttention.edit');
         }
@@ -335,14 +335,14 @@ SQL;
             $jwest_url = $requestAttention['jwest_url'];
 
             foreach ($word as $key => $value) {
-                $a_start_set_array[] = array(
+                $a_start_set_array[] = [
                     "attention_detail_id" => $attention_detail_id[$key],
                     "word" => $value,
                     "url" => $url[$key],
                     "jwest_word" => $jwest_word[$key],
                     "jwest_url" => $jwest_url[$key],
                     "modify_cd"    => $modify_cd,
-                );
+                ];
 
                 $a_detail_conditions = $a_start_set_array[$key];
                 DB::update($s_sql, $a_detail_conditions);
@@ -356,9 +356,9 @@ SQL;
         }
     }
 
-    //======================================================================
-    // 登録
-    //======================================================================
+    /**
+     * 登録
+     */
     public function create()
     {
 
@@ -377,22 +377,16 @@ SQL;
         $insertCheck_result = $attentionModel->insertCheck($requestAttention);
         if ($insertCheck_result !== true) {
             //newへ戻る
-            session()->put('error', $insertCheck_result);
+            session()->put('errors', $insertCheck_result);
             session()->put('return_data', $requestAttention);
             return redirect()->route('ctl.brAttention.new');
         }
 
         //nextvalの取得、これで大丈夫？（下非表示は元ソース）
-        $at_seq_id  = $attentionModel->incrementSequence('at_seq_id');
-        $attention_seq_id = $at_seq_id->val; //これで値は問題なくとれているが、intelephenseエラー？どう直せばいい？
-        //$s_sql =
-        // <<<SQL
-        //select attention_seq.nextval as nextval
-        //from dual
-        // SQL;
-
-        //$at_seq_id = DB::select($s_sql,array());
-        // $attention_seq_id = $at_seq_id[0]['nextval'];
+        // $at_seq_id  = $attentionModel->incrementSequence('at_seq_id');
+        // $attention_seq_id = $at_seq_id->val; //これで値は問題なくとれているが、intelephenseエラー？どう直せばいい？
+        //実装済の↑が使用できなくなっていた、以下で問題ないか？かつ、insertCheckより上にないとだめそうなので、移動
+        $attention_seq_id = DB::table('top_attention')->max('attention_id') + 1;
 
         try {
             $s_sql =
@@ -454,7 +448,7 @@ SQL;
 									modify_ts
 						)
 					   values(
-									:attention_detail_id, 
+									:attention_detail_id, -- attention_detail_seq.nextvalから変更
 									:attention_id,
 									:order_no,
 									:word,
@@ -474,12 +468,14 @@ SQL;
             $jwest_url = $requestAttention['jwest_url'] ?? []; //同上
 
             foreach ($word as $key => $value) {
-                //nextvalの取得、これで大丈夫？
-                $at_detail_seq_id  = $attentionModel->incrementSequence('at_detail_seq_id');
-                $attention_detail_seq_id = $at_detail_seq_id->val; //これで値は問題なくとれているが、intelephenseエラー？どう直せばいい？
+                // //nextvalの取得、これで大丈夫？
+                // $at_detail_seq_id  = $attentionModel->incrementSequence('at_detail_seq_id');
+                // $attention_detail_seq_id = $at_detail_seq_id->val; //これで値は問題なくとれているが、intelephenseエラー？どう直せばいい？
+                //実装済の↑が使用できなくなっていた、以下で問題ないか？
+                $attention_detail_seq_id = DB::table('top_attention_detail')->max('attention_detail_id') + 1;
 
-                $a_start_set_array[] = array(
-                    "attention_detail_id" => $attention_detail_seq_id, //追記,SQL文内変更
+                $a_start_set_array[] = [
+                    "attention_detail_id" => $attention_detail_seq_id, //SQL文内変更のため追記
                     "attention_id" => $attention_seq_id,
                     "order_no" => $key + 1,
                     "word" => $value,
@@ -488,7 +484,7 @@ SQL;
                     "jwest_url" => $jwest_url[$key],
                     "entry_cd"             => $entry_cd,
                     "modify_cd"             => $modify_cd,
-                );
+                ];
                 $a_detail_conditions = $a_start_set_array[$key];
                 DB::update($s_sql, $a_detail_conditions);
             }
@@ -500,9 +496,9 @@ SQL;
         }
     }
 
-    //======================================================================
-    // 表示変更
-    //======================================================================
+    /**
+     * 表示変更
+     */
     public function change()
     {
         try {
@@ -521,17 +517,17 @@ SQL;
             if ($display_flag == 0) {
                 $a_conditions['attention_id']       = $attention_id;
                 $a_conditions['display_flag']     = 1;
-                $guide = $title . 'を再表示に変更しました';
+                $guides[] = $title . 'を再表示に変更しました';
             } else {
                 $a_conditions['attention_id']       = $attention_id;
                 $a_conditions['display_flag']     = 0;
-                $guide = $title . 'を非表示に変更しました';
+                $guides[] = $title . 'を非表示に変更しました';
             }
             DB::update($s_sql, $a_conditions);
 
             //listへ
             session()->put('return_data', $requestAttention);
-            session()->put('guide', $guide);
+            session()->put('guides', $guides);
             return redirect()->route('ctl.brAttention.list');
         } catch (Exception $e) {
             throw $e;

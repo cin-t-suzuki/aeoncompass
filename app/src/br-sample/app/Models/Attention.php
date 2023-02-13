@@ -94,7 +94,7 @@ class Attention extends CommonDBModel
     public function insertCheck($requestAttention)//引数追記
     {
         //??null追記
-        $attention_id = $requestAttention['attention_id'] ?? null;
+        $attention_id = $requestAttention['attention_id'] ?? ''; //nullだと<>の判定でnullしか戻らない
         $title = $requestAttention['title'] ?? null;
         $start_date_year = $requestAttention['start_date_year'] ?? null;
         $start_date_month = $requestAttention['start_date_month'] ?? null;
@@ -138,10 +138,10 @@ class Attention extends CommonDBModel
 				and   attention_id <> :attention_id
 SQL;
 
-        $check_date = array(
+        $check_date = [
             "start_date" => $start_date,
             "attention_id" => $attention_id
-        );
+        ];
         $a_check_date = DB::select($s_sql, $check_date);
 
         if (!empty($a_check_date)) {
@@ -150,7 +150,7 @@ SQL;
         }
 
         //表示方法選択チェック
-        if (!($display_status == 2 or $display_status == 4)) {
+        if (!($display_status == 2 || $display_status == 4)) {
             $a_error_message['irregular_status'] = '表示方法が無効です。';
         }
 

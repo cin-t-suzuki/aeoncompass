@@ -12,8 +12,7 @@
   @section('content')
 
   {{-- メッセージ --}}
-  {{-- content内の書き換えあっている？ --}}
-  @include('ctl.common.message', $messages)
+  @include('ctl.common.message')
 
    <hr class="contents-margin" />
 
@@ -29,7 +28,7 @@
   {{-- 入力フォーム --}}
   {!! Form::open(['route' => ['ctl.brAttention.update'], 'method' => 'post']) !!} 
       <h2 style="color:#444">注目編集画面</h2>
-   <input type="hidden" name="attention_id" value="{{$views->form_params['attention_id']}}">
+   <input type="hidden" name="attention_id" value="{{$form_params['attention_id']}}">
     @include('ctl.brAttention._edit_brattention_message')
     <hr class="contents-margin" />
     <input type="submit" style="width:80px; height: 35px; border-radius: 4px; background-color: #c3d825" value="変更">

@@ -17,8 +17,7 @@
 
     {{--削除でいい？ <hr class="contents-margin" /> --}}
     {{-- メッセージ --}}
-    {{-- content内の書き換えあっている？ --}}
-    @include('ctl.common.message', $messages)
+    @include('ctl.common.message')
 
     </div>
     <div style="width:960px;">
@@ -47,17 +46,17 @@
           <th style="text-align: center">プレビュー</th>
           <th style="text-align: center">更新日時</th>
       </tr>
-    @foreach ($views->message_list as $message_list)
+    @foreach ($message_list as $message_list)
       <tr>
-          <td nowrap @if ($message_list->display_flag == 0) style="background: #aaa" @elseif ($views->now_display_attention->attention_id == $message_list->attention_id) style="background: #F6FEC0" @endif>@if ($views->now_display_attention->attention_id == $message_list->attention_id)<div align="center" style="color:#FF0000" >★現在表示中★</div><br>@endif{{$message_list->start_date}} ～</td>
-          <td @if ($message_list->display_flag == 0) style="background: #aaa" @elseif ($views->now_display_attention->attention_id == $message_list->attention_id) style="background: #F6FEC0" @endif>{{strip_tags($message_list->title)}}</td>
-          <td @if ($message_list->display_flag == 0) style="background: #aaa" @elseif ($views->now_display_attention->attention_id == $message_list->attention_id) style="background: #F6FEC0" @endif>
+          <td nowrap @if ($message_list->display_flag == 0) style="background: #aaa" @elseif ($now_display_attention->attention_id == $message_list->attention_id) style="background: #F6FEC0" @endif>@if ($now_display_attention->attention_id == $message_list->attention_id)<div align="center" style="color:#FF0000" >★現在表示中★</div><br>@endif{{$message_list->start_date}} ～</td>
+          <td @if ($message_list->display_flag == 0) style="background: #aaa" @elseif ($now_display_attention->attention_id == $message_list->attention_id) style="background: #F6FEC0" @endif>{{strip_tags($message_list->title)}}</td>
+          <td @if ($message_list->display_flag == 0) style="background: #aaa" @elseif ($now_display_attention->attention_id == $message_list->attention_id) style="background: #F6FEC0" @endif>
           @foreach ($message_list->child_value as $child_value)
            <ul>
               <li><a href="{{$child_value['url']}}" target="_blank">{{$child_value['word']}}</a></li>
             </ul>
           @endforeach
-          <td style="text-align:center;@if ($message_list->display_flag == 0)background: #aaa @elseif ($views->now_display_attention->attention_id == $message_list->attention_id)background: #F6FEC0 @endif">
+          <td style="text-align:center;@if ($message_list->display_flag == 0)background: #aaa @elseif ($now_display_attention->attention_id == $message_list->attention_id)background: #F6FEC0 @endif">
             {!! Form::open(['route' => ['ctl.brAttention.edit'], 'method' => 'get']) !!} 
               <input type="hidden" name="attention_id"      value="{{$message_list->attention_id}}" />
               <input type="hidden" name="send_edit" value= 1 />
@@ -75,14 +74,14 @@
               @endif
             {!! Form::close() !!}
           </td>
-          <td style="text-align:center;@if ($message_list->display_flag == 0)background: #aaa @elseif ($views->now_display_attention->attention_id == $message_list->attention_id)background: #F6FEC0 @endif">
+          <td style="text-align:center;@if ($message_list->display_flag == 0)background: #aaa @elseif ($now_display_attention->attention_id == $message_list->attention_id)background: #F6FEC0 @endif">
             {{--書き換えあっている？ <p><a href= @if ($v->config->environment->status == "product") "http://www.bestrsv.com/rsv/"
               @else "http://www.dev.bestrsv.com/rsv/"@endif target="_blank">>></a></p> --}}
             {{-- TODO TOPページは動的。画面完成後にこちらにURL要設定。 --}}
             <p><a href= @if(App::environment('product')) ""
               @else "" @endif target="_blank">>></a></p>
           </td>
-          <td nowrap @if ($message_list->display_flag == 0) style="background: #aaa" @elseif ($views->now_display_attention->attention_id == $message_list->attention_id) style="background: #F6FEC0" @endif>@include ('ctl.common._date',['timestamp' => $message_list->modify_ts , 'format' => 'ymdhi'])</td>
+          <td nowrap @if ($message_list->display_flag == 0) style="background: #aaa" @elseif ($now_display_attention->attention_id == $message_list->attention_id) style="background: #F6FEC0" @endif>@include ('ctl.common._date',['timestamp' => $message_list->modify_ts , 'format' => 'ymdhi'])</td>
       </tr>
     @endforeach
     </table>
