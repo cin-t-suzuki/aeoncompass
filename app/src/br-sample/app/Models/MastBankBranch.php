@@ -1,10 +1,10 @@
 <?php
 
 namespace App\Models;
+
 use App\Models\common\CommonDBModel;
 use App\Models\common\ValidationColumn;
 use Illuminate\Support\Facades\DB;
-
 
 /**
  * 銀行支店マスタ
@@ -12,17 +12,18 @@ use Illuminate\Support\Facades\DB;
 class MastBankBranch extends CommonDBModel
 {
     protected $table = "mast_bank_branch";
+
     // カラム
-    public string $COL_BANK_CD = "bank_cd";
+    public string $COL_BANK_CD        = "bank_cd";
     public string $COL_BANK_BRANCH_CD = "bank_branch_cd";
     public string $COL_BANK_BRANCH_NM = "bank_branch_nm";
     public string $COL_BANK_BRANCH_KN = "bank_branch_kn";
 
-
     /**
      * コンストラクタ
      */
-    function __construct(){
+    function __construct()
+    {
         // カラム情報の設定
         $colArr[] = new ValidationColumn();
         $colArr[0]->setColumnName($this->COL_BANK_CD, "銀行コード")->require()->notHalfKana()->length(4, 4);
@@ -38,15 +39,16 @@ class MastBankBranch extends CommonDBModel
     /**
      * 主キーで取得
      */
-    public function selectByKey($bankCd, $bankBranchCd){
+    public function selectByKey($bankCd, $bankBranchCd)
+    {
         $data = $this->where("bank_cd", $bankCd)->where("bank_branch_cd", $bankBranchCd)->get();
-        if(!is_null($data) && count($data) > 0){
-            return array(
-                "bank_cd" => $data[0]->BANK_CD,
+        if (!is_null($data) && count($data) > 0) {
+            return [
+                "bank_cd"        => $data[0]->BANK_CD,
                 "bank_branch_cd" => $data[0]->bank_branch_cd,
                 "bank_branch_nm" => $data[0]->bank_branch_nm,
                 "bank_branch_kn" => $data[0]->bank_branch_kn,
-            );
+            ];
         }
         return null;
     }
@@ -54,17 +56,18 @@ class MastBankBranch extends CommonDBModel
     /**
      * 銀行コードで取得
      */
-    public function selectByBankCd($bankCd){
+    public function selectByBankCd($bankCd)
+    {
         $data = $this->where("bank_cd", $bankCd)->orderBy("bank_branch_cd", "asc")->get();
         $rtnArr = [];
-        if(!is_null($data) && count($data) > 0){
-            foreach($data as $row){
-                $rtnArr[] = array(
-                    "bank_cd" => $row->bank_cd,
+        if (!is_null($data) && count($data) > 0) {
+            foreach ($data as $row) {
+                $rtnArr[] = [
+                    "bank_cd"        => $row->bank_cd,
                     "bank_branch_cd" => $row->bank_branch_cd,
                     "bank_branch_nm" => $row->bank_branch_nm,
                     "bank_branch_kn" => $row->bank_branch_kn,
-                );
+                ];
             }
         }
         return $rtnArr;
@@ -73,19 +76,20 @@ class MastBankBranch extends CommonDBModel
     /**
      * 新規登録(1件)
      */
-    public function singleInsert($con, $data){
+    public function singleInsert($con, $data)
+    {
         // 重複チェック
         $cnt = $this->where($this->COL_BANK_CD, $data[$this->COL_BANK_CD])
             ->where($this->COL_BANK_BRANCH_CD, $data[$this->COL_BANK_BRANCH_CD])
             ->count();
-        if($cnt > 0){
+        if ($cnt > 0) {
             return "ご指定の支店コードは既に存在しています";
         }
         // 支店名称（カナ）はカタカナに変換
         $data[$this->COL_BANK_BRANCH_KN] = trim(mb_convert_kana($data[$this->COL_BANK_BRANCH_KN], 'CKVAs'));
 
         $result = $con->table($this->table)->insert($data);
-        if(!$result){
+        if (!$result) {
             return "登録に失敗しました";
         }
         return "";
@@ -94,12 +98,13 @@ class MastBankBranch extends CommonDBModel
     /**
      * 更新(1件)
      */
-    public function singleUpdate($con, $bankCd, $bankBranchCd, $data){
+    public function singleUpdate($con, $bankCd, $bankBranchCd, $data)
+    {
         // 支店名称（カナ）はカタカナに変換
         $data[$this->COL_BANK_BRANCH_KN] = trim(mb_convert_kana($data[$this->COL_BANK_BRANCH_KN], 'CKVAs'));
 
         $result = $con->table($this->table)->where("bank_cd", $bankCd)->where("bank_branch_cd", $bankBranchCd)->update($data);
-        if(!$result){
+        if (!$result) {
             return "更新に失敗しました";
         }
         return "";
@@ -107,12 +112,12 @@ class MastBankBranch extends CommonDBModel
 
     /**
      * 独自のバリデーション
-	 *   支店名称（カナ）
+     *   支店名称（カナ）
      */
-    protected function bankBranchKnValidate($value){
-        if (mb_strlen(mb_convert_kana($value, 'hkas')) > 15 ) {
+    protected function bankBranchKnValidate($value)
+    {
+        if (mb_strlen(mb_convert_kana($value, 'hkas')) > 15) {
             return '支店名称（カナ）は、半角カナ文字にしたときに15文字以内になるように入力してください。';
         }
     }
-
 }

@@ -86,11 +86,6 @@ Route::post('/ctl/brsupervisor/createhotel', [\App\Http\Controllers\ctl\Brsuperv
 Route::post('/ctl/brsupervisor/deletehotel', [\App\Http\Controllers\ctl\BrsupervisorController::class,'deletehotel'])->name('ctl.brsupervisor.deletehotel'); 
 Route::post('/ctl/brsupervisor/edit', [\App\Http\Controllers\ctl\BrsupervisorController::class,'edit'])->name('ctl.brsupervisor.edit'); 
 
-
-
-	Route::get('/brpartnercustomer/', 'BrsupervisorController@index')->name('brsupervisor.index');
-	
-
 // 予約通知ＦＡＸ広告 掲載文章
 Route::post('/ctl/brfaxPr/edit', [\App\Http\Controllers\ctl\BrfaxPrController::class, 'edit'])->name('ctl.brfaxPr.edit');
 Route::post('/ctl/brfaxPr/update', [\App\Http\Controllers\ctl\BrfaxPrController::class, 'update'])->name('ctl.brfaxPr.update');
@@ -116,6 +111,10 @@ Route::match(['get', 'post'], '/ctl/htlHotelCancel/index/'      , function(){ re
 Route::match(['get', 'post'], '/ctl/htlHotelReceipt/index/'     , function(){ return 'TODO:'; })->name('ctl.htl_hotel_receipt.index');
 Route::match(['get', 'post'], '/ctl/htlBathTax/'                , function(){ return 'TODO:'; })->name('ctl.htl_bath_tax.index');
 
+// 予約通知ＦＡＸ広告 掲載文章
+Route::post('/ctl/brfaxPr/edit', [\App\Http\Controllers\ctl\BrfaxPrController::class, 'edit'])->name('ctl.brfaxPr.edit');
+Route::post('/ctl/brfaxPr/update', [\App\Http\Controllers\ctl\BrfaxPrController::class, 'update'])->name('ctl.brfaxPr.update');
+Route::get('/ctl/brfaxPr/show', [\App\Http\Controllers\ctl\BrfaxPrController::class, 'show'])->name('ctl.brfaxPr.show');
 
 // 施設情報
 Route::match(['get','post'], '/ctl/brhotelInfo/show', [\App\Http\Controllers\ctl\HtlhotelInfoController::class, 'show'])->name('ctl.htlhotelInfo.show');

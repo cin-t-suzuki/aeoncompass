@@ -17,7 +17,8 @@ class HotelRate extends CommonDBModel
 	use Traits;
 
 	protected $table = "hotel_rate";
-	// カラム
+
+    // カラム
 	public string $COL_HOTEL_CD = "hotel_cd";
 	public string $COL_BRANCH_NO = "branch_no";
 	public string $COL_ACCEPT_S_YMD = "accept_s_ymd";
@@ -153,7 +154,7 @@ class HotelRate extends CommonDBModel
 	public function selectByHotelCd($hotelCd){
 		$data = $this->where($this->COL_HOTEL_CD, $hotelCd)->orderBy($this->COL_ACCEPT_S_YMD,'desc')->get();
 
-		$result = null;
+        $result = [];
 
 		if(!empty($data) && count($data) > 0){
 			foreach($data as $row){

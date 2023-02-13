@@ -1,10 +1,10 @@
 <?php
 
 namespace App\Models;
+
 use App\Models\common\CommonDBModel;
 use App\Models\common\ValidationColumn;
 use Illuminate\Support\Facades\DB;
-
 
 /**
  * 銀行マスタ
@@ -17,11 +17,11 @@ class MastBank extends CommonDBModel
     public string $COL_BANK_NM = "bank_nm";
     public string $COL_BANK_KN = "bank_kn";
 
-
     /**
      * コンストラクタ
      */
-    function __construct(){
+    function __construct()
+    {
         // カラム情報の設定
         $colBankCd = new ValidationColumn();
         $colBankCd->setColumnName($this->COL_BANK_CD, "銀行コード")->require()->notHalfKana()->length(4, 4);
@@ -35,14 +35,15 @@ class MastBank extends CommonDBModel
     /**
      * 主キーで取得
      */
-    public function selectByKey($bankCd){
+    public function selectByKey($bankCd)
+    {
         $data = $this->where("bank_cd", $bankCd)->get();
-        if(!is_null($data) && count($data) > 0){
-            return array(
+        if (!is_null($data) && count($data) > 0) {
+            return [
                 "bank_cd" => $data[0]->bank_cd,
                 "bank_nm" => $data[0]->bank_nm,
                 "bank_kn" => $data[0]->bank_kn,
-            );
+            ];
         }
         return null;
     }
@@ -55,55 +56,56 @@ class MastBank extends CommonDBModel
         // スペースで区切って検索する
         $keywordArr = preg_split('/ |　/', $keyword);
         $wheres = "";
-        for ($i=0; $i < count($keywordArr); $i++) {
+        for ($i = 0; $i < count($keywordArr); $i++) {
             $orgKey = trim($keywordArr[$i]);
             $knKey = trim(mb_convert_kana($orgKey, 'CKVAs'));
             if (!empty($orgKey)) {
-                $wheres .= <<<SQL
-                and	(
-                    q1.bank_cd like '%{$orgKey}%' or q1.bank_cd like '%{$knKey}%'
-                    or q1.bank_nm like '%{$orgKey}%' or q1.bank_nm like '%{$knKey}%'
-                    or q1.bank_kn like '%{$orgKey}%' or q1.bank_kn like '%{$knKey}%'
-                    or q2.bank_branch_cd like '%{$orgKey}%' or q2.bank_branch_cd like '%{$knKey}%'
-                    or q2.bank_branch_nm like '%{$orgKey}%' or q2.bank_branch_nm like '%{$knKey}%'
-                    or q2.bank_branch_kn like '%{$orgKey}%' or q2.bank_branch_kn like '%{$knKey}%'
-                )
+                $wheres = <<<SQL
+                    and (
+                        q1.bank_cd like '%{$orgKey}%' or q1.bank_cd like '%{$knKey}%'
+                        or q1.bank_nm like '%{$orgKey}%' or q1.bank_nm like '%{$knKey}%'
+                        or q1.bank_kn like '%{$orgKey}%' or q1.bank_kn like '%{$knKey}%'
+                        or q2.bank_branch_cd like '%{$orgKey}%' or q2.bank_branch_cd like '%{$knKey}%'
+                        or q2.bank_branch_nm like '%{$orgKey}%' or q2.bank_branch_nm like '%{$knKey}%'
+                        or q2.bank_branch_kn like '%{$orgKey}%' or q2.bank_branch_kn like '%{$knKey}%'
+                    )
                 SQL;
             }
         }
         // キーワード
-        if(empty($wheres)){
+        if (empty($wheres)) {
             throw new \Exception('検索キーワードを設定してください。');
         }
 
         $query = <<<SQL
-        select
-            q1.bank_cd,
-            q1.bank_nm,
-            q1.bank_kn,
-            q2.bank_branch_cd,
-            q2.bank_branch_nm,
-            q2.bank_branch_kn
-        from
-            mast_bank q1
-            left join mast_bank_branch q2 on q1.bank_cd = q2.bank_cd
-        where
-            1 = 1
-            {$wheres}
-        order by
-            q1.bank_kn,
-            q2.bank_branch_kn
+            select
+                q1.bank_cd,
+                q1.bank_nm,
+                q1.bank_kn,
+                q2.bank_branch_cd,
+                q2.bank_branch_nm,
+                q2.bank_branch_kn
+            from
+                mast_bank q1
+                left join mast_bank_branch q2 on q1.bank_cd = q2.bank_cd
+            where
+                1 = 1
+                {$wheres}
+            order by
+                q1.bank_kn,
+                q2.bank_branch_kn
         SQL;
 
         // データを取得
         $result = null;
         $data = DB::select($query);
-        if(!empty($data) && count($data) > 0){
-            foreach($data as $row){
+        if (!empty($data) && count($data) > 0) {
+            foreach ($data as $row) {
                 $result[$row->bank_cd]["bank"] = [
                     "bank_cd" => $row->bank_cd,
                     "bank_nm" => $row->bank_nm,
-                    "bank_kn" => $row->bank_kn];
+                    "bank_kn" => $row->bank_kn
+                ];
                 if (empty($row->bank_branch_cd)) {
                     $result[$row->bank_cd]["branch"] = [];
                 } else {
@@ -122,17 +124,18 @@ class MastBank extends CommonDBModel
     /**
      * 新規登録(1件)
      */
-    public function singleInsert($con, $data){
+    public function singleInsert($con, $data)
+    {
         // 重複チェック
         $cnt = $this->where($this->COL_BANK_CD, $data[$this->COL_BANK_CD])->count();
-        if($cnt > 0){
+        if ($cnt > 0) {
             return "ご指定の銀行コードは既に存在しています";
         }
         // 銀行名称（カナ）はカタカナに変換
         $data[$this->COL_BANK_KN] = trim(mb_convert_kana($data[$this->COL_BANK_KN], 'CKVAs'));
 
         $result = $con->table($this->table)->insert($data);
-        if(!$result){
+        if (!$result) {
             return "登録に失敗しました";
         }
         return "";
@@ -141,12 +144,13 @@ class MastBank extends CommonDBModel
     /**
      * 更新(1件)
      */
-    public function singleUpdate($con, $bankCd, $data){
+    public function singleUpdate($con, $bankCd, $data)
+    {
         // 銀行名称（カナ）はカタカナに変換
         $data[$this->COL_BANK_KN] = trim(mb_convert_kana($data[$this->COL_BANK_KN], 'CKVAs'));
 
         $result = $con->table($this->table)->where("bank_cd", $bankCd)->update($data);
-        if(!$result){
+        if (!$result) {
             return "更新に失敗しました";
         }
         return "";
@@ -154,12 +158,12 @@ class MastBank extends CommonDBModel
 
     /**
      * 独自のバリデーション
-	 *   銀行名称（カナ）
+     *   銀行名称（カナ）
      */
-    protected function bankKnValidate($value){
-        if (mb_strlen(mb_convert_kana($value, 'hkas')) > 15 ) {
+    protected function bankKnValidate($value)
+    {
+        if (mb_strlen(mb_convert_kana($value, 'hkas')) > 15) {
             return '銀行名称（カナ）は、半角カナ文字にしたときに15文字以内になるように入力してください';
         }
     }
-
 }

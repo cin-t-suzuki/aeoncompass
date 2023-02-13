@@ -5,13 +5,22 @@
 {{-- TODO: なぞ xml <?xml version="1.0" encoding="UTF-8"?> --}}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">{{-- TODO: なぞ doctype 宣言 --}}
 @php
+    // TODO: 他の guard で認証しているとき、これを追加
+    // 他の guard: hotel(施設管理者), supervisor(施設統括), partner, affiliate
+    // MEMO: 移植元では、 lib\Br\Models\Authorize\Operator.php の is_login() で判定
+    $isLogin = Auth::guard('staff')->check();
+
+    $isStaff = Auth::guard('staff')->check();
+    if ($isStaff) {
+        $staffName = Auth::guard('staff')->user()->staffInfo->staff_nm;
+    } else {
+        $staffName = 'TODO: ロール未実装';
+    }
+
     // TODO: 認証関連、環境変数関連
     $v = new \stdClass;
     $v->user = new \stdClass;
     $v->user->operator = new \stdClass;
-    $v->user->operator->is_login = true;
-    $v->user->operator->is_staff = true;
-    $v->user->operator->staff_nm = 'staff_name_val';
     $v->env = [
         'controller'        => "brtop",
         'action'            => "index",
@@ -30,7 +39,7 @@
         <meta http-equiv="Cache-Control" content="no-cache" />
         <meta http-equiv="Expires" content="0" />
         <meta name="robots" content="none" />
-        {{-- TODO: jquery 存在確認 --}}<script type="text/javascript" src="/scripts/jquery.js"></script>
+        {{-- TODO: jquery 存在確認 --}}<script type="text/javascript" src="{{ asset('/js/jquery.js') }}"></script>
         <title>
             STREAM社内管理 @yield('title')
         </title>
@@ -54,9 +63,9 @@
                         <div id="system-name">STREAM社内管理</div>
                         <div id="main-menu">
                             {{-- TODO: route() --}}
-                            <form action="{{ $v->env['source_path'] }}{{ $v->env['module'] }}/brtop/" method="post">
+                            <form action="{{ route('ctl.br.top') }}" method="post">
                                 <div>
-                                    <input type="submit" value="メインメニュー" />担当：{{ $v->user->operator->staff_nm }}
+                                    <input type="submit" value="メインメニュー" />担当：{{ $staffName }}
                                 </div>
                             </form>
                         </div>
@@ -82,8 +91,8 @@
                 <div class="footer-br-contents">
                     <div id="logout">
                         <div>
-                            @if ('$v->user->operator->is_login()' and '$v->user->operator->is_staff()') {{-- TODO オブジェクトが実行されたら修正（単なる文字列は true判定） --}}
-                                @if ($v->env['controller'] === "brtop" and $v->env['action'] === "index")
+                            @if ($isLogin && $isStaff)
+                                @if ($v->env['controller'] === "brtop" && $v->env['action'] === "index")
                                     <form method="post" action="{{ $v->env['source_path'] }}{{ $v->env['module'] }}/logout/">
                                         <div><input type="submit" value="ログアウト" /></div>
                                     </form>

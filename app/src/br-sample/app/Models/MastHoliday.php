@@ -1,54 +1,61 @@
 <?php
 
 namespace App\Models;
+
 use App\Models\common\CommonDBModel;
 use App\Models\common\ValidationColumn;
 use Illuminate\Support\Facades\DB;
-
 
 /**
  * 祝祭日マスタ
  */
 class MastHoliday extends CommonDBModel
 {
-	protected $table = "mast_holiday";
-	// カラム
-	public string $COL_HOLIDAY = "holiday";
-	public string $COL_HOLIDAY_NM = "holiday_nm";
+    protected $table = "mast_holiday";
+    // カラム
+    public string $COL_HOLIDAY      = "holiday";
+    public string $COL_HOLIDAY_NM   = "holiday_nm";
 
-	/**
-	 * コンストラクタ
-	 */
-	function __construct(){
-		// カラム情報の設定
-		$colHoliday = new ValidationColumn();
-		$colHoliday->setColumnName($this->COL_HOLIDAY, "祝祭日")->require()->correctDate();
-		$colHolidayNm = new ValidationColumn();
-		$colHolidayNm->setColumnName($this->COL_HOLIDAY_NM, "祝祭日名称")->notHalfKana()->length(0, 64);
-		parent::setColumnDataArray([$colHoliday, $colHolidayNm]);
-	}
+    /**
+     * コンストラクタ
+     */
+    public function __construct()
+    {
+        // カラム情報の設定
+        $colHoliday = new ValidationColumn();
+        $colHoliday->setColumnName($this->COL_HOLIDAY, "祝祭日")->require()->correctDate();
+        $colHolidayNm = new ValidationColumn();
+        $colHolidayNm->setColumnName($this->COL_HOLIDAY_NM, "祝祭日名称")->notHalfKana()->length(0, 64);
+        parent::setColumnDataArray([$colHoliday, $colHolidayNm]);
+    }
 
-	/* 祝日を判断します。
-	 * $date = Y-m-d
-	 * is_holiday
-	 */
-	public function isHoliday($arrayDate)
-	{
-		$date=$arrayDate['holiday'];
-		$s_sql = <<<SQL
-			SELECT  holiday, holiday_nm
-			FROM    mast_holiday
-			WHERE DATE_FORMAT (holiday , '%Y-%m-%d') = '{$date}'
-			SQL;
+    /**
+     * 祝日を判断します。
+     * $date = Y-m-d
+     * is_holiday
+     *
+     * HACK: refactor 非直感的な挙動のメソッド
+     * isXXX であれば真偽値が返るべき
+     */
+    public function isHoliday($arrayDate)
+    {
+        $date = $arrayDate['holiday'];
+        $sql = <<<SQL
+            select
+                holiday,
+                holiday_nm
+            from
+                mast_holiday
+            where
+                date_format(holiday, '%Y-%m-%d') = :date
+        SQL;
 
-		$data = DB::select($s_sql);
+        $data = DB::select($sql, ['date' => $date]);
 
-		if( empty($data) || count($data) <= 0 ){
-			$data = array();
-		}else{
-			return $data[0];//data[0]->holiday_nm で取得
-		}
-	}
-
-
+        if (empty($data) || count($data) <= 0) {
+            $data = [];
+        } else {
+            return $data[0]; //data[0]->holiday_nm で取得
+        }
+    }
 }
