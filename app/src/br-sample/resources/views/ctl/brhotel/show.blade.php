@@ -1,16 +1,16 @@
+@extends('ctl.common.base')
 @section('title', '詳細変更')
-@include('ctl.common.base')
 
 @inject('service', 'App\Http\Controllers\ctl\BrbroadcastMessageController')
 
+@section('page_blade')
+
 {{-- メッセージ --}}
-@section('message')
 @include('ctl.common.message', $messages)
 
 <table border="0" cellspacing="0" cellpadding="4">
 	<td valign="top">
 		{{-- 施設情報詳細 --}}
-		@section('hotel_info')
 		@include('ctl.brhotel._hotel_info',
 			["hotel" => $views->hotel,
 			"mast_pref" => $views->mast_pref,
@@ -31,7 +31,7 @@
 						<input type="hidden" name="target_cd" value="{{strip_tags($views->target_cd)}}">
 						{!! Form::close() !!}
 					@else
-						{!! Form::open(['route' => ['ctl.brhotel.new'], 'method' => 'post']) !!}
+						{!! Form::open(['route' => ['ctl.br_hotel.new'], 'method' => 'get']) !!}
 						<td nowrap><input type="submit" value=" 登録"></td>
 						<input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($views->target_cd)}">
 						{!! Form::close() !!}
@@ -298,5 +298,4 @@
 	</small>
 </div>
 
-@section('title', 'footer')
-@include('ctl.common.footer')
+@endsection
