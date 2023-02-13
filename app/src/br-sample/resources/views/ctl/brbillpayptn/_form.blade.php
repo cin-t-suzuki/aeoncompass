@@ -1,4 +1,4 @@
-{!! Form::open(['route' => ['ctl.brbillpayptn.list'], 'method' => 'post']) !!}
+{!! Form::open(['route' => ['ctl.brbillpayptn.list'], 'method' => 'get']) !!}
 <p>
 <table class="br-detail-list">
   <tr>

@@ -272,16 +272,6 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
     Route::get('/brpartnersite/edit', 'BrPartnerSiteController@edit')->name('ctl.brPartnerSite.edit');
     Route::post('/brpartnersite/modify', 'BrPartnerSiteController@modify')->name('ctl.brPartnerSite.modify');
 
-    // パートナー精算確認
-    Route::match(['get', 'post'], '/brbillpayptn/list', 'BrBillPayPtnController@list')->name('ctl.brbillpayptn.list');
-    Route::match(['get', 'post'], '/brbillpayptn/customer', 'BrBillPayPtnController@customer')
-        ->name('ctl.brbillpayptn.customer');
-    Route::match(['get', 'post'], '/brbillpayptn/detail', 'BrBillPayPtnController@detail')
-        ->name('ctl.brbillpayptn.detail');
-    Route::post('/brbillpayptn/csv', 'BrBillPayPtnController@csv')->name('ctl.brbillpayptn.csv');
-    Route::post('/brbillpayptn/bookcsv', 'BrBillPayPtnController@bookcsv')->name('ctl.brbillpayptn.bookcsv');
-    Route::post('/brbillpayptn/book', 'BrBillPayPtnController@book')->name('ctl.brbillpayptn.book');
-
     // 重点表示プラン
     Route::match(['get', 'post'], '/list', 'BrroomPlanPriority2Controller@list')
         ->name('ctl.brroomplanpriority2.list'); //表示
@@ -302,3 +292,17 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
     Route::post('/brhoteladvert2009000400/update', 'BrhotelAdvert2009000400Controller@update')
         ->name('ctl.brhoteladvert2009000400.update'); //更新
 });
+
+// パートナー精算確認
+Route::get('/ctl/brbillpayptn/list', [\App\Http\Controllers\ctl\BrBillPayPtnController::class, 'list'])
+    ->name('ctl.brbillpayptn.list');
+Route::get('/ctl/brbillpayptn/customer', [\App\Http\Controllers\ctl\BrBillPayPtnController::class, 'customer'])
+    ->name('ctl.brbillpayptn.customer');
+Route::get('/ctl/brbillpayptn/detail', [\App\Http\Controllers\ctl\BrBillPayPtnController::class, 'detail'])
+    ->name('ctl.brbillpayptn.detail');
+Route::post('/ctl/brbillpayptn/csv', [\App\Http\Controllers\ctl\BrBillPayPtnController::class, 'csv'])
+    ->name('ctl.brbillpayptn.csv');
+Route::post('/ctl/brbillpayptn/bookcsv', [\App\Http\Controllers\ctl\BrBillPayPtnController::class, 'bookcsv'])
+    ->name('ctl.brbillpayptn.bookcsv');
+Route::post('/ctl/brbillpayptn/book', [\App\Http\Controllers\ctl\BrBillPayPtnController::class, 'book'])
+    ->name('ctl.brbillpayptn.book');

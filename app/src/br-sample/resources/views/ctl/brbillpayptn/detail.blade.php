@@ -89,7 +89,7 @@
 
   <hr class="contents-margin" />
 
-  {{ Form::open(['route' => 'ctl.brbillpayptn.csv', 'method' => 'post', 'target' => "_blank"]) }}
+  {{ Form::open(['route' => 'ctl.brbillpayptn.csv', 'method' => 'get', 'target' => "_blank"]) }}
     <input type="submit" value="ＣＳＶデータダウンロード" />
     {{-- Getパラメータ作成 --}}
     {{-- {assign var=get_params value=''} --}}
@@ -102,7 +102,7 @@
   <hr class="contents-margin" />
 
   {{-- 精算実績の確認への遷移 --}}
-  {{ Form::open(['route' => 'ctl.brbillpayptn.customer', 'method' => 'post']) }}
+  {{ Form::open(['route' => 'ctl.brbillpayptn.customer', 'method' => 'get']) }}
     <div class="ptn-back-main-menu-form">
       <input type="hidden" name="billpay_ym"     value="{{$views->form_params['billpay_ym']}}" />
       <input type="hidden" name="customer_id"     value="{{$views->form_params['customer_id']}}" />

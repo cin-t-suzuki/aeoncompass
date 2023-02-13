@@ -43,7 +43,7 @@
   {{-- 予約明細ＣＳＶ --}}
   @if (!$service->is_empty($views->book))
   <hr class="contents-margin" />
-  {{ Form::open(['route' => 'ctl.brbillpayptn.csv', 'method' => 'post', 'target' => "_blank"]) }}
+  {{ Form::open(['route' => 'ctl.brbillpayptn.csv', 'method' => 'get', 'target' => "_blank"]) }}
     <input type="submit" value="ＣＳＶデータダウンロード（予約明細）" />
     <input type="hidden" name="customer_id"    value="{{$views->customer['customer_id']}}" />
     <input type="hidden" name="billpay_ptn_cd" value="{{$views->customer['billpay_ptn_cd']}}" />
@@ -57,7 +57,7 @@
   <hr class="contents-margin" />
 
   {{-- パートナー精算一覧への遷移 --}}
-  {{ Form::open(['route' => 'ctl.brbillpayptn.list', 'method' => 'post']) }}
+  {{ Form::open(['route' => 'ctl.brbillpayptn.list', 'method' => 'get']) }}
     <div class="ptn-back-main-menu-form">
       <input type="hidden" name="year"     value="{{substr($views->form_params['billpay_ym'],0,4)}}" />
       <input type="hidden" name="month"    value="{{substr($views->form_params['billpay_ym'],5,2)}}" />
