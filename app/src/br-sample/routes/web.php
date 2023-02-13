@@ -21,6 +21,7 @@ Route::get('/', function () {
 /**
  * 宿泊予約
  */
+Route::get('/rsv/auth', [\App\Http\Controllers\rsv\AuthController::class, 'index'])->name('rsv.auth.login');
 Route::namespace('App\Http\Controllers\rsv')->prefix('rsv')->group(function () {
     // 施設情報
     Route::controller(HotelController::class)->prefix("hotel")->group(function () {
