@@ -28,6 +28,9 @@ Route::namespace('App\Http\Controllers\rsv')->prefix('rsv')->group(function () {
     });
 });
 
+/**
+ * 管理システム 認証関連
+ */
 Route::middleware(['guest:staff', 'guest:hotel' /* TODO: 各ロールについて guest ミドルウェアを追加 */])->group(function () {
     Route::get('/ctl/brLogin', [\App\Http\Controllers\ctl\BrLoginController::class, 'index'])->name('ctl.br.login');
     Route::post('/ctl/brLogin', [\App\Http\Controllers\ctl\BrLoginController::class, 'login'])->name('ctl.br.login.authenticate');
