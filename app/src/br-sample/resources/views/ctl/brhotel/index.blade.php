@@ -1,8 +1,9 @@
+@extends('ctl.common.base')
 @section('title', '施設情報メイン')
-@include('ctl.common.base')
+
+@section('page_blade')
 
 {{-- メッセージ --}}
-@section('message')
 @include('ctl.common.message', $messages)
 
 <script language="JavaScript" type="text/javascript">
@@ -32,30 +33,30 @@
 {{--TODO 精算先 画面遷移--}}
 <table border="1" cellspacing="0" cellpadding="5">
 	<!--TODO form action="{$v->env.source_path}{$v->env.module}/brhotel/new/" method="post"-->
-	{!! Form::open(['route' => ['ctl.brhotel.new'], 'method' => 'post']) !!}
+	{{ Form::open(['route' => ['ctl.br_hotel.new'], 'method' => 'get']) }}
 	<tr>
 	<td bgcolor="#EEFFEE">宿泊施設（発番処理）</td>
 	<td bgcolor="#EEFFEE">新規登録</td>
 	<td><input type="submit" value="施設登録"></td>
 	</tr>
-	{!! Form::close() !!}
+	{{ Form::close() }}
 </table>
 
 <br />
 <table border="1" cellspacing="0" cellpadding="4">
 	<tr>
-	<form method="post" action="{$v->env.source_path}{$v->env.module}/brcustomer/list/">
+	{!! Form::open(['route' => ['ctl.brCustomer.list'], 'method' => 'post']) !!}
 		<td nowrap bgcolor="#EEFFEE">精算先の登録・変更</td>
 		<td nowrap>
 		<input name="keywords" size="20" maxlength="30" type="text">
 		<input name="i_btn" value="設定" type="submit">
 		</td>
-	</form>
-	<form method="post" action="{$v->env.source_path}{$v->env.module}/brcustomer/csv/">
+	{!! Form::close() !!}
+	{!! Form::open(['route' => ['ctl.brCustomer.csv'], 'method' => 'post']) !!}
 		<td nowrap>
 		<input name="i_btn" value="精算先全件CSVダウンロード" type="submit">
 		</td>
-	</form>
+	{!! Form::close() !!}
 	</tr>
 </table>
 
@@ -72,9 +73,7 @@ if(document.getElementById){
 <br />
 
 <style type="text/css">
-<!-- 
  form {margin:0px}
--->
 </style>
 
 <script language="javascript"  type="text/javascript">
@@ -181,6 +180,4 @@ if(document.getElementById){
 		</ul>
 	</div>
 </div>
-
-@section('title', 'footer')
-@include('ctl.common.footer')
+@endsection
