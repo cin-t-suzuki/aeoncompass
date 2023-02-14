@@ -27,7 +27,8 @@ class ValidationColumn
     private $urlCheck = false;               // URLチェック対象
     private $checkInOutTimeCheck = false;          //チェックインとアウトの時刻書式のチェック対象
     private $numberAndUpperAlphabetCheck = false;     // 半角大文字英と数字のみかチェック対象
-
+    private $notFullCharacterCheck = false;   // 全角英数チェック
+    
     private $inputTypeCheck = false;       // 入力チェック対象
     private $inputTypeArray = [];          // 入力可能タイプ
     private $lengthCheck = false;          // 文字数チェック
@@ -307,12 +308,28 @@ class ValidationColumn
     }
 
     /**
-	 * 半角大文字英と数字のみであるかチェック only_number_and_alphabet_shot_upper
-	 */
-	public function numberAndUpperAlphabet(){
-		$this->numberAndUpperAlphabetCheck = true;
-		return $this;
-	}
-	public function isNumberAndUpperAlphabet(){ return $this->numberAndUpperAlphabetCheck; }
+     * 半角大文字英と数字のみであるかチェック only_number_and_alphabet_shot_upper
+     */
+    public function numberAndUpperAlphabet()
+    {
+        $this->numberAndUpperAlphabetCheck = true;
+        return $this;
+    }
+    public function isNumberAndUpperAlphabet()
+    {
+        return $this->numberAndUpperAlphabetCheck;
+    }
 
+    /**
+     * 全角英数チェック
+     */
+    public function notFullCharacter()
+    {
+        $this->notFullCharacterCheck = true;
+        return $this;
+    }
+    public function isNotFullCharacter()
+    {
+        return $this->notFullCharacterCheck;
+    }
 }
