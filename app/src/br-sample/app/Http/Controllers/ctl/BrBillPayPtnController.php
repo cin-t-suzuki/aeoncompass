@@ -52,7 +52,7 @@ class BrBillPayPtnController extends _commonController
         }
 
         // ビューを表示
-        return view('ctl.brbillpayptn.list', [
+        return view('ctl.brBillpayPtn.list', [
             'year'         => $year,
             'month'      => $month,
             'billpayptn' => $billpayptn,
@@ -120,7 +120,7 @@ class BrBillPayPtnController extends _commonController
         }
 
         // ビューを表示
-        return view('ctl.brbillpayptn.customer', [
+        return view('ctl.brBillpayPtn.customer', [
             'form_params'         => $request->all(), //allでいいか？
             // $this->_assign->partner_cd              = $this->_s_partner_cd;//いる？？
             'customer'      => $a_customer,
@@ -198,7 +198,7 @@ class BrBillPayPtnController extends _commonController
         }
 
         // ビューを表示
-        return view('ctl.brbillpayptn.detail', [
+        return view('ctl.brBillpayPtn.detail', [
             'form_params'         => $requestBrBillPayPtn,
             // $this->_assign->partner_cd              = $this->_s_partner_cd; //いる？？
             'customer'      => $a_customer,

@@ -1,6 +1,6 @@
 
 {{--  css  --}}
-@include('ctl.brbillpayptn._css')
+@include('ctl.brBillpayPtn._css')
 
 @inject('service', 'App\Http\Controllers\ctl\BrBillPayPtnController')
 
@@ -17,7 +17,7 @@
   @include('ctl.common.message')
 
     <div style="text-align:left;">
-    @include ('ctl.brbillpayptn._form')
+    @include ('ctl.brBillpayPtn._form')
     </div>
 
     <hr class="contents-margin" />
@@ -40,7 +40,7 @@
         <td style="text-align:center;">
           @if ($service->is_empty($billpayptn['book_path']))未作成 
           @else 
-          {{ Form::open(['route' => 'ctl.brbillpayptn.customer', 'method' => 'get']) }}
+          {{ Form::open(['route' => 'ctl.brBillpayPtn.customer', 'method' => 'get']) }}
             <input type="submit" value=" 表示 ">
             <input type="hidden" name="billpay_ym"       value="{{$billpayptn['billpay_ym']}}" />
             <input type="hidden" name="customer_id"      value="{{$billpayptn['customer_id']}}" />

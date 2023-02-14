@@ -1,5 +1,5 @@
 {{--  css  --}}
-@include('ctl.brbillpayptn._css')
+@include('ctl.brBillpayPtn._css')
 
 @inject('service', 'App\Http\Controllers\ctl\BrBillPayPtnController')
 
@@ -83,7 +83,7 @@
 
   <hr class="contents-margin" />
 
-  {{ Form::open(['route' => 'ctl.brbillpayptn.csv', 'method' => 'get', 'target' => "_blank"]) }}
+  {{ Form::open(['route' => 'ctl.brBillpayPtn.csv', 'method' => 'get', 'target' => "_blank"]) }}
     <input type="submit" value="ＣＳＶデータダウンロード" />
     {{-- Getパラメータ作成 --}}
     {{-- {assign var=get_params value=''} --}}
@@ -96,7 +96,7 @@
   <hr class="contents-margin" />
 
   {{-- 精算実績の確認への遷移 --}}
-  {{ Form::open(['route' => 'ctl.brbillpayptn.customer', 'method' => 'get']) }}
+  {{ Form::open(['route' => 'ctl.brBillpayPtn.customer', 'method' => 'get']) }}
     <div class="ptn-back-main-menu-form">
       <input type="hidden" name="billpay_ym"     value="{{$form_params['billpay_ym'] ?? null}}" />
       <input type="hidden" name="customer_id"     value="{{$form_params['customer_id'] ?? null}}" />

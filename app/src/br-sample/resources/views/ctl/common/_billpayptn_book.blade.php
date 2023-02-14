@@ -100,7 +100,7 @@
         @endif
         <td style="text-align:center;">
           {{-- <form style="margin:0;" method="post" action="{$v->env.source_path}{$v->env.module}/{$v->env.controller}/detail/"> --}}
-          {{ Form::open(['route' => 'ctl.brbillpayptn.detail', 'method' => 'get', 'style' => 'margin:0;']) }}
+          {{ Form::open(['route' => 'ctl.brBillpayPtn.detail', 'method' => 'get', 'style' => 'margin:0;']) }}
             <input type="submit" value="明細" />
             <input type="hidden" name="site_cd"        value="{{$site['site_cd']}}" />
             <input type="hidden" name="customer_id"    value="{{$site['customer_id']}}" />

@@ -1,5 +1,5 @@
 {{--  css  --}}
-@include('ctl.brbillpayptn._css')
+@include('ctl.brBillpayPtn._css')
 
 @inject('service', 'App\Http\Controllers\ctl\BrBillPayPtnController')
 
@@ -41,7 +41,7 @@
   {{-- 予約明細ＣＳＶ --}}
   @if (!$service->is_empty($book))
   <hr class="contents-margin" />
-  {{ Form::open(['route' => 'ctl.brbillpayptn.csv', 'method' => 'get', 'target' => "_blank"]) }}
+  {{ Form::open(['route' => 'ctl.brBillpayPtn.csv', 'method' => 'get', 'target' => "_blank"]) }}
     <input type="submit" value="ＣＳＶデータダウンロード（予約明細）" />
     <input type="hidden" name="customer_id"    value="{{$customer['customer_id']}}" />
     <input type="hidden" name="billpay_ptn_cd" value="{{$customer['billpay_ptn_cd']}}" />
@@ -55,7 +55,7 @@
   <hr class="contents-margin" />
 
   {{-- パートナー精算一覧への遷移 --}}
-  {{ Form::open(['route' => 'ctl.brbillpayptn.list', 'method' => 'get']) }}
+  {{ Form::open(['route' => 'ctl.brBillpayPtn.list', 'method' => 'get']) }}
     <div class="ptn-back-main-menu-form">
       <input type="hidden" name="year"     value="{{substr($form_params['billpay_ym'],0,4)}}" />
       <input type="hidden" name="month"    value="{{substr($form_params['billpay_ym'],5,2)}}" />
