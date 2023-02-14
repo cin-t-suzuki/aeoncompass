@@ -26,7 +26,9 @@ class ValidationColumn
     private $emailsCheck = false;               // メールアドレスの妥当性チェック対象 (カンマ区切りで列挙可)
     private $urlCheck = false;               // URLチェック対象
     private $checkInOutTimeCheck = false;          //チェックインとアウトの時刻書式のチェック対象
+    private $numberAndUpperAlphabetCheck = false;     // 半角大文字英と数字のみかチェック対象
     private $notFullCharacterCheck = false;   // 全角英数チェック
+    private $numberAndAlphabetCheck = false;  // 半角英数のみチェック
     
     private $inputTypeCheck = false;       // 入力チェック対象
     private $inputTypeArray = [];          // 入力可能タイプ
@@ -305,13 +307,43 @@ class ValidationColumn
     {
         return $this->originalValidFunc;
     }
-        
-	/**
-	 * 全角英数チェック
-	 */
-	public function notFullCharacter(){
-		$this->notFullCharacterCheck = true;
-		return $this;
-	}
-	public function isNotFullCharacter(){ return $this->notFullCharacterCheck; }
+
+    /**
+     * 半角大文字英と数字のみであるかチェック only_number_and_alphabet_shot_upper
+     */
+    public function numberAndUpperAlphabet()
+    {
+        $this->numberAndUpperAlphabetCheck = true;
+        return $this;
+    }
+    public function isNumberAndUpperAlphabet()
+    {
+        return $this->numberAndUpperAlphabetCheck;
+    }
+
+    /**
+     * 半角英数のみであるかチェック only_number_and_alphabet
+     */
+    public function numberAndAlphabet()
+    {
+        $this->numberAndAlphabetCheck = true;
+        return $this;
+    }
+    public function isNumberAndAlphabet()
+    {
+        return $this->numberAndAlphabetCheck;
+    }
+
+    /**
+     * 全角英数チェック
+     */
+    public function notFullCharacter()
+    {
+        $this->notFullCharacterCheck = true;
+        return $this;
+    }
+    public function isNotFullCharacter()
+    {
+        return $this->notFullCharacterCheck;
+    }
 }

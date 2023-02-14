@@ -32,9 +32,9 @@ class HotelSupervisorAccount extends CommonDBModel
 	 */
 	function __construct(){
 		$colSupervisorCd = (new ValidationColumn())->setColumnName($this->COL_SUPERVISOR_CD, "施設統括コード")->require()->length(0, 10)->notHalfKana();
-		$colAccountId = (new ValidationColumn())->setColumnName($this->COL_ACCOUNT_ID, "アカウントID")->require()->length(0, 10)->notHalfKana()->notFullCharacter();//全角英数チェック合ってる？
-		$colPassword = (new ValidationColumn())->setColumnName($this->COL_PASSWORD, "パスワード")->require()->length(0, 10)->notHalfKana()->notFullCharacter();//全角英数チェック合ってる？
-		$colAcceptStatus = (new ValidationColumn())->setColumnName($this->COL_ACCEPT_STATUS, "ステータス")->require()->length(0, 1)->intOnly();//TODO パターンチェック必要？カラム説明	0 => '利用不可' 1 => '利用可'
+		$colAccountId = (new ValidationColumn())->setColumnName($this->COL_ACCOUNT_ID, "アカウントID")->require()->length(0, 10)->notHalfKana()->numberAndAlphabet();//半角英数のみかチェック
+		$colPassword = (new ValidationColumn())->setColumnName($this->COL_PASSWORD, "パスワード")->require()->length(0, 10)->notHalfKana()->numberAndAlphabet();//半角英数のみかチェック
+		$colAcceptStatus = (new ValidationColumn())->setColumnName($this->COL_ACCEPT_STATUS, "ステータス")->require()->length(0, 1)->intOnly();
 
 		parent::setColumnDataArray([$colSupervisorCd, $colAccountId,$colPassword,$colAcceptStatus]);
 	}
