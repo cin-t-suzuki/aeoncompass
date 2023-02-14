@@ -24,11 +24,11 @@ services:
       # 最初にimageを起動したときのデータ初期化&データ投入。実行順序はファイル名アルファベット順
       - ./db/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
       #  データ保管場所
-#      - ./db/data :/var/lib/mysql
+      - ./db/data:/var/lib/mysql
 
     restart: always
-    extra_hosts:
-      - localhost:127.0.0.1
+    # extra_hosts:
+    #   - localhost:127.0.0.1
     ports:
       - 3306:3306
     
