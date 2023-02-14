@@ -5,17 +5,16 @@
 @inject('service', 'App\Http\Controllers\ctl\BrBillPayPtnController')
 
 {{--削除でいい？ {strip} --}}
-  {{-- 提携先管理ヘッダー --}}
-  {{--元 {include file='../_common/_br_header2.tpl' title="パートナー精算一覧"} --}}
-  @section('title', 'パートナー精算一覧')
-  @include('ctl.common.base')
+@extends('ctl.common.base2')
+@section('title', 'パートナー精算一覧')
+
+@section('content')
 
     <hr class="contents-margin" />
 
-  {{-- メッセージボックス --}}
   {{-- 元々なかったが、コントローラでメッセージは渡していたので追記 --}}
-  @section('message')
-  @include('ctl.common.message', $messages)
+  {{-- メッセージbladeの読込 --}}
+  @include('ctl.common.message')
 
     <div style="text-align:left;">
     @include ('ctl.brbillpayptn._form')
@@ -30,9 +29,9 @@
         <th>精算額（税込）</th>
         <th>原稿作成日</th>
         <th>内容表示</th>
-        <th>原稿表示</th>
+        {{-- 原稿表示はリリース時未実装。必要であれば元ソースより追記する --}}
       </tr>
-    @foreach ($views->billpayptn as $billpayptn)
+    @foreach ($billpayptn as $billpayptn)
       <tr>
         <td>{{$billpayptn['billpay_ptn_cd']}}</td>
         <td>{{$billpayptn['customer_nm']}}<br />{{$billpayptn['person_post']}} {{$billpayptn['person_nm']}}</td>
@@ -50,25 +49,12 @@
           {{ Form::close() }}
           @endif
         </td>
-        <td style="text-align:center;">
-          @if ($service->is_empty($billpayptn['book_path']))未作成
-          @else 
-          {{ Form::open(['route' => 'ctl.brbillpayptn.book', 'method' => 'post', 'target' => '_blank']) }}
-            <input type="submit" value=" 原稿 ">
-            <input type="hidden" name="billpay_ym"    value="{{$billpayptn['billpay_ym']}}" />
-            <input type="hidden" name="customer_id"   value="{{$billpayptn['customer_id']}}" />
-            <input type="hidden" name="key"           value="{{$billpayptn['book_path_encrypt']}}" />
-            {{--上記 {{$billpayptn['billpay_ym']}}の日付フォーマットしていないが、コントローラ側で既に済 --}}
-          {{ Form::close() }}
-          @endif
-        </td>
+        {{-- 原稿表示はリリース時未実装。必要であれば元ソースより追記する --}}
       </tr>
     @endforeach
     </table>
     <hr class="contents-margin" />
 
-  {{-- 提携先管理フッター --}}
-  @section('title', 'footer')
-  @include('ctl.common.footer')
+  @endsection
 
 {{--削除でいい？ {/strip} --}}

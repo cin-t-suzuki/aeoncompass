@@ -149,6 +149,7 @@ SQL;
     public function getBook($aa_conditions)
     {
         try {
+            $a_condition = [];
             $s_customer_id = ''; //追記
             $s_customer_id2 = '';
             $s_customer_id3 = '';
@@ -171,6 +172,11 @@ SQL;
 
             if ($this->is_empty($aa_conditions['billpay_ptn_cd'] ?? null)) { //null追記
                 $s_billpay_ptn_cd = 'and q01.billpay_ptn_cd  is null';
+                $s_billpay_ptn_cd2 = '';
+                $s_billpay_ptn_cd3 = '';
+                $s_billpay_ptn_cd4 = '';
+                $s_billpay_ptn_cd5 = '';
+                $s_billpay_ptn_cd6 = '';
             } else {
                 $s_billpay_ptn_cd = 'and q01.billpay_ptn_cd  = :billpay_ptn_cd';
                 $a_condition['billpay_ptn_cd'] = $aa_conditions['billpay_ptn_cd'];
@@ -1273,12 +1279,13 @@ SQL;
                             hotel.pref_id,
                             (select pref_nm from mast_pref where pref_id = hotel.pref_id) as pref_nm,
                             hotel.address
-                    from	reserve,
+                    from	reserve
+                            left outer join hikari_account
+                                on reserve.member_cd   = hikari_account.id, -- to_char削除してOK？
                             reserve_guest,
-                            reserve_plan,
-                            reserve_extension,
-                            hikari_account,
-                            hotel,
+                            reserve_plan
+                            left outer join hotel
+                            on reserve_plan.hotel_cd    = hotel.hotel_cd,
                         (
                             select	customer_id,
                                     site_cd,
@@ -1320,14 +1327,12 @@ SQL;
                                     rate,
                                     msd_rate
                         ) q10
+                        left outer join reserve_extension
+                            on q10.reserve_cd  = reserve_extension.reserve_cd
                     where	q10.reserve_cd  = reserve.reserve_cd
                         and	q10.date_ymd    = reserve.date_ymd
                         and	q10.reserve_cd  = reserve_plan.reserve_cd
                         and	q10.reserve_cd  = reserve_guest.reserve_cd
-                        and	q10.reserve_cd  = reserve_extension.reserve_cd 
-                        and	reserve.member_cd   = hikari_account.id -- to_char削除してOK？
-                        and	reserve_plan.hotel_cd    = hotel.hotel_cd 
-                        -- 下記3つの書き換え方不明（上記はとりあえず(+)のみとってデータはとれている）
                         -- and	q10.reserve_cd  = reserve_extension.reserve_cd(+)
                         -- and	reserve.member_cd   = to_char(hikari_account.id(+))
                         -- and	reserve_plan.hotel_cd    = hotel.hotel_cd(+)
@@ -1341,7 +1346,6 @@ SQL;
                                 q10.reserve_cd
 SQL;
 
-            // return  $_oracle->find_by_sql_statement($s_sql, $a_condition, $aa_offsets);
             $result = DB::select($s_sql, $a_condition, $aa_offsets);
             $result = json_decode(json_encode($result), true); //json~追記しないとviewでエラー
             return $result;
@@ -1571,7 +1575,7 @@ SQL;
             }
 
             if ($this->is_empty($a_book)) {
-                $error = 'NotFound';
+                $error[] = 'NotFound';
                 return $error;
             }
 
@@ -1603,7 +1607,10 @@ SQL;
                 // サイト未指定
                 if ($this->is_empty($requestBrBillPayPtn['site_cd'] ?? null)) { //??null追記
                     $a_customer = $this->getBillpayptn($a_conditions);
-                    $a_customer = $a_customer[0];
+                    // NotFoundが返ってきた場合の分岐を追記
+                    if ($a_customer != "NotFound") {
+                        $a_customer = $a_customer[0];
+                    }
 
                     // 通常・赤伝集出設定
                     $a_options['billpay']   = 1;

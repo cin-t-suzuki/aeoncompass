@@ -227,12 +227,8 @@ Route::get('/ctl/brbillpayptn/customer', [\App\Http\Controllers\ctl\BrBillPayPtn
     ->name('ctl.brbillpayptn.customer');
 Route::get('/ctl/brbillpayptn/detail', [\App\Http\Controllers\ctl\BrBillPayPtnController::class, 'detail'])
     ->name('ctl.brbillpayptn.detail');
-Route::post('/ctl/brbillpayptn/csv', [\App\Http\Controllers\ctl\BrBillPayPtnController::class, 'csv'])
+Route::get('/ctl/brbillpayptn/csv', [\App\Http\Controllers\ctl\BrBillPayPtnController::class, 'csv'])
     ->name('ctl.brbillpayptn.csv');
-Route::post('/ctl/brbillpayptn/bookcsv', [\App\Http\Controllers\ctl\BrBillPayPtnController::class, 'bookcsv'])
-    ->name('ctl.brbillpayptn.bookcsv');
-Route::post('/ctl/brbillpayptn/book', [\App\Http\Controllers\ctl\BrBillPayPtnController::class, 'book'])
-    ->name('ctl.brbillpayptn.book');
 
 // 参考として一応残す。
 // Route::namespace('App\Http\Controllers\ctl')->prefix('ctl')->group(function () {
