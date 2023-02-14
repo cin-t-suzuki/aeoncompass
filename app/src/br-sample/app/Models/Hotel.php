@@ -630,10 +630,13 @@ SQL;
 
 	}
 
-	// 施設情報ページの更新依頼
-	//
-	//  as_hotel_cd       施設コード
-	//  aa_attributes     施設*テーブルの登録データ内容
+	/**
+	 * 施設情報ページの更新依頼
+	 * 
+	 * aa_attributes     施設テーブルの登録データ内容
+	 * 
+	 * @return bool
+	 */
 	public function hotelModify($aa_attributes)
 	{
 		$hotel_status = new HotelStatus();

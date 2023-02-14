@@ -50,9 +50,6 @@ class HtlHotelController extends _commonController
         }
 
         // HACK: 移植元では、 get_hotel_xxx() 系を Hotel モデルにまとめている。
-        // hotel_cdをセット
-
-        // $a_hotelrate             = $models_hotel->get_hotel_rates();              // 料率の一覧データを配列で取得
 
         $a_hotel_links          = $this->getHotelLinks($targetCd);          // 施設リンクの取得
         $a_hotel_inform_cancel  = $this->getHotelInformCancels($targetCd);  // 施設注意事項情報の取得
@@ -120,15 +117,15 @@ class HtlHotelController extends _commonController
             'a_hotel_receipt'           => $a_hotel_receipt,
             'a_hotel_bath_tax'          => $a_hotel_bath_tax,
             'a_hotel_bath_tax_flg'      => $a_hotel_bath_tax_flg,
-
         ]);
     }
 
-    // 施設情報登録内容の変更
+    /**
+     * 施設情報登録内容の変更
+     */
     public function edit(Request $request)
     {
         try {
-
             // エラーメッセージの設定
             if ($request->session()->has('errors')) {
                 // エラーメッセージ があれば、入力を保持して表示
@@ -156,8 +153,8 @@ class HtlHotelController extends _commonController
                 }
             }
 
-            // 特定施設のリンクの取得dd
-            $a_hotel_links = DB::table('hotel_link')->where('type', 1)->where('hotel_cd', $targetCd)->get(); //   type ウェブサイトタイプ  1:施設トップページ 2:携帯トップページ 3:その他ページ
+            // 特定施設のリンクの取得
+            $a_hotel_links = DB::table('hotel_link')->where('type', 1)->where('hotel_cd', $targetCd)->get(); // type ウェブサイトタイプ  1:施設トップページ 2:携帯トップページ 3:その他ページ
 
             // 施設情報取得
             $a_hotel = Hotel::find($targetCd);
@@ -213,20 +210,18 @@ class HtlHotelController extends _commonController
         }
     }
 
-    // 施設情報登録内容の更新
+    /**
+     * 施設情報登録内容の更新
+     */
     public function update(Request $request)
     {
         $a_hotel  = $request->input('Hotel');
         $targetCd = $request->input('target_cd');
+        $actionCd = $this->getActionCd();
 
         try {
-            // トランザクション開始
-            DB::beginTransaction();
-
-            // ホテルのインスタンスの取得
-            $o_hotel          = new Hotel();
-
-            $a_find_hotel = $o_hotel->find(['hotel_cd' => $targetCd])->first();
+            $o_hotel = new Hotel();
+            $a_find_hotel = $o_hotel->where(['hotel_cd' => $targetCd])->first();
 
             // バリデート
             $a_attributes = [];
@@ -248,48 +243,23 @@ class HtlHotelController extends _commonController
                 return $this->edit($request, ['target_cd' => $targetCd])->with(['errors' => $errorList]);
             }
 
-            $a_attributes['modify_cd'] = 'modify_cd'; // TODO $this->box->info->env->action_cd
+            $a_attributes['modify_cd'] = $actionCd;
             $a_attributes['modify_ts'] = now();
 
-            $hotel_update = $o_hotel->where(['hotel_cd' => $targetCd])
-                ->update([
-                    'postal_cd' => $a_attributes['postal_cd'],
-                    'address' => $a_attributes['address'],
-                    'tel' => $a_attributes['tel'],
-                    'fax' => $a_attributes['fax'],
-                    'room_count' => $a_attributes['room_count'],
-                    'check_in' => $a_attributes['check_in'],
-                    'check_in_end' => $a_attributes['check_in_end'],
-                    'check_out' => $a_attributes['check_out'],
-                    'modify_cd' =>  $a_attributes['modify_cd'],
-                    'modify_ts' => $a_attributes['modify_ts']
-                ]);
-
-            // 更新後失敗した場合editアクションへ
-            if ($hotel_update == 0) {
-                // ロールバック
-                DB::rollback();
-
-                // editアクションに転送します
-                return $this->edit($request, ['target_cd' => $targetCd])->with(['errors' => '更新に失敗しました。']);
-            }
-
-            // 施設情報ページの更新依頼
+            // 施設情報ページの有無確認
             $existsHotelModify = HotelModify::where('hotel_cd', $targetCd)->exists();
             if (!$existsHotelModify) {
-                $a_attributes['entry_cd'] = 'entry_cd'; // TODO $this->box->info->env->action_cd
+                $a_attributes['entry_cd'] = $actionCd;
                 $a_attributes['entry_ts'] = now();
             }
-            $o_hotel->hotelModify($a_attributes);
 
-            //-------------------------------
-            // JRセット参画施設の場合
-            //-------------------------------
+            // JRセット参画施設かどうかチェック
             $o_hotel_status_jr      = new HotelStatusJr();
             $a_find_hotel_status_jr = $o_hotel_status_jr->find(['hotel_cd' => $targetCd])->first();
             $b_is_rejudge           = false;
+
             if (!empty($a_find_hotel_status_jr)) {
-                // 施設の郵便番号・住所・TEL・FAXのいずれかが更新された場合は再審査状態に変更
+                // 施設の郵便番号・住所・TEL・FAXのいずれかが更新された場合は再審査フラグを立てる
                 if ($a_find_hotel['postal_cd'] != $a_hotel['postal_cd']) {
                     $b_is_rejudge = true;
                 }
@@ -306,45 +276,65 @@ class HtlHotelController extends _commonController
                     $b_is_rejudge = true;
                 }
 
-                // 再審査が必要な場合は状態を更新
+                // 再審査が必要な場合は値をチェック
                 if ($b_is_rejudge) {
                     // バリデート
-                    $a_attributes = [];
-                    $a_attributes['hotel_cd'] = $targetCd;
-                    $a_attributes['active_status'] = $a_find_hotel_status_jr['active_status'];
-                    $a_attributes['judge_status'] = $a_find_hotel_status_jr['judge_status'];
-                    $a_attributes['last_modify_dtm'] = now();
+                    $a_attributes_jr = [];
+                    $a_attributes_jr['hotel_cd'] = $targetCd;
+                    $a_attributes_jr['active_status'] = $a_find_hotel_status_jr['active_status'];
+                    $a_attributes_jr['judge_status'] = $a_find_hotel_status_jr['judge_status'];
+                    $a_attributes_jr['last_modify_dtm'] = now();
 
                     $errorList = [];
-                    $errorList = $o_hotel_status_jr->validation($a_attributes);
+                    $errorList = $o_hotel_status_jr->validation($a_attributes_jr);
 
                     if (count($errorList) > 0) {
                         return $this->edit($request, ['target_cd' => $targetCd])->with(['errors' => $errorList]);
                     }
-
-                    // 更新
-                    $hotel_status_jr_update = $o_hotel_status_jr->where([
-                        'hotel_cd' => $targetCd
-                    ])->update([
-                        'last_modify_dtm' => now(),
-                        'modify_cd' => 'action_cd', // TODO $this->box->info->env->action_cd
-                        'modify_ts' => now(),
-                    ]);
-
-                    if ($hotel_status_jr_update == 0) {
-                        // ロールバック
-                        DB::rollback();
-
-                        // 入力画面へ
-                        return $this->edit($request, ['target_cd' => $targetCd])->with(['errors' => '更新に失敗しました。']);
-                    }
                 }
             }
 
-            // コミット
-            DB::commit();
+            try {
+                DB::beginTransaction();
 
-            // 登録完了後に登録内容の取得
+                // ホテルTBL更新
+                $o_hotel->where(['hotel_cd' => $targetCd])
+                    ->update([
+                        'postal_cd' => $a_attributes['postal_cd'],
+                        'address' => $a_attributes['address'],
+                        'tel' => $a_attributes['tel'],
+                        'fax' => $a_attributes['fax'],
+                        'room_count' => $a_attributes['room_count'],
+                        'check_in' => $a_attributes['check_in'],
+                        'check_in_end' => $a_attributes['check_in_end'],
+                        'check_out' => $a_attributes['check_out'],
+                        'modify_cd' =>  $a_attributes['modify_cd'],
+                        'modify_ts' => $a_attributes['modify_ts']
+                    ]);
+
+                // 施設情報ページの更新
+                $o_hotel->hotelModify($a_attributes);
+
+                // JR参画施設で、再審査が必要な場合はステータスを更新
+                if ($b_is_rejudge) {
+                    // 更新
+                    $o_hotel_status_jr->where([
+                        'hotel_cd' => $targetCd
+                    ])->update([
+                        'last_modify_dtm' => now(),
+                        'modify_cd' => $actionCd,
+                        'modify_ts' => now(),
+                    ]);
+                }
+                DB::commit();
+            } catch (Exception $e) {
+                // ロールバック
+                DB::rollback();
+                // editアクションに転送します
+                return $this->edit($request, ['target_cd' => $targetCd])->with(['errors' => '更新に失敗しました。']);
+            }
+
+            // 登録完了後の登録内容の取得
             // 特定施設のリンクの取得
             $a_hotel_links = DB::table('hotel_link')->where('type', 1)->where('hotel_cd', $targetCd)->get(); //   type ウェブサイトタイプ  1:施設トップページ 2:携帯トップページ 3:その他ページ
 
@@ -354,7 +344,6 @@ class HtlHotelController extends _commonController
             // 都道府県、市の取得            
             $a_pref = MastPref::where('pref_id', $a_hotel['pref_id'])->first();
             $a_city = MastCity::where('city_id', $a_hotel['city_id'])->first();
-
 
             // 施設アカウント情報
             $a_hotel_account = HotelAccount::find($targetCd);
@@ -383,7 +372,9 @@ class HtlHotelController extends _commonController
 
             // 各メソッドで Exception が投げられた場合
         } catch (Exception $e) {
-            throw $e;
+            DB::rollback();
+            // 入力画面へ
+            return $this->edit($request, ['target_cd' => $targetCd])->with(['errors' => '更新に失敗しました。']);
         }
     }
 
@@ -893,8 +884,11 @@ class HtlHotelController extends _commonController
         return collect(DB::select($sql, $parameters));
     }
 
-    // 予約の通知欄のメーセージ作成
-    //   find で取得したhotel_notifyの配列
+    /**
+     * 予約の通知欄のメーセージ作成
+     * 
+     * find で取得したhotel_notifyの配列
+     */
     private function makeNotifyMessages($a_hotel_notify)
     {
         try {
@@ -972,18 +966,20 @@ class HtlHotelController extends _commonController
         }
     }
 
-    // ２進数を展開し一致するビットもしくは位に変換します。
-    //
-    //  as_value 数字を設定
-    //  ab_bits  true ビットで返却 false 位で返却
-    //
-    //  example
-    //    bits = true
-    //      > 30
-    //        >> array(2, 4, 8, 16)
-    //    bits = false
-    //      > 30
-    //        >> array(1, 2, 3, 4)
+    /**
+     * ２進数を展開し一致するビットもしくは位に変換します。
+     *
+     *  as_value 数字を設定
+     *  ab_bits  true ビットで返却 false 位で返却
+     *
+     *  example
+     *    bits = true
+     *      > 30
+     *        >> array(2, 4, 8, 16)
+     *    bits = false
+     *      > 30
+     *        >> array(1, 2, 3, 4)
+     */
     public function to_shift($as_value, $ab_bits = true)
     {
         try {
@@ -1026,5 +1022,25 @@ class HtlHotelController extends _commonController
         } catch (Exception $e) {
             throw $e;
         }
+    }
+
+    /**
+     * コントローラ名とアクション名を取得して、ユーザーIDと連結
+     * ユーザーID取得は暫定の為、書き換え替えが必要です。
+     *
+     * MEMO: app/Models/common/CommonDBModel.php から移植したもの
+     * HACK: 適切に共通化したいか。
+     * @return string
+     */
+    private function getActionCd()
+    {
+        $path = explode("@", \Illuminate\Support\Facades\Route::currentRouteAction());
+        $pathList = explode('\\', $path[0]);
+        $controllerName = str_replace("Controller", "", end($pathList)); // コントローラ名
+        $actionName = $path[1]; // アクション名
+        $userId = \Illuminate\Support\Facades\Session::get("user_id");   // TODO: ユーザー情報取得のキーは仮です
+        $actionCd = $controllerName . "/" . $actionName . "." . $userId;
+
+        return $actionCd;
     }
 }
