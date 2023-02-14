@@ -35,15 +35,18 @@ class BillPayPtn extends CommonDBModel
         // カラム情報の設定
     }
 
-    //======================================================================
-    // 精算先サイトの取得
-    // aa_conditions
-    //    partner_cd    パートナーコード
-    //    affiliate_cd  アフィリエイトコード
-    //    site_cd       アフィリエイトコード
-    //    fee_type      手数料タイプ(1:販売 2:在庫（NTA）3:補助金)
-    //    billpay_ym    精算月（YYYY-MM)
-    //======================================================================
+    /**
+     * 精算先サイトの取得
+     *
+     * @param array{
+     *  partner_cd?: string,
+     *  affiliate_cd?: string,
+     *  site_cd?: string,
+     *  fee_type?: int,
+     *  billpay_ym: string
+     * } $aa_conditions
+     * @return array
+     */
     public function getSite($aa_conditions)
     {
         try {
@@ -138,14 +141,16 @@ SQL;
         }
     }
 
-    //======================================================================
-    // 月単位の精算状況
-    // aa_conditions
-    //    billpay_ptn_cd  パートナー精算コード
-    //    customer_id     パートナー精算先コード
-    //    site_cd        精算サイトコード
-    //    billpay_ym     精算月（YYYY-MM)
-    //======================================================================
+    /**
+     * 月単位の精算状況
+     * @param array{
+     * billpay_ptn_cd?: string,
+     * customer_id?: string,
+     * site_cd?: string,
+     * billpay_ym?: string
+     * } $aa_conditions
+     * @return array
+     */
     public function getBook($aa_conditions)
     {
         try {
@@ -554,23 +559,26 @@ SQL;
         }
     }
 
-    //======================================================================
-    // 支払・請求に対応する予約情報を取得します。
-    //
-    //   aa_conditions
-    //     billpay_ptn_cd  パートナー精算コード
-    //     customer_id     パートナー精算先コード
-    //     site_cd        精算サイトコード
-    //     billpay_ym     精算月（YYYY-MM)
-    //     stock_type     在庫タイプ（1:一般ネット在庫、 2:連動在庫 3:東横イン在庫）
-    //     rate           料率
-    //   aa_options
-    //     billpay        通常（1:抽出する 0: 抽出しない）
-    //     billpayed      赤伝（1:抽出する 0: 抽出しない）
-    //   aa_offsets
-    //     page           ページ
-    //     size           レコード数(1から) ページ数を指定した場合必須
-    //======================================================================
+    /**
+     * 支払・請求に対応する予約情報を取得します。
+     * @param array{
+     *  billpay_ptn_cd?: string,
+     *  customer_id?: string,
+     *  site_cd?: string,
+     *  billpay_ym?: string
+     *  stock_type?: int,
+     *  rate?: int
+     * } $aa_conditions
+     * @param array{
+     *  billpay?: int,
+     *  billpayed?: int
+     * } $aa_options
+     * @param array {
+     *  page?: int,
+     *  size?: int
+     * } $aa_offsets
+     * @return array
+     */
     public function getDetailStatement($aa_conditions, $aa_options, $aa_offsets = null)
     {
         try { //パラメータ？（:~）がSQL文内にいくつかあるため、すべて定義（かつ下の方で分岐用にも再定義）
@@ -1356,23 +1364,26 @@ SQL;
         }
     }
 
-    //======================================================================
-    // 支払・請求に対応する予約情報を取得します。
-    //
-    //   aa_conditions
-    //     billpay_ptn_cd  パートナー精算コード
-    //     customer_id     パートナー精算先コード
-    //     site_cd        精算サイトコード
-    //     billpay_ym     精算月（YYYY-MM)
-    //     stock_type     在庫タイプ（1:一般ネット在庫、 2:連動在庫 3:東横イン在庫）
-    //     rate           料率
-    //   aa_options
-    //     billpay        通常（1:抽出する 0: 抽出しない）
-    //     billpayed      赤伝（1:抽出する 0: 抽出しない）
-    //   aa_offsets
-    //     page           ページ
-    //     size           レコード数(1から) ページ数を指定した場合必須
-    //======================================================================
+    /**
+     * 支払・請求に対応する予約情報を取得します。
+     * @param array{
+     *  billpay_ptn_cd?: string,
+     *  customer_id?: string,
+     *  site_cd?: string,
+     *  billpay_ym?: string
+     *  stock_type?: int,
+     *  rate?: int
+     * } $aa_conditions
+     * @param array{
+     *  billpay?: int,
+     *  billpayed?: int
+     * } $aa_options
+     * @param array {
+     *  page?: int,
+     *  size?: int
+     * } $aa_offsets
+     * @return array
+     */
     public function getDetail($aa_conditions, $aa_options, $aa_offsets = null)
     {
         try {
@@ -1402,9 +1413,11 @@ SQL;
         }
     }
 
-    //======================================================================
-    // 検索に利用するパラメータでURIを作成　※private→publicへ変更したが大丈夫？
-    //======================================================================
+    /**
+     * 検索に利用するパラメータでURIを作成　※private→publicへ変更したが大丈夫？
+     * @param array $requestBrBillPayPtn
+     * @return array
+     */
     public function setSearchParams($requestBrBillPayPtn)
     {
         try {
@@ -1422,9 +1435,11 @@ SQL;
         }
     }
 
-    //======================================================================
-    // 明細を表示するパラメータでURIを作成 ※private->publicへ変更
-    //======================================================================
+    /**
+     * 明細を表示するパラメータでURIを作成　※private→publicへ変更したが大丈夫？
+     * @param array $requestBrBillPayPtn
+     * @return array
+     */
     public function setDetailParams($requestBrBillPayPtn)
     {
         try {
@@ -1479,12 +1494,14 @@ SQL;
         }
     }
 
-    //======================================================================
-    // パートナー精算対象月の精算データを検索 ※private->publicへ変更
-    //======================================================================
-    // aa_conditions
-    //   as_billpay_ym   精算年月(YYYY-MM)
-    //   as_customer_id  パートナー精算先ID
+    /**
+     * パートナー精算対象月の精算データを検索　※private→publicへ変更したが大丈夫？
+     * @param array{
+     *  as_billpay_ym?: string
+     *  as_customer_id?: string
+     * } $aa_conditions
+     * @return array
+     */
     public function getBillPayPtn($aa_conditions)
     {
         try {
@@ -1585,9 +1602,12 @@ SQL;
         }
     }
 
-    //======================================================================
-    // CSV表示 ※private->publicへ変更
-    //======================================================================
+
+    /**
+     * CSV表示　※private→publicへ変更したが大丈夫？
+     * @param array $requestBrBillPayPtn
+     * @return array
+     */
     public function csv($requestBrBillPayPtn)
     {
         try {
@@ -1681,9 +1701,12 @@ SQL;
         }
     }
 
-    //======================================================================
-    // CSVヘッダー設定 ※モデルへの記述でいい？
-    //======================================================================
+
+    /**
+     * CSVヘッダー設定 ※モデルへの記述でいい？
+     * @param array $customer
+     * @return array
+     */
     public function setCsvHeader($customer)
     {
         $header = ["No.", "サイトコード"];
@@ -1720,9 +1743,13 @@ SQL;
         return $header;
     }
 
-    //======================================================================
-    // CSVデータ設定 ※モデルへの記述でいい？
-    //======================================================================
+    /**
+     * CSVデータ設定 ※モデルへの記述でいい？
+     * @param array $customer
+     * @param array $offset
+     * @param array $detail
+     * @return array
+     */
     public function setCsvData($customer, $offset, $detail)
     {
         $data = [];

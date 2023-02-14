@@ -20,10 +20,12 @@ class BrBillPayPtnController extends _commonController
 {
     use Traits;
 
-    //======================================================================
-    // パートナー精算書一覧表示
-    //======================================================================
-
+    /**
+     * パートナー精算書一覧表示
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function list(Request $request)
     {
         // データを取得
@@ -62,11 +64,12 @@ class BrBillPayPtnController extends _commonController
         ]);
     }
 
-    //======================================================================
-    // 精算内容を取得する
-    //======================================================================
-    // aa_form_set_params 検索用パラメータ
-    //
+    /**
+     * 精算内容を取得する
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function customer(Request $request)
     {
         //初期化
@@ -131,9 +134,13 @@ class BrBillPayPtnController extends _commonController
             'guides'    => $guides ?? []
         ]);
     }
-    //======================================================================
-    // 明細表示
-    //======================================================================
+
+    /**
+     * 明細表示
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
     protected function detail(Request $request)
     {
 
@@ -212,9 +219,13 @@ class BrBillPayPtnController extends _commonController
         ]);
     }
 
-    //======================================================================
-    // CSVダウンロード
-    //======================================================================
+
+    /**
+     * CSVダウンロード
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function csv(Request $request)
     {
         // データを取得
