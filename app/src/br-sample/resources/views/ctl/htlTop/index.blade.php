@@ -57,7 +57,7 @@
 			{{--------------------------------------------------------------------------------}}
 			@if (in_array(1, ($views->is_disp_room_plan_list ?? [])))
 				{{-- 旧画面利用施設 --}}
-				@include ('ctl.htltop._renew_info')
+				@include ('ctl.htlTop._renew_info')
 			@endif
 		</div>
 
@@ -112,18 +112,18 @@
 
 @if ($views->stock_type == 0 || $views->stock_type == 3)
 	{{-- 部屋の管理 --}}
-	@include ('ctl.htltop._stock')
+	@include ('ctl.htlTop._stock')
 	{{-- 部屋の管理 --}}
 	<br>
 @endif
 
 {{-- 予約の管理と会員へのサポート --}}
-@include ('ctl.htltop._support')
+@include ('ctl.htlTop._support')
 {{-- 予約の管理と会員へのサポート --}}
 <br>
 
 {{-- 基本情報の管理 --}}
-@include ('ctl.htltop._basis_info')
+@include ('ctl.htlTop._basis_info')
 {{-- 基本情報の管理 --}}
 <br>
 
@@ -156,7 +156,7 @@
 @endif
 
 {{-- サービスのお問い合わせ先 --}}
-@include ('ctl.htltop._info')
+@include ('ctl.htlTop._info')
 {{-- サービスのお問い合わせ先 --}}
 
 				<br />
@@ -188,7 +188,7 @@
 	<br><br>
 
 	{{-- お知らせ表示 --}}
-	@include ('ctl.htltop._broadcast_messages')
+	@include ('ctl.htlTop._broadcast_messages')
 	{{-- お知らせ表示 --}}
 @endif
 

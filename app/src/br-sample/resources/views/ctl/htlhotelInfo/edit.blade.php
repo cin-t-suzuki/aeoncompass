@@ -4,7 +4,7 @@
 {{-- TODO サブメニュー --}}
 <a href="{$v->env.source_path}{$v->env.module}/htltop/index/target_cd/{$v->assign->target_cd}">メインメニュー</a>&nbsp;&gt;&nbsp;<a href="{$v->env.source_path}{$v->env.module}/htlhotel/show/target_cd/{$v->assign->hotelinfos.hotel_cd}">施設情報詳細</a>&nbsp;&gt;&nbsp;<a href="{$v->env.source_path}{$v->env.module}/htlhotelinfo/show/target_cd/{$v->assign->hotelinfos.hotel_cd}">施設情報</a>&nbsp;&gt;&nbsp;変更<br>
 
-<a href="{{--TODO route( 'ctl.htltop.index',['target_cd'=>$views->target_cd]) --}}">メインメニュー（未）</a>&nbsp;&gt;&nbsp;
+<a href="{{--TODO route( 'ctl.htlTop.index',['target_cd'=>$views->target_cd]) --}}">メインメニュー（未）</a>&nbsp;&gt;&nbsp;
 <a href="{{--TODO  route( 'ctl.htlhotel.show',['target_cd'=>$views->hotelinfos['hotel_cd']]) --}}">施設情報詳細 （未）</a>&nbsp;&gt;&nbsp;
 <a href="{{ route( 'ctl.htlhotelInfo.show',['target_cd'=>$views->hotelInfo['hotel_cd'] ] ) }}">施設情報</a>&nbsp;&gt;&nbsp;変更<br>
 

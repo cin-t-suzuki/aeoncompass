@@ -115,7 +115,7 @@ class HtlTopController extends _commonController
         $this->addViewData("is_disp_rate_info", false);
 
         // ビューを表示
-        return view("ctl.htltop.index", $this->getViewData());
+        return view("ctl.htlTop.index", $this->getViewData());
     }
 
     //======================================================================

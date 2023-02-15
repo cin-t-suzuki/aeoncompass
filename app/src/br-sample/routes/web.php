@@ -40,9 +40,6 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 		Route::get('/', 'index')->name('ctl.brtop.index');
 	});
 
-	// ホテルトップ
-	Route::get('/htltop/', 'HtlTopController@index')->name('ctl.htltop.index');
-
 	// 管理画面一覧
 	Route::controller(TopController::class)->prefix("top")->group(function(){
 		Route::get('/', 'index')->name('ctl.top.index');
@@ -181,3 +178,6 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 	Route::post('/brpartnersite/modify', 'BrPartnerSiteController@modify')->name('ctl.brPartnerSite.modify');
 
 });
+
+    // ホテルトップ
+    Route::get('/ctl/htltop/', [\App\Http\Controllers\ctl\HtlTopController::class, 'index'])->name('ctl.htlTop.index');
