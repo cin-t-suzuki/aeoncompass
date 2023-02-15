@@ -44,14 +44,14 @@
 <br />
 <table border="1" cellspacing="0" cellpadding="4">
 	<tr>
-	{!! Form::open(['route' => ['ctl.brCustomer.list'], 'method' => 'post']) !!}
+	{!! Form::open(['route' => ['ctl.brCustomer.list'], 'method' => 'get']) !!}
 		<td nowrap bgcolor="#EEFFEE">精算先の登録・変更</td>
 		<td nowrap>
 		<input name="keywords" size="20" maxlength="30" type="text">
 		<input name="i_btn" value="設定" type="submit">
 		</td>
 	{!! Form::close() !!}
-	{!! Form::open(['route' => ['ctl.brCustomer.csv'], 'method' => 'post']) !!}
+	{!! Form::open(['route' => ['ctl.brCustomer.csv'], 'method' => 'get']) !!}
 		<td nowrap>
 		<input name="i_btn" value="精算先全件CSVダウンロード" type="submit">
 		</td>

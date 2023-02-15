@@ -241,21 +241,7 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 	Route::get('/brpartnersite/edit', 'BrPartnerSiteController@edit')->name('ctl.brPartnerSite.edit');
 	Route::post('/brpartnersite/modify', 'BrPartnerSiteController@modify')->name('ctl.brPartnerSite.modify');
 
-    // 精算先
-    Route::match(['get','post'], '/brcustomer/list', 'BrCustomerController@list')->name('ctl.brCustomer.list');
-    Route::match(['get','post'], '/brcustomer/create', 'BrCustomerController@create')->name('ctl.brCustomer.create');
-    Route::post('/brcustomer/banksearch', 'BrCustomerController@banksearch')->name('ctl.brCustomer.banksearch');
-    Route::match(['get','post'], '/brcustomer/edit', 'BrCustomerController@edit')->name('ctl.brCustomer.edit');
-    Route::post('/brcustomer/update', 'BrCustomerController@update')->name('ctl.brCustomer.update');
-    Route::get('/brcustomer/sendletter', 'BrCustomerController@sendletter')->name('ctl.brCustomer.sendletter');
-    Route::post('/brcustomer/csv', 'BrCustomerController@csv')->name('ctl.brCustomer.csv');
 
-    // 施設情報：請求関連（請求先） 精算先（登録施設）
-    Route::match(['get','post'], '/brcustomerhotel/list', 'BrCustomerHotelController@list')->name('ctl.brCustomerHotel.list');//未確認
-    Route::post('/brcustomerhotel/hotellist', 'BrCustomerHotelController@hotellist')
-        ->name('ctl.brCustomerHotel.hotellist');
-    Route::post('/brcustomerhotel/setting', 'BrCustomerHotelController@setting')
-        ->name('ctl.brCustomerHotel.setting');
 
     // 重点表示プラン
     Route::match(['get', 'post'], '/list', 'BrroomPlanPriority2Controller@list')
@@ -277,3 +263,27 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
     Route::post('/brhoteladvert2009000400/update', 'BrhotelAdvert2009000400Controller@update')
         ->name('ctl.brhoteladvert2009000400.update'); //更新
 });
+
+    // 精算先
+    Route::get('/ctl/brcustomer/list', [\App\Http\Controllers\ctl\BrCustomerController::class, 'list'])
+        ->name('ctl.brCustomer.list');
+    Route::post('/ctl/brcustomer/create', [\App\Http\Controllers\ctl\BrCustomerController::class, 'create'])
+        ->name('ctl.brCustomer.create');
+    Route::get('/ctl/brcustomer/banksearch', [\App\Http\Controllers\ctl\BrCustomerController::class, 'banksearch'])
+        ->name('ctl.brCustomer.banksearch');
+    Route::get('/ctl/brcustomer/edit', [\App\Http\Controllers\ctl\BrCustomerController::class, 'edit'])
+        ->name('ctl.brCustomer.edit');
+    Route::post('/ctl/brcustomer/update', [\App\Http\Controllers\ctl\BrCustomerController::class, 'update'])
+        ->name('ctl.brCustomer.update');
+    Route::get('/ctl/brcustomer/sendletter', [\App\Http\Controllers\ctl\BrCustomerController::class, 'sendletter'])
+        ->name('ctl.brCustomer.sendletter');
+    Route::get('/ctl/brcustomer/csv', [\App\Http\Controllers\ctl\BrCustomerController::class, 'csv'])
+        ->name('ctl.brCustomer.csv');
+
+    // 施設情報：請求関連（請求先） 精算先（登録施設）
+    Route::get('/ctl/brcustomerhotel/list', [\App\Http\Controllers\ctl\BrCustomerHotelController::class, 'list'])
+        ->name('ctl.brCustomerHotel.list');
+    Route::get('/ctl/brcustomerhotel/hotellist', [\App\Http\Controllers\ctl\BrCustomerHotelController::class, 'hotellist'])
+        ->name('ctl.brCustomerHotel.hotellist');
+    Route::post('/ctl/brcustomerhotel/setting', [\App\Http\Controllers\ctl\BrCustomerHotelController::class, 'setting'])
+        ->name('ctl.brCustomerHotel.setting');

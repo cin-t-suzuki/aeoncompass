@@ -6,7 +6,7 @@
 {{-- メッセージbladeの読込 --}}
 @include('ctl.common.message')
 <table border="1" cellspacing="0" cellpadding="2">
-  {!! Form::open(['route' => ['ctl.brCustomer.list'], 'method' => 'post']) !!}
+  {!! Form::open(['route' => ['ctl.brCustomer.list'], 'method' => 'get']) !!}
     <tr>
       <td  bgcolor="#eeffee" nowrap>精算先検索</td>
       <td>
@@ -68,14 +68,14 @@
           </small><br />
         </td>
         <td>
-          {!! Form::open(['route' => ['ctl.brCustomer.edit'], 'method' => 'post']) !!}
+          {!! Form::open(['route' => ['ctl.brCustomer.edit'], 'method' => 'get']) !!}
             <input type="hidden" name="customer_id" value="{{strip_tags($customer_list['values'][$list]->customer_id)}}">
             <input type="hidden" name="keywords" value="{{strip_tags($keywords)}}">
             <input value="請求先変更" type="submit"><br />
           {!! Form::close() !!}
         </td>
         <td>
-          {!! Form::open(['route' => ['ctl.brCustomerHotel.hotellist'], 'method' => 'post']) !!}
+          {!! Form::open(['route' => ['ctl.brCustomerHotel.hotellist'], 'method' => 'get']) !!}
             <input type="hidden" name="customer_id" value="{{strip_tags($customer_list['values'][$list]->customer_id)}}">
             <input type="hidden" name="keywords" value="{{strip_tags($keywords)}}">
             <input value="登録施設" type="submit"><br />

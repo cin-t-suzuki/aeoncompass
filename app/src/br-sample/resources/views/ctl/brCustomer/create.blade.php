@@ -9,7 +9,7 @@
 以下の内容で登録しました。
   @include ('ctl.brCustomer._info_customer')
 <p>
-{!! Form::open(['route' => ['ctl.brCustomer.edit'], 'method' => 'post']) !!}
+{!! Form::open(['route' => ['ctl.brCustomer.edit'], 'method' => 'get']) !!}
   <small>
 <input type="hidden" name="customer_id" value="{{strip_tags($views->customer['customer_id'])}}" >
     <input type="submit" value="詳細情報">
@@ -17,7 +17,7 @@
 {!! Form::close() !!}
 </p>
 <p>
-{!! Form::open(['route' => ['ctl.brCustomer.list'], 'method' => 'post']) !!}
+{!! Form::open(['route' => ['ctl.brCustomer.list'], 'method' => 'get']) !!}
   <small>
     <input type="submit" value="請求先検索へ">
     <input type="hidden" name="keywords" value="{{strip_tags($views->keywords)}}">

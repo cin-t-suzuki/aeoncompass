@@ -20,7 +20,7 @@
         @if (!$service->is_empty($views->customer_hotel))
           {{strip_tags($views->customer_hotel->customer_id)}}&nbsp;[{{strip_tags($views->customer_hotel->customer_nm)}}]
       </td>
-      {!! Form::open(['route' => ['ctl.brCustomer.edit'], 'method' => 'post', 'target' => '_blank']) !!}
+      {!! Form::open(['route' => ['ctl.brCustomer.edit'], 'method' => 'get', 'target' => '_blank']) !!}
         <input type="hidden" name="customer_id" value="{{strip_tags($views->customer_hotel->customer_id)}}" >
         <td><small><input type="submit" value="詳細情報"></small><br />
         @else
@@ -34,7 +34,7 @@
 {{-- メッセージbladeの読込 --}}
 @include('ctl.common.message', $messages)
 <b>精算先の変更</b>
-{!! Form::open(['route' => ['ctl.brCustomerHotel.list'], 'method' => 'post']) !!}
+{!! Form::open(['route' => ['ctl.brCustomerHotel.list'], 'method' => 'get']) !!}
   <input type="hidden" name="target_cd" value="{{strip_tags($views->target_cd)}}" />
   <font color="#0000FF">精算先を検索して結果から登録します。</font><table border="1" cellspacing="0" cellpadding="2">
     <tr>
@@ -81,7 +81,7 @@
         {!! Form::close() !!}
         {{-- $smarty.section.customer_list.index　→　customer_listでいいか？ --}}
         <td nowrap>({{strip_tags($views->customer_list['values'][$customer_list]->customer_id)}}){{strip_tags($views->customer_list['values'][$customer_list]->customer_nm)}}</td>
-        {!! Form::open(['route' => ['ctl.brCustomer.edit'], 'method' => 'post', 'target' => '_blank']) !!}
+        {!! Form::open(['route' => ['ctl.brCustomer.edit'], 'method' => 'get', 'target' => '_blank']) !!}
           <input type="hidden" name="customer_id" value="{{strip_tags($views->customer_list['values'][$customer_list]->customer_id)}}" >
           <td><small>
             <input type="submit" value="詳細情報">
@@ -98,7 +98,7 @@
 @endif
 <hr size="1">
 <div align="right">
-  {!! Form::open(['route' => ['ctl.brCustomer.list'], 'method' => 'post', 'target' => '_blank']) !!}
+  {!! Form::open(['route' => ['ctl.brCustomer.list'], 'method' => 'get', 'target' => '_blank']) !!}
     精算先が登録されていない場合は↓<br>
     <input type="submit" value="精算先の新規作成">
   {!! Form::close() !!}

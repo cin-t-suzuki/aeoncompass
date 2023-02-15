@@ -12,7 +12,7 @@
   <input type="submit" value="変　　　　更">
 {!! Form::close() !!}
 <hr SIZE="1">
-{!! Form::open(['route' => ['ctl.brCustomer.list'], 'method' => 'post']) !!}
+{!! Form::open(['route' => ['ctl.brCustomer.list'], 'method' => 'get']) !!}
   <small>
     <input type="hidden" name="keywords" value="{{strip_tags($keywords)}}">
     <input type="submit" value="請求先検索へ">
