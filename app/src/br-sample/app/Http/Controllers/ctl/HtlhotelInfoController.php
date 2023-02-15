@@ -15,7 +15,11 @@ use App\Models\KeywordsHotel;
 class HtlhotelInfoController extends _commonController
 {
 
-	// インデックス
+	/**
+	 * インデックス
+	 * 
+	 * @return view
+	 */
 	public function index()
 	{
 		// Hotel_Rate モデル の インスタンスを取得
@@ -31,8 +35,11 @@ class HtlhotelInfoController extends _commonController
 		}
 	}
 
-
-	// 登録処理入力
+	/**
+	 * 登録情報入力
+	 * 
+	 * @return view
+	 */
 	public function new()
 	{
 		// 施設情報マスタのリクエストパラメータの取得
@@ -69,13 +76,50 @@ class HtlhotelInfoController extends _commonController
 		}
 	}
 
-	// 登録
+	/** 
+	 * 施設情報 画面 表示
+	 * 
+	 * @return view
+	 */
+	public function show()
+	{
+		$request = Request::all();
+
+		if (session()->exists('target_cd')) {
+			$hotelCd = session("target_cd");
+			if (session()->exists('guideMessage')) {
+				$this->addGuideMessage(session('guideMessage'));
+			}
+			session()->forget('target_cd'); // クリア
+			session()->forget('guideMessage');
+		} else if (isset($request["target_cd"])) {
+			$hotelCd = $request["target_cd"];
+		} else {
+			return $this->new();
+		}
+
+		// 施設データ取得
+		$this->setHotelDbData($hotelInfoData, $hotelCd);
+
+		$this->addViewData("hotelInfo", $hotelInfoData);
+		$this->addViewData("target_cd", $hotelCd);
+
+		// ビューを表示
+		return view("ctl.htlhotelInfo.show", $this->getViewData());
+	}
+
+	/**
+	 * 登録
+	 * 
+	 * @return view
+	 */
 	public function create()
 	{
 		// 施設情報マスタのリクエストパラメータの取得
 		$Hotel_Info = new HotelInfo();
 		$targetCd = Request::input('target_cd');
 		$input_data = Request::input('HotelInfo');
+		$actionCd = $this->getActionCd();
 
 		$a_request_hotelinfo = $Hotel_Info->where(['hotel_cd' => $targetCd])->first();
 
@@ -109,13 +153,10 @@ class HtlhotelInfoController extends _commonController
 			}
 		}
 
+		// キーに紐付くデータ取得
+		$a_hotelinfo = $Hotel_Info->find(['hotel_cd' => $targetCd]);
+
 		try {
-			// トランザクション開始
-			DB::beginTransaction();
-
-			// キーに紐付くデータ取得
-			$a_hotelinfo = $Hotel_Info->find(['hotel_cd' => $targetCd]);
-
 			// 更新対象のテーブルがない場合、新規登録実行する
 			if (count($a_hotelinfo) == 0) {
 				$a_attributes = [];
@@ -130,14 +171,16 @@ class HtlhotelInfoController extends _commonController
 
 				if (count($errorList) > 0) {
 					$this->addErrorMessageArray($errorList);
-					DB::rollback();
 					return $this->new();
 				}
 
-				$a_attributes['entry_cd'] = 'entry_cd'; // TODO $this->box->info->env->action_cd;
+				$a_attributes['entry_cd'] = $actionCd;
 				$a_attributes['entry_ts'] = now();
-				$a_attributes['modify_cd'] = 'modify_cd'; // TODO $this->box->info->env->action_cd
+				$a_attributes['modify_cd'] = $actionCd;
 				$a_attributes['modify_ts'] = now();
+
+				// トランザクション開始
+				DB::beginTransaction();
 
 				$Hotel_Info->create([
 					'hotel_cd' => $targetCd,
@@ -179,54 +222,16 @@ class HtlhotelInfoController extends _commonController
 
 			// 各メソッドで Exception が投げられた場合
 		} catch (Exception $e) {
-			throw $e;
+			DB::rollback();
+			$this->addErrorMessage('登録に失敗しました。');
+			$this->addViewData("hotelrate", $a_request_hotelinfo);
+			return $this->show();
 		}
-	}
-
-	/** 施設情報 画面 表示
-	 * 
-	 * @return 施設情報 画面
-	 */
-	public function show()
-	{
-		$request = Request::all();
-
-		if (session()->exists('target_cd')) {
-			$hotelCd = session("target_cd");
-			if (session()->exists('guideMessage')) {
-				$this->addGuideMessage(session('guideMessage'));
-			}
-			session()->forget('target_cd'); // クリア
-			session()->forget('guideMessage');
-		} else if (isset($request["target_cd"])) {
-			$hotelCd = $request["target_cd"];
-		} else {
-			return $this->new();
-		}
-
-		// 施設データ取得
-		$this->setHotelDbData($hotelInfoData, $hotelCd);
-
-		$this->addViewData("hotelInfo", $hotelInfoData);
-		$this->addViewData("target_cd", $hotelCd);
-
-		// ビューを表示
-		return view("ctl.htlhotelInfo.show", $this->getViewData());
-	}
-
-	/** 施設データをDBから取得（参照渡し）
-	 *
-	 * @return void
-	 */
-	private function setHotelDbData(&$hotelInfoData, $hotelCd)
-	{
-		$hotel = new HotelInfo();
-		$hotelInfoData = $hotel->selectByKey($hotelCd);
 	}
 
 	/** 施設情報 更新画面表示
 	 *
-	 * @return void
+	 * @return view
 	 */
 	public function edit()
 	{
@@ -254,40 +259,9 @@ class HtlhotelInfoController extends _commonController
 		return view("ctl.htlhotelInfo.edit", $this->getViewData());
 	}
 
-	/** 施設情報の画面の値を取得、変換、バリデーションを行う（参照渡し）
-	 *
-	 * @param [type] $hotelInfoData
-	 * @param [type] $input
-	 * @param [type] $hotelInfo
-	 * @return array
-	 */
-	private function validateHotelInfoFromScreen(&$hotelInfoData, $input, $hotelInfo)
-	{
-		$hotelInfoData['hotel_cd'] = $input['hotel_cd'];
-
-		if (!is_null($input['parking_info'])) {
-			$hotelInfoData['parking_info'] = str_replace(">", "＞", str_replace("<", "＜", $input['parking_info']));
-		} else {
-			$hotelInfoData['parking_info'] = null;
-		}
-		if (!is_null($input['card_info'])) {
-			$hotelInfoData['card_info'] = str_replace(">", "＞", str_replace("<", "＜", $input['card_info']));
-		} else {
-			$hotelInfoData['card_info'] = null;
-		}
-		$hotelInfoData['info'] = str_replace(">", "＞", str_replace("<", "＜", $input['info']));
-		if (empty($hotelInfoData['info'])) {
-			$hotelInfoData['info'] = null;
-		}
-
-		// バリデーションチェック
-		return $hotelInfo->validation($hotelInfoData);
-	}
-
-
 	/** 施設情報 更新処理
 	 *
-	 * @return void
+	 * @return view
 	 */
 	public function update()
 	{
@@ -343,7 +317,53 @@ class HtlhotelInfoController extends _commonController
 			->with(['guideMessage' => '施設情報データを更新しました。']);
 	}
 
+	/**
+	 * 施設データをDBから取得
+	 * 
+	 * @return void
+	 */
+	private function setHotelDbData(&$hotelInfoData, $hotelCd)
+	{
+		$hotel = new HotelInfo();
+		$hotelInfoData = $hotel->selectByKey($hotelCd);
+	}
 
+	/**
+	 * 施設情報の画面の値を取得、変換、バリデーションを行う
+	 * 
+	 * @param [type] $hotelInfoData
+	 * @param [type] $input
+	 * @param [type] $hotelInfo
+	 * @return array
+	 */
+	private function validateHotelInfoFromScreen(&$hotelInfoData, $input, $hotelInfo)
+	{
+		$hotelInfoData['hotel_cd'] = $input['hotel_cd'];
+
+		if (!is_null($input['parking_info'])) {
+			$hotelInfoData['parking_info'] = str_replace(">", "＞", str_replace("<", "＜", $input['parking_info']));
+		} else {
+			$hotelInfoData['parking_info'] = null;
+		}
+		if (!is_null($input['card_info'])) {
+			$hotelInfoData['card_info'] = str_replace(">", "＞", str_replace("<", "＜", $input['card_info']));
+		} else {
+			$hotelInfoData['card_info'] = null;
+		}
+		$hotelInfoData['info'] = str_replace(">", "＞", str_replace("<", "＜", $input['info']));
+		if (empty($hotelInfoData['info'])) {
+			$hotelInfoData['info'] = null;
+		}
+
+		// バリデーションチェック
+		return $hotelInfo->validation($hotelInfoData);
+	}
+
+	/**
+	 * 施設キーワードの登録・更新
+	 * 
+	 * @return void|bool
+	 */
 	public function search_words($targetCd)
 	{
 		// 施設検索情報テーブルへの登録
@@ -353,21 +373,21 @@ class HtlhotelInfoController extends _commonController
 		$a_hotel_search_words      = [];
 		$a_find_hotel_search_words = [];
 		$b_is_create_hsd          = false;
-		$b_is_success             = false;
+		$actionCd = $this->getActionCd();
 
 		// 施設検索情報テーブルへの登録			
 		// 施設検索データが存在するかチェック
-		$a_find_hotel_search_words             = $o_hotel_search_words->find($targetCd);
+		$a_find_hotel_search_words = $o_hotel_search_words->find($targetCd);
 
 		// レコードが存在しなければ作成
 		if (empty($a_find_hotel_search_words)) {
 			$b_is_create_hsd = true;
-			$a_find_hotel_search_words['entry_cd']  = 'entry_cd'; // TODO $this->box->info->env->action_cd
+			$a_find_hotel_search_words['entry_cd']  = $actionCd;
 			$a_find_hotel_search_words['entry_ts']  = now();
 		}
 
 		// 登録データの整形
-		$a_conditions['hotel_cd']     = $targetCd;
+		$a_conditions['hotel_cd'] = $targetCd;
 
 		$s_translate_hotel_nm     = $this->get_sql_translate_keyword('q3.hotel_nm');
 		$s_translate_hotel_kn     = $this->get_sql_translate_keyword('q3.hotel_kn');
@@ -424,7 +444,7 @@ SQL;
 		$a_hotel_search_words = DB::select($s_sql, $a_conditions);
 
 		// 登録データの取得
-		$a_find_hotel_search_words['modify_cd'] = 'modify_cd'; // TODO $this->box->info->env->action_cd;
+		$a_find_hotel_search_words['modify_cd'] = $actionCd;
 		$a_find_hotel_search_words['modify_ts'] = now();
 
 		$a_attributes['hotel_cd']     = $targetCd;
@@ -441,143 +461,138 @@ SQL;
 
 		if (count($errorList) > 0) {
 			$this->addErrorMessageArray($errorList);
-			DB::rollback();
 			return false;
 		}
 
-		// レコードの登録・更新
-		if ($b_is_create_hsd) {
-			$b_is_success = $o_hotel_search_words->create([
-				'hotel_cd' 		=> $a_hotel_search_words[0]->hotel_cd,
-				'hotel_nm' 		=> $a_hotel_search_words[0]->hotel_nm,
-				'hotel_kn'		=> $a_hotel_search_words[0]->hotel_kn,
-				'hotel_old_nm'	=> $a_hotel_search_words[0]->hotel_old_nm,
-				'info'			=> $a_hotel_search_words[0]->info,
-				'address'		=> $a_hotel_search_words[0]->address,
-				'tel'			=> $a_hotel_search_words[0]->tel,
-				'entry_cd'		=> $a_find_hotel_search_words['entry_cd'],
-				'entry_ts'		=> $a_find_hotel_search_words['entry_ts'],
-				'modify_cd'		=> $a_find_hotel_search_words['modify_cd'],
-				'modify_ts'		=> $a_find_hotel_search_words['modify_ts'],
-			]);
-		} else {
-			$b_is_success = $o_hotel_search_words->where([
-				'hotel_cd' 		=> $a_hotel_search_words[0]->hotel_cd
-			])->update([
-				'hotel_nm' 		=> $a_hotel_search_words[0]->hotel_nm,
-				'hotel_kn'		=> $a_hotel_search_words[0]->hotel_kn,
-				'hotel_old_nm'	=> $a_hotel_search_words[0]->hotel_old_nm,
-				'info'			=> $a_hotel_search_words[0]->info,
-				'address'		=> $a_hotel_search_words[0]->address,
-				'tel'			=> $a_hotel_search_words[0]->tel,
-				'modify_cd'		=> $a_find_hotel_search_words['modify_cd'],
-				'modify_ts'		=> $a_find_hotel_search_words['modify_ts'],
-			]);
-		}
+		try {
+			DB::beginTransaction();
 
-		// レコードの登録・更新結果判定
-		if (!$b_is_success) {
-			return false;
-		}
+			// レコードの登録・更新
+			if ($b_is_create_hsd) {
+				$o_hotel_search_words->create([
+					'hotel_cd' 		=> $a_hotel_search_words[0]->hotel_cd,
+					'hotel_nm' 		=> $a_hotel_search_words[0]->hotel_nm,
+					'hotel_kn'		=> $a_hotel_search_words[0]->hotel_kn,
+					'hotel_old_nm'	=> $a_hotel_search_words[0]->hotel_old_nm,
+					'info'			=> $a_hotel_search_words[0]->info,
+					'address'		=> $a_hotel_search_words[0]->address,
+					'tel'			=> $a_hotel_search_words[0]->tel,
+					'entry_cd'		=> $a_find_hotel_search_words['entry_cd'],
+					'entry_ts'		=> $a_find_hotel_search_words['entry_ts'],
+					'modify_cd'		=> $a_find_hotel_search_words['modify_cd'],
+					'modify_ts'		=> $a_find_hotel_search_words['modify_ts'],
+				]);
+			} else {
+				$o_hotel_search_words->where([
+					'hotel_cd' 		=> $a_hotel_search_words[0]->hotel_cd
+				])->update([
+					'hotel_nm' 		=> $a_hotel_search_words[0]->hotel_nm,
+					'hotel_kn'		=> $a_hotel_search_words[0]->hotel_kn,
+					'hotel_old_nm'	=> $a_hotel_search_words[0]->hotel_old_nm,
+					'info'			=> $a_hotel_search_words[0]->info,
+					'address'		=> $a_hotel_search_words[0]->address,
+					'tel'			=> $a_hotel_search_words[0]->tel,
+					'modify_cd'		=> $a_find_hotel_search_words['modify_cd'],
+					'modify_ts'		=> $a_find_hotel_search_words['modify_ts'],
+				]);
+			}
 
-		//------------------------------------------------------------------
-		// 施設キーワードの登録(Keywords_Hotel)
-		//------------------------------------------------------------------
-		// インスタンス生成
-		$o_keywords_hotel = new KeywordsHotel();
+			//------------------------------------------------------------------
+			// 施設キーワードの登録(Keywords_Hotel)
+			//------------------------------------------------------------------
+			// インスタンス生成
+			$o_keywords_hotel = new KeywordsHotel();
 
-		// キーワード項目数だけループ
-		foreach ($a_hotel_search_words[0] ?? [] as $s_item_nm => $s_keyword) {
-
-			// 施設コード以外を登録
-			if ($s_item_nm !== 'hotel_cd') {
-				// 初期化
-				$a_keywords_hotel_work = [];
-				$a_keywords_hotel_find = [];
-
-				// 対象レコードが存在するかチェック
-				$a_keywords_hotel_work['hotel_cd'] = $a_hotel_search_words[0]->hotel_cd;
-				$a_keywords_hotel_work['field_nm'] = $s_item_nm;
-
-				$a_keywords_hotel_find             = $o_keywords_hotel->where([
-					'hotel_cd' => $a_keywords_hotel_work['hotel_cd'],
-					'field_nm' => $a_keywords_hotel_work['field_nm']
-				])->first();
-
-
-				// 電話番号（TEL）のみ半角→全角へ変換されていないので対応
-				if ($s_item_nm === 'tel') {
-					$s_keyword = mb_convert_kana($s_keyword, 'ASK', 'UTF-8');
-				}
-
-				// 登録・更新
-				// レコード無：登録
-				// レコード有：更新
-				if (empty($a_keywords_hotel_find)) {
-					// 登録用データ作成
+			// キーワード項目数だけループ
+			foreach ($a_hotel_search_words[0] ?? [] as $s_item_nm => $s_keyword) {
+				// 施設コード以外を登録
+				if ($s_item_nm !== 'hotel_cd') {
+					// 初期化
 					$a_keywords_hotel_work = [];
-					$a_keywords_hotel_work['hotel_cd']  = $a_hotel_search_words[0]->hotel_cd;
-					$a_keywords_hotel_work['field_nm']  = $s_item_nm;
-					$a_keywords_hotel_work['keyword']   = $s_keyword;
+					$a_keywords_hotel_find = [];
 
-					// バリデート実行
-					$errorList = [];
-					$errorList = $o_keywords_hotel->validation($a_keywords_hotel_work);
+					// 対象レコードが存在するかチェック
+					$a_keywords_hotel_work['hotel_cd'] = $a_hotel_search_words[0]->hotel_cd;
+					$a_keywords_hotel_work['field_nm'] = $s_item_nm;
 
-					if (count($errorList) > 0) {
-						$this->addErrorMessageArray($errorList);
-						DB::rollback();
-						return false;
+					$a_keywords_hotel_find             = $o_keywords_hotel->where([
+						'hotel_cd' => $a_keywords_hotel_work['hotel_cd'],
+						'field_nm' => $a_keywords_hotel_work['field_nm']
+					])->first();
+
+
+					// 電話番号（TEL）のみ半角→全角へ変換されていないので対応
+					if ($s_item_nm === 'tel') {
+						$s_keyword = mb_convert_kana($s_keyword, 'ASK', 'UTF-8');
 					}
 
-					// 登録
-					$keywords_hotel_create = $o_keywords_hotel->create([
-						'hotel_cd'  => $a_hotel_search_words[0]->hotel_cd,
-						'field_nm'  => $s_item_nm,
-						'keyword'   => $s_keyword,
-						'entry_cd'  => 'entry_cd', 	// TODO $this->box->info->env->action_cd;
-						'entry_ts'  => now(),
-						'modify_cd' => 'modify_cd',	// TODO $this->box->info->env->action_cd;
-						'modify_ts' => now()
-					]);
+					// 登録・更新
+					// レコード無：登録
+					// レコード有：更新
+					if (empty($a_keywords_hotel_find)) {
+						// 登録用データ作成
+						$a_keywords_hotel_work = [];
+						$a_keywords_hotel_work['hotel_cd']  = $a_hotel_search_words[0]->hotel_cd;
+						$a_keywords_hotel_work['field_nm']  = $s_item_nm;
+						$a_keywords_hotel_work['keyword']   = $s_keyword;
 
-					if (!$keywords_hotel_create) {
-						return false;
-					}
-				} else {
-					// 更新用データ作成
-					$a_keywords_hotel_work = [];
-					$a_keywords_hotel_work['keyword']   = $s_keyword;
+						// バリデート実行
+						$errorList = [];
+						$errorList = $o_keywords_hotel->validation($a_keywords_hotel_work);
 
-					// バリデート実行
-					$errorList = [];
-					$errorList = $o_keywords_hotel->validation($a_keywords_hotel_work);
+						if (count($errorList) > 0) {
+							$this->addErrorMessageArray($errorList);
+							DB::rollback();
+							return false;
+						}
+						// 登録
+						$o_keywords_hotel->create([
+							'hotel_cd'  => $a_hotel_search_words[0]->hotel_cd,
+							'field_nm'  => $s_item_nm,
+							'keyword'   => $s_keyword,
+							'entry_cd'  => $actionCd,
+							'entry_ts'  => now(),
+							'modify_cd' => $actionCd,
+							'modify_ts' => now()
+						]);
+					} else {
+						// 更新用データ作成
+						$a_keywords_hotel_work = [];
+						$a_keywords_hotel_work['keyword']   = $s_keyword;
 
-					if (count($errorList) > 0) {
-						$this->addErrorMessageArray($errorList);
-						DB::rollback();
-						return false;
-					}
+						// バリデート実行
+						$errorList = [];
+						$errorList = $o_keywords_hotel->validation($a_keywords_hotel_work);
 
-					// 更新
-					$keywords_hotel_update = $o_keywords_hotel->where([
-						'hotel_cd'  => $a_hotel_search_words[0]->hotel_cd,
-						'field_nm'  => $s_item_nm,
-					])->update([
-						'keyword'   => $s_keyword,
-						'modify_cd' => 'modify_cd',	// TODO $this->box->info->env->action_cd;
-						'modify_ts' => now()
-					]);
-
-					if (!$keywords_hotel_update) {
-						return false;
+						if (count($errorList) > 0) {
+							$this->addErrorMessageArray($errorList);
+							DB::rollback();
+							return false;
+						}
+						// 更新
+						$o_keywords_hotel->where([
+							'hotel_cd'  => $a_hotel_search_words[0]->hotel_cd,
+							'field_nm'  => $s_item_nm,
+						])->update([
+							'keyword'   => $s_keyword,
+							'modify_cd' => $actionCd,
+							'modify_ts' => now()
+						]);
 					}
 				}
 			}
+			DB::commit();
+		} catch (Exception $e) {
+			DB::rollback();
+			return false;
 		}
 	}
 
-	// キーワードの変換を行うSQL文を取得
+	/**
+	 * キーワードの変換を行うSQL文を取得
+	 * 
+	 * @return string
+	 */
 	public function get_sql_translate_keyword($as_str, $ab_is_trans_kana = true)
 	{
 		try {
@@ -613,5 +628,25 @@ SQL;
 		} catch (Exception $e) {
 			throw $e;
 		}
+	}
+
+	/**
+	 * コントローラ名とアクション名を取得して、ユーザーIDと連結
+	 * ユーザーID取得は暫定の為、書き換え替えが必要です。
+	 *
+	 * MEMO: app/Models/common/CommonDBModel.php から移植したもの
+	 * HACK: 適切に共通化したいか。
+	 * @return string
+	 */
+	private function getActionCd()
+	{
+		$path = explode("@", \Illuminate\Support\Facades\Route::currentRouteAction());
+		$pathList = explode('\\', $path[0]);
+		$controllerName = str_replace("Controller", "", end($pathList)); // コントローラ名
+		$actionName = $path[1]; // アクション名
+		$userId = \Illuminate\Support\Facades\Session::get("user_id");   // TODO: ユーザー情報取得のキーは仮です
+		$actionCd = $controllerName . "/" . $actionName . "." . $userId;
+
+		return $actionCd;
 	}
 }
