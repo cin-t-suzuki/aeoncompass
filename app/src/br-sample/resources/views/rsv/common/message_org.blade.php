@@ -1,4 +1,5 @@
 {{-- MEMO: 移植元 public\app\rsv\view2\_common\_message_org.tpl --}}
+
 {{-- エラーメッセージ --}}
 @if ($errors->any())
     <style type="text/css">

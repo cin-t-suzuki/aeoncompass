@@ -8,7 +8,7 @@
 --------------------------------------------------------------------------------
 --}}
 
-{{-- 大変そうだから後回し
+{{-- TODO: 大変そうだから後回し (by suzuki san)
 {if $v->user->member->is_login() and !$v->user->member->is_free()}
 {else}
 { capture name=next_url}{
@@ -58,7 +58,7 @@
                 <tr>
                     <td>
                         <div class="pgh1-usr2 member">
-                            <a class="user-link" href="{{-- {$v->env.ssl_path}point/history/ --}}" title ="ポイントの発行状況はこちら" style = "display: block;">
+                            <a class="user-link" href="{{ route('rsv.point.history') }}" title ="ポイントの発行状況はこちら" style = "display: block;">
                                 <div class="pgh1-usr3">
                                     <span class="sankaku"></span>
                                     <span class="welcome">ようこそ</span>
@@ -92,9 +92,8 @@
                 @endif
                 </div>
                 <div class="mnv">
-                    @if(false)
-                    {{-- if (strpos($v->env.x_uri, $v->env.path_base|cat:'/point/') !== 0) --}}
-                        <a class="" href="{$v->env.path_base}/point/">
+                    @if (Route::currentRouteName() !== 'rsv.point.index')
+                        <a class="" href="{{ route('rsv.point.index') }}">
                             <img src="{{ asset('/img/mnv/mnv-point2.gif') }}" width="102" height="33" alt="ＢＲポイント" />
                         </a>
                     @else
@@ -102,9 +101,8 @@
                     @endif
                 </div>
                 <div class="mnv">
-                    @if(false)
-                    {{-- if ($v->env.x_uri != $v->env.path_base|cat:'/reserve/') --}}
-                        <a class="" href="{$v->env.port_https}{$v->env.path_base}/reserve/">
+                    @if (Route::currentRouteName() !== 'rsv.reserve.index')
+                        <a class="" href="{{ route('rsv.reserve.index') }}">
                             <img src="{{ asset('/img/mnv/mnv-rsv2.gif') }}" width="182" height="33" alt="予約の確認・キャンセル・日程短縮" />
                         </a>
                     @else
@@ -112,21 +110,20 @@
                     @endif
                 </div>
                 <div class="mnv">
-                    <a class="" href="{$v->env.path_base}/help/">
+                    <a class="" href="{{ route('rsv.help.index') }}">
                         <img src="{{ asset('/img/mnv/mnv-help2.gif') }}" width="92" height="33" alt="ヘルプ" />
                     </a>
                 </div>
             @elseif ($pgh1_mnv == 2)
                 <div class="mnv">
-                    <a class="" href="{$v->env.path_base}/help/">
+                    <a class="" href="{{ route('rsv.help.index') }}">
                         <img src="{{ asset('/img/mnv/mnv-help2.gif') }}" width="92" height="33" alt="ヘルプ" />
                     </a>
                 </div>
             @elseif ($pgh1_mnv == 3)
                 <div class="mnv">
-                    @if(false)
-                    {{-- if (strpos($v->env.x_uri, $v->env.path_base|cat:'/guide/coupon/') !== 0) --}}
-                        <a class="" href="{$v->env.path_base}/guide/coupon/">
+                    @if (Route::currentRouteName() !== 'rsv.guide.coupon')
+                        <a class="" href="{{ route('rsv.guide.coupon') }}">
                             <img src="{{ asset('/img/mnv/mnv-first2.gif') }}" width="112" height="40" alt="初めての方へ" />
                         </a>
                     @else
@@ -134,9 +131,8 @@
                     @endif
                 </div>
                 <div class="mnv">
-                    @if(false)
-                    {{-- if (strpos($v->env.x_uri, $v->env.path_base|cat:'/point/') !== 0) --}}
-                        <a class="" href="{$v->env.path_base}/point/">
+                    @if (Route::currentRouteName() !== 'rsv.point.index')
+                        <a class="" href="{{ route('rsv.point.index') }}">
                             <img src="{{ asset('/img/mnv/mnv-point2.gif') }}" width="112" height="40" alt="ＢＲポイント" />
                         </a>
                     @else
@@ -144,9 +140,8 @@
                     @endif
                 </div>
                 <div class="mnv">
-                    @if(false)
-                    {{-- if (strpos($v->env.x_uri, $v->env.path_base|cat:'/reserve/') !== 0) --}}
-                        <a class="" href="{$v->env.port_https}{$v->env.path_base}/reserve/">
+                    @if (Route::currentRouteName() !== 'rsv.reserve.index')
+                        <a class="" href="{{ route('rsv.reserve.index') }}">
                             <img src="{{ asset('/img/mnv/mnv-rsv2.gif') }}" width="112" height="40" alt="予約の確認・キャンセル・日程短縮" />
                         </a>
                     @else
@@ -154,7 +149,7 @@
                     @endif
                 </div>
                 <div class="mnv">
-                    <a class="" href="{$v->env.path_base}/help/">
+                    <a class="" href="{{ route('rsv.help.index') }}">
                         <img src="{{ asset('/img/mnv/mnv-help2.gif') }}" width="92" height="33" alt="ヘルプ" />
                     </a>
                 </div>

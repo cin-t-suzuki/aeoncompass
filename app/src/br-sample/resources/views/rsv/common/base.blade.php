@@ -163,7 +163,7 @@
                         <p><a href="{{-- {$v->env.ssl_path}rsv/reminder/ --}}">会員コード・パスワードを照会する</a></p>
                         <p><a href="{{-- {$v->env.ssl_path}rsv/member/mail1/ --}}">メールマガジンの受信状態を変更する</a></p>
                         <br />
-                        <p><a href="{{-- {$v->env.path_base}/point/ --}}">ＢＲポイント</a></p>
+                        <p><a href="{{ route('rsv.point.index')}}">ＢＲポイント</a></p>
                         <br />
                         <br />
                         <br />
@@ -174,7 +174,7 @@
                         <p><a href="{{-- {$v->env.path_base}/about/policy/member/ --}}">会員規約について</a></p>
                         <p><a href="{{-- {$v->env.path_base}/about/policy/ --}}">利用規約について</a></p>
                         <p><a href="{{-- {$v->env.path_base}/about/policy/privacy/ --}}" target="_blank">プライバシーポリシーについて</a></p>
-                        <p><a href="{{-- {$v->env.path_base}/help/ --}}">ヘルプ</a></p>
+                        <p><a href="{{ route('rsv.help.index') }}">ヘルプ</a></p>
                         <br />
                         <p><a href="{{-- {$v->env.path_base}/hotel/new.html --}}">新着ホテル</a></p>
                         <br />

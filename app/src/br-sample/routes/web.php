@@ -22,12 +22,34 @@ Route::get('/', function () {
  * 宿泊予約
  */
 Route::get('/rsv/auth', [\App\Http\Controllers\rsv\AuthController::class, 'index'])->name('rsv.auth.login');
+Route::post('/rsv/auth', [\App\Http\Controllers\rsv\AuthController::class, 'login'])->name('rsv.auth.login.authenticate');
+Route::get('/rsv/auth/logout', [\App\Http\Controllers\rsv\AuthController::class, 'logout'])->name('rsv.auth.logout');
+
+Route::get('/rsv/top', function () {
+    return view('rsv.top.index');
+})->name('rsv.top');
 Route::namespace('App\Http\Controllers\rsv')->prefix('rsv')->group(function () {
     // 施設情報
     Route::controller(HotelController::class)->prefix("hotel")->group(function () {
         Route::get('/{hotel_cd}', 'info')->name('rsv.hotel.info');
     });
 });
+/**
+ * ↓↓↓ 宿泊予約 未実装の route
+ */
+Route::get('/rsv/subscribe/new', function () {return 'TODO: 新規会員登録'; })->name('rsv.subscribe.new');
+Route::get('/point', function () {return 'TODO: ポイント'; })->name('rsv.point.index');
+Route::get('/point/history', function () {return 'TODO: ポイント履歴'; })->name('rsv.point.history');
+Route::get('/reserve', function () {return 'TODO: 予約確認・キャンセル・領収書'; })->name('rsv.reserve.index');
+Route::get('/help', function () {return 'TODO: ヘルプ'; })->name('rsv.help.index');
+Route::get('/guide/coupon', function () {return 'TODO: クーポン'; })->name('rsv.guide.coupon');
+Route::get('/guide/visitor', function () {return 'TODO: 初めての方へ'; })->name('rsv.guide.visitor');
+Route::post('/auth/eplogin', function () {return 'TODO: EPARK ログイン'; })->name('rsv.auth.eplogin.authenticate');
+Route::get('/rsv/reminder', function () {return 'TODO: 会員コード・パスワードをお忘れの方'; })->name('rsv.reminder');
+Route::get('/member/withdraw4', function () {return 'TODO: 会員コード・パスワードをお忘れの方'; })->name('rsv.reminder.withdraw4'); // magic number
+/**
+ * ↑↑↑ 宿泊予約 未実装の route
+ */
 
 Route::middleware(['guest:staff' /* TODO: 各ロールについて guest ミドルウェアを追加 */])->group(function () {
     Route::get('ctl/brLogin', [\App\Http\Controllers\ctl\BrLoginController::class, 'index'])->name('ctl.br.login.index');

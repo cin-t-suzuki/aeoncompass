@@ -41,11 +41,15 @@ class Authenticate extends Middleware
             if (in_array('staff', $this->guards, true)) {
                 return route('ctl.br.login.index');
             }
+
+            if (in_array('web', $this->guards, true)) {
+                return route('rsv.auth.login');
+            }
+
             // TODO: ↑ 各ロールについて、未認証時に遷移先とするログイン画面を追加
 
             // 上記以外の場合は、ログインが不要なページに移動 TODO: 遷移先は仮
-            // return route('user.top');
-            return view('user top (cf. app/Http/Middleware/Authenticate.php');
+            return 'user top (cf. app/Http/Middleware/Authenticate.php';
         }
     }
 }
