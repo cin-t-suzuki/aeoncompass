@@ -12,7 +12,7 @@ class DateUtil
     private $date = null; // 基準日時
 
     // コンストラクタ
-    function __construct($at_date = null)
+    public function __construct($at_date = null)
     {
 
         // 数字のみの場合はシリアル値とみなし数値型に強制的に変換（sqlで取得した値はすべて文字型になるため）
@@ -31,7 +31,6 @@ class DateUtil
 
             // 日付型と認識できない場合
             if (!$this->is_date($at_date)) {
-
                 // 日付型と認識しない場合（2月31日など）は月末にまるめる（2月28日）
                 if (substr($at_date, 0, 4) . substr($at_date, 4, 2) != $this->to_format('Ym')) {
                     $this->add('M', -1);
@@ -43,8 +42,9 @@ class DateUtil
         }
     }
 
-    /** 基準日時の設定
-     *  基準日時に指定した日付で設定する。
+    /**
+     * 基準日時の設定
+     *    基準日時に指定した日付で設定する。
      *  at_date には 年月日の文字列を設定します。
      * example
      * clear(strtotime('2008/05/01'))
@@ -70,7 +70,6 @@ class DateUtil
 
             // 日付型と認識できない場合
             if (!$this->is_date($at_date)) {
-
                 // 日付型と認識しない場合（2月31日など）は月末にまるめる（2月28日）
                 if (substr($at_date, 0, 4) . substr($at_date, 4, 2) != $this->to_format('Ym')) {
                     $this->add('M', -1);
@@ -84,13 +83,14 @@ class DateUtil
         return true;
     }
 
-    /** 基準日時の取得
-     *  基準日時に指定した日付で設定する。
-     *  at_date には 年月日の文字列を設定します。
-     *  example
-     *    > 2008/06/07
-     *  >> $this->date が 2008/06/07になる
-     *          clear(strtotime('2008/05/01'))
+    /**
+     * 基準日時の取得
+     *    基準日時に指定した日付で設定する。
+     *    at_date には 年月日の文字列を設定します。
+     *    example
+     *        > 2008/06/07
+     *        >> $this->date が 2008/06/07になる
+     *            clear(strtotime('2008/05/01'))
      *
      * @return
      */
@@ -99,21 +99,23 @@ class DateUtil
         return $this->date;
     }
 
-    // 日付の確認
-    //
-    // 文字列の日付に正しいか確認する。
-    //
-    //  as_time には 年月日の文字列を設定します。
-    //
-    // example
-    //
-    // is_date('20080501')
-    // is_date('20080501 235959')
-    // is_date('2008-05-01')
-    // is_date('2008/05/01 23/59/59')
-    //
-    //   > strtotime('2008/02/30')
-    //     >> true
+    /**
+     * 日付の確認
+     *
+     * 文字列の日付に正しいか確認する。
+     *
+     *  as_time には 年月日の文字列を設定します。
+     *
+     * example
+     *
+     * is_date('20080501')
+     * is_date('20080501 235959')
+     * is_date('2008-05-01')
+     * is_date('2008/05/01 23/59/59')
+     *
+     *   > strtotime('2008/02/30')
+     *     >> true
+     */
     public function is_date($as_date)
     {
 
@@ -225,14 +227,16 @@ class DateUtil
         return true;
     }
 
-    /** ハイフンかスラッシュの日付のチェック
+    /**
+     * ハイフンかスラッシュの日付のチェック
+     *
      *  ・日付が正しくない場合はfalseを返す
-     *  ・現行system.phpより
-     *  date
-     *  YYYY-MM-DD
-     *  YYYY/MM/DD
-     *  return
-     *  true or false
+     *    ・現行system.phpより
+     *    date
+     *    YYYY-MM-DD
+     *    YYYY/MM/DD
+     *    return
+     *    true or false
      *
      * @param [type] $date
      * @return void
@@ -240,7 +244,6 @@ class DateUtil
     public function check_date_ymd($date)
     {
         try {
-
             // 値がなければnullを返す。
             if ($this->is_empty($date)) {
                 return false;
@@ -282,54 +285,56 @@ class DateUtil
     }
 
 
-    // 加算
-    //
-    // 基準日時に指定の単位で加算した結果をtime型でかえす。
-    //
-    //  as_interval には 加算する単位を設定します。
-    //  an_number   には 加算する値をを設定します。
-    //
-    // example
-    //   基準日を2008/05/10とする
-    //
-    // add('Y', 1)
-    //
-    //   > 'Y'
-    //   > 1
-    //     >> 2009/05/10 00:00:00
-    //
-    //   > 'm'
-    //   > 1
-    //     >> 2008/06/10 00:00:00
-    //
-    //   > 'd'
-    //   > 1
-    //     >> 2008/05/11 00:00:00
-    //
-    //   > 'H'
-    //   > 1
-    //     >> 2008/05/10 01:00:00
-    //
-    //   > 'i'
-    //   > 1
-    //     >> 2008/05/10 00:01:00
-    //
-    //   > 's'
-    //   > 1
-    //     >> 2008/05/10 00:00:01
-    //
-    //   > 's'
-    //   > -1
-    //     >> 2008/05/09 23:59:59
-    //
-    //
-    //  単位($as_interval)
-    //   ・年         : Y
-    //   ・月         : m
-    //   ・日         : d
-    //   ・時(24時間) : H
-    //   ・分         : i
-    //   ・秒         : s
+    /**
+     * 加算
+     *
+     * 基準日時に指定の単位で加算した結果をtime型でかえす。
+     *
+     *  as_interval には 加算する単位を設定します。
+     *  an_number   には 加算する値をを設定します。
+     *
+     * example
+     *   基準日を2008/05/10とする
+     *
+     * add('Y', 1)
+     *
+     *   > 'Y'
+     *   > 1
+     *     >> 2009/05/10 00:00:00
+     *
+     *   > 'm'
+     *   > 1
+     *     >> 2008/06/10 00:00:00
+     *
+     *   > 'd'
+     *   > 1
+     *     >> 2008/05/11 00:00:00
+     *
+     *   > 'H'
+     *   > 1
+     *     >> 2008/05/10 01:00:00
+     *
+     *   > 'i'
+     *   > 1
+     *     >> 2008/05/10 00:01:00
+     *
+     *   > 's'
+     *   > 1
+     *     >> 2008/05/10 00:00:01
+     *
+     *   > 's'
+     *   > -1
+     *     >> 2008/05/09 23:59:59
+     *
+     *
+     *    単位($as_interval)
+     *   ・年         : Y
+     *   ・月         : m
+     *   ・日         : d
+     *   ・時(24時間) : H
+     *   ・分         : i
+     *   ・秒         : s
+     */
     public function add($as_interval, $an_number)
     {
 
@@ -453,10 +458,11 @@ class DateUtil
         }
     }
 
-    // 月末を設定し返却します。
+    /**
+     * 月末を設定し返却します。
+     */
     public function last_day()
     {
-
         $date_ymd = $this->to_format('Y-m') . '-01 ' . $this->to_format('H:i:s');
         $this->set($date_ymd);
         $this->add('m', 1);
@@ -465,21 +471,23 @@ class DateUtil
         return $this->date;
     }
 
-    // フォーマット
-    //   ・年         : Y (YYYY)
-    //   ・月         : m (MM)
-    //   ・日         : d (DD)
-    //   ・時(24時間) : H (HH)
-    //   ・時(12時間) : h (HH)
-    //   ・分         : i (MM)
-    //   ・秒         : s (SS)
-    //   ・月         : n (M)
-    //   ・日         : j (D)
-    //   ・時(24時間) : G (H)
-    //   ・時(12時間) : g (HH)
+    /**
+     * フォーマット
+     *
+     *   ・年         : Y (YYYY)
+     *   ・月         : m (MM)
+     *   ・日         : d (DD)
+     *   ・時(24時間) : H (HH)
+     *   ・時(12時間) : h (HH)
+     *   ・分         : i (MM)
+     *   ・秒         : s (SS)
+     *   ・月         : n (M)
+     *   ・日         : j (D)
+     *   ・時(24時間) : G (H)
+     *   ・時(12時間) : g (HH)
+     */
     public function to_format($as_format)
     {
-
         // 文字列なら
         if (gettype($this->date) == 'string') {
 
@@ -490,11 +498,11 @@ class DateUtil
         return date($as_format, $this->date);
     }
 
-    /* 祝日を判断します。
-    */
+    /**
+     * 祝日を判断します。
+     */
     public function is_holiday()
     {
-
         $mastHoliday = new MastHoliday();
 
         $a_row = $mastHoliday->isHoliday(array('holiday' => date('Y-m-d', $this->date)));
@@ -502,47 +510,48 @@ class DateUtil
         return !(empty($a_row->holiday_nm));
     }
 
-    /* 祝日名称を取得します。
-    */
+    /**
+     * 祝日名称を取得します。
+     */
     public function to_holiday_nm()
     {
-
         $mastHoliday = new MastHoliday();
         $a_row = $mastHoliday->isHoliday(array('holiday' => date('Y-m-d', $this->date)));
 
         return $a_row->holiday_nm;
     }
 
-    // 曜日
-    //
-    // 基準日時を指定のスタイルで変換した値を文字列型でかえす。
-    //
-    //  as_style には変換するスタイルを設定します。
-    //
-    // example
-    //   基準日を2008/06/15とする
-    // to_week('d')
-    //
-    //   > 'n'
-    //     >> 1
-    //   > 'e'
-    //     >> Sun
-    //   > 'E'
-    //     >> Sunday
-    //   > 'j'
-    //     >> 日
-    //   > 'J'
-    //     >> 日曜日
-    //
-    //  スタイル($as_style)
-    //   ・数値             : n
-    //   ・3文字の英語      : e
-    //   ・フルスペルの英語 : E
-    //   ・1文字日本語      : j
-    //   ・3文字日本語      : J
+    /**
+     * 曜日
+     *
+     * 基準日時を指定のスタイルで変換した値を文字列型でかえす。
+     *
+     *  as_style には変換するスタイルを設定します。
+     *
+     * example
+     *   基準日を2008/06/15とする
+     * to_week('d')
+     *
+     *   > 'n'
+     *     >> 1
+     *   > 'e'
+     *     >> Sun
+     *   > 'E'
+     *     >> Sunday
+     *   > 'j'
+     *     >> 日
+     *   > 'J'
+     *     >> 日曜日
+     *
+     *    スタイル($as_style)
+     *   ・数値             : n
+     *   ・3文字の英語      : e
+     *   ・フルスペルの英語 : E
+     *   ・1文字日本語      : j
+     *   ・3文字日本語      : J
+     */
     public function to_week($as_style)
     {
-
         $a_week['n'] = array(1,        2,        3,         4,           5,          6,        7);
         $a_week['e'] = array('Sun',    'Mon',    'Tue',     'Wed',       'Thu',      'Fri',    'Sat');
         $a_week['E'] = array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
@@ -550,5 +559,28 @@ class DateUtil
         $a_week['J'] = array('日曜日', '月曜日', '火曜日',  '水曜日',    '木曜日',   '金曜日', '土曜日');
 
         return $a_week[$as_style][date('w', $this->date)];
+    }
+
+    /**
+     * 現在設定されている日付をもとにある曜日の日付を取得
+     *
+     * as_style  曜日を指定
+     *  1:日 2:月 3:火 4:水 5:木 6:金 7:土
+     * ab_mon 週の開始を日曜日からとするのか月曜日からとするのかを設定します。
+     *  true:月曜を週の先頭 false:日曜を週の先頭
+     * @return int
+     *
+     */
+    public function week_day($as_style, $ab_mon = false)
+    {
+
+        // 月曜日が週の開始であった場合かつ日曜日の日付を求める場合
+        if ($ab_mon && $as_style == 1) {
+            $as_style = 8;
+        }
+
+        $this->add('d', ($this->to_week('n') * -1) + $as_style);
+
+        return $this->date;
     }
 }

@@ -80,9 +80,15 @@
 	@else
 
 		@if(!$service->is_empty(strip_tags($hotel_list->hotel_old_nm)))
+<<<<<<< HEAD
 			<td nowrap><font color="#996666">{{$hotel_list->hotel_cd}}<br><a href="{{ route( 'ctl.htlTop.index' , ['hotel_cd'=>$hotel_list->hotel_cd]  ) }}" target="_blank" style="text-decoration: none; color:#000066;">{{strip_tags($hotel_list->hotel_nm)}}( 旧{{strip_tags($hotel_list->hotel_old_nm)}})</a>
 		@else
 			<td nowrap><font color="#996666">{{$hotel_list->hotel_cd}}<br><a href="{{ route( 'ctl.htlTop.index' , ['hotel_cd'=>$hotel_list->hotel_cd]  ) }}" target="_blank" style="text-decoration: none; color:#000066;">{{strip_tags($hotel_list->hotel_nm)}}</a>
+=======
+			<td nowrap><font color="#996666">{{$hotel_list->hotel_cd}}<br><a href="{{ route( 'ctl.htl_top.index' , ['hotel_cd'=>$hotel_list->hotel_cd]  ) }}" target="_blank" style="text-decoration: none; color:#000066;">{{strip_tags($hotel_list->hotel_nm)}}( 旧{{strip_tags($hotel_list->hotel_old_nm)}})</a>
+		@else
+			<td nowrap><font color="#996666">{{$hotel_list->hotel_cd}}<br><a href="{{ route( 'ctl.htl_top.index' , ['hotel_cd'=>$hotel_list->hotel_cd]  ) }}" target="_blank" style="text-decoration: none; color:#000066;">{{strip_tags($hotel_list->hotel_nm)}}</a>
+>>>>>>> develop
 		@endif
 
 		@if ($hotel_list->stock_type == 1)
