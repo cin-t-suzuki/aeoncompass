@@ -14,52 +14,8 @@ pgh1_mnv : メインナビゲーション
     $isLogin = false;
     $isFree = true;
     $svc_rsv = isset($svc_rsv) ? $svc_rsv : 1;
-    $env = [
-        'x_uri' => '',
-        'controller' => '',
-        'port_https' => '',
-        'in_security' => '',
-        'path_base' => '',
-        'path_img' => '',
-        'ssl_path' => '',
-        'root_path' => '',
-    ];
 @endphp
-@if ($isLogin && !$isFree)
-@else
-    @php
-        $next_url = '';
-        if (!is_null($next_url)) {
-            // ↑ もとは is empty
-            $next_url .= $next_url;
-        } elseif (is_null($env['x_uri'])) {
-            // ↑ もとは is empty
-        } elseif ($env['x_uri'] == '/auth/login/') {
-        } elseif (strpos($env['x_uri'], '/rsv/free/') === 0) {
-        } elseif (strpos($env['x_uri'], '/,/') === 0) {
-        } elseif ($env['controller'] == 'reserve') {
-            $next_url .= $env['port_https'];
-            $next_url .= $env['path_base'];
-            $next_url .= '/reserve/';
-        } else {
-            $next_url .= 'http';
-        
-            if ($env['in_security']) {
-                $next_url .= 's';
-            }
-        
-            $next_url .= '://';
-            $next_url .= $v->config->system->host_name;
-            $next_url .= $env['x_uri'];
-        
-            if (!is_null($v->helper->form->to_query_correct('', false))) {
-                // ↑ もとは is empty
-                $next_url .= '?';
-                $next_url .= $v->helper->form->to_query_correct('', false);
-            }
-        }
-    @endphp
-@endif
+
 <div id="pgh1">
     <div class="pg">
         <div class="pgh1-logo">
@@ -80,7 +36,7 @@ pgh1_mnv : メインナビゲーション
                 <div class="pgh1-usr2 guest">
                     <div class="pgh1-usr3">
                         <div class="button">
-                            <a class="btnimg btn-active" href="{{ route('rsv.auth.login', ['next_url' => $next_url]) }}">
+                            <a class="btnimg btn-active" href="{{ route('rsv.auth.login', ['next_url' => Request::fullUrl()]) }}">
                                 <img src="{{ asset('/img/usr/usr-login.gif') }}" title="ログイン" alt="ログイン" width="119" height="32" />
                             </a>
                         </div>

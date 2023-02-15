@@ -127,7 +127,6 @@
                             <input name="type" type="hidden" value="{{ $type }}" />
                             <input name="button_nm" type="hidden" value="{{ $button_nm }}" />
                             <input name="reconfirm" type="hidden" value="{{ $reconfirm }}" />
-                            <input name="next_url" type="hidden" value="{{ $next_url }}" />
                         </div>
                     </form>
                 </div>

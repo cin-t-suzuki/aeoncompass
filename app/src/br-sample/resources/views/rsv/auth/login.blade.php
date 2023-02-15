@@ -41,7 +41,6 @@
                                 <div class="reserve_stay_box_inner" style="padding-bottom: 320px;">
 
                                     {{ Form::open(['route' => 'rsv.auth.eplogin.authenticate', 'method' => 'post']) }}
-                                    <input name="next_url" type="hidden" value="{{ $next_url }}">
                                     <div style=" width: 50%; float: left;">
                                         <h3>EPARK IDでログイン</h3>
                                         <p>EPARKのアカウントでログインを行います。</p>
@@ -51,7 +50,6 @@
 
                                     {{ Form::open(['route' => 'rsv.auth.login.authenticate', 'method' => 'post']) }}
 
-                                    <input name="next_url" type="hidden" value="{{ $next_url }}">
                                     <div style=" width: 50%; float: left;">
                                         <h3>ベストリザーブ会員IDでログインする</h3>
                                         {{-- MEMO: ↓ もとは is_empty() --}}

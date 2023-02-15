@@ -1,3 +1,4 @@
+@include('rsv.common._pgh1')
 <p>
     {{ 'ログイン: ' . (Auth::guard('web')->check() ? '済' : '未') }}
     @if (Auth::guard('web')->check())

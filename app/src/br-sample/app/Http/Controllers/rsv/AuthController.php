@@ -8,24 +8,28 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+    /**
+     * ログイン画面表示
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function index(Request $request)
     {
-        var_dump($request->input('next_url'));
         if ($request->has('next_url')) {
-            // TODO:
-            // $request->session()->put('route.intended', $request->input('next_url'));
+            // ログイン認証後に遷移する url を指定
+            $request->session()->put('url.intended', $request->input('next_url'));
         }
-        return view('rsv.auth.login', [
-            'banner'    => $request->input('banner'),
-            'type'      => $request->input('type'),
-            'reconfirm' => $request->input('reconfirm'),
-            'button_nm' => $request->input('button_nm'),
 
-            // TODO: 暫定
-            'next_url' => '',
-        ]);
+        return view('rsv.auth.login');
     }
 
+    /**
+     * ログイン認証
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function login(Request $request)
     {
         $credentials = $request->only(
@@ -42,15 +46,14 @@ class AuthController extends Controller
         }
 
         $request->session()->regenerate();
-        $nextRoute = $request->session()->pull('route.intended', 'rsv.top');
-        return redirect()->intended(route($nextRoute));
+        return redirect()->intended(route('rsv.top'));
     }
 
     /**
      * ログアウトを実行する
      *
      * @param Request $request
-     * @return void
+     * @return \Illuminate\Http\Response
      */
     public function logout(Request $request)
     {
