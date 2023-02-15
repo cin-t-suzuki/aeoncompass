@@ -17,6 +17,12 @@ class BrCustomerHotelController extends _commonController
 
     private $defaultCustomerHotelLimit = 100;
 
+    /**
+     * 検索一覧表示
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function list(Request $request)
     {
         $hotel_cd  = $request->input('target_cd');
@@ -69,7 +75,12 @@ class BrCustomerHotelController extends _commonController
         return view("ctl.brCustomerHotel.list", $this->getViewData());
     }
 
-    // 指定施設関連施設一覧
+    /**
+     * 指定施設関連施設一覧
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function hotellist(Request $request)
     {
         $o_customer  = new Customer();
@@ -88,6 +99,12 @@ class BrCustomerHotelController extends _commonController
         return view("ctl.brCustomerHotel.hotellist", $this->getViewData());
     }
 
+    /**
+     * 精算先を変更
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function setting(Request $request)
     {
 

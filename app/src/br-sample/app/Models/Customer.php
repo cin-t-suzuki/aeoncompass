@@ -70,6 +70,9 @@ class Customer extends CommonDBModel
 
     /**
      * 主キーで取得
+     *
+     * @param string $customer_id
+     * @return array
      */
     public function selectByKey($customer_id)
     {
@@ -120,7 +123,12 @@ class Customer extends CommonDBModel
         return null;
     }
 
-    // プライマリキーにてデータの取得を行います。
+    /**
+     * プライマリキーにてデータの取得を行います。
+     *
+     * @param array $aa_conditions
+     * @return array
+     */
     public function find($aa_conditions)
     {
         // $a_row = parent::find($aa_conditions);
@@ -145,8 +153,13 @@ class Customer extends CommonDBModel
         return $a_row;
     }
 
-    // 請求先・支払先施設データ
-    //   as_hotel_cd 請求先・支払先施設データの施設番号
+
+    /**
+     * 請求先・支払先施設データ
+     *
+     * @param string $as_hotel_cd //請求先・支払先施設データの施設番号
+     * @return array
+     */
     public function getCustomer($as_hotel_cd)
     {
         try {
@@ -176,21 +189,27 @@ SQL;
         }
     }
 
-    // 請求先・支払先一覧を取得します。
-    //
-    //  aa_conditions
-    //    search_type no       請求先連番
-    //                follow   請求先連番（以降を表示
-    //                name     請求先名称
-    //    like_type   front    前方一致
-    //                back     後方一致
-    //                無し             あいまい
-    //    key         demand_cd もしくは demand_nm
-    //
-    //  return
-    //    values
-    //          values データ
-    //          cnt    件数
+    /**
+     * 請求先・支払先一覧を取得します。
+     *
+     * @param array{
+     *  {
+     *       no?: int, //請求先連番
+     *       follow?: int, //請求先連番（以降を表示
+     *       name?: string, //請求先名称
+     *   } $search_type,
+     *  {
+     *       front?: string,　//前方一致
+     *       back?: string,　//後方一致
+     *       //無し あいまい
+     *  } $like_type,
+     *  $key //demand_cd もしくは demand_nm
+     * } $aa_conditions
+     * @return array{
+     *  values?: string, //データ
+     *  cnt?: int, //件数
+     * }$values
+     */
     public function getCustomerList($aa_conditions)
     {
         try {
@@ -268,8 +287,12 @@ SQL;
         }
     }
 
-    // 請求先・支払先関連施設データを取得
-    //   as_customer_id 請求先・支払先ID
+    /**
+     * 請求先・支払先関連施設データを取得
+     *
+     * @param string $as_customer_id //請求先・支払先ID
+     * @return array
+     */
     public function getCustomerHotel($as_customer_id)
     {
         try {
@@ -316,11 +339,15 @@ SQL;
         }
     }
 
-    // 請求先・支払先を検索
-    //
-    //  aa_conditions
-    //    pref_id      都道府県ID
-    //    keywords     キーワード
+    /**
+     * 請求先・支払先を検索
+     *
+     * @param array{
+     *  pref_id?: string, //都道府県ID
+     *  keywords?: string //キーワード
+     * } $aa_conditions
+     * @return array
+     */
     public function search($aa_conditions = null)
     {
         try {
@@ -490,7 +517,11 @@ SQL;
         }
     }
 
-    // 請求先・支払先の 請求先・支払先IDを取得
+    /**
+     * 請求先・支払先の 請求先・支払先IDを取得
+     *
+     * @return string
+     */
     public function getSequenceNo()
     {
         try {
@@ -537,9 +568,11 @@ SQL;
         return "";
     }
 
-    //======================================================================
-    // CSVヘッダー設定 ※モデルへの記述でいい？
-    //======================================================================
+    /**
+     * CSVヘッダー設定 ※モデルへの記述でいい？
+     *
+     * @return array
+     */
     public function setCsvHeader($customer)
     {
         $header = [
@@ -572,9 +605,11 @@ SQL;
         return $header;
     }
 
-    //======================================================================
-    // CSVデータ設定 ※モデルへの記述でいい？
-    //======================================================================
+    /**
+     * CSVデータ設定 ※モデルへの記述でいい？
+     *
+     * @return array
+     */
     public function setCsvData($customers)
     {
         $data = [];

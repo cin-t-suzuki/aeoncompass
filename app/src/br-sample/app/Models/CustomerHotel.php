@@ -19,7 +19,8 @@ class CustomerHotel extends CommonDBModel
     const COL_HOTEL_CD = "hotel_cd";
     const COL_CUSTOMER_ID = "customer_id";
 
-    /** コンストラクタ
+    /**
+     * コンストラクタ
      */
     public function __construct() //publicでいいか？
     {
@@ -41,7 +42,11 @@ class CustomerHotel extends CommonDBModel
         parent::setColumnDataArray([$colHotelCd, $colCustomerId]);
     }
 
-    /** 主キーで取得
+    /**
+     * 主キーで取得
+     *
+     * @param string $hotelCd
+     * @return array
      */
     public function selectByKey($hotelCd)
     {

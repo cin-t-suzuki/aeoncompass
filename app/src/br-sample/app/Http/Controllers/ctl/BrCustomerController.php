@@ -23,6 +23,12 @@ class BrCustomerController extends _commonController
 
     private $default_customer_limit = 30;
 
+    /**
+     * 検索一覧表示
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function list(Request $request)
     {
         // $this->paramsは$request->inputでいいか？(このアクション内全体的に変更済)
@@ -154,6 +160,12 @@ class BrCustomerController extends _commonController
         ]);
     }
 
+    /**
+     * 銀行検索
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function banksearch(Request $request)
     {
         // $this->paramsは$request->inputでいいか？(このアクション内全体的に変更済)
@@ -168,6 +180,12 @@ class BrCustomerController extends _commonController
             ]);
     }
 
+    /**
+     * 登録
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function create(CustomerRequest $request, Service $service)
     {
         // $this->paramsは$request->inputでいいか？(このアクション内全体的に変更済)
@@ -357,7 +375,12 @@ class BrCustomerController extends _commonController
         return view("ctl.brCustomer.create", $this->getViewData());
     }
 
-
+    /**
+     * 編集
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function edit(Request $request)
     {
         try {
@@ -477,6 +500,12 @@ SQL;
         }
     }
 
+    /**
+     * 更新
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function update(CustomerRequest $request, Service $service)
     {
         $a_customer = $request->input('customer');
@@ -664,15 +693,24 @@ SQL;
         return view("ctl.brCustomer.update", $this->getViewData());
     }
 
-    // 上付サンプル
+    /**
+     * 上付サンプル
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function sendletter()
     {
         // ビューを表示
         return view("ctl.brCustomer.sendletter", $this->getViewData());
     }
 
-    // 請求先全件のCSVダウンロード
-        // brhotelから呼び出される
+
+    /**
+     * 請求先全件のCSVダウンロード　brhotelから呼び出される
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function csv(Request $request)
     {
         $customerModel  = new Customer();
