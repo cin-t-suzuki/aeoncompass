@@ -441,28 +441,38 @@ class BrbankController extends _commonController
                 // 遷移元データがあれば、入力を保持して表示
                 $keyword = $request->session()->pull('keyword');
                 $next = $request->session()->pull('next');
+                $is_fact = $request->session()->pull('is_fact');
+                $a_customer = $request->session()->pull('customer');
             } else {
                 // 遷移元データがなければ、リクエストデータを表示
                 $keyword = $request->input('keyword');
                 $next = $request->input('next');
+                $a_customer = $request->input('customer');
+                $is_fact = $request->input('is_fact');
             }
 
             $o_models_Mast = new MastBank();
 
             // ビューデータ登録
             if ($this->is_empty(trim($keyword))) {
-                $this->addGuideMessage('銀行・支店名称を入力してください。');
-                $this->addViewData("next", $next);
-                return view("ctl.brbank.query", $this->getViewData());
+                $guides[] = '銀行・支店名称を入力してください。';
+                return view('ctl.brbank.query', [
+                    'next'   => $next,
+                    'customer' => $a_customer,
+                    'is_fact' => $is_fact,
+                    'guides'      => $guides,
+                ]);
             }
 
             $banks = $o_models_Mast->get_bankbranch(trim($keyword));
 
-            $this->addViewData("keyword", $keyword);
-            $this->addViewData("banks", $banks);
-            $this->addViewData("next", $next);
-
-            return view("ctl.brbank.query", $this->getViewData());
+            return view('ctl.brbank.query', [
+                'keyword'      => $keyword,
+                'banks'    => $banks,
+                'next'   => $next,
+                'customer' => $a_customer,
+                'is_fact' => $is_fact
+            ]);
 
             // 各メソッドで Exception が投げられた場合
         } catch (Exception $e) {

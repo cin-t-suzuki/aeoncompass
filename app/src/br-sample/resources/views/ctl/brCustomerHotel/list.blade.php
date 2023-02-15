@@ -32,7 +32,7 @@
   </TABLE>
 </p>
 {{-- メッセージbladeの読込 --}}
-@include('ctl.common.message', $messages)
+@include('ctl.common.message')
 <b>精算先の変更</b>
 {!! Form::open(['route' => ['ctl.brCustomerHotel.list'], 'method' => 'get']) !!}
   <input type="hidden" name="target_cd" value="{{strip_tags($target_cd)}}" />

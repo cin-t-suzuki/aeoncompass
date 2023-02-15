@@ -4,7 +4,7 @@
 
 @section('page_blade')
 {{-- メッセージbladeの読込 --}}
-@include('ctl.common.message', $messages)
+@include('ctl.common.message')
 
 以下の内容で登録しました。
   @include ('ctl.brCustomer._info_customer')

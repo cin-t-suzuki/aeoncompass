@@ -171,9 +171,11 @@ class BrCustomerController extends _commonController
 
         // 検索から戻ってくる際のURLを生成
             $is_fact = $request->query('is_fact') ?? null; //is_fact部分を取得(渡されないときはnullで、URLに出力しないよう設定)
-            $next = route('ctl.brCustomer.list', ['customer' => $a_customer, 'is_fact' => $is_fact]);
+            $next = route('ctl.brCustomer.list');
             return redirect()->route('ctl.brbank.query')->with([
                 'next' => $next,
+                'customer' => $a_customer,
+                'is_fact' => $is_fact,
                 'keyword' => ''
             ]);
     }
@@ -312,7 +314,7 @@ class BrCustomerController extends _commonController
         $n_sequence = $customerModel->getSequenceNo();
         $a_customer['customer_id'] = $n_sequence;
 
-        /* データ整形 */
+        // データ整形
         $customerData = $service->makeCustomerData($a_customer);
 
         // 共通カラム値設定
