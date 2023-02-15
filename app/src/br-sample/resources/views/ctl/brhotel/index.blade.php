@@ -1,8 +1,9 @@
+@extends('ctl.common.base')
 @section('title', '施設情報メイン')
-@include('ctl.common.base')
+
+@section('page_blade')
 
 {{-- メッセージ --}}
-@section('message')
 @include('ctl.common.message', $messages)
 
 <script language="JavaScript" type="text/javascript">
@@ -72,9 +73,7 @@ if(document.getElementById){
 <br />
 
 <style type="text/css">
-<!-- 
  form {margin:0px}
--->
 </style>
 
 <script language="javascript"  type="text/javascript">
@@ -181,6 +180,4 @@ if(document.getElementById){
 		</ul>
 	</div>
 </div>
-
-@section('title', 'footer')
-@include('ctl.common.footer')
+@endsection

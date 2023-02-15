@@ -57,8 +57,8 @@
     {{-- -------------------------------------------------------------------- --}}
     <form action="{{ $v->env->source_path }}{{ $v->env->module }}/htltop/" method="post">
         <div id="hd-staff-act">
-            <p><a href="{{ $v->env->source_path }}{{ $v->env->module }}/brtop/">メインメニュー</a></p>
-            <p>担当：{{ $v->user->operator->staff_nm }}</p>
+            <p><a href="{{ route('ctl.br.top') }}">メインメニュー</a></p>
+            <p>担当：{{ $staffName }}</p>
             <p>
                 施設コード：<input type="text" size="12" maxlength="10" name="target_cd" value="" />
                 &nbsp;
