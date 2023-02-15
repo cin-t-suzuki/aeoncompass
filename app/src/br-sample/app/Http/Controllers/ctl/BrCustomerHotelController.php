@@ -27,19 +27,10 @@ class BrCustomerHotelController extends _commonController
     {
         $hotel_cd  = $request->input('target_cd');
 
-        // エラーメッセージの設定
-        if ($request->session()->has('errors')) {
-            // エラーメッセージ があれば、入力を保持して表示
-            $errorList = $request->session()->pull('errors');
-            $this->addErrorMessageArray($errorList);
-        }
+        //エラー、ガイドメッセージがあれば取得
+        $errors = $request->session()->get('errors', []);
+        $guides = $request->session()->get('guides', []);
 
-        // ガイドメッセージの設定
-        if ($request->session()->has('guide')) {
-            // ガイドメッセージ があれば、入力を保持して表示
-            $guide = $request->session()->pull('guide');
-            $this->addGuideMessage($guide);
-        }
 
         $o_hotel      = new Hotel();
         $a_hotel      = $o_hotel->selectByKey($hotel_cd); //find→selectByKeyでいいか？
@@ -58,21 +49,24 @@ class BrCustomerHotelController extends _commonController
 
             //書き替えあっているか？ if ($a_customer_list['values']['cnt'] == 0) {
             if (count($a_customer_list['values']) == 0) {
-                $this->addErrorMessage('該当する契約先が見つかりません。');
+                $errors[] = '該当する契約先が見つかりません。';
             }
         }
 
-        // ビュー情報を設定
-        $this->addViewData("target_cd", $hotel_cd);
-        $this->addViewData("customer_list", $a_customer_list['values']);
-        $this->addViewData("customer_hotel", $a_customer_hotel['values'][0]);
-        $this->addViewData("limit", ($request->input('limit') ?? $this->defaultCustomerHotelLimit));
-        $this->addViewData("hotel", $a_hotel);
-        $this->addViewData("keyword", $request->input('keyword'));
-        $this->addViewData("like_type", $request->input('like_type'));
-
         // ビューを表示
-        return view("ctl.brCustomerHotel.list", $this->getViewData());
+        return view('ctl.brCustomerHotel.list', [
+            'target_cd'     => $hotel_cd,
+            'customer_list'      => $a_customer_list['values'],
+            'customer_hotel' => $a_customer_hotel['values'][0],
+            'limit' => ($request->input('limit') ?? $this->defaultCustomerHotelLimit),
+            'hotel'     => $a_hotel,
+            'keyword' => $request->input('keyword'),
+            'like_type'    => $request->input('like_type'),
+
+            //error,guideメッセージがない時は空の配列を返す
+            'errors'    => $errors ?? [],
+            'guides'    => $guides ?? []
+        ]);
     }
 
     /**
@@ -87,16 +81,15 @@ class BrCustomerHotelController extends _commonController
         $a_customer = $o_customer->selectByKey($request->input('customer_id')); //find→selectByKeyでいいか？
         $a_customer_hotel = $o_customer->getCustomerHotel($request->input('customer_id'));
 
-        // ビュー情報を設定
-        $this->addViewData("target_cd", $request->input('target_cd'));
-        $this->addViewData("customer", $a_customer);
-        $this->addViewData("customer_hotel", $a_customer_hotel['values']);
-        $this->addViewData("limit", ($request->input('limit') ?? $this->defaultCustomerHotelLimit));
-        $this->addViewData("keyword", $request->input('keyword'));
-        $this->addViewData("like_type", $request->input('like_type'));
-
         // ビューを表示
-        return view("ctl.brCustomerHotel.hotellist", $this->getViewData());
+        return view('ctl.brCustomerHotel.hotellist', [
+            'target_cd'     => $request->input('target_cd'),
+            'customer'      => $a_customer,
+            'customer_hotel' => $a_customer_hotel['values'],
+            'limit' => ($request->input('limit') ?? $this->defaultCustomerHotelLimit),
+            'keyword' => $request->input('keyword'),
+            'like_type'    => $request->input('like_type')
+        ]);
     }
 
     /**
@@ -154,7 +147,7 @@ class BrCustomerHotelController extends _commonController
                     'errors' => $errorList
                 ]);
             }
-            $guide = '精算先を更新しました';
+            $guides[] = '精算先を更新しました';
 
         // あった場合は更新
         } else {
@@ -202,12 +195,12 @@ class BrCustomerHotelController extends _commonController
                     'errors' => $errorList
                 ]);
             }
-            $guide = '精算先を更新しました';
+            $guides[] = '精算先を更新しました';
         }
         return redirect()->route('ctl.brCustomerHotel.list', [
             'target_cd' =>  $target_cd
         ])->with([
-            'guide' => $guide
+            'guides' => $guides
         ]);
     }
 }

@@ -141,8 +141,6 @@ class BrCustomerController extends _commonController
         $a_factoring_bank_branch = $mast_bank_branch->selectByKey($a_customer['factoring_bank_cd'] ?? null, $a_customer['factoring_bank_branch_cd'] ?? null);
 
         $errors = $request->session()->get('errors', []);
-        // errorsの渡し方でエラーが出てたため、以下のreturnも含め書き方変更し、blade側も変更しています。
-        // editとこちらしか以下returnの書き方は変更していないが、他のメソッドも合わせるべき？？（合わせる場合はblade側も要修正）
 
         return view('ctl.brCustomer.list', [
             'customer_list'      => $a_customer_list,
@@ -195,12 +193,12 @@ class BrCustomerController extends _commonController
         $mast_bank = new MastBank();
         $a_bank = $mast_bank->selectByKey($a_customer['payment_bank_cd']); //find→selectByKeyでいいか
         if ($this->is_empty($a_bank) && !$this->is_empty($a_customer['payment_bank_cd'])) {
-            $errorList[] = '支払銀行：該当する銀行コードが存在しません。';
+            $errors[] = '支払銀行：該当する銀行コードが存在しません。';
             // list アクションに転送します
             return redirect()->route('ctl.brCustomer.list', [
                 'customer' => $a_customer
             ])->with([
-                'errors' => $errorList
+                'errors' => $errors
             ]);
         }
         // 銀行支店の存在確認（支払）
@@ -209,12 +207,12 @@ class BrCustomerController extends _commonController
         if ($a_customer['payment_bank_cd'] != '9900') {
             $a_bank_branch = $mast_bank_branch->selectByKey($a_customer['payment_bank_cd'], $a_customer['payment_bank_branch_cd']); //find→selectByKeyでいいか
             if ($this->is_empty($a_bank_branch) && !$this->is_empty($a_customer['payment_bank_branch_cd'])) {
-                $errorList[] = '支払銀行：該当する銀行支店コードが存在しません。';
+                $errors[] = '支払銀行：該当する銀行支店コードが存在しません。';
                 // list アクションに転送します
                 return redirect()->route('ctl.brCustomer.list', [
                     'customer' => $a_customer
                 ])->with([
-                    'errors' => $errorList
+                    'errors' => $errors
                 ]);
             }
         }
@@ -222,12 +220,12 @@ class BrCustomerController extends _commonController
         // 銀行の存在確認（引落）
         $a_factoring_bank = $mast_bank->selectByKey($a_customer['factoring_bank_cd']); //find→selectByKeyでいいか
         if ($this->is_empty($a_factoring_bank) && !$this->is_empty($a_customer['factoring_bank_cd'])) {
-            $errorList[] = '引落銀行：該当する銀行コードが存在しません。';
+            $errors[] = '引落銀行：該当する銀行コードが存在しません。';
             // list アクションに転送します
             return redirect()->route('ctl.brCustomer.list', [
                 'customer' => $a_customer
             ])->with([
-                'errors' => $errorList
+                'errors' => $errors
             ]);
         }
         // 銀行支店の存在確認（引落）
@@ -235,12 +233,12 @@ class BrCustomerController extends _commonController
         if ($a_customer['factoring_bank_cd'] != '9900') {
             $a_factoring_bank_branch = $mast_bank_branch->selectByKey($a_customer['factoring_bank_cd'], $a_customer['factoring_bank_branch_cd']); //find→selectByKeyでいいか
             if ($this->is_empty($a_factoring_bank_branch) && !$this->is_empty($a_customer['factoring_bank_branch_cd'])) {
-                $errorList[] = '引落銀行：該当する銀行支店コードが存在しません。';
+                $errors[] = '引落銀行：該当する銀行支店コードが存在しません。';
                 // list アクションに転送します
                 return redirect()->route('ctl.brCustomer.list', [
                     'customer' => $a_customer
                 ])->with([
-                    'errors' => $errorList
+                    'errors' => $errors
                 ]);
             }
         }
@@ -260,12 +258,12 @@ class BrCustomerController extends _commonController
             $w_bank_empty_check = $w_bank_empty_check + 1;
         }
         if (($w_bank_empty_check < 4) && ($w_bank_empty_check > 0)) {
-            $errorList[] = '引落銀行の情報は引落顧客番号以外全て入力するか、全て空欄である必要があります。';
+            $errors[] = '引落銀行の情報は引落顧客番号以外全て入力するか、全て空欄である必要があります。';
             // list アクションに転送します
             return redirect()->route('ctl.brCustomer.list', [
                 'customer' => $a_customer
             ])->with([
-                'errors' => $errorList
+                'errors' => $errors
             ]);
         }
 
@@ -284,12 +282,12 @@ class BrCustomerController extends _commonController
             $w_bank_empty_check = $w_bank_empty_check + 1;
         }
         if (($w_bank_empty_check < 4) && ($w_bank_empty_check > 0)) {
-            $errorList[] = '支払銀行の情報は全て入力するか、全て空欄である必要があります。';
+            $errors[] = '支払銀行の情報は全て入力するか、全て空欄である必要があります。';
             // list アクションに転送します
             return redirect()->route('ctl.brCustomer.list', [
                 'customer' => $a_customer
             ])->with([
-                'errors' => $errorList
+                'errors' => $errors
             ]);
         }
 
@@ -321,7 +319,7 @@ class BrCustomerController extends _commonController
         $customerModel->setInsertCommonColumn($customerData);
 
         // コネクション
-        $errorList = []; //初期化
+        $errors = []; //初期化
         try {
             $con = DB::connection('mysql');
             $dbErr = $con->transaction(function () use ($con, $customerModel, $customerData) {
@@ -330,15 +328,15 @@ class BrCustomerController extends _commonController
                 //insertでいいか？
             });
         } catch (Exception $e) {
-            $errorList[] = '精算先情報の登録処理でエラーが発生しました。';
+            $errors[] = '精算先情報の登録処理でエラーが発生しました。';
         }
         // 更新エラー
-        if (count($errorList) > 0 || !empty($dbErr)) {
-            $errorList[] = "精算先情報を更新できませんでした。 ";
+        if (count($errors) > 0 || !empty($dbErr)) {
+            $errors[] = "精算先情報を更新できませんでした。 ";
             return redirect()->route('ctl.brCustomer.list', [
                 'customer' => $a_customer
             ])->with([
-                'errors' => $errorList
+                'errors' => $errors
             ]);
         }
 
@@ -357,22 +355,21 @@ class BrCustomerController extends _commonController
         $o_mast_pref   = new MastPref();
         $a_pref = $o_mast_pref->selectByKey($a_customer['pref_id']); //find→selectByKeyでいいか
 
-        // ビュー情報を設定
-        $this->addViewData("pref_nm", $a_pref['pref_nm']);
-        $this->addViewData("customer", $a_customer);
-        $this->addViewData("customer_id", $n_sequence);
-        $this->addViewData("keywords", $request->input('keywords'));
-        $this->addViewData("bank", $a_bank);
-        $this->addViewData("bank_branch", $a_bank_branch);
-
         // 引落銀行の取得　//元ソースにはないが必要そう　// ?? null追記でいいか
         $a_factoring_bank        = $mast_bank->selectByKey($a_customer['factoring_bank_cd']);
         $a_factoring_bank_branch = $mast_bank_branch->selectByKey($a_customer['factoring_bank_cd'], $a_customer['factoring_bank_branch_cd']);
-        $this->addViewData("factoring_bank", $a_factoring_bank);
-        $this->addViewData("factoring_bank_branch", $a_factoring_bank_branch);
 
         // ビューを表示
-        return view("ctl.brCustomer.create", $this->getViewData());
+        return view('ctl.brCustomer.create', [
+            'pref_nm'         => $a_pref['pref_nm'],
+            'customer'      => $a_customer,
+            'customer_id' => $n_sequence,
+            'keywords' => $request->input('keywords'),
+            'bank' => $a_bank,
+            'bank_branch' => $a_bank_branch,
+            'factoring_bank' => $a_factoring_bank,
+            'factoring_bank_branch' => $a_factoring_bank_branch,
+        ]);
     }
 
     /**
@@ -514,12 +511,12 @@ SQL;
         $mast_bank = new MastBank();
         $a_bank = $mast_bank->selectByKey($a_customer['payment_bank_cd']); //find→selectByKeyでいいか
         if ($this->is_empty($a_bank) && !$this->is_empty($a_customer['payment_bank_cd'])) {
-            $errorList[] = "該当する銀行コードが存在しません。 ";
+            $errors[] = "該当する銀行コードが存在しません。 ";
             // edit アクションに転送します
             return redirect()->route('ctl.brCustomer.edit', [
                 'customer' => $a_customer
             ])->with([
-                'errors' => $errorList
+                'errors' => $errors
             ]);
         }
         // 銀行支店の存在確認（支払）
@@ -528,12 +525,12 @@ SQL;
         if ($a_customer['payment_bank_cd'] != '9900') {
             $a_bank_branch = $mast_bank_branch->selectByKey($a_customer['payment_bank_cd'], $a_customer['payment_bank_branch_cd']); //find→selectByKeyでいいか
             if ($this->is_empty($a_bank_branch) && !$this->is_empty($a_customer['payment_bank_branch_cd'])) {
-                $errorList[] = "該当する銀行支店コードが存在しません。 ";
+                $errors[] = "該当する銀行支店コードが存在しません。 ";
                 // edit アクションに転送します
                 return redirect()->route('ctl.brCustomer.edit', [
                     'customer' => $a_customer
                 ])->with([
-                    'errors' => $errorList
+                    'errors' => $errors
                 ]);
             }
         }
@@ -541,24 +538,24 @@ SQL;
         // 銀行の存在確認（引落）
         $a_factoring_bank = $mast_bank->selectByKey($a_customer['factoring_bank_cd']); //find→selectByKeyでいいか
         if ($this->is_empty($a_factoring_bank) && !$this->is_empty($a_customer['factoring_bank_cd'])) {
-            $errorList[] = "引落銀行：該当する銀行コードが存在しません。 ";
+            $errors[] = "引落銀行：該当する銀行コードが存在しません。 ";
             // edit アクションに転送します
             return redirect()->route('ctl.brCustomer.edit', [
                 'customer' => $a_customer
             ])->with([
-                'errors' => $errorList
+                'errors' => $errors
             ]);
         }
         // 銀行支店の存在確認（引落）
         if ($a_customer['factoring_bank_cd'] != '9900') {
             $a_factoring_bank_branch = $mast_bank_branch->selectByKey($a_customer['factoring_bank_cd'], $a_customer['factoring_bank_branch_cd']); //find→selectByKeyでいいか
             if ($this->is_empty($a_factoring_bank_branch) && !$this->is_empty($a_customer['factoring_bank_branch_cd'])) {
-                $errorList[] = "引落銀行：該当する銀行支店コードが存在しません。 ";
+                $errors[] = "引落銀行：該当する銀行支店コードが存在しません。 ";
                 // edit アクションに転送します
                 return redirect()->route('ctl.brCustomer.edit', [
                     'customer' => $a_customer
                 ])->with([
-                    'errors' => $errorList
+                    'errors' => $errors
                 ]);
             }
         }
@@ -578,12 +575,12 @@ SQL;
             $w_bank_empty_check = $w_bank_empty_check + 1;
         }
         if (($w_bank_empty_check < 4) && ($w_bank_empty_check > 0)) {
-            $errorList[] = "引落銀行の情報は引落顧客番号以外全て入力するか、全て空欄である必要があります。 ";
+            $errors[] = "引落銀行の情報は引落顧客番号以外全て入力するか、全て空欄である必要があります。 ";
             // edit アクションに転送します (元ソースはlistに転送だが、editの方がよさそうなので修正でいい？)
             return redirect()->route('ctl.brCustomer.edit', [
                 'customer' => $a_customer
             ])->with([
-                'errors' => $errorList
+                'errors' => $errors
             ]);
         }
 
@@ -602,12 +599,12 @@ SQL;
             $w_bank_empty_check = $w_bank_empty_check + 1;
         }
         if (($w_bank_empty_check < 4) && ($w_bank_empty_check > 0)) {
-            $errorList[] = "支払銀行の情報は全て入力するか、全て空欄である必要があります。 ";
+            $errors[] = "支払銀行の情報は全て入力するか、全て空欄である必要があります。 ";
             // edit アクションに転送します (元ソースはlistに転送だが、editの方がよさそうなので修正でいい？)
             return redirect()->route('ctl.brCustomer.edit', [
                 'customer' => $a_customer
             ])->with([
-                'errors' => $errorList
+                'errors' => $errors
             ]);
         }
 
@@ -638,7 +635,7 @@ SQL;
         // 更新件数
         $dbCount = 0;
         // コネクション
-        $errorList = []; //初期化
+        $errors = []; //初期化
         try {
             $con = DB::connection('mysql');
             $dbErr = $con->transaction(function () use ($con, $customerModel, $customerData, &$dbCount) {
@@ -647,19 +644,19 @@ SQL;
                 //TODO 更新件数0件でも1で戻る気がする,modify_tsがあるからでは？（共通カラム設定消すと想定通りになる）
             });
         } catch (Exception $e) {
-            $errorList[] = '精算先情報の更新処理でエラーが発生しました。';
+            $errors[] = '精算先情報の更新処理でエラーが発生しました。';
         }
         // 更新エラー
         if (
-            $dbCount == 0 || count($errorList) > 0 || !empty($dbErr)
+            $dbCount == 0 || count($errors) > 0 || !empty($dbErr)
         ) {
-            //改行いらないのでは？ $errorList[] = "更新エラー<br>トップページよりやり直してください ";
-            $errorList[] = "更新エラー：トップページよりやり直してください ";
+            //改行いらないのでは？ $errors[] = "更新エラー<br>トップページよりやり直してください ";
+            $errors[] = "更新エラー：トップページよりやり直してください ";
             // edit アクションに転送します
             return redirect()->route('ctl.brCustomer.edit', [
                 'customer' => $a_customer
             ])->with([
-                'errors' => $errorList
+                'errors' => $errors
             ]);
         }
 
@@ -679,18 +676,17 @@ SQL;
         $o_mast_pref   = new MastPref();
         $a_pref = $o_mast_pref->selectByKey($a_customer['pref_id']);
 
-        // ビュー情報を設定
-        $this->addViewData("pref_nm", $a_pref['pref_nm']);
-        $this->addViewData("customer", $a_customer);
-        $this->addViewData("customer_id", $request->input('customer_id'));
-        $this->addViewData("keywords", $request->input('keywords'));
-        $this->addViewData("bank", $a_bank);
-        $this->addViewData("bank_branch", $a_bank_branch);
-        $this->addViewData("factoring_bank", $a_factoring_bank);
-        $this->addViewData("factoring_bank_branch", $a_factoring_bank_branch);
-
         // ビューを表示
-        return view("ctl.brCustomer.update", $this->getViewData());
+        return view('ctl.brCustomer.update', [
+            'pref_nm'         => $a_pref['pref_nm'],
+            'customer'      => $a_customer,
+            'customer_id' => $request->input('customer_id'),
+            'keywords' => $request->input('keywords'),
+            'bank' => $a_bank,
+            'bank_branch' => $a_bank_branch,
+            'factoring_bank' => $a_factoring_bank,
+            'factoring_bank_branch' => $a_factoring_bank_branch,
+        ]);
     }
 
     /**

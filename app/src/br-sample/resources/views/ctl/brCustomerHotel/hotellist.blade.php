@@ -7,15 +7,15 @@
 <p><table border="1" cellpadding="4" cellspacing="0">
   <tr>
     <td bgcolor="#EEFFEE" >精算先</td>
-    <td nowrap>{{$views->customer['customer_id']}}<br />{{$views->customer['customer_nm']}}<br />
-@if (!$service->is_empty($views->customer['section_nm']) || !$service->is_empty($views->customer['person_nm'])){{$views->customer['section_nm']}} {{$views->customer['person_nm']}}<br />@endif
-@if (!$service->is_empty($views->customer['tel']))TEL : {{$views->customer['tel']}} @endif
-@if (!$service->is_empty($views->customer['fax']))FAX : {{$views->customer['fax']}}@endif
+    <td nowrap>{{$customer['customer_id']}}<br />{{$customer['customer_nm']}}<br />
+@if (!$service->is_empty($customer['section_nm']) || !$service->is_empty($customer['person_nm'])){{$customer['section_nm']}} {{$customer['person_nm']}}<br />@endif
+@if (!$service->is_empty($customer['tel']))TEL : {{$customer['tel']}} @endif
+@if (!$service->is_empty($customer['fax']))FAX : {{$customer['fax']}}@endif
     </td>
   </tr>
 </table></p>
 
-@if (count($views->customer_hotel) < 1)
+@if (count($customer_hotel) < 1)
   対象の施設がありませんでした。
 @else
     <table border="1" cellspacing="0" cellpadding="2">
@@ -25,7 +25,7 @@
         <th  bgcolor="#EEFFEE" >連絡先</th>
         <th  bgcolor="#EEFFEE" >詳細</th>
       </tr>
-@foreach($views->customer_hotel as $customer_hotel)
+@foreach($customer_hotel as $customer_hotel)
       <tr>
         <td nowrap>
   @if ($customer_hotel->entry_status == '')新規発番中
@@ -44,7 +44,7 @@
   @if ($customer_hotel->entry_status == 0 && $customer_hotel->accept_status == 1) @else </font>
   @endif（{{$customer_hotel->pref_nm}}）</td>
         <td nowrap>{{$customer_hotel->person_post}} {{$customer_hotel->person_nm}}<br />
-          TEL:{{$views->customer['tel']}} FAX:{{$views->customer['fax']}}
+          TEL:{{$customer['tel']}} FAX:{{$customer['fax']}}
         </td>
         <td>{!! Form::open(['route' => ['ctl.brhotel.show'], 'method' => 'post']) !!}
             <input type="submit" value="表示">
@@ -54,7 +54,7 @@
       </tr>
 @endforeach
   </table>
-登録施設 {{number_format(count($views->customer_hotel))}} 軒
+登録施設 {{number_format(count($customer_hotel))}} 軒
 @endif
 <br />
 

@@ -11,7 +11,7 @@
 <p>
 {!! Form::open(['route' => ['ctl.brCustomer.edit'], 'method' => 'get']) !!}
   <small>
-<input type="hidden" name="customer_id" value="{{strip_tags($views->customer['customer_id'])}}" >
+<input type="hidden" name="customer_id" value="{{strip_tags($customer['customer_id'])}}" >
     <input type="submit" value="詳細情報">
   </small>
 {!! Form::close() !!}
@@ -20,7 +20,7 @@
 {!! Form::open(['route' => ['ctl.brCustomer.list'], 'method' => 'get']) !!}
   <small>
     <input type="submit" value="請求先検索へ">
-    <input type="hidden" name="keywords" value="{{strip_tags($views->keywords)}}">
+    <input type="hidden" name="keywords" value="{{strip_tags($keywords)}}">
   </small>
 {!! Form::close() !!}
 </p>
