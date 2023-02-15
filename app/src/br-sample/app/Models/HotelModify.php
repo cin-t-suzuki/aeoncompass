@@ -34,7 +34,7 @@ class HotelModify extends CommonDBModel
      *
      * @var bool
      */
-    public $timestamps = false;
+    public $timestamps = true;
     const CREATED_AT = 'entry_ts';
     const UPDATED_AT = 'modify_ts';
     /**

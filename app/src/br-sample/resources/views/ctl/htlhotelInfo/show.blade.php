@@ -55,9 +55,14 @@
 <br/>
 <input type="submit" value="編集">
 
+<<<<<<< HEAD
 @if(isset(($views->hotelInfo["hotel_cd"])))
 	<input type="hidden" name="HotelInfo[hotel_cd]" value="{{strip_tags($views->hotelInfo["hotel_cd"])}}" >
 @endif
 <input type="hidden" name="target_cd" value="{{strip_tags($views->target_cd)}}">
 {!! Form::close() !!}
 @endsection
+=======
+{{-- include file=$v->env.module_root|cat:'/views/_common/_htl_footer.tpl' --}}
+@endsection
+>>>>>>> develop
