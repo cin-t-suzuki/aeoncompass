@@ -37,18 +37,16 @@ class BrAdditonalZenginController extends _commonController
         $a_additional_zengin = $additionalZenginModel->getPaymentSchedule();
 
         // ガイドメッセージの設定
-        if ($request->session()->has('guide')) {
-            // ガイドメッセージ があれば、入力を保持して表示
-            $guide = $request->session()->pull('guide');
-            $this->addGuideMessage($guide);
-        }
+        $guides = $request->session()->get('guides', []);
 
-        // ビュー情報を設定
-        $this->addViewData("reserve_select_year", $this->reserve_select_year);
-        $this->addViewData("s_cnt", $this->year_loop_cnt);
-        $this->addViewData("direct_debit_ym_select", $a_additional_zengin);
         // ビューを表示
-        return view("ctl.brAdditionalZengin.list", $this->getViewData());
+        return view('ctl.brAdditionalZengin.list', [
+            'reserve_select_year'         => $this->reserve_select_year,
+            's_cnt'      => $this->year_loop_cnt,
+            'direct_debit_ym_select' => $a_additional_zengin,
+
+            'guides' => $guides
+        ]);
     }
 
     // 一覧画面 検索リクエスト処理
@@ -57,9 +55,11 @@ class BrAdditonalZenginController extends _commonController
         // 必須項目のkeywordが無ければ検索しない。
         if ($this->is_empty($request->input('keywords')) && $request->input('unuse_check') == 2) {
             // エラーメッセージ
-            $this->addErrorMessage("年月を指定もしくは、キーワードを入力してください。");
-            // 書き換えあっている？ return $this->render('searchhotel');
-            return view("ctl.brAdditionalZengin.searchHotel", $this->getViewData());
+            $errors[] = "年月を指定もしくは、キーワードを入力してください。";
+            // ビューを表示
+            return view('ctl.brAdditionalZengin.searchHotel', [
+                'errors' => $errors
+            ]);
         }
 
         $a_conditions = [
@@ -74,11 +74,10 @@ class BrAdditonalZenginController extends _commonController
         $additionalZenginModel = new AdditionalZengin();
         $a_additional_zengin['values'] = $additionalZenginModel->getAdditionalZengin($a_conditions);
 
-        // ビュー情報を設定
-        $this->addViewData("additional_zengin", $a_additional_zengin);
-
         // ビューを表示
-        return view("ctl.brAdditionalZengin.searchList", $this->getViewData());
+        return view('ctl.brAdditionalZengin.searchList', [
+            'additional_zengin' => $a_additional_zengin
+        ]);
     }
 
     // 詳細画面
@@ -94,18 +93,9 @@ class BrAdditonalZenginController extends _commonController
             $branch_id = $request->input('branch_id');
         }
 
-        // エラーメッセージの設定
-        if ($request->session()->has('errors')) {
-            // エラーメッセージ があれば、入力を保持して表示
-            $errorList = $request->session()->pull('errors');
-            $this->addErrorMessageArray($errorList);
-        }
         // ガイドメッセージの設定
-        if ($request->session()->has('guide')) {
-            // ガイドメッセージ があれば、入力を保持して表示
-            $guide = $request->session()->pull('guide');
-            $this->addGuideMessage($guide);
-        }
+        $errors = $request->session()->get('errors', []);
+        $guides = $request->session()->get('guides', []);
 
         $additionalZenginModel = new AdditionalZengin();
         $a_additional_zengin = $additionalZenginModel->selectByKey($zengin_ym, $branch_id);
@@ -117,11 +107,13 @@ class BrAdditonalZenginController extends _commonController
             $this->getStaffNm($a_additional_zengin);
         }
 
-        // ビュー情報を設定
-        $this->addViewData("additional_zengin", $a_additional_zengin);
-
         // ビューを表示
-        return view("ctl.brAdditionalZengin.detail", $this->getViewData());
+        return view('ctl.brAdditionalZengin.detail', [
+            'additional_zengin' => $a_additional_zengin,
+
+            'errors' => $errors,
+            'guides' => $guides
+        ]);
     }
 
 
@@ -178,14 +170,14 @@ class BrAdditonalZenginController extends _commonController
             ]);
         }
 
-        $guide = '口座振替の引落追加情報の更新が完了しました。';
+        $guides[] = '口座振替の引落追加情報の更新が完了しました。';
 
         // ビューを表示
         return redirect()->route('ctl.brAdditionalZengin.detail', [
             'zengin_ym' => $zengin_ym,
             'branch_id' => $branch_id
         ])->with([
-            'guide' => $guide
+            'guides' => $guides
         ]);
     }
 
@@ -241,14 +233,14 @@ class BrAdditonalZenginController extends _commonController
             ]);
         }
 
-        $guide = '口座振替の追加金額情報を削除しました。';
+        $guides[] = '口座振替の追加金額情報を削除しました。';
 
         // ビューを表示
         return redirect()->route('ctl.brAdditionalZengin.detail', [
             'zengin_ym' => $zengin_ym,
             'branch_id' => $branch_id
         ])->with([
-            'guide' => $guide
+            'guides' => $guides
         ]);
     }
 
@@ -258,11 +250,10 @@ class BrAdditonalZenginController extends _commonController
         $mastPrefModel = new MastPref();
         $mastPrefsData = $mastPrefModel->getMastPrefs();
 
-        // ビュー情報を設定
-        $this->addViewData("mast_prefs", $mastPrefsData);
-
         // ビューを表示
-        return view("ctl.brAdditionalZengin.search", $this->getViewData());
+        return view('ctl.brAdditionalZengin.search', [
+            'mast_prefs' => $mastPrefsData
+        ]);
     }
 
 
@@ -272,11 +263,11 @@ class BrAdditonalZenginController extends _commonController
         // 必須項目のkeywordが無ければ検索しない。
         if ($this->is_empty($request->input('keywords'))) {
             // エラーメッセージ
-            $this->addErrorMessage("キーワードを入力してください。");
-
-            //書き換えあっている？ return $this->render('searchhotel');
+            $errors[] = "キーワードを入力してください。";
             // ビューを表示
-            return view("ctl.brAdditionalZengin.searchHotel", $this->getViewData());
+            return view('ctl.brAdditionalZengin.searchHotel', [
+                'errors' => $errors
+            ]);
         }
 
         $hotelModel = new Hotel();
@@ -301,16 +292,18 @@ class BrAdditonalZenginController extends _commonController
             $a_hotel_list["values"][$key] = array_merge($hotel_list, $this->getFactoring($hotel_list["hotel_cd"]));
         }
 
-        // ビュー情報を設定
-        $this->addViewData("hotel_list", $a_hotel_list);
-
         if (count($a_hotel_list['values']) == 0) {
             // エラーメッセージ
-            $this->addErrorMessage("該当する施設が見つかりませんでした。");
+            $errors[] = "該当する施設が見つかりませんでした。";
         }
 
         // ビューを表示
-        return view("ctl.brAdditionalZengin.searchHotel", $this->getViewData());
+        return view('ctl.brAdditionalZengin.searchHotel', [
+            'hotel_list' => $a_hotel_list,
+
+            //エラーメッセージがないときは空の配列を渡す
+            'errors' => $errors ?? []
+        ]);
     }
 
     // 登録画面 表示処理
@@ -322,32 +315,29 @@ class BrAdditonalZenginController extends _commonController
         $additional_charge = $request->input('additional_charge');
 
         // エラーメッセージの設定
-        if ($request->session()->has('errors')) {
-            // エラーメッセージ があれば、入力を保持して表示
-            $errorList = $request->session()->pull('errors');
-            $this->addErrorMessageArray($errorList);
-        }
+        $errors = $request->session()->get('errors', []);
 
         // 指定した施設CDの施設情報・精算先・口座情報を取得する。
         $a_hotel_list = $this->getHotelList($hotel_cd);
 
         // セレクトボックスの初期値を設定
-        $this->_reserve_select_year = date('Y') . '-01-01';
-
-        // ビュー情報を設定
-        $this->addViewData("reserve_select_year", $this->_reserve_select_year);
-        $this->addViewData("s_cnt", 2);
-        $this->addViewData("hotel_list", $a_hotel_list);
-        $this->addViewData("reason", $reason);
-        $this->addViewData("reason_internal", $reason_internal);
-        $this->addViewData("additional_charge", $additional_charge);
+        $this->reserve_select_year = date('Y') . '-01-01';
 
         $search['year'] = $request->input('year');
         $search['month'] = $request->input('month');
-        $this->addViewData("search", $search);
 
         // ビューを表示
-        return view("ctl.brAdditionalZengin.edit", $this->getViewData());
+        return view('ctl.brAdditionalZengin.edit', [
+            'reserve_select_year' => $this->reserve_select_year,
+            's_cnt' => 2,
+            'hotel_list' => $a_hotel_list,
+            'reason' => $reason,
+            'reason_internal' => $reason_internal,
+            'additional_charge' => $additional_charge,
+            'search' => $search,
+
+            'errors' => $errors
+        ]);
     }
 
     // 登録画面 リクエスト処理
