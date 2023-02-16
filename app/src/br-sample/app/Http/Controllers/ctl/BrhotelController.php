@@ -732,7 +732,6 @@ class BrhotelController extends _commonController
                 $hotelRates = HotelRate::where('hotel_cd', $targetCd)->get();
                 if ($hotelRates->isEmpty()) {
                     $errorList[] = '施設の料率情報が存在していない為、登録状態:公開中で更新できません。';
-                    DB::rollBack();
                     // 編集画面へ
                     return redirect()->route('ctl.br_hotel.edit_management', ['target_cd' => $targetCd])
                         ->with([
@@ -758,7 +757,6 @@ class BrhotelController extends _commonController
         $inputHotelPerson['person_email'] = $cipher->encrypt($inputHotelPerson['person_email']);
 
         if (count($errorList) > 0) {
-            DB::rollback();
             // 編集画面へ
             return redirect()->route('ctl.br_hotel.edit_management', ['target_cd' => $targetCd])
                 ->with([
