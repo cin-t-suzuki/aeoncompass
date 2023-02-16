@@ -717,9 +717,6 @@ class BrhotelController extends _commonController
         // MEMO: 移植元ソースに倣っている
         $display = 'edit';
 
-        // トランザクション開始
-        DB::beginTransaction();
-
         // 情報のセット
         $hotel = Hotel::find($targetCd);
 
@@ -752,7 +749,7 @@ class BrhotelController extends _commonController
         $hotelStatusModel = new HotelStatus();
 
         // validation
-        // MEMO: hotel_account のバリデーションのみ、 FormRequest で行うよう変更済み。
+        // MEMO: 施設管理者ログイン認証機能実装に伴い、hotel_account のバリデーションのみ、 FormRequest で行うよう変更済み。
         $errorList = array_merge($errorList, $hotelPersonModel->validation($inputHotelPerson));
         $errorList = array_merge($errorList, $hotelStatusModel->validation($inputHotelStatus));
 
@@ -793,24 +790,36 @@ class BrhotelController extends _commonController
             $hotelStatus->close_dtm = date('Y/m/d');
         }
 
-        // 更新実行
-        if (!$hotelAccount->save() || !$hotelPerson->save() || !$hotelStatus->save() || !$hotel->save()) {
-            DB::rollBack();
-            $errorList[] = '施設管理情報の更新ができませんでした。';
+		try {
+			// トランザクション開始
+			DB::beginTransaction();
+			// 更新実行
+			if (!$hotelAccount->save() || !$hotelPerson->save() || !$hotelStatus->save() || !$hotel->save()) {
+				DB::rollBack();
+				$errorList[] = '施設管理情報の更新ができませんでした。';
+				// 編集画面へ
+				return redirect()->route('ctl.br_hotel.edit_management', ['target_cd' => $targetCd])
+					->with([
+						'Hotel_Account' => $inputHotelAccount,
+						'Hotel_Person'  => $inputHotelPerson,
+						'Hotel_Status'  => $inputHotelStatus,
+					])->withErrors($errorList);
+			}
+
+			// コミット
+			DB::commit();
+		} catch (\Exception $e) {
+			DB::rollBack();
             // 編集画面へ
             return redirect()->route('ctl.br_hotel.edit_management', ['target_cd' => $targetCd])
                 ->with([
-                    'errors'        => $errorList,
                     'Hotel_Account' => $inputHotelAccount,
                     'Hotel_Person'  => $inputHotelPerson,
                     'Hotel_Status'  => $inputHotelStatus,
-                ]);
-        }
+                ])->withErrors($errorList);
+		}
 
-        // コミット
-        DB::commit();
-
-        // 完了メッセージ
+		// 完了メッセージ
         $guides[] = '施設情報の更新が完了いたしました。';
 
         // 登録情報の取得
