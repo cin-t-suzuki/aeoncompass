@@ -181,23 +181,15 @@ Route::namespace("App\Http\Controllers\ctl")->prefix("ctl")->group(function(){
 	Route::get('/brpartnersite/search', 'BrPartnerSiteController@search')->name('ctl.brPartnerSite.search');
 	Route::get('/brpartnersite/edit', 'BrPartnerSiteController@edit')->name('ctl.brPartnerSite.edit');
 	Route::post('/brpartnersite/modify', 'BrPartnerSiteController@modify')->name('ctl.brPartnerSite.modify');
-
-    // 口座振替　追加処理
-    Route::get('/bradditionalzengin/', 'BrAdditonalZenginController@list')->name('ctl.brAdditionalZengin.list');
-    Route::post('/bradditionalzengin/search', 'BrAdditonalZenginController@search')
-        ->name('ctl.brAdditionalZengin.search');
-    Route::get('/bradditionalzengin/searchList', 'BrAdditonalZenginController@searchList')
-        ->name('ctl.brAdditionalZengin.searchlist');
-    Route::get('/bradditionalzengin/searchhotel', 'BrAdditonalZenginController@searchHotel')
-        ->name('ctl.brAdditionalZengin.searchhotel');
-    Route::match(['get','post'], '/bradditionalzengin/edit', 'BrAdditonalZenginController@edit')
-        ->name('ctl.brAdditionalZengin.edit');
-    Route::post('/bradditionalzengin/create', 'BrAdditonalZenginController@create')
-        ->name('ctl.brAdditionalZengin.create');
-    Route::match(['get','post'], '/bradditionalzengin/detail', 'BrAdditonalZenginController@detail')
-        ->name('ctl.brAdditionalZengin.detail');
-    Route::match(['get','post'], '/bradditionalzengin/update', 'BrAdditonalZenginController@update')
-        ->name('ctl.brAdditionalZengin.update');
-    Route::match(['get', 'post'], '/bradditionalzengin/delete', 'BrAdditonalZenginController@delete')
-        ->name('ctl.brAdditionalZengin.delete');
 });
+
+// 口座振替　追加処理
+Route::get('/ctl/bradditionalzengin/', [\App\Http\Controllers\ctl\BrAdditonalZenginController::class, 'list'])->name('ctl.brAdditionalZengin.list');
+Route::get('/ctl/bradditionalzengin/search', [\App\Http\Controllers\ctl\BrAdditonalZenginController::class, 'search'])->name('ctl.brAdditionalZengin.search');
+Route::get('/ctl/bradditionalzengin/searchList', [\App\Http\Controllers\ctl\BrAdditonalZenginController::class, 'searchList'])->name('ctl.brAdditionalZengin.searchList');
+Route::get('/ctl/bradditionalzengin/searchhotel', [\App\Http\Controllers\ctl\BrAdditonalZenginController::class, 'searchhotel'])->name('ctl.brAdditionalZengin.searchHotel');
+Route::get('/ctl/bradditionalzengin/edit', [\App\Http\Controllers\ctl\BrAdditonalZenginController::class, 'edit'])->name('ctl.brAdditionalZengin.edit');
+Route::post('/ctl/bradditionalzengin/create', [\App\Http\Controllers\ctl\BrAdditonalZenginController::class, 'create'])->name('ctl.brAdditionalZengin.create');
+Route::get('/ctl/bradditionalzengin/detail', [\App\Http\Controllers\ctl\BrAdditonalZenginController::class, 'detail'])->name('ctl.brAdditionalZengin.detail');
+Route::post('/ctl/bradditionalzengin/update', [\App\Http\Controllers\ctl\BrAdditonalZenginController::class, 'update'])->name('ctl.brAdditionalZengin.update');
+Route::post('/ctl/bradditionalzengin/delete', [\App\Http\Controllers\ctl\BrAdditonalZenginController::class, 'delete'])->name('ctl.brAdditionalZengin.delete');

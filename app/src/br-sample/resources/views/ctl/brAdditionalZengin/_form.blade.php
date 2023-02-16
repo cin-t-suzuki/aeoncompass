@@ -15,7 +15,7 @@
   });
   function exec_searchlist(){
     // var uri = '{/literal}{$v->env.source_path}{$v->env.module}{literal}/bradditionalzengin/searchList?keywords=' + encodeURI($('input[name="keyword"]').val()) + '&year=' + $('select[name="year"]').val() + '&month=' + $('select[name="month"]').val() + '&ym=' + $('select[name="direct_debit_ym"]').val();
-    var uri = '{{ route('ctl.brAdditionalZengin.searchlist')}}?keywords=' + encodeURI($('input[name="keyword"]').val()) + '&year=' + $('select[name="year"]').val() + '&month=' + $('select[name="month"]').val() + '&ym=' + $('select[name="direct_debit_ym"]').val();
+    var uri = '{{ route('ctl.brAdditionalZengin.searchList')}}?keywords=' + encodeURI($('input[name="keyword"]').val()) + '&year=' + $('select[name="year"]').val() + '&month=' + $('select[name="month"]').val() + '&ym=' + $('select[name="direct_debit_ym"]').val();
       if ($('#unuse_ym').is(':checked')) {
           uri += '&unuse_check=0';
       } else if ($('#unuse_ddym').is(':checked')){

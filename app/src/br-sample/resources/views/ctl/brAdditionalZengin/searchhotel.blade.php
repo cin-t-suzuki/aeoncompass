@@ -78,7 +78,7 @@
 
     </td>
     <td nowrap align="middle">
-      {{ Form::open(['route' => 'ctl.brAdditionalZengin.edit', 'method' => 'post']) }}
+      {{ Form::open(['route' => 'ctl.brAdditionalZengin.edit', 'method' => 'get']) }}
         <input type="submit" value="設定"  @if (!$hotel_list['factoring_flg'])disabled @endif>
         <input type="hidden" name="hotel_cd" value="{{$hotel_list['hotel_cd']}}" />
         <input type="hidden" name="customer_id" value="{{$hotel_list['customer_id']}}" />

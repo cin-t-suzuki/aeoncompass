@@ -13,7 +13,7 @@
 
   @include('ctl.brAdditionalZengin._form')
 
-  {{ Form::open(['route' => 'ctl.brAdditionalZengin.search', 'method' => 'post']) }}
+  {{ Form::open(['route' => 'ctl.brAdditionalZengin.search', 'method' => 'get']) }}
  <small style="color:#336">施設の口座振替額に追加処理を行います。</small><input type="submit" value="追加" style="width: 80px;">
   {{ Form::close() }}
   <hr size="0" style="margin:1em 0">

@@ -59,7 +59,7 @@ class BrAdditonalZenginController extends _commonController
             // エラーメッセージ
             $this->addErrorMessage("年月を指定もしくは、キーワードを入力してください。");
             // 書き換えあっている？ return $this->render('searchhotel');
-            return view("ctl.brAdditionalZengin.searchhotel", $this->getViewData());
+            return view("ctl.brAdditionalZengin.searchHotel", $this->getViewData());
         }
 
         $a_conditions = [
@@ -78,7 +78,7 @@ class BrAdditonalZenginController extends _commonController
         $this->addViewData("additional_zengin", $a_additional_zengin);
 
         // ビューを表示
-        return view("ctl.brAdditionalZengin.searchlist", $this->getViewData());
+        return view("ctl.brAdditionalZengin.searchList", $this->getViewData());
     }
 
     // 詳細画面
@@ -276,7 +276,7 @@ class BrAdditonalZenginController extends _commonController
 
             //書き換えあっている？ return $this->render('searchhotel');
             // ビューを表示
-            return view("ctl.brAdditionalZengin.searchhotel", $this->getViewData());
+            return view("ctl.brAdditionalZengin.searchHotel", $this->getViewData());
         }
 
         $hotelModel = new Hotel();
@@ -310,7 +310,7 @@ class BrAdditonalZenginController extends _commonController
         }
 
         // ビューを表示
-        return view("ctl.brAdditionalZengin.searchhotel", $this->getViewData());
+        return view("ctl.brAdditionalZengin.searchHotel", $this->getViewData());
     }
 
     // 登録画面 表示処理

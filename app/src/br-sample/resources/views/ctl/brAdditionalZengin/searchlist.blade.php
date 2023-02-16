@@ -66,7 +66,7 @@
 
 
     <td nowrap align="middle">
-      {{ Form::open(['route' => 'ctl.brAdditionalZengin.detail', 'method' => 'post']) }}
+      {{ Form::open(['route' => 'ctl.brAdditionalZengin.detail', 'method' => 'get']) }}
         <input type="submit" value="詳細情報">
         <input type="hidden" name="zengin_ym" value="{{$zengin_list->zengin_ym}}" />
         <input type="hidden" name="branch_id" value="{{$zengin_list->branch_id}}" />

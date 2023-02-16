@@ -55,10 +55,10 @@ function help2Form() {
     $('input[name="query"]').click(function () {
       if ($('input[name="entry_status"]').is(':checked')) {
         // var uri = '{/literal}{$v->env.source_path}{$v->env.module}{literal}/bradditionalzengin/searchhotel?keywords=' + encodeURI($('input[name="keyword"]').val()) + '&pref_id=' + $('select[name="pref_id"]').val() + '&entry_status=0';
-        var uri = '{{ route('ctl.brAdditionalZengin.searchhotel')}}?keywords=' + encodeURI($('input[name="keyword"]').val()) + '&pref_id=' + $('select[name="pref_id"]').val() + '&entry_status=0';
+        var uri = '{{ route('ctl.brAdditionalZengin.searchHotel')}}?keywords=' + encodeURI($('input[name="keyword"]').val()) + '&pref_id=' + $('select[name="pref_id"]').val() + '&entry_status=0';
       } else {
         // var uri = '{/literal}{$v->env.source_path}{$v->env.module}{literal}/bradditionalzengin/searchhotel?keywords=' + encodeURI($('input[name="keyword"]').val()) + '&pref_id=' + $('select[name="pref_id"]').val();
-        var uri = '{{ route('ctl.brAdditionalZengin.searchhotel')}}?keywords=' + encodeURI($('input[name="keyword"]').val()) + '&pref_id=' + $('select[name="pref_id"]').val();
+        var uri = '{{ route('ctl.brAdditionalZengin.searchHotel')}}?keywords=' + encodeURI($('input[name="keyword"]').val()) + '&pref_id=' + $('select[name="pref_id"]').val();
       }
 
       //window.location.href =uri;
