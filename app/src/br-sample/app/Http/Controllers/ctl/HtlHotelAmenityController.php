@@ -12,58 +12,59 @@ use App\Http\Requests\HtlHotelAmenityRequest;
 
 class HtlHotelAmenityController extends _commonController
 {
-    //一覧
+    /**
+     * 一覧
+     */
     public function list(Request $request)
     {
-        // ターゲットコード
         $target_cd = $request->input('target_cd');
+
         // リクエストパラメータの取得
         $a_request_hotel_amenity = $request->input('HotelAmenity');
 
-        try {
-            // 施設要素マスタを取得
-            $a_hotel_elements['values'] = $this->getHotelElements(['element_type' => 'amenity']);
-            $a_hotel_amenities['values'] = $this->getHotelAmenities($target_cd);
+        // 施設要素マスタを取得
+        $a_hotel_elements['values'] = $this->getHotelElements(['element_type' => 'amenity']);
+        $a_hotel_amenities['values'] = $this->getHotelAmenities($target_cd);
 
-            if (is_array($a_hotel_elements['values'])) {
-                foreach ($a_hotel_elements['values'] as $elementskey => $elementsvalue) {
-                    if (!empty($a_hotel_amenities['values'])) {
-                        foreach ($a_hotel_amenities['values'] as $amenitieskey => $amenitiesvalue) {
-                            if ($amenitiesvalue->element_id == $elementsvalue->element_id) {
-                                $a_hotel_elements['values'][$elementskey]->amenitiesvalue = $amenitiesvalue->element_value_id;
-                                break;
-                            } else {
-                                $a_hotel_elements['values'][$elementskey]->amenitiesvalue = 0;
-                            }
+        if (is_array($a_hotel_elements['values'])) {
+            foreach ($a_hotel_elements['values'] as $elementskey => $elementsvalue) {
+                if (!empty($a_hotel_amenities['values'])) {
+                    foreach ($a_hotel_amenities['values'] as $amenitieskey => $amenitiesvalue) {
+                        if ($amenitiesvalue->element_id == $elementsvalue->element_id) {
+                            $a_hotel_elements['values'][$elementskey]->amenitiesvalue = $amenitiesvalue->element_value_id;
+                            break;
+                        } else {
+                            $a_hotel_elements['values'][$elementskey]->amenitiesvalue = 0;
                         }
-                    } else {
-                        $a_hotel_elements['values'][$elementskey]->amenitiesvalue = 0;
                     }
+                } else {
+                    $a_hotel_elements['values'][$elementskey]->amenitiesvalue = 0;
                 }
             }
-
-            // バリデーションエラー時はエラーメッセージ取得
-            $errors = $request->session()->get('errors', []);
-
-            return view('ctl.htlhotelamenity.list', [
-                'target_cd'               => $target_cd,                // ターゲットコード
-                'hotel_amenity'           => $a_hotel_elements,         // エレメント情報
-                'a_request_hotel_amenity' => $a_request_hotel_amenity,  // リクエスト情報
-                'errors'                  => $errors
-            ]);
-
-            // 各メソッドで Exception が投げられた場合
-        } catch (Exception $e) {
-            throw $e;
         }
+
+        // バリデーションエラー時はエラーメッセージ取得
+        $errors = $request->session()->get('errors', []);
+
+        return view('ctl.htlhotelamenity.list', [
+            'target_cd'               => $target_cd,                // ターゲットコード
+            'hotel_amenity'           => $a_hotel_elements,         // エレメント情報
+            'a_request_hotel_amenity' => $a_request_hotel_amenity,  // リクエスト情報
+            'errors'                  => $errors
+        ]);
     }
 
-    //新規登録処理
+    /**
+     *新規登録処理
+     *
+     * @param HtlHotelAmenityRequest $request
+     * @return \Illuminate\Http\Response
+     */
     public function create(HtlHotelAmenityRequest $request)
     {
-
-        // ターゲットコード
         $target_cd = $request->input('target_cd');
+        $actionCd = $this->getActionCd();
+
         // リクエストパラメータの取得
         $a_chk = $request->input('HotelAmenity');
 
@@ -87,25 +88,24 @@ class HtlHotelAmenityController extends _commonController
             }
         }
 
+        $Hotel_Amenity = new HotelAmenity();
+
+        $a_attributes['hotel_cd'] = $target_cd;
+        $a_attributes['entry_cd'] = $actionCd;
+        $a_attributes['entry_ts'] = now();
+        $a_attributes['modify_cd'] = $actionCd;
+        $a_attributes['modify_ts'] = now();
+
         try {
-            // トランザクション開始
-            DB::beginTransaction();
-
-            // ホテルコードインスタンス生成
-            $Hotel_Amenity = new HotelAmenity();
-
             if (is_array($a_chk)) {
+                // トランザクション開始
+                DB::beginTransaction();
+
                 foreach ($a_chk as $key => $value) {
                     $Hotel_Amenity_value = $Hotel_Amenity->where([
                         'hotel_cd'         => $target_cd,
                         'element_id'       => $key
                     ])->first();
-
-                    $a_attributes['hotel_cd'] = $target_cd;
-                    $a_attributes['entry_cd'] = 'entry_cd';     // TODO $this->box->info->env->action_cd;
-                    $a_attributes['entry_ts'] = now();
-                    $a_attributes['modify_cd'] = 'modify_cd';   // TODO $this->box->info->env->action_cd;
-                    $a_attributes['modify_ts'] = now();
 
                     //データが存在しない場合は新規登録 存在する場合は更新処理
                     if ($Hotel_Amenity_value == "") {
@@ -121,14 +121,14 @@ class HtlHotelAmenityController extends _commonController
                         ]);
 
                         // 保存に失敗したときエラーメッセージ表示
-                        if (!$Hotel_Amenity_create) {
+                        if (is_null($Hotel_Amenity_create)) {
                             // ロールバック
                             DB::rollback();
                             // エラーメッセージ
                             return $this->list($request, [
                                 'target_cd' => $target_cd,
                                 'hotel_amenity' => $a_hotel_elements,         // エレメント情報
-                            ])->with(['errors' => 'ご希望のアメニティデータを更新できませんでした。']);
+                            ])->with(['errors' => ['ご希望のアメニティデータを更新できませんでした。']]);
                         }
                     } else {
                         // 更新処理
@@ -141,63 +141,68 @@ class HtlHotelAmenityController extends _commonController
                             'modify_ts'        => $a_attributes['modify_ts'],
                         ]);
 
-                        if (!$Hotel_Amenity_update) {
+                        if ($Hotel_Amenity_update == 0) {
                             // ロールバック
                             DB::rollback();
                             // エラーメッセージ
                             return $this->list($request, [
                                 'target_cd' => $target_cd,
                                 'hotel_amenity' => $a_hotel_elements
-                            ])->with(['errors' => 'ご希望のアメニティデータを更新できませんでした。']);
+                            ])->with(['errors' => ['ご希望のアメニティデータを更新できませんでした。']]);
                         }
                     }
                 }
             }
 
             // 施設情報ページの更新依頼
-            $Hotel_Amenity->hotel_modify($a_attributes);
+            $Hotel_Amenity->hotelModify($a_attributes);
 
             // コミット
             DB::commit();
-
-            // 更新後の施設情報を取得
-            $a_hotel_elements['values'] = $this->getHotelElements(['element_type' => 'amenity']);
-            $a_hotel_amenities['values'] = $this->getHotelAmenities($target_cd);
-
-            if (is_array($a_hotel_elements['values'])) {
-                foreach ($a_hotel_elements['values'] as $elementskey => $elementsvalue) {
-                    if (!empty($a_hotel_amenities['values'])) {
-                        foreach ($a_hotel_amenities['values'] as $amenitieskey => $amenitiesvalue) {
-                            if ($amenitiesvalue->element_id == $elementsvalue->element_id) {
-                                $a_hotel_elements['values'][$elementskey]->amenitiesvalue = $amenitiesvalue->element_value_id;
-                                break;
-                            } else {
-                                $a_hotel_elements['values'][$elementskey]->amenitiesvalue = 0;
-                            }
-                        }
-                    } else {
-                        $a_hotel_elements['values'][$elementskey]->amenitiesvalue = 0;
-                    }
-                }
-            }
-
-            return view('ctl.htlhotelamenity.list', [
-                'target_cd' => $target_cd,                  // ターゲットコード
-                'hotel_amenity' => $a_hotel_elements,       // エレメント情報
-                'guides'    => ['変更しました。']
-
-            ]);
         } catch (Exception $e) {
+            DB::rollback();
             throw $e;
         }
+
+        // 更新後の施設情報を取得
+        $a_hotel_elements['values'] = $this->getHotelElements(['element_type' => 'amenity']);
+        $a_hotel_amenities['values'] = $this->getHotelAmenities($target_cd);
+
+        if (is_array($a_hotel_elements['values'])) {
+            foreach ($a_hotel_elements['values'] as $elementskey => $elementsvalue) {
+                if (!empty($a_hotel_amenities['values'])) {
+                    foreach ($a_hotel_amenities['values'] as $amenitieskey => $amenitiesvalue) {
+                        if ($amenitiesvalue->element_id == $elementsvalue->element_id) {
+                            $a_hotel_elements['values'][$elementskey]->amenitiesvalue = $amenitiesvalue->element_value_id;
+                            break;
+                        } else {
+                            $a_hotel_elements['values'][$elementskey]->amenitiesvalue = 0;
+                        }
+                    }
+                } else {
+                    $a_hotel_elements['values'][$elementskey]->amenitiesvalue = 0;
+                }
+            }
+        }
+
+        return view('ctl.htlhotelamenity.list', [
+            'target_cd' => $target_cd,                  // ターゲットコード
+            'hotel_amenity' => $a_hotel_elements,       // エレメント情報
+            'guides'    => ['変更しました。']
+        ]);
     }
 
-
-    // 施設要素マスタを取得
-    //
-    //   aa_conditions
-    //   element_type 要素タイプ hotel:施設関係 room:部屋関係 amenity:アメニティ service:サービス vicinity:周辺
-    //
+    /**
+     * 施設要素マスタを取得
+     *
+     *  element_type（要素タイプ）は5種類
+     *  hotel:施設関係 room:部屋関係 amenity:アメニティ service:サービス vicinity:周辺
+     *
+     * @param array{
+     *   element_type: string,
+     * } $aa_conditions 検索条件
+     * @return array
+     */
     public function getHotelElements($aa_conditions)
     {
         try {
@@ -234,6 +239,13 @@ SQL;
             throw $e;
         }
     }
+
+    /**
+     * ホテルに紐づくをアメニティ情報を取得
+     *
+     * @param string $target_cd ホテルコード
+     * @return array
+     */
     private function getHotelAmenities($target_cd)
     {
         $sql = <<<SQL
@@ -271,5 +283,25 @@ SQL;
         SQL;
 
         return DB::select($sql, ['hotel_cd' => $target_cd]);
+    }
+
+    /**
+     * コントローラ名とアクション名を取得して、ユーザーIDと連結
+     * ユーザーID取得は暫定の為、書き換え替えが必要です。
+     *
+     * MEMO: app/Models/common/CommonDBModel.php から移植したもの
+     * HACK: 適切に共通化したいか。
+     * @return string
+     */
+    private function getActionCd()
+    {
+        $path = explode("@", \Illuminate\Support\Facades\Route::currentRouteAction());
+        $pathList = explode('\\', $path[0]);
+        $controllerName = str_replace("Controller", "", end($pathList)); // コントローラ名
+        $actionName = $path[1]; // アクション名
+        $userId = \Illuminate\Support\Facades\Session::get("user_id");   // TODO: ユーザー情報取得のキーは仮です
+        $actionCd = $controllerName . "/" . $actionName . "." . $userId;
+
+        return $actionCd;
     }
 }
