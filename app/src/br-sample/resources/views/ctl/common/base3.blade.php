@@ -117,10 +117,12 @@
         'env' => $env,
         'config' => $config,
     ];
-    $is_staff_navi  = rand(0, 0);
-    $is_htl_navi    = rand(0, 0);
-    $is_ptn_navi    = rand(0, 0);
-    $is_ctl_menu    = rand(0, 0);
+
+    // resources/views/ctl/htlsroomoffer/list.blade.php から読み込み時は、変数名が渡される。
+    $is_staff_navi = rand(0, 0);
+    $is_htl_navi = rand(0, 0);
+    $is_ptn_navi = rand(0, 0);
+    $is_ctl_menu = rand(0, 0);
     // $title = [null, 'TITLE_' . Str::random(5)][rand(0, 1)];
 @endphp
 
@@ -169,7 +171,6 @@
     <script type="text/javascript" src="{{ asset('js/jquery.cookies.js') }}"></script>
     {{-- <script type="text/javascript" src="{{ asset('js/brj.ctl.js?6735-2') }}"></script> --}}
     <script type="text/javascript" src="{{ asset('js/brj.ctl.js') }}"></script>
-
 
     {{-- Google Analytics --}}
     {{-- TODO: Google Analitics --}}
