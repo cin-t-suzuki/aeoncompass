@@ -19,7 +19,7 @@ class MastHoliday extends CommonDBModel
     /**
      * コンストラクタ
      */
-    function __construct()
+    public function __construct()
     {
         // カラム情報の設定
         $colHoliday = new ValidationColumn();
@@ -33,20 +33,24 @@ class MastHoliday extends CommonDBModel
      * 祝日を判断します。
      * $date = Y-m-d
      * is_holiday
+     *
+     * HACK: refactor 非直感的な挙動のメソッド
+     * isXXX であれば真偽値が返るべき
      */
     public function isHoliday($arrayDate)
     {
         $date = $arrayDate['holiday'];
-        $s_sql = <<<SQL
+        $sql = <<<SQL
             select
-                holiday, holiday_nm
+                holiday,
+                holiday_nm
             from
                 mast_holiday
             where
-                date_format (holiday , '%Y-%m-%d') = '{$date}'
+                date_format(holiday, '%Y-%m-%d') = :date
         SQL;
 
-        $data = DB::select($s_sql);
+        $data = DB::select($sql, ['date' => $date]);
 
         if (empty($data) || count($data) <= 0) {
             $data = [];

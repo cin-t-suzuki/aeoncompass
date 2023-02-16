@@ -39,10 +39,10 @@
             {{-- TODO: Form Facades, create Route --}}
             <form action="{{ $v->env->source_path }}{{ $v->env->module }}/htltop/" method="post" target="_blank">
                 <td style="text-align:right" width="100%">
-                    <a href="{{ $v->env->source_path }}{{ $v->env->module }}/brtop/">
+                    <a href="{{ route('ctl.br.top') }}">
                         メインメニュー
                     </a><br>
-                    担当：{{ $v->user->operator->staff_nm }}<br>
+                    担当：{{ $staffName }}<br>
                     施設コード：<input type="text" size="12" maxlength="10" name="target_cd" value="" />
                     <input type="submit" value="移動">
                 </td>
