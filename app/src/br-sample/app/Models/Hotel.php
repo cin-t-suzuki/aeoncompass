@@ -631,6 +631,16 @@ SQL;
 
 	}
 
+    /**
+     * 枝序番号などを求めます
+     *
+     * 現在登録されていて歯抜けになっているところを取得するか、そうでなければ最大値 + 1を取得します。
+     *
+     * @param $target_cd 施設コード
+     * @param $as_table_name テーブル名称
+     * @param $aa_conditions 検索条件
+     * @return int
+     */
     // 枝序番号などを求めます
     //   現在登録されていて歯抜けになっているところを取得するか、そうでなければ最大値 + 1を取得します。
     //
@@ -688,5 +698,15 @@ SQL;
         } catch (Exception $e) {
             throw $e;
         }
+    }
+
+    // シングルトンインスタンスを実装 10/13追記
+    private static $_o_instance = null;
+    public static function getInstance()
+    {
+        if (null === self::$_o_instance) {
+            self::$_o_instance = new self();
+        }
+        return self::$_o_instance;
     }
 }

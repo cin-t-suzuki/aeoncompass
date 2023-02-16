@@ -60,11 +60,11 @@
 	@if ($hotel_list->entry_status == 0 && $hotel_list->accept_status == 1)
 		@if (!$service->is_empty( strip_tags($hotel_list->hotel_old_nm)))
 			<td nowrap>{{$hotel_list->hotel_cd}}<br>
-				<a href="{{ route( 'ctl.htltop.index' , ['hotel_cd'=>$hotel_list->hotel_cd]  ) }}"
+				<a href="{{ route( 'ctl.htl_top.index' , ['hotel_cd'=>$hotel_list->hotel_cd]  ) }}"
 					target="_blank" style="text-decoration: none; color:#000066;">{{strip_tags($hotel_list->hotel_nm)}}( 旧{{strip_tags($hotel_list->hotel_old_nm)}})</a>
 		@else
 			<td nowrap>{{$hotel_list->hotel_cd}}<br>
-				<a href="{{ route( 'ctl.htltop.index' , ['hotel_cd'=>$hotel_list->hotel_cd]  ) }}"
+				<a href="{{ route( 'ctl.htl_top.index' , ['hotel_cd'=>$hotel_list->hotel_cd]  ) }}"
 					target="_blank" style="text-decoration: none; color:#000066;">{{strip_tags($hotel_list->hotel_nm)}}</a>
 		@endif
 
@@ -80,9 +80,9 @@
 	@else
 
 		@if(!$service->is_empty(strip_tags($hotel_list->hotel_old_nm)))
-			<td nowrap><font color="#996666">{{$hotel_list->hotel_cd}}<br><a href="{{ route( 'ctl.htltop.index' , ['hotel_cd'=>$hotel_list->hotel_cd]  ) }}" target="_blank" style="text-decoration: none; color:#000066;">{{strip_tags($hotel_list->hotel_nm)}}( 旧{{strip_tags($hotel_list->hotel_old_nm)}})</a>
+			<td nowrap><font color="#996666">{{$hotel_list->hotel_cd}}<br><a href="{{ route( 'ctl.htl_top.index' , ['hotel_cd'=>$hotel_list->hotel_cd]  ) }}" target="_blank" style="text-decoration: none; color:#000066;">{{strip_tags($hotel_list->hotel_nm)}}( 旧{{strip_tags($hotel_list->hotel_old_nm)}})</a>
 		@else
-			<td nowrap><font color="#996666">{{$hotel_list->hotel_cd}}<br><a href="{{ route( 'ctl.htltop.index' , ['hotel_cd'=>$hotel_list->hotel_cd]  ) }}" target="_blank" style="text-decoration: none; color:#000066;">{{strip_tags($hotel_list->hotel_nm)}}</a>
+			<td nowrap><font color="#996666">{{$hotel_list->hotel_cd}}<br><a href="{{ route( 'ctl.htl_top.index' , ['hotel_cd'=>$hotel_list->hotel_cd]  ) }}" target="_blank" style="text-decoration: none; color:#000066;">{{strip_tags($hotel_list->hotel_nm)}}</a>
 		@endif
 
 		@if ($hotel_list->stock_type == 1)

@@ -249,6 +249,15 @@ Route::get('/ctl/brinsuranceweather/', [\App\Http\Controllers\ctl\BrInsuranceWea
 Route::post('/ctl/brinsuranceweather/updatecondition', [\App\Http\Controllers\ctl\BrInsuranceWeatherController::class, 'updatecondition'])
     ->name('ctl.brInsuranceWeather.updatecondition');
 
+// パートナー精算確認
+Route::get('/ctl/brbillpayptn/list', [\App\Http\Controllers\ctl\BrBillPayPtnController::class, 'list'])
+    ->name('ctl.brBillpayPtn.list');
+Route::get('/ctl/brbillpayptn/customer', [\App\Http\Controllers\ctl\BrBillPayPtnController::class, 'customer'])
+    ->name('ctl.brBillpayPtn.customer');
+Route::get('/ctl/brbillpayptn/detail', [\App\Http\Controllers\ctl\BrBillPayPtnController::class, 'detail'])
+    ->name('ctl.brBillpayPtn.detail');
+Route::get('/ctl/brbillpayptn/csv', [\App\Http\Controllers\ctl\BrBillPayPtnController::class, 'csv'])
+    ->name('ctl.brBillpayPtn.csv');
 
 // 参考として一応残す。
 // Route::namespace('App\Http\Controllers\ctl')->prefix('ctl')->group(function () {
