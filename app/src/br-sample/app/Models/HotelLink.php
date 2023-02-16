@@ -49,17 +49,19 @@ class HotelLink extends Model
         'modify_ts',
     ];
 
-    	// 削除処理
-		//
-		//  同一の施設で複数存在するものを更新します。
-		//  これは異なる施設コードで施設情報ページを同一の内容にするためです。
-		public function destroyAction($aa_conditions){
+    /**
+     * 削除処理
+     *
+     * @return void|bool(エラー時)
+     */
+    public function destroyAction($aa_conditions)
+    {
 
-			$a_attributes = $aa_conditions;
+        $a_attributes = $aa_conditions;
 
-			// 表示順序を繰り上げます。
-			$s_sql =
-<<<SQL
+        // 表示順序を繰り上げます。
+        $s_sql =
+            <<<SQL
 				select	hotel_link.hotel_cd,
 						hotel_link.branch_no
 				from	hotel_link,
@@ -74,47 +76,49 @@ class HotelLink extends Model
 					and	hotel_link.order_no > q1.order_no
 SQL;
 
-            $a_target = DB::select($s_sql, ['hotel_cd' => $a_attributes['hotel_cd'], 'branch_no'   => $a_attributes['branch_no']]);
+        $a_target = DB::select($s_sql, ['hotel_cd' => $a_attributes['hotel_cd'], 'branch_no'   => $a_attributes['branch_no']]);
 
-            $decrement_link_delete = $this->where([
-                'hotel_cd'   => $aa_conditions['hotel_cd'],
-                'branch_no'  => $aa_conditions['branch_no']
-            ])->delete();
+        $decrement_link_delete = $this->where([
+            'hotel_cd'   => $aa_conditions['hotel_cd'],
+            'branch_no'  => $aa_conditions['branch_no']
+        ])->delete();
 
-            if (!$decrement_link_delete){
-                return false;
-            }
-
-			for($i = 0; $i < count($a_target); $i++){
-				$hotel_link = $this->where(['hotel_cd' => $a_target[$i]->hotel_cd, 'branch_no' => $a_target[$i]->branch_no])->first();
-
-                $decrement_link_update = $this->where([
-                    'hotel_cd'   => $hotel_link['hotel_cd'],
-                    'branch_no'  => $hotel_link['branch_no']
-    
-                ])->update([
-					'order_no'    => $hotel_link['order_no'] - 1,
-					'modify_cd'   => basename(__FILE__) .'->'. __METHOD__,
-					'modify_ts'   => now()
-				]);
-
-				if (!$decrement_link_update){
-					return false;
-				}
-			}
-        
-        // 施設情報ページを更新に設定
-        $this->hotel_modify($a_attributes);
-
+        if ($decrement_link_delete == 0) {
+            return false;
         }
 
-    // 施設情報ページの更新依頼
-    //
-    //  as_hotel_cd       施設コード
-    //  aa_attributes     施設*テーブルの登録データ内容
-    public function hotel_modify($aa_attributes)
+        for ($i = 0; $i < count($a_target); $i++) {
+            $hotel_link = $this->where(['hotel_cd' => $a_target[$i]->hotel_cd, 'branch_no' => $a_target[$i]->branch_no])->first();
+
+            $decrement_link_update = $this->where([
+                'hotel_cd'   => $hotel_link['hotel_cd'],
+                'branch_no'  => $hotel_link['branch_no']
+
+            ])->update([
+                'order_no'    => $hotel_link['order_no'] - 1,
+                'modify_cd'   => basename(__FILE__) . '->' . __METHOD__,
+                'modify_ts'   => now()
+            ]);
+
+            if ($decrement_link_update == 0) {
+                return false;
+            }
+        }
+
+        // 施設情報ページを更新に設定
+        $this->hotelModify($a_attributes);
+    }
+
+    /**
+     * 施設情報ページの更新依頼
+     *
+     * @param $aa_attributes 施設テーブルへの登録データ内容
+     *
+     * @return bool
+     */
+    public function hotelModify($aa_attributes)
     {
-        $hotel_status = new HotelStatus;
+        $hotel_status = new HotelStatus();
         $a_hotel_status = $hotel_status->where(['hotel_cd' => $aa_attributes['hotel_cd']])->first();
 
         // 解約状態の場合は必ず削除依頼
@@ -156,5 +160,4 @@ SQL;
             }
         }
     }
-
 }

@@ -15,7 +15,7 @@
 {{-- メッセージ --}}
 @include('ctl.common.message')
 
-{!! Form::open(['route' => ['ctl.htl_hotel_link.update'], 'method' => 'post']) !!}
+{!! Form::open(['route' => ['ctl.htl_hotel_link.update'], 'method' => 'get']) !!}
 <table border="1" cellspacing="0" cellpadding="4">
     @include('ctl.htlhotellink._form')
 </table>
