@@ -51,13 +51,15 @@ class HotelStation extends CommonDBModel
         'modify_ts'
     ];
 
-    // 施設情報ページの更新依頼
-    //
-    //  as_hotel_cd       施設コード
-    //  aa_attributes     施設*テーブルの登録データ内容
-    public function hotel_modify($aa_attributes)
+    /**
+     * 施設情報ページの更新依頼
+     *
+     * @param array $aa_attributes 施設テーブルへの登録データ内容
+     * @return bool
+     */
+    public function hotelModify($aa_attributes)
     {
-        $hotel_status = new HotelStatus;
+        $hotel_status = new HotelStatus();
         $a_hotel_status = $hotel_status->where(['hotel_cd' => $aa_attributes['hotel_cd']])->first();
 
         // 解約状態の場合は必ず削除依頼
