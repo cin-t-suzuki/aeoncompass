@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Common\Traits;
 use App\Models\common\CommonDBModel;
 use App\Models\common\ValidationColumn;
+use Exception;
 use Illuminate\Support\Facades\DB;
 
 class HotelInform extends CommonDBModel
@@ -61,7 +62,9 @@ class HotelInform extends CommonDBModel
         'modify_ts'
     ];
 
-    // カラム
+    /**
+     * カラム
+     */
     public string $COL_HOTEL_CD = "hotel_cd";
     public string $COL_BRANCH_NO = "branch_no";
     public string $COL_INFORM_TYPE = "inform_type";
@@ -72,7 +75,9 @@ class HotelInform extends CommonDBModel
     public string $COL_MODIFY_CD = "modify_cd";
     public string $COL_MODIFY_TS = "modify_ts";
 
-    // コンストラクタ
+    /**
+     * コンストラクタ
+     */
     public function __construct()
     {
         // カラム情報の設定
@@ -90,11 +95,15 @@ class HotelInform extends CommonDBModel
         parent::setColumnDataArray([$colHotelCd, $colBranchNo, $ColInformType, $colInform, $colOrderNo]);
     }
 
-    // 削除処理
-    //
+    /**
+     * 削除処理
+     *
+     * 削除と同時に、表示順も整形
+     *
+     * @return bool
+     */
     public function destroyAction($aa_conditions)
     {
-
         $a_attributes = $aa_conditions;
 
         // 表示順序を繰り上げます。
@@ -141,18 +150,21 @@ SQL;
         }
 
         // 施設情報ページを更新に設定
-        $this->hotel_modify($a_attributes);
+        $this->hotelModify($a_attributes);
 
         return true;
     }
 
-    // 施設情報ページの更新依頼
-    //
-    //  as_hotel_cd       施設コード
-    //  aa_attributes     施設*テーブルの登録データ内容
-    public function hotel_modify($aa_attributes)
+    /**
+     * 施設情報ページの更新依頼
+     *
+     * @param $aa_attributes 施設テーブルへの登録データ内容
+     *
+     * @return bool
+     */
+    public function hotelModify($aa_attributes)
     {
-        $hotel_status = new HotelStatus;
+        $hotel_status = new HotelStatus();
         $a_hotel_status = $hotel_status->where(['hotel_cd' => $aa_attributes['hotel_cd']])->first();
 
         // 解約状態の場合は必ず削除依頼
@@ -165,33 +177,31 @@ SQL;
         // 施設情報ページを更新するに設定
         $hotel_modify = new HotelModify();
         $a_hotel_modify = $hotel_modify->where(['hotel_cd' => $aa_attributes['hotel_cd']])->first();
+        try {
+            DB::beginTransaction();
 
-        if (empty($a_hotel_modify)) {
-            $hotel_modify_create = $hotel_modify->create([
-                'hotel_cd'      => $aa_attributes['hotel_cd'],
-                'modify_status' => $modify_status,
-                'entry_cd'      => $aa_attributes['entry_cd'],
-                'entry_ts'      => $aa_attributes['entry_ts'],
-                'modify_cd'     => $aa_attributes['modify_cd'],
-                'modify_ts'     => $aa_attributes['modify_ts'],
-            ]);
-            if (!$hotel_modify_create) {
-                return false;
+            if (empty($a_hotel_modify)) {
+                $hotel_modify->create([
+                    'hotel_cd'      => $aa_attributes['hotel_cd'],
+                    'modify_status' => $modify_status,
+                    'entry_cd'      => $aa_attributes['entry_cd'],
+                    'entry_ts'      => $aa_attributes['entry_ts'],
+                    'modify_cd'     => $aa_attributes['modify_cd'],
+                    'modify_ts'     => $aa_attributes['modify_ts'],
+                ]);
+            } else {
+                $hotel_modify->where([
+                    'hotel_cd'      => $aa_attributes['hotel_cd']
+                ])->update([
+                    'modify_status' => $modify_status,
+                    'modify_cd'     => $aa_attributes['modify_cd'],
+                    'modify_ts'     => $aa_attributes['modify_ts'],
+                ]);
             }
-
-            // 削除状態で無い場合に設定
-        } else {
-            $hotel_modify_upadte = $hotel_modify->where([
-                'hotel_cd'      => $aa_attributes['hotel_cd']
-            ])->update([
-                'modify_status' => $modify_status,
-                'modify_cd'     => $aa_attributes['modify_cd'],
-                'modify_ts'     => $aa_attributes['modify_ts'],
-            ]);
-
-            if (!$hotel_modify_upadte) {
-                return false;
-            }
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+            return false;
         }
     }
 }
