@@ -230,14 +230,23 @@ abstract class CommonDBModel extends Model
                 }
             }
 
-   			// 全角英数チェック
-			if($this->colmunArray[$key]->isNotFullCharacter()){
-				if (strlen($val) != 0){
-					if($val != mb_convert_kana($val, "kvrn")){
-						$rtnErrors[] = $this->colmunArray[$key]->getColumnName() . "に全角英数が含まれています";
-					}
-				}
-			}
+            // 半角大文字英と数字のみであるかチェック
+            if ($this->colmunArray[$key]->isNumberAndUpperAlphabet()) {
+                if (strlen($val) != 0) {
+                    if (!preg_match('/^[0-9A-Z]*$/', $val)) {
+                        $rtnErrors[] = $this->colmunArray[$key]->getColumnName() . "には半角大文字アルファベットまたは半角数字のみ入力いただけます。";
+                    }
+                }
+            }
+
+            // 全角英数チェック
+            if ($this->colmunArray[$key]->isNotFullCharacter()) {
+                if (strlen($val) != 0) {
+                    if ($val != mb_convert_kana($val, "kvrn")) {
+                        $rtnErrors[] = $this->colmunArray[$key]->getColumnName() . "に全角英数が含まれています";
+                    }
+                }
+            }
         }
 
         return $rtnErrors;
