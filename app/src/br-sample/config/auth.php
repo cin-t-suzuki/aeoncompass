@@ -40,6 +40,28 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        'staff' => [
+            'driver' => 'session',
+            'provider' => 'staff',
+        ],
+
+        'supervisor' => [
+            'driver' => 'session',
+            'provider' => 'supervisor',
+        ],
+        'hotel' => [
+            'driver' => 'session',
+            'provider' => 'hotel',
+        ],
+        'partner' => [
+            'driver' => 'session',
+            'provider' => 'partner',
+        ],
+        'affiliate' => [
+            'driver' => 'session',
+            'provider' => 'affiliate',
+        ],
     ],
 
     /*
@@ -69,6 +91,27 @@ return [
         //     'driver' => 'database',
         //     'table' => 'users',
         // ],
+
+        'staff' => [
+            'driver' => 'custom', // ハッシュロジックを旧ソースの暗号化ロジックに差し替え
+            'model' => App\Models\StaffAccount::class,
+        ],
+        'supervisor' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\User::class, // TODO: 各ログイン機能実装時、対応するモデルに書き換える
+        ],
+        'hotel' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\User::class, // TODO: 各ログイン機能実装時、対応するモデルに書き換える
+        ],
+        'partner' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\User::class, // TODO: 各ログイン機能実装時、対応するモデルに書き換える
+        ],
+        'affiliate' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\User::class, // TODO: 各ログイン機能実装時、対応するモデルに書き換える
+        ],
     ],
 
     /*
@@ -93,6 +136,13 @@ return [
             'expire' => 60,
             'throttle' => 60,
         ],
+        // TODO: 詳細要確認。
+        'staff' => [
+            'provider' => 'staff',
+            'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
     ],
 
     /*
@@ -106,6 +156,6 @@ return [
     |
     */
 
-    'password_timeout' => 10800,
+    'password_timeout' => 10800, // 3 hours
 
 ];
