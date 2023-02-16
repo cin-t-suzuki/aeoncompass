@@ -1,9 +1,9 @@
 @inject('service', 'App\Http\Controllers\ctl\BrAdditonalZenginController')
 {{-- メッセージbladeの読込 --}}
-@include('ctl.common.message', $messages)
+@include('ctl.common.message')
 
 {{-- ??[]追記でいいか？ --}}
-@if (count($views->hotel_list['values'] ?? []) != 0)
+@if (count($hotel_list['values'] ?? []) != 0)
 <table cellspacing="0" cellpadding="2" border="1">
   <tr>
     <td bgcolor="#EEFFEE" nowrap>登録状態</td>
@@ -16,7 +16,7 @@
   </tr>
 
 
-  @foreach ($views->hotel_list['values'] as $hotel_list)
+  @foreach ($hotel_list['values'] as $hotel_list)
   <tr>
     <td nowrap>
       @if ($hotel_list['entry_status'] == 0)

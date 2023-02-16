@@ -50,19 +50,19 @@
           <select size="1" name="year">
             {{--書き換え合っている？ @if ($v->helper->date->set($v->assign->reserve_select_year))@endif --}}
             @php        
-              if (!$service->is_empty($views->reserve_select_year)) {
-                $date_Y = date('Y', strtotime($views->reserve_select_year));
+              if (!$service->is_empty($reserve_select_year)) {
+                $date_Y = date('Y', strtotime($reserve_select_year));
               } else {
                 $date_Y = null;
               }
             @endphp
             {{--書き替えはforで合っているか？ {section name = year start = 0 loop = $v->assign->s_cnt} --}}
-            @for ($y = 0; $y <= $views->s_cnt; $y++) 
+            @for ($y = 0; $y <= $s_cnt; $y++) 
               {{--書き替え以下であっている？ <option value="{{$v->helper->date->to_format('Y')}" --}}
               <option value="{{$date_Y}}"
-                {{-- $views->searchでの取得データ、初期表示では値がないためnull追記でいいか --}}
-              @if (!$service->is_empty($views->search['year'] ?? null))
-                @if ($date_Y == $views->search['year'] ?? null)
+                {{-- $searchでの取得データ、初期表示では値がないためnull追記でいいか --}}
+              @if (!$service->is_empty($search['year'] ?? null))
+                @if ($date_Y == $search['year'] ?? null)
                   selected="selected"
                 @endif
               @else
@@ -89,10 +89,10 @@
             @for($m = 1; $m < 13; $m++)
               {{--書き替え以下であっている？？ <option value="{$v->helper->form->strip_tags($smarty.section.month.index)|string_format:"%02d"}" --}}
                 <option value="{{sprintf('%02d',strip_tags($m))}}"
-                {{-- $views->searcでの取得データ、初期表示では値がないためnull追記でいいか --}}
-              @if (!$service->is_empty($views->search['month'] ?? null))
+                {{-- $searcでの取得データ、初期表示では値がないためnull追記でいいか --}}
+              @if (!$service->is_empty($search['month'] ?? null))
                 {{--書き替え以下であっている？？ @if ($smarty.section.month.index|string_format:"%02d" == $v->assign->search.month) --}}
-                @if (sprintf('%02d',$m) == $views->search['month'] ?? null)
+                @if (sprintf('%02d',$m) == $search['month'] ?? null)
                   selected="selected"
                 @endif
               {{--書き替え以下であっている？？ @elseif ($smarty.section.month.index|string_format:"%02d" == $smarty.now|date_format:'%m') --}}
@@ -106,7 +106,7 @@
           </select>&nbsp;月<br>
         <input type="radio" style="margin: 5px 5px;" value="1" name="unuse_check" id="unuse_ddym" value="" ><label for="unuse_ddym">引落入金予定日</label>
           <select size="1" name="direct_debit_ym">
-            @foreach ($views->direct_debit_ym_select as $k => $v)
+            @foreach ($direct_debit_ym_select as $k => $v)
               {{--書き替え以下であっている？？ <option value="{$v.ym|date_format:'%Y%m'}">{$v.date_ymd|date_format:"%Y/%m/%d"}</option> --}}
               @php
                 if (!$service->is_empty($v->ym)) {

@@ -18,7 +18,7 @@
   </tr>
 
 
-@foreach ($views->additional_zengin['values'] as $zengin_list)
+@foreach ($additional_zengin['values'] as $zengin_list)
 
   <tr>
     <td nowrap>

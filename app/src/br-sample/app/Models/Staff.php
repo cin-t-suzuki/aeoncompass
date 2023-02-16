@@ -73,7 +73,7 @@ class Staff extends Model
     /**
      * コンストラクタ
      */
-    public function __construct() //publicでいいか？使用しないが削除するとエラー
+    public function __construct()
     {
         // カラム情報の設定
     }
@@ -81,6 +81,9 @@ class Staff extends Model
 
     /**
      * 主キーで取得
+     *
+     * @param string $customer_id
+     * @return array
      */
     public function selectByKey($staff_id)
     {
@@ -96,5 +99,5 @@ class Staff extends Model
         }
         return null;
     }
-    
+
 }

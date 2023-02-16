@@ -4,7 +4,7 @@
 
 @section('page_blade')
 {{-- メッセージbladeの読込 --}}
-@include('ctl.common.message', $messages)
+@include('ctl.common.message')
 
 <div style="line-height:150%" style="margin:1em 1em">
 

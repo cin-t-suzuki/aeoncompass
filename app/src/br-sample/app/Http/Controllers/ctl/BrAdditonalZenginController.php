@@ -27,7 +27,12 @@ class BrAdditonalZenginController extends _commonController
     // ループカウント
     private $year_loop_cnt = '11';
 
-    // 一覧画面  表示処理
+    /**
+     * 一覧画面  表示処理
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function list(Request $request)
     {
         // セレクトボックスの初期値を設定
@@ -49,7 +54,12 @@ class BrAdditonalZenginController extends _commonController
         ]);
     }
 
-    // 一覧画面 検索リクエスト処理
+    /**
+     * 一覧画面  検索リクエスト処理
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function searchList(Request $request)
     {
         // 必須項目のkeywordが無ければ検索しない。
@@ -80,7 +90,12 @@ class BrAdditonalZenginController extends _commonController
         ]);
     }
 
-    // 詳細画面
+    /**
+     * 詳細画面
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function detail(Request $request)
     {
         // 別ページから値が渡されていればばそれを適用する
@@ -117,7 +132,12 @@ class BrAdditonalZenginController extends _commonController
     }
 
 
-    // 詳細画面
+    /**
+     * 更新処理
+     *
+     * @param Request $request
+     * @return Illuminate\Http\RedirectResponse
+     */
     public function update(Request $request)
     {
         $additionalZenginModel = new AdditionalZengin();
@@ -181,7 +201,12 @@ class BrAdditonalZenginController extends _commonController
         ]);
     }
 
-    // 詳細画面
+    /**
+     * 削除処理
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function delete(Request $request)
     {
         $additionalZenginModel = new AdditionalZengin();
@@ -244,7 +269,12 @@ class BrAdditonalZenginController extends _commonController
         ]);
     }
 
-    //施設選択画面 表示処理
+    /**
+     * 施設選択画面 表示処理
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function search()
     {
         $mastPrefModel = new MastPref();
@@ -256,8 +286,12 @@ class BrAdditonalZenginController extends _commonController
         ]);
     }
 
-
-    // 施設選択画面 検索リクエスト処理
+    /**
+     * 施設選択画面 検索リクエスト処理
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function searchHotel(Request $request)
     {
         // 必須項目のkeywordが無ければ検索しない。
@@ -306,7 +340,12 @@ class BrAdditonalZenginController extends _commonController
         ]);
     }
 
-    // 登録画面 表示処理
+    /**
+     * 登録画面 表示処理
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function edit(Request $request)
     {
         $hotel_cd = $request->input('hotel_cd');
@@ -340,7 +379,12 @@ class BrAdditonalZenginController extends _commonController
         ]);
     }
 
-    // 登録画面 リクエスト処理
+    /**
+     * 登録画面 リクエスト処理
+     *
+     * @param Request $request
+     * @return Illuminate\Http\RedirectResponse
+     */
     public function create(Request $request)
     {
         $additionalZenginModel = new AdditionalZengin();
@@ -454,7 +498,12 @@ class BrAdditonalZenginController extends _commonController
         return redirect()->route('ctl.brAdditionalZengin.list');
     }
 
-    // 指定した施設CDの施設情報・精算先・口座情報を取得する。
+    /**
+     * 指定した施設CDの施設情報・精算先・口座情報を取得する。
+     *
+     * @param string $hotel_cd
+     * @return array $a_hotel_list
+     */
     private function getHotelList($hotel_cd)
     {
         $o_models_hotel = new Hotel();
@@ -471,7 +520,12 @@ class BrAdditonalZenginController extends _commonController
         return  $a_hotel_list;
     }
 
-    // 指定した施設の精算先・口座情報を取得する
+    /**
+     * 指定した施設の精算先・口座情報を取得する
+     *
+     * @param string $hotel_cd
+     * @return array $a_factoring
+     */
     private function getFactoring($hotel_cd)
     {
         //精算先、精算先関連施設 の インスタンスを取得
@@ -520,7 +574,11 @@ class BrAdditonalZenginController extends _commonController
         return $a_factoring;
     }
 
-    // 銀行名、支店名を取得する
+    /**
+     * 銀行名、支店名を取得する
+     *
+     * @param string $a_customer
+     */
     private function getBankNm(&$a_customer)
     {
         // 銀行名、支店名 の インスタンスを取得
@@ -534,7 +592,11 @@ class BrAdditonalZenginController extends _commonController
         $a_customer['factoring_bank_branch_nm'] = $a_mast_branch_bank['bank_branch_nm'];
     }
 
-    // スタッフ名を取得する
+    /**
+     * スタッフ名を取得する
+     *
+     * @param string $a_customer
+     */
     private function getStaffNm(&$a_customer)
     {
         // スタッフ の インスタンスを取得

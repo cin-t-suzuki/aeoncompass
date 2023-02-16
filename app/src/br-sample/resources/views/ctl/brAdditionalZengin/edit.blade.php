@@ -4,7 +4,7 @@
 
 @section('page_blade')
 {{-- メッセージbladeの読込 --}}
-@include('ctl.common.message', $messages)
+@include('ctl.common.message')
 
 
 {{--削除でいいか？ {literal} --}}
@@ -122,7 +122,7 @@
     <td bgcolor="#EEFFEE" nowrap>送客請求実績</td>
   </tr>
 
-  @foreach ($views->hotel_list['values'] as $hotel_list)
+  @foreach ($hotel_list['values'] as $hotel_list)
   <tr>
     <td nowrap>
       @if ($hotel_list['entry_status'] == 0)
@@ -177,7 +177,7 @@
 </table>
 
 
-@foreach ($views->hotel_list['values'] as $hotel_list)
+@foreach ($hotel_list['values'] as $hotel_list)
 <table cellspacing="0" cellpadding="2" border="1" style="margin-top: 10px;min-width: 380px;">
   <tr>
     {{-- 以下factoring_bank関連の値すべて??null追記でいいか --}}
@@ -212,20 +212,20 @@
               <select size="1" name="year">
             {{--書き換え合っている？ {if $v->helper->date->set($v->assign->reserve_select_year)}{/if} --}}
             @php        
-            if (!$service->is_empty($views->reserve_select_year)) {
-              $date_Y = date('Y', strtotime($views->reserve_select_year));
+            if (!$service->is_empty($reserve_select_year)) {
+              $date_Y = date('Y', strtotime($reserve_select_year));
             } else {
               $date_Y = null;
             }
             @endphp
             {{--書き替えはforで合っているか？ {section name = year start = 0 loop = $v->assign->s_cnt} --}}
-            @for ($y = 0; $y <= $views->s_cnt; $y++) 
+            @for ($y = 0; $y <= $s_cnt; $y++) 
               {{--書き替え以下であっている？ <option value="{{$v->helper->date->to_format('Y')}" --}}
               <option value="{{$date_Y}}"
-                {{-- $views->searchでの取得データ、初期表示では値がないためnull追記でいいか --}}
-              @if (!$service->is_empty($views->search['year'] ?? null))
+                {{-- $searchでの取得データ、初期表示では値がないためnull追記でいいか --}}
+              @if (!$service->is_empty($search['year'] ?? null))
                 {{--書き替え以下であっている？ {if $v->helper->date->to_format('Y') == $v->assign->search.year} --}}
-                @if ($date_Y == $views->search['year'] ?? null)
+                @if ($date_Y == $search['year'] ?? null)
                   selected="selected"
                 @endif
               @else
@@ -252,10 +252,10 @@
               @for($m = 1; $m < 13; $m++)
                 {{--書き替え以下であっている？？ <option value="{$v->helper->form->strip_tags($smarty.section.month.index)|string_format:"%02d"}" --}}
                 <option value="{{sprintf('%02d',strip_tags($m))}}"
-                {{-- $views->searcでの取得データ、初期表示では値がないためnull追記でいいか --}}
-                @if (!$service->is_empty($views->search['month']))
+                {{-- $searcでの取得データ、初期表示では値がないためnull追記でいいか --}}
+                @if (!$service->is_empty($search['month']))
                   {{--書き替え以下であっている？？ {if ($smarty.section.month.index|string_format:"%02d" == $v->assign->search.month) --}}
-                  @if (sprintf('%02d',$m) == $views->search['month'] ?? null)
+                  @if (sprintf('%02d',$m) == $search['month'] ?? null)
                     selected="selected"
                   @endif
                 {{--書き替え以下であっている？？ {elseif ($smarty.section.month.index|string_format:"%02d" == $smarty.now|date_format:'%m') --}}
@@ -274,14 +274,14 @@
     <td bgcolor="#EEFFEE" nowrap>追加金額</td>
     <td nowrap>
     <div style="color: #f00;" id="msg_additional_charge"></div>
-    <input maxlength="20" name="additional_charge" class="num" value="{{$views->additional_charge}}">
+    <input maxlength="20" name="additional_charge" class="num" value="{{$additional_charge}}">
     </td>
   </tr>
   <tr>
     <td bgcolor="#EEFFEE" nowrap>理由<br>(施設向け)<br>1000文字まで</td>
     <td nowrap>
     <div style="color: #f00;" id="msg_reason"></div>
-    <textarea name="reason" cols="100" rows="6">{{$views->reason}}</textarea>
+    <textarea name="reason" cols="100" rows="6">{{$reason}}</textarea>
     </td>
   </tr>
   <tr>
@@ -289,7 +289,7 @@
 
     <td nowrap>
     <div style="color: #f00;" id="msg_reason_internal"></div>
-    <textarea name="reason_internal" cols="100" rows="6">{{$views->reason_internal}}</textarea>
+    <textarea name="reason_internal" cols="100" rows="6">{{$reason_internal}}</textarea>
     </td>
   </tr>
 </table>

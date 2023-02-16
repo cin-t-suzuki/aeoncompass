@@ -4,7 +4,7 @@
 
 @section('page_blade')
 {{-- メッセージbladeの読込 --}}
-@include('ctl.common.message', $messages)
+@include('ctl.common.message')
 
 {{--削除でいいか？ {literal} --}}
 <script type="text/javascript">
@@ -139,26 +139,26 @@
   <tr>
 
     <td nowrap>
-      {{$views->additional_zengin['hotel_cd']}}<br>
+      {{$additional_zengin['hotel_cd']}}<br>
 	  {{-- ↓null追記でいいか？ --}}
-      <a href="http://{$v->config->system->rsv_host_name}/hotel/{{$views->additional_zengin['hotel_cd']}}/" target="_blank" style="text-decoration: none; color:#000066;">{{$views->additional_zengin['hotel_nm']}}@if (!$service->is_empty($views->additional_zengin['hotel_old_nm'] ?? null))（{{$views->additional_zengin['hotel_old_nm']}}）</font>@endif</a>
+      <a href="http://{$v->config->system->rsv_host_name}/hotel/{{$additional_zengin['hotel_cd']}}/" target="_blank" style="text-decoration: none; color:#000066;">{{$additional_zengin['hotel_nm']}}@if (!$service->is_empty($additional_zengin['hotel_old_nm'] ?? null))（{{$additional_zengin['hotel_old_nm']}}）</font>@endif</a>
 	  <font color="#0000ff">[買]</font>
-      @if (($views->additional_zengin['stock_type'] ?? null) == 1)
+      @if (($additional_zengin['stock_type'] ?? null) == 1)
       @endif
-      @if (!$service->is_empty($views->additional_zengin['pref_nm'] ?? null))
-        （{{$views->additional_zengin['pref_nm']}}）</font>
+      @if (!$service->is_empty($additional_zengin['pref_nm'] ?? null))
+        （{{$additional_zengin['pref_nm']}}）</font>
       @endif
     </td>
 
     <td>
-      ({{$views->additional_zengin['customer_id']}}){{$views->additional_zengin['customer_nm']}}
+      ({{$additional_zengin['customer_id']}}){{$additional_zengin['customer_nm']}}
     </td>
 
     <td nowrap align="middle">
 		{{-- TODO htldemand作成後に遷移先設定 --}}
       <form action="{$v->env.source_path}{$v->env.module}/htldemand/" method="post" target= "_blank">
         <input type="submit" value="詳細情報">
-        <input type="hidden" name="target_cd" value="{{$views->additional_zengin['hotel_cd']}}" />
+        <input type="hidden" name="target_cd" value="{{$additional_zengin['hotel_cd']}}" />
       </form>
     </td>
 
@@ -169,17 +169,17 @@
 <table cellspacing="0" cellpadding="2" border="1" style="margin-top: 10px;min-width: 380px;">
   <tr>
     <tr><td bgcolor="#eeffee" colspan="3">引落銀行</td></tr>
-  <tr><td bgcolor="#eeffee" colspan="2">銀行コード</td><td>{{strip_tags($views->additional_zengin['factoring_bank_cd'])}} : {{strip_tags($views->additional_zengin['factoring_bank_nm'])}}</td></tr>
-  <tr><td bgcolor="#eeffee" colspan="2">支店コード</td><td>{{strip_tags($views->additional_zengin['factoring_bank_branch_cd'])}} : {{strip_tags($views->additional_zengin['factoring_bank_branch_nm'])}}</td></tr>
+  <tr><td bgcolor="#eeffee" colspan="2">銀行コード</td><td>{{strip_tags($additional_zengin['factoring_bank_cd'])}} : {{strip_tags($additional_zengin['factoring_bank_nm'])}}</td></tr>
+  <tr><td bgcolor="#eeffee" colspan="2">支店コード</td><td>{{strip_tags($additional_zengin['factoring_bank_branch_cd'])}} : {{strip_tags($additional_zengin['factoring_bank_branch_nm'])}}</td></tr>
   <tr><td bgcolor="#eeffee" colspan="2">引落口座種別</td><td>
-          @if ($views->additional_zengin['factoring_bank_account_type'] == 1)普通
-      @elseif ($views->additional_zengin['factoring_bank_account_type'] == 2)当座
-      @elseif ($views->additional_zengin['factoring_bank_account_type'] == 4)貯蓄
-      @elseif ($views->additional_zengin['factoring_bank_account_type'] == 9)その他
+          @if ($additional_zengin['factoring_bank_account_type'] == 1)普通
+      @elseif ($additional_zengin['factoring_bank_account_type'] == 2)当座
+      @elseif ($additional_zengin['factoring_bank_account_type'] == 4)貯蓄
+      @elseif ($additional_zengin['factoring_bank_account_type'] == 9)その他
           @endif</td></tr>
-  <tr><td bgcolor="#eeffee" colspan="2">引落口座番号</td><td>{{strip_tags($views->additional_zengin['factoring_bank_account_no'])}}<br /></td></tr>
-  <tr><td bgcolor="#eeffee" colspan="2">引落口座名義</td><td>{{strip_tags($views->additional_zengin['factoring_bank_account_kn'])}}<br /></td></tr>
-  <tr><td bgcolor="#eeffee" colspan="2">引落顧客番号</td><td>{{strip_tags($views->additional_zengin['factoring_cd'])}}<br /></td></tr>
+  <tr><td bgcolor="#eeffee" colspan="2">引落口座番号</td><td>{{strip_tags($additional_zengin['factoring_bank_account_no'])}}<br /></td></tr>
+  <tr><td bgcolor="#eeffee" colspan="2">引落口座名義</td><td>{{strip_tags($additional_zengin['factoring_bank_account_kn'])}}<br /></td></tr>
+  <tr><td bgcolor="#eeffee" colspan="2">引落顧客番号</td><td>{{strip_tags($additional_zengin['factoring_cd'])}}<br /></td></tr>
   </tr>
 
 </table>
@@ -193,23 +193,23 @@
   <tr>
     <td bgcolor="#EEFFEE" nowrap style="width: 20%;">引落日</td>
     <td nowrap style="width: 80%;">
-		@include('ctl.common._date',["timestamp" => $views->additional_zengin['billpay_ymd'], "format" =>"y/m/d" ] )
+		@include('ctl.common._date',["timestamp" => $additional_zengin['billpay_ymd'], "format" =>"y/m/d" ] )
     </td>
   </tr>
 
   <tr>
     <td bgcolor="#EEFFEE" nowrap>追加金額</td>
     <td nowrap>
-	{{-- {{number_format($views->additional_zengin['additional_charge'])}} --}}
+	{{-- {{number_format($additional_zengin['additional_charge'])}} --}}
     <div style="color: #f00;" id="msg_additional_charge"></div>
-    <input maxlength="20" name="additional_charge" class="num" value="{{$views->additional_zengin['additional_charge']}}">
+    <input maxlength="20" name="additional_charge" class="num" value="{{$additional_zengin['additional_charge']}}">
     </td>
   </tr>
   <tr>
     <td bgcolor="#EEFFEE" nowrap>理由<br>(施設向け)<br>1000文字まで</td>
     <td nowrap>
     <div style="color: #f00;" id="msg_reason"></div>
-    <textarea name="reason" cols="100" rows="6">{{$views->additional_zengin['reason']}}</textarea>
+    <textarea name="reason" cols="100" rows="6">{{$additional_zengin['reason']}}</textarea>
     </td>
   </tr>
   <tr>
@@ -217,31 +217,31 @@
 
     <td nowrap>
     <div style="color: #f00;" id="msg_reason_internal"></div>
-    <textarea name="reason_internal" cols="100" rows="6">{{$views->additional_zengin['reason_internal']}}</textarea>
+    <textarea name="reason_internal" cols="100" rows="6">{{$additional_zengin['reason_internal']}}</textarea>
     </td>
   </tr>
   <tr>
     <td bgcolor="#EEFFEE" nowrap>登録者</td>
 
     <td nowrap>
-    {{$views->additional_zengin['staff_nm']}}
+    {{$additional_zengin['staff_nm']}}
     </td>
   </tr>
   <tr>
     <td bgcolor="#EEFFEE" nowrap>登録日</td>
 
     <td nowrap>
-	{{$views->additional_zengin['entry_ts'] ?? null}}
+	{{$additional_zengin['entry_ts'] ?? null}}
     </td>
   </tr>
 </table>
-@if ($views->additional_zengin['notactive_flg'] == 0)
+@if ($additional_zengin['notactive_flg'] == 0)
 {{-- ↓form+jquery関連書き換えあっているか？ --}}
     <input type="submit" value="更新" style="width: 100px;height: 25px;margin: 10px 100px;" id="btn_update" data-url="update">
     <input type="submit" value="削除" style="width: 100px;height: 25px;margin: 10px 100px;" id="btn_delete" data-url="delete">
 
-    <input type="hidden" name="zengin_ym" value="{{$views->additional_zengin['zengin_ym']}}" />
-    <input type="hidden" name="branch_id" value="{{$views->additional_zengin['branch_id']}}" />
+    <input type="hidden" name="zengin_ym" value="{{$additional_zengin['zengin_ym']}}" />
+    <input type="hidden" name="branch_id" value="{{$additional_zengin['branch_id']}}" />
 {{ Form::close() }}
 @else
 <div style="margin: 10px 300px;">

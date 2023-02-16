@@ -80,7 +80,7 @@ function help2Form() {
       <td nowrap><input type="checkbox" value="0" name="entry_status" id="entry_status_0" /><label for="entry_status_0">公開中のみ</label></td>
       <td nowrap>
 	   <select size="1" name="pref_id">
-      @foreach ($views->mast_prefs['values'] as $mast_pref)
+      @foreach ($mast_prefs['values'] as $mast_pref)
         @if (strip_tags($mast_pref['pref_id']) == 0)
           <option value="">
         @else
