@@ -5,9 +5,10 @@
 @set($regwords, '旅館,ホテル,ビジネスホテル,ホテル予約,予約,宿泊,格安,割引,レジャー,出張,宿泊予約')
 @set($regtitle, '旅館・ホテル・ビジネスホテルの予約はベストリザーブ') --}}
 @php
-    $regdesc    = '日本全国宿泊予約なら「ベストリザーブ・宿ぷらざ」、レンタカー予約もお得です。さらに新幹線とお宿がセットになったお得なプランが満載のＪＲコレクション。インターネットで楽々即時予約。便利でお得なポイント貯めて！使えちゃう！';
-    $regwords   = '旅館,ホテル,ビジネスホテル,ホテル予約,予約,宿泊,格安,割引,レジャー,出張,宿泊予約';
-    $regtitle   = '旅館・ホテル・ビジネスホテルの予約はベストリザーブ';
+    $regdesc = '日本全国宿泊予約なら「ベストリザーブ・宿ぷらざ」、レンタカー予約もお得です。さらに新幹線とお宿がセットになったお得なプランが満載のＪＲコレクション。インターネットで楽々即時予約。便利でお得なポイント貯めて！使えちゃう！';
+    $regwords = '旅館,ホテル,ビジネスホテル,ホテル予約,予約,宿泊,格安,割引,レジャー,出張,宿泊予約';
+    $regtitle = '旅館・ホテル・ビジネスホテルの予約はベストリザーブ';
+    $title = $title ?? '';
 @endphp
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN">
@@ -31,8 +32,7 @@
             @endif
         @endif
     @else
-        {{-- HACK: @yield ディレクティブの中身を調べる。無理やりな実装 --}}
-        @if ($__env->yieldContent('title') == 'regular')
+        @if ($title == 'regular')
             <meta name="description" content="{{ $regdesc }}">
         @else
             <meta name="description" content="@yield('title') - {{ $regdesc }}">
@@ -47,11 +47,10 @@
             <meta name="keywords" content="{{ $words }},{{ $regwords }}">
         @endif
     @else
-        {{-- HACK: @yield ディレクティブの中身を調べる。無理やりな実装 --}}
-        @if ($__env->yieldContent('title') == 'regular')
+        @if ($title == 'regular')
             <meta name="keywords" content="{{ $regwords }}">
         @else
-            <meta name="keywords" content="{{ str_replace(' - ', ',', $__env->yieldContent('title')) }},{{ $regwords }}">
+            <meta name="keywords" content="{{ str_replace(' - ', ',', $title) }},{{ $regwords }}">
         @endif
     @endif
     <meta http-equiv="Content-Script-Type" content="text/javascript" />
@@ -59,10 +58,10 @@
 
     {{-- タイトルを出力 --}}
     @hasSection('title')
-        @if ($__env->yieldContent('title') == 'regular')
+        @if ($title == 'regular')
             <title>{{ $regtitle }}</title>
-        @elseif($__env->yieldContent('title') != '')
-            <title>{{ $__env->yieldContent('title') }} - {{ $regtitle }}</title>
+        @elseif($title != '')
+            <title>{{ $title }} - {{ $regtitle }}</title>
         @endif
     @else
         @if (config('app.env') != 'product')
@@ -73,11 +72,11 @@
     @endif
 
     @if (isset($current) && $current == 'top')
-        <link rel="alternate" media="handheld" href="http://www.bestrsv.com/m/" />
+        <link href="http://www.bestrsv.com/m/" rel="alternate" media="handheld" />
     @endif
     <link href="/apple-touch-icon-precomposed.png" rel="apple-touch-icon-precomposed">
-    <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon">
-    <link href="/favicon.ico" rel="icon" type="image/x-icon">
+    <link type="image/x-icon" href="/favicon.ico" rel="shortcut icon">
+    <link type="image/x-icon" href="/favicon.ico" rel="icon">
 
     <meta property="og:title" content="ベストリザーブ・宿ぷらざ | 国内宿泊予約" />
     <meta property="og:type" content="website" />
@@ -87,9 +86,9 @@
     <meta property="og:description" content="{{ $regdesc }}" />
 
     {{-- スタイルシートの読み込み --}}
-    <link rel="stylesheet" href="{{ asset('/css/base2.css') . '?r=' . mt_rand() }}">
-    <link rel="stylesheet" href="{{ asset('/css/agoda.css') . '?r=' . mt_rand() }}">
-    
+    <link href="{{ asset('/css/base2.css') . '?r=' . mt_rand() }}" rel="stylesheet">
+    <link href="{{ asset('/css/agoda.css') . '?r=' . mt_rand() }}" rel="stylesheet">
+
     @yield('page_css')
 
     {{-- スクリプトの読込 --}}
@@ -105,15 +104,13 @@
         <script type="text/javascript" src="{{ asset('/js/brj.today.js') }}"></script>
         <script type="text/javascript" src="{{ asset('/js/brj.data.place.js') }}"></script>
         <script type="text/javascript" src="{{ asset('/js/_source/brj.reserve.js/brj.reserve.js') . '?r=' . mt_rand() }}"></script>
-        <script type="text/javascript" src="{{ asset('/js/_source/brj.reserve.js/brj.reserve.area.js') . '?r=' . mt_rand() }}">
-        </script>
+        <script type="text/javascript" src="{{ asset('/js/_source/brj.reserve.js/brj.reserve.area.js') . '?r=' . mt_rand() }}"></script>
         <script type="text/javascript" src="{{ asset('/js/_source/brj.reserve.js/brj.reserve.checkinselector.js') }}"></script>
         <script type="text/javascript" src="{{ asset('/js/_source/brj.reserve.js/brj.reserve.jrc.js') }}"></script>
         <script type="text/javascript" src="{{ asset('/js/_source/brj.reserve.js/brj.rsv.panelcalendar.js') }}"></script>
         <script type="text/javascript" src="{{ asset('/js/_source/brj.reserve.js/brj.gmap.js') }}"></script>
         <script type="text/javascript" src="{{ asset('/js/_source/brj.reserve.js/brj.rsv.highrank.js') }}"></script>
-        <script type="text/javascript"
-            src="{{ asset('/js/_source/brj.reserve.js/brj.reserve.condition.js?') . '?r=' . mt_rand() }}"></script>
+        <script type="text/javascript" src="{{ asset('/js/_source/brj.reserve.js/brj.reserve.condition.js?') . '?r=' . mt_rand() }}"></script>
     @else
         <script type="text/javascript" src="{{ asset('/js/jquery.js') . '?r=' . mt_rand() }}"></script>
         <script type="text/javascript" src="{{ asset('/js/brj.js') . '?r=' . mt_rand() }}"></script>
@@ -163,7 +160,7 @@
                         <p><a href="{{-- {$v->env.ssl_path}rsv/reminder/ --}}">会員コード・パスワードを照会する</a></p>
                         <p><a href="{{-- {$v->env.ssl_path}rsv/member/mail1/ --}}">メールマガジンの受信状態を変更する</a></p>
                         <br />
-                        <p><a href="{{ route('rsv.point.index')}}">ＢＲポイント</a></p>
+                        <p><a href="{{ route('rsv.point.index') }}">ＢＲポイント</a></p>
                         <br />
                         <br />
                         <br />

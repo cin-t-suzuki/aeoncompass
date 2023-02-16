@@ -1,28 +1,31 @@
 <p>
     {{ 'ログイン: ' . (Auth::guard('web')->check() ? '済' : '未') }}
     @if (Auth::guard('web')->check())
-    {{ Auth::guard('web')->user()->name() }}
+        {{ Auth::guard('web')->user()->name() }}
     @endif
 </p>
 
 @if (Auth::guard('web')->check())
-<a href="{{ route('rsv.auth.logout') }}">ログアウト</a>
+    <a href="{{ route('rsv.auth.logout') }}">ログアウト</a>
 @else
-<a href="{{ route('rsv.auth.login') }}">ログイン</a>
+    <a href="{{ route('rsv.auth.login') }}">ログイン</a>
 @endif
 
 {{-- MEMO: 移植元 public\app\rsv\view2\top\index.tpl --}}
-{{-- TODO: 作業順序変更に伴い、中断 --}}
 
 {{-- {include file='../_common/_header.tpl' title="regular" current="top" css="_cpn.tpl" } --}}
-
+@php
+    $title = 'regular';
+    $current = 'top';
+@endphp
 @extends('rsv.common.base')
-@section('title', '')
+@section('title', 'regular')
 
 @section('content')
     {{-- {include file='../_common/_pgh1.tpl' pgh1_mnv=1} --}}
-    @include('rsv.common._pgh1')
-    <div style="background-color: gray; font-size: 3rem; line-height: 4rem;">TODO: 実装中断</div>
+    @include('rsv.common._pgh1', [
+        'pgh1_mnv' => 1,
+    ])
 
     <style>
         .ept_banner {
@@ -58,7 +61,8 @@
                 <ul class="info">
                     {include file="./_link_text.tpl"}
                 </ul>
-                {include file='../_common/_pgh2_inner.tpl'}
+                {{-- {include file='../_common/_pgh2_inner.tpl'} --}}
+                @include('rsv.common._pgh2_inner')
             </div>
         </div>
     </div>
@@ -66,39 +70,49 @@
     <div id="pgc1">
         <div class="pg">
             <div class="pgc1-inner pgc1-top">
-                <div class="jqs-banner-tosp"></div>
+                <div class="jqs-banner-tosp">
+                </div>
                 <table border="0" cellpadding="0" cellspacing="0">
                     <tr>
                         <td class="top-layout1" rowspan="2">
                             {{-- キーワード検索 --}}
-                            {include file='./_form_keyword.tpl'}
+                            {{-- {include file='./_form_keyword.tpl'} --}}
+                            @include('rsv.top._form_keyword')
 
                             {{-- 空室検索 --}}
-                            {include file='../_common/_form_search.tpl' isTop='true'}
+                            {{-- {include file='../_common/_form_search.tpl' isTop='true'} --}}
+                            @include('rsv.common._form_search', [
+                                'isTop' => true,
+                            ])
 
                             {{-- ホテル検索 --}}
                             {{-- {include file='./_form_hotel.tpl'} --}}
+                            @include('rsv.top._form_hotel')
                         </td>
                         <td class="top-layout2" colspan="2">
                             {{-- メインバナー --}}
-                            {include file="./_rotation_banner.tpl"}
+                            {{-- {include file="./_rotation_banner.tpl"} --}}
+                            @include('rsv.top._rotation_banner')
                         </td>
                     </tr>
                     <tr>
                         <td class="top-layout3">
                             {{-- 地図 --}}
-                            {include file='./_link_map.tpl'}
+                            {{-- {include file='./_link_map.tpl'} --}}
+                            @include('rsv.top._link_map')
                         </td>
                         <td>
                             {{-- 駅検索 --}}
-                            {include file='./_link_station.tpl'}
+                            {{-- {include file='./_link_station.tpl'} --}}
+                            @include('rsv.top._link_station')
 
                             {{-- ランドマーク検索 --}}
                             {{-- include file='./_link_landmark.tpl' --}}
+                            @include('rsv.top._link_landmark')
                             <div class="sfm-extra">
                                 {{-- Go To トラベル キャンペーン --}}
                                 <a id="sfm-extra-atag-id" href="{$v->env.path_base}/campaign/goto/" title="Go To トラベル キャンペーン">
-                                    <img src="{$v->env.path_img}/tpc/banner-goto-306-159-2.gif" alt="Go To トラベル キャンペーン" />
+                                    <img src="/img/tpc/banner-goto-306-159-2.gif" alt="Go To トラベル キャンペーン" />
                                 </a>
                             </div>
                         </td>
@@ -110,7 +124,7 @@
     <div id="pgc2">
         <div class="pg">
             <div class="pgc2-inner pgc2-top">
-                <table border="0" cellpadding="0" cellspacing="0" style="float:left;width:754px">
+                <table style="float:left;width:754px" border="0" cellpadding="0" cellspacing="0">
                     {{-- ＪＲ＋宿泊 --}}
                     <tr class="jqs-jrc">
                         <td class="top-layout11" colspan="2">
@@ -149,7 +163,8 @@
                     {{-- レコメンド --}}
                     <tr>
                         <td colspan="2">
-                            <div class="jqs-include" name="{$v->env.path_base_module}/recommend/?type=pc111"></div>
+                            <div class="jqs-include" name="{$v->env.path_base_module}/recommend/?type=pc111">
+                            </div>
                         </td>
                     </tr>
                     <tr>
@@ -199,27 +214,27 @@
 
                     {{-- facebook --}}
                     <div class="fbshare" style="margin-bottom:10px;">
-                        <h4><a href="https://www.facebook.com/bestrsv" target="_blank">ｆａｃｅｂｏｏｋでお得情報Ｇｅｔ！</a></h4>
+                        <h4>
+                            <a href="https://www.facebook.com/bestrsv" target="_blank">ｆａｃｅｂｏｏｋでお得情報Ｇｅｔ！</a>
+                        </h4>
                         <div class="cont">
                             <div class="info">
-                                <h5><a href="https://www.facebook.com/bestrsv" target="_blank">ベストリザーブ・宿<br />ぷらざ運用ページ</a>
+                                <h5>
+                                    <a href="https://www.facebook.com/bestrsv" target="_blank">ベストリザーブ・宿<br />ぷらざ運用ページ</a>
                                 </h5>
-                                <iframe
-                                    src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.bestrsv.com%2F&amp;send=false&amp;layout=button_count&amp;width=450&amp;show_faces=true&amp;font&amp;colorscheme=light&amp;action=like&amp;height=21"
-                                    scrolling="no" frameborder="0"
-                                    style="border:none; overflow:hidden; width:70px; height:21px;"
-                                    allowTransparency="true"></iframe>
+                                <iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.bestrsv.com%2F&amp;send=false&amp;layout=button_count&amp;width=450&amp;show_faces=true&amp;font&amp;colorscheme=light&amp;action=like&amp;height=21" style="border:none; overflow:hidden; width:70px; height:21px;" scrolling="no" frameborder="0" allowTransparency="true">
+                                </iframe>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div style="clear:both;"></div>
+                <div style="clear:both;">
+                </div>
 
                 {{-- EPARKトラベルバナー ここから --}}
                 <div id="pgh2">
                     <div class="pg">
-                        <a href="http://eparktravel.{{ config('app.env') != 'product' ? 'dev.' : '' }}bestrsv.com/lp/epark/"
-                            class="ept_banner" target="_blank">
+                        <a class="ept_banner" href="http://eparktravel.{{ config('app.env') != 'product' ? 'dev.' : '' }}bestrsv.com/lp/epark/" target="_blank">
                             <div class="pgh2-inner pgh2-top">
                                 2019年2月28日　EPARKとベストリザーブが連携し宿泊予約サイト『EPARKトラベル』をオープンしました！！　→　詳しくはこちらをクリック！
                             </div>

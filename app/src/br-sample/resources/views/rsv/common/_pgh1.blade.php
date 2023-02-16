@@ -10,10 +10,10 @@ pgh1_mnv : メインナビゲーション
 --}}
 @php
     // TODO:
-    $pgh1_mnv = isset($pgh1_mnv) ? $pgh1_mnv : 1;
+    $pgh1_mnv = $pgh1_mnv ?? 1;
     $isLogin = false;
     $isFree = true;
-    $svc_rsv = isset($svc_rsv) ? $svc_rsv : 1;
+    $svc_rsv = $svc_rsv ?? 0;
 @endphp
 
 <div id="pgh1">
