@@ -294,3 +294,8 @@ Route::post('/ctl/brCustomer/csv', function () {return 'TODO'; })->name('ctl.brC
 Route::match(['get', 'post'], '/ctl/htlHotelCard/show/', [\App\Http\Controllers\ctl\HtlHotelCardController::class, 'show'])->name('ctl.htl_hotel_card.show');
 Route::match(['get', 'post'], '/ctl/htlHotelCard/update/', [\App\Http\Controllers\ctl\HtlHotelCardController::class, 'update'])->name('ctl.htl_hotel_card.update');
 
+/**
+ * 部屋総合 プランメンテナンス画面
+ */
+Route::match(['get', 'post'], '/ctl/htlsroomplan2/', [\App\Http\Controllers\ctl\Htlsroomplan2Controller::class, 'index'])->name('ctl.htlsroomplan2.index');
+
