@@ -16,6 +16,7 @@ use App\Models\ConfirmHotelPerson;
 use Illuminate\Support\Facades\DB;
 use Exception;
 use App\Util\Models_Cipher;
+use App\Http\Requests\HtlTopRequest;
 
 class HtlTopController extends _commonController
 {
@@ -24,19 +25,22 @@ class HtlTopController extends _commonController
     // 担当者確認ポップアップ表示間隔 =>三か月毎
     private $confirm_span = '-3 month';
 
-    //======================================================================
-    // インデックス
-    //======================================================================
-    public function index(Request $request)
+    /**
+     * インデックス
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function index(HTlTopRequest $request)
     {
         $target_cd = $request->input('target_cd');
 
         // Hotel モデルを生成
         $hotel = new Hotel();
-        //削除で大丈夫？ $hotel->set_hotel_cd($target_cd);
+        $hotel->setHotelCd($target_cd);
 
         // お知らせを取得
-        $a_twitters = $hotel->getTwitters($target_cd);
+        $a_twitters = $hotel->getTwitters();
 
         // おしらせ説明部分表示
         $models_System = new System();
@@ -47,21 +51,11 @@ class HtlTopController extends _commonController
 
         $is_open_adjournment_ctl = $hotel->isOpenAdjournmentCtl($target_cd);
 
-        // ビューデータの登録
-        $this->addViewData("is_open_adjournment_ctl", $is_open_adjournment_ctl);
-        $this->addViewData("target_cd", $target_cd);
-        $this->addViewData("twitters", $a_twitters);// お知らせ
-        $this->addViewData("broadcast_messages", $a_broadcast_messages);// おしらせ説明文
-        $this->addViewData("stock_type", $a_hotel_control['stock_type'] ?? 0); //a_hotel_controlがnullだった場合、0でいいか？
-
-
         //-------------------------------
         // 担当者情報の更新確認
         //-------------------------------
 
         // リクエストパラメータの取得
-        // $a_hotel_person   = $this->_request->getParam('Hotel_Person');
-        // $a_customer = $this->params('customer');　//↑←の書き方の違いは…？
         $a_hotel_person   = $request->input('Hotel_Person');
         $a_customer = $request->input('customer');
 
@@ -89,8 +83,6 @@ class HtlTopController extends _commonController
                 $a_customer['email'] = $cipher->decrypt($a_customer['email']);
             }
         }
-        $this->addViewData("hotel_person", $a_hotel_person);// 施設担当者情報
-        $this->addViewData("customer", $a_customer);// 精算先担当者情報
 
         // 担当者確認ポップアップ表示制御
         if ($this->isSupportTime()) {
@@ -99,8 +91,8 @@ class HtlTopController extends _commonController
             $b_confirm_hotel_person_force
                 = $this->isConfirmHotelPersonForce($a_hotel_person, $a_customer, $a_hotel_control['stock_type'] ?? null); //null追記でいいか
 
-            $this->addViewData("a_confirm_hotel_person", $a_confirm_hotel_person);// 確認用フラグ
-            $this->addViewData("confirm_hotel_person_force", $b_confirm_hotel_person_force);// 変更強制フラグ
+
+            $confirm_hotel_person_force = $b_confirm_hotel_person_force;// 変更強制フラグ
         } else {
             //  営業時間外はポップアップを抑止する
             $a_confirm_hotel_person = [
@@ -108,21 +100,35 @@ class HtlTopController extends _commonController
                 'hotel_person_email_check' => 0,
                 'customer_email_check'     => 0,
             ];
-            $this->addViewData("a_confirm_hotel_person", $a_confirm_hotel_person);// 確認用フラグ
-            $this->addViewData("confirm_hotel_person_force", false);// 非強制
+
+            $confirm_hotel_person_force = false;// 非強制
         }
 
-        $this->addViewData("is_disp_rate_info", false);
-
         // ビューを表示
-        return view("ctl.htlTop.index", $this->getViewData());
+        return view('ctl.htlTop.index', [
+            'is_open_adjournment_ctl' => $is_open_adjournment_ctl,
+            'target_cd' => $target_cd,
+            'twitters' => $a_twitters,// お知らせ
+            'broadcast_messages' => $a_broadcast_messages,// おしらせ説明文
+            'stock_type' => $a_hotel_control['stock_type'] ?? 0, //a_hotel_controlがnullだった場合、0でいいか？
+
+            'hotel_person'  => $a_hotel_person,// 施設担当者情報
+            'customer'      => $a_customer,// 精算先担当者情報
+
+            'a_confirm_hotel_person' => $a_confirm_hotel_person, //確認用フラグ
+            'confirm_hotel_person_force' => $confirm_hotel_person_force,
+            'is_disp_rate_info' => false,
+        ]);
     }
 
-    //======================================================================
-    // サポート営業時間を判定する
-    // true  :営業時間
-    // false :営業時間外
-    //======================================================================
+    /**
+     * サポート営業時間を判定する
+     *
+     * @return bool
+     * true  :営業時間
+     * false :営業時間外
+     *
+     */
     private function isSupportTime()
     {
 
@@ -149,22 +155,27 @@ class HtlTopController extends _commonController
         return false;
     }
 
-    //======================================================================
-    // 施設担当者情報の更新チェック判定 空欄あり入力強制する場合
-    // true  :ポップアップを表示する
-    // false :ポップアップを表示する
-    //======================================================================
+    /**
+     * 施設担当者情報の更新チェック判定 空欄あり入力強制する場合
+     *
+     * @return bool
+     * true  :ポップアップを表示する
+     * false :ポップアップを表示する
+     *
+     */
     private function isConfirmHotelPersonForce($a_hotel_person, $a_customer, $stock_type)
     {
-        //不要？
-        // // 施設スタッフ以外（社内スタッフ NTAスタッフ）の場合は対象外
-        // if ($this->box->user->operator->is_staff() || $this->box->user->operator->is_nta()) {
+        // TODO ： スタッフかどうかの判定ができるようになったら実装
+        // // 施設スタッフ以外（社内スタッフ）の場合は対象外
+        // if ($this->box->user->operator->is_staff()) {
         //     return false;
         // }
-        // // 0:受託販売以外は対象外
-        // if ($stock_type  != 0) {
-        //     return false;
-        // }
+
+        // 0:受託販売以外は対象外
+        if ($stock_type  != 0) {
+            return false;
+        }
+
         // 名前、電話番号、メールアドレスいずれかに空欄がある場合は、変更画面を強制する。
         if (
             $this->is_empty($a_hotel_person['person_nm'] ?? null)// null追記
@@ -179,9 +190,13 @@ class HtlTopController extends _commonController
         return false;
     }
 
-    //======================================================================
-    // 施設担当者情報の更新チェック判定
-    //======================================================================
+    /**
+     * 施設担当者情報の更新チェック判定
+     *
+     * @param string $target_cd
+     * @param string $stock_type
+     * @return array
+     */
     private function isConfirmHotelPerson($target_cd, $stock_type)
     {
 
@@ -191,15 +206,16 @@ class HtlTopController extends _commonController
             'customer_email_check'     => 0,
         ];
 
-        //不要？
-        // // 施設スタッフ以外（社内スタッフ NTAスタッフ）の場合は対象外
-        // if ($this->box->user->operator->is_staff() || $this->box->user->operator->is_nta()) {
+        // TODO ： スタッフかどうかの判定ができるようになったら実装
+        // 施設スタッフ以外（社内スタッフ）の場合は対象外
+        // if ($this->box->user->operator->is_staff()) {
         //     return $result_confirm;
         // }
-        // // 0:受託販売以外は対象外
-        // if ($stock_type  != 0) {
-        //     return $result_confirm;
-        // }
+
+        // 0:受託販売以外は対象外
+        if ($stock_type  != 0) {
+            return $result_confirm;
+        }
 
         $confirmHotelPersonModel = new ConfirmHotelPerson();
         $a_confirm_hotel_person = $confirmHotelPersonModel->selectByKey(['hotel_cd' => $target_cd]);
@@ -212,13 +228,15 @@ class HtlTopController extends _commonController
             $requestConfirmHotelPerson['hotel_person_email_check'] = 0;
             $requestConfirmHotelPerson['customer_email_check'] = 0;
 
-            // バリデーション
-            //カラムの書き方をconstにしてみたので、validationの書き方も変えましたが合っていますでしょうか？
-            $errorList = $confirmHotelPersonModel->validation($requestConfirmHotelPerson);
-            if (count($errorList) > 0) {
-                $errorList[] = "更新確認情報を更新できませんでした。 ";
-                //TODO バリデーションエラー時の処理は？この時点でreturnしたほうがいい？
-            }
+            //FormObjectでのバリデーションが問題なければ削除
+            // // バリデーション
+            // //カラムの書き方をconstにしてみたので、validationの書き方も変えましたが合っていますでしょうか？
+            // $errorList = $confirmHotelPersonModel->validation($requestConfirmHotelPerson);
+            // if (count($errorList) > 0) {
+            //     $errorList[] = "更新確認情報を更新できませんでした。 ";
+            //     //TODO バリデーションエラー時の処理は？この時点でreturnしたほうがいい？
+            // }
+
             // 共通カラム値設定
             $confirmHotelPersonModel->setInsertCommonColumn($requestConfirmHotelPerson);
 
@@ -228,7 +246,6 @@ class HtlTopController extends _commonController
                 $dbErr = $con->transaction(function () use ($con, $confirmHotelPersonModel, $requestConfirmHotelPerson) {
                     // DB更新
                     $confirmHotelPersonModel->insert($con, $requestConfirmHotelPerson);
-                    //insertでいいか？
                 });
             } catch (Exception $e) {
                 $errorList[] = '更新確認情報の登録処理でエラーが発生しました。';
@@ -248,12 +265,12 @@ class HtlTopController extends _commonController
             //  施設担当者のメール送信エラー
             //  精算担当者のメール送信エラー
         } elseif (
-            $a_confirm_hotel_person['confirm_dtm'] < strtotime($this->confirm_span)
+            strtotime($a_confirm_hotel_person['confirm_dtm']) < strtotime($this->confirm_span) //confirm_dtmもtimestamp化
             || $a_confirm_hotel_person['hotel_person_email_check']
             || $a_confirm_hotel_person['customer_email_check']
         ) {
             // ポップアップ表示用のフラグを立てる
-            if ($a_confirm_hotel_person['confirm_dtm'] < strtotime($this->confirm_span)) {
+            if (strtotime($a_confirm_hotel_person['confirm_dtm']) < strtotime($this->confirm_span)) { //confirm_dtmもtimestamp化
                 $result_confirm["confirm_dtm_check"] = 1;
             }
             if ($a_confirm_hotel_person['hotel_person_email_check']) {
@@ -263,18 +280,20 @@ class HtlTopController extends _commonController
                 $result_confirm["customer_email_check"] = 1;
             }
 
-            $requestConfirmHotelPerson['hotel_cd'] = $a_confirm_hotel_person['hotel_cd']; //追記で問題ないか？（hotel_cdないとUpdateできない）
+            $requestConfirmHotelPerson['hotel_cd'] = $a_confirm_hotel_person['hotel_cd'];
             $requestConfirmHotelPerson['confirm_dtm'] = now();
             //'hotel_person_email_check'  => 0,
             //'customer_email_check'      => 0,
 
-            // バリデーション
-            //カラムの書き方をconstにしてみたので、validationの書き方も変えましたが合っていますでしょうか？
-            $errorList = $confirmHotelPersonModel->validation($requestConfirmHotelPerson);
-            if (count($errorList) > 0) {
-                $errorList[] = "更新確認情報を更新できませんでした。 ";
-                //TODO バリデーションエラー時の処理は？この時点でreturnしたほうがいい？
-            }
+            //FormObjectでのバリデーションが問題なければ削除
+            // // バリデーション
+            // //カラムの書き方をconstにしてみたので、validationの書き方も変えましたが合っていますでしょうか？
+            // $errorList = $confirmHotelPersonModel->validation($requestConfirmHotelPerson);
+            // if (count($errorList) > 0) {
+            //     $errorList[] = "更新確認情報を更新できませんでした。 ";
+            //     //TODO バリデーションエラー時の処理は？この時点でreturnしたほうがいい？
+            // }
+
             // 共通カラム値設定
             $confirmHotelPersonModel->setUpdateCommonColumn($requestConfirmHotelPerson);
 

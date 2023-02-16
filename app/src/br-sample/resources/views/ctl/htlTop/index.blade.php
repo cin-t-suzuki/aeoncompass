@@ -19,7 +19,7 @@
 {{-- ================================================================================================== --}}
 {{-- 受託販売の施設にのみ表示するメニュー                                                             --}}
 {{--==================================================================================================--}}
-@if ($views->stock_type == 0)
+@if ($stock_type == 0)
 	{{--------------------------------------------------------------------------------}}
 	{{-- 年末年始営業に関する告知                                                   --}}
 	{{--------------------------------------------------------------------------------}}
@@ -29,7 +29,7 @@
 	<div style="width: 800px; margin: auto; text-align: center;">
 
 		{{-- ??[]追記でいいのか？↓ --}}
-				@foreach ($views->broadcast_messages->values ?? [] as $key => $value) 
+				@foreach ($broadcast_messages->values ?? [] as $key => $value) 
 				@if (!empty($value['header_message']) && ($value['accept_header_s_dtm'] < now() && now() < $value['accept_header_e_dtm']))
 					<div style="border:1px solid #EF0000; width: 700px; padding:5px;  margin: 0 auto;">
 						<table class="info_account_transfer" border="0" cellspacing="0" cellpadding="4" style="width: 700px;">
@@ -50,15 +50,6 @@
 			{{-- 2014/4 消費税に関する告知      (テンプレートで残す)                          --}}
 			{{--------------------------------------------------------------------------------}}
 			@include ('ctl.common._consumption_tax_201404',["type" => 'pdf'])
-
-			{{--------------------------------------------------------------------------------}}
-			{{-- マイグレーションに関する告知案内                                           --}}
-			{{-- ※旧管理画面利用施設のみ表示       (テンプレートで残す)                     --}}
-			{{--------------------------------------------------------------------------------}}
-			@if (in_array(1, ($views->is_disp_room_plan_list ?? [])))
-				{{-- 旧画面利用施設 --}}
-				@include ('ctl.htlTop._renew_info')
-			@endif
 		</div>
 
 	</div>
@@ -86,7 +77,7 @@
     <br>
   
 {{-- お知らせ表示 --}}
-@foreach ($views->twitters['values'] as $key => $value)
+@foreach ($twitters['values'] as $key => $value)
 	@if ($loop->first)
 		<br>
 		<div align="center">
@@ -110,7 +101,7 @@
 @endforeach
 
 
-@if ($views->stock_type == 0 || $views->stock_type == 3)
+@if ($stock_type == 0 || $stock_type == 3)
 	{{-- 部屋の管理 --}}
 	@include ('ctl.htlTop._stock')
 	{{-- 部屋の管理 --}}
@@ -127,7 +118,7 @@
 {{-- 基本情報の管理 --}}
 <br>
 
-@if ($views->stock_type == 0)
+@if ($stock_type == 0)
 <table border="1" cellspacing="0" cellpadding="3" width="600">
 	<tr>
 		<td  bgcolor="#EEEEFF"  colspan="2" align="center">
@@ -142,7 +133,7 @@
 	<tr>
 		<td width="40%">管理画面操作マニュアル</td>
                 {{--nullも追記 {if $v->user->hotel_system_version.version == 1} --}}
-				@if (($views->hotel_system_version['version'] ??null) == 1)
+				@if (($hotel_system_version['version'] ??null) == 1)
 <form action="//{$v->config->system->rsv_host_name}/hs/manual/" method="GET" target="_blank">
                 @else
 <form action="//{$v->config->system->rsv_host_name}/hs/manual/pdf/instruction.pdf?{0|rand:999}" method="GET" target="_blank">
@@ -184,7 +175,7 @@
 " style="font-weight: bold; text-decoration: underline" target="_blank">こちらのリンク</a>をクリック下さい。</p>
 		</div>
 
-@if ($views->stock_type == 0)
+@if ($stock_type == 0)
 	<br><br>
 
 	{{-- お知らせ表示 --}}
@@ -208,10 +199,10 @@
 
 {{-- 担当者情報確認ダイアログ --}}
 @if (
-	$views->a_confirm_hotel_person['confirm_dtm_check']
-    || $views->a_confirm_hotel_person['hotel_person_email_check']
-	|| $views->a_confirm_hotel_person['customer_email_check']
-	|| $views->confirm_hotel_person_force
+	$a_confirm_hotel_person['confirm_dtm_check']
+    || $a_confirm_hotel_person['hotel_person_email_check']
+	|| $a_confirm_hotel_person['customer_email_check']
+	|| $confirm_hotel_person_force
 	)
 <link rel="stylesheet" href="/scripts/Remodal-master/remodal.css">
 <link rel="stylesheet" href="/scripts/Remodal-master/remodal-default-theme.css">
@@ -226,7 +217,7 @@ $(function(){
 // {/literal}
 </script>
 
-@if ($views->confirm_hotel_person_force)
+@if ($confirm_hotel_person_force)
 	<div class="remodal" data-remodal-id="modal_confirm_info" data-remodal-options="hashTracking: false, closeOnOutsideClick: false,closeOnEscape:false">
 @else
 	<div class="remodal" data-remodal-id="modal_confirm_info" data-remodal-options="hashTracking: false">
@@ -235,7 +226,7 @@ $(function(){
 	<!-- button data-remodal-action="close" class="remodal-close"></button-->
 
 	<p>ご担当者に変更はございませんか？</p>
-@if ($views->confirm_hotel_person_force)
+@if ($confirm_hotel_person_force)
 	<p style="font-size:14px;color: #900;margin-top: -20px;">ご登録のない施設にご案内させて頂いております。</p>
 @else
 	<p style="font-size:14px;color: #900;margin-top: -20px;">定期的にご確認させていただいております。</p>
@@ -249,30 +240,30 @@ $(function(){
 			<ul>
 			<li class="li-title">[氏名]</li>
 			<li class="li-name">
-			@if (empty($views->hotel_person['person_nm']))
+			@if (empty($hotel_person['person_nm']))
 				<font color="red">※氏名のご登録をお願いします。</font>
 			@else
-				{{$views->hotel_person['person_nm']}}<span class="li-name-sama">様</span>
+				{{$hotel_person['person_nm']}}<span class="li-name-sama">様</span>
 			@endif
 			</li>
 			<li class="li-title">[電話番号]</li>
 			<li class="li-tel" >
-			@if (empty($views->hotel_person['person_tel']))
+			@if (empty($hotel_person['person_tel']))
 				<font color="red">※電話番号のご登録をお願いします。</font>
 			@else
-				{{$views->hotel_person['person_tel']}}
+				{{$hotel_person['person_tel']}}
 			@endif
 			</li>
 			<li class="li-title">[メールアドレス]</li>
 			<li class="li-mail">
-				@if (empty($views->hotel_person['person_email']))
+				@if (empty($hotel_person['person_email']))
 					<font color="red">※メールアドレスのご登録をお願いします。</font>
-				@elseif ($views->a_confirm_hotel_person['hotel_person_email_check'])
-					<font color="red">{{$views->hotel_person['person_email']}}<br>
+				@elseif ($a_confirm_hotel_person['hotel_person_email_check'])
+					<font color="red">{{$hotel_person['person_email']}}<br>
 					※メールアドレスが正しくない可能性があります。
 					</font>
 				@else
-					{{$views->hotel_person['person_email']}}
+					{{$hotel_person['person_email']}}
 				@endif
 			</li>
 			</ul>
@@ -283,30 +274,30 @@ $(function(){
 			<ul>
 			<li class="li-title">[氏名]</li>
 			<li class="li-name">
-			@if (empty($views->customer['person_nm']))
+			@if (empty($customer['person_nm']))
 				<font color="red">※氏名のご登録をお願いします。</font>
 			@else
-				{{$views->customer['person_nm']}}<span class="li-name-sama">様</span>
+				{{$customer['person_nm']}}<span class="li-name-sama">様</span>
 			@endif
 			</li>
 			<li class="li-title">[電話番号]</li>
 			<li class="li-tel">
-			@if (empty($views->customer['tel']))
+			@if (empty($customer['tel']))
 				<font color="red">※電話番号のご登録をお願いします。</font>
 			@else
-				{{$views->customer['tel']}}
+				{{$customer['tel']}}
 			@endif
 			</li>
 			<li class="li-title">[メールアドレス]
 			<li class="li-mail">
-			@if (empty($views->customer['email']))
+			@if (empty($customer['email']))
 				<font color="red">※メールアドレスのご登録をお願いします。</font>
-			@elseif ($views->a_confirm_hotel_person['customer_email_check'])
-				<font color="red">{{$views->customer['email']}}<br>
+			@elseif ($a_confirm_hotel_person['customer_email_check'])
+				<font color="red">{{$customer['email']}}<br>
 				※メールアドレスが正しくない可能性があります。
 				</font>
 			@else
-				{{$views->customer['email']}}
+				{{$customer['email']}}
 			@endif
 			</li>
 			</ul>
@@ -315,14 +306,14 @@ $(function(){
 <hr size=1>
 
 	<div class='mt20'>
-		@if ($views->confirm_hotel_person_force)
+		@if ($confirm_hotel_person_force)
 		<form action="{$v->env.source_path}{$v->env.module}/htlmaillist/list" method="POST">
-		<input type="hidden" name="target_cd" value="{{strip_tags($views->target_cd)}}" />
+		<input type="hidden" name="target_cd" value="{{strip_tags($target_cd)}}" />
 		<input type="submit" name="genreupload"  value="登録する"  class="remodal-confirm btn btn-success"  style=" width: 450px;margin: 0 100px 0 100px;"/>
 		</form>
 		@else
 		<form action="{$v->env.source_path}{$v->env.module}/htlmaillist/list" method="POST">
-		<input type="hidden" name="target_cd" value="{{strip_tags($views->target_cd)}}" />
+		<input type="hidden" name="target_cd" value="{{strip_tags($target_cd)}}" />
 		<input type="submit" name="genreupload"  value="変更が必要"  class="remodal-confirm btn btn-success"  style="float: left;margin: 0 50px 0 100px;"/>
 		</form>
 		<button data-remodal-action="cancel" class="btn btn-danger remodal-cancel">変更しない</button>

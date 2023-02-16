@@ -13,11 +13,11 @@
     </td>
   </tr>
   {{-- ??[]追記でいいか --}}
-  @foreach ($views->broadcast_messages['values'] ?? [] as $key => $value)
+  @foreach ($broadcast_messages['values'] ?? [] as $key => $value)
   {{-- null追記でいいか --}}
-  @if (!($views->is_disp_rate_info ?? null))
+  @if (!($is_disp_rate_info ?? null))
     {{-- ??[]追記でいいか --}}
-  @if (!in_array($value->id,$views->disable_disp_broadcast_id ??[]))
+  @if (!in_array($value->id,$disable_disp_broadcast_id ??[]))
   @if ($value->accept_s_dtm < now() && now() < $value->accept_e_dtm)
   <tr>
     <td>
@@ -31,7 +31,7 @@
   @endif
   @endif
   @else
-  @if (!in_array($value['id'],$views->disable_disp_broadcast_id))
+  @if (!in_array($value['id'],$disable_disp_broadcast_id))
   @if ($value->accept_s_dtm < now() && now() < $value->accept_e_dtm)
   <tr>
     <td>

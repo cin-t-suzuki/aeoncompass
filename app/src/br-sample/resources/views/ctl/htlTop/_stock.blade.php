@@ -13,13 +13,13 @@
           <tr align="center">
             <td>
               <form action="{$v->env.source_path}{$v->env.module}/htlsroomoffer/" method="POST" style="display:inline;">
-                <input type="hidden" name="target_cd"        value="{{$views->target_cd}}" />
+                <input type="hidden" name="target_cd"        value="{{$target_cd}}" />
                 <input type="submit" value="室数・料金・期間の調整" />
               </form>
             </td>
             <td>
               <form action="{$v->env.source_path}{$v->env.module}/htlreserve/" method="POST" style="display:inline;">
-                <input type="hidden" name="target_cd"        value="{{$views->target_cd}}" />
+                <input type="hidden" name="target_cd"        value="{{$target_cd}}" />
                 <input type="submit" value="予約情報の確認" />
               </form>
             </td>
@@ -27,20 +27,20 @@
           <tr>
             <td>
               <form action="{$v->env.source_path}{$v->env.module}/htlsroomplan2/list/" method="POST" style="display:inline;">
-                <input type="hidden" name="target_cd"        value="{{$views->target_cd}}" />
+                <input type="hidden" name="target_cd"        value="{{$target_cd}}" />
                 <input type="submit" value="プランメンテナンス" />
               </form>
             </td>
             <td>
               <form action="{$v->env.source_path}{$v->env.module}/htlextend/" method="POST">
-                <input type="hidden" name="target_cd" value="{{strip_tags($views->target_cd)}}" />
+                <input type="hidden" name="target_cd" value="{{strip_tags($target_cd)}}" />
                 <input type="hidden" name="display_type" value="htls" />
                 <input type="submit" value="販売自動延長">
               </form>
             </td>
             <td>
               <form action="{$v->env.source_path}{$v->env.module}/htlsextendoffer/edit/" method="POST" style="display:inline;">
-                <input type="hidden" name="target_cd" value="{{$views->target_cd}}" />
+                <input type="hidden" name="target_cd" value="{{$target_cd}}" />
                 <input type="hidden" name="plan_id" value="" />
                 <input type="submit" value="期間延長" /><font color="#ff0000">NEW!!</font>
               </form>  
@@ -69,7 +69,7 @@
         <input type="hidden" name="target_cd" value="{$v->helper->form->strip_tags($v->assign->target_cd)}" />
         <input type="submit" value="変更">　
         {{--一時的にnull追記 {if $v->user->hotel.accept_status == 1} --}}
-        @if ($views->hotel['accept_status'] ??null == 1)
+        @if ($hotel['accept_status'] ??null == 1)
           <font color="#0000ff">予約受付中</font>
         @else
           <font color="#ff0000">予約受付停止中</font>
@@ -79,7 +79,7 @@
   </tr>
   
   {{-- 旧画面利用施設にのみ表示 --}}
-  @if (in_array(1, ($views->is_disp_room_plan_list ?? [])))
+  @if (in_array(1, ($is_disp_room_plan_list ?? [])))
     <tr>
       <td>旧部屋管理総合ページ</td>
       <td>
@@ -131,7 +131,7 @@
       </form>
     </tr>
   @else
-        @if ($views->stock_type == 0)
+        @if ($stock_type == 0)
             <tr>
               <td>当日料金の設定</td>
               <form action="{$v->env.source_path}{$v->env.module}/htlschargetoday/" method="POST">
@@ -141,7 +141,7 @@
             </tr>
         @endif
   @endif
-  {{--不要？？ @if ($views->stock_type == 0)
+  {{--不要？？ @if ($stock_type == 0)
   <tr>
     <td>キャンペーン</td>
     <form action="{$v->env.source_path}{$v->env.module}/htlcamp/" method="POST">

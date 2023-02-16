@@ -15,6 +15,8 @@ class Hotel extends CommonDBModel
 {
     use Traits;
 
+    protected $s_hotel_cd   = null;  // 施設コード
+
     /**
      * モデルに関連付けるテーブル
      *
@@ -187,6 +189,15 @@ class Hotel extends CommonDBModel
             $colCheckInEnd  , $colCheckInInfo   , $colCheckOut      , $colMidnightStatus, $colAcceptStatus,
             $colAcceptAuto  , $colAcceptDtm
         ]);
+    }
+
+    /**
+     * 施設コードの設定
+     * @param string $as_hotel_cd
+     */
+    public function setHotelCd($as_hotel_cd)
+    {
+        $this->s_hotel_cd = $as_hotel_cd;
     }
 
     /**
@@ -630,14 +641,19 @@ SQL;
     }
 
 
-    // お知らせ通知情報を取得
-    //
-    // this->_s_hotel_cd 施設コード
-    //
-    //   aa_offsets
-    //     page ページ
-    //     size レコード数(1から) ページ数を指定した場合必須
-    public function getTwitters($target_cd, $aa_offsets = ['page' => 1, 'size' => 5]) //target_cdを引数に追加
+
+    /**
+     * お知らせ通知情報を取得
+     *
+     * this->_s_hotel_cd 施設コード
+     * @param string $target_cd 請求先・支払先ID
+     * @param array{
+     *  page: int, ページ
+     *  size: int　レコード数(1から) ページ数を指定した場合必須
+     * } $aa_offsets
+     * @return array
+     */
+    public function getTwitters($aa_offsets = ['page' => 1, 'size' => 5])
     {
         try {
             $s_sql =
@@ -663,9 +679,9 @@ SQL;
 SQL;
 
             // データの取得
-            // $a_row = DB::select($s_sql, ['hotel_cd' => $this->_s_hotel_cd], $aa_offsets);
+            $a_row = DB::select($s_sql, ['hotel_cd' => $this->s_hotel_cd], $aa_offsets);
             // $this->_s_hotel_cdはtarget_cdを代入しているだけ？だと思うので、target_cdに変更して問題ない？
-            $a_row = DB::select($s_sql, ['hotel_cd' => $target_cd], $aa_offsets);
+            // $a_row = DB::select($s_sql, ['hotel_cd' => $target_cd], $aa_offsets);
 
             return [
                 'values'     => $a_row
@@ -678,9 +694,12 @@ SQL;
         }
     }
 
-    //==================================
-    // 管理画面公開延期施設判定
-    //==================================
+    /**
+     * 管理画面公開延期施設判定
+     *
+     * @param string $as_hotel_cd
+     * @return bool
+     */
     public function isOpenAdjournmentCtl($as_hotel_cd)
     {
         $a_target_hotels = []; //公開延期施設があればここに追記する

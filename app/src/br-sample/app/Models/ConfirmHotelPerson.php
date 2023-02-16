@@ -84,10 +84,7 @@ class ConfirmHotelPerson extends CommonDBModel
     public function updateByKey($con, $data)
     {
         $result = $con->table($this->table)->where(self::COL_HOTEL_CD, $data[self::COL_HOTEL_CD])->update($data);
-        if (!$result) {
-            return "更新に失敗しました";
-        }
-        return "";
+        return  $result;
     }
 
     /**  新規登録
