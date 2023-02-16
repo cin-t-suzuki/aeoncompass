@@ -2,20 +2,65 @@
 
 namespace App\Models;
 
-use App\Common\Traits;
-use App\Models\common\CommonDBModel;
-use App\Models\common\ValidationColumn;
-use Illuminate\Support\Facades\DB;
-use Exception;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
-/** 施設管理サイト担当者
- *
- */
-class Staff extends CommonDBModel
+class Staff extends Model
 {
-    use Traits;
+    use HasFactory;
 
-    protected $table = "staff";
+    /**
+     * モデルに関連付けるテーブル
+     *
+     * @var string
+     */
+    protected $table = 'staff';
+
+    /**
+     * テーブルに関連付ける主キー
+     *
+     * @var string
+     */
+    protected $primaryKey = 'staff_id';
+
+    /**
+     * モデルのIDを自動増分するか
+     *
+     * @var bool
+     */
+    public $incrementing = true;
+
+    /**
+     * モデルにタイムスタンプを付けるか
+     *
+     * @var bool
+     */
+    public $timestamps = true;
+    public const CREATED_AT = 'entry_ts';
+    public const UPDATED_AT = 'modify_ts';
+
+    /**
+     * 複数代入可能な属性
+     *
+     * @var array
+     */
+    protected $fillable = [
+        // 'staff_id',
+        // 'staff_nm',
+        // 'staff_cd',
+        // 'email',
+        // 'staff_status',
+        // 'entry_cd',
+        // 'entry_ts',
+        // 'modify_cd',
+        // 'modify_ts',
+    ];
+
+    // リレーション (hasOne) 設定
+    public function staffAccount()
+    {
+        return $this->hasOne(StaffAccount::class, 'staff_id');
+    }
 
     // カラム
     const COL_STAFF_ID  = "staff_id";
@@ -25,7 +70,8 @@ class Staff extends CommonDBModel
     const COL_EMAIL  = "email";
 
 
-    /** コンストラクタ
+    /**
+     * コンストラクタ
      */
     public function __construct() //publicでいいか？使用しないが削除するとエラー
     {
@@ -50,4 +96,5 @@ class Staff extends CommonDBModel
         }
         return null;
     }
+    
 }

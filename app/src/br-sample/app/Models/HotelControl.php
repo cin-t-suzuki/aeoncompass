@@ -7,8 +7,7 @@ use App\Models\common\CommonDBModel;
 use App\Models\common\ValidationColumn;
 use Illuminate\Support\Facades\DB;
 
-
-/** 
+/**
  * 施設管理
  */
 class HotelControl extends CommonDBModel
@@ -22,23 +21,41 @@ class HotelControl extends CommonDBModel
      * @var string
      */
     protected $primaryKey = 'hotel_cd';
+
     /**
      * モデルのIDを自動増分するか
      *
      * @var bool
      */
     public $incrementing = false;
+
     /**
      * モデルにタイムスタンプを付けるか
      *
-     * MEMO: 独自実装でタイムスタンプを設定しているため、Laravel 側では設定しない。
-     * HACK: (工数次第) Laravel の機能を使ったほうがよい気もする。
-     *
      * @var bool
      */
-    public $timestamps = false;
-    const CREATED_AT = 'entry_ts';
-    const UPDATED_AT = 'modify_ts';
+    public $timestamps = true;
+    public const CREATED_AT = 'entry_ts';
+    public const UPDATED_AT = 'modify_ts';
+
+    /**
+     * 複数代入可能な属性
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'hotel_cd',
+        'stock_type',
+        'checksheet_send',
+        'charge_round',
+        'stay_cap',
+        'management_status',
+        'akafu_status',
+        'entry_cd',
+        'entry_ts',
+        'modify_cd',
+        'modify_ts',
+    ];
 
     // カラム
     public string $COL_HOTEL_CD             = 'hotel_cd';
@@ -50,14 +67,34 @@ class HotelControl extends CommonDBModel
 
     // カラム定数
     /*
+        仕入タイプ
         MEMO: 移植元ソースのテーブル定義書を参照。
         実際に検証データに登録されている値に「-2」はなし。
         DB にはほかに「3」が見られるが、定義書に記載されていない。
+
+        (追記）3 が特定施設（三普）であることは、ハードコーディングからの推測（以下などを参照）
+            public\app\ctl\controllers\BrhotelController.php L.740 あたりの if 文
+            public\app\ctl\views\brhotel\_input_hotel_form.tpl L.168 あたりの 「仕入タイプ」の選択肢
+            「特別対応のためのもの」なので、使用しない。
     */
-    const STOCK_TYPE_CONTRACT_SALE = 0;             //受託販売
-    const STOCK_TYPE_PURCHASE_SALE = 1;             //買取販売
-    const STOCK_TYPE_BULK_CONTRACT_TOYOKO_INN = 2;  //一括受託（東横イン）
-    const STOCK_TYPE_BULK_CONTRACT_OLD_YADO_PLAZA = -2; //一括受託（旧宿ぷらざ）
+    public const STOCK_TYPE_CONTRACT_SALE = 0;             //受託販売
+    public const STOCK_TYPE_PURCHASE_SALE = 1;             //買取販売
+    public const STOCK_TYPE_BULK_CONTRACT_TOYOKO_INN = 2;  //一括受託（東横イン）
+    public const STOCK_TYPE_BULK_CONTRACT_OLD_YADO_PLAZA = -2; //一括受託（旧宿ぷらざ）
+    // public const STOCK_TYPE_SANPU = 3; // 特定施設(三普)
+
+    // 送客リスト送信可否
+    public const CHECKSHEET_SEND_FALSE  = 0; // 送付しない
+    public const CHECKSHEET_SEND_TRUE   = 1; // 送付する
+
+    // 利用方法
+    public const MANAGEMENT_STATUS_FAX          = 1; // ファックス管理
+    public const MANAGEMENT_STATUS_INTERNET     = 2; // インターネット管理
+    public const MANAGEMENT_STATUS_FAX_INTERNET = 3; // ファックス管理＋インターネット管理
+
+    // 赤い風船在庫利用施設
+    public const AKAFU_STATUS_FALSE = 0; // 利用否
+    public const AKAFU_STATUS_TRUE  = 1; // 利用施設
 
 	/** コンストラクタ
 	 */
