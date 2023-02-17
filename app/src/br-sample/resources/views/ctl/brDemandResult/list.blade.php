@@ -24,7 +24,7 @@ function helpForm() {
   <table border="1" cellpadding="4" cellspacing="0">
     <tr>
       <td nowrap  bgcolor="#EEFFEE">キーワード</td>
-      <td nowrap><input type="text" name="keyword" size="30" maxlength="500" value="{{strip_tags($views->keyword)}}">　<small>（必須）</small></td>
+      <td nowrap><input type="text" name="keyword" size="30" maxlength="500" value="{{strip_tags($keyword)}}">　<small>（必須）</small></td>
     </tr>
   </table>
   <input type="submit" name="hotel" value="検索する">
@@ -46,9 +46,9 @@ function helpForm() {
   </div>
 <hr size="1">
 {{-- $v->error->has()の書き替えは以下でいいか,countない場合は??[]でいいか --}}
-@if (count($messages['errors'] ?? []) > 0 || count($views->search_customer ?? []) == 0) 
+@if (count($messages['errors'] ?? []) > 0 || count($search_customer ?? []) == 0) 
   {{-- メッセージbladeの読込 --}}
-  @include('ctl.common.message', $messages)
+  @include('ctl.common.message')
 @else
   <table border="1" cellspacing="0" cellpadding="4">
     <tr bgcolor="#EEFFEE" >
@@ -58,7 +58,7 @@ function helpForm() {
       <td nowrap>施設名称</td>
       <td nowrap><br></td>
     </tr>
-    @foreach ($views->search_customer as $value)
+    @foreach ($search_customer as $value)
       <tr>
         {{-- TODO：HTldemand実装後に修正 --}}
         <form action="{$v->env.source_path}{$v->env.module}/htldemand/" method="post">

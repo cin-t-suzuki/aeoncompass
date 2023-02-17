@@ -16,7 +16,12 @@ class BrDemandResultController extends _commonController
 {
     use Traits;
 
-    // 一覧
+    /**
+     * 一覧
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function list(Request $request)
     {
         $billpayModel  = new Billpay();
@@ -32,17 +37,19 @@ class BrDemandResultController extends _commonController
             $a_search_customer = $billpayModel->searchCustomer($a_conditions);
 
             if (count($a_search_customer) == 0) {
-                $this->addErrorMessage("該当請求データが存在しませんでした。");
+                $errors[] = "該当請求データが存在しませんでした。";
             }
         }
 
-        // ビュー情報を設定
-        $this->addViewData("search_customer", $a_search_customer);
-        // hidden
-        $this->addViewData("keyword", $keyword);
-        $this->addViewData("period", $request->input('period'));
-
         // ビューを表示
-        return view("ctl.brDemandResult.list", $this->getViewData());
+        return view('ctl.brDemandResult.list', [
+            'search_customer' => $a_search_customer,
+            // hidden
+            'keyword' => $keyword,
+            'period' => $request->input('period'),
+
+            //エラーメッセージが設定されていなければ空の配列を返す
+            'errors' => $errors ?? []
+        ]);
     }
 }
