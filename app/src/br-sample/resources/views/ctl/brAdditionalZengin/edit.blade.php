@@ -122,51 +122,52 @@
     <td bgcolor="#EEFFEE" nowrap>送客請求実績</td>
   </tr>
 
-  @foreach ($hotel_list['values'] as $hotel_list)
+  @foreach ($hotel_list['values'] as $hotelList) 
+  {{-- 変数名は違うもので設定しなおし --}}
   <tr>
     <td nowrap>
-      @if ($hotel_list['entry_status'] == 0)
+      @if ($hotelList['entry_status'] == 0)
         公開中
-      @elseif ($hotel_list['entry_status'] == 1)
+      @elseif ($hotelList['entry_status'] == 1)
         登録作業中<br>
-      @elseif ($hotel_list['entry_status'] == 2)
+      @elseif ($hotelList['entry_status'] == 2)
         解約
       @endif<br />
-      @if ($hotel_list['accept_status'] == 1)
+      @if ($hotelList['accept_status'] == 1)
         [受付中]
-      @elseif ($hotel_list['accept_status'] == 0)
+      @elseif ($hotelList['accept_status'] == 0)
         <font color="#ff0000">[停止中]</font>
       @endif
     </td>
 
     <td nowrap>
-      {{$hotel_list['hotel_cd']}}<br>
-      <a href="http://{$v->config->system->rsv_host_name}/hotel/{{$hotel_list['hotel_cd']}}/" target="_blank" style="text-decoration: none; color:#000066;">{{$hotel_list['hotel_nm']}}@if (!$service->is_empty($hotel_list['hotel_old_nm']))（{{$hotel_list['hotel_old_nm']}}）</font>@endif</a>
-      @if ($hotel_list['stock_type'] == 1)
+      {{$hotelList['hotel_cd']}}<br>
+      <a href="http://{$v->config->system->rsv_host_name}/hotel/{{$hotelList['hotel_cd']}}/" target="_blank" style="text-decoration: none; color:#000066;">{{$hotelList['hotel_nm']}}@if (!$service->is_empty($hotelList['hotel_old_nm']))（{{$hotelList['hotel_old_nm']}}）</font>@endif</a>
+      @if ($hotelList['stock_type'] == 1)
         <font color="#0000ff">[買]</font>
       @endif
-      @if (!$service->is_empty($hotel_list['pref_nm']))
-        （{{$hotel_list['pref_nm']}}）</font>
+      @if (!$service->is_empty($hotelList['pref_nm']))
+        （{{$hotelList['pref_nm']}}）</font>
       @endif
     </td>
 
     <td>
-    @if (!$service->is_empty($hotel_list['customer_id']))
-      ({{$hotel_list['customer_id']}}){{$hotel_list['customer_nm']}}
+    @if (!$service->is_empty($hotelList['customer_id']))
+      ({{$hotelList['customer_id']}}){{$hotelList['customer_nm']}}
     @else
     	未設定
     @endif
     </td>
 
     <td nowrap align="middle">
-    @if (!$service->is_empty($hotel_list['customer_id']))
-        @if (!$hotel_list['factoring_flg'])
+    @if (!$service->is_empty($hotelList['customer_id']))
+        @if (!$hotelList['factoring_flg'])
           <font color="#ff0000">未設定</font>
         @endif
 		{{-- TODO htldemand作成後に遷移先設定 --}}
       <form action="{$v->env.source_path}{$v->env.module}/htldemand/" method="post" target= "_blank">
         <input type="submit" value="詳細情報">
-        <input type="hidden" name="target_cd" value="{{$hotel_list['hotel_cd']}}" />
+        <input type="hidden" name="target_cd" value="{{$hotelList['hotel_cd']}}" />
       </form>
     @endif
 
@@ -177,22 +178,22 @@
 </table>
 
 
-@foreach ($hotel_list['values'] as $hotel_list)
+@foreach ($hotel_list['values'] as $hotelList)
 <table cellspacing="0" cellpadding="2" border="1" style="margin-top: 10px;min-width: 380px;">
   <tr>
     {{-- 以下factoring_bank関連の値すべて??null追記でいいか --}}
     <tr><td bgcolor="#eeffee" colspan="3">引落銀行</td></tr>
-  <tr><td bgcolor="#eeffee" colspan="2">銀行コード</td><td>{{strip_tags($hotel_list['factoring_bank_cd'] ?? null)}} : {{strip_tags($hotel_list['factoring_bank_nm'] ?? null)}}</td></tr>
-  <tr><td bgcolor="#eeffee" colspan="2">支店コード</td><td>{{strip_tags($hotel_list['factoring_bank_branch_cd'] ?? null)}} : {{strip_tags($hotel_list['factoring_bank_branch_nm'] ?? null)}}</td></tr>
+  <tr><td bgcolor="#eeffee" colspan="2">銀行コード</td><td>{{strip_tags($hotelList['factoring_bank_cd'] ?? null)}} : {{strip_tags($hotelList['factoring_bank_nm'] ?? null)}}</td></tr>
+  <tr><td bgcolor="#eeffee" colspan="2">支店コード</td><td>{{strip_tags($hotelList['factoring_bank_branch_cd'] ?? null)}} : {{strip_tags($hotelList['factoring_bank_branch_nm'] ?? null)}}</td></tr>
   <tr><td bgcolor="#eeffee" colspan="2">引落口座種別</td><td>
-          @if (($hotel_list['factoring_bank_account_type'] ?? null) == 1)普通
-      @elseif (($hotel_list['factoring_bank_account_type'] ?? null) == 2)当座
-      @elseif (($hotel_list['factoring_bank_account_type'] ?? null) == 4)貯蓄
-      @elseif (($hotel_list['factoring_bank_account_type'] ?? null) == 9)その他
+          @if (($hotelList['factoring_bank_account_type'] ?? null) == 1)普通
+      @elseif (($hotelList['factoring_bank_account_type'] ?? null) == 2)当座
+      @elseif (($hotelList['factoring_bank_account_type'] ?? null) == 4)貯蓄
+      @elseif (($hotelList['factoring_bank_account_type'] ?? null) == 9)その他
           @endif</td></tr>
-  <tr><td bgcolor="#eeffee" colspan="2">引落口座番号</td><td>{{strip_tags($hotel_list['factoring_bank_account_no'] ?? null)}}<br /></td></tr>
-  <tr><td bgcolor="#eeffee" colspan="2">引落口座名義</td><td>{{strip_tags($hotel_list['factoring_bank_account_kn'] ?? null)}}<br /></td></tr>
-  <tr><td bgcolor="#eeffee" colspan="2">引落顧客番号</td><td>{{strip_tags($hotel_list['factoring_cd'] ?? null)}}<br /></td></tr>
+  <tr><td bgcolor="#eeffee" colspan="2">引落口座番号</td><td>{{strip_tags($hotelList['factoring_bank_account_no'] ?? null)}}<br /></td></tr>
+  <tr><td bgcolor="#eeffee" colspan="2">引落口座名義</td><td>{{strip_tags($hotelList['factoring_bank_account_kn'] ?? null)}}<br /></td></tr>
+  <tr><td bgcolor="#eeffee" colspan="2">引落顧客番号</td><td>{{strip_tags($hotelList['factoring_cd'] ?? null)}}<br /></td></tr>
 @endforeach
 
   </tr>
@@ -274,14 +275,14 @@
     <td bgcolor="#EEFFEE" nowrap>追加金額</td>
     <td nowrap>
     <div style="color: #f00;" id="msg_additional_charge"></div>
-    <input maxlength="20" name="additional_charge" class="num" value="{{$additional_charge}}">
+    <input maxlength="20" name="additional_charge" class="num" value="{{old('additional_charge',$additional_charge)}}">
     </td>
   </tr>
   <tr>
     <td bgcolor="#EEFFEE" nowrap>理由<br>(施設向け)<br>1000文字まで</td>
     <td nowrap>
     <div style="color: #f00;" id="msg_reason"></div>
-    <textarea name="reason" cols="100" rows="6">{{$reason}}</textarea>
+    <textarea name="reason" cols="100" rows="6">{{old('reason',$reason)}}</textarea>
     </td>
   </tr>
   <tr>
@@ -289,13 +290,18 @@
 
     <td nowrap>
     <div style="color: #f00;" id="msg_reason_internal"></div>
-    <textarea name="reason_internal" cols="100" rows="6">{{$reason_internal}}</textarea>
+    <textarea name="reason_internal" cols="100" rows="6">{{old('reason_internal',$reason_internal)}}</textarea>
     </td>
   </tr>
 </table>
     <input type="submit" value="登録" style="width: 100px;height: 25px;margin: 10px 335px;" id="btn_create">
-    <input type="hidden" name="hotel_cd" value="{{$hotel_list['hotel_cd']}}" />
-    <input type="hidden" name="customer_id" value="{{$hotel_list['customer_id']}}" />
+    {{-- 非表示部分元ソース、foreachで書き替えないとだめ？上部foreachで回しているのと同じ変数でとっている気がする --}}
+    {{-- <input type="hidden" name="hotel_cd" value="{$hotel_list.hotel_cd}" /> --}}
+    {{-- <input type="hidden" name="customer_id" value="{$hotel_list.customer_id}" /> --}}
+    @foreach ($hotel_list['values'] as $hotelList)
+    <input type="hidden" name="hotel_cd" value="{{$hotelList['hotel_cd']}}" />
+    <input type="hidden" name="customer_id" value="{{$hotelList['customer_id']}}" />
+    @endforeach
   {{ Form::close() }}
 
 </div>

@@ -163,9 +163,11 @@ class AdditionalZengin extends CommonDBModel
         ]);
     }
 
-    //============================================
-    //引落入金予定日の取得 201804
-    //============================================
+    /**
+     * 引落入金予定日の取得 201804
+     *
+     * @return object|array
+    */
     public function getPaymentSchedule()
     {
         try {
@@ -185,9 +187,12 @@ SQL;
         }
     }
 
-    //============================================
-    // 引落追加額データの取得
-    //============================================
+    /**
+     * 連番IDの取得
+     *
+     * @param array $aa_conditions
+     * @return string
+    */
     public function getBranchId($zengin_ym)
     {
         try {
@@ -212,9 +217,13 @@ SQL;
         }
     }
 
-    //============================================
-    // 引落追加額データの取得
-    //============================================
+
+    /**
+     * 引落追加額データの取得
+     *
+     * @param array $aa_conditions
+     * @return object
+    */
     public function getAdditionalZengin($aa_conditions)
     {
         try {
@@ -293,8 +302,12 @@ SQL;
         }
     }
 
-    /** 主キーで取得
-     */
+    /**  複合主キーで取得
+     *
+     * @param [type] $con
+     * @param [type] $data
+     * @return
+    */
     public function selectByKey($zengin_ym, $branch_id)
     {
         $data = $this->where([self::COL_ZENGIN_YM => $zengin_ym, self::COL_BRANCH_ID => $branch_id])->get();
@@ -324,8 +337,12 @@ SQL;
         return null;
     }
 
-    /** キーで取得
-     */
+    /**  複合主キー＋hotel_cdで取得
+     *
+     * @param [type] $con
+     * @param [type] $data
+     * @return
+    */
     public function selectBy3Key($zengin_ym, $hotelCd, $notactive_flg)
     {
         $data = $this->where([

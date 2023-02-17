@@ -16,6 +16,7 @@ use App\Models\MastBankBranch;
 use App\Models\Staff;
 use App\Models\MastPref;
 use Exception;
+use App\Http\Requests\AdditionalZenginRequest;
 
 class BrAdditonalZenginController extends _commonController
 {
@@ -135,10 +136,10 @@ class BrAdditonalZenginController extends _commonController
     /**
      * 更新処理
      *
-     * @param Request $request
+     * @param App\Http\Requests\AdditionalZenginRequest $request
      * @return Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request)
+    public function update(AdditionalZenginRequest $request)
     {
         $additionalZenginModel = new AdditionalZengin();
         $zengin_ym  = $request->input('zengin_ym');
@@ -149,24 +150,13 @@ class BrAdditonalZenginController extends _commonController
         $a_additional_zengin['reason_internal'] =  $request->input('reason_internal'); //備考(内部のみ)
         $a_additional_zengin['additional_charge'] =  $request->input('additional_charge'); //追加金額
 
-        // バリデーション
-        //カラムの書き方をconstにしてみたので、validationの書き方も変えましたが合っていますでしょうか？
-        $errorList = $additionalZenginModel->validation($a_additional_zengin);
-        if (count($errorList) > 0) {
-            $errorList[] = "口座振替の引落追加情報を更新できませんでした。 ";
-            return redirect()->route('ctl.brAdditionalZengin.detail', [
-                'zengin_ym' => $zengin_ym,
-                'branch_id' => $branch_id
-            ])->with([
-                'errors' => $errorList
-            ]);
-        }
         // 共通カラム値設定
         $additionalZenginModel->setUpdateCommonColumn($a_additional_zengin);
 
         // 更新件数
         $dbCount = 0;
         // コネクション
+        $errorList = [];
         try {
             $con = DB::connection('mysql');
             $dbErr = $con->transaction(function () use ($con, $additionalZenginModel, $a_additional_zengin, &$dbCount) {
@@ -204,10 +194,10 @@ class BrAdditonalZenginController extends _commonController
     /**
      * 削除処理
      *
-     * @param Request $request
+     * @param @param App\Http\Requests\AdditionalZenginRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function delete(Request $request)
+    public function delete(AdditionalZenginRequest $request)
     {
         $additionalZenginModel = new AdditionalZengin();
 
@@ -217,24 +207,13 @@ class BrAdditonalZenginController extends _commonController
 
         $a_additional_zengin['notactive_flg'] = 1; // 削除フラグ(0:有効 1:無効)
 
-        // バリデーション
-        //カラムの書き方をconstにしてみたので、validationの書き方も変えましたが合っていますでしょうか？
-        $errorList = $additionalZenginModel->validation($a_additional_zengin);
-        if (count($errorList) > 0) {
-            $errorList[] = "口座振替の追加金額情報を削除できませんでした。 ";
-            return redirect()->route('ctl.brAdditionalZengin.detail', [
-                'zengin_ym' => $zengin_ym,
-                'branch_id' => $branch_id
-            ])->with([
-                'errors' => $errorList
-            ]);
-        }
         // 共通カラム値設定
         $additionalZenginModel->setUpdateCommonColumn($a_additional_zengin);
 
         // 更新件数
         $dbCount = 0;
         // コネクション
+        $errorList = [];
         try {
             $con = DB::connection('mysql');
             $dbErr = $con->transaction(function () use ($con, $additionalZenginModel, $a_additional_zengin, &$dbCount) {
@@ -382,10 +361,10 @@ class BrAdditonalZenginController extends _commonController
     /**
      * 登録画面 リクエスト処理
      *
-     * @param Request $request
+     * @param App\Http\Requests\AdditionalZenginRequest $request
      * @return Illuminate\Http\RedirectResponse
      */
-    public function create(Request $request)
+    public function create(AdditionalZenginRequest $request)
     {
         $additionalZenginModel = new AdditionalZengin();
         $o_date = new DateUtil($request->input('year') . '-' . $request->input('month') . '-23'); //Br_Models_DateはDateUtilでいいか？
@@ -407,10 +386,12 @@ class BrAdditonalZenginController extends _commonController
         }
 
         // ->allの書き換えはselectBy3Keyを別途作成で問題ないか？
+        $zengin_ym   = $o_date->to_format('Ym');
+        $notactive_flg   = '0';
         $temp = $additionalZenginModel->selectBy3Key(
-            $zengin_ym   = $o_date->to_format('Ym'),
+            $zengin_ym,
             $hotel_cd,
-            $notactive_flg   = '0'
+            $notactive_flg
         );
 
         if (!$this->is_empty($temp)) {
@@ -455,24 +436,11 @@ class BrAdditonalZenginController extends _commonController
         // $requestAdditionalZengin['staff_id'] = $this->box->user->operator->staff_id; //スタッフID
         $requestAdditionalZengin['notactive_flg'] = '0'; //削除フラグ
 
-        // バリデーション
-        //カラムの書き方をconstにしてみたので、validationの書き方も変えましたが合っていますでしょうか？
-        $errorList = $additionalZenginModel->validation($requestAdditionalZengin);
-        if (count($errorList) > 0) {
-            $errorList[] = "更新確認情報を更新できませんでした。 ";
-            return redirect()->route('ctl.brAdditionalZengin.edit', [
-                'hotel_cd' => $hotel_cd,
-                'reason' => $reason,
-                'reason_internal' => $reason_internal,
-                'additional_charge' => $additional_charge
-            ])->with([
-                'errors' => $errorList
-            ]);
-        }
         // 共通カラム値設定
         $additionalZenginModel->setInsertCommonColumn($requestAdditionalZengin);
 
         // コネクション
+        $errorList = [];
         try {
             $con = DB::connection('mysql');
             $dbErr = $con->transaction(function () use ($con, $additionalZenginModel, $requestAdditionalZengin) {
@@ -543,10 +511,13 @@ class BrAdditonalZenginController extends _commonController
             $a_customer = $customer->selectByKey(['customer_id' => $a_customer_hotel['customer_id']]); //find→selectByKeyに変更でいいか？
             $f_factoring = false;
             if (
-                ($a_customer['bill_way'] ?? null) == '1' && //null追記でいいか
-                isset($a_customer['factoring_bank_cd']) && isset($a_customer['factoring_bank_branch_cd']) &&
-                isset($a_customer['factoring_bank_account_type']) && isset($a_customer['factoring_bank_account_no']) &&
-                isset($a_customer['factoring_bank_account_kn']) && isset($a_customer['factoring_cd'])
+                ($a_customer['bill_way'] ?? null) == '1'  //null追記でいいか
+                && isset($a_customer['factoring_bank_cd'])
+                && isset($a_customer['factoring_bank_branch_cd'])
+                && isset($a_customer['factoring_bank_account_type'])
+                && isset($a_customer['factoring_bank_account_no'])
+                && isset($a_customer['factoring_bank_account_kn'])
+                && isset($a_customer['factoring_cd'])
             ) {
                 $f_factoring = true;
             }

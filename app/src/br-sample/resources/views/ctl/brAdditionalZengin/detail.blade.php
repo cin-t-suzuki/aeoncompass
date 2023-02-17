@@ -202,14 +202,14 @@
     <td nowrap>
 	{{-- {{number_format($additional_zengin['additional_charge'])}} --}}
     <div style="color: #f00;" id="msg_additional_charge"></div>
-    <input maxlength="20" name="additional_charge" class="num" value="{{$additional_zengin['additional_charge']}}">
+    <input maxlength="20" name="additional_charge" class="num" value="{{old('additional_charge',$additional_zengin['additional_charge'])}}">
     </td>
   </tr>
   <tr>
     <td bgcolor="#EEFFEE" nowrap>理由<br>(施設向け)<br>1000文字まで</td>
     <td nowrap>
     <div style="color: #f00;" id="msg_reason"></div>
-    <textarea name="reason" cols="100" rows="6">{{$additional_zengin['reason']}}</textarea>
+    <textarea name="reason" cols="100" rows="6">{{old('reason',$additional_zengin['reason'])}}</textarea>
     </td>
   </tr>
   <tr>
@@ -217,7 +217,7 @@
 
     <td nowrap>
     <div style="color: #f00;" id="msg_reason_internal"></div>
-    <textarea name="reason_internal" cols="100" rows="6">{{$additional_zengin['reason_internal']}}</textarea>
+    <textarea name="reason_internal" cols="100" rows="6">{{old('reason_internal',$additional_zengin['reason_internal'])}}</textarea>
     </td>
   </tr>
   <tr>

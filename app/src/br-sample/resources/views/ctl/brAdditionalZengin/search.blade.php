@@ -3,7 +3,7 @@
 
 @section('page_blade')
 {{-- メッセージbladeの読込 --}}
-@include('ctl.common.message', $messages)
+@include('ctl.common.message')
 
 {{--削除でいいか {literal} --}}
 <script language="JavaScript" type="text/javascript">
