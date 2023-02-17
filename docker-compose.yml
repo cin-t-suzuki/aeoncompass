@@ -1,0 +1,40 @@
+version: '3'
+services:
+  # DB
+  mysql:
+    image: mysql:8 # コンテナの下となるイメージを指定
+    container_name: ac_hotel_db
+    restart: always
+    volumes:
+      # 設定ファイル
+      - ./mysql/db/my.cnf:/etc/mysql/conf.d/my.cnf
+      # 最初にimageを起動したときのデータ初期化&データ投入。実行順序はファイル名アルファベット順
+      - ./mysql/db/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      #  データ保管場所
+      - ./mysql/data:/var/lib/mysql
+    environment:
+      # root のパスワード 長さチェック有？
+      MYSQL_ROOT_PASSWORD: pass
+      # TZ: Asia/Tokyo
+      # MYSQL_USER: databaseuser
+      # MYSQL_PASSWORD: password
+      # MYSQL_DATABASE: laravel
+    ports:
+      - 3306:3306
+    # extra_hosts:
+    #   - localhost:127.0.0.1
+
+  app:
+    build: 
+      context: ./app
+      dockerfile: Dockerfile
+    image: acapp # 作成(build)するイメージのイメージ名を指定
+    container_name: ac_test
+    depends_on:
+    - mysql
+    ports:
+    - 8080:80
+    volumes:
+     - ./app/src:/var/www/html
+    extra_hosts:
+     - "host.docker.internal:host-gateway"

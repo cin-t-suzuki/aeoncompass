@@ -3,6 +3,18 @@
 <html>
 
 @php
+    // TODO: 他の guard で認証しているとき、これを追加
+    // 他の guard: hotel(施設管理者), supervisor(施設統括), partner, affiliate
+    // MEMO: 移植元では、 lib\Br\Models\Authorize\Operator.php の is_login() で判定
+    $isLogin = Auth::guard('staff')->check();
+
+    $isStaff = Auth::guard('staff')->check();
+    if ($isStaff) {
+        $staffName = Auth::guard('staff')->user()->staffInfo->staff_nm;
+    } else {
+        $staffName = 'TODO: ロール未実装';
+    }
+
     // TODO: 認証関連、環境変数関連
     $v = new \stdClass;
 
@@ -19,9 +31,6 @@
                 'staff_nm' => 'staff_nm' . Str::random(3,6),
             ];
         }
-        public function is_staff() { return rand(0,1); }
-        public function is_nta() { return rand(0,1); }
-        public function is_login() { return rand(0,1); }
     }
     $v->user->operator = new Operator(Str::random(16));
 
@@ -73,8 +82,6 @@
     $no_print               = rand(0,1) == 0;
     $no_print_title         = rand(0,1) == 0;
     $service_info_flg       = rand(0,1) == 0;
-    $menu_title             = rand(0,2) ? '' : 'menu_title_' . Str::random(rand(2,4));
-    $title                  = rand(0,2) ? '' : 'title_' . Str::random(rand(2,4));
     $acceptance_status_flg  = rand(0,1) == 0;
     $header_number          = 'header_number_' . rand(0,100);
     $ad = Str::random(16);
@@ -129,10 +136,8 @@
 
     <div class="{{ $no_print == true ? 'noprint' : '' }}">
         {{-- staffのみ情報を表示 --}}
-        @if ($v->user->operator->is_staff())
+        @if ($isStaff)
             @include ('ctl.common._htl_staff_header')
-        @elseif ($v->user->operator->is_nta())
-            @include ('ctl.common._nta_staff_header')
         @endif
         <table border="0" width="100%" cellspacing="0" cellpadding="5" bgcolor="#EEEEFF" >
             <tr>
@@ -192,15 +197,15 @@
 
     <div class="{{ $no_print_title == true ? 'noprint' : '' }}">
         {{-- サービスセンター --}}
-        @if (!$service->is_empty($menu_title) || !$service->is_empty($title))
+        @if (View::hasSection('menu_title') || View::hasSection('title'))
             <table border="3" cellspacing="0" cellpadding="2">
                 <tr>
                     <td bgcolor="#EEEEFF" align="center">
                         <big>
-                            @if ($service->is_empty($menu_title))
-                                {{ strip_tags($title) }}
+                            @hasSection('menu_title')
+                                @yield('menu_title')
                             @else
-                                {{ strip_tags($menu_title) }}
+                                @yield('title')
                             @endif
                         </big>
                     </td>
@@ -224,9 +229,9 @@
             </tr>
             <tr>
                 {{-- ログインしていれば --}}
-                @if ($v->user->operator->is_login() == true)
+                @if ($isLogin)
                     <td nowrap>
-                        @if (!$v->user->operator->is_staff())
+                        @if (!$isStaff)
                             {{-- TODO: URL, create Route --}}
                             <small><a href="{{ $v->env->source_path }}{{ $v->env->module }}/logout/">ログアウト</a></small>
                         @endif
