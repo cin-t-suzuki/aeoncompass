@@ -20,7 +20,7 @@ function helpForm() {
 {{-- {/literal} --}}
 
 <br />
-{!! Form::open(['route' => ['ctl.BrDemandResult.list'], 'method' => 'post']) !!}
+{!! Form::open(['route' => ['ctl.BrDemandResult.list'], 'method' => 'get']) !!}
   <table border="1" cellpadding="4" cellspacing="0">
     <tr>
       <td nowrap  bgcolor="#EEFFEE">キーワード</td>
