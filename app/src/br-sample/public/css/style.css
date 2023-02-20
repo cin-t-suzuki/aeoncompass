@@ -1,0 +1,1353 @@
+@charset "UTF-8";
+/* 共通 */
+/* line 28, ../sass/style.scss */
+body {
+  line-height: 18px;
+  font-size: 12px;
+  font-family: "メイリオ", Meiryo, "ＭＳ Ｐゴシック", sans-serif;
+  width: 1024px;
+  margin-top: 0pt;
+  margin-left: 0pt;
+}
+
+/* line 30, ../sass/style.scss */
+.wrapproduct {
+  padding-left: 4px;
+  min-width: 1024px;
+  width: expression(document.body.clientWidth < 1024 ? "1024px" : "auto");
+}
+
+/* line 37, ../sass/style.scss */
+.wrapdevelopment {
+  padding-left: 4px;
+  border-left: 4px solid #36A;
+  min-width: 1024px;
+  width: expression(document.body.clientWidth < 1024 ? "1024px" : "auto");
+}
+
+/* line 46, ../sass/style.scss */
+.wraptest {
+  padding-left: 4px;
+  border-left: 4px solid #297;
+  min-width: 1024px;
+  width: expression(document.body.clientWidth < 1024 ? "1024px" : "auto");
+}
+
+/* line 55, ../sass/style.scss */
+.wrap {
+  padding-left: 4px;
+  border-left: 4px solid #A63;
+  min-width: 1024px;
+  width: expression(document.body.clientWidth < 1024 ? "1024px" : "auto");
+}
+
+/* 回り込み解除 */
+/* line 65, ../sass/style.scss */
+.clear {
+  clear: both;
+}
+
+/* nowrap代替 */
+/* line 68, ../sass/style.scss */
+.nowrap {
+  white-space: nowrap;
+}
+
+/* align代替 */
+/* line 71, ../sass/style.scss */
+.align-l {
+  text-align: left;
+}
+
+/* line 72, ../sass/style.scss */
+.align-c {
+  text-align: center;
+}
+
+/* line 73, ../sass/style.scss */
+.align-r {
+  text-align: right;
+}
+
+/* float代替 */
+/* line 76, ../sass/style.scss */
+.float-l {
+  float: left;
+}
+
+/* 販売中 */
+/* line 79, ../sass/style.scss */
+.sale-on {
+  background-color: white;
+}
+
+/* line 80, ../sass/style.scss */
+.sale-off {
+  background-color: #cdcdcd;
+}
+
+/* 文字太さ */
+/* line 83, ../sass/style.scss */
+.font-normal {
+  font-weight: normal;
+}
+
+/* line 84, ../sass/style.scss */
+.font-bold {
+  font-weight: bold;
+}
+
+/* line 86, ../sass/style.scss */
+form {
+  display: inline;
+  margin: 0px;
+  padding: 0px;
+}
+
+/* line 88, ../sass/style.scss */
+a {
+  color: #000099;
+  text-decoration: none;
+}
+
+/* line 89, ../sass/style.scss */
+a:visited {
+  color: #660099;
+  text-decoration: none;
+}
+
+/* line 90, ../sass/style.scss */
+a:hover {
+  text-decoration: underline;
+}
+
+/* line 92, ../sass/style.scss */
+img {
+  border: 0;
+}
+
+/* 幅100% */
+/* line 95, ../sass/style.scss */
+.width-full-rate {
+  width: 100%;
+}
+
+/* line 97, ../sass/style.scss */
+.margin-spacer {
+  margin: 6px;
+}
+
+/* 実行環境表示 */
+/* line 100, ../sass/style.scss */
+.envproduct {
+  display: none;
+}
+
+/* line 101, ../sass/style.scss */
+.envdevelopment {
+  margin-left: -12px;
+  margin-bottom: 4px;
+  padding: 0.25em 0;
+  background-color: #36A;
+  color: #fff;
+  font-weight: bold;
+  width: 6em;
+  text-align: center;
+}
+
+/* line 102, ../sass/style.scss */
+.envtest {
+  margin-left: -12px;
+  margin-bottom: 4px;
+  padding: 0.25em 0;
+  background-color: #297;
+  color: #fff;
+  font-weight: bold;
+  width: 6em;
+  text-align: center;
+}
+
+/* line 103, ../sass/style.scss */
+.env {
+  margin-left: -12px;
+  margin-bottom: 4px;
+  padding: 0.25em 0;
+  background-color: #A63;
+  color: #fff;
+  font-weight: bold;
+  width: 6em;
+  text-align: center;
+}
+
+/* ()で括る文言 */
+/* line 107, ../sass/style.scss */
+.parenthesis {
+  margin: 0px 2px;
+}
+
+/*旧*/
+.br-header {
+  width: 100%;
+  padding: 0px;
+  background-color: #eeffee;
+  border-color: #336633;
+  border-width: 0px 1px 0px 1px;
+  border-style: solid;
+}
+
+/* line 79, ../sass/style.scss */
+.br-header-hotel {
+  float: left;
+  padding: 0px;
+  margin: 0px 4px;
+}
+
+/* line 80, ../sass/style.scss */
+.br-header-menu {
+  text-align: right;
+  width: 100%;
+  padding: 0px;
+}
+
+/* 新BRヘッダー */
+/* line 111, ../sass/style.scss */
+.br-header2 {
+  width: 1024px;
+  padding: 0px;
+}
+/* line 115, ../sass/style.scss */
+.br-header2 .br-header2-back {
+  background-color: #eeffee;
+  border-color: #336633;
+  border-width: 1px 1px 0px 1px;
+  border-style: solid;
+}
+/* line 122, ../sass/style.scss */
+.br-header2 .br-header2-back .br-header2-inline .br-header2-hotel {
+  width: 740px;
+  float: left;
+  padding: 10px;
+  margin: 0px 4px;
+}
+/* line 123, ../sass/style.scss */
+.br-header2 .br-header2-back .br-header2-inline .br-header2-menu {
+  text-align: left;
+  padding: 12px;
+}
+
+/* NTAヘッダー */
+/* line 129, ../sass/style.scss */
+.nta-header {
+  width: 1024px;
+  padding: 0px;
+  background-color: #99ccff;
+  border-color: #336633;
+  border-width: 1px 1px 0px 1px;
+  border-style: solid;
+}
+
+
+/* 旧ホテルヘッダー */
+/* ホテルヘッダー */
+/* line 86, ../sass/style.scss */
+.htl-header {
+  padding: 0px;
+  background-color: #eeefff;
+  width: 100%;
+  float: left;
+  border-color: #9999ff;
+  border-width: 0px 1px 0px 1px;
+  border-style: solid;
+}
+
+/* line 87, ../sass/style.scss */
+.htl-hotel-nm {
+  float: left;
+  margin: 4px;
+  width: 45%;
+}
+
+/* line 88, ../sass/style.scss */
+.htl-ayan {
+  float: left;
+  margin: 4px;
+  text-align: right;
+}
+
+/* line 89, ../sass/style.scss */
+.htl-top-menu {
+  float: left;
+  margin-top: 14px;
+  text-align: right;
+}
+
+/* 予約受付状態 */
+/* line 92, ../sass/style.scss */
+.rsv-accept-box {
+  border: solid 1px;
+  text-align: center;
+  padding: 4px;
+  float: left;
+  margin: 4px;
+}
+
+/* line 93, ../sass/style.scss */
+.rsv-accept-ok {
+  color: #00F;
+}
+
+/* line 94, ../sass/style.scss */
+.rsv-accept-no {
+  color: #F00;
+}
+
+/* 新ホテルヘッダー */
+/* line 133, ../sass/style.scss */
+.htl-header2 {
+  width: 1024px;
+  padding: 0px;
+}
+/* line 138, ../sass/style.scss */
+.htl-header2 .htl-header2-back {
+  background-color: #eeefff;
+  border-color: #9999ff;
+  border-width: 1px;
+  border-style: solid;
+}
+/* line 144, ../sass/style.scss */
+.htl-header2 .htl-header2-back .htl-header2-inline {
+  padding: 10px;
+}
+/* line 146, ../sass/style.scss */
+.htl-header2 .htl-header2-back .htl-header2-inline img {
+  vertical-align: middle;
+}
+/* line 147, ../sass/style.scss */
+.htl-header2 .htl-header2-back .htl-header2-inline .htl-hotel-nm {
+  float: left;
+  width: 40%;
+  margin-top: 12px;
+}
+
+.htl-header2 .htl-header2-back .htl-header2-inline .htl-header2-menu-r {
+  boder:1px solid;
+  float:right;
+}
+
+/* line 148, ../sass/style.scss */
+.htl-header2 .htl-header2-back .htl-header2-inline .htl-header2-menu-r .htl-ayan {
+  float: left;
+  margin: 0px 4px;
+}
+/* line 149, ../sass/style.scss */
+.htl-header2 .htl-header2-back .htl-header2-inline .htl-header2-menu-r .rsv-accept-box {
+  float: left;
+  text-align: center;
+  padding: 6px;
+  border: solid 1px;
+  margin: 0px 2px;
+}
+/* line 150, ../sass/style.scss */
+.htl-header2 .htl-header2-back .htl-header2-inline .htl-header2-menu-r .htl-top-menu {
+  float: left;
+  text-align: center;
+  margin-top: 12px;
+  margin-left: 2px;
+}
+
+/* ※旧デザイン互換 */
+/* line 190, ../sass/style.scss */
+.br-info {
+  text-align: left;
+  border: solid 1px;
+  float: right;
+  padding: 2px;
+}
+
+/* line 197, ../sass/style.scss */
+.display-title {
+  background-color: #eeefff;
+  text-align: center;
+  border: solid 4px;
+  float: left;
+  border-style: outset;
+  font-size: large;
+  padding: 4px;
+  white-space: nowrap;
+  border-color: #9999ff;
+}
+
+/* 施設ページ共通の先頭パーツ */
+/* line 211, ../sass/style.scss */
+.page-head {
+  width: 1024px;
+  min-width: 1014px;
+  /* 画面名称 */
+}
+/* line 215, ../sass/style.scss */
+.page-head .page-head-back {
+  margin-left: 10px;
+  margin-right: 10px;
+  /* お問い合わせ先 */
+}
+/* line 221, ../sass/style.scss */
+.page-head .page-head-back .br-info-box {
+  width: 215px;
+  float: right;
+}
+/* line 226, ../sass/style.scss */
+.page-head .page-head-back .br-info-box .br-info-box-back {
+  border-radius: 3px;
+  border: solid 1px #6c6c6c;
+  box-shadow: 0px 8px 6px -6px #9c9c9c;
+}
+/* line 231, ../sass/style.scss */
+.page-head .page-head-back .br-info-box .br-info-box-back p {
+  background-color: #6c6c6c;
+  margin: 0px;
+  padding: 2px;
+  text-align: center;
+  color: #ffffff;
+  font-weight: bold;
+}
+/* line 234, ../sass/style.scss */
+.page-head .page-head-back .br-info-box .br-info-box-back .br-info-box-contents {
+  padding: 4px;
+}
+/* line 236, ../sass/style.scss */
+.page-head .page-head-back .br-info-box .br-info-box-back .br-info-box-contents ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+/* line 237, ../sass/style.scss */
+.page-head .page-head-back .br-info-box .br-info-box-back .br-info-box-contents li #item-mail {
+  margin-left: 2px;
+  margin-right: 2px;
+}
+/* line 238, ../sass/style.scss */
+.page-head .page-head-back .br-info-box .br-info-box-back .br-info-box-contents li #item-tel {
+  margin-left: 8px;
+  margin-right: 2px;
+}
+/* line 239, ../sass/style.scss */
+.page-head .page-head-back .br-info-box .br-info-box-back .br-info-box-contents li #item-fax {
+  margin-left: 6px;
+  margin-right: 2px;
+}
+/* line 240, ../sass/style.scss */
+.page-head .page-head-back .br-info-box .br-info-box-back .br-info-box-contents li #item-days {
+  margin-left: 4px;
+  margin-right: 2px;
+}
+/* line 248, ../sass/style.scss */
+.page-head .display-title-box {
+  padding: 0px;
+}
+/* line 251, ../sass/style.scss */
+.page-head .display-title-box .display-title-box-back {
+  float: left;
+  background-color: #eeefff;
+  border-color: #9999ff;
+  border-width: 2px;
+  border-style: solid;
+  padding: 10px;
+  font-weight: bold;
+  font-size: large;
+  border-radius: 3px;
+  color: #333333;
+  box-shadow: 0px 8px 6px -6px #9c9c9c;
+}
+
+/* 入力項目表示table */
+/* 入力項目table：施設 */
+/* line 274, ../sass/style.scss */
+table.htl {
+  border: solid 1px;
+  border-collapse: collapse;
+  line-height: 18px;
+  font-size: 12px;
+  font-family: meiryo;
+  border-color: #9999ff;
+}
+/* line 276, ../sass/style.scss */
+table.htl th {
+  padding: 8px;
+  border: solid 1px;
+  border-collapse: collapse;
+  border-color: #9999ff;
+  background-color: #eeefff;
+}
+/* line 277, ../sass/style.scss */
+table.htl td {
+  padding: 8px;
+  border: solid 1px;
+  border-collapse: collapse;
+  border-color: #9999ff;
+  background-color: #FFFFFF;
+}
+
+/* 入力項目表示table-sub */
+/* line 286, ../sass/style.scss */
+table.sub {
+  border: solid 1px;
+  border-collapse: collapse;
+  text-align: left;
+  line-height: 18px;
+  font-size: 12px;
+  font-family: meiryo;
+}
+/* line 288, ../sass/style.scss */
+table.sub th {
+  border: solid 1px;
+  border-collapse: collapse;
+  border-color: #cccccc;
+  padding: 4px;
+  background-color: #e6e6e6;
+}
+/* line 289, ../sass/style.scss */
+table.sub td {
+  border: solid 1px;
+  border-collapse: collapse;
+  border-color: #cccccc;
+  padding: 4px;
+  background-color: #ffffff;
+}
+/* line 290, ../sass/style.scss */
+table.sub td.bk-deactive {
+  background-color: #f5f5f5;
+}
+
+/* タグ風テキスト */
+/* line 295, ../sass/style.scss */
+.tag-text, .tag-text-info, .tag-text-error, .tag-text-warning, .tag-text-success, .tag-text-deactive {
+  color: #ffffff;
+  padding: 1px 4px;
+  white-space: nowrap;
+  font-weight: bold;
+  border-radius: 3px;
+}
+
+/* line 296, ../sass/style.scss */
+.tag-text-info {
+  background-color: #0066ff;
+}
+
+/* line 297, ../sass/style.scss */
+.tag-text-error {
+  background-color: #ED2502;
+}
+
+/* line 298, ../sass/style.scss */  
+.tag-text-warning {
+  background-color: #ff6600;
+}
+
+/* line 299, ../sass/style.scss */
+.tag-text-success {
+  background-color: #2d9124;
+}
+
+/* line 300, ../sass/style.scss */
+.tag-text-deactive {
+  background-color: #999999;
+}
+
+/* ガイドメッセージ用 */
+/* line 303, ../sass/style.scss */
+.msg-text-info {
+  color: #0066ff;
+}
+
+/* 正常終了メッセージ用 */
+/* line 306, ../sass/style.scss */
+.msg-text-success {
+  color: #2d9124;
+}
+
+/* エラーメッセージ用 */
+/* line 309, ../sass/style.scss */
+.msg-text-error {
+  color: red;
+}
+
+/* 警告メッセージ用 */
+/* line 312, ../sass/style.scss */
+.msg-text-warning {
+  color: #ff6600;
+}
+
+/* アクティブではないことを示すメッセージ（グレーアウト） */
+/* line 315, ../sass/style.scss */
+.msg-text-deactive {
+  color: #999999;
+}
+
+/* 境界スペース用hr */
+/* line 318, ../sass/style.scss */
+hr.bound-line {
+  width: 100%;
+  color: #ffffff;
+  border-style: solid;
+}
+
+/* 項目区切り用hr */
+/* line 321, ../sass/style.scss */
+hr.pause-line {
+  width: 100%;
+  border-width: 1px 0px 0px 0px;
+  height: 1px;
+  overflow: hidden;
+  clear: both;
+  color: #cccccc;
+}
+
+/* プラン編集画面 */
+/* line 324, ../sass/style.scss */
+div.partner-list-dp {
+  margin-left: 16px;
+  overflow: auto;
+  height: auto;
+}
+
+/* line 325, ../sass/style.scss */
+div.partner-list {
+  margin-left: 16px;
+  overflow: auto;
+  height: 320px;
+  border: solid 1px;
+  border-color: #EEEEEE;
+}
+
+/* line 326, ../sass/style.scss */
+div.field-help {
+  font-size: smaller;
+}
+
+/* line 327, ../sass/style.scss */
+textarea.info {
+  wrap: soft;
+}
+
+/* line 328, ../sass/style.scss */
+div.room-box {
+  width: 50%;
+  float: left;
+  text-align: center;
+}
+
+/* line 329, ../sass/style.scss */
+div.selected-room {
+  background: #fda;
+  border: solid 1px #fda;
+}
+
+/* line 330, ../sass/style.scss */
+div.select-room {
+  background: #BBBBBB;
+  border: solid 1px #BBBBBB;
+}
+
+/* line 331, ../sass/style.scss */
+div.room-list {
+  height: 150px;
+  text-align: left;
+  margin: 0;
+  border: solid 1px #EEEEEE;
+  overflow: scroll;
+}
+
+/* line 332, ../sass/style.scss */
+ul.error {
+  margin: 0px;
+}
+
+/* line 333, ../sass/style.scss */
+.jqs-selected-dp {
+  display: none;
+}
+
+/* line 334, ../sass/style.scss */
+.guide-box {
+  border: solid 1px;
+  text-align: center;
+  padding: 10px;
+  margin: 10px 200px;
+}
+
+/* 部屋プラン一覧 */
+/* line 338, ../sass/style.scss */
+.info-plan-base {
+  width: 1024px;
+  box-shadow: 0 10px 6px -6px #cdcdcd;
+}
+/* line 342, ../sass/style.scss */
+.info-plan-base .info-plan-base-back {
+  background-color: #C3E59F;
+  border: solid 1px #6ABD10;
+}
+/* line 346, ../sass/style.scss */
+.info-plan-base .info-plan-base-back .info-plan-base-inline {
+  padding: 4px;
+}
+/* line 349, ../sass/style.scss */
+.info-plan-base .info-plan-base-back .info-plan-base-inline .info-plan-base-contents {
+  width: 1014px;
+  border: solid 1px;
+  border-collapse: collapse;
+  text-align: left;
+  line-height: 18px;
+  font-size: 12px;
+  font-family: meiryo;
+}
+/* line 357, ../sass/style.scss */
+.info-plan-base .info-plan-base-back .info-plan-base-inline .info-plan-base-contents th {
+  border: solid 1px;
+  border-collapse: collapse;
+  border-color: #cccccc;
+  padding: 4px;
+  background-color: #e6e6e6;
+}
+/* line 358, ../sass/style.scss */
+.info-plan-base .info-plan-base-back .info-plan-base-inline .info-plan-base-contents td {
+  border: solid 1px;
+  border-collapse: collapse;
+  border-color: #cccccc;
+  padding: 4px;
+  background-color: #ffffff;
+}
+/* line 359, ../sass/style.scss */
+.info-plan-base .info-plan-base-back .info-plan-base-inline .info-plan-base-contents td.bk-deactive {
+  background-color: #f5f5f5;
+}
+/* line 360, ../sass/style.scss */
+.info-plan-base .info-plan-base-back .info-plan-base-inline .info-plan-base-contents td.plan-info-edit {
+  width: 5%;
+}
+/* line 361, ../sass/style.scss */
+.info-plan-base .info-plan-base-back .info-plan-base-inline .info-plan-base-contents td.plan-accept_status {
+  width: 5%;
+}
+/* line 362, ../sass/style.scss */
+.info-plan-base .info-plan-base-back .info-plan-base-inline .info-plan-base-contents td.plan-accept_ymd {
+  width: 20%;
+}
+/* line 363, ../sass/style.scss */
+.info-plan-base .info-plan-base-back .info-plan-base-inline .info-plan-base-contents td.plan-media-edit {
+  width: 5%;
+}
+/* line 364, ../sass/style.scss */
+.info-plan-base .info-plan-base-back .info-plan-base-inline .info-plan-base-contents td.plan-cancel-policy {
+  width: 10%;
+}
+/* line 365, ../sass/style.scss */
+.info-plan-base .info-plan-base-back .info-plan-base-inline .info-plan-base-contents td.plan-info-delete {
+  width: 5%;
+}
+/* line 366, ../sass/style.scss */
+.info-plan-base .info-plan-base-back .info-plan-base-inline .info-plan-base-contents td.plan-room-info {
+  width: 20%;
+}
+/* line 367, ../sass/style.scss */
+.info-plan-base .info-plan-base-back .info-plan-base-inline .info-plan-base-contents td.plan-room-sale-status {
+  width: 15%;
+}
+/* line 368, ../sass/style.scss */
+.info-plan-base .info-plan-base-back .info-plan-base-inline .info-plan-base-contents td.plan-room-charge-ymd {
+  width: 23%;
+}
+/* line 369, ../sass/style.scss */
+.info-plan-base .info-plan-base-back .info-plan-base-inline .info-plan-base-contents td.plan-room-charge-edit {
+  width: 10%;
+}
+/* line 370, ../sass/style.scss */
+.info-plan-base .info-plan-base-back .info-plan-base-inline .info-plan-base-contents td.plan-room-extend-status {
+  width: 22%;
+}
+/* line 371, ../sass/style.scss */
+.info-plan-base .info-plan-base-back .info-plan-base-inline .info-plan-base-contents td.plan-room-extend-edit {
+  width: 10%;
+}
+
+/* line 377, ../sass/style.scss */
+.info-room-base {
+  width: 1024px;
+  box-shadow: 0 10px 6px -6px #cdcdcd;
+}
+/* line 381, ../sass/style.scss */
+.info-room-base .info-room-base-back {
+  background-color: #FFE0B2;
+  border: solid 1px #ff9933;
+}
+/* line 385, ../sass/style.scss */
+.info-room-base .info-room-base-back .info-room-base-inline {
+  padding: 4px;
+}
+/* line 388, ../sass/style.scss */
+.info-room-base .info-room-base-back .info-room-base-inline .info-room-base-contents {
+  width: 1014px;
+  border: solid 1px;
+  border-collapse: collapse;
+  text-align: left;
+  line-height: 18px;
+  font-size: 12px;
+  font-family: meiryo;
+}
+/* line 396, ../sass/style.scss */
+.info-room-base .info-room-base-back .info-room-base-inline .info-room-base-contents th {
+  border: solid 1px;
+  border-collapse: collapse;
+  border-color: #cccccc;
+  padding: 4px;
+  background-color: #e6e6e6;
+}
+/* line 397, ../sass/style.scss */
+.info-room-base .info-room-base-back .info-room-base-inline .info-room-base-contents td {
+  border: solid 1px;
+  border-collapse: collapse;
+  border-color: #cccccc;
+  padding: 4px;
+  background-color: #ffffff;
+}
+/* line 398, ../sass/style.scss */
+.info-room-base .info-room-base-back .info-room-base-inline .info-room-base-contents td.room-stock-status {
+  width: 25%;
+}
+/* line 399, ../sass/style.scss */
+.info-room-base .info-room-base-back .info-room-base-inline .info-room-base-contents td.bk-deactive {
+  background-color: #f5f5f5;
+}
+
+/* line 406, ../sass/style.scss */
+.plan-room-type-list {
+  display: none;
+}
+/* line 407, ../sass/style.scss */
+.plan-room-type-list .row-spacer {
+  margin: 12px;
+}
+
+/* line 410, ../sass/style.scss */
+.plan-room-spacer {
+  margin: 8px;
+}
+
+/* line 411, ../sass/style.scss */
+.prev-text {
+  font-size: x-small;
+}
+
+/* line 412, ../sass/style.scss */
+.label-cd-text {
+  margin-left: 2px;
+  margin-right: 2px;
+}
+
+/* line 413, ../sass/style.scss */
+.deploy-btn {
+  border: 1px solid #999;
+  font-weight: bold;
+  color: #666;
+  width: 28px;
+  height: 28px;
+}
+
+/* line 415, ../sass/style.scss */
+.room-list-header {
+  width: 1024px;
+  box-shadow: 0 10px 6px -6px #cdcdcd;
+}
+/* line 419, ../sass/style.scss */
+.room-list-header .room-list-header-back {
+  background-color: #FFB74C;
+  border-top: solid 1px #ff9933;
+  border-bottom: solid 1px #ff9933;
+  padding: 8px;
+}
+/* line 425, ../sass/style.scss */
+.room-list-header .room-list-header-back .room-list-header-text {
+  font-size: 120%;
+  color: #333333;
+}
+
+/* line 433, ../sass/style.scss */
+.plan-list-header {
+  width: 1024px;
+  box-shadow: 0 10px 6px -6px #cdcdcd;
+}
+/* line 437, ../sass/style.scss */
+.plan-list-header .plan-list-header-back {
+  background-color: #96D157;
+  border-top: solid 1px #2D9124;
+  border-bottom: solid 1px #2D9124;
+  padding: 8px;
+}
+/* line 443, ../sass/style.scss */
+.plan-list-header .plan-list-header-back .plan-list-header-text {
+  font-size: 120%;
+  color: #333333;
+}
+
+/* line 450, ../sass/style.scss */
+.plan-room-summary {
+  background-color: #ffffff;
+  padding: 6px;
+  border-radius: 3px;
+}
+
+/* line 451, ../sass/style.scss */
+.plan-room-summary-text {
+  margin-left: 18px;
+}
+
+/* line 452, ../sass/style.scss */
+.plan-sale-status-msg {
+  padding: 2px;
+  margin-left: 10%;
+  text-align: left;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* line 453, ../sass/style.scss */
+.plan-sale-st-msg-margin {
+  margin-left: 0;
+}
+
+/* line 456, ../sass/style.scss */
+.plan-sale-status-box a {
+  display: inline;
+}
+/* line 457, ../sass/style.scss */
+.plan-sale-status-box a:hover {
+  background-color: #ADD8E6;
+  color: #0000ff;
+}
+
+/* line 460, ../sass/style.scss */
+.plan-search-box {
+  border: solid 1px;
+  border-color: #cdcdcd;
+  padding: 4px;
+  width: 42%;
+}
+/* line 465, ../sass/style.scss */
+.plan-search-box .div {
+  display: inline;
+}
+/* line 466, ../sass/style.scss */
+.plan-search-box .display-btn {
+  margin-left: 12px;
+}
+
+/* 室数調整・料金調整 */
+/* line 470, ../sass/style.scss */
+.room-offer-search-box {
+  background-color: #999999;
+}
+
+/* line 471, ../sass/style.scss */
+.column-box {
+  padding: 4px;
+}
+
+/* line 476, ../sass/style.scss */
+table.room-offer {
+  border: solid 1px;
+  border-collapse: collapse;
+}
+/* line 478, ../sass/style.scss */
+table.room-offer tr.plan-row {
+  display: none;
+}
+/* line 479, ../sass/style.scss */
+table.room-offer th {
+  padding: 8px;
+  border: solid 1px;
+  border-collapse: collapse;
+  border-color: #cdcdcd;
+  padding: 0;
+}
+/* line 480, ../sass/style.scss */
+table.room-offer td {
+  padding: 8px;
+  border: solid 1px;
+  border-collapse: collapse;
+  border-color: #cdcdcd;
+  padding: 0;
+}
+/* line 481, ../sass/style.scss */
+table.room-offer td.search-box {
+  background-color: #cdcdcd;
+  width: 252px;
+}
+/* line 482, ../sass/style.scss */
+table.room-offer td.room-base {
+  background-color: #FFE0B2;
+  vertical-align: top;
+}
+/* line 483, ../sass/style.scss */
+table.room-offer td.room-base-t {
+  background-color: #FFE0B2;
+  padding: 4px;
+  width: 46px;
+  vertical-align: top;
+}
+/* line 484, ../sass/style.scss */
+table.room-offer td.plan-base {
+  background-color: #C3E59F;
+  width: 30%;
+  vertical-align: top;
+}
+/* line 485, ../sass/style.scss */
+table.room-offer td.plan-base-t {
+  background-color: #C3E59F;
+  padding: 4px;
+  width: 46px;
+  vertical-align: top;
+}
+/* line 486, ../sass/style.scss */
+table.room-offer td.subject-base {
+  background-color: #e6e6e6;
+}
+/* line 487, ../sass/style.scss */
+table.room-offer td.subject-base-t {
+  background-color: #e6e6e6;
+  padding: 4px;
+  width: 46px;
+}
+/* line 488, ../sass/style.scss */
+table.room-offer td.room-spacer {
+  background-color: #ff9933;
+  height: 3px;
+}
+/* line 489, ../sass/style.scss */
+table.room-offer td.plan-spacer {
+  background-color: #6ABD10;
+  height: 3px;
+}
+/* line 490, ../sass/style.scss */
+table.room-offer td.deactive {
+  background-color: #f5f5f5;
+}
+
+/* line 493, ../sass/style.scss */
+.input-charge-box {
+  border: 1px solid #DAA520;
+}
+
+/* line 496, ../sass/style.scss */
+.header-menu-base {
+  width: 1024px;
+  min-width: 1024px;
+}
+/* line 501, ../sass/style.scss */
+.header-menu-base .main-header-menu {
+  margin-left: 5px;
+  margin-right: 5px;
+  float: left;
+}
+/* line 506, ../sass/style.scss */
+.header-menu-base .main-header-menu .main-header-menu-back {
+  border-bottom: 0px solid #9d9d9d;
+}
+/* line 509, ../sass/style.scss */
+.header-menu-base .main-header-menu .main-header-menu-back ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0px 3px;
+}
+/* line 512, ../sass/style.scss */
+.header-menu-base .main-header-menu .main-header-menu-back li {
+  float: left;
+  margin: 0px 4px 0px 0px;
+}
+/* line 518, ../sass/style.scss */
+.header-menu-base .main-header-menu .main-header-menu-back a {
+  border-radius: 3px 3px 0px 0px;
+  display: block;
+  margin: 0px;
+  padding: 5px;
+  color: #ffffff;
+  background-color: #333333;
+  text-align: center;
+  font-weight: bold;
+  font-size: 12px;
+  font-family: meiryo;
+}
+/* line 531, ../sass/style.scss */
+.header-menu-base .main-header-menu .main-header-menu-back .active-tab {
+  background-color: #9d9d9d;
+}
+/* line 533, ../sass/style.scss */
+.header-menu-base .main-header-menu .main-header-menu-back a:hover {
+  background-color: #666666;
+  text-decoration: none;
+}
+/* line 534, ../sass/style.scss */
+.header-menu-base .main-header-menu .main-header-menu-back a:visited {
+  color: #ffffff;
+}
+/* line 539, ../sass/style.scss */
+.header-menu-base .change-expert-menu {
+  text-align: right;
+  margin-right: 20px;
+}
+/* line 544, ../sass/style.scss */
+.header-menu-base .change-expert-menu button {
+  width: 160px;
+  font-size: x-small;
+}
+
+/* line 553, ../sass/style.scss */
+.active-contents {
+  width: 1024px;
+  min-width: 1024px;
+}
+/* line 557, ../sass/style.scss */
+.active-contents .active-contents-back {
+  border-style: solid;
+  border-width: 3px 0px 3px 0px;
+  padding: 6px;
+  border-color: #9c9c9c;
+  border-radius: 3px;
+  box-shadow: 0px 8px 6px -6px #9c9c9c;
+  margin-bottom: 10px;
+}
+
+/* line 568, ../sass/style.scss */
+.bound-line-spacer {
+  margin: 32px 0px;
+}
+
+
+.room-row {
+  overflow:hidden;
+  box-shadow: 0 10px 6px -6px #cdcdcd;
+}
+
+/* 部屋表示順 */
+.room-row .room-sort-menu-base {
+  float:left;
+  width:70px;
+}
+
+.room-row .room-sort-menu-base .room-sort-menu-base-back {
+  height: 110px;
+  background-color: #ff9966;
+  border: solid 1px #ff9966;
+  border-radius: 3px 0px 0px 3px;
+}
+
+.room-row .room-sort-menu-base .room-sort-menu-base-back .room-sort-menu-base-inline {
+  padding: 4px;
+}
+
+.room-row .room-sort-menu-base .room-sort-menu-base-back .room-sort-menu-base-inline .room-sort-menu-base-contents {
+  border-collapse: collapse;
+  text-align: left;
+  line-height: 18px;
+  font-size: 12px;
+  font-family: meiryo;
+}
+
+.room-row .room-sort-menu-base .room-sort-menu-base-back .room-sort-menu-base-inline .room-sort-menu-base-contents .room-sort-button {
+  width:60px;
+  margin:0;
+}
+
+.room-row .room-sort-menu-base .room-sort-menu-base-back .room-sort-menu-base-inline .room-sort-menu-base-contents .form-group-params {
+  display: inline-block;
+  _display:inline;
+  margin:0;
+  padding:0;
+}
+
+.room-row .room-sort-info {
+  float:left;
+  white-space:nowrap;
+}
+
+.room-row .room-sort-info-room-count-title {
+  background-color:#e6e6e6;
+  padding:4px;
+  font-weight:bold;
+  border: solid;
+  border-width: 1px 0px 1px 1px;
+  border-color: #cccccc;
+  float:left;
+}
+
+.room-row .room-sort-info-room-count-active, .room-sort-info-room-count-deactive {
+  background-color:#ffffff;
+  padding:4px;
+  font-weight:bold;
+  border: solid 1px;
+  border-color: #cccccc;
+  float:left;
+  width:240px;
+  text-align:center;
+}
+
+.room-row .room-sort-info-room-count-deactive {
+  background-color:#f5f5f5;
+}
+
+
+.room-row .room-order-info-room-base {
+  float:left;
+  width: 950px;
+}
+
+.room-row .room-order-info-room-base .room-order-info-room-base-back {
+  height: 110px;
+  background-color: #FFE0B2;
+  border: solid 1px #ff9933;
+  border-radius: 0px 3px 3px 0px;
+}
+
+.room-row .room-order-info-room-base .room-order-info-room-base-back .room-order-info-room-base-inline {
+  padding: 4px;
+}
+
+.room-row .room-order-info-room-base .room-order-info-room-base-back .room-order-info-room-base-inline .room-order-info-room-base-contents {
+  border: solid 1px;
+  border-collapse: collapse;
+  text-align: left;
+  line-height: 18px;
+  font-size: 12px;
+  font-family: meiryo;
+}
+
+/* ソートメニュー */
+.room-group-sort-menu-base {
+  float:left;
+}
+
+.room-group-sort-menu-base .room-group-sort-menu-base-back {
+  padding:4px;
+  border:1px solid #c3c3c3;
+  white-space:nowrap;
+  margin:5px;
+}
+
+.room-group-sort-menu-base .room-group-sort-menu-base-back p {
+  margin: 0;
+  padding:0;
+  font-weight:bold;
+}
+
+/* footer */
+.footer {
+  width:1024px;
+}
+
+
+
+/* 部屋情報（赤い風船在庫） */
+
+.box-title {
+  background-color:#e6e6e6;
+  padding:3px;
+  font-weight:bold;
+  border: solid;
+  border-width: 1px 0px 1px 1px;
+  border-color: #cccccc;
+  float:left;
+  border-radius: 3px 0px 0px 3px;
+}
+
+.box-contents {
+  background-color:#ffffff;
+  padding: 3px 2px;
+  border: solid 1px;
+  border-color: #cccccc;
+  float:left;
+  width:60px;
+  text-align:center;
+  border-radius: 0px 3px 3px 0px;
+}
+
+.info-room-base-akf {
+  width: 35%;
+  box-shadow: 0 10px 6px -6px #cdcdcd;
+}
+.info-room-base-akf .info-room-base-akf-back {
+  background-color: #FFD7D1;
+  border: solid 1px #FF221E;
+  border-radius: 3px;
+}
+.info-room-base-akf .info-room-base-akf-back .info-room-base-akf-inline {
+  height: 90px;
+  padding: 4px;
+}
+
+.info-room-base-br {
+  width: 50%;
+  box-shadow: 0 10px 6px -6px #cdcdcd;
+}
+
+.info-room-base-br .info-room-base-br-back {
+  background-color: #FFE0B2;
+  border: solid 1px #ff9933;
+  border-radius: 3px;
+}
+
+.info-room-base-br .info-room-base-br-back .info-room-base-br-inline {
+  height: 90px;
+  padding: 4px;
+}
+
+.info-room-base-none {
+  width: 50%;
+  box-shadow: 0 10px 6px -6px #cdcdcd;
+}
+
+.info-room-base-none .info-room-base-none-back {
+  border: solid 1px #cccccc;
+  border-radius: 3px;
+}
+
+.info-room-base-none .info-room-base-none-back .info-room-base-none-inline {
+  height: 90px;
+  padding: 4px;
+  text-align: center;
+  line-height: 90px;
+}
+
+.room-relation-connect-exist {
+  background-color: #FFE88E;
+  width: 14%;
+  float: left;
+  margin-top: 36px;
+  text-align: center;
+  padding: 2px 0px;
+}
+
+.room-relation-connect-none {
+  background-color: #DEECF2;
+  width: 14%;
+  float: left;
+  margin-top: 20px;
+  text-align: center;
+  white-space: nowrap;
+  padding: 2px 0px;
+}
+
+.room-spec-list, .guide-text-list {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  list-style-position: outside;
+}
+
+.room-spec-list li {
+  display:block;
+  float:left;
+  white-space:nowrap;
+  margin: 5px 4px 2px 0px;
+}
+
+.guide-text-list li{
+  
+}

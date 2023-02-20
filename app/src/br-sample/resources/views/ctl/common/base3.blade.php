@@ -119,10 +119,12 @@
     ];
 
     // resources/views/ctl/htlsroomoffer/list.blade.php から読み込み時は、変数名が渡される。
-    $is_staff_navi = rand(0, 0);
-    $is_htl_navi = rand(0, 0);
+    $is_staff_navi = 'true';
+    $isStaff = 'true';
+    $is_htl_navi = 'true';
     $is_ptn_navi = rand(0, 0);
-    $is_ctl_menu = rand(0, 0);
+    $is_ctl_menu = 'true';
+    $room_list = [];
     // $title = [null, 'TITLE_' . Str::random(5)][rand(0, 1)];
 @endphp
 
@@ -144,6 +146,10 @@
     {{-- 共通CSS --}}
     {{-- <link type="text/css" rel="stylesheet" href="{{ asset('css/style_base.css?6735-4') }}" /> --}}
     <link type="text/css" rel="stylesheet" href="{{ asset('css/style_base.css') }}" />
+
+    @if ($v->env->controller !== 'htlsroomoffer')
+        <link type="text/css" rel="stylesheet" href="{{ asset('css/style.css') }}" />
+    @endif
 
     {{-- 画面の種類に合わせたCSSを追加で読み込む --}}
     @if ($screen_type === 'br')
@@ -291,12 +297,12 @@
                         【室数・料金・期間の調整】
                     </div>
                 @else
-                    <form action="{{ $v->env->source_path }}{{ $v->env->module }}/htlsroomoffer/" method="post">
+                    {{!! Form::Open(['route' => ['ctl.htlsroomoffer.list'], 'method' => 'post']) !!}}
                         <div class="elm-1st">
                             <input type="hidden" name="target_cd" value="{{ $v->user->hotel->hotel_cd }}" />
                             <input type="submit" value="室数・料金・期間の調整" />
                         </div>
-                    </form>
+                    {{!! Form::close() !!}}
                 @endif
 
                 {{-- プランメンテナンス --}}
@@ -305,12 +311,12 @@
                         【プランメンテナンス】
                     </div>
                 @else
-                    <form action="{{ $v->env->source_path }}{{ $v->env->module }}/htlsroomplan2/list/" method="post">
+                    {{!! Form::Open(['route' => ['ctl.htlsroomplan2.index'], 'method' => 'post']) !!}}
                         <div class="elm">
                             <input type="hidden" name="target_cd" value="{{ $v->user->hotel->hotel_cd }}" />
                             <input type="submit" value="プランメンテナンス" />
                         </div>
-                    </form>
+                    {{!! Form::close() !!}}
                 @endif
 
                 {{-- 予約情報の確認 --}}

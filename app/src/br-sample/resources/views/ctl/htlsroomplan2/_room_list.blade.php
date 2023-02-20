@@ -1,7 +1,5 @@
-{*  引数：$room_list  *}
-{literal}
+<!-- {*  引数：$room_list  *} -->
 <script type="text/javascript">
-  <!--
     $(document).ready(function () {
       $('input.jqs-btn-room-del').click(function(){
          return confirm($('.jqs-room-nm').eq($('input.jqs-btn-room-del').index(this)).text() + '\n\nこの部屋を削除します。\nよろしいですか？');
@@ -33,10 +31,8 @@
         }
       });
     });
-  -->
 </script>
-{/literal}
-<div>
+<div class="align-l">
   <div class="room-list-header">
     <div class="room-list-header-back">
       <div class="room-list-header-text">
@@ -47,7 +43,207 @@
   </div>
   <div class="jqs-room-list">
   <hr class="bound-line" />
-  {if $room_list|@count <= 0}<span class="msg-text-error">登録されている部屋がありません。</span>{/if}
+  @if(!(is_countable($room_list) && 0 < count($room_list)))
+    <span class="msg-text-error">登録されている部屋がありません。</span>
+  @else
+    @foreach($room_list as $room)
+    <div class="info-room-base">
+      <div class="info-room-base-back">
+        <div class="info-room-base-inline">
+          <!-- {* 部屋名 *} -->
+          <div><span class="font-bold jqs-room-nm">{{$room->room_nm}}</span></div>
+          <!-- {* 部屋ラベル *} -->
+          @if(!is_null($room->roomtype_cd))
+            <div>
+              [<span class="label-cd-text">{$room.label_cd}</span>]
+              @if(!is_empty($room.roomtype_cd))
+                &nbsp;[<span class="label-cd-text">{$room.roomtype_cd}</span>]
+              @endif
+            </div>
+          @else
+            <br />
+          @endif
+          <div>
+            <!-- {* 部屋スペック *} -->
+            @include('ctl.common._zap_room_spec_icon')
+          </div>
+          <div class="margin-spacer"></div>
+          <table class="info-room-base-contents">
+            <tr>
+              <th class="align-c">部屋情報</th>
+              <th class="align-c" colspan="2">部屋数</th>
+              <th class="align-c">部屋画像</th>
+              <th class="align-c">部屋休止設定</th>
+              <th class="align-c"><br /></th>
+            </tr>
+            <tr>
+              <!-- button-edit-room -->
+              <td class="align-c">
+                <form action="{$v->env.source_path}{$v->env.module}/htlsroom2/edit/" method="post">
+                  <div>
+                    <input type="hidden" name="target_cd" value="{$room.hotel_cd}" />
+                    <input type="hidden" name="room_id"   value="{$room.room_id}" />
+                    <input type="submit" value="部屋の編集" />
+                  </div>
+                </form>
+              </td>
+              <!-- /button-edit-room -->
+              <!-- info-room-stock -->
+              @if(is_null($room->rooms))
+                <td class="align-c bk-deactive room-stock-status">
+                  <span class="msg-text-error">部屋数の登録が有りません</span>
+                </td>
+                <td class="align-c bk-deactive">
+                  <form action="{$v->env.source_path}{$v->env.module}/htlsroomoffer/edit/" method="post">
+                    <div>
+                      <input type="hidden" name="target_cd"   value="{$room.hotel_cd}" />
+                      <input type="hidden" name="room_id"     value="{$room.room_id}" />
+                      <input type="hidden" name="ui_type"     value="calender" />
+                      <input type="hidden" name="date_ym"     value="{$smarty.now}" />
+                      <input type="hidden" name="current_ymd" value="{$smarty.now}" />
+                      <input type="hidden" name="return_path" value="{$v->env.source_path}{$v->env.module}/{$v->env.controller}/{$v->env.action}/" />
+                      <!-- ユーザの在庫編集可否判定 ログインがntaという継続的接続クッキーを持っているかで判断している -->
+                      @if(true)
+                        <input type="submit" value="部屋数の設定" disabled="disabled" />
+                      @else
+                        <input type="submit" value="部屋数の設定" />
+                      @endif
+                    </div>
+                  </form>
+                </td>
+              @else
+                <td class="align-c room-stock-status">
+                  @include('ctl._common._date')
+                </td>
+                <td class="align-c">
+                  <form action="{$v->env.source_path}{$v->env.module}/htlsroomoffer/edit/" method="post">
+                    <div>
+                      <input type="hidden" name="target_cd"   value="{$room.hotel_cd}" />
+                      <input type="hidden" name="room_id"     value="{$room.room_id}" />
+                      <input type="hidden" name="ui_type"     value="calender" />
+                      <input type="hidden" name="date_ym"     value="{$smarty.now}" />
+                      <input type="hidden" name="current_ymd" value="{$smarty.now}" />
+                      <input type="hidden" name="return_path" value="{$v->env.source_path}{$v->env.module}/{$v->env.controller}/{$v->env.action}/" />
+                      <!-- ユーザの在庫編集可否判定 ログインがntaという継続的接続クッキーを持っているかで判断している -->
+                      @if(true)
+                        <input type="submit" value="部屋数の設定" disabled="disabled" />
+                      @else
+                        <input type="submit" value="部屋数の設定" />
+                      @endif
+                    </div>
+                  </form>
+                </td>
+              @endif
+              <!-- /info-room-stock -->
+              <!-- button-edit-room-stock -->
+              <!-- /button-edit-room-stock -->
+              <!-- button-edit-room-status -->
+              @if(is_null($room->media_no))
+                <td class="align-c bk-deactive">
+                  <form action="{$v->env.source_path}{$v->env.module}/htlsmedia/editroom/" method="post">
+                    <div>
+                      <input type="hidden" name="target_cd" value="{$room.hotel_cd}" />
+                      <input type="hidden" name="room_id"   value="{$room.room_id}" />
+                      <input type="submit" value="画像の設定" />
+                    </div>
+                  </form>
+                </td>
+              @else
+                <td class="align-c">
+                  <form action="{$v->env.source_path}{$v->env.module}/htlsmedia/editroom/" method="post">
+                    <div>
+                      <input type="hidden" name="target_cd" value="{$room.hotel_cd}" />
+                      <input type="hidden" name="room_id"   value="{$room.room_id}" />
+                      <input type="submit" value="画像の設定" />
+                    </div>
+                  </form>
+                </td>
+              @endif
+              <!-- /button-edit-room-status -->
+              <!-- info-room-status -->
+              @php
+                $uri_act = '';
+              @endphp
+              @if($room->accept_status == 0)
+                @php
+                  $uri_act = 'roomsale';
+                @endphp
+                <td class="align-c bk-deactive">
+                  <!-- {* 部屋の販売ステータスで遷移先を制御($uri_act) *} -->
+                  <span class="msg-text-error">部屋休止中</span><br />
+                  <form action="{$v->env.source_path}{$v->env.module}/htlsroomplan2/updateroomaccept/" method="post">
+                    <div>
+                      <input type="hidden" name="target_cd"          value="{$room.hotel_cd}" />
+                      <input type="hidden" name="room_id"            value="{$room.room_id}" />
+                      <input type="hidden" name="accept_status"      value="{if $is_no_accept_room}1{else}0{/if}" />
+                      <input type="hidden" name="search_sale_status" value="{$v->assign->form_params.search_sale_status}" />
+                      @if(!$is_edit_room_sales_state_relo)
+                        <input type="submit" value="休止中を解除" disabled="disabled" />
+                      @else
+                        <input type="submit" value="休止中を解除"/>
+                      @endif
+                    </div>
+                  </form>
+                </td>
+              @else
+                @php
+                  $uri_act = 'roomstop';
+                @endphp
+                <td class="align-c">
+                  <form action="{$v->env.source_path}{$v->env.module}/htlsroomplan2/updateroomaccept/" method="post">
+                    <div>
+                      <input type="hidden" name="target_cd"          value="{$room.hotel_cd}" />
+                      <input type="hidden" name="room_id"            value="{$room.room_id}" />
+                      <input type="hidden" name="accept_status"      value="{if $is_no_accept_room}1{else}0{/if}" />
+                      <input type="hidden" name="search_sale_status" value="{$v->assign->form_params.search_sale_status}" />
+                      @if(true)
+                        <input type="submit" value="休止中に変更" disabled="disabled" />
+                      @else
+                        <input type="submit" value="休止中に変更"/>
+                      @endif
+                    </div>
+                  </form>
+                </td>
+              @endif
+              <!-- /info-room-status -->
+              <!-- button-room-delete -->
+              <!-- 部屋が紐づいているプランが存在するか・ネット在庫・基幹在庫の部屋の削除判定によって分岐している -->
+              @if(!(is_null($room->plan_id) or true))
+                <td class="align-c bk-deactive">
+                  <form action="{$v->env.source_path}{$v->env.module}/htlsroomplan2/hiddenroom/" method="post">
+                    <div>
+                      <input type="hidden" name="target_cd"          value="{$room.hotel_cd}" />
+                      <input type="hidden" name="room_id"            value="{$room.room_id}" />
+                      <input type="hidden" name="search_sale_status" value="{$v->assign->form_params.search_sale_status}" />
+                      <input type="submit" value="部屋の削除" class="jqs-btn-room-del" />
+                    </div>
+                  </form>
+                </td>
+              @else
+                <td class="align-c {if !($is_relation_plan or !$is_delete_room_relo)}bk-deactive{/if}">
+                  <form action="{$v->env.source_path}{$v->env.module}/htlsroomplan2/hiddenroom/" method="post">
+                    <div>
+                      <input type="hidden" name="target_cd"          value="{$room.hotel_cd}" />
+                      <input type="hidden" name="room_id"            value="{$room.room_id}" />
+                      <input type="hidden" name="search_sale_status" value="{$v->assign->form_params.search_sale_status}" />
+                      @if(is_null($room->plan_id))
+                        <input type="submit" value="部屋の削除" class="jqs-btn-room-del" disabled="disabled" />
+                      @else
+                        <input type="submit" value="部屋の削除" class="jqs-btn-room-del" />
+                      @endif
+                    </div>
+                  </form>
+                </td>
+              @endif
+              <!-- /button-room-delete -->
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    @endforeach
+  @endif
+  <!-- {if $room_list|@count <= 0}<span class="msg-text-error">登録されている部屋がありません。</span>{/if}
   {foreach from=$room_list item=room name=loop_room_list}
     {* 在庫数の有無を判定($is_reg_room) true:在庫無, false:在庫あり *}
     {assign var=is_reg_room value=false}
@@ -76,109 +272,7 @@
       {if !$v->user->operator->is_nta()}
         {assign var=is_edit_rooms value=false}
       {/if}
-    {/if}
-    <div class="info-room-base">
-      <div class="info-room-base-back">
-        <div class="info-room-base-inline">
-          {* 部屋名 *}
-          <div><span class="font-bold jqs-room-nm">{$room.room_nm}</span></div>
-          {* 部屋ラベル *}
-          {if $is_disp_room_cd}<div>[<span class="label-cd-text">{$room.label_cd}</span>]{if !is_empty($room.roomtype_cd)}&nbsp;[<span class="label-cd-text">{$room.roomtype_cd}</span>]{/if}</div>
-          {else}<br />
-          {/if}
-          <div>
-            {* 部屋スペック *}
-            {include file=$v->env.module_root|cat:'/view2/_common/_zap_room_spec_icon.tpl' room_spec=$room}
-          </div>
-          <div class="margin-spacer"></div>
-          <table class="info-room-base-contents">
-            <tr>
-              <th class="align-c">部屋情報</th>
-              <th class="align-c" colspan="2">部屋数</th>
-              <th class="align-c">部屋画像</th>
-              <th class="align-c">部屋休止設定</th>
-              <th class="align-c"><br /></th>
-            </tr>
-            <tr>
-              <!-- button-edit-room -->
-              <td class="align-c">
-                <form action="{$v->env.source_path}{$v->env.module}/htlsroom2/edit/" method="post">
-                  <div>
-                    <input type="hidden" name="target_cd" value="{$room.hotel_cd}" />
-                    <input type="hidden" name="room_id"   value="{$room.room_id}" />
-                    <input type="submit" value="部屋の編集" />
-                  </div>
-                </form>
-              </td>
-              <!-- /button-edit-room -->
-              <!-- info-room-stock -->
-              <td class="align-c {if !$is_reg_room}bk-deactive{/if} room-stock-status">
-                {if $is_reg_room}{include file=$v->env.module_root|cat:'/views/_common/_date.tpl' timestamp=$room.last_reg_ymd format='ymd(w)'}まで登録済み
-                {else}<span class="msg-text-error">部屋数の登録が有りません</span>
-                {/if}
-              </td>
-              <!-- /info-room-stock -->
-              <!-- button-edit-room-stock -->
-              <td class="align-c {if !$is_reg_room}bk-deactive{/if}">
-                <form action="{$v->env.source_path}{$v->env.module}/htlsroomoffer/edit/" method="post">
-                  <div>
-                    <input type="hidden" name="target_cd"   value="{$room.hotel_cd}" />
-                    <input type="hidden" name="room_id"     value="{$room.room_id}" />
-                    <input type="hidden" name="ui_type"     value="calender" />
-                    <input type="hidden" name="date_ym"     value="{$smarty.now}" />
-                    <input type="hidden" name="current_ymd" value="{$smarty.now}" />
-                    <input type="hidden" name="return_path" value="{$v->env.source_path}{$v->env.module}/{$v->env.controller}/{$v->env.action}/" />
-                    <input type="submit" value="部屋数の設定" {if !$is_edit_rooms}disabled="disabled"{/if} />
-                  </div>
-                </form>
-              </td>
-              <!-- /button-edit-room-stock -->
-              <!-- button-edit-room-status -->
-              <td class="align-c {if !$is_set_room_media}bk-deactive{/if}">
-                <form action="{$v->env.source_path}{$v->env.module}/htlsmedia/editroom/" method="post">
-                  <div>
-                    <input type="hidden" name="target_cd" value="{$room.hotel_cd}" />
-                    <input type="hidden" name="room_id"   value="{$room.room_id}" />
-                    <input type="submit" value="画像の設定" />
-                  </div>
-                </form>
-              </td>
-              <!-- /button-edit-room-status -->
-              <!-- info-room-status -->
-              <td class="align-c {if $is_no_accept_room}bk-deactive{/if}">
-                {* 部屋の販売ステータスで遷移先を制御($uri_act) *}
-                {assign var=uri_act value=''}
-                {if $is_no_accept_room}{assign var=uri_act value='roomsale'}<span class="msg-text-error">部屋休止中</span><br />
-                {else}{assign var=uri_act value='roomstop'}
-                {/if}
-                <form action="{$v->env.source_path}{$v->env.module}/htlsroomplan2/updateroomaccept/" method="post">
-                  <div>
-                    <input type="hidden" name="target_cd"          value="{$room.hotel_cd}" />
-                    <input type="hidden" name="room_id"            value="{$room.room_id}" />
-                    <input type="hidden" name="accept_status"      value="{if $is_no_accept_room}1{else}0{/if}" />
-                    <input type="hidden" name="search_sale_status" value="{$v->assign->form_params.search_sale_status}" />
-                    <input type="submit" value="{if $is_no_accept_room}休止中を解除{else}休止中に変更{/if}" {if !$is_edit_room_sales_state_relo}disabled="disabled"{/if} />
-                  </div>
-                </form>
-              </td>
-              <!-- /info-room-status -->
-              <!-- button-room-delete -->
-              <td class="align-c {if !($is_relation_plan or !$is_delete_room_relo)}bk-deactive{/if}">
-                <form action="{$v->env.source_path}{$v->env.module}/htlsroomplan2/hiddenroom/" method="post">
-                  <div>
-                    <input type="hidden" name="target_cd"          value="{$room.hotel_cd}" />
-                    <input type="hidden" name="room_id"            value="{$room.room_id}" />
-                    <input type="hidden" name="search_sale_status" value="{$v->assign->form_params.search_sale_status}" />
-                    <input type="submit" value="部屋の削除" class="jqs-btn-room-del" {if $is_relation_plan}disabled="disabled"{/if} />
-                  </div>
-                </form>
-              </td>
-              <!-- /button-room-delete -->
-            </tr>
-          </table>
-        </div>
-      </div>
-    </div>
+    {/if} -->
+  </div>
     <hr class="bound-line" />
-  {/foreach}
 </div>

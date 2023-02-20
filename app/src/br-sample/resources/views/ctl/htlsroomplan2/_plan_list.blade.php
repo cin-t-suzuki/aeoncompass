@@ -1,7 +1,5 @@
-{*  引数：$plan_list  *}
-{literal}
+<!-- {*  引数：$plan_list  *} -->
 <script type="text/javascript">
-  <!--
     $(document).ready(function () {
       $('input.jqs-btn-plan-del').click(function(){
          return confirm($('.jqs-plan-nm').eq($('input.jqs-btn-plan-del').index(this)).text() + '\n\nこのプランを削除します。\nよろしいですか？');
@@ -50,11 +48,9 @@
       });
 
     });
-  -->
 </script>
-{/literal}
 <!-- plan-list -->
-<div>
+<div class="align-l">
   <div class="plan-list-header">
     <div class="plan-list-header-back">
       <div class="plan-list-header-text">
@@ -70,9 +66,9 @@
         <div>
           <span class="align-l">
             <input type="hidden" name="target_cd" value="{$v->assign->form_params.target_cd}" />
-            <input type="radio" id="spfs_0" name="search_sale_status" value="9" {if $v->assign->form_params.search_sale_status == 9}checked="checked"{/if} /><label for="spfs_0">すべてのプラン</label>
-            <input type="radio" id="spfs_1" name="search_sale_status" value="1" {if $v->assign->form_params.search_sale_status == 1}checked="checked"{/if} /><label for="spfs_1">設定済のプラン</label>
-            <input type="radio" id="spfs_2" name="search_sale_status" value="2" {if $v->assign->form_params.search_sale_status == 2}checked="checked"{/if} /><label for="spfs_2">非販売のプラン</label>
+            <input type="radio" id="spfs_0" name="search_sale_status" value="9" {{ old('search_sale_status') == '9' ? 'checked' : ''}} /><label for="spfs_0">すべてのプラン</label>
+            <input type="radio" id="spfs_1" name="search_sale_status" value="1" {{ old('search_sale_status') == '1' ? 'checked' : ''}} /><label for="spfs_1">設定済のプラン</label>
+            <input type="radio" id="spfs_2" name="search_sale_status" value="2" {{ old('search_sale_status') == '2' ? 'checked' : ''}} /><label for="spfs_2">非販売のプラン</label>
           </span>
           <span class="display-btn align-r"><input type="submit" value="表示" /></span>
         </div>
@@ -80,11 +76,14 @@
     </div>
     <hr class="bound-line" />
     <!-- /search-box -->
-    {if $plan_list|@count <= 0}<span class="msg-text-error">表示対象のプランが見つかりませんでした。</span>{/if}
-    {foreach from=$plan_list.plans item=plan name=loop_plan_list}
-      {include file=$v->env.module_root|cat:'/view2/_common/_info_plan.tpl' plan=$plan}
-      <hr class="bound-line" />
-    {/foreach}
+    @if(0 < count($plan_list))
+      @foreach($plan_list as $plan)
+        @include('ctl.common._info_plan')
+        <hr class="bound-line" />
+      @endforeach
+    @else
+      <span class="msg-text-error">表示対象のプランが見つかりませんでした。</span>
+    @endif
   </div>
   <hr class="bound-line" />
 </div>
