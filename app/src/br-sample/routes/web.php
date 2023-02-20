@@ -309,3 +309,6 @@ Route::get('/ctl/brreserveck/search', [\App\Http\Controllers\ctl\BrReserveCkCont
 Route::post('/ctl/brreserveck/update', [\App\Http\Controllers\ctl\BrReserveCkController::class, 'update'])->name('ctl.brReserveCk.update');
 Route::get('/ctl/brreserveck/reserveck', [\App\Http\Controllers\ctl\BrReserveCkController::class, 'reserveck'])->name('ctl.brReserveCk.reserveck');
 Route::get('/dl/reserveck.csv', [\App\Http\Controllers\ctl\BrReserveCkController::class, 'csv'])->name('ctl.dl.reserveck'); //CSV　パス、URL合っている？
+
+// 送客請求実績確認
+Route::get('/ctl/brdemandresult/list', [\App\Http\Controllers\ctl\BrDemandResultController::class, 'list'])->name('ctl.BrDemandResult.list');
