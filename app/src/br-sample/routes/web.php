@@ -231,34 +231,22 @@ Route::post('/ctl/brhoteladvert2009000400/edit', [\App\Http\Controllers\ctl\Brho
 Route::post('/ctl/brhoteladvert2009000400/update', [\App\Http\Controllers\ctl\BrhotelAdvert2009000400Controller::class, 'update'])->name('ctl.brhoteladvert2009000400.update'); //更新
 
 // 注目文言管理
-Route::get('/ctl/brattention/index', [\App\Http\Controllers\ctl\BrAttentionController::class, 'list'])
-    ->name('ctl.brAttention.list');
-Route::get('/ctl/brattention/edit', [\App\Http\Controllers\ctl\BrAttentionController::class, 'edit'])
-    ->name('ctl.brAttention.edit');
-Route::post('/ctl/brattention/update', [\App\Http\Controllers\ctl\BrAttentionController::class, 'update'])
-    ->name('ctl.brAttention.update');
-Route::get('/ctl/brattention/new', [\App\Http\Controllers\ctl\BrAttentionController::class, 'new'])
-    ->name('ctl.brAttention.new');
-Route::post('/ctl/brattention/create', [\App\Http\Controllers\ctl\BrAttentionController::class, 'create'])
-    ->name('ctl.brAttention.create');
-Route::post('/ctl/brattention/change', [\App\Http\Controllers\ctl\BrAttentionController::class, 'change'])
-    ->name('ctl.brAttention.change');
+Route::get('/ctl/brattention/index', [\App\Http\Controllers\ctl\BrAttentionController::class, 'list'])->name('ctl.brAttention.list');
+Route::get('/ctl/brattention/edit', [\App\Http\Controllers\ctl\BrAttentionController::class, 'edit'])->name('ctl.brAttention.edit');
+Route::post('/ctl/brattention/update', [\App\Http\Controllers\ctl\BrAttentionController::class, 'update'])->name('ctl.brAttention.update');
+Route::get('/ctl/brattention/new', [\App\Http\Controllers\ctl\BrAttentionController::class, 'new'])->name('ctl.brAttention.new');
+Route::post('/ctl/brattention/create', [\App\Http\Controllers\ctl\BrAttentionController::class, 'create'])->name('ctl.brAttention.create');
+Route::post('/ctl/brattention/change', [\App\Http\Controllers\ctl\BrAttentionController::class, 'change'])->name('ctl.brAttention.change');
 
 // お天気保証
-Route::get('/ctl/brinsuranceweather/', [\App\Http\Controllers\ctl\BrInsuranceWeatherController::class, 'index'])
-    ->name('ctl.brInsuranceWeather.index');
-Route::post('/ctl/brinsuranceweather/updatecondition', [\App\Http\Controllers\ctl\BrInsuranceWeatherController::class, 'updatecondition'])
-    ->name('ctl.brInsuranceWeather.updatecondition');
+Route::get('/ctl/brinsuranceweather/', [\App\Http\Controllers\ctl\BrInsuranceWeatherController::class, 'index'])->name('ctl.brInsuranceWeather.index');
+Route::post('/ctl/brinsuranceweather/updatecondition', [\App\Http\Controllers\ctl\BrInsuranceWeatherController::class, 'updatecondition'])->name('ctl.brInsuranceWeather.updatecondition');
 
 // パートナー精算確認
-Route::get('/ctl/brbillpayptn/list', [\App\Http\Controllers\ctl\BrBillPayPtnController::class, 'list'])
-    ->name('ctl.brBillpayPtn.list');
-Route::get('/ctl/brbillpayptn/customer', [\App\Http\Controllers\ctl\BrBillPayPtnController::class, 'customer'])
-    ->name('ctl.brBillpayPtn.customer');
-Route::get('/ctl/brbillpayptn/detail', [\App\Http\Controllers\ctl\BrBillPayPtnController::class, 'detail'])
-    ->name('ctl.brBillpayPtn.detail');
-Route::get('/ctl/brbillpayptn/csv', [\App\Http\Controllers\ctl\BrBillPayPtnController::class, 'csv'])
-    ->name('ctl.brBillpayPtn.csv');
+Route::get('/ctl/brbillpayptn/list', [\App\Http\Controllers\ctl\BrBillPayPtnController::class, 'list'])->name('ctl.brBillpayPtn.list');
+Route::get('/ctl/brbillpayptn/customer', [\App\Http\Controllers\ctl\BrBillPayPtnController::class, 'customer'])->name('ctl.brBillpayPtn.customer');
+Route::get('/ctl/brbillpayptn/detail', [\App\Http\Controllers\ctl\BrBillPayPtnController::class, 'detail'])->name('ctl.brBillpayPtn.detail');
+Route::get('/ctl/brbillpayptn/csv', [\App\Http\Controllers\ctl\BrBillPayPtnController::class, 'csv'])->name('ctl.brBillpayPtn.csv');
 
 // 参考として一応残す。
 // Route::namespace('App\Http\Controllers\ctl')->prefix('ctl')->group(function () {
@@ -303,3 +291,5 @@ Route::post('/ctl/brCustomer/csv', function () {return 'TODO'; })->name('ctl.brC
 Route::match(['get', 'post'], '/ctl/htlHotelCard/show/', [\App\Http\Controllers\ctl\HtlHotelCardController::class, 'show'])->name('ctl.htl_hotel_card.show');
 Route::match(['get', 'post'], '/ctl/htlHotelCard/update/', [\App\Http\Controllers\ctl\HtlHotelCardController::class, 'update'])->name('ctl.htl_hotel_card.update');
 
+// アフィリエイト管理
+Route::get('/ctl/braffiliate/', [\App\Http\Controllers\ctl\BrAffiliateController::class, 'list'])->name('ctl.brAffiliate.list');
