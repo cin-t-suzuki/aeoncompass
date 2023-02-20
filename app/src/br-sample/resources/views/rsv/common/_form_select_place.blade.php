@@ -3,32 +3,41 @@
 {{-- MEMO: 移植元 public\app\rsv\view2\_common\_form_select_place.tpl --}}
 
 <select name="place_p" size="1">
-    {foreach from=$v->assign->search_condition.form.prefs item=prefs}
-    <option value="{$prefs.place}"{if $prefs.current_status} selected="selected"{/if}>{$prefs.place_nm}</option>
-    {/foreach}
+    @foreach ($search_condition['form']['prefs'] as $prefs)
+        <option value="{{ $prefs['place'] }}" {{ $prefs['current_status'] ? 'selected' : '' }}>
+            {{ $prefs['place_nm'] }}
+        </option>
+    @endforeach
 </select>
-{if (is_empty($v->assign->search_condition.form.cws)) }
-<br />
-<span>
-    <select name="place_ms" style="width:200px;" size="1">
-        {foreach from=$v->assign->search_condition.form.areas item=areas}
-        <option value="{$areas.place}"{if $areas.current_status} selected="selected"{/if}>{$areas.place_nm}</option>
-        {/foreach}
-    </select>
-</span>
-{else}
-<span>
-    <select name="place_ms" style="width:140px;" size="1">
-        {foreach from=$v->assign->search_condition.form.areas item=areas}
-        <option value="{$areas.place}"{if $areas.current_status} selected="selected"{/if}>{$areas.place_nm}</option>
-        {/foreach}
-    </select>
-</span>
-<span>
-    <select name="place_cw" style="width:140px;" size="1">
-        {foreach from=$v->assign->search_condition.form.cws item=cws}
-        <option value="{$cws.place}"{if $cws.current_status} selected="selected"{/if}>{$cws.place_nm}</option>
-        {/foreach}
-    </select>
-</span>
-{/if}
+@if (is_null($search_condition['form']['cws']))
+    {{-- MEMO: ↑↑↑ もとは is_empty --}}
+    <br />
+    <span>
+        <select name="place_ms" style="width:200px;" size="1">
+            @foreach ($search_condition['form']['areas'] as $area)
+                <option value="{{ $area['place'] }}" {{ $area['current_status'] ? 'selected' : '' }}>
+                    {{ $area['place_nm'] }}
+                </option>
+            @endforeach
+        </select>
+    </span>
+@else
+    <span>
+        <select name="place_ms" style="width:140px;" size="1">
+            @foreach ($search_condition['form']['areas'] as $area)
+                <option value="{{ $area['place'] }}" {{ $area['current_status'] ? 'selected' : '' }}>
+                    {{ $area['place_nm'] }}
+                </option>
+            @endforeach
+        </select>
+    </span>
+    <span>
+        <select name="place_cw" style="width:140px;" size="1">
+            @foreach ($search_condition['form']['cws'] as $cws)
+                <option value="{{ $cws['place'] }}" {{ $cws['current_status'] ? 'selected' : '' }}>
+                    {{ $cws['place_nm'] }}
+                </option>
+            @endforeach
+        </select>
+    </span>
+@endif

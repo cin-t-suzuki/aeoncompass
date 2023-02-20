@@ -86,8 +86,9 @@
                             ])
 
                             {{-- ホテル検索 --}}
+                            {{-- MEMO: 移植元ソースでコメントアウト --}}
                             {{-- {include file='./_form_hotel.tpl'} --}}
-                            @include('rsv.top._form_hotel')
+                            {{-- @include('rsv.top._form_hotel') --}}
                         </td>
                         <td class="top-layout2" colspan="2">
                             {{-- メインバナー --}}
@@ -107,11 +108,13 @@
                             @include('rsv.top._link_station')
 
                             {{-- ランドマーク検索 --}}
+                            {{-- MEMO: 移植元ソースでコメントアウト --}}
                             {{-- include file='./_link_landmark.tpl' --}}
-                            @include('rsv.top._link_landmark')
+                            {{-- @include('rsv.top._link_landmark') --}}
+
                             <div class="sfm-extra">
                                 {{-- Go To トラベル キャンペーン --}}
-                                <a id="sfm-extra-atag-id" href="{$v->env.path_base}/campaign/goto/" title="Go To トラベル キャンペーン">
+                                <a id="sfm-extra-atag-id" href="/campaign/goto/" title="Go To トラベル キャンペーン">
                                     <img src="/img/tpc/banner-goto-306-159-2.gif" alt="Go To トラベル キャンペーン" />
                                 </a>
                             </div>

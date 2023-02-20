@@ -4,7 +4,8 @@
 
 <div class="sfm-landmark">
     <div class="sfm-landmark-inner">
-        {{-- <a href="{$v->env.path_base_module}/landmark/">ランドマーク検索</a> --}}
-        <img src="{$v->env.path_img}/tpc/teaser-landmark.gif" />
+        {{-- MEMO: 移植元ソースでコメントアウト --}}
+        {{-- <a href="/rsv/landmark/">ランドマーク検索</a> --}}
+        <img src="/img/tpc/teaser-landmark.gif" />
     </div>
 </div>

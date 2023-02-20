@@ -25,9 +25,7 @@ Route::get('/rsv/auth', [\App\Http\Controllers\rsv\AuthController::class, 'index
 Route::post('/rsv/auth', [\App\Http\Controllers\rsv\AuthController::class, 'login'])->name('rsv.auth.login.authenticate');
 Route::get('/rsv/auth/logout', [\App\Http\Controllers\rsv\AuthController::class, 'logout'])->name('rsv.auth.logout');
 
-Route::get('/rsv/top', function () {
-    return view('rsv.top.index');
-})->name('rsv.top');
+Route::get('/rsv/top', [\App\Http\Controllers\rsv\TopController::class, 'index'])->name('rsv.top');
 Route::namespace('App\Http\Controllers\rsv')->prefix('rsv')->group(function () {
     // 施設情報
     Route::controller(HotelController::class)->prefix("hotel")->group(function () {
@@ -47,6 +45,11 @@ Route::get('/guide/visitor', function () {return 'TODO: 初めての方へ'; })-
 Route::post('/auth/eplogin', function () {return 'TODO: EPARK ログイン'; })->name('rsv.auth.eplogin.authenticate');
 Route::get('/rsv/reminder', function () {return 'TODO: 会員コード・パスワードをお忘れの方'; })->name('rsv.reminder');
 Route::get('/member/withdraw4', function () {return 'TODO: 会員コード・パスワードをお忘れの方'; })->name('rsv.reminder.withdraw4'); // magic number
+Route::get('/keywords', function (\Illuminate\Http\Request  $request) {var_dump($request->input()); return 'TODO: キーワード検索結果'; })->name('rsv.keywords.search');
+Route::get('/rsv/hotelList/search', function () {return 'TODO: ホテル名検索結果'; })->name('rsv.hotel.list.search');
+Route::get('/area/{area_id}', function ($areaId) {return 'TODO: ホテルエリア検索画面: area_id -> ' . $areaId; })->name('rsv.area');
+Route::get('/station', function () {return 'TODO: 駅検索画面'; })->name('rsv.station.index');
+Route::get('/station/{station_id}', function ($stationId) {return 'TODO: 駅検索画面: station_id -> ' . $stationId; })->name('rsv.station.search');
 /**
  * ↑↑↑ 宿泊予約 未実装の route
  */

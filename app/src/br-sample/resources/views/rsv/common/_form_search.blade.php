@@ -1,24 +1,41 @@
-{{-- TODO: --}}
-
 {{-- MEMO: 移植元 public\app\rsv\view2\_common\_form_search.tpl --}}
 
-{strip}
-{if !is_empty($v->assign->piece.hotels.0.hotel_cd)}
-{assign var=ihotel value=$v->assign->piece.hotels.0}
-{assign var=vhotel value=$v->assign->values.hotels[$ihotel.hotel_cd]}
-<div style="margin:20px 20px 20px 10px;">
-    {assign var=ihotel value=$v->assign->piece.hotels.0}
-    {assign var=vhotel value=$v->assign->values.hotels[$ihotel.hotel_cd]}
-    <div style="padding: 0 0 0 46px;background:url({$v->env.root_path}img/lhd/lhd-hotel.gif) left top no-repeat;">{$vhotel.hotel_nm}</div>
-    {if !is_empty($ihotel.plans.0.plan_id)}
-    {assign var=iplan value=$ihotel.plans.0}
-    {assign var=iroom value=$iplan.plan_rooms.0}
-    {assign var=vplan value=$vhotel.plans[$iplan.plan_id]}
-    {assign var=vroom value=$vhotel.rooms[$iroom.room_id]}
-    <div class="sfm-plan_nm" style="margin-top:0.5em;padding: 0 0 0 46px;background:url({$v->env.root_path}img/lhd/lhd-plan.gif) left top no-repeat;color:#005e8e">{$vplan.plan_nm}{if !is_empty($vroom.room_nm)}［{$vroom.room_nm}］{/if}</div>
-    {/if}
-</div>
-{/if}
+@php
+    // TODO: 誤魔化し実装 to be deleted
+    $vhotel = ['jrc_hotel_cd' => null];
+@endphp
+@if (!is_null($piece['hotels'][0]['hotel_cd']))
+    {{-- MEMO: ↑↑↑ もとは is_empty() --}}
+    @php
+        $ihotel = $piece['hotels'][0];
+        $vhotel = $values['hotels'][$ihotel['hotel_cd']];
+    @endphp
+    <div style="margin:20px 20px 20px 10px;">
+        @php
+            $ihotel = $piece['hotels'][0];
+            $vhotel = $values['hotels'][$ihotel['hotel_cd']];
+        @endphp
+        <div style="padding: 0 0 0 46px;background:url(/img/lhd/lhd-hotel.gif) left top no-repeat;">
+            {{ $vhotel['hotel_nm'] }}
+        </div>
+        @if (!is_null($ihotel['plans'][0]['plan_id']))
+            {{-- MEMO: ↑↑↑ もとは is_empty() --}}
+            @php
+                $iplan = $ihotel['plans'][0];
+                $iroom = $iplan['plan_rooms'][0];
+                $vplan = $vhotel['plans'][$iplan['plan_id']];
+                $vroom = $vhotel['rooms'][$iroom['room_id']];
+            @endphp
+            <div class="sfm-plan_nm" style="margin-top:0.5em;padding: 0 0 0 46px;background:url(/img/lhd/lhd-plan.gif) left top no-repeat;color:#005e8e">
+                {{ $vplan['plan_nm'] }}
+                @if (!is_null($vroom['room_nm']))
+                    {{-- MEMO: ↑↑↑ もとは is_empty() --}}
+                    ［{{ $vroom['room_nm'] }}］
+                @endif
+            </div>
+        @endif
+    </div>
+@endif
 {{-- -------------------------------------------------------------------------- --}}
 {{-- このテンプレートを修正した場合、以下の点に注意してください --}}
 {{-- --}}
@@ -27,81 +44,79 @@
 {{-- ローカル環境(PC)の時間を変更し深夜時間のデザインを確認、ラジオボタンを --}}
 {{-- クリックし、表示の切り替え確認、この2点を必ず確認してください。 --}}
 {{-- -------------------------------------------------------------------------- --}}
-{if !is_empty($v->assign->piece.hotels.0.hotel_cd)}<div style="margin:0 auto;width:344px;">{/if}
-    <div class="sfm-search">
-        <div class="sfm-cat-box">
-            <ul class="clearfix">
-                {{-- 国内宿泊 --}}
+@if (!is_null($piece['hotels'][0]['hotel_cd']))
+    {{-- MEMO: ↑↑↑ もとは is_empty() --}}
+    <div style="margin:0 auto;width:344px;">
+@endif
+<div class="sfm-search">
+    <div class="sfm-cat-box">
+        <ul class="clearfix">
+            {{-- 国内宿泊 --}}
+            <li>
+                <input class="btnimg jqs-tab {{ 'tab-normal2' . $bgcolor . (!$search_condition['form']['midnight']['current_status'] ? 'current' : '') }}" id="sfm-radio01" name="search-cat" type="radio" value="normal" {{ !$search_condition['form']['midnight']['current_status'] ? 'checked' : '' }}>
+                <label for="sfm-radio01">国内宿泊</label>
+            </li>
+            {{-- 今すぐ泊まれる宿 --}}
+            @if ($search_condition['form']['midnight'])
                 <li>
-                    <input id="sfm-radio01" name="search-cat" type="radio" value="normal" {if !$v->assign->search_condition.form.midnight.current_status} checked="checked"{/if} class="btnimg jqs-tab tab-normal2{$bgcolor}{if !$v->assign->search_condition.form.midnight.current_status} current{/if}">
-                    <label for="sfm-radio01">国内宿泊</label>
+                    <input class="btnimg jqs-tab {{ 'tab-today' . $bgcolor . ($search_condition['form']['midnight']['current_status'] ? 'current' : '') }}" id="sfm-radio06" name="search-cat" type="radio" value="today" {{ $search_condition['form']['midnight']['current_status'] ? 'checked' : '' }} @if (!$search_condition['form']['midnight']['current_status']) style="display: none;" @endif>
+                    <label for="sfm-radio06" @if (!$search_condition['form']['midnight']['current_status']) style="display: none;" @endif>今すぐ泊まれる宿</label>
                 </li>
-                {{-- 今すぐ泊まれる宿 --}}
-                {if $v->assign->search_condition.form.midnight}
-                <li>
-                    <input id="sfm-radio06" name="search-cat" type="radio" value="today" {if $v->assign->search_condition.form.midnight.current_status} checked="checked"{/if} class="btnimg jqs-tab tab-today{$bgcolor}{if $v->assign->search_condition.form.midnight.current_status} current{/if}"{if !$v->assign->search_condition.form.midnight.current_status} style="display: none;"{/if}>
-                    <label for="sfm-radio06" {if !$v->assign->search_condition.form.midnight.current_status} style="display: none;"{/if}>今すぐ泊まれる宿</label>
-                </li>
-                {/if}
-                {{-- JR＋宿泊 --}}
-                {if ($vhotel.jrc_hotel_cd or is_empty($v->assign->piece.hotels.0.hotel_cd))}
+            @endif
+            {{-- JR＋宿泊 --}}
+            @if ($vhotel['jrc_hotel_cd'] || is_null($piece['hotels'][0]['hotel_cd']))
+                {{-- MEMO: ↑↑↑ もとは is_empty() --}}
                 <li class="jqs-jrc">
-                    <input class="btnimg jqs-tab tab-jrc{$bgcolor}" id="sfm-radio02" name="search-cat" type="radio" value="jrc">
+                    <input class="btnimg jqs-tab {{ 'tab-jrc' . $bgcolor }}" id="sfm-radio02" name="search-cat" type="radio" value="jrc">
                     <label name="search-cat" for="sfm-radio02">JR＋宿泊</label>
                 </li>
-                {/if}
-                {{-- ベストプライスルーム --}}
-                {{-- {if (!is_empty($isTop) and $isTop == 'true' and !$v->assign->search_condition.form.midnight.current_status)}
-                <li>
-                    <input class="btnimg jqs-tab jqs-bestprice tab-bestprice{$bgcolor}" id="sfm-radio03" name="search-cat" type="radio" value="bestprice">
-                    <label for="sfm-radio03">ベストプライスルーム</label>
-                </li>
-                {/if} --}}
-                {if (!is_empty($isTop) and $isTop == 'true' and !$v->assign->search_condition.form.midnight.current_status)}
-                {{-- レンタカー予約 --}}
-                {{-- <li>
-                    <input id="sfm-radio05" name="search-cat" type="radio" value="rentcar" onclick="window.location.href = '{$v->env.path_base}/rentacar/'">
-                    <label for="sfm-radio05">レンタカー予約</label>
-                </li> --}}
+            @endif
+            @if (!is_null($isTop) && $isTop && !$search_condition['form']['midnight']['current_status'])
+                {{-- MEMO: ↑↑↑ もとは is_empty() --}}
                 {{-- 高速バス予約 --}}
                 <li>
-                    <input class="jqs-tabLink" id="sfm-radio04" name="search-cat" type="radio" value="bus" onclick="window.open('{$v->env.path_base}/ro/tabiplaza-bus/')">
+                    <input class="jqs-tabLink" id="sfm-radio04" name="search-cat" type="radio" value="bus" onclick="window.open('/ro/tabiplaza-bus/')">
                     <label for="sfm-radio04">高速バス予約</label>
                 </li>
-                {/if}
-            </ul>
-        </div>
-        {{-- 国内宿泊 --}}
-        <div class="sfm-normal2{$bgcolor}{if (!is_empty($v->assign->piece.hotels.0.hotel_cd))}s{/if}" name="search-cat_normal_box"{if $v->assign->search_condition.form.midnight.current_status} style="display: none;"{/if}>
-            <div class="sfm-normal2{$bgcolor}{if (!is_empty($v->assign->piece.hotels.0.hotel_cd))}s{/if}-inner">
-                {include file='../_common/_form_search_normal.tpl'}
-            </div>
-        </div>
-        {{-- 今すぐ泊まれる宿 --}}
-        {if $v->assign->search_condition.form.midnight}
-        <div class="sfm-today{$bgcolor}{if (!is_empty($v->assign->piece.hotels.0.hotel_cd))}s{/if}" name="search-cat_today_box"{if !$v->assign->search_condition.form.midnight.current_status} style="display: none;"{/if}>
-            <div class="sfm-today{$bgcolor}{if (!is_empty($v->assign->piece.hotels.0.hotel_cd))}s{/if}-inner">
-                {include file='../_common/_form_search_today.tpl'}
-            </div>
-        </div>
-        {/if}
-        {{-- ＪＲ＋宿泊 --}}
-        {if ($vhotel.jrc_hotel_cd or is_empty($v->assign->piece.hotels.0.hotel_cd))}
-        <div class="sfm-jrc{$bgcolor}{if (!is_empty($v->assign->piece.hotels.0.hotel_cd))}s{/if}" name="search-cat_jrc_box" style="display: none;">
-            <div class="sfm-jrc{$bgcolor}{if (!is_empty($v->assign->piece.hotels.0.hotel_cd))}s{/if}-inner">
-                {include file='../_common/_form_search_jrc.tpl'}
-            </div>
-        </div>
-        {/if}
-        {{-- ベストプライスルーム --}}
-        {{-- {if (!is_empty($isTop) and $isTop and !$v->assign->search_condition.form.midnight.current_status)}
-        <div class="sfm-bestprice" name="search-cat_bestprice_box" style="display: none;">
-            <div class="sfm-bestprice-inner">
-                {include file='../_common/_form_search_bestprice.tpl'}
-            </div>
-        </div>
-        {/if} --}}
+            @endif
+        </ul>
     </div>
-    {if !is_empty($v->assign->piece.hotels.0.hotel_cd)}
-</div>{/if}
-{/strip}
+    {{-- 国内宿泊 --}}
+    <div class="{{ 'sfm-normal2' . $bgcolor . (!is_null($piece['hotels'][0]['hotel_cd']) ? 's' : '') }} " name="search-cat_normal_box" @if ($search_condition['form']['midnight']['current_status']) style="display: none;" @endif>
+        {{-- MEMO: ↑↑↑ もとは is_empty() --}}
+        <div class="{{ 'sfm-normal2' . $bgcolor . (!is_null($piece['hotels'][0]['hotel_cd']) ? 's' : '') . '-inner' }}">
+            {{-- MEMO: ↑↑↑ もとは is_empty() --}}
+            {{-- {include file='../_common/_form_search_normal.tpl'} --}}
+            @include('rsv.common._form_search_normal')
+        </div>
+    </div>
+    {{-- 今すぐ泊まれる宿 --}}
+    @if ($search_condition['form']['midnight'])
+        <div class="{{ 'sfm-today' . $bgcolor . (!is_null($piece['hotels'][0]['hotel_cd']) ? 's' : '') }}" name="search-cat_today_box" @if (!$search_condition['form']['midnight']['current_status']) style="display: none;" @endif>
+            {{-- MEMO: ↑↑↑ もとは is_empty() --}}
+            <div class="{{ 'sfm-today' . $bgcolor . (!is_null($piece['hotels'][0]['hotel_cd']) ? 's' : '') . '-inner' }}">
+                {{-- MEMO: ↑↑↑ もとは is_empty() --}}
+                {{-- {include file='../_common/_form_search_today.tpl'} --}}
+                @include('rsv.common._form_search_today')
+            </div>
+        </div>
+    @endif
+
+    {{-- ＪＲ＋宿泊 --}}
+    {{-- TODO: ラジオボタンで表示が切り替わらない。 --}}
+    @if ($vhotel['jrc_hotel_cd'] || is_null($piece['hotels'][0]['hotel_cd']))
+        {{-- MEMO: ↑↑↑ もとは is_empty() --}}
+        <div class="{{ 'sfm-jrc' . $bgcolor . (!is_null($piece['hotels'][0]['hotel_cd']) ? 's' : '') }} " name="search-cat_jrc_box" style="display: none;">
+            {{-- MEMO: ↑↑↑ もとは is_empty() --}}
+            <div class="{{ 'sfm-jrc' . $bgcolor . (!is_null($piece['hotels'][0]['hotel_cd']) ? 's' : '') . '-inner' }}">
+                {{-- MEMO: ↑↑↑ もとは is_empty() --}}
+                {{-- {include file='../_common/_form_search_jrc.tpl'} --}}
+                @include('rsv.common._form_search_jrc')
+            </div>
+        </div>
+    @endif
+</div>
+@if (!is_null($piece['hotels'][0]['hotel_cd']))
+    {{-- MEMO: ↑↑↑ もとは is_empty() --}}
+    </div>
+@endif
