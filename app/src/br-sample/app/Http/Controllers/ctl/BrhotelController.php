@@ -130,8 +130,7 @@ class BrhotelController extends _commonController
 		// 登録されているかの判断
 		$isRegistHotelSurvey = false;
 		$hotelSurveyData = (new HotelSurvey())->selectByKey($hotelCd);
-		if (count($hotelSurveyData) != 0
-		){
+        if (!is_null($hotelSurveyData)) {
 			$isRegistHotelSurvey = true;
 		}
 
@@ -145,7 +144,7 @@ class BrhotelController extends _commonController
 		$hotelMscInfoData = (new HotelMscLogin)->getMscUsageSituation($hotelCd);
 
 		$this->addViewData("target_cd", $hotelCd);
-		$this->addViewData("customer_hotel", $customerHotelData['values'][0]);
+        $this->addViewData("customer_hotel", $customerHotelData['values'][0] ?? []);
 
 		$this->addViewData("hotel_regist", $isRegistHotel);
 		$this->addViewData("hotel_management_regist", $isRegistHotelManagement);
