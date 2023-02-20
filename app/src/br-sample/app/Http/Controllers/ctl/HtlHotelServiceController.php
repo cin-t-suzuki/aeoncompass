@@ -12,55 +12,55 @@ use App\Http\Requests\HtlHotelServiceRequest;
 
 class HtlHotelServiceController extends _commonController
 {
-    // 一覧
+    /**
+     * 一覧
+     */
     public function list(Request $request)
     {
-        // ターゲットコード
         $target_cd = $request->input('target_cd');
 
-        try {
-            // 施設要素マスタを取得
-            $a_hotel_elements['values'] = $this->getHotelElements(['element_type' => 'service']);
+        // 施設要素マスタを取得
+        $a_hotel_elements['values'] = $this->getHotelElements(['element_type' => 'service']);
 
-            // サービス情報取得
-            $a_hotel_service['values'] = $this->getHotelServices($target_cd);
+        // サービス情報取得
+        $a_hotel_service['values'] = $this->getHotelServices($target_cd);
 
-            foreach ($a_hotel_elements['values'] as $elementskey => $elementsvalue) {
-                if (!empty($a_hotel_service['values'])) {
-                    foreach ($a_hotel_service['values'] as $servicekey => $servicevalue) {
-                        if ($servicevalue->element_id == $elementsvalue->element_id) {
-                            $a_hotel_elements['values'][$elementskey]->servicevalue = $servicevalue->element_value_id;
-                            break;
-                        } else {
-                            $a_hotel_elements['values'][$elementskey]->servicevalue = 0;
-                        }
+        foreach ($a_hotel_elements['values'] as $elementskey => $elementsvalue) {
+            if (!empty($a_hotel_service['values'])) {
+                foreach ($a_hotel_service['values'] as $servicekey => $servicevalue) {
+                    if ($servicevalue->element_id == $elementsvalue->element_id) {
+                        $a_hotel_elements['values'][$elementskey]->servicevalue = $servicevalue->element_value_id;
+                        break;
+                    } else {
+                        $a_hotel_elements['values'][$elementskey]->servicevalue = 0;
                     }
-                } else {
-                    $a_hotel_elements['values'][$elementskey]->servicevalue = 0;
                 }
+            } else {
+                $a_hotel_elements['values'][$elementskey]->servicevalue = 0;
             }
-
-            // バリデーションエラー時はエラーメッセージ取得
-            $errors = $request->session()->get('errors', []);
-
-            return view('ctl.htlhotelservice.list', [
-                'target_cd'               => $target_cd,                // ターゲットコード
-                'hotel_service'           => $a_hotel_elements,         // エレメント情報
-                'errors'                  => $errors
-            ]);
-
-            // 各メソッドで Exception が投げられた場合
-        } catch (Exception $e) {
-            throw $e;
         }
+
+        // バリデーションエラー時はエラーメッセージ取得
+        $errors = $request->session()->get('errors', []);
+
+        return view('ctl.htlhotelservice.list', [
+            'target_cd'               => $target_cd,                // ターゲットコード
+            'hotel_service'           => $a_hotel_elements,         // エレメント情報
+            'errors'                  => $errors
+        ]);
     }
-    // 新規登録処理
+
+    /**
+     *新規登録処理
+     *
+     * @param HtlHotelServiceRequest $request
+     * @return \Illuminate\Http\Response
+     */
     public function create(HtlHotelServiceRequest $request)
     {
-        // ターゲットコード
         $target_cd = $request->input('target_cd');
-        // リクエストパラメータの取得
         $a_chk = $request->input('HotelService');
+        $actionCd = $this->getActionCd();
 
         // 施設要素マスタを取得
         $a_hotel_elements['values'] = $this->getHotelElements(['element_type' => 'service']);
@@ -84,13 +84,13 @@ class HtlHotelServiceController extends _commonController
         }
 
         try {
-            // トランザクション開始
-            DB::beginTransaction();
-
-            // 施設サービスモデル
+            // 施設サービスモデルの取得
             $Hotel_Service = new HotelService();
 
             if (is_array($a_chk)) {
+                // トランザクション開始
+                DB::beginTransaction();
+
                 foreach ($a_chk as $key => $value) {
                     $Hotel_Service_value = $Hotel_Service->where([
                         'hotel_cd'         => $target_cd,
@@ -98,9 +98,9 @@ class HtlHotelServiceController extends _commonController
                     ])->first();
 
                     $a_attributes['hotel_cd'] = $target_cd;
-                    $a_attributes['entry_cd'] = 'entry_cd';     // TODO $this->box->info->env->action_cd;
+                    $a_attributes['entry_cd'] = $actionCd;
                     $a_attributes['entry_ts'] = now();
-                    $a_attributes['modify_cd'] = 'modify_cd';   // TODO $this->box->info->env->action_cd;
+                    $a_attributes['modify_cd'] = $actionCd;
                     $a_attributes['modify_ts'] = now();
 
                     // データが存在しない場合は新規登録 存在する場合は更新処理
@@ -116,14 +116,14 @@ class HtlHotelServiceController extends _commonController
                             'modify_ts'        => $a_attributes['modify_ts'],
                         ]);
                         // 保存に失敗したときエラーメッセージ表示
-                        if (!$Hotel_Service_create) {
+                        if (is_null($Hotel_Service_create)) {
                             // ロールバック
                             DB::rollback();
                             // エラーメッセージ
                             return $this->list($request, [
                                 'target_cd' => $target_cd,
                                 'hotel_service' => $a_hotel_elements,         // エレメント情報
-                            ])->with(['errors' => 'ご希望のサービスデータを登録できませんでした。']);
+                            ])->with(['errors' => ['ご希望のサービスデータを登録できませんでした。']]);
                         }
                     } else {
                         // 更新処理
@@ -136,57 +136,64 @@ class HtlHotelServiceController extends _commonController
                             'modify_ts'        => $a_attributes['modify_ts'],
                         ]);
 
-                        if (!$Hotel_Service_update) {
+                        if ($Hotel_Service_update == 0) {
                             // ロールバック
                             DB::rollback();
                             // エラーメッセージ
                             return $this->list($request, [
                                 'target_cd' => $target_cd,
                                 'hotel_service' => $a_hotel_elements,         // エレメント情報
-                            ])->with(['errors' => 'ご希望のサービスデータを登録できませんでした。']);
+                            ])->with(['errors' => ['ご希望のサービスデータを登録できませんでした。']]);
                         }
                     }
                 }
             }
 
             // 施設情報ページの更新依頼
-            $Hotel_Service->hotel_modify($a_attributes);
+            $Hotel_Service->hotelModify($a_attributes);
 
             // コミット
             DB::commit();
-
-            // 更新後のサービス情報取得
-            $a_hotel_service['values'] = $this->getHotelServices($target_cd);
-
-            foreach ($a_hotel_elements['values'] as $elementskey => $elementsvalue) {
-                if (!empty($a_hotel_service['values'])) {
-                    foreach ($a_hotel_service['values'] as $servicekey => $servicevalue) {
-                        if ($servicevalue->element_id == $elementsvalue->element_id) {
-                            $a_hotel_elements['values'][$elementskey]->servicevalue = $servicevalue->element_value_id;
-                            break;
-                        } else {
-                            $a_hotel_elements['values'][$elementskey]->servicevalue = 0;
-                        }
-                    }
-                } else {
-                    $a_hotel_elements['values'][$elementskey]->servicevalue = 0;
-                }
-            }
-            return view('ctl.htlhotelservice.list', [
-                'target_cd'               => $target_cd,                // ターゲットコード
-                'hotel_service'           => $a_hotel_elements,         // エレメント情報
-                'guides'    => ['変更しました。']
-            ]);
         } catch (Exception $e) {
+            DB::rollback();
             throw $e;
         }
+
+        // 更新後のサービス情報取得
+        $a_hotel_service['values'] = $this->getHotelServices($target_cd);
+
+        foreach ($a_hotel_elements['values'] as $elementskey => $elementsvalue) {
+            if (!empty($a_hotel_service['values'])) {
+                foreach ($a_hotel_service['values'] as $servicekey => $servicevalue) {
+                    if ($servicevalue->element_id == $elementsvalue->element_id) {
+                        $a_hotel_elements['values'][$elementskey]->servicevalue = $servicevalue->element_value_id;
+                        break;
+                    } else {
+                        $a_hotel_elements['values'][$elementskey]->servicevalue = 0;
+                    }
+                }
+            } else {
+                $a_hotel_elements['values'][$elementskey]->servicevalue = 0;
+            }
+        }
+        return view('ctl.htlhotelservice.list', [
+            'target_cd'               => $target_cd,                // ターゲットコード
+            'hotel_service'           => $a_hotel_elements,         // エレメント情報
+            'guides'    => ['変更しました。']
+        ]);
     }
 
-    // 施設要素マスタを取得
-    //
-    //   aa_conditions
-    //   element_type 要素タイプ hotel:施設関係 room:部屋関係 amenity:アメニティ service:サービス vicinity:周辺
-    //
+    /**
+     * 施設要素マスタを取得
+     *
+     *  element_type（要素タイプ）は5種類
+     *  hotel:施設関係 room:部屋関係 amenity:アメニティ service:サービス vicinity:周辺
+     *
+     * @param array{
+     *   element_type: string,
+     * } $aa_conditions 検索条件
+     * @return array
+     */
     public function getHotelElements($aa_conditions)
     {
         try {
@@ -224,10 +231,12 @@ SQL;
         }
     }
 
-    // 特定施設のサービス(hotel_service)の取得
-    //
-    // target_cd 施設コード
-    //
+    /**
+     * ホテルに紐づくを特定施設のサービス(hotel_service)情報を取得
+     *
+     * @param string $target_cd ホテルコード
+     * @return array
+     */
     public function getHotelServices($target_cd)
     {
         try {
@@ -264,5 +273,25 @@ SQL;
         } catch (Exception $e) {
             throw $e;
         }
+    }
+
+    /**
+     * コントローラ名とアクション名を取得して、ユーザーIDと連結
+     * ユーザーID取得は暫定の為、書き換え替えが必要です。
+     *
+     * MEMO: app/Models/common/CommonDBModel.php から移植したもの
+     * HACK: 適切に共通化したいか。
+     * @return string
+     */
+    private function getActionCd()
+    {
+        $path = explode("@", \Illuminate\Support\Facades\Route::currentRouteAction());
+        $pathList = explode('\\', $path[0]);
+        $controllerName = str_replace("Controller", "", end($pathList)); // コントローラ名
+        $actionName = $path[1]; // アクション名
+        $userId = \Illuminate\Support\Facades\Session::get("user_id");   // TODO: ユーザー情報取得のキーは仮です
+        $actionCd = $controllerName . "/" . $actionName . "." . $userId;
+
+        return $actionCd;
     }
 }
