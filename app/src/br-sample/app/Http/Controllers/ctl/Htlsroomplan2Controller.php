@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\ctl;
 
 use App\Http\Controllers\ctl\_commonController;
-use App\Http\Models\HtlsRoomPlan2Model;
+use App\Services\Htlsroomplan2Service;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
 
 	//==========================================================================
@@ -45,17 +46,19 @@ use Illuminate\Support\Facades\Request;
 		//======================================================================
 		// インデックス
 		//======================================================================
-		public function index()
+		public function index(Htlsroomplan2Service $service)
 		{
 			try{
 				// ※別画面のテンプレートを表示する場合
 				// return $this->_forward('list');
 				$request = Request::all();
 
+				$room_list = $service->get_room_list($request['target_cd']);
+				$plan_list = $service->get_plan_list($request['target_cd']);
+				
 				$user = array('akafu_status' => 0, 'target_cd' => $request['target_cd']);
-				$this->addViewData('user', $user);
 
-				return view('ctl.htlsroomplan2.index', $this->getViewData());
+				return view('ctl.htlsroomplan2.index', compact('user', 'room_list', 'plan_list'));
 				
 			} catch (Exception $e) {
 				throw $e;
