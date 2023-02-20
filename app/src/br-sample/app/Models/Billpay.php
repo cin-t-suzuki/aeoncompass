@@ -7,21 +7,26 @@ use App\Models\common\ValidationColumn;
 use Illuminate\Support\Facades\DB;
 use Exception;
 
-/** 請求先・支払先関連施設
+/**
+ * 請求先・支払先関連施設
  *
  */
 class Billpay extends CommonDBModel
 {
     use Traits;
 
-    public function __construct() //publicでいいか、使わないが削除するとエラー
+    public function __construct()
     {
         // カラム情報の設定
     }
 
 
-    // キーワードから対象となる施設を特定します。
-//ここの修正から
+    /**
+     * キーワードから対象となる施設を特定します。
+     *
+     * @param array $aa_conditions
+     * @return object
+     */
     public function searchCustomer($aa_conditions)
     {
         try {

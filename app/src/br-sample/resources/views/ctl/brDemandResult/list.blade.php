@@ -3,10 +3,7 @@
 
 @section('page_blade')
 
-{{--削除でいいか？ {literal} --}}
 <script language="javascript"  type="text/javascript">
-<!--
-// <!--は削除でいい？コメントアウト？
 function helpForm() {
   var f = document.getElementById('help');
   if (f.style.display == 'none') {
@@ -15,9 +12,7 @@ function helpForm() {
     f.style.display = 'none';
   }
 }
-//-->
 </script>
-{{-- {/literal} --}}
 
 <br />
 {!! Form::open(['route' => ['ctl.BrDemandResult.list'], 'method' => 'get']) !!}
@@ -45,8 +40,7 @@ function helpForm() {
     </div>
   </div>
 <hr size="1">
-{{-- $v->error->has()の書き替えは以下でいいか,countない場合は??[]でいいか --}}
-@if (count($messages['errors'] ?? []) > 0 || count($search_customer ?? []) == 0) 
+@if (count($errors) > 0 || count($search_customer ?? []) == 0) 
   {{-- メッセージbladeの読込 --}}
   @include('ctl.common.message')
 @else
