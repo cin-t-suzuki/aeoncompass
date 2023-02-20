@@ -130,11 +130,13 @@ trait Traits
 
 	}
 
-    //※is_empty同様にblade側で使用したかったのでこのファイルに書いたがあっているか？
-    // 生リクエスト内容をそのままGetパラメータに変換します。
-    //
-    //   as_key      パラメータに変換する対象となるキーを「,」で区切って設定します。
-    //   ab_include  true:aa_key に存在するもののみを表示 false:aa_keyに存在しないものを表示
+
+    /**
+     * 生リクエスト内容をそのままGetパラメータに変換します
+     * @param string $as_key パラメータに変換する対象となるキーを「,」で区切って設定します。
+     * @param bool $ab_include true:aa_key に存在するもののみを表示 false:aa_keyに存在しないものを表示
+     * @return array
+     */
     public function toQueryCorrect($as_key, $ab_include = true)
     {
 
