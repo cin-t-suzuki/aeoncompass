@@ -303,5 +303,12 @@ Route::post('/ctl/brCustomer/csv', function () {return 'TODO'; })->name('ctl.brC
 Route::match(['get', 'post'], '/ctl/htlHotelCard/show/', [\App\Http\Controllers\ctl\HtlHotelCardController::class, 'show'])->name('ctl.htl_hotel_card.show');
 Route::match(['get', 'post'], '/ctl/htlHotelCard/update/', [\App\Http\Controllers\ctl\HtlHotelCardController::class, 'update'])->name('ctl.htl_hotel_card.update');
 
+// 送客実績・料金変更
+Route::get('/ctl/brreserveck/index', [\App\Http\Controllers\ctl\BrReserveCkController::class, 'index'])->name('ctl.brReserveCk.index');
+Route::get('/ctl/brreserveck/search', [\App\Http\Controllers\ctl\BrReserveCkController::class, 'search'])->name('ctl.brReserveCk.search');
+Route::post('/ctl/brreserveck/update', [\App\Http\Controllers\ctl\BrReserveCkController::class, 'update'])->name('ctl.brReserveCk.update');
+Route::get('/ctl/brreserveck/reserveck', [\App\Http\Controllers\ctl\BrReserveCkController::class, 'reserveck'])->name('ctl.brReserveCk.reserveck');
+Route::get('/dl/reserveck.csv', [\App\Http\Controllers\ctl\BrReserveCkController::class, 'csv'])->name('ctl.dl.reserveck'); //CSV　パス、URL合っている？
+
 // 送客請求実績確認
 Route::get('/ctl/brdemandresult/list', [\App\Http\Controllers\ctl\BrDemandResultController::class, 'list'])->name('ctl.BrDemandResult.list');
