@@ -21,12 +21,14 @@ class ReserveAddedMessage extends CommonDBModel
         // カラム情報の設定
     }
 
-    // get_ReserveAddedMessage
-    // 指定された予約に対する追加メッセージを取得
-    //
-    // 引数
-    // $s_reserve_cd   予約番号
-    //
+    /**
+     * get_ReserveAddedMessage
+     * 指定された予約に対する追加メッセージを取得
+     *
+     * @param string $s_reserve_cd 予約番号
+     *
+     * @return array
+     */
     public function getReserveAddedMessage($s_reserve_cd)
     {
         try {
@@ -64,6 +66,4 @@ SQL;
             return [];
         }
     }
-
- 
 }

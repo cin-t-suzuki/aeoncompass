@@ -88,7 +88,11 @@ class ReservePoint extends CommonDBModel
             ]);
     }
 
-    /** 主キーで取得
+    /**
+     * 主キーで取得
+     *
+     * @param string $reserve_cd
+     * @return array|null
      */
     public function selectByKey($reserve_cd)
     {

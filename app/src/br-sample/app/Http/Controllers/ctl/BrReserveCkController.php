@@ -32,8 +32,12 @@ class BrReserveCkController extends _commonController
     // ループカウント
     private $year_loop_cnt = '11';
 
-
-    // 初期表示
+    /**
+     * 初期表示
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function index(Request $request)
     {
         $a_search = $request->input('Search');
@@ -53,7 +57,12 @@ class BrReserveCkController extends _commonController
         ]);
     }
 
-    // 検索
+    /**
+     * 検索
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function search(Request $request)
     {
 
@@ -160,6 +169,12 @@ class BrReserveCkController extends _commonController
         ]);
     }
 
+    /**
+     * 更新
+     *
+     * @param App\Http\Requests\ChecksheetFixRequest $request
+     * @return \Illuminate\Http\Response
+     */
     public function update(ChecksheetFixRequest $request)
     {
 
@@ -266,7 +281,12 @@ class BrReserveCkController extends _commonController
         ]);
     }
 
-    // 送客実績・料金変更
+    /**
+     * 送客実績・料金変更
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function reserveck(Request $request)
     {
         // リクエストの取得
@@ -353,7 +373,12 @@ class BrReserveCkController extends _commonController
         ]);
     }
 
-    // csvダウンロード
+    /**
+     * csvダウンロード
+     *
+     * @param Request $request
+     * @return 
+     */
     public function csv(Request $request)
     {
 

@@ -60,7 +60,13 @@ class ChecksheetFix extends CommonDBModel
         ]);
     }
 
-    // 処理年月と施設CDでの取得
+    /**
+     * 処理年月と施設CDでの取得
+     *
+     * @param string $checksheet_ym
+     * @param string $hotel_cd
+     * @return array
+    */
     public function selectByWKey($checksheet_ym, $hotel_cd)
     {
         $data = $this->where([

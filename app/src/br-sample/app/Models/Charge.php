@@ -14,8 +14,6 @@ class Charge extends CommonDBModel
 {
     use Traits;
 
-    // カラム
-
     public function __construct()
     {
         // カラム情報の設定
@@ -24,9 +22,13 @@ class Charge extends CommonDBModel
     // キャッシュ用変数
     private $n_tax_rate = 0;    // 消費税
 
-    // 消費税を取得します。
-    //   accept_s_ymd 開始日 YYYY-MM-DD
-    //
+    /**
+     * 消費税を取得します。
+     *
+     * @param string $accept_s_ymd
+     * 開始日 YYYY-MM-DD
+     * @return array
+    */
     public function getTaxRate($as_accept_s_ymd = null)
     {
         try {
@@ -72,5 +74,4 @@ SQL;
             throw $e;
         }
     }
-
 }

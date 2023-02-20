@@ -14,17 +14,21 @@ class Core extends CommonDBModel
 {
     use Traits;
 
-    // カラム
-
     public function __construct()
     {
         // カラム情報の設定
     }
 
-    // 生リクエスト内容をそのままGetパラメータに変換します。
-    //
-    //   aa_key      パラメータに変換する対象となるキー
-    //   ab_include  true:aa_key に存在するもののみを表示 false:aa_keyに存在しないものを表示
+    /**
+     * 生リクエスト内容をそのままGetパラメータに変換します。
+     *
+     * @param array $aa_key
+     * パラメータに変換する対象となるキー
+     * @param bool $ab_include
+     * true:aa_key に存在するもののみを表示 false:aa_keyに存在しないものを表示
+     *
+     * @return string
+    */
     public function toQueryCorrect($aa_key = [], $ab_include = true)
     {
         //初期化

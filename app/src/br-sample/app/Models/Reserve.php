@@ -25,12 +25,15 @@ class Reserve extends CommonDBModel
     // 予約一覧
     private $a_reserves = [];
 
-    // ある時点でのシステム利用料を取得
-    //
-    //     as_hotel_cd         施設コード
-    //     aa_date_ymd         宿泊対象
-    //        after            開始対象日
-    //        before           終了対象日
+    /**
+     * ある時点でのシステム利用料を取得
+     * @param string $as_hotel_cd 施設コード
+     * @param array{
+     *  after?: string 開始対象日
+     *  before?: string 終了対象日
+     * } $aa_date_ymd 宿泊対象
+     * @return int
+     */
     public function getBillChargeTotal($as_hotel_cd, $aa_date_ymd)
     {
         try {
@@ -110,45 +113,53 @@ SQL;
         }
     }
 
-    // 予約情報と宿泊料金の情報
-    //
-    //   aa_conditions
-    //     reserve_cd        予約コード
-    //     partner_ref       予約参照コード
-    //     partner_cd        提携先コード
-    //     common_cd         予約コードまたは予約参照コード
-    //     member_cd         会員コード
-    //     member_cds        会員コード array('xxx', 'xxx')
-    //     member_nm         会員名称（漢字・かな 両方可）
-    //     hotel_cd          施設コード
-    //     hotel_cds         施設コード array('xxx', 'xxx')
-    //     supervisor_cd     施設統括コード
-    //     hotel_nm          施設名称
-    //     guest_nm          宿泊代表者氏名
-    //     email             予約者メールアドレス
-    //     reserve_system    予約システム
-    //     affiliate_cd      アフィリエイトコード
-    //     affiliate_cd_sub  アフィリエイトコード枝番
-    //     auth_type         認証タイプ
-    //     stock_type        仕入タイプ array(0 , 1)
-    //     payment_way       決済方法   array(0 , 1, 2)
-    //     insurance_weather お天気保険
-    //     pref_id           都道府県コード
-    //     capacity          利用人数
-    //       people =        人数
-    //       type   =        タイプ large:人数以上の場合  same:人数が同じ場合
-    //     reserve_status    予約ステータス 0:含まない 1:キャンセルのみ
-    //     date_ymd
-    //       after  =        日付 > 日付以降宿泊の予約 YYYY-MM-DD
-    //       before =        日付 > 日付以前宿泊の予約 YYYY-MM-DD
-    //     reserve_dtm       予約日の予約
-    //       after  =        日付 > 日付以降の予約 YYYY-MM-DD HH24:MI:SS
-    //       before =        日付 > 日付以前の予約 YYYY-MM-DD HH24:MI:SS
-    //     cancel_dtm        取り消し日の予約
-    //       after  =        日付 > 日付以降取り消しの予約 YYYY-MM-DD HH24:MI:SS
-    //       before =        日付 > 日付以前取り消しの予約 YYYY-MM-DD HH24:MI:SS
-    //    reserve_type       0:手配旅行 1:募集型企画旅行（1がJRコレクションに該当）
-    //
+    /**
+     * 予約情報と宿泊料金の情報
+     *
+     * @param array{
+     *  reserve_cd?: string,        予約コード
+     *  partner_ref?: string,       予約参照コード
+     *  partner_cd?: string,        提携先コード
+     *  common_cd?: string,         予約コードまたは予約参照コード
+     *  member_cd?: string,         会員コード
+     *  member_cds?: array,         会員コード array('xxx', 'xxx')
+     *  member_nm?: string,         会員名称（漢字・かな 両方可）
+     *  hotel_cd?: string,          施設コード
+     *  hotel_cds?: array,          施設コード array('xxx', 'xxx')
+     *  supervisor_cd?: string,     施設統括コード
+     *  hotel_nm?: string,          施設名称
+     *  guest_nm?: string,          宿泊代表者氏名
+     *  email?: string,             予約者メールアドレス
+     *  reserve_system?: string,    予約システム
+     *  affiliate_cd?: string,      アフィリエイトコード
+     *  affiliate_cd_sub?: string,  アフィリエイトコード枝番
+     *  auth_type?: string,         認証タイプ
+     *  stock_type?: array,         仕入タイプ array(0 , 1)
+     *  payment_way?: array,        決済方法   array(0 , 1, 2)
+     *  insurance_weather?: string, お天気保険
+     *  pref_id?: string,           都道府県コード
+     *  capacity?: array{            利用人数
+     *    people,          人数
+     *    type,            タイプ large:人数以上の場合  same:人数が同じ場合
+     *  },
+     *  reserve_status?: int,    予約ステータス 0:含まない 1:キャンセルのみ
+     *  date_ymd?: array{
+     *    after,           日付 > 日付以降宿泊の予約 YYYY-MM-DD
+     *    before          日付 > 日付以前宿泊の予約 YYYY-MM-DD
+     *  },
+     *  reserve_dtm?: array{       予約日の予約
+     *    after,           日付 > 日付以降の予約 YYYY-MM-DD HH24:MI:SS
+     *    before,          日付 > 日付以前の予約 YYYY-MM-DD HH24:MI:SS
+     *  },
+     *  cancel_dtm?: array{        取り消し日の予約
+     *    after,           日付 > 日付以降取り消しの予約 YYYY-MM-DD HH24:MI:SS
+     *    before,          日付 > 日付以前取り消しの予約 YYYY-MM-DD HH24:MI:SS
+     *    reserve_type,       0:手配旅行 1:募集型企画旅行（1がJRコレクションに該当）
+     *  }
+     * } $aa_conditions
+     *
+     * @return bool
+     */
     public function reserves($aa_conditions)
     {
 
@@ -1020,22 +1031,31 @@ SQL;
         }
     }
 
-    // １泊単位の予約情報を取得 ※ReserveのModelから移植
-    //   ※ このプログラムを修正する場合は \public\batch\scripts\php\models\Msd.php _get_reserve_days も修正が必要です。（MSD)
-    //
-    //   aa_conditions
-    //     include_member true : 会員情報を取得します。
-    //
-    //   aa_order 表示順序 array('カラム' => 'asc or desc')
-    //     > array('date_ymd' => 'asc')     宿泊日昇順
-    //     > array('date_ymd' => 'desc')    宿泊日降順
-    //     > array('reserve_dtm' => 'asc')  予約日昇順
-    //     > array('reserve_dtm' => 'desc') 予約日降順
-    //     上記のうちのひとつを設定します。
-    //
-    //   aa_offsets
-    //     page ページ
-    //     size レコード数(1から) ページ数を指定した場合必須
+    /**
+     * １泊単位の予約情報を取得 ※ReserveのModelから移植
+     * ※ このプログラムを修正する場合は \public\batch\scripts\php\models\Msd.php _get_reserve_days も修正が必要です。（MSD)
+     *
+     * @param array{
+     *  include_member?: bool,        true : 会員情報を取得します。
+     * } $aa_conditions
+     * @param array{
+     *  array{
+     *   date_ymd?: string
+     *   > array('date_ymd' => 'asc')     宿泊日昇順
+     *   > array('date_ymd' => 'desc')    宿泊日降順
+     *   reserve_dtm?: string
+     *   > array('reserve_dtm' => 'asc')  予約日昇順
+     *   > array('reserve_dtm' => 'desc') 予約日降順
+     *   上記のうちのひとつを設定します。
+     *  },
+     * } $aa_order 表示順序 array('カラム' => 'asc or desc')
+     * @param array{
+     *  page?: int, ページ
+     *  size?: int, レコード数(1から) ページ数を指定した場合必須
+     * } $aa_offsets
+     *
+     * @return array
+     */
     public function getReserveDays($aa_conditions = [], $aa_order = ['date_ymd' => 'desc'], $aa_offsets = [])
     {
         try {
@@ -1125,23 +1145,34 @@ SQL;
         }
     }
 
-    // １泊単位の予約情報を取得 ※ReserveのCoreから移植
-    //
-    //   aa_conditions
-    //     include_member true : 会員情報を取得します。
-    //
-    //   aa_order 表示順序 array('カラム' => 'asc or desc')
-    //     > array('date_ymd' => 'asc')     宿泊日昇順
-    //     > array('date_ymd' => 'desc')    宿泊日降順
-    //     > array('reserve_dtm' => 'asc')  予約日昇順
-    //     > array('reserve_dtm' => 'desc') 予約日降順
-    //     > array('cancel_dtm' => 'asc')   キャンセル日昇順
-    //     > array('cancel_dtm' => 'desc')  キャンセル日降順
-    //     上記のうちのひとつを設定します。
-    //
-    //   aa_offsets
-    //     page ページ
-    //     size レコード数(1から) ページ数を指定した場合必須
+    /**
+     * １泊単位の予約情報を取得 ※ReserveのCoreから移植
+     * ※ このプログラムを修正する場合は \public\batch\scripts\php\models\Msd.php _get_reserve_days も修正が必要です。（MSD)
+     *
+     * @param array{
+     *  include_member?: bool,        true : 会員情報を取得します。
+     * } $aa_conditions
+     * @param array{
+     *  array{
+     *   date_ymd?: string
+     *   > array('date_ymd' => 'asc')     宿泊日昇順
+     *   > array('date_ymd' => 'desc')    宿泊日降順
+     *   reserve_dtm?: string
+     *   > array('reserve_dtm' => 'asc')  予約日昇順
+     *   > array('reserve_dtm' => 'desc') 予約日降順
+     *   cancel_dtm?: string
+     *   > array('cancel_dtm' => 'asc')  キャンセル日昇順
+     *   > array('cancel_dtm' => 'desc') キャンセル日降順
+     *  上記のうちのひとつを設定します。
+     *  },
+     * } $aa_order 表示順序 array('カラム' => 'asc or desc')
+     * @param array{
+     *  page?: int, ページ
+     *  size?: int, レコード数(1から) ページ数を指定した場合必須
+     * } $aa_offsets
+     *
+     * @return array
+     */
     public function parentGetReserveDays($aa_conditions = [], $aa_order = ['date_ymd' => 'desc'], $aa_offsets = [])
     {
         try {
@@ -1383,13 +1414,17 @@ SQL;
         }
     }
 
-
-    // 予約割引料金の取得
-    //
-    //   aa_conditions
-    //     reserve_cd         予約コード
-    //     date_ymd           宿泊日 YYYY-MM-DD
-    //     discount_factor_id 割引要素ID 1:パワーダウンチャージ 2:Y!ポイント 3:ギフトチケット（ＢＲポイント）
+    /**
+     * 予約割引料金の取得
+     *
+     * @param array{
+     *  reserve_cd?: string, 予約コード
+     *  date_ymd?: string, 宿泊日 YYYY-MM-DD
+     *  discount_factor_id?: string, 割引要素ID 1:パワーダウンチャージ 2:Y!ポイント 3:ギフトチケット（ＢＲポイント）
+     * } $aa_conditions
+     *
+     * @return array
+     */
     private function getReserveChargeDiscounts($aa_conditions)
     {
         try {
@@ -1564,7 +1599,15 @@ SQL;
         }
     }
 
-    // 予約者の会員情報を取得します。
+    /**
+     * 予約者の会員情報を取得します。
+     *
+     * @param string $as_partner_cd
+     * @param string $as_member_cd
+     * @param string $as_auth_type
+     *
+     * @return array
+     */
     private function getMember($as_partner_cd, $as_member_cd, $as_auth_type)
     {
         try {
@@ -1682,26 +1725,38 @@ SQL;
         }
     }
 
-    // １部屋単位の予約情報を取得
-    //
-    //   aa_conditions
-    //     include_member true : 会員情報を取得します。
-    //     last_check_in
-    //       after  =       日付 > 日付以降最終チェックインの予約 YYYY-MM-DD
-    //       before =       日付 > 日付以前最終チェックインの予約 YYYY-MM-DD
-    //
-    //   aa_order 表示順序 array('カラム' => 'asc or desc')
-    //     > array('transaction_cd' => 'asc')      予約単位昇順（１泊目で判断します。）
-    //     > array('date_ymd'       => 'asc')      宿泊日昇順（１泊目で判断します。）
-    //     > array('date_ymd'       => 'desc')     宿泊日降順（１泊目で判断します。）
-    //     > array('reserve_dtm'    => 'asc')      予約日昇順（１泊目で判断します。）
-    //     > array('reserve_dtm'    => 'desc')     予約日降順（１泊目で判断します。）
-    //     > array('values'         => 'reserve')  未来の予約,  過去の予約, 取消しの予約の順
-    //     上記のうちのひとつを設定します。
-    //
-    //   aa_offsets
-    //     page ページ
-    //     size レコード数(1から) ページ数を指定した場合必須
+    /**
+     * １部屋単位の予約情報を取得
+     *
+     * @param array{
+     *  include_member?: bool,        true : 会員情報を取得します。
+     *  last_check_in?: array{
+     *   after?: string, 日付 > 日付以降最終チェックインの予約 YYYY-MM-DD
+     *   before?: string 日付 > 日付以前最終チェックインの予約 YYYY-MM-DD
+     *  }
+     * } $aa_conditions
+     * @param array{
+     *  array{
+     *   transaction_cd?: string
+     *   > array('transaction_cd' => 'asc')      予約単位昇順（１泊目で判断します。）
+     *   date_ymd?: string
+     *   > array('date_ymd' => 'asc')     宿泊日昇順（１泊目で判断します。）
+     *   > array('date_ymd' => 'desc')    宿泊日降順（１泊目で判断します。）
+     *   reserve_dtm?: string
+     *   > array('reserve_dtm' => 'asc')  予約日昇順（１泊目で判断します。）
+     *   > array('reserve_dtm' => 'desc') 予約日降順（１泊目で判断します。）
+     *   values?: string
+     *   > array('values'         => 'reserve')  未来の予約,  過去の予約, 取消しの予約の順
+     *   上記のうちのひとつを設定します。
+     *  },
+     * } $aa_order 表示順序 array('カラム' => 'asc or desc')
+     * @param array{
+     *  page?: int, ページ
+     *  size?: int, レコード数(1から) ページ数を指定した場合必須
+     * } $aa_offsets
+     *
+     * @return array
+     */
     public function getReserveRooms($aa_conditions = [], $aa_order = ['date_ymd' => 'desc'], $aa_offsets = [])
     {
         try {
@@ -2093,9 +2148,11 @@ SQL;
         }
     }
 
-    //======================================================================
-    // CSVヘッダー設定 ※モデルへの記述でいい？
-    //======================================================================
+    /**
+     * CSVヘッダー設定 ※モデルへの記述でいい？
+     *
+     * @return array
+     */
     public function setCsvHeader()
     {
         $header = [
@@ -2109,9 +2166,11 @@ SQL;
         return $header;
     }
 
-    //======================================================================
-    // CSVデータ設定 ※モデルへの記述でいい？
-    //======================================================================
+    /**
+     * CSVデータ設定 ※モデルへの記述でいい？
+     *
+     * @return array
+     */
     public function setCsvData($reserve_data)
     {
         $data = [];

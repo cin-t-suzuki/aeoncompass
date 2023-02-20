@@ -60,7 +60,12 @@ class MemberFree extends CommonDBModel
         // カラム情報の設定
     }
 
-    // メンバーCDとパートナーCDでの取得
+    /**
+     * メンバーCDとパートナーCDでの取得
+     * @param string $member_cd
+     * @param string $partner_cd
+     * @return array
+     */
     public function selectByWKey($member_cd, $partner_cd)
     {
         $data = $this->where([

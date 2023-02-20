@@ -67,7 +67,10 @@ class HikariAccount extends CommonDBModel
         ]);
     }
 
-    /** 主キーで取得
+    /**
+     * 主キーで取得
+     * @param string $id
+     * @return array|null
      */
     public function selectByKey($id)
     {

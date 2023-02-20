@@ -21,15 +21,19 @@ class CorePlan extends CommonDBModel
         // カラム情報の設定
     }
 
-    // パワー？
-    //
-    // Core_Hotel->_s_hotel_cd 施設コード
-    // Core_Room->_s_room_cd   部屋コード
-    // this->_s_plan_cd        プランコード
-    //
-    // example
-    //  >> true  : パワー
-    //  >> false : パワーでない
+    /**
+     * パワー？
+     *
+     * Core_Hotel->_s_hotel_cd 施設コード
+     * Core_Room->_s_room_cd   部屋コード
+     * this->_s_plan_cd        プランコード
+     *
+     * example
+     * >> true  : パワー
+     * >> false : パワーでない
+     *
+     * @return bool
+    */
     public function isPower($hotel_cd, $room_cd, $plan_cd) //引き数追加でわざわざ各モデルからとる形ではなくていいか？
     {
         try {
