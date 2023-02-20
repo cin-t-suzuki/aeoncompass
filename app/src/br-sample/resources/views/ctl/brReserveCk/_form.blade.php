@@ -1,4 +1,4 @@
-{!! Form::open(['route' => ['ctl.brReserveCk.search'], 'method' => 'post']) !!}
+{!! Form::open(['route' => ['ctl.brReserveCk.search'], 'method' => 'get']) !!}
   <table border="1" cellpadding="4" cellspacing="0">
     <tr>
       <td  bgcolor="#EEFFEE" colspan="2">施設キーワード</td>

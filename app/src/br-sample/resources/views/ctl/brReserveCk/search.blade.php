@@ -17,7 +17,7 @@
   </tr>
   @foreach ($hotel_lists['values'] as $key => $reserve_data)
   <tr>
-    {!! Form::open(['route' => ['ctl.brReserveCk.reserveck'], 'method' => 'post', 'target' => 'hotel']) !!}
+    {!! Form::open(['route' => ['ctl.brReserveCk.reserveck'], 'method' => 'get', 'target' => 'hotel']) !!}
 
       @if ($date_ymd['after'] == '2009-06-30')
         <INPUT TYPE="hidden" NAME="date_ymd[after]" VALUE="2009-07-01">
