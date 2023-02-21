@@ -148,13 +148,15 @@
 
 
     <div id="pgf1">
-        <div class="pg"></div>
+        <div class="pg">
+        </div>
     </div>
     <div id="pgf2">
         <div class="pg">
             <div class="pgf2-inner">
                 @if (\Route::currentRouteName() == 'rsv.top')
                     <div class="pgf2-column">
+                        {{-- TODO: routing 追加 --}}
                         <p><a href="{{-- {$v->env.ssl_path}rsv/member/edit/ --}}">会員情報を変更する</a></p>
                         <p><a href="{{-- {$v->env.ssl_path}rsv/member/withdraw/ --}}">退会手続きをする</a></p>
                         <p><a href="{{-- {$v->env.ssl_path}rsv/reminder/ --}}">会員コード・パスワードを照会する</a></p>
@@ -167,6 +169,7 @@
                         <br />
                     </div>
                     <div class="pgf2-column">
+                        {{-- TODO: routing 追加 --}}
                         <p><a href="{{-- {$v->env.path_base}/guide/visitor/ --}}">初めての方へ</a></p>
                         <p><a href="{{-- {$v->env.path_base}/about/policy/member/ --}}">会員規約について</a></p>
                         <p><a href="{{-- {$v->env.path_base}/about/policy/ --}}">利用規約について</a></p>
@@ -177,6 +180,7 @@
                         <br />
                     </div>
                     <div class="pgf2-column">
+                        {{-- TODO: routing 追加 --}}
                         <p><a href="{{-- {$v->env.path_base}/contact/hotel/ --}}">宿泊施設関係者様へ</a></p>
                         <p><a href="{{-- {$v->env.path_base}/contact/partner/ --}}">業務提携について</a></p>
                         <p><a href="{{-- {$v->env.path_base}/about/recruit/ --}}">人材募集</a></p>

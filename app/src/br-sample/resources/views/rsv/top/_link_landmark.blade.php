@@ -6,6 +6,6 @@
     <div class="sfm-landmark-inner">
         {{-- MEMO: 移植元ソースでコメントアウト --}}
         {{-- <a href="/rsv/landmark/">ランドマーク検索</a> --}}
-        <img src="/img/tpc/teaser-landmark.gif" />
+        <img src="{{ asset('img/tpc/teaser-landmark.gif') }}" />
     </div>
 </div>

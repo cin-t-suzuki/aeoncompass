@@ -2,10 +2,12 @@
 
 {{-- MEMO: 移植元 public\app\rsv\view2\top\_link_station.tpl --}}
 
+{{-- TODO: レイアウト崩れ --}}
+
 <div class="sfm-station">
     <div class="sfm-station-inner">
         <a class="btnimg" href="/station" title="駅・路線図">
-            <img src="/img/btn/btn-top-station.gif" alt="駅・路線図" />
+            <img src="{{ asset('img/btn/btn-top-station.gif') }}" alt="駅・路線図" />
         </a>
         <dl>
             <dt>●主要な駅</dt>

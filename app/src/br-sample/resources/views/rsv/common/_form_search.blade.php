@@ -1,5 +1,6 @@
 {{-- MEMO: 移植元 public\app\rsv\view2\_common\_form_search.tpl --}}
 
+{{-- TODO: レイアウト崩れ --}}
 @php
     // TODO: 誤魔化し実装 to be deleted
     $vhotel = ['jrc_hotel_cd' => null];

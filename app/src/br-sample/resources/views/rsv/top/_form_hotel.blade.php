@@ -7,7 +7,7 @@
         <form method="get" action="{{ route('rsv.hotel.list.search') }}">
             <input name="keywords" type="text" value="" maxlength="40" placeholder="入力例：プリンスホテル">
             <div class="btn-b01-143-s" style="margin:-8px 16px 0 0; float:right; padding:5px;">
-                <input class="btnimg" src="/img/btn/b01-search4.gif" type="image" alt="ホテル検索" />
+                <input class="btnimg" src="{{ asset('img/btn/b01-search4.gif') }}" type="image" alt="ホテル検索" />
             </div>
         </form>
         <dl>

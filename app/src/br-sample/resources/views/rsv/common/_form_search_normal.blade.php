@@ -18,23 +18,29 @@
                     {{-- 年月表示（13月まで表示） --}}
                     <select name="year_month" size="1">
                         @foreach ($search_condition['form']['year_month'] as $months)
-                            <option value="{{ $months['date_ym'] }}" {{ $months['current_status'] ? 'selected' : '' }}>{{ substr($months['date_ym'], 0, 4) }}年{{ number_format(substr($months['date_ym'], 5, 2)) }}月</option>
+                            <option value="{{ $months['date_ym'] }}" {{ $months['current_status'] ? 'selected' : '' }}>
+                                {{ substr($months['date_ym'], 0, 4) }}年{{ number_format(substr($months['date_ym'], 5, 2)) }}月
+                            </option>
                         @endforeach
                     </select>
                     {{-- 日表示のための31回ループ --}}
                     <select class="text-right" name="day" size="1">
                         @foreach ($search_condition['form']['days'] as $days)
-                            <option value="{{ $days['date_ymd'] }}" {{ $days['current_status'] ? 'selected' : '' }}>{{ $days['date_ymd'] }}日</option>
+                            <option value="{{ $days['date_ymd'] }}" {{ $days['current_status'] ? 'selected' : '' }}>
+                                {{ $days['date_ymd'] }}日
+                            </option>
                         @endforeach
                     </select>
                     &nbsp;&nbsp;
                     <a class="jqs-calendar" href="#calendar">
-                        <img src="/img/lhd/lhd-calendar.gif" alt="" />
+                        <img src="{{ asset('img/lhd/lhd-calendar.gif') }}" alt="" />
                     </a>
                     <br />
                     <select class="text-right" name="stay" size="1">
                         @foreach ($search_condition['form']['stay'] as $stay)
-                            <option value="{{ $stay['days'] }}" {{ $stay['current_status'] ? 'selected' : '' }}>{{ $stay['days'] }}泊</option>
+                            <option value="{{ $stay['days'] }}" {{ $stay['current_status'] ? 'selected' : '' }}>
+                                {{ $stay['days'] }}泊
+                            </option>
                         @endforeach
                     </select>
                     &nbsp;&nbsp;
@@ -52,7 +58,9 @@
                 <td>
                     <select class="text-right" name="rooms" size="1">
                         @foreach ($search_condition['form']['rooms'] as $rooms)
-                            <option value="{{ $rooms['room_count'] }}" {{ $rooms['current_status'] ? 'selected' : '' }}>{{ $rooms['room_count'] }}室</option>
+                            <option value="{{ $rooms['room_count'] }}" {{ $rooms['current_status'] ? 'selected' : '' }}>
+                                {{ $rooms['room_count'] }}室
+                            </option>
                         @endforeach
                     </select>
                 </td>
@@ -64,7 +72,9 @@
                 <td>
                     大人<select class="text-right" name="senior" size="1">
                         @foreach ($search_condition['form']['senior']['capacities'] as $senior)
-                            <option value="{{ $senior['capacity'] }}" {{ $senior['current_status'] ? 'selected' : '' }}>{{ $senior['capacity'] }}名</option>
+                            <option value="{{ $senior['capacity'] }}" {{ $senior['current_status'] ? 'selected' : '' }}>
+                                {{ $senior['capacity'] }}名
+                            </option>
                         @endforeach
                     </select>
                     @if ($search_condition['form']['childs']['accept_status'])
@@ -98,7 +108,9 @@
                                 @if ($loop->first)
                                     <select class="text-right" name="charge_min" size="1">
                                 @endif
-                                <option value="{{ $charge_min['charge'] }}" {{ $charge_min['current_status'] ? 'selected' : '' }}>{{ $charge_min['name'] }}</option>
+                                <option value="{{ $charge_min['charge'] }}" {{ $charge_min['current_status'] ? 'selected' : '' }}>
+                                    {{ $charge_min['name'] }}
+                                </option>
                                 @if ($loop->last)
                                     </select>
                                 @endif
@@ -115,7 +127,9 @@
                                 @if ($loop->first)
                                     ～<select class="text-right" name="charge_max" size="1">
                                 @endif
-                                <option value="{{ $charge_max['charge'] }}" {{ $charge_max['current_status'] ? 'selected' : '' }}>{{ $charge_max['name'] }}</option>
+                                <option value="{{ $charge_max['charge'] }}" {{ $charge_max['current_status'] ? 'selected' : '' }}>
+                                    {{ $charge_max['name'] }}
+                                </option>
                                 @if ($loop->last)
                                     </select>
                                 @endif
@@ -163,11 +177,11 @@
         @if (is_null($search_condition['form']['hotel']['hotel_cd']))
             {{-- MEMO: ↑↑↑ もとは is_empty --}}
             <div class="btn-b01-143-sb" style="margin:0 auto;">
-                <input class="btnimg collectBtn" src="/img/btn/b01-search1.gif" type="image" alt="空室検索" />
+                <input class="btnimg collectBtn" src="{{ asset('img/btn/b01-search1.gif') }}" type="image" alt="空室検索" />
             </div>
         @else
             <div class="btn-b06-138-sc" style="margin:0 auto;">
-                <input class="btnimg collectBtn" src="/img/btn/b06-booking.gif" type="image" alt="予約へすすむ" />
+                <input class="btnimg collectBtn" src="{{ asset('img/btn/b06-booking.gif') }}" type="image" alt="予約へすすむ" />
             </div>
         @endif
         <input name="today" type="hidden" value="{{ date('Y-m-d') }}" />

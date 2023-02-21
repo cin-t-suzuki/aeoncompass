@@ -31,7 +31,9 @@
                     @else
                         <select class="text-right" name="child1" size="1" {{ $s_disabled }}>
                             @foreach ($search_condition['form']['childs']['child1_capacities'] as $child)
-                                <option value="{{ $child['capacity'] > 0 ? $child['capacity']  : '' }}" {{ $child['current_status'] ? 'selected' : '' }}>{{ $child['capacity'] }}名</option>
+                                <option value="{{ $child['capacity'] > 0 ? $child['capacity'] : '' }}" {{ $child['current_status'] ? 'selected' : '' }}>
+                                    {{ $child['capacity'] }}名
+                                </option>
                             @endforeach
                         </select>
                     @endif
@@ -44,7 +46,9 @@
                     @else
                         <select class="text-right" name="child2" size="1" {{ $s_disabled }}>
                             @foreach ($search_condition['form']['childs']['child2_capacities'] as $child)
-                                <option value="{{ $child['capacity'] > 0 ? $child['capacity']  : '' }} "{{ $child['current_status'] ? 'selected' : '' }}>{{ $child['capacity'] }}名</option>
+                                <option value="{{ $child['capacity'] > 0 ? $child['capacity'] : '' }}" {{ $child['current_status'] ? 'selected' : '' }}>
+                                    {{ $child['capacity'] }}名
+                                </option>
                             @endforeach
                         </select>
                     @endif
@@ -57,7 +61,9 @@
                     @else
                         <select class="text-right" name="child4" size="1" {{ $s_disabled }}>
                             @foreach ($search_condition['form']['childs']['child4_capacities'] as $child)
-                                <option value="{{ $child['capacity'] > 0 ? $child['capacity']  : '' }} "{{ $child['current_status'] ? 'selected' : '' }}>{{ $child['capacity'] }}名</option>
+                                <option value="{{ $child['capacity'] > 0 ? $child['capacity'] : '' }}" {{ $child['current_status'] ? 'selected' : '' }}>
+                                    {{ $child['capacity'] }}名
+                                </option>
                             @endforeach
                         </select>
                     @endif
@@ -70,7 +76,9 @@
                     @else
                         <select class="text-right" name="child3" size="1" {{ $s_disabled }}>
                             @foreach ($search_condition['form']['childs']['child3_capacities'] as $child)
-                                <option value="{{ $child['capacity'] > 0 ? $child['capacity']  : '' }} "{{ $child['current_status'] ? 'selected' : '' }}>{{ $child['capacity'] }}名</option>
+                                <option value="{{ $child['capacity'] > 0 ? $child['capacity'] : '' }}" {{ $child['current_status'] ? 'selected' : '' }}>
+                                    {{ $child['capacity'] }}名
+                                </option>
                             @endforeach
                         </select>
                     @endif
@@ -83,7 +91,9 @@
                     @else
                         <select class="text-right" name="child5" size="1" {{ $s_disabled }}>
                             @foreach ($search_condition['form']['childs']['child5_capacities'] as $child)
-                                <option value="{{ $child['capacity'] > 0 ? $child['capacity']  : '' }} "{{ $child['current_status'] ? 'selected' : '' }}>{{ $child['capacity'] }}名</option>
+                                <option value="{{ $child['capacity'] > 0 ? $child['capacity'] : '' }}" {{ $child['current_status'] ? 'selected' : '' }}>
+                                    {{ $child['capacity'] }}名
+                                </option>
                             @endforeach
                         </select>
                     @endif

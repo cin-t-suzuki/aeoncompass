@@ -76,46 +76,39 @@
                     <tr>
                         <td class="top-layout1" rowspan="2">
                             {{-- キーワード検索 --}}
-                            {{-- {include file='./_form_keyword.tpl'} --}}
                             @include('rsv.top._form_keyword')
 
-                            {{-- 空室検索 --}}
-                            {{-- {include file='../_common/_form_search.tpl' isTop='true'} --}}
+                            {{-- 空室検索 日付から探す --}}
                             @include('rsv.common._form_search', [
                                 'isTop' => true,
                             ])
 
                             {{-- ホテル検索 --}}
                             {{-- MEMO: 移植元ソースでコメントアウト --}}
-                            {{-- {include file='./_form_hotel.tpl'} --}}
                             {{-- @include('rsv.top._form_hotel') --}}
                         </td>
                         <td class="top-layout2" colspan="2">
                             {{-- メインバナー --}}
-                            {{-- {include file="./_rotation_banner.tpl"} --}}
                             @include('rsv.top._rotation_banner')
                         </td>
                     </tr>
                     <tr>
                         <td class="top-layout3">
                             {{-- 地図 --}}
-                            {{-- {include file='./_link_map.tpl'} --}}
                             @include('rsv.top._link_map')
                         </td>
                         <td>
                             {{-- 駅検索 --}}
-                            {{-- {include file='./_link_station.tpl'} --}}
                             @include('rsv.top._link_station')
 
                             {{-- ランドマーク検索 --}}
                             {{-- MEMO: 移植元ソースでコメントアウト --}}
-                            {{-- include file='./_link_landmark.tpl' --}}
                             {{-- @include('rsv.top._link_landmark') --}}
 
                             <div class="sfm-extra">
                                 {{-- Go To トラベル キャンペーン --}}
-                                <a id="sfm-extra-atag-id" href="/campaign/goto/" title="Go To トラベル キャンペーン">
-                                    <img src="/img/tpc/banner-goto-306-159-2.gif" alt="Go To トラベル キャンペーン" />
+                                <a id="sfm-extra-atag-id" href="{{ route('rsv.campaign.goto') }}" title="Go To トラベル キャンペーン">
+                                    <img src="{{ asset('img/tpc/banner-goto-306-159-2.gif') }}" alt="Go To トラベル キャンペーン" />
                                 </a>
                             </div>
                         </td>
@@ -154,11 +147,15 @@
                             {{-- 一番上のバナーにだけ style="margin-bottom:11px" を付けてください --}}
 
                             {{-- 城崎特集 --}}
-                            <div style="margin-bottom:11px">{include file="./_link_kinosaki_middle.tpl"}</div>
+                            <div style="margin-bottom:11px">
+                                {include file="./_link_kinosaki_middle.tpl"}
+                            </div>
 
                             {{-- バナーC（小下） --}}
                             {{-- 温泉特集 --}}
-                            <div style="margin-bottom:11px">{include file="./_link_onsen_middle.tpl"}</div>
+                            <div style="margin-bottom:11px">
+                                {include file="./_link_onsen_middle.tpl"}
+                            </div>
                         </td>
                     </tr>
 
@@ -172,48 +169,74 @@
                     </tr>
                     <tr>
                         <td class="top-layout14" colspan="2">
-                            <div>{include file="./_link_advert_hotels.tpl"}</div>
+                            <div>
+                                {include file="./_link_advert_hotels.tpl"}
+                            </div>
                         </td>
                     </tr>
                 </table>
                 <div class="top-layout15">
 
                     {{-- MOTHER化粧品付きプラン特集 --}}
-                    <div style="margin-bottom:10px;text-align:right;">{include file="./_link_2017mother.tpl"}</div>
+                    <div style="margin-bottom:10px;text-align:right;">
+                        {include file="./_link_2017mother.tpl"}
+                    </div>
 
                     {{-- 旅亭懐石のとや --}}
-                    <div style="margin-bottom:10px;text-align:right;">{include file="./_link_notoya.tpl"}</div>
+                    <div style="margin-bottom:10px;text-align:right;">
+                        {include file="./_link_notoya.tpl"}
+                    </div>
 
                     {{-- 宮古島 --}}
-                    {{-- <div style="margin-bottom:10px;text-align:right;">{include file="./_link_miyakojima_small.tpl"}</div> --}}
+                    {{-- <div style="margin-bottom:10px;text-align:right;">
+                        {include file="./_link_miyakojima_small.tpl"}
+                    </div> --}}
 
                     {{-- 露天風呂付き客室特集 --}}
-                    <div style="margin-bottom:10px;text-align:right;">{include file="./_link_rotenroom.tpl"}</div>
+                    <div style="margin-bottom:10px;text-align:right;">
+                        {include file="./_link_rotenroom.tpl"}
+                    </div>
 
                     {{-- 東横イン特集 --}}
-                    <div style="margin-bottom:10px;text-align:right;">{include file="./_link_toyokoinn.tpl"}</div>
+                    <div style="margin-bottom:10px;text-align:right;">
+                        {include file="./_link_toyokoinn.tpl"}
+                    </div>
 
                     {{-- 東北物語 --}}
-                    <div style="margin-bottom:10px;text-align:right;">{include file="./_link_tohoku-monogatari.tpl"}</div>
+                    <div style="margin-bottom:10px;text-align:right;">
+                        {include file="./_link_tohoku-monogatari.tpl"}
+                    </div>
 
                     {{-- テレビde通訳 --}}
-                    <div style="margin-bottom:10px;text-align:right;">{include file="./_link_tvde.tpl"}</div>
+                    <div style="margin-bottom:10px;text-align:right;">
+                        {include file="./_link_tvde.tpl"}
+                    </div>
 
                     {{-- おみせフォト特集 --}}
-                    <div style="margin-bottom:10px;text-align:right;">{include file="./_link_gphoto.tpl"}</div>
+                    <div style="margin-bottom:10px;text-align:right;">
+                        {include file="./_link_gphoto.tpl"}
+                    </div>
 
                     {{-- バスぷらざ --}}
-                    <div style="margin-bottom:10px;text-align:right;">{include file="./_link_tabiplaza-bus.tpl"}</div>
+                    <div style="margin-bottom:10px;text-align:right;">
+                        {include file="./_link_tabiplaza-bus.tpl"}
+                    </div>
 
                     {{-- レンタカー --}}
-                    <div style="margin-bottom:10px;text-align:right;">{include file="./_link_tabiplaza-rentcar.tpl"}</div>
+                    <div style="margin-bottom:10px;text-align:right;">
+                        {include file="./_link_tabiplaza-rentcar.tpl"}
+                    </div>
 
                     {{-- スマフォ --}}
-                    <div style="margin:0 0 10px 7px;text-align:right; border:2px solid #c00; width:176px;">{include file="./_link_smartphone.tpl"}</div>
+                    <div style="margin:0 0 10px 7px;text-align:right; border:2px solid #c00; width:176px;">
+                        {include file="./_link_smartphone.tpl"}
+                    </div>
 
 
                     {{-- MOTHER化粧品付きプラン特集 --}}
-                    <div style="margin-bottom:10px;text-align:right;">{include file="./_link_mothercosme.tpl"}</div>
+                    <div style="margin-bottom:10px;text-align:right;">
+                        {include file="./_link_mothercosme.tpl"}
+                    </div>
 
                     {{-- facebook --}}
                     <div class="fbshare" style="margin-bottom:10px;">

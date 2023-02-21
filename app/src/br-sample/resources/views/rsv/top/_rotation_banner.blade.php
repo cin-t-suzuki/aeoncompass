@@ -20,28 +20,28 @@
     {{-- 都道府県民限定プラン特集 --}}
     <div class="sp-slide">
         <a href="/feature/arealimited2022/A01/">
-            <img class="sp-image" src="/img/tpc/slider/kenmin-br.jpg" alt="都道府県民限定プラン特集" />
+            <img class="sp-image" src="{{ asset('img/tpc/slider/kenmin-br.jpg') }}" alt="都道府県民限定プラン特集" />
         </a>
     </div>
 
     {{-- ベストセレクション --}}
     <div class="sp-slide">
         <a href="/feature/bselection2021/A01/">
-            <img class="sp-image" src="/img/tpc/slider/2020-1-bc.gif" alt="ベストセレクション" />
+            <img class="sp-image" src="{{ asset('img/tpc/slider/2020-1-bc.gif') }}" alt="ベストセレクション" />
         </a>
     </div>
 
     {{-- MOTHER化粧品付きプラン特集 --}}
     <div class="sp-slide">
         <a href="/feature/2017mother/A02/">
-            <img class="sp-image" src="/img/tpc/slider/2018-3-mother.gif" alt="MOTHER化粧品付きプラン特集" />
+            <img class="sp-image" src="{{ asset('img/tpc/slider/2018-3-mother.gif') }}" alt="MOTHER化粧品付きプラン特集" />
         </a>
     </div>
 
     {{-- お天気保険付きプラン --}}
     <div class="sp-slide">
         <a href="/guide/weatherplan/">
-            <img class="sp-image" src="/img/tpc/slider/2017-4-weather.gif" alt="お天気保険付きプラン" />
+            <img class="sp-image" src="{{ asset('img/tpc/slider/2017-4-weather.gif') }}" alt="お天気保険付きプラン" />
         </a>
     </div>
 
@@ -49,7 +49,7 @@
     {{-- ＪＲおでかけネットから遷移したときは表示しない。代替えとしてお天気保険を表示する。 --}}
     <div class="sp-slide">
         <a id="a-ch-jr-rentacar" href="/feature/jrc/">
-            <img class="sp-image ch-jr-rentacar" src="/img/tpc/slider/95-4-jrc.gif" alt="JR＋宿泊のお得なセット" />
+            <img class="sp-image ch-jr-rentacar" src="{{ asset('img/tpc/slider/95-4-jrc.gif') }}" alt="JR＋宿泊のお得なセット" />
         </a>
     </div>
 
@@ -57,19 +57,19 @@
 
 <div class="sp-thumbnails">
     {{-- 都道府県民限定プラン特集 サムネイル画像 --}}
-    <img class="sp-thumbnail" src="/img/tpc/slider/kenmin-br.jpg" />
+    <img class="sp-thumbnail" src="{{ asset('img/tpc/slider/kenmin-br.jpg') }}" />
 
     {{-- ベストセレクション サムネイル画像 --}}
-    <img class="sp-thumbnail" src="/img/tpc/slider/2020-1-bc.gif" />
+    <img class="sp-thumbnail" src="{{ asset('img/tpc/slider/2020-1-bc.gif') }}" />
 
     {{-- MOTHER化粧品付きプラン特集 サムネイル画像 --}}
-    <img class="sp-thumbnail" src="/img/tpc/slider/2018-3-mother.gif" />
+    <img class="sp-thumbnail" src="{{ asset('img/tpc/slider/2018-3-mother.gif') }}" />
 
     {{-- お天気保険付きプラン サムネイル画像 --}}
-    <img class="sp-thumbnail" src="/img/tpc/slider/2017-4-weather.gif" />
+    <img class="sp-thumbnail" src="{{ asset('img/tpc/slider/2017-4-weather.gif') }}" />
 
     {{-- ＪＲコレクション サムネイル画像 ：ＪＲおでかけネットから遷移したときは表示しない。代替えとしてお天気保険を表示する。 --}}
-    <img class="sp-thumbnail ch-jr-rentacar" src="/img/tpc/slider/95-4-jrc.gif" />
+    <img class="sp-thumbnail ch-jr-rentacar" src="{{ asset('img/tpc/slider/95-4-jrc.gif') }}" />
 
 </div>
 </div>

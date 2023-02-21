@@ -157,14 +157,14 @@
     @if (is_null($hotel_cd))
         <div class="sfm-jrc-submit">
             <div class="btn-b06-138-sb" style="margin:0 auto;">
-                <input class="btnimg collectBtn collectForce" src="/img/btn/b06-jrc1.gif" type="image" alt="ＪＲ＋宿泊検索" />
+                <input class="btnimg collectBtn collectForce" src="{{ asset('img/btn/b06-jrc1.gif') }}" type="image" alt="ＪＲ＋宿泊検索" />
             </div>
         </div>
         <div style="text-align:center;">※ご予約は日本旅行サイトでのご予約となります。</div>
     @else
         <div class="sfm-jrc-submit">
             <div class="btn-b06-138-sb" style="margin:0 auto;">
-                <input class="btnimg collectBtn collectForce" src="/img/btn/b06-jrc3.gif" type="image" alt="ＪＲ＋宿泊検索へすすむ" />
+                <input class="btnimg collectBtn collectForce" src="{{ asset('img/btn/b06-jrc3.gif') }}" type="image" alt="ＪＲ＋宿泊検索へすすむ" />
             </div>
         </div>
         <div style="text-align:center;">この商品は株式会社日本旅行が企画・実施しております。</div>
