@@ -59,7 +59,7 @@
         <div class="pg">
             <div class="pgh2-inner pgh2-top">
                 <ul class="info">
-                    {include file="./_link_text.tpl"}
+                    @include('rsv.top._link_text')
                 </ul>
                 {{-- {include file='../_common/_pgh2_inner.tpl'} --}}
                 @include('rsv.common._pgh2_inner')
@@ -124,7 +124,35 @@
                     {{-- ＪＲ＋宿泊 --}}
                     <tr class="jqs-jrc">
                         <td class="top-layout11" colspan="2">
-                            {include file='./_link_jrc.tpl'}
+                            {{-- {include file='./_link_jrc.tpl'} --}}
+                            <div style="margin-top:6px;float:left;">
+                                <a class="btnimg" href="/feature/jrc/">
+                                    <img src="/img/tpc/tpc-jrc-title.gif" alt="ＪＲ＋宿泊" width="753" height="40" />
+                                </a>
+                            </div>
+                            <div style="clear:both">
+                                <div style="padding: 3px 9px 3px 5px;float:left;">
+                                    <a href="/jrc/?SiteCode=00574251&PageType=hotel&ListMode=Plan&HotelCD=2000050121&Departure=56" target="_blank">
+                                        <img src="/feature/jrc/img/banner-2000050121_175-161.gif" alt="スマイルホテル東京日本橋" width="175" height="161" />
+                                    </a>
+                                </div>
+                                <div style="padding: 3px 9px 3px 5px;float:left;">
+                                    <a href="/jrc/?SiteCode=00574251&PageType=hotel&ListMode=Plan&HotelCD=2001080061&Departure=81" target="_blank">
+                                        <img src="/feature/jrc/img/banner-2001080061_175-161.gif" alt="新大阪サニーストンホテル" width="175" height="161" />
+                                    </a>
+                                </div>
+                                <div style="padding: 3px 9px 3px 5px;float:left;">
+                                    <a href="/jrc/?SiteCode=00574251&PageType=hotel&ListMode=Plan&HotelCD=2011110923&Departure=31" target="_blank">
+                                        <img src="/feature/jrc/img/banner-2011110923_175-161.gif" alt="和倉温泉湯けむりの宿美湾荘" width="175" height="161" />
+                                    </a>
+                                </div>
+                                <div style="padding: 3px 0px 3px 5px;float:left;">
+                                    <a href="/jrc/?SiteCode=00574251&PageType=hotel&ListMode=Plan&HotelCD=2001040033&Departure=31&Pax=1" target="_blank">
+                                        <img src="/feature/jrc/img/banner-2001040033_175-161.gif" alt="ホテルウィングインターナショナル名古屋" width="175" height="161" />
+                                    </a>
+                                </div>
+                            </div>
+                            {{-- /include --}}
                         </td>
                     </tr>
 
@@ -134,11 +162,44 @@
                             {{-- バナーB（大） --}}
                             <div>
                                 <div style="clear:both;width:446px;">
-                                    {include file='./_link_tdr.tpl'}
+                                    {{-- {include file='./_link_tdr.tpl'} --}}
+                                    @php
+                                        $alt = '東京ディズニーリゾート®・オフィシャルホテルへ行こう！';
+                                        $uri = '/feature/tdr/';
+                                        $img = '/feature/tdr/img/banner-218-219.gif';
+                                    @endphp
+                                    <div style="float:left;">
+                                        <a href="{{ $uri }}" title="{{ $alt }}" alt="{{ $alt }}">
+                                            <img src="{{ $img }}" alt="{{ $alt }}" width="218" height="219" />
+                                        </a>
+                                    </div>
+                                    {{-- /include --}}
                                 </div>
                                 <div>
-                                    {include file='./_link_yufuin.tpl'}
-                                    {include file='./_link_miyakojima.tpl'}
+                                    {{-- {include file='./_link_yufuin.tpl'} --}}
+                                    @php
+                                        $alt = 'ルートインホテルズ 特集';
+                                        $uri = '/hotel/grouphotel/JP2000RTIH.html';
+                                        $img = '/hotel/grouphotel/images/bn_JP2000RTIH_wide.jpg';
+                                    @endphp
+                                    <div>
+                                        <a href="{{ $uri }}" title="{{ $alt }}" alt="{{ $alt }}">
+                                            <img src="{{ $img }}" alt="{{ $alt }}" style="margin-left:9px;" width="218" height="105" />
+                                        </a>
+                                    </div>
+                                    {{-- /include --}}
+                                    {{-- {include file='./_link_miyakojima.tpl'} --}}
+                                    @php
+                                        $alt = '地域振興 宮古島へ行こう';
+                                        $uri = '/journey/japan/miyakojima/';
+                                        $img = '/journey/japan/miyakojima/img/banner-218-105.png';
+                                    @endphp
+                                    <div>
+                                        <a href="{{ $uri }}" title="{{ $alt }}" alt="{{ $alt }}">
+                                            <img src="{{ $img }}" alt="{{ $alt }}" style="margin:9px 0 0 9px;" width="218" height="105" />
+                                        </a>
+                                    </div>
+                                    {{-- /include --}}
                                 </div>
                             </div>
                         </td>
@@ -148,13 +209,21 @@
 
                             {{-- 城崎特集 --}}
                             <div style="margin-bottom:11px">
-                                {include file="./_link_kinosaki_middle.tpl"}
+                                {{-- {include file="./_link_kinosaki_middle.tpl"} --}}
+                                <a href="#" title="" alt="" target="_blank">
+                                    <img src="#" alt="仮実装" width="297" height="105" />
+                                </a>
+                                {{-- /include --}}
                             </div>
 
                             {{-- バナーC（小下） --}}
                             {{-- 温泉特集 --}}
                             <div style="margin-bottom:11px">
-                                {include file="./_link_onsen_middle.tpl"}
+                                {{-- {include file="./_link_onsen_middle.tpl"} --}}
+                                <a href="{$uri}" title="alt" alt="alt" target="_blank">
+                                    <img src="{$img}" alt="alt" width="297" height="105" />
+                                </a>
+                                {{-- /include --}}
                             </div>
                         </td>
                     </tr>
@@ -170,72 +239,103 @@
                     <tr>
                         <td class="top-layout14" colspan="2">
                             <div>
-                                {include file="./_link_advert_hotels.tpl"}
+                                @include('rsv.top._link_advert_hotels')
                             </div>
                         </td>
                     </tr>
                 </table>
-                <div class="top-layout15">
 
-                    {{-- MOTHER化粧品付きプラン特集 --}}
+                {{-- MEMO: 画面下半分の右端 --}}
+                <div class="top-layout15">
+                    {{--
+                        MEMO: 仮実装
+                            使用しない可能性があるため、仮実装
+                    --}}
+                    @for ($i = 0; $i < 10; $i++)
+                        @php
+                            $uri = '#';
+                            $alt = 'alt(' . $i . ')';
+                            $img_path = '/img/#';
+                            $width = 180;
+                            $height = $i === 0 ? 120 : 60;
+                        @endphp
+                        <div style="margin-bottom:10px;text-align:right;">
+                            {{-- {include file="./_link_2017mother.tpl"} --}}
+                            <a href="{{ $uri }}" title="{{ $alt }}" alt="{{ $alt }}">
+                                <img src="{{ $img_path }}" alt="{{ $alt }}" width="{{ $width }}" height="{{ $height }}" />
+                            </a>
+                            {{-- /include --}}
+                        </div>
+                    @endfor
+                    {{--
+                    <!-- MOTHER化粧品付きプラン特集 -->
                     <div style="margin-bottom:10px;text-align:right;">
                         {include file="./_link_2017mother.tpl"}
                     </div>
 
-                    {{-- 旅亭懐石のとや --}}
+                    <!-- 旅亭懐石のとや -->
                     <div style="margin-bottom:10px;text-align:right;">
                         {include file="./_link_notoya.tpl"}
                     </div>
 
-                    {{-- 宮古島 --}}
-                    {{-- <div style="margin-bottom:10px;text-align:right;">
-                        {include file="./_link_miyakojima_small.tpl"}
-                    </div> --}}
-
-                    {{-- 露天風呂付き客室特集 --}}
+                    <!-- 露天風呂付き客室特集 -->
                     <div style="margin-bottom:10px;text-align:right;">
                         {include file="./_link_rotenroom.tpl"}
                     </div>
 
-                    {{-- 東横イン特集 --}}
+                    <!-- 東横イン特集 -->
                     <div style="margin-bottom:10px;text-align:right;">
                         {include file="./_link_toyokoinn.tpl"}
                     </div>
 
-                    {{-- 東北物語 --}}
+                    <!-- 東北物語 -->
                     <div style="margin-bottom:10px;text-align:right;">
                         {include file="./_link_tohoku-monogatari.tpl"}
                     </div>
 
-                    {{-- テレビde通訳 --}}
+                    <!-- テレビde通訳 -->
                     <div style="margin-bottom:10px;text-align:right;">
                         {include file="./_link_tvde.tpl"}
                     </div>
 
-                    {{-- おみせフォト特集 --}}
+                    <!-- おみせフォト特集 -->
                     <div style="margin-bottom:10px;text-align:right;">
                         {include file="./_link_gphoto.tpl"}
                     </div>
 
-                    {{-- バスぷらざ --}}
+                    <!-- バスぷらざ -->
                     <div style="margin-bottom:10px;text-align:right;">
                         {include file="./_link_tabiplaza-bus.tpl"}
                     </div>
 
-                    {{-- レンタカー --}}
+                    <!-- レンタカー -->
                     <div style="margin-bottom:10px;text-align:right;">
                         {include file="./_link_tabiplaza-rentcar.tpl"}
                     </div>
 
-                    {{-- スマフォ --}}
-                    <div style="margin:0 0 10px 7px;text-align:right; border:2px solid #c00; width:176px;">
-                        {include file="./_link_smartphone.tpl"}
-                    </div>
-
-
-                    {{-- MOTHER化粧品付きプラン特集 --}}
+                    <!-- MOTHER化粧品付きプラン特集 -->
                     <div style="margin-bottom:10px;text-align:right;">
                         {include file="./_link_mothercosme.tpl"}
+                    </div>
+                    --}}
+
+                    {{-- スマフォ --}}
+                    <div style="margin:0 0 10px 7px;text-align:right; border:2px solid #c00; width:176px;">
+                        {{-- {include file="./_link_smartphone.tpl"} --}}
+                        @php
+                            $alt = 'スマートフォン版ベストリザーブ・宿ぷらざ';
+                            $uri = '/sp/';
+                            $img = '/img/cnr/spqr/banner-176-144-spqr.gif';
+                        @endphp
+                        <a href="{{ $uri }}" title="{{ $alt }}" alt="{{ $alt }}" target="_blank">
+                            <img src="{{ $img }}" alt="{{ $alt }}" width="176" height="144" />
+                        </a>
+                        <p style="font-size:12px; padding:5px 0 3px 6px; text-align:left;">
+                            <a href="{{ $uri }}" style="color:#333;" target="_blank">
+                                http://www.bestrsv.com/sp/
+                            </a>
+                        </p>
+                        {{-- /include --}}
                     </div>
 
                     {{-- facebook --}}

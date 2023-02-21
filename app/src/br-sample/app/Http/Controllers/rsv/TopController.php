@@ -166,6 +166,7 @@ class TopController extends Controller
                     ],
                 ],
             ],
+            'top_attention' => (object)[],
         ]);
     }
 }
