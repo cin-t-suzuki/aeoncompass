@@ -97,7 +97,10 @@ Route::get('/ctl/htltop/index/target_cd/{hotel_cd}', function ($targetCd) {retur
 Route::get('/ctl/htlHotel/show', [\App\Http\Controllers\ctl\HtlHotelController::class, 'show'])->name('ctl.htl_hotel.show');
 Route::match(['get', 'post'], '/ctl/htlHotel/edit/'             , function(){ return 'TODO:'; })->name('ctl.htl_hotel.edit');
 Route::match(['get', 'post'], '/ctl/htlHotelCard/show/'         , function(){ return 'TODO:'; })->name('ctl.htl_hotel_card.show');
-Route::match(['get', 'post'], '/ctl/htlHotelInfo/'              , function(){ return 'TODO:'; })->name('ctl.htl_hotel_info.index');
+Route::match(['get', 'post'], '/htlHotelInfo/', [\App\Http\Controllers\ctl\HtlhotelInfoController::class, 'index'])->name('ctl.htl_hotel_info.index');
+Route::match(['get', 'post'], '/htlHotelInfo/new/', [\App\Http\Controllers\ctl\HtlhotelInfoController::class, 'new'])->name('ctl.htl_hotel_info.new');
+Route::match(['get', 'post'], '/htlHotelInfo/show/', [\App\Http\Controllers\ctl\HtlhotelInfoController::class, 'show'])->name('ctl.htl_hotel_info.show');
+Route::match(['get', 'post'], '/htlHotelInfo/create/', [\App\Http\Controllers\ctl\HtlhotelInfoController::class, 'create'])->name('ctl.htl_hotel_info.create');
 Route::match(['get', 'post'], '/ctl/htlHotelLink/list/'         , function(){ return 'TODO:'; })->name('ctl.htl_hotel_link.list');
 Route::match(['get', 'post'], '/ctl/htlHotelStation/list/'      , function(){ return 'TODO:'; })->name('ctl.htl_hotel_station.list');
 Route::match(['get', 'post'], '/ctl/htlHotelAmenity/list/'      , function(){ return 'TODO:'; })->name('ctl.htl_hotel_amenity.list');
@@ -312,3 +315,13 @@ Route::match(['get', 'post'], '/ctl/htlHotelInform/changeinformorder/', [\App\Ht
 Route::match(['get', 'post'], '/ctl/htlHotelInform/changeotherorder/', [\App\Http\Controllers\ctl\HtlHotelInformController::class, 'changeotherorder'])->name('ctl.htl_hotel_inform.changeotherorder');
 Route::match(['get', 'post'], '/ctl/htlHotelInform/deleteother/', [\App\Http\Controllers\ctl\HtlHotelInformController::class, 'deleteother'])->name('ctl.htl_hotel_inform.deleteother');
 Route::match(['get', 'post'], '/ctl/htlHotelInform/deleteinform/', [\App\Http\Controllers\ctl\HtlHotelInformController::class, 'deleteinform'])->name('ctl.htl_hotel_inform.deleteinform');
+
+// 送客実績・料金変更
+Route::get('/ctl/brreserveck/index', [\App\Http\Controllers\ctl\BrReserveCkController::class, 'index'])->name('ctl.brReserveCk.index');
+Route::get('/ctl/brreserveck/search', [\App\Http\Controllers\ctl\BrReserveCkController::class, 'search'])->name('ctl.brReserveCk.search');
+Route::post('/ctl/brreserveck/update', [\App\Http\Controllers\ctl\BrReserveCkController::class, 'update'])->name('ctl.brReserveCk.update');
+Route::get('/ctl/brreserveck/reserveck', [\App\Http\Controllers\ctl\BrReserveCkController::class, 'reserveck'])->name('ctl.brReserveCk.reserveck');
+Route::get('/dl/reserveck.csv', [\App\Http\Controllers\ctl\BrReserveCkController::class, 'csv'])->name('ctl.dl.reserveck'); //CSV　パス、URL合っている？
+
+// 送客請求実績確認
+Route::get('/ctl/brdemandresult/list', [\App\Http\Controllers\ctl\BrDemandResultController::class, 'list'])->name('ctl.BrDemandResult.list');

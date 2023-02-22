@@ -63,7 +63,8 @@ class MastPref extends CommonDBModel
         if (!is_null($data) && count($data) > 0) {
             return [
                 $this->COL_PREF_ID => $data[0]->pref_id,
-                $this->COL_PREF_NM => $data[0]->pref_nm
+                $this->COL_PREF_NM => $data[0]->pref_nm,
+                $this->COL_PREF_CD => $data[0]->pref_cd //追記したが、他に影響ないか？
             ];
         }
         return null;
