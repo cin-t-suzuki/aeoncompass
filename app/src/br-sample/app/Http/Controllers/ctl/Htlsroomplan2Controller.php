@@ -8,49 +8,14 @@ use App\Services\Htlsroomplan2Service;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
 
-	//==========================================================================
-	// Htlsroomplan2 : Htlsroomplan2
-	//==========================================================================
-	// require_once '../models/HtlsRoomPlan2Model.php';
-	// require_once '_common/models/Core/ChargeCondition.php';
-	
-	class Htlsroomplan2Controller extends _commonController
+class Htlsroomplan2Controller extends _commonController
 	{
-		//======================================================================
-		// 事前処理
-		//======================================================================
-		public function preDispatch()
-		{
-			try{
-				// ログインチェック
-				parent::htlDispatch(); // ホテル向け認証
-				
-				//--------------------------------
-				// バージョンチェック
-				//--------------------------------
-				// 旧画面利用施設の場合は管理画面TOPへ飛ばす
-				$o_hotel_system_version = Hotel_System_Version::getInstance();
-				$a_hotel_system_version = $o_hotel_system_version->find(array('hotel_cd' => $this->params('target_cd'), 'system_type' => 'plan'));
-				
-				if ( $a_hotel_system_version['version'] === '1' ) {
-					return $this->_helper->redirector('index', 'htltop', 'ctl');
-				}
-				
-			} catch (Exception $e) {
-				// 各メソッドで Exception が投げられた場合
-				throw $e;
-			}
-			
-		}
-		
-		//======================================================================
-		// インデックス
-		//======================================================================
+		/**
+		 * Display a listening plan-maintenance
+		 */
 		public function index(Htlsroomplan2Service $service)
 		{
 			try{
-				// ※別画面のテンプレートを表示する場合
-				// return $this->_forward('list');
 				$request = Request::all();
 
 				$room_list = $service->get_room_list($request['target_cd']);
@@ -61,26 +26,6 @@ use Illuminate\Support\Facades\Request;
 				return view('ctl.htlsroomplan2.index', compact('user', 'room_list', 'plan_list'));
 				
 			} catch (Exception $e) {
-				throw $e;
-			}
-			
-		}
-		
-		//======================================================================
-		// 一覧
-		//======================================================================
-		public function listAction()
-		{
-			try{
-				// アクションの処理
-				$this->listMethod();
-				
-				// ※当該画面のtplを表示
-				$this->box->item->assign = $this->_assign;
-				$this->set_assign();
-				
-			} catch (Exception $e) {
-				// 各メソッドで Exception が投げられた場合
 				throw $e;
 			}
 			
