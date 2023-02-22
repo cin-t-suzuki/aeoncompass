@@ -97,7 +97,10 @@ Route::get('/ctl/htltop/index/target_cd/{hotel_cd}', function ($targetCd) {retur
 Route::get('/ctl/htlHotel/show', [\App\Http\Controllers\ctl\HtlHotelController::class, 'show'])->name('ctl.htl_hotel.show');
 Route::match(['get', 'post'], '/ctl/htlHotel/edit/'             , function(){ return 'TODO:'; })->name('ctl.htl_hotel.edit');
 Route::match(['get', 'post'], '/ctl/htlHotelCard/show/'         , function(){ return 'TODO:'; })->name('ctl.htl_hotel_card.show');
-Route::match(['get', 'post'], '/ctl/htlHotelInfo/'              , function(){ return 'TODO:'; })->name('ctl.htl_hotel_info.index');
+Route::match(['get', 'post'], '/htlHotelInfo/', [\App\Http\Controllers\ctl\HtlhotelInfoController::class, 'index'])->name('ctl.htl_hotel_info.index');
+Route::match(['get', 'post'], '/htlHotelInfo/new/', [\App\Http\Controllers\ctl\HtlhotelInfoController::class, 'new'])->name('ctl.htl_hotel_info.new');
+Route::match(['get', 'post'], '/htlHotelInfo/show/', [\App\Http\Controllers\ctl\HtlhotelInfoController::class, 'show'])->name('ctl.htl_hotel_info.show');
+Route::match(['get', 'post'], '/htlHotelInfo/create/', [\App\Http\Controllers\ctl\HtlhotelInfoController::class, 'create'])->name('ctl.htl_hotel_info.create');
 Route::match(['get', 'post'], '/ctl/htlHotelInform/list/'       , function(){ return 'TODO:'; })->name('ctl.htl_hotel_inform.list');
 Route::match(['get', 'post'], '/ctl/htlHotelLink/list/'         , function(){ return 'TODO:'; })->name('ctl.htl_hotel_link.list');
 Route::match(['get', 'post'], '/ctl/htlHotelStation/list/'      , function(){ return 'TODO:'; })->name('ctl.htl_hotel_station.list');
