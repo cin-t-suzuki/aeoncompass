@@ -99,7 +99,10 @@ Route::match(['get', 'post'], '/ctl/htlHotel/show', [\App\Http\Controllers\ctl\H
 Route::match(['get', 'post'], '/ctl/htlHotel/edit/', [\App\Http\Controllers\ctl\HtlHotelController::class, 'edit'])->name('ctl.htl_hotel.edit');
 Route::match(['get', 'post'], '/ctl/htlHotel/update/', [\App\Http\Controllers\ctl\HtlHotelController::class, 'update'])->name('ctl.htl_hotel.update');
 Route::match(['get', 'post'], '/ctl/htlHotelCard/show/'         , function(){ return 'TODO:'; })->name('ctl.htl_hotel_card.show');
-Route::match(['get', 'post'], '/ctl/htlHotelInfo/'              , function(){ return 'TODO:'; })->name('ctl.htl_hotel_info.index');
+Route::match(['get', 'post'], '/htlHotelInfo/', [\App\Http\Controllers\ctl\HtlhotelInfoController::class, 'index'])->name('ctl.htl_hotel_info.index');
+Route::match(['get', 'post'], '/htlHotelInfo/new/', [\App\Http\Controllers\ctl\HtlhotelInfoController::class, 'new'])->name('ctl.htl_hotel_info.new');
+Route::match(['get', 'post'], '/htlHotelInfo/show/', [\App\Http\Controllers\ctl\HtlhotelInfoController::class, 'show'])->name('ctl.htl_hotel_info.show');
+Route::match(['get', 'post'], '/htlHotelInfo/create/', [\App\Http\Controllers\ctl\HtlhotelInfoController::class, 'create'])->name('ctl.htl_hotel_info.create');
 Route::match(['get', 'post'], '/ctl/htlHotelInform/list/'       , function(){ return 'TODO:'; })->name('ctl.htl_hotel_inform.list');
 Route::match(['get', 'post'], '/ctl/htlHotelLink/list/'         , function(){ return 'TODO:'; })->name('ctl.htl_hotel_link.list');
 Route::match(['get', 'post'], '/ctl/htlHotelStation/list/'      , function(){ return 'TODO:'; })->name('ctl.htl_hotel_station.list');
@@ -252,6 +255,15 @@ Route::get('/ctl/brinsuranceweather/', [\App\Http\Controllers\ctl\BrInsuranceWea
 Route::post('/ctl/brinsuranceweather/updatecondition', [\App\Http\Controllers\ctl\BrInsuranceWeatherController::class, 'updatecondition'])
     ->name('ctl.brInsuranceWeather.updatecondition');
 
+// パートナー精算確認
+Route::get('/ctl/brbillpayptn/list', [\App\Http\Controllers\ctl\BrBillPayPtnController::class, 'list'])
+    ->name('ctl.brBillpayPtn.list');
+Route::get('/ctl/brbillpayptn/customer', [\App\Http\Controllers\ctl\BrBillPayPtnController::class, 'customer'])
+    ->name('ctl.brBillpayPtn.customer');
+Route::get('/ctl/brbillpayptn/detail', [\App\Http\Controllers\ctl\BrBillPayPtnController::class, 'detail'])
+    ->name('ctl.brBillpayPtn.detail');
+Route::get('/ctl/brbillpayptn/csv', [\App\Http\Controllers\ctl\BrBillPayPtnController::class, 'csv'])
+    ->name('ctl.brBillpayPtn.csv');
 
 // 参考として一応残す。
 // Route::namespace('App\Http\Controllers\ctl')->prefix('ctl')->group(function () {
@@ -296,3 +308,12 @@ Route::post('/ctl/brCustomer/csv', function () {return 'TODO'; })->name('ctl.brC
 Route::match(['get', 'post'], '/ctl/htlHotelCard/show/', [\App\Http\Controllers\ctl\HtlHotelCardController::class, 'show'])->name('ctl.htl_hotel_card.show');
 Route::match(['get', 'post'], '/ctl/htlHotelCard/update/', [\App\Http\Controllers\ctl\HtlHotelCardController::class, 'update'])->name('ctl.htl_hotel_card.update');
 
+// 送客実績・料金変更
+Route::get('/ctl/brreserveck/index', [\App\Http\Controllers\ctl\BrReserveCkController::class, 'index'])->name('ctl.brReserveCk.index');
+Route::get('/ctl/brreserveck/search', [\App\Http\Controllers\ctl\BrReserveCkController::class, 'search'])->name('ctl.brReserveCk.search');
+Route::post('/ctl/brreserveck/update', [\App\Http\Controllers\ctl\BrReserveCkController::class, 'update'])->name('ctl.brReserveCk.update');
+Route::get('/ctl/brreserveck/reserveck', [\App\Http\Controllers\ctl\BrReserveCkController::class, 'reserveck'])->name('ctl.brReserveCk.reserveck');
+Route::get('/dl/reserveck.csv', [\App\Http\Controllers\ctl\BrReserveCkController::class, 'csv'])->name('ctl.dl.reserveck'); //CSV　パス、URL合っている？
+
+// 送客請求実績確認
+Route::get('/ctl/brdemandresult/list', [\App\Http\Controllers\ctl\BrDemandResultController::class, 'list'])->name('ctl.BrDemandResult.list');
