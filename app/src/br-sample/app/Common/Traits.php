@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Common;
+use App\Models\Core;
 
 trait Traits
 {
@@ -130,4 +131,18 @@ trait Traits
 	}
 
 
+    /**
+     * 生リクエスト内容をそのままGetパラメータに変換します
+     * @param string $as_key パラメータに変換する対象となるキーを「,」で区切って設定します。
+     * @param bool $ab_include true:aa_key に存在するもののみを表示 false:aa_keyに存在しないものを表示
+     * @return array
+     */
+    public function toQueryCorrect($as_key, $ab_include = true)
+    {
+
+        $aa_key = explode(',', $as_key);
+
+        $core = new Core();
+        return $core->toQueryCorrect($aa_key, $ab_include);
+    }
 }
