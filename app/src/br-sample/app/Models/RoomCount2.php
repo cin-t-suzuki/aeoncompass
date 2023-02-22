@@ -10,7 +10,6 @@ use Exception;
 
 class RoomCount2 extends CommonDBModel
 {
-
     /**
      * モデルに関連付けるテーブル
      *
@@ -79,7 +78,7 @@ class RoomCount2 extends CommonDBModel
         'modify_ts'
     ];
 
-    public function DataInsert($a_attributes)
+    public function dataInsert($a_attributes)
     {
         try {
             $s_sql =
@@ -111,7 +110,7 @@ class RoomCount2 extends CommonDBModel
             }
 
             // room_count のinsert
-            if (!$room_count->insert_htls_room_offer($a_attributes)) {
+            if (!$room_count->insertHtlsRoomOffer($a_attributes)) {
                 return false;
             }
 
@@ -125,14 +124,14 @@ class RoomCount2 extends CommonDBModel
                     'rooms'    => $a_attributes['edit_rooms'],
                     'reserve_rooms' => 0,
                     'accept_status' => 1,
-                    'entry_cd'  => "action_cd",  // TODO $this->box->info->env->action_cd
+                    'entry_cd'  => $a_attributes['entry_cd'],
                     'entry_ts'      => now(),
-                    'modify_cd' => "action_cd", // TODO $this->box->info->env->action_cd
+                    'modify_cd' => $a_attributes['modify_cd'],
                     'modify_ts'     => now()
                 ]
             );
 
-            if (!$room_count2_insert) {
+            if (is_null($room_count2_insert)) {
                 return false;
             }
 
@@ -142,10 +141,9 @@ class RoomCount2 extends CommonDBModel
         }
     }
 
-    public function DataUpdate($a_attributes)
+    public function dataUpdate($a_attributes)
     {
         try {
-
             $s_sql =
                 <<< SQL
     					select	room_cd
@@ -183,15 +181,16 @@ class RoomCount2 extends CommonDBModel
                 $this->addErrorMessageArray($errorList);
                 return false;
             }
-
             // room_countのupdate
-            if (!$room_count->update_htls_room_offer($a_attributes)) {
+            if (!$room_count->updateHtlsRoomOffer($a_attributes)) {
                 return false;
             }
+
             // room_count2 のupdate
             $room_count2 = new RoomCount2();
+
             if (isset($a_attributes['accept_status']) && $a_attributes['ui_type'] != 'accept') {
-                $room_count2_update = $room_count2->where(
+                $room_count2->where(
                     [
                         'hotel_cd' => $a_attributes['hotel_cd'],
                         'room_id' => $a_attributes['room_cd'],
@@ -206,7 +205,7 @@ class RoomCount2 extends CommonDBModel
                     ]
                 );
             } elseif (isset($a_attributes['accept_status']) && $a_attributes['ui_type'] === 'accept') {
-                $room_count2_update = $room_count2->where(
+                $room_count2->where(
                     [
                         'hotel_cd' => $a_attributes['hotel_cd'],
                         'room_id' => $a_attributes['room_cd'],
@@ -220,7 +219,7 @@ class RoomCount2 extends CommonDBModel
                     ]
                 );
             } else {
-                $room_count2_update = $room_count2->where(
+                $room_count2->where(
                     [
                         'hotel_cd' => $a_attributes['hotel_cd'],
                         'room_id' => $a_attributes['room_cd'],
@@ -230,15 +229,10 @@ class RoomCount2 extends CommonDBModel
                     [
                         'rooms' => $a_attributes['rooms'],
                         'modify_cd' => $a_attributes['modify_cd'],
-                        'modify_ts' => $a_attributes['modify_ts'],
+                        'modify_ts' => $a_attributes['modify_ts']
                     ]
                 );
             }
-
-            if (!$room_count2_update) {
-                return false;
-            }
-
             return true;
         } catch (Exception $e) {
             throw $e;

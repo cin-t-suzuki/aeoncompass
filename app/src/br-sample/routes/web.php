@@ -303,3 +303,9 @@ Route::post('/ctl/brCustomer/csv', function () {return 'TODO'; })->name('ctl.brC
 Route::match(['get', 'post'], '/ctl/htlHotelCard/show/', [\App\Http\Controllers\ctl\HtlHotelCardController::class, 'show'])->name('ctl.htl_hotel_card.show');
 Route::match(['get', 'post'], '/ctl/htlHotelCard/update/', [\App\Http\Controllers\ctl\HtlHotelCardController::class, 'update'])->name('ctl.htl_hotel_card.update');
 
+// 室数提供調整
+Route::match(['get', 'post'], '/ctl/htlsroomoffer/index', [\App\Http\Controllers\ctl\HtlsroomofferController::class, 'index'])->name('ctl.htlsroomoffer.index');
+Route::match(['get', 'post'], '/ctl/htlsroomoffer/list', [\App\Http\Controllers\ctl\HtlsroomofferController::class, 'list'])->name('ctl.htlsroomoffer.list');
+Route::match(['get', 'post'], '/ctl/htlsroomoffer/edit', [\App\Http\Controllers\ctl\HtlsroomofferController::class, 'edit'])->name('ctl.htlsroomoffer.edit');
+Route::match(['get', 'post'], '/ctl/htlsroomoffer/confirm', [\App\Http\Controllers\ctl\HtlsroomofferController::class, 'confirm'])->name('ctl.htlsroomoffer.confirm');
+Route::match(['get', 'post'], '/ctl/htlsroomoffer/update', [\App\Http\Controllers\ctl\HtlsroomofferController::class, 'update'])->name('ctl.htlsroomoffer.update');

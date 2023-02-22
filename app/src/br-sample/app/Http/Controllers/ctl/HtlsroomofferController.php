@@ -20,7 +20,7 @@ class HtlsRoomOfferController extends _commonController
     protected $_s_partner_cd       = null;  // 提携先コード
     protected $_n_partner_group_id = null;  // 提携先グループID
     private $_a_get_partner_group_id = [];  // キャッシュ用変数  （旧）public\app\_common\models\Core\Partner.php
-    
+
     protected $a_calendar;
     protected $s_from_ymd = null;
     protected $s_to_ymd = null;
@@ -37,15 +37,14 @@ class HtlsRoomOfferController extends _commonController
     const PTN_CD_RELO = '3015008796'; // リロクラブ
 
     // 特殊な提携先コードのリスト
-    protected $a_special_partners; 
+    protected $a_special_partners;
 
     // 土曜日
-    const SATDAY_NUM = 6; 
+    const SATDAY_NUM = 6;
 
-
-    //==========================================================================================
-    // インデックス
-    //==========================================================================================
+    /**
+     * インデックス
+     */
     public function index()
     {
         try {
@@ -56,13 +55,12 @@ class HtlsRoomOfferController extends _commonController
         }
     }
 
-    //==========================================================================================
-    // 一覧画面
-    //==========================================================================================
+    /**
+     * 一覧画面
+     */
     public function list()
     {
         try {
-            // アクションの実行
             // 初期化
             $o_date = new DateUtil();
             $o_now_date = new DateUtil();
@@ -70,7 +68,8 @@ class HtlsRoomOfferController extends _commonController
             // リクエストパラメータ取得
             $target_cd = Request::input('target_cd');
             $a_form_params = Request::all();
-            // TODO 認証関連機能ができ次第削除　仮で設定 
+
+            // TODO 認証関連機能ができ次第削除　仮で設定
             $hotel['hotel_cd'] = 999999;
 
             // 選択可能最小日付取得(2年前まで)
@@ -88,15 +87,15 @@ class HtlsRoomOfferController extends _commonController
             $a_end_date['month'] = (int)$o_now_date->to_format('m');
             $a_end_date['day']   = (int)$o_now_date->to_format('d');
 
-            // 表示日付範囲取得			
+            // 表示日付範囲取得
             if (!empty($a_form_params['start_ymd']['year']) and !empty($a_form_params['start_ymd']['month']) and !empty($a_form_params['start_ymd']['day'])) {
                 $o_date->set($a_form_params['start_ymd']['year'] . '-' . sprintf('%02d', $a_form_params['start_ymd']['month']) . '-' . sprintf('%02d', $a_form_params['start_ymd']['day']));
             }
 
-            $a_date_range = $this->_set_date_range($o_date->get());
+            $a_date_range = $this->setDateRange($o_date->get());
 
             //「新部屋プランメンテナンス」メニューの表示・非表示判定
-            $a_system_versions = $this->_set_disp_room_plan_list($target_cd);
+            $a_system_versions = $this->setDispRoomPlanList($target_cd);
 
             // アサインの登録
             $this->addViewData("target_cd", $target_cd);
@@ -115,7 +114,6 @@ class HtlsRoomOfferController extends _commonController
             //----------------------------------------------------------------------------------
             // リクエストパラメータを取得
             //----------------------------------------------------------------------------------
-
             $a_request_params = Request::all();
 
             // 旧処理との互換維持のためにパラメータを設定
@@ -149,7 +147,7 @@ class HtlsRoomOfferController extends _commonController
             }
 
             // カレンダーオブジェクトに開始日を設定
-            $this->set_from_ymd($o_models_date->to_format('Y-m-d'));
+            $this->setFromYmd($o_models_date->to_format('Y-m-d'));
 
             // 開始日をリクエストパラメータに設定
             $a_request_params['from_year']  = $o_models_date->to_format('Y');
@@ -163,20 +161,17 @@ class HtlsRoomOfferController extends _commonController
             $a_request_params['to_ymd']   = $o_models_date->to_format('Y-m-d');
 
             // カレンダーオブジェクトに終了日を設定
-            $this->set_to_ymd($o_models_date->to_format('Y-m-d'));
+            $this->setToYmd($o_models_date->to_format('Y-m-d'));
 
             // 表示期間情報を生成
-            $this->make_line_calendar();
+            $this->makeLineCalendar();
 
-            //----------------------------------------------------------------------------------
-            // アサイン
-            //---------------------------------------------------------------------------------
-            $room_details            = $this->get_details_room3($target_cd);          // 施設の有効なすべての部屋の詳細情報
-            $plan_details            = $this->get_details_plan3($target_cd);          // 施設の有効なすべてのプランの詳細情報
-            $match_room_plans_all    = $this->get_match_room_plans_all($target_cd);   // 部屋から見たときのプランとの組み合わせ情報
-            $week_days               = $this->get_calendar();
-            $sale_state_room_plan    = $this->get_from_to_sale_state_room_plan($a_request_params['from_ymd'], $a_request_params['to_ymd'], $target_cd);
-            $reserve_count_room_plan = $this->get_from_to_reserve_count_room_plan($a_request_params['from_ymd'], $a_request_params['to_ymd'], $target_cd);
+            $room_details            = $this->getDetailsRoom3($target_cd);          // 施設の有効なすべての部屋の詳細情報
+            $plan_details            = $this->getDetailsPlan3($target_cd);          // 施設の有効なすべてのプランの詳細情報
+            $match_room_plans_all    = $this->getMatchRoomPlansAll($target_cd);   // 部屋から見たときのプランとの組み合わせ情報
+            $week_days               = $this->getCalendar();
+            $sale_state_room_plan    = $this->getFromToSaleStateRoomPlan($a_request_params['from_ymd'], $a_request_params['to_ymd'], $target_cd);
+            $reserve_count_room_plan = $this->getFromToReserveCountRoomPlan($a_request_params['from_ymd'], $a_request_params['to_ymd'], $target_cd);
 
             $this->addViewData("request_params", $a_form_params);
             $this->addViewData("room_details", $room_details);
@@ -192,13 +187,12 @@ class HtlsRoomOfferController extends _commonController
         }
     }
 
-    //==========================================================================================
-    // 提供部屋数編集
-    //==========================================================================================
+    /**
+     * 提供部屋数編集
+     */
     public function edit()
     {
         try {
-
             // リクエストパラメータ取得
             $target_cd = Request::input('target_cd');
             $a_form_params = Request::all();
@@ -206,21 +200,21 @@ class HtlsRoomOfferController extends _commonController
             $a_form_params['remainder_room_zero'] = Request::input('remainder_room_zero');
 
             // 「新部屋プランメンテナンス」メニューの表示・非表示判定
-            $a_system_versions = $this->_set_disp_room_plan_list($target_cd);
+            $a_system_versions = $this->setDispRoomPlanList($target_cd);
 
             // UIの種類によって処理を変更
             switch ($a_form_params['ui_type']) {
                 case 'room':
                 case 'accept':
-                    $this->_edit_ui_type_room($a_form_params);
+                    $this->editUiTypeRoom($a_form_params);
                     break;
 
                 case 'date':
-                    $this->_edit_ui_type_date($a_form_params);
+                    $this->editUiTypeDate($a_form_params);
                     break;
 
                 case 'calender':
-                    $this->_edit_ui_type_calender($a_form_params);
+                    $this->editUiTypeCalender($a_form_params);
                     break;
             }
 
@@ -235,9 +229,9 @@ class HtlsRoomOfferController extends _commonController
         }
     }
 
-    //==========================================================================================
-    // 提供部屋数編集確認
-    //==========================================================================================
+    /**
+     * 提供部屋数編集確認
+     */
     public function confirm()
     {
         try {
@@ -247,15 +241,14 @@ class HtlsRoomOfferController extends _commonController
             }
 
             return view("ctl.htlsroomoffer.confirm", $this->getViewData());
-
         } catch (Exception $e) {
             throw $e;
         }
     }
 
-    //==========================================================================================
-    // 提供部屋数更新
-    //==========================================================================================
+    /**
+     * 提供部屋数更新
+     */
     public function update()
     {
         // リクエストパラメータ取得
@@ -293,21 +286,18 @@ class HtlsRoomOfferController extends _commonController
             // }
 
             return view("ctl.htlsroomoffer.update", $this->getViewData());
-
         } catch (Exception $e) {
+            DB::rollback();
             throw $e;
         }
     }
 
-
-    //==========================================================================================
-    // 表示期間指定用パラメータセット
-    //==========================================================================================
-    public function _set_date_range($an_base_date = null)
+    /**
+     * 表示期間指定用パラメータセット
+     */
+    public function setDateRange($an_base_date = null)
     {
-
         try {
-
             // 初期化
             $o_date        = new DateUtil($an_base_date);
             $o_date->set($o_date->to_format('Y-m-d'));
@@ -368,15 +358,15 @@ class HtlsRoomOfferController extends _commonController
         }
     }
 
-    //==========================================================================================
-    // 「新部屋プランメンテナンス」メニューの表示・非表示判定
-    //==========================================================================================
-    public function _set_disp_room_plan_list($target_cd)
+    /**
+     * 「新部屋プランメンテナンス」メニューの表示・非表示判定
+     */
+    public function setDispRoomPlanList($target_cd)
     {
         try {
             $plan = 'plan';
             $version_cullumn = HotelSystemVersion::where('hotel_cd', $target_cd)->where('system_type', $plan)->first();
-            $a_system_versions = $this->to_shift($version_cullumn['version'], true);
+            $a_system_versions = $this->toShift($version_cullumn['version'], true);
 
             return $a_system_versions;
         } catch (Exception $e) {
@@ -384,20 +374,23 @@ class HtlsRoomOfferController extends _commonController
         }
     }
 
-    // 旧ソース public\app\_common\models\Core.php のto_shiftメソッド
-    // ２進数を展開し一致するビットもしくは位に変換します。
-    //
-    //  as_value 数字を設定
-    //  ab_bits  true ビットで返却 false 位で返却
-    //
-    //  example
-    //    bits = true
-    //      > 30
-    //        >> array(2, 4, 8, 16)
-    //    bits = false
-    //      > 30
-    //        >> array(1, 2, 3, 4)
-    public function to_shift($as_value, $ab_bits = true)
+    /**
+     * ２進数を展開し一致するビットもしくは位に変換します。
+     *
+     * 旧ソース public\app\_common\models\Core.php のtoShiftメソッド
+     * as_value 数字を設定
+     * ab_bits  true ビットで返却 false 位で返却
+     *
+     * example
+     *    bits = true
+     *      > 30
+     *        >> array(2, 4, 8, 16)
+     *
+     *    bits = false
+     *      > 30
+     *        >> array(1, 2, 3, 4)
+     */
+    public function toShift($as_value, $ab_bits = true)
     {
         try {
             if ($as_value <= 0) {
@@ -441,11 +434,10 @@ class HtlsRoomOfferController extends _commonController
         }
     }
 
-
-    //======================================================================
-    // 施設の保持する管理画面上有効な部屋の詳細情報を取得
-    //======================================================================
-    public function get_details_room3($s_hotel_cd)
+    /**
+     * 施設の保持する管理画面上有効な部屋の詳細情報を取得
+     */
+    public function getDetailsRoom3($s_hotel_cd)
     {
         try {
             //--------------------------------------------------------------
@@ -473,7 +465,7 @@ class HtlsRoomOfferController extends _commonController
 						and	room2.active_status  = 1
 SQL_WHERE;
             // $o_models_room_akafu_relation = new RoomAkafuRelation();
-            $s_sql = $this->get_sql_room_base($s_where);
+            $s_sql = $this->getSqlRoomBase($s_where);
             $a_rows = DB::select($s_sql, $a_conditions);
             //--------------------------------------------------------------
             // 配列のキーが部屋IDになるように整形
@@ -488,15 +480,15 @@ SQL_WHERE;
         }
     }
 
-    //======================================================================
-    // 部屋情報（管理画面上でオレンジ枠で表現されるもの）を取得するSQL文を取得。
-    //
-    // @params string 部屋の抽出条件（WHERE句）
-    // @params bool   ORDER BY句を付与するか否か（true:付与する, false:付与しない）
-    //
-    // @return string 部屋情報を取得する為のSQL文
-    //======================================================================
-    public function get_sql_room_base($as_where, $ab_is_orderby = true)
+    /**
+     * 部屋情報（管理画面上でオレンジ枠で表現されるもの）を取得するSQL文を取得。
+     *
+     * @param string 部屋の抽出条件（WHERE句）
+     * @param bool   ORDER BY句を付与するか否か（true:付与する, false:付与しない）
+     *
+     * @return string 部屋情報を取得する為のSQL文
+     */
+    public function getSqlRoomBase($as_where, $ab_is_orderby = true)
     {
         try {
             //--------------------------------------------------------------
@@ -553,7 +545,8 @@ SQL_ORDER_BY;
 							  	is null then 0	
 							end 
 							as is_akafu
-					from	
+					from	room_akafu_relation
+                    right outer join
 							(
 								-- 部屋のネット環境情報の取得
 								select	room_specs_add.hotel_cd,
@@ -630,7 +623,6 @@ SQL_ORDER_BY;
 								where	room_network2.hotel_cd = room_specs_add.hotel_cd
 									and	room_network2.room_id  = room_specs_add.room_id
 							) network_add
-					left join room_akafu_relation
 					on	room_akafu_relation.hotel_cd = network_add.hotel_cd
 					and	room_akafu_relation.room_id = network_add.room_id
 					{$s_order_by}
@@ -642,14 +634,15 @@ SQL;
         }
     }
 
-    //======================================================================
-    // 指定した施設の管理画面に表示されるプラン詳細情報を取得
-    //   ・プランメンテナンス画面のプラン表示と同フォーマット
-    //   ・必要な情報のみを取得
-    //
-    // @return array 管理画面に表示されているプランの詳細情報
-    //======================================================================
-    public function get_details_plan3($s_hotel_cd)
+    /**
+     * 指定した施設の管理画面に表示されるプラン詳細情報を取得
+     *
+     * ・プランメンテナンス画面のプラン表示と同フォーマット
+     * ・必要な情報のみを取得
+     *
+     * @return array 管理画面に表示されているプランの詳細情報
+     */
+    public function getDetailsPlan3($s_hotel_cd)
     {
         $this->a_details          = [];
 
@@ -684,17 +677,17 @@ SQL;
 						and	plan.active_status  = 1
 SQL_WHERE;
             // $o_models_plam_point = new PlanPoint();
-            $s_sql = $this->get_sql_plan_base($s_where);
+            $s_sql = $this->getSqlPlanBase($s_where);
             $a_rows = DB::select($s_sql, $a_conditions);
 
             foreach ($a_rows as $key => $a_row) {
                 // キャンペーン対象かどうかを設定
-                $this->s_plan_id                                 = $a_row->plan_id;
-                $this->a_details[$a_row->plan_id]            = $a_row;
-                $this->a_details[$a_row->plan_id]->is_camp = $this->is_campaign($s_hotel_cd);
+                $this->s_plan_id                           = $a_row->plan_id;
+                $this->a_details[$a_row->plan_id]          = $a_row;
+                $this->a_details[$a_row->plan_id]->is_camp = $this->isCampaign($s_hotel_cd);
 
                 // プランの販売先チャンネルIDを設定
-                $this->a_details[$a_row->plan_id]->partner_groups = $this->get_plan_partner_groups($s_hotel_cd);
+                $this->a_details[$a_row->plan_id]->partner_groups = $this->getPlanPartnerGroups($s_hotel_cd);
             }
 
             // 退避していたプランIDを設定しなおす
@@ -706,15 +699,15 @@ SQL_WHERE;
         }
     }
 
-    //======================================================================
-    // プラン情報（管理画面上で緑枠で表現されるもの）を取得するSQL文を取得。
-    //
-    // @params string プランの抽出条件（WHERE句）
-    // @params bool   ORDER BY句を付与するか否か（true:付与する, false:付与しない）
-    //
-    // @return string プラン情報を取得する為のSQL文
-    //======================================================================
-    public function get_sql_plan_base($as_where, $ab_is_orderby = true)
+    /**
+     * プラン情報（管理画面上で緑枠で表現されるもの）を取得するSQL文を取得。
+     *
+     * @param string プランの抽出条件（WHERE句）
+     * @param bool   ORDER BY句を付与するか否か（true:付与する, false:付与しない）
+     *
+     * @return string プラン情報を取得する為のSQL文
+     */
+    public function getSqlPlanBase($as_where, $ab_is_orderby = true)
     {
         try {
             //--------------------------------------------------------------
@@ -939,12 +932,12 @@ SQL;
         }
     }
 
-    //======================================================================
-    // 対象プランがキャンペーン対象であるかチェック
-    //
-    // @return bool キャンペーンプラン成否（true:対象, false:非対象）
-    //======================================================================
-    public function is_campaign($s_hotel_cd)
+    /**
+     * 対象プランがキャンペーン対象であるかチェック
+     *
+     * @return bool キャンペーンプラン成否（true:対象, false:非対象）
+     */
+    public function isCampaign($s_hotel_cd)
     {
         try {
             //--------------------------------------------------------------
@@ -1009,12 +1002,12 @@ SQL;
         }
     }
 
-    //======================================================================
-    // 販売先の提携先グループIDを取得
-    //
-    // @return Array 対象プランの販売される提携先グループID一覧
-    //======================================================================
-    public function get_plan_partner_groups($s_hotel_cd)
+    /**
+     * 販売先の提携先グループIDを取得
+     *
+     * @return array 対象プランの販売される提携先グループID一覧
+     */
+    public function getPlanPartnerGroups($s_hotel_cd)
     {
         try {
             //--------------------------------------------------------------
@@ -1062,10 +1055,10 @@ SQL;
         }
     }
 
-    //======================================================================
-    // 施設のすべての部屋が紐づくプランIDをすべて取得
-    //======================================================================
-    public function get_match_room_plans_all($s_hotel_cd)
+    /**
+     * 施設のすべての部屋が紐づくプランIDをすべて取得
+     */
+    public function getMatchRoomPlansAll($s_hotel_cd)
     {
         try {
             //--------------------------------------------------------------
@@ -1082,7 +1075,7 @@ SQL;
 					where	room_plan_match.hotel_cd = :hotel_cd
 WHERE;
 
-            $s_sql = $this->get_sql_match_plan_room_base($s_where);
+            $s_sql = $this->getSqlMatchPlanRoomBase($s_where);
 
             //--------------------------------------------------------------
             // 結果取得
@@ -1099,16 +1092,17 @@ WHERE;
         }
     }
 
-    //======================================================================
-    // プランと部屋の指定期間の販売状況を判断するための情報を取得(部屋基準)
-    // ・「在庫数」、「料金」、「手仕舞」の状態
-    //
-    // @params string 開始日
-    //         string 終了日
-    //
-    // @return array 指定期間のプランと部屋の販売状況
-    //======================================================================
-    public function get_from_to_sale_state_room_plan($as_from_ymd, $as_to_ymd, $target_cd)
+    /**
+     * プランと部屋の指定期間の販売状況を判断するための情報を取得(部屋基準)
+     *
+     * ・「在庫数」、「料金」、「手仕舞」の状態
+     *
+     * @param string 開始日
+     * @param string 終了日
+     *
+     * @return array 指定期間のプランと部屋の販売状況
+     */
+    public function getFromToSaleStateRoomPlan($as_from_ymd, $as_to_ymd, $target_cd)
     {
         try {
             // 初期化
@@ -1117,7 +1111,7 @@ WHERE;
             $a_result          = [];
 
             // 指定期間内の販売状況を判断するための情報を取得
-            $a_base_sale_state = $this->_get_from_to_sale_state($as_from_ymd, $as_to_ymd, $target_cd);
+            $a_base_sale_state = $this->getFromToSaleState($as_from_ymd, $as_to_ymd, $target_cd);
 
             // 部屋基準の形に整形
             foreach ($a_base_sale_state ?? [] as $a_sale_state) {
@@ -1343,22 +1337,24 @@ WHERE;
         }
     }
 
-    //======================================================================
-    // 部屋・プラン別の指定期間の予約数を取得（部屋基準）
-    //
-    // @params string 開始日
-    //         string 終了日
-    //
-    // @return array 指定期間の各部屋プラン別の予約数
-    //======================================================================
-    public function get_from_to_reserve_count_room_plan($as_from_ymd, $as_to_ymd, $target_cd)
+    /**
+     * 部屋・プラン別の指定期間の予約数を取得（部屋基準）
+     *
+     * ・「在庫数」、「料金」、「手仕舞」の状態
+     *
+     * @param string 開始日
+     * @param string 終了日
+     *
+     * @return array 指定期間の各部屋プラン別の予約数
+     */
+    public function getFromToReserveCountRoomPlan($as_from_ymd, $as_to_ymd, $target_cd)
     {
         try {
             // 初期化
             $a_base_reserve_count = [];
             $a_result             = [];
             // 指定期間内の販売状況を判断するための情報を取得
-            $a_base_reserve_count = $this->_get_from_to_reserve_count($as_from_ymd, $as_to_ymd, $target_cd);
+            $a_base_reserve_count = $this->getFromToReserveCount($as_from_ymd, $as_to_ymd, $target_cd);
             // 日付基準の形に整形
             foreach ($a_base_reserve_count as $a_reserve_count) {
                 // キー情報を設定
@@ -1378,15 +1374,17 @@ WHERE;
         }
     }
 
-    //======================================================================
-    // プランと部屋の指定期間の予約数を取得
-    //
-    // @params string 開始日
-    //         string 終了日
-    //
-    // @return array 指定期間の各部屋プラン別の予約数
-    //======================================================================
-    private function _get_from_to_reserve_count($as_from_ymd, $as_to_ymd, $target_cd)
+    /**
+     * プランと部屋の指定期間の予約数を取得
+     *
+     * ・「在庫数」、「料金」、「手仕舞」の状態
+     *
+     * @param string 開始日
+     * @param string 終了日
+     *
+     * @return array 指定期間の各部屋プラン別の予約数
+     */
+    private function getFromToReserveCount($as_from_ymd, $as_to_ymd, $target_cd)
     {
 
         try {
@@ -1486,11 +1484,12 @@ SQL;
         }
     }
 
-    //======================================================================
-    // プランと部屋の指定期間の販売状況を判断するための情報を取得
-    // ・「在庫数」、「料金」、「手仕舞」の状態
-    //======================================================================
-    private function _get_from_to_sale_state($as_from_ymd, $as_to_ymd, $target_cd)
+    /**
+     * プランと部屋の指定期間の販売状況を判断するための情報を取得
+     *
+     * ・「在庫数」、「料金」、「手仕舞」の状態
+     */
+    private function getFromToSaleState($as_from_ymd, $as_to_ymd, $target_cd)
     {
         try {
             //--------------------------------------------------------------
@@ -1547,6 +1546,7 @@ SQL;
                 'from_ymd' => $as_from_ymd,
                 'to_ymd'   => $as_to_ymd
             ];
+
             $s_sql =
                 <<< SQL
 					select	q5.hotel_cd,
@@ -1563,7 +1563,8 @@ SQL;
 							c.accept_status as accept_status_charge,
 							DATE_FORMAT(c.accept_s_dtm, '%Y-%m-%d %H:%i:%S') as accept_s_dtm,
 							DATE_FORMAT(c.accept_e_dtm, '%Y-%m-%d %H:%i:%S') as accept_e_dtm
-					from	
+					from  charge c	
+                    right outer join
 							(
 								select	q4.hotel_cd,
 										q4.room_id,
@@ -1575,7 +1576,8 @@ SQL;
 										room_count2.reserve_rooms,
 										room_count2.rooms - room_count2.reserve_rooms as remaining_rooms,
 										room_count2.accept_status as accept_status_room_count
-								from	
+								from	room_count2
+                                right outer join 
 										(
 											select	q3.hotel_cd,
 													q3.room_id,
@@ -1590,13 +1592,15 @@ SQL;
 																q2.accept_status_room,
 																p.plan_id,
 																p.accept_status as accept_status_plan
-														from	
+														from	plan p
+                                                        right outer join 
 																(
 																	select	q1.hotel_cd,
 																			q1.room_id,
 																			q1.accept_status_room,
 																			rpm.plan_id
-																	from	
+																	from	room_plan_match rpm
+                                                                    right outer join
 																			(
 																				select	r2.hotel_cd,
 																						r2.room_id,
@@ -1606,11 +1610,9 @@ SQL;
 																					and	r2.display_status = 1
 																					and	r2.active_status  = 1
 																			) q1
-																			left join room_plan_match rpm
 																			on	rpm.hotel_cd = q1.hotel_cd
 																			and	rpm.room_id = q1.room_id
 																) q2
-															left join plan p
 															on p.hotel_cd = q2.hotel_cd
 															and	p.plan_id = q2.plan_id
 															and	p.display_status = 1
@@ -1618,12 +1620,10 @@ SQL;
 													) q3
 											where mc.date_ymd between DATE_FORMAT(:from_ymd, '%Y-%m-%d') and DATE_FORMAT(:to_ymd, '%Y-%m-%d')
 										) q4
-								left join room_count2
 								on room_count2.hotel_cd = q4.hotel_cd
 								and	room_count2.room_id = q4.room_id
 								and	room_count2.date_ymd = q4.date_ymd
 							) q5
-						left join charge c
 						on c.hotel_cd = q5.hotel_cd
 						and	c.plan_id = q5.plan_id
 						and	c.room_id = q5.room_id
@@ -1650,14 +1650,14 @@ SQL;
         }
     }
 
-    //======================================================================
-    // プランと部屋の組合せ一覧を取得するベースとなるSQL文を取得
-    //
-    // @params string 抽出条件（WHERE句）
-    //
-    // @return string SQL文
-    //======================================================================
-    public function get_sql_match_plan_room_base($as_where)
+    /**
+     * プランと部屋の組合せ一覧を取得するベースとなるSQL文を取得
+     *
+     * @param string 抽出条件（WHERE句）
+     *
+     * @return string SQL文
+     */
+    public function getSqlMatchPlanRoomBase($as_where)
     {
         try {
             //--------------------------------------------------------------
@@ -1716,12 +1716,10 @@ SQL;
         }
     }
 
-
-    // calender.php ここから
-    //======================================================================
-    // Setter：対象期間の開始日
-    //======================================================================
-    public function set_from_ymd($as_from_ymd)
+    /**
+     * Setter：対象期間の開始日
+     */
+    public function setFromYmd($as_from_ymd)
     {
         try {
             // エラーチェック
@@ -1747,10 +1745,10 @@ SQL;
         }
     }
 
-    //======================================================================
-    // Setter：対象期間の終了日
-    //======================================================================
-    public function set_to_ymd($as_to_ymd)
+    /**
+     * Setter：対象期間の終了日
+     */
+    public function setToYmd($as_to_ymd)
     {
         try {
             // エラーチェック
@@ -1776,12 +1774,12 @@ SQL;
         }
     }
 
-    //======================================================================
-    // Getter：指定の表示期間開始日の週の初日日付を取得
-    //
-    // @return String 設定された表示期間開始日
-    //======================================================================
-    public function get_from_ymd_week_first()
+    /**
+     * Getter：指定の表示期間開始日の週の初日日付を取得
+     *
+     * @return string 設定された表示期間開始日
+     */
+    public function getFromYmdWeekFirst()
     {
         // 指定の開始日の週の日曜日を取得(※カレンダーは日曜日から表示)
         $n_from_ymd     = strtotime($this->s_from_ymd);
@@ -1791,12 +1789,12 @@ SQL;
         return $s_from_day_sun;
     }
 
-    //======================================================================
-    // Getter：指定の表示期間終了日の週の週末日付を取得
-    //
-    // @return String 設定された表示期間終了日
-    //======================================================================
-    public function get_to_ymd_week_last()
+    /**
+     * Getter：指定の表示期間終了日の週の週末日付を取得
+     *
+     * @return string 設定された表示期間終了日
+     */
+    public function getToYmdWeekLast()
     {
         // 指定の終了日の週の土曜日を取得(※カレンダーは土曜日まで表示)
         $n_to_ymd     = strtotime($this->s_to_ymd);
@@ -1806,32 +1804,28 @@ SQL;
         return $s_to_day_sat;
     }
 
-    //======================================================================
-    // Getter：カレンダー
-    //
-    // @return Array 指定期間のカレンダー表示用データ
-    //======================================================================
-    public function get_calendar()
+    /**
+     * Getter：カレンダー
+     *
+     * @return array 指定期間のカレンダー表示用データ
+     */
+    public function getCalendar()
     {
         return $this->a_calendar;
     }
 
-    //======================================================================
-    // 料金登録用の期間データを作成
-    // ※対象期間のデータを生成（第1週、第2週..のインデックスを持たない形）
-    //
-    //======================================================================
-
-    public function make_line_calendar()
+    /**
+     * 料金登録用の期間データを作成
+     *
+     * ※対象期間のデータを生成（第1週、第2週..のインデックスを持たない形）
+     */
+    public function makeLineCalendar()
     {
 
         try {
             //--------------------------------------------------------------
             // 初期化
             //--------------------------------------------------------------
-
-            //仮で設定
-
             $this->a_calendar = [];
             $a_conditions     = [];
             $o_date           = new DateUtil();
@@ -1899,13 +1893,13 @@ SQL;
             throw $e;
         }
     }
-    // calender.phpここまで
 
-    // edit()ここから
-    //==========================================================================================
-    // 部屋指定 - 在庫編集
-    //==========================================================================================
-    private function _edit_ui_type_room($a_form_params)
+    /**
+     * 部屋指定 - 在庫編集
+     *
+     * ※edit()ここから
+     */
+    private function editUiTypeRoom($a_form_params)
     {
 
         try {
@@ -1930,11 +1924,12 @@ SQL;
 
             // 対象部屋の在庫状況を取得
             $a_room2 = $o_room2->where(['hotel_cd' => $a_form_params['target_cd'], 'room_id' => $a_form_params['room_id']])->first();
-            $a_room2['room_count'] = $o_room_count2->where([
-                'hotel_cd' => $a_form_params['target_cd'],
-                'room_id' => $a_form_params['room_id'],
-                'date_ymd' => date('Ymd', $a_form_params['date_ymd'])
-            ]
+            $a_room2['room_count'] = $o_room_count2->where(
+                [
+                    'hotel_cd' => $a_form_params['target_cd'],
+                    'room_id' => $a_form_params['room_id'],
+                    'date_ymd' => date('Ymd', $a_form_params['date_ymd'])
+                ]
             )->first() ?? [
                 'hotel_cd' => null,
                 'room_id'  => null,
@@ -1957,7 +1952,7 @@ SQL;
             $a_form_params['date_ymd_to_month']   = $a_form_params['date_ymd_to_month'] ?? $o_now_date->to_format('m');
             $a_form_params['date_ymd_to_day']     = $a_form_params['date_ymd_to_day'] ?? $o_now_date->to_format('d');
 
-            $b_is_room_akf = $this->is_room_akf($a_form_params['target_cd'], $a_form_params['room_id']);
+            $b_is_room_akf = $this->isRoomAkf($a_form_params['target_cd'], $a_form_params['room_id']);
 
             // アサインの登録
             $this->addViewData("start_date", $a_start_date);
@@ -1970,34 +1965,35 @@ SQL;
         }
     }
 
-    // public\app\ctl\models\Hotel\Room2.php に記載の処理
-    //==========================================================================================
-    // 部屋在庫タイプの取得（部屋別）
-    // commonのroom2へ昇格したが、このクラスの継承元クラスとは違うためこのクラスからも呼べるようにした
-    //   as_hotel_cd 施設コード
-    //   as_room_id  部屋ID
-    //==========================================================================================
-    public function is_room_akf($as_hotel_cd, $as_room_id)
+    /**
+     * 部屋在庫タイプの取得（部屋別）
+     *
+     * as_hotel_cd 施設コード
+     * as_room_id  部屋ID
+     *
+     */
+    public function isRoomAkf($as_hotel_cd, $as_room_id)
     {
         try {
             // 初期化
             $a_room_stock_type = [];
 
             // 判定
-            $b_is_akf = $this->is_akafu($as_hotel_cd, $as_room_id);
+            $b_is_akf = $this->isAkafu($as_hotel_cd, $as_room_id);
             return $b_is_akf;
         } catch (Exception $e) {
             throw $e;
         }
     }
 
-    // public\app\_common\models\Core\Hotel\Room2.php に記載の処理
-    //==========================================================================================
-    // 赤い風船在庫？
-    //   as_hotel_cd 施設コード
-    //   as_room_id  部屋ID
-    //==========================================================================================
-    public function is_akafu($as_hotel_cd, $as_room_id)
+    /**
+     * 赤い風船在庫
+     *
+     * as_hotel_cd 施設コード
+     * as_room_id  部屋ID
+     *
+     */
+    public function isAkafu($as_hotel_cd, $as_room_id)
     {
         try {
             $s_sql =
@@ -2025,10 +2021,10 @@ SQL;
         }
     }
 
-    //==========================================================================================
-    // 日付指定 - 在庫編集
-    //==========================================================================================
-    private function _edit_ui_type_date($a_form_params)
+    /**
+     * 日付指定 - 在庫編集
+     */
+    private function editUiTypeDate($a_form_params)
     {
         try {
             // 初期化
@@ -2063,9 +2059,8 @@ SQL;
                     'modify_cd' => null,
                     'modify_ts' => null,
                 ];
-                $a_room2[$room_id]['is_room_akf'] = $this->is_room_akf($a_form_params['target_cd'], $room_id);
+                $a_room2[$room_id]['is_room_akf'] = $this->isRoomAkf($a_form_params['target_cd'], $room_id);
                 $a_form_params['rooms'][$room_id] = $a_form_params['rooms'][$room_id] ?? $a_room2[$room_id]['room_count']['rooms'];
-
             }
             $this->addViewData("form_params", $a_form_params);
             $this->addViewData("rooms", $a_room2);
@@ -2075,12 +2070,11 @@ SQL;
         }
     }
 
-    //==========================================================================================
-    // カレンダー - 在庫編集
-    //==========================================================================================
-    private function _edit_ui_type_calender($a_form_params)
+    /**
+     * カレンダー - 在庫編集
+     */
+    private function editUiTypeCalender($a_form_params)
     {
-
         try {
             // 初期化
             $o_now_date   = new DateUtil();
@@ -2126,23 +2120,23 @@ SQL;
             }
 
             // カレンダー表示用の配列を生成
-            $a_calender = $this->_create_calender(['current_ym' => $a_form_params['date_ym'], 'hotel_cd' => $a_form_params['target_cd'], 'room_id' => $a_form_params['room_id'], 'calender' => $a_calender_values]);
+            $a_calender = $this->createCalender(['current_ym' => $a_form_params['date_ym'], 'hotel_cd' => $a_form_params['target_cd'], 'room_id' => $a_form_params['room_id'], 'calender' => $a_calender_values]);
 
             $this->addViewData("form_params", $a_form_params);
             $this->addViewData("room", $a_room2);
             $this->addViewData("start_date", $a_start_date);
             $this->addViewData("end_date", $a_end_date);
             $this->addViewData("calender", $a_calender);
-            $this->addViewData("is_room_akf", $this->is_room_akf($a_form_params['target_cd'], $a_form_params['room_id']));
+            $this->addViewData("is_room_akf", $this->isRoomAkf($a_form_params['target_cd'], $a_form_params['room_id']));
         } catch (Exception $e) {
             throw $e;
         }
     }
 
-    //==========================================================================================
-    // 施設の赤風在庫一覧を取得
-    //==========================================================================================
-    public function get_room_akf_all($as_hotel_cd)
+    /**
+     * 施設の赤風在庫一覧を取得
+     */
+    public function getRoomAkfAll($as_hotel_cd)
     {
         try {
             // 初期化
@@ -2178,15 +2172,12 @@ SQL;
         }
     }
 
-
-    //==========================================================================================
-    // カレンダー表示用データ生成
-    //==========================================================================================
-    private function _create_calender($aa_conditions)
+    /**
+     * カレンダー表示用データ生成
+     */
+    private function createCalender($aa_conditions)
     {
-
         try {
-
             // 初期化
             $o_date   = new DateUtil($aa_conditions['current_ym']);
             $o_date_time = new DateUtil();
@@ -2264,18 +2255,15 @@ SQL;
             throw $e;
         }
     }
-    // edit() ここまで
 
-
-    // confirm() ここから
-    //==========================================================================================
-    // 提供部屋数編集確認
-    //==========================================================================================
+    /**
+     * 提供部屋数編集確認
+     *
+     * ※confirm() ここから
+     */
     protected function confirmMethod()
     {
-
         try {
-
             // 初期化
             $b_is_success = true;
 
@@ -2288,20 +2276,20 @@ SQL;
             switch ($a_form_params['ui_type']) {
                 case 'room':
                 case 'accept':
-                    $b_is_success = $this->_confirm_ui_type_room($a_form_params);
+                    $b_is_success = $this->confirmUiTypeRoom($a_form_params);
                     break;
 
                 case 'date':
-                    $b_is_success = $this->_confirm_ui_type_date($a_form_params);
+                    $b_is_success = $this->confirmUiTypeDate($a_form_params);
                     break;
 
                 case 'calender':
-                    $b_is_success = $this->_confirm_ui_type_calender($a_form_params);
+                    $b_is_success = $this->confirmUiTypeCalender($a_form_params);
                     break;
             }
 
             // 「新部屋プランメンテナンス」メニューの表示・非表示判定
-            $a_system_versions = $this->_set_disp_room_plan_list($target_cd);
+            $a_system_versions = $this->setDispRoomPlanList($target_cd);
 
             // アサインの登録
             $this->addViewData("target_cd", $target_cd);
@@ -2313,14 +2301,14 @@ SQL;
             throw $e;
         }
     }
-    //==========================================================================================
-    // 部屋指定 - 在庫編集確認
-    //==========================================================================================
-    private function _confirm_ui_type_room($a_form_params)
+
+    /**
+     * 部屋指定 - 在庫編集確認
+     */
+    private function confirmUiTypeRoom($a_form_params)
     {
 
         try {
-
             $o_date        = new DateUtil();
             $o_room2       = new Room2();
             $o_room_count2 = new RoomCount2();
@@ -2384,7 +2372,7 @@ SQL;
             $o_validations = [];
             $o_validations['hotel_cd'] = $a_form_params['target_cd'];
             $o_validations['room_id'] = $a_form_params['room_id'];
-            $o_validations['date_ymd'] = date("Ymd",$a_form_params['date_ymd']);
+            $o_validations['date_ymd'] = date("Ymd", $a_form_params['date_ymd']);
 
             //販売ステータス変更無の場合にチェックが走らないようにするため
             if (0 <= $a_form_params['accept_status']) {
@@ -2399,19 +2387,19 @@ SQL;
                         'room_id'  => $a_form_params['room_id'],
                         'date_ymd' => date("Y/m/d G:i:s", $o_date->get())
                     ]
-                    )->first() ?? [
-                        'hotel_cd' => null,
-                        'room_id'  => null,
-                        'date_ymd' => null,
-                        'rooms' => null,
-                        'reserve_rooms' => null,
-                        'entry_cd' => null,
-                        'entry_ts' => null,
-                        'modify_cd' => null,
-                        'modify_ts' => null,
-                    ];
+                )->first() ?? [
+                    'hotel_cd' => null,
+                    'room_id'  => null,
+                    'date_ymd' => null,
+                    'rooms' => null,
+                    'reserve_rooms' => null,
+                    'entry_cd' => null,
+                    'entry_ts' => null,
+                    'modify_cd' => null,
+                    'modify_ts' => null,
+                ];
 
-                    if ($a_form_params['ui_type'] === 'room') {
+                if ($a_form_params['ui_type'] === 'room') {
                     //期間設定開始日にもともと在庫が無い場合で、在庫数の設定が無い場合は在庫数登録を促すメッセージを出す。
                     if ($n_loop_cnt == 0 && is_null($a_room_count['rooms'])) {
                         if (empty($a_form_params['rooms'])) {
@@ -2426,9 +2414,8 @@ SQL;
                     }
                     //Validationを利用してしまうと、予約数との在庫数比較チェックが走ってしまうので、
                     //確認画面では数値かどうかだけのチェックのみ行う。
-                    //_update_ui_type_roomで、予約数と比較し適切な在庫数調整を行う。
-                    if (!preg_match('/^[0-9]+$/', $a_form_params['rooms']))
-                     {
+                    //updateUiTypeRoomで、予約数と比較し適切な在庫数調整を行う。
+                    if (!preg_match('/^[0-9]+$/', $a_form_params['rooms'])) {
                         $this->addErrorMessage('在庫数は半角数字のみで入力してください。');
                         return false;
                     }
@@ -2436,7 +2423,7 @@ SQL;
 
                 $errorList = [];
                 $errorList = $o_room_count2->validation($o_validations);
-                if(count($errorList) > 0){
+                if (count($errorList) > 0) {
                     $this->addErrorMessageArray($errorList);
                     return false;
                 } else {
@@ -2447,11 +2434,11 @@ SQL;
                         return false;
                     }
                 }
-    
+
                 $o_date->add('d', 1);
                 $n_loop_cnt++;
             }
-            $b_is_room_akf = $this->is_room_akf($a_form_params['target_cd'], $a_form_params['room_id']);
+            $b_is_room_akf = $this->isRoomAkf($a_form_params['target_cd'], $a_form_params['room_id']);
             $a_form_params['setting_period'] = $n_loop_cnt;
 
             // アサインの登録
@@ -2465,11 +2452,10 @@ SQL;
         }
     }
 
-
-    //==========================================================================================
-    // 日付指定 - 在庫編集確認
-    //==========================================================================================
-    private function _confirm_ui_type_date($a_form_params)
+    /**
+     * 日付指定 - 在庫編集確認
+     */
+    private function confirmUiTypeDate($a_form_params)
     {
         try {
             // 初期化
@@ -2495,7 +2481,7 @@ SQL;
             foreach ($a_form_params['room_id'] as $room_id) {
                 $a_room2[$room_id] = $o_room2->where(['hotel_cd' => $a_form_params['target_cd'], 'room_id' => $room_id])->first();
                 $a_room2[$room_id]['room_count'] = $o_room_count2->where(['hotel_cd' => $a_form_params['target_cd'], 'room_id'  => $room_id, 'date_ymd' => date("Y/m/d G:i:s", $o_date->get())])->first() ?? [];
-                $a_room2[$room_id]['is_room_akf'] = $this->is_room_akf($a_form_params['target_cd'], $room_id);
+                $a_room2[$room_id]['is_room_akf'] = $this->isRoomAkf($a_form_params['target_cd'], $room_id);
             }
 
             foreach ($a_form_params['room_id'] as $room_id) {
@@ -2503,7 +2489,7 @@ SQL;
                 $a_room_count = $o_room_count2->where(['hotel_cd' => $a_form_params['target_cd'], 'room_id'  => $room_id, 'date_ymd' => date("Y/m/d G:i:s", $o_date->get())])->first();
 
                 // 部屋在庫タイプ取得
-                $b_is_room_akf = $this->is_room_akf($a_form_params['target_cd'], $room_id);
+                $b_is_room_akf = $this->isRoomAkf($a_form_params['target_cd'], $room_id);
                 // 在庫数より予約数の方が多い場合は予約数を設定する
                 $a_room_count['reserve_rooms'] = $a_room_count['reserve_rooms'] ?? 0;
                 if ($a_form_params['rooms'][$room_id] < $a_room_count['reserve_rooms']) {
@@ -2525,7 +2511,7 @@ SQL;
                     $o_validations = [];
                     $o_validations['hotel_cd'] = $a_form_params['target_cd'];
                     $o_validations['room_id'] = $room_id;
-                    $o_validations['date_ymd'] = date("Ymd",$a_form_params['date_ymd']);
+                    $o_validations['date_ymd'] = date("Ymd", $a_form_params['date_ymd']);
                     $o_validations['rooms'] = $a_form_params['rooms'][$room_id];
                     $o_validations['reserve_rooms'] = $a_room_count['reserve_rooms'];
                     if (0 <= $a_form_params['accept_status']) {
@@ -2536,7 +2522,7 @@ SQL;
                     }
                     $errorList = [];
                     $errorList = $o_room_count2->validation($o_validations);
-                    if(count($errorList) > 0){
+                    if (count($errorList) > 0) {
                         $this->addErrorMessageArray($errorList);
                         return false;
                     } else {
@@ -2548,7 +2534,7 @@ SQL;
                         }
                     }
                 }
-            } 
+            }
 
             // _confirm_ui_date.bladeのforeach valueエラー回避のため
             $_confirm_ui_date_back_form = $a_form_params;
@@ -2565,13 +2551,13 @@ SQL;
             throw $e;
         }
     }
-    //==========================================================================================
-    // カレンダー - 在庫編集確認
-    //==========================================================================================
-    private function _confirm_ui_type_calender($a_form_params)
+
+    /**
+     * カレンダー - 在庫編集確認
+     */
+    private function confirmUiTypeCalender($a_form_params)
     {
         try {
-
             $o_now_date     = new DateUtil();
             $o_room2        = new Room2();
 
@@ -2581,7 +2567,7 @@ SQL;
                     'hotel_cd' => $a_form_params['target_cd'],
                     'room_id'  => $a_form_params['room_id']
                 ]
-                )->first();
+            )->first();
 
             if (empty($a_form_params['calender_current_year']) && empty($a_form_params['calender_current_month'])) {
                 $o_now_date->set($a_form_params['date_ym']);
@@ -2605,7 +2591,7 @@ SQL;
             }
 
             // カレンダー表示用の配列を生成
-            $a_calender = $this->_confirm_calender(
+            $a_calender = $this->confirmCalender(
                 [
                     'current_ym' => $a_form_params['date_ym'],
                     'hotel_cd' => $a_form_params['target_cd'],
@@ -2626,13 +2612,13 @@ SQL;
             throw $e;
         }
     }
-    //==========================================================================================
-    // カレンダーデータ更新
-    //==========================================================================================
-    private function _confirm_calender($aa_conditions)
+
+    /**
+     * カレンダーデータ更新
+     */
+    private function confirmCalender($aa_conditions)
     {
         try {
-
             // 初期化
             $o_date     = new DateUtil($aa_conditions['current_ym']);
             $o_date->set($o_date->to_format('Y-m') . '-01');
@@ -2656,7 +2642,6 @@ SQL;
             // カレンダー配列に整形
             $n_val_cnt = 0;
             while ($n_last_date != $o_date->get()) {
-
                 $a_room_count = $o_room_count2->where(
                     [
                         'hotel_cd' => $aa_conditions['hotel_cd'],
@@ -2674,7 +2659,7 @@ SQL;
                     'modify_cd' => null,
                     'modify_ts' => null,
                 ];
-    
+
                 // 在庫数の入力があるときのみ
                 if (!empty($aa_conditions['calender'][$o_date->get()])) {
                     // レコードが存在しないなら登録
@@ -2683,14 +2668,14 @@ SQL;
                         $o_validations = [];
                         $o_validations['hotel_cd'] = $aa_conditions['hotel_cd'];
                         $o_validations['room_id'] = $aa_conditions['room_id'];
-                        $o_validations['date_ymd'] = date("Ymd",$o_date->get());
+                        $o_validations['date_ymd'] = date("Ymd", $o_date->get());
                         $o_validations['rooms'] = $aa_conditions['calender'][$o_date->get()];
                         $o_validations['accept_status'] = 1;
 
                         // バリデート実行
                         $errorList = [];
                         $errorList = $o_room_count2->validation($o_validations);
-                        if(count($errorList) > 0){
+                        if (count($errorList) > 0) {
                             $this->addErrorMessageArray($errorList);
                             return false;
                         }
@@ -2700,10 +2685,10 @@ SQL;
                         $errorList = [];
                         $errorList = $o_room_count2->validation($o_validations);
 
-                        if(count($errorList) > 0){
+                        if (count($errorList) > 0) {
                             $this->addErrorMessageArray($errorList);
                             return false;
-                        }else{
+                        } else {
                             // 独自のバリデーション
                             // 在庫数 ＜ 予約部屋数
                             if (intval($aa_conditions['calender'][$o_date->get()]) < $a_room_count['reserve_rooms']) {
@@ -2735,20 +2720,17 @@ SQL;
             throw $e;
         }
     }
-    // confirm() ここまで
 
-
-
-
-    // update() ここから
-    //==========================================================================================
-    // 提供部屋数更新
-    //==========================================================================================
+    /**
+     * 提供部屋数更新
+     *
+     * ※update() ここから
+     */
     private function updateMethod($a_form_params)
     {
         try {
             // 初期化
-            $b_is_success = true;            
+            $b_is_success = true;
             $target_cd = $a_form_params['target_cd'];
             $a_form_params['accept_status'] = $a_form_params['accept_status'] ?? -1;
 
@@ -2756,25 +2738,25 @@ SQL;
             switch ($a_form_params['ui_type']) {
                 case 'room':
                 case 'accept':
-                    $b_is_success = $this->_update_ui_type_room($a_form_params);
+                    $b_is_success = $this->updateUiTypeRoom($a_form_params);
                     break;
 
                 case 'date':
-                    $b_is_success = $this->_update_ui_type_date($a_form_params);
+                    $b_is_success = $this->updateUiTypeDate($a_form_params);
                     break;
 
                 case 'calender':
-                    $b_is_success = $b_is_success = $this->_update_ui_type_calender($a_form_params);
+                    $b_is_success = $b_is_success = $this->updateUiTypeCalender($a_form_params);
                     break;
             }
 
             // 「新部屋プランメンテナンス」メニューの表示・非表示判定
-            $a_system_versions = $this->_set_disp_room_plan_list($target_cd);
+            $a_system_versions = $this->setDispRoomPlanList($target_cd);
 
             // アサインの登録
             $this->addViewData("target_cd", $target_cd);
             $this->addViewData("form_params", $a_form_params);
-            $this->addViewData("partner_group_id",$this->_partner_group_id);
+            $this->addViewData("partner_group_id", $this->_partner_group_id);
             $this->addViewData("system_versions", $a_system_versions);
 
             return $b_is_success;
@@ -2782,18 +2764,19 @@ SQL;
             throw $e;
         }
     }
-    //==========================================================================================
-    // 部屋指定 - 在庫更新
-    //==========================================================================================
-    private function _update_ui_type_room($a_form_params)
+
+    /**
+     * 部屋指定 - 在庫更新
+     */
+    private function updateUiTypeRoom($a_form_params)
     {
 
         try {
-
             $o_date        = new DateUtil();
             $o_room2       = new Room2();
             $o_room_count = new RoomCount();
             $o_room_count2  = new RoomCount2();
+            $actionCd = $this->getActionCd();
 
             $o_date->set($o_date->to_format('Y-m-d'));
             $n_now_date = $o_date->get();
@@ -2845,19 +2828,18 @@ SQL;
                 $o_validations_room_count['rooms'] = $a_form_params['rooms'];
             }
 
-            $b_is_room_akf = $this->is_room_akf($a_form_params['target_cd'], $a_form_params['room_id']);
+            $b_is_room_akf = $this->isRoomAkf($a_form_params['target_cd'], $a_form_params['room_id']);
             while ($n_last_date != $o_date->get()) {
                 // 在庫数がnullのもの以外に処理をおこなう
                 $a_room_count = $o_room_count2->where(
                     [
-                        'hotel_cd' => $a_form_params['target_cd'], 
-                        'room_id' => $a_form_params['room_id'], 
+                        'hotel_cd' => $a_form_params['target_cd'],
+                        'room_id' => $a_form_params['room_id'],
                         'date_ymd' => date("Y/m/d G:i:s", $o_date->get())
                     ]
-                    )->first() ?? null;
-                
-                if (empty($a_room_count)) {
+                )->first() ?? null;
 
+                if (empty($a_room_count)) {
                     if ($a_form_params['ui_type'] === 'accept') {
                         continue;
                     }
@@ -2867,7 +2849,7 @@ SQL;
                     $errorList = $o_room_count2->validation($o_validations_room_count2);
                     $errorList_room_count = [];
                     $errorList = $o_room_count->validation($o_validations_room_count);
-                    if(count($errorList_room_count2) > 0 || count($errorList_room_count) > 0){
+                    if (count($errorList_room_count2) > 0 || count($errorList_room_count) > 0) {
                         $errorListArray = array_merge($errorList_room_count2, $errorList_room_count);
                         $errorList = array_unique($errorListArray);
                         $this->addErrorMessageArray($errorList);
@@ -2878,28 +2860,27 @@ SQL;
                     $a_attributes = [];
                     $a_attributes['hotel_cd'] = $a_form_params['target_cd'];
                     $a_attributes['room_id'] = $a_form_params['room_id'];
-                    $a_attributes['date_ymd'] = date("Ymd",$o_date->get());
+                    $a_attributes['date_ymd'] = date("Ymd", $o_date->get());
                     $a_attributes['edit_rooms'] = $a_form_params['rooms'];
                     $a_attributes['reserve_rooms'] = 0;
                     $a_attributes['accept_status'] = 1;
-                    $a_attributes['entry_cd'] = '_update_ui_type_room_create_entry_cd';
+                    $a_attributes['entry_cd'] = $actionCd;
                     $a_attributes['entry_ts'] = now();
-                    $a_attributes['modify_cd'] = '_update_ui_type_room_create_modify_cd';
+                    $a_attributes['modify_cd'] = $actionCd;
                     $a_attributes['modify_ts'] = now();
 
                     // 連携在庫ではないとき 画面のaccept_statusで登録する
-                    if ( !$b_is_room_akf ) {
+                    if (!$b_is_room_akf) {
                         if (0 <= $a_form_params['accept_status']) {
                             $a_attributes['accept_status'] = $a_form_params['accept_status'];
-                            $a_attributes['modify_cd'] = '_update_ui_type_room_create_modify_cd';
+                            $a_attributes['modify_cd'] = $actionCd;
                             $a_attributes['modify_ts'] = now();
                         }
                     }
 
-                    if (!$o_room_count2->DataInsert($a_attributes)) {
+                    if (!$o_room_count2->dataInsert($a_attributes)) {
                         return false;
                     }
-
                 } else {
                     if ($a_form_params['ui_type'] === 'room') {
                         // 在庫数より予約数の方が多い場合は予約数を設定する
@@ -2912,22 +2893,22 @@ SQL;
                         $a_attributes = [];
                         $a_attributes['hotel_cd'] = $a_form_params['target_cd'];
                         $a_attributes['room_id'] = $a_form_params['room_id'];
-                        $a_attributes['date_ymd'] = date("Ymd",$o_date->get());
+                        $a_attributes['date_ymd'] = date("Ymd", $o_date->get());
                         $a_attributes['rooms'] = $n_reserve_rooms;
-                        $a_attributes['modify_cd'] = '_update_ui_type_room_create_modify_cd';
+                        $a_attributes['modify_cd'] = $actionCd;
                         $a_attributes['modify_ts'] = now();
                     }
 
                     // 連携在庫ではないとき
-                    if(!$b_is_room_akf) { 
+                    if (!$b_is_room_akf) {
                         if (0 <= $a_form_params['accept_status']) {
                             $a_attributes['hotel_cd'] = $a_form_params['target_cd'];
                             $a_attributes['room_id'] = $a_form_params['room_id'];
-                            $a_attributes['date_ymd'] = date("Ymd",$o_date->get());
+                            $a_attributes['date_ymd'] = date("Ymd", $o_date->get());
                             $a_attributes['accept_status'] = $a_form_params['accept_status'];
-                            $a_attributes['modify_cd'] = '_update_ui_type_room_create_modify_cd';
-                            $a_attributes['modify_ts'] = now(); 
-                            $a_attributes['ui_type'] = $a_form_params['ui_type']; 
+                            $a_attributes['modify_cd'] = $actionCd;
+                            $a_attributes['modify_ts'] = now();
+                            $a_attributes['ui_type'] = $a_form_params['ui_type'];
                         }
                     }
                     // バリデート実行
@@ -2935,18 +2916,17 @@ SQL;
                     $errorList = $o_room_count2->validation($o_validations_room_count2);
                     $errorList_room_count = [];
                     $errorList = $o_room_count->validation($o_validations_room_count);
-                    if(count($errorList_room_count2) > 0 || count($errorList_room_count) > 0){
+                    if (count($errorList_room_count2) > 0 || count($errorList_room_count) > 0) {
                         $errorListArray = array_merge($errorList_room_count2, $errorList_room_count);
                         $errorList = array_unique($errorListArray);
                         $this->addErrorMessageArray($errorList);
                         return false;
                     }
 
-                    if ( !$o_room_count2->DataUpdate($a_attributes)) {
+                    if (!$o_room_count2->dataUpdate($a_attributes)) {
                         return false;
                     }
-
-                } 
+                }
                 $o_date->add('d', 1);
             }
 
@@ -2964,10 +2944,10 @@ SQL;
         }
     }
 
-    //==========================================================================================
-    // 日付指定 - 在庫更新
-    //==========================================================================================
-    private function _update_ui_type_date($a_form_params)
+    /**
+     * 日付指定 - 在庫更新
+     */
+    private function updateUiTypeDate($a_form_params)
     {
         try {
             // 初期化
@@ -2977,6 +2957,7 @@ SQL;
             $o_room_count = new RoomCount();
             $o_room_count2  = new RoomCount2();
             $a_disp_date = ['target_date' => $o_date->get(), 'week_day' => $o_date->to_week('j')];
+            $actionCd = $this->getActionCd();
 
             foreach ($a_form_params['room_id'] as $room_id) {
                 $a_room2[$room_id] = $o_room2->where(
@@ -3005,7 +2986,7 @@ SQL;
             }
             foreach ($a_form_params['room_id'] as $room_id) {
                 // 部屋在庫タイプ取得
-                $b_is_room_akf = $this->is_room_akf($a_form_params['target_cd'], $room_id);
+                $b_is_room_akf = $this->isRoomAkf($a_form_params['target_cd'], $room_id);
                 if (!is_null($a_form_params['rooms'][$room_id])) {
                     $a_room_count = $o_room_count2->where(
                         [
@@ -3018,7 +2999,7 @@ SQL;
                     $o_validations_room_count2 = [];
                     $o_validations_room_count2['hotel_cd'] = $a_form_params['target_cd'];
                     $o_validations_room_count2['room_id'] = $room_id;
-                    $o_validations_room_count2['date_ymd'] = $o_date->get();        
+                    $o_validations_room_count2['date_ymd'] = $o_date->get();
                     $o_validations_room_count2['rooms'] = $a_form_params['rooms'][$room_id];
                     $o_validations_room_count2['reserve_rooms'] = $a_room_count['reserve_rooms'] ?? null;
                     $o_validations_room_count2['accept_status'] = $a_form_params['accept_status'];
@@ -3026,7 +3007,7 @@ SQL;
                     $o_validations_room_count = [];
                     $o_validations_room_count['hotel_cd'] = $a_form_params['target_cd'];
                     $o_validations_room_count['room_cd'] = $room_id;
-                    $o_validations_room_count['date_ymd'] = $o_date->get();        
+                    $o_validations_room_count['date_ymd'] = $o_date->get();
                     $o_validations_room_count['rooms'] = $a_form_params['rooms'][$room_id];
                     $o_validations_room_count['reserve_rooms'] = $a_room_count['reserve_rooms'] ?? null;
                     $o_validations_room_count['accept_status'] = $a_form_params['accept_status'];
@@ -3036,7 +3017,7 @@ SQL;
                     $errorList = $o_room_count2->validation($o_validations_room_count2);
                     $errorList_room_count = [];
                     $errorList = $o_room_count->validation($o_validations_room_count);
-                    if(count($errorList_room_count2) > 0 || count($errorList_room_count) > 0){
+                    if (count($errorList_room_count2) > 0 || count($errorList_room_count) > 0) {
                         $errorListArray = array_merge($errorList_room_count2, $errorList_room_count);
                         $errorList = array_unique($errorListArray);
                         $this->addErrorMessageArray($errorList);
@@ -3044,58 +3025,57 @@ SQL;
                     }
 
 
-                    if(empty($a_room_count)) {   
+                    if (empty($a_room_count)) {
                         // insert
                         $a_attributes = [];
                         $a_attributes['hotel_cd'] = $a_form_params['target_cd'];
                         $a_attributes['room_id'] = $room_id;
-                        $a_attributes['date_ymd'] = date("Ymd",$o_date->get());
+                        $a_attributes['date_ymd'] = date("Ymd", $o_date->get());
                         $a_attributes['edit_rooms'] = $a_form_params['rooms'][$room_id];
                         $a_attributes['reserve_rooms'] = 0;
                         $a_attributes['accept_status'] = 1;
-                        $a_attributes['entry_cd'] = 'action_cd';     // TODO $this->box->info->env->action_cd
+                        $a_attributes['entry_cd'] = $actionCd;
                         $a_attributes['entry_ts'] = now();
-                        $a_attributes['modify_cd'] = 'action_cd';    // TODO $this->box->info->env->action_cd
+                        $a_attributes['modify_cd'] = $actionCd;
                         $a_attributes['modify_ts'] = now();
 
 
                         // 連携在庫ではないとき
-                        if ( !$b_is_room_akf ) {
-                            if ( 0 <= $a_form_params['accept_status']) {
+                        if (!$b_is_room_akf) {
+                            if (0 <= $a_form_params['accept_status']) {
                                 $a_attributes['accept_status'] = $a_form_params['accept_status'];
-                                $a_attributes['modify_cd'] = 'action_cd';    // TODO $this->box->info->env->action_cd
+                                $a_attributes['modify_cd'] = $actionCd;
                                 $a_attributes['modify_ts'] = now();
                             }
                         }
 
-                        if (!$o_room_count2->DataInsert($a_attributes)) {
+                        if (!$o_room_count2->dataInsert($a_attributes)) {
                             return false;
                         }
-                    } else {    
+                    } else {
                         $o_room_count2->where(['hotel_cd' => $a_form_params['target_cd'], 'room_id'  => $room_id, 'date_ymd' => date("Y/m/d G:i:s", $o_date->get())])
-                                    ->update([
-                                        'rooms' => $a_form_params['rooms'][$room_id],
-                                        'modify_cd' => 'action_cd',
-                                        'modify_ts' => now(),
-                                    ]);
+                            ->update([
+                                'rooms' => $a_form_params['rooms'][$room_id],
+                                'modify_cd' => $actionCd,
+                                'modify_ts' => now(),
+                            ]);
 
-                        // update
                         $a_attributes = [];
                         $a_attributes['hotel_cd'] = $a_form_params['target_cd'];
                         $a_attributes['room_id'] = $room_id;
-                        $a_attributes['date_ymd'] = date("Ymd",$o_date->get());
+                        $a_attributes['date_ymd'] = date("Ymd", $o_date->get());
                         $a_attributes['rooms'] = $a_form_params['rooms'][$room_id];
-                        $a_attributes['modify_cd'] = 'action_cd'; // TODO $this->box->info->env->action_cd
+                        $a_attributes['modify_cd'] = $actionCd;
                         $a_attributes['modify_ts'] = now();
-                        $a_attributes['ui_type'] = $a_form_params['ui_type']; 
-                        
+                        $a_attributes['ui_type'] = $a_form_params['ui_type'];
+
                         // 連携在庫ではないとき
-                        if ( !$b_is_room_akf ) {
-                            if ( 0 <= $a_form_params['accept_status']) {
+                        if (!$b_is_room_akf) {
+                            if (0 <= $a_form_params['accept_status']) {
                                 $a_attributes['accept_status'] = $a_form_params['accept_status'];
-                                $a_attributes['modify_cd'] = 'action_cd';    // TODO $this->box->info->env->action_cd
+                                $a_attributes['modify_cd'] = $actionCd;
                                 $a_attributes['modify_ts'] = now();
-                                $a_attributes['ui_type'] = $a_form_params['ui_type']; 
+                                $a_attributes['ui_type'] = $a_form_params['ui_type'];
                             }
                         }
 
@@ -3104,43 +3084,43 @@ SQL;
                         $errorList = $o_room_count2->validation($o_validations_room_count2);
                         $errorList_room_count = [];
                         $errorList = $o_room_count->validation($o_validations_room_count);
-                        if(count($errorList_room_count2) > 0 || count($errorList_room_count) > 0){
+                        if (count($errorList_room_count2) > 0 || count($errorList_room_count) > 0) {
                             $errorListArray = array_merge($errorList_room_count2, $errorList_room_count);
                             $errorList = array_unique($errorListArray);
                             $this->addErrorMessageArray($errorList);
                             return false;
                         }
-    
-                        if ( !$o_room_count2->DataUpdate($a_attributes)) {
+
+                        if (!$o_room_count2->dataUpdate($a_attributes)) {
                             return false;
                         }
                     }
-                } 
+                }
             }
 
             // 登録した内容の再取得
             foreach ($a_form_params['room_id'] as $room_id) {
                 $a_room2[$room_id] = $o_room2->where(['hotel_cd' => $a_form_params['target_cd'], 'room_id' => $room_id])->first();
-                $a_room2[$room_id]['is_room_akf'] = $this->is_room_akf($a_form_params['target_cd'], $room_id);
-                $a_room2[$room_id]['room_count'] = 
+                $a_room2[$room_id]['is_room_akf'] = $this->isRoomAkf($a_form_params['target_cd'], $room_id);
+                $a_room2[$room_id]['room_count'] =
                     $o_room_count2->where(
                         [
                             'hotel_cd' => $a_form_params['target_cd'],
                             'room_id'  => $room_id,
                             'date_ymd' => date("Y/m/d G:i:s", $o_date->get())
                         ]
-                        )->first() ?? [
-                            'hotel_cd' => null,
-                            'room_id'  => null,
-                            'date_ymd' => null,
-                            'rooms' => null,
-                            'reserve_rooms' => null,
-                            'entry_cd' => null,
-                            'entry_ts' => null,
-                            'modify_cd' => null,
-                            'modify_ts' => null,
-                        ];
-                }
+                    )->first() ?? [
+                        'hotel_cd' => null,
+                        'room_id'  => null,
+                        'date_ymd' => null,
+                        'rooms' => null,
+                        'reserve_rooms' => null,
+                        'entry_cd' => null,
+                        'entry_ts' => null,
+                        'modify_cd' => null,
+                        'modify_ts' => null,
+                    ];
+            }
 
             // アサインの登録
             $this->addViewData("form_params", $a_form_params);
@@ -3152,10 +3132,10 @@ SQL;
         }
     }
 
-    //==========================================================================================
-    // カレンダー - 在庫更新
-    //==========================================================================================
-    private function _update_ui_type_calender($a_form_params)
+    /**
+     * カレンダー - 在庫更新
+     */
+    private function updateUiTypeCalender($a_form_params)
     {
 
         try {
@@ -3190,7 +3170,7 @@ SQL;
                     $a_calender_values[$a_tmp_key[1]] = $value;
                 }
             }
-            $a_calender = $this->_update_calender(
+            $a_calender = $this->updateCalender(
                 [
                     'current_ym' => $a_form_params['date_ym'],
                     'hotel_cd'   => $a_form_params['target_cd'],
@@ -3211,13 +3191,13 @@ SQL;
             throw $e;
         }
     }
-    //==========================================================================================
-    // カレンダーデータ更新
-    //==========================================================================================
-    private function _update_calender($aa_conditions)
+
+    /**
+     * カレンダーデータ更新
+     */
+    private function updateCalender($aa_conditions)
     {
         try {
-
             // 初期化
             $o_date     = new DateUtil($aa_conditions['current_ym']);
             $o_date->set($o_date->to_format('Y-m') . '-01');
@@ -3225,7 +3205,7 @@ SQL;
             $n_week_idx     = 1;
             $o_room_count2   = new RoomCount2();
             $o_room_count = new RoomCount();
-
+            $actionCd = $this->getActionCd();
 
             // カレンダー最終週の土曜日の翌日日付を取得
             $o_date->set($o_date->last_day());
@@ -3241,8 +3221,8 @@ SQL;
 
             // カレンダー配列に整形
             $n_val_cnt = 0;
-            while ($n_last_date != $o_date->get()) {
 
+            while ($n_last_date != $o_date->get()) {
                 $a_room_count = $o_room_count2->where(
                     [
                         'hotel_cd' => $aa_conditions['hotel_cd'],
@@ -3259,16 +3239,16 @@ SQL;
                         $o_validations_room_count2 = [];
                         $o_validations_room_count2['hotel_cd'] = $aa_conditions['hotel_cd'];
                         $o_validations_room_count2['room_id'] = $aa_conditions['room_id'];
-                        $o_validations_room_count2['date_ymd'] = date("Ymd",$o_date->get());
-                        $o_validations_room_count2['rooms'] = $aa_conditions['calender'][$o_date->get()];                       
+                        $o_validations_room_count2['date_ymd'] = date("Ymd", $o_date->get());
+                        $o_validations_room_count2['rooms'] = $aa_conditions['calender'][$o_date->get()];
                         $o_validations_room_count2['reserve_rooms'] = 0;
                         $o_validations_room_count2['accept_status'] = 1;
 
                         $o_validations_room_count = [];
                         $o_validations_room_count['hotel_cd'] = $aa_conditions['hotel_cd'];
                         $o_validations_room_count['room_cd'] = $aa_conditions['room_id'];
-                        $o_validations_room_count['date_ymd'] = date("Ymd",$o_date->get());
-                        $o_validations_room_count['rooms'] = $aa_conditions['calender'][$o_date->get()];                       
+                        $o_validations_room_count['date_ymd'] = date("Ymd", $o_date->get());
+                        $o_validations_room_count['rooms'] = $aa_conditions['calender'][$o_date->get()];
                         $o_validations_room_count['reserve_rooms'] = 0;
                         $o_validations_room_count['accept_status'] = 1;
 
@@ -3277,7 +3257,7 @@ SQL;
                         $errorList = $o_room_count2->validation($o_validations_room_count2);
                         $errorList_room_count = [];
                         $errorList = $o_room_count->validation($o_validations_room_count);
-                        if(count($errorList_room_count2) > 0 || count($errorList_room_count) > 0){
+                        if (count($errorList_room_count2) > 0 || count($errorList_room_count) > 0) {
                             $errorListArray = array_merge($errorList_room_count2, $errorList_room_count);
                             $errorList = array_unique($errorListArray);
                             $this->addErrorMessageArray($errorList);
@@ -3286,32 +3266,31 @@ SQL;
                         $a_attributes = [];
                         $a_attributes['hotel_cd'] = $aa_conditions['hotel_cd'];
                         $a_attributes['room_id'] = $aa_conditions['room_id'];
-                        $a_attributes['date_ymd'] = date("Ymd",$o_date->get());
-                        $a_attributes['rooms'] = $aa_conditions['calender'][$o_date->get()];                       
+                        $a_attributes['date_ymd'] = date("Ymd", $o_date->get());
+                        $a_attributes['rooms'] = $aa_conditions['calender'][$o_date->get()];
                         $a_attributes['reserve_rooms'] = 0;
                         $a_attributes['accept_status'] = 1;
                         $a_attributes['edit_rooms'] = $aa_conditions['calender'][$o_date->get()];
-                        $a_attributes['entry_cd'] = "_update_calender_create_test_entry_cd";
+                        $a_attributes['entry_cd'] = $actionCd;
                         $a_attributes['entry_ts'] = now();
-                        $a_attributes['modify_cd'] = "_update_calender_create_test_modify_cd";
+                        $a_attributes['modify_cd'] = $actionCd;
                         $a_attributes['modify_ts'] = now();
 
                         // insert
-                        if ( !$o_room_count2->DataInsert($a_attributes)) {
+                        if (!$o_room_count2->dataInsert($a_attributes)) {
                             return false;
                         }
-
                     } else {
                         $o_validations_room_count2 = [];
                         $o_validations_room_count2['hotel_cd'] = $aa_conditions['hotel_cd'];
                         $o_validations_room_count2['room_id'] = $aa_conditions['room_id'];
-                        $o_validations_room_count2['date_ymd'] = date("Ymd",$o_date->get());
+                        $o_validations_room_count2['date_ymd'] = date("Ymd", $o_date->get());
                         $o_validations_room_count2['rooms'] = $aa_conditions['calender'][$o_date->get()];
 
                         $o_validations_room_count = [];
                         $o_validations_room_count['hotel_cd'] = $aa_conditions['hotel_cd'];
                         $o_validations_room_count['room_cd'] = $aa_conditions['room_id'];
-                        $o_validations_room_count['date_ymd'] = date("Ymd",$o_date->get());
+                        $o_validations_room_count['date_ymd'] = date("Ymd", $o_date->get());
                         $o_validations_room_count['rooms'] = $aa_conditions['calender'][$o_date->get()];
 
                         // バリデート実行
@@ -3319,23 +3298,23 @@ SQL;
                         $errorList = $o_room_count2->validation($o_validations_room_count2);
                         $errorList_room_count = [];
                         $errorList = $o_room_count->validation($o_validations_room_count);
-                        if(count($errorList_room_count2) > 0 || count($errorList_room_count) > 0){
+                        if (count($errorList_room_count2) > 0 || count($errorList_room_count) > 0) {
                             $errorListArray = array_merge($errorList_room_count2, $errorList_room_count);
                             $errorList = array_unique($errorListArray);
                             $this->addErrorMessageArray($errorList);
                             return false;
                         }
-        
+
                         // 更新
                         $a_attributes = [];
                         $a_attributes['hotel_cd'] = $aa_conditions['hotel_cd'];
                         $a_attributes['room_id'] = $aa_conditions['room_id'];
-                        $a_attributes['date_ymd'] = date("Ymd",$o_date->get());
+                        $a_attributes['date_ymd'] = date("Ymd", $o_date->get());
                         $a_attributes['rooms'] = $aa_conditions['calender'][$o_date->get()];
-                        $a_attributes['modify_cd'] = 'test_update_calender';
+                        $a_attributes['modify_cd'] = $actionCd;
                         $a_attributes['modify_ts'] = now();
-                        
-                        if ( !$o_room_count2->DataUpdate($a_attributes)) {
+
+                        if (!$o_room_count2->dataUpdate($a_attributes)) {
                             return false;
                         }
                     }
@@ -3345,9 +3324,9 @@ SQL;
                 $a_calender['week' . $n_week_idx]['months'][]        = (int)$o_date->to_format('m');
                 $a_calender['week' . $n_week_idx]['date_ymd'][]      = $o_date->get();
                 $a_calender['week' . $n_week_idx]['rooms'][]         = $a_room_count['rooms'] ?? null;
-                if($a_room_count){
+                if ($a_room_count) {
                     $a_calender['week' . $n_week_idx]['edit_rooms'][] = $aa_conditions['calender'][$o_date->get()] ?? $a_room_count['rooms'];
-                }else{
+                } else {
                     $a_calender['week' . $n_week_idx]['edit_rooms'][] = $aa_conditions['calender'][$o_date->get()] ?? $a_attributes['edit_rooms'] ?? null;
                 }
                 $a_calender['week' . $n_week_idx]['reserve_rooms'][] = $a_room_count['reserve_rooms'] ?? null;
@@ -3368,18 +3347,19 @@ SQL;
         }
     }
 
-    // パートナーグループIDを取得
-    public function get_partner_group_id()
+    /**
+     * パートナーグループIDを取得
+     */
+    public function getPartnerGroupId()
     {
         try {
-
             // キーが同じ場合キャッシュを利用
             if ($this->_s_partner_cd   == $this->_a_get_partner_group_id['partner_cd']) {
                 return $this->_a_get_partner_group_id['values'];
             }
 
             $s_sql =
-            <<<SQL
+                <<<SQL
 					select	partner_group_id
 					from	partner_group_join
 					where	partner_cd      = :partner_cd
@@ -3396,5 +3376,25 @@ SQL;
         } catch (Exception $e) {
             throw $e;
         }
+    }
+
+    /**
+     * コントローラ名とアクション名を取得して、ユーザーIDと連結
+     * ユーザーID取得は暫定の為、書き換え替えが必要です。
+     *
+     * MEMO: app/Models/common/CommonDBModel.php から移植したもの
+     * HACK: 適切に共通化したいか。
+     * @return string
+     */
+    private function getActionCd()
+    {
+        $path = explode("@", \Illuminate\Support\Facades\Route::currentRouteAction());
+        $pathList = explode('\\', $path[0]);
+        $controllerName = str_replace("Controller", "", end($pathList)); // コントローラ名
+        $actionName = $path[1]; // アクション名
+        $userId = \Illuminate\Support\Facades\Session::get("user_id");   // TODO: ユーザー情報取得のキーは仮です
+        $actionCd = $controllerName . "/" . $actionName . "." . $userId;
+
+        return $actionCd;
     }
 }
