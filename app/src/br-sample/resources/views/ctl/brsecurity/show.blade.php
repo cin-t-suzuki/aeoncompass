@@ -1,10 +1,10 @@
-<!-- {* header start *}
-{include file=$v->env.module_root|cat:'/views/_common/_br_header.tpl' title = 'セキュリティログ詳細'}
-{* header end *} -->
-@section('title', 'セキュリティログ詳細')
-@include('ctl.common.base')
 
-@inject('service', 'App\Http\Controllers\ctl\BrSecurityController')
+@extends('ctl.common.base')
+@section('title', 'セキュリティログ詳細')
+
+
+@section('page_blade')
+
 
 <!-- エラーメッセージの表示 -->
 @if (!empty($errors) && is_array($errors) && count($errors) > 0)
@@ -53,4 +53,4 @@
 </table>
 @endif
 
-@include('ctl.common.footer')
+@endsection

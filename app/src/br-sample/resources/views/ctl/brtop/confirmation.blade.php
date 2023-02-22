@@ -1,12 +1,9 @@
+
+
+@extends('ctl.common.base')
 @section('title', '確認')
-@include('ctl.common.base')
 
-@inject('service', 'App\Http\Controllers\ctl\BrtopController')
-
-<!-- 
-{* header start *}
-	{include file=$v->env.module_root|cat:'/views/_common/_br_header.tpl' title="確認"}
-{* header end *} -->
+@section('page_blade')
 
 
 <table border="0" cellspacing="0" cellpadding="4">
@@ -198,4 +195,4 @@
 </table>
 <br>
 
-@include('ctl.common.footer')
+@endsection

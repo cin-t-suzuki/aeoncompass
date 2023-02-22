@@ -1,26 +1,29 @@
+
+@extends('ctl.common.base')
 @section('title', 'セキュリティログ一覧')
-@include('ctl.common.base')
 
-@inject('service', 'App\Http\Controllers\ctl\BrSecurityController')
 
-<!-- エラーメッセージの表示部分 -->
-@if (!empty($errors) && is_array($errors) && count($errors) > 0)
-<div style="border-style:solid;border-color:#f00;border-width:1px;padding:6px;background-color:#fee;">
-    @foreach ($errors as $error)
-        <div>{!! nl2br($error) !!}</div>
-    @endforeach
-</div>
-@endif
-<br>
-<!-- 検索フォーム部分 -->
-@include('ctl.brsecurity._form')
+@section('page_blade')
 
-<hr size="1">
-<br>
+  <!-- エラーメッセージの表示部分 -->
+  @if (!empty($errors) && is_array($errors) && count($errors) > 0)
+  <div style="border-style:solid;border-color:#f00;border-width:1px;padding:6px;background-color:#fee;">
+      @foreach ($errors as $error)
+          <div>{!! nl2br($error) !!}</div>
+      @endforeach
+  </div>
+  @endif
+  <br>
+  <!-- 検索フォーム部分 -->
+  @include('ctl.brsecurity._form')
 
-@if(isset($log_securities))
-  <!-- 一覧表示部分 -->
-  @include('ctl.brsecurity._list')
-@endif
+  <hr size="1">
+  <br>
 
-@include('ctl.common.footer')
+  @if(isset($log_securities))
+    <!-- 一覧表示部分 -->
+    @include('ctl.brsecurity._list')
+  @endif
+
+
+@endsection

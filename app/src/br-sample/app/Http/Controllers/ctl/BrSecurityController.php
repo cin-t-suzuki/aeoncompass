@@ -2,7 +2,6 @@
 namespace App\Http\Controllers\ctl;
 use App\Http\Controllers\ctl\_commonController;
 use Illuminate\Http\Request;
-// use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
 use Exception;
 use App\Services\BrSecurityService;
@@ -41,6 +40,22 @@ use App\Services\BrSecurityService;
 					if ($o_after_date <= $o_before_date ){
 						
 						// 送信電子メールキュー一覧取得
+						/**
+						* @param array
+						*       a_conditions
+						*			account_class アカウントクラス
+						*			account_key   アカウント認証キー
+						*			request_dtm   リクエスト日時
+						* @return array
+						* 		log_securities		結果内容
+						*			security_cd		セキュリティログコード
+						*			session_id		セッションID
+						*			request_dtm		リクエスト日時
+						*			account_class	アカウントクラス
+						*			account_key		アカウント認証キー
+						*			ip_address		IPアドレス
+						*			uri				リクエストURI
+						*/
 						if($brSecurityService->get_log_securities($a_conditions) != null){
 
 							$log_securities = $brSecurityService->get_log_securities($a_conditions)['values'];
@@ -132,6 +147,8 @@ use App\Services\BrSecurityService;
 
 
 				// セキュリティログのインスタンスを取得　※月毎に違う
+					//　eloquent-find()メソッドで呼び出す作りにするには Log_security01~12 まで用意しなければならないので
+					//  DB::ファサードのselect()メソッドを使用
 				switch (date('m', strtotime($o_after_date))) {
 					case '01':
 						$sql_param_month='01';
@@ -177,6 +194,21 @@ use App\Services\BrSecurityService;
 				$a_conditions['security_cd'] = $security_cd;
 
 				//該当データの検索
+				/**
+				* @param array
+				*       a_conditions
+				*			security_cd アカウントキー
+				* @return array
+				* 		log_securities		結果内容
+				*			security_cd		セキュリティログコード
+				*			session_id		セッションID
+				*			request_dtm		リクエスト日時
+				*			account_class	アカウントクラス
+				*			account_key		アカウント認証キー
+				*			ip_address		IPアドレス
+				*			uri				リクエストURI
+				*			parameter		パラメータ
+				*/
 				$log_securities = $brSecurityService->get_log_securities_show($a_conditions);
 
 				// データが存在しない場合

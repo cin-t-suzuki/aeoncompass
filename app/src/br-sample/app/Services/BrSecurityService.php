@@ -1,34 +1,29 @@
 <?php
 
 namespace App\Services;
-
-// use App\Models\DenyList;
-use App\Models\Partner;
-// use App\Models\HotelAccount;
-// use App\Models\HotelControl;
-// use App\Models\HotelInsuranceWeather;
-// use App\Models\HotelNotify;
-// use App\Models\HotelPerson;
-// use App\Models\HotelStatus;
-// use App\Models\HotelSystemVersion;
-use App\Util\Models_Cipher;
 use Illuminate\Support\Facades\DB;
+use App\Models\Staff;
 
 
 class BrSecurityService
 {
-
     	// セキュリティログ一覧取得
-		//
-		// aa_conditions
-		//   account_class アカウントクラス
-		//   account_key   アカウント認証キー
-		//   request_dtm   リクエスト日時
-		//     after  =      日付 YYYY-MM-DD HH24:MI:SS
-		//     before =      日付 YYYY-MM-DD HH24:MI:SS
-		//
-
-
+		/**
+		* @param array
+		*       aa_conditions
+		*			account_class アカウントクラス
+		*			account_key   アカウント認証キー
+		*			request_dtm   リクエスト日時
+		* @return array
+		* 		log_securities		結果内容
+		*			security_cd		セキュリティログコード
+		*			session_id		セッションID
+		*			request_dtm		リクエスト日時
+		*			account_class	アカウントクラス
+		*			account_key		アカウント認証キー
+		*			ip_address		IPアドレス
+		*			uri				リクエストURI
+		*/
 		public function get_log_securities($aa_conditions = array()){
 			try {
 
@@ -93,19 +88,53 @@ SQL;
 					//クエリの発行
                     $a_row = DB::select($s_sql, $a_conditions);
 
-					
-
-					//ここにスタッフからメンバーのデータクレンジングをする
-
-
 
 					//結果内容を配列に詰める
 					for ($n_cnt = 0; $n_cnt < count($a_row); $n_cnt++){
+
+							// 機能として使っていないロジックではあるものの、一応コメントアウトにて保管
+								// $staff            = Staff::getInstance();
+								// $hotel            = Hotel::getInstance();
+								// $partner          = Partner::getInstance();
+								// $hotel_supervisor = Hotel_Supervisor::getInstance();
+								// $member_free      = Member_Free::getInstance();
+								// $models_member    = new models_Member();
+			
+								// for ($n_cnt = 0; $n_cnt < count($a_row); $n_cnt++){
+								// 	switch ($a_row[$n_cnt]['account_class']) {
+								// 	case 'staff':
+								// 		$a_row[$n_cnt]['staff'] = $staff->find(array('staff_id' => $a_row[$n_cnt]['account_key']));
+								// 		break;
+								// 	case 'hotel':
+								// 		$a_row[$n_cnt]['hotel'] = $hotel->find(array('hotel_cd' => $a_row[$n_cnt]['account_key']));
+								// 		break;
+								// 	case 'partner':
+								// 		$a_row[$n_cnt]['partner'] = $partner->find(array('partner_cd' => $a_row[$n_cnt]['account_key']));
+								// 		break;
+								// 	case 'supervisor':
+								// 		$a_row[$n_cnt]['hotel_supervisor'] = $hotel_supervisor->find(array('supervisor_cd' => $a_row[$n_cnt]['account_key']));
+								// 		break;
+								// 	case 'member':
+								// 		$a_row[$n_cnt]['member'] = $models_member->get_member($a_row[$n_cnt]['account_key']);
+								// 		break;
+								// 	case 'member_free':
+								// 		$a_row[$n_cnt]['member_free'] = $member_free->find(array('member_cd' => $a_row[$n_cnt]['account_key']));
+								// 		break;
+								// 	}
+					
+									// 上記機能が必要になった際のlaravel用、下記の記述で置き換え可能
+										// switch ($a_row[$n_cnt]->account_class) {
+										// 	case 'staff':
+										// 		$a_row[$n_cnt]->staff = Staff::where('staff_id',$a_row[$n_cnt]->account_key)->get();
+										// 		break;
+										// 	}
+
+
+						//繰り返しごとの結果内容を総合結果に詰める
 						$as_result[] = $a_row[$n_cnt];
-						// dd($a_row[$n_cnt]);
 					}
 
-					//01~12の月の繰り上げ、うるう年対策で関数不使用
+					//01~12の月の繰り上げ、うるう年や31日あるなし対策で標準関数不使用
 					if($o_after != '12'){
 						$o_after=sprintf('%02d', $o_after+1);
 					}else{
@@ -113,59 +142,16 @@ SQL;
 					}
 				}
 
-				// dd(Partner::getInstance());
-
-                    //後で消す部分
                     if (count($as_result) > 0) {
-                     
-						// return $as_result;
 						return array(
 							'values'     => $as_result,
 							// 'reference' => $this->set_reference('セキュリティログ一覧取得', __METHOD__)
 						);
-
-                        
+             
                     } else {
-
-                        return  null;
-                     
+                        return  null;                  
                     }
                 
-
-					$staff            = Staff::getInstance();
-					$hotel            = Hotel::getInstance();
-					$partner          = Partner::getInstance();
-					$hotel_supervisor = Hotel_Supervisor::getInstance();
-					$member_free      = Member_Free::getInstance();
-					$models_member    = new models_Member();
-
-					for ($n_cnt = 0; $n_cnt < count($a_row); $n_cnt++){
-						dd($a_row[$n_cnt]);
-						switch ($a_row[$n_cnt]['account_class']) {
-						case 'staff':
-							$a_row[$n_cnt]['staff'] = $staff->find(array('staff_id' => $a_row[$n_cnt]['account_key']));
-							break;
-						case 'hotel':
-							$a_row[$n_cnt]['hotel'] = $hotel->find(array('hotel_cd' => $a_row[$n_cnt]['account_key']));
-							break;
-						case 'partner':
-							$a_row[$n_cnt]['partner'] = $partner->find(array('partner_cd' => $a_row[$n_cnt]['account_key']));
-							break;
-						case 'supervisor':
-							$a_row[$n_cnt]['hotel_supervisor'] = $hotel_supervisor->find(array('supervisor_cd' => $a_row[$n_cnt]['account_key']));
-							break;
-						case 'member':
-							$a_row[$n_cnt]['member'] = $models_member->get_member($a_row[$n_cnt]['account_key']);
-							break;
-						case 'member_free':
-							$a_row[$n_cnt]['member_free'] = $member_free->find(array('member_cd' => $a_row[$n_cnt]['account_key']));
-							break;
-						}
-
-						$as_result[] = $a_row[$n_cnt];
-
-					}
-
 				
 			// 各メソッドで Exception が投げられた場合
 			} catch (Exception $e) {
@@ -173,21 +159,31 @@ SQL;
 			}
 		}
 
+
+		// セキュリティログ一覧詳細情報
+		/**
+		* @param array
+		*       a_conditions
+		*			security_cd アカウントキー
+		* @return array
+		* 		log_securities		結果内容
+		*			security_cd		セキュリティログコード
+		*			session_id		セッションID
+		*			request_dtm		リクエスト日時
+		*			account_class	アカウントクラス
+		*			account_key		アカウント認証キー
+		*			ip_address		IPアドレス
+		*			uri				リクエストURI
+		*			parameter		パラメータ
+		*/
 		public function get_log_securities_show($aa_conditions = array()){
 			try {
 
-				// dd($aa_conditions);
-
-
 				//SQL内で使用のパラメータの初期化
-                // $security_cd =$aa_conditions['security_cd'];
 				$sql_param_month=$aa_conditions['sql_param_month'];;
              
-				// if (!empty($aa_conditions['request_dtm']['before'])){
 					$security_cd ='	and	account_key = :security_cd';
 					$a_conditions['security_cd'] = $aa_conditions['security_cd'];
-				// }
-				
 
 			
 					$s_sql = 
@@ -211,26 +207,11 @@ SQL;
 					//クエリの発行
                     $a_row = DB::select($s_sql, $a_conditions);
 
-
-	
-				
-
-				// dd(Partner::getInstance());
-
-                    //後で消す部分
                     if (count($a_row) > 0) {
-                     
-						// return $as_result;
 						return $a_row[0];
-
-                        
                     } else {
-
-                        return  null;
-                     
+                        return  null;  
                     }
-                
-
 				
 			// 各メソッドで Exception が投げられた場合
 			} catch (Exception $e) {
