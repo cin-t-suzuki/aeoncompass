@@ -7,7 +7,7 @@ use App\Models\common\CommonDBModel;
 use App\Models\common\ValidationColumn;
 use Illuminate\Support\Facades\DB;
 
-class HotelModify extends CommonDBModel
+class KeywordsHotel extends CommonDBModel
 {
     use HasFactory;
 
@@ -16,13 +16,13 @@ class HotelModify extends CommonDBModel
      *
      * @var string
      */
-    protected $table = 'hotel_modify';
+    protected $table = 'keywords_hotel';
     /**
      * テーブルに関連付ける主キー
      *
      * @var string
      */
-    protected $primaryKey = 'hotel_cd';
+    protected $primaryKey = ['hotel_cd', 'field_nm'];
     /**
      * モデルのIDを自動増分するか
      *
@@ -34,7 +34,7 @@ class HotelModify extends CommonDBModel
      *
      * @var bool
      */
-    public $timestamps = true;
+    public $timestamps = false;
     const CREATED_AT = 'entry_ts';
     const UPDATED_AT = 'modify_ts';
     /**
@@ -44,19 +44,18 @@ class HotelModify extends CommonDBModel
      */
     protected $fillable = [
         'hotel_cd',
-        'modify_status',
+        'field_nm',
+        'keyword',
         'entry_cd',
         'entry_ts',
         'modify_cd',
         'modify_ts'
     ];
+
     // カラム
-    public string $COL_HOTEL_CD = "hotel_cd";
-    public string $COL_MODIFY_STATUS = "modify_status";
-    public string $COL_ENTRY_CD = "entry_cd";
-    public string $COL_ENTRY_TS = "entry_ts";
-    public string $COL_MODIFY_CD = "modify_cd";
-    public string $COL_MODIFY_TS = "modify_ts";
+    public string $COL_HOTEL_CD         = "hotel_cd";
+    public string $COL_FIELD_NM         = "field_nm";
+    public string $COL_KEYWORD         = "keyword";
 
     /** コンストラクタ
      */
@@ -65,10 +64,13 @@ class HotelModify extends CommonDBModel
         // カラム情報の設定
         $colHotelCd = new ValidationColumn();
         $colHotelCd->setColumnName($this->COL_HOTEL_CD, "施設コード")->require()->length(0, 10)->notHalfKana();
-        $colModifyStatus = new ValidationColumn();
-        $colModifyStatus->setColumnName($this->COL_MODIFY_STATUS, "更新ステータス")->require();
 
+        $colFieldNm = new ValidationColumn();
+        $colFieldNm->setColumnName($this->COL_FIELD_NM, "フィールド名称")->require()->length(0, 30)->notHalfKana();
 
-        parent::setColumnDataArray([$colHotelCd, $colModifyStatus]);
+        $colKeyword = new ValidationColumn();
+        $colKeyword->setColumnName($this->COL_KEYWORD, "キーワード")->length(0, 1333)->notHalfKana();
+
+        parent::setColumnDataArray([$colHotelCd, $colFieldNm, $colKeyword]);
     }
 }
