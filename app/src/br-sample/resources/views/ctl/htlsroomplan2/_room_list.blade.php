@@ -53,16 +53,9 @@
           <!-- {* 部屋名 *} -->
           <div><span class="font-bold jqs-room-nm">{{$room->room_nm}}</span></div>
           <!-- {* 部屋ラベル *} -->
-          @if(!is_null($room->roomtype_cd))
-            <div>
-              [<span class="label-cd-text">{$room.label_cd}</span>]
-              @if(!is_empty($room.roomtype_cd))
-                &nbsp;[<span class="label-cd-text">{$room.roomtype_cd}</span>]
-              @endif
-            </div>
-          @else
-            <br />
-          @endif
+          <div>
+            [<span class="label-cd-text">{{$room->label_cd}}</span>]
+          </div>
           <div>
             <!-- {* 部屋スペック *} -->
             @include('ctl.common._zap_room_spec_icon')
@@ -89,7 +82,7 @@
               </td>
               <!-- /button-edit-room -->
               <!-- info-room-stock -->
-              @if(is_null($room->rooms))
+              @if(is_null($room->last_registered_ymd))
                 <td class="align-c bk-deactive room-stock-status">
                   <span class="msg-text-error">部屋数の登録が有りません</span>
                 </td>
@@ -113,7 +106,7 @@
                 </td>
               @else
                 <td class="align-c room-stock-status">
-                  @include('ctl._common._date')
+                  {{$room->last_registered_ymd}}
                 </td>
                 <td class="align-c">
                   <form action="{$v->env.source_path}{$v->env.module}/htlsroomoffer/edit/" method="post">
@@ -135,10 +128,8 @@
                 </td>
               @endif
               <!-- /info-room-stock -->
-              <!-- button-edit-room-stock -->
-              <!-- /button-edit-room-stock -->
               <!-- button-edit-room-status -->
-              @if(is_null($room->media_no))
+              @if(is_null($room->room_media_count))
                 <td class="align-c bk-deactive">
                   <form action="{$v->env.source_path}{$v->env.module}/htlsmedia/editroom/" method="post">
                     <div>
@@ -208,29 +199,25 @@
               <!-- /info-room-status -->
               <!-- button-room-delete -->
               <!-- 部屋が紐づいているプランが存在するか・ネット在庫・基幹在庫の部屋の削除判定によって分岐している -->
-              @if(!(is_null($room->plan_id) or true))
+              @if($room->relation_plan_count > 0)
                 <td class="align-c bk-deactive">
                   <form action="{$v->env.source_path}{$v->env.module}/htlsroomplan2/hiddenroom/" method="post">
                     <div>
                       <input type="hidden" name="target_cd"          value="{$room.hotel_cd}" />
                       <input type="hidden" name="room_id"            value="{$room.room_id}" />
                       <input type="hidden" name="search_sale_status" value="{$v->assign->form_params.search_sale_status}" />
-                      <input type="submit" value="部屋の削除" class="jqs-btn-room-del" />
+                      <input type="submit" value="部屋の削除" class="jqs-btn-room-del" disabled="disabled" />
                     </div>
                   </form>
                 </td>
               @else
-                <td class="align-c {if !($is_relation_plan or !$is_delete_room_relo)}bk-deactive{/if}">
+                <td class="align-c">
                   <form action="{$v->env.source_path}{$v->env.module}/htlsroomplan2/hiddenroom/" method="post">
                     <div>
                       <input type="hidden" name="target_cd"          value="{$room.hotel_cd}" />
                       <input type="hidden" name="room_id"            value="{$room.room_id}" />
                       <input type="hidden" name="search_sale_status" value="{$v->assign->form_params.search_sale_status}" />
-                      @if(is_null($room->plan_id))
-                        <input type="submit" value="部屋の削除" class="jqs-btn-room-del" disabled="disabled" />
-                      @else
-                        <input type="submit" value="部屋の削除" class="jqs-btn-room-del" />
-                      @endif
+                      <input type="submit" value="部屋の削除" class="jqs-btn-room-del" />
                     </div>
                   </form>
                 </td>
@@ -243,36 +230,6 @@
     </div>
     @endforeach
   @endif
-  <!-- {if $room_list|@count <= 0}<span class="msg-text-error">登録されている部屋がありません。</span>{/if}
-  {foreach from=$room_list item=room name=loop_room_list}
-    {* 在庫数の有無を判定($is_reg_room) true:在庫無, false:在庫あり *}
-    {assign var=is_reg_room value=false}
-    {if is_empty($room.last_reg_ymd)}{assign var=is_reg_room value=false}{else}{assign var=is_reg_room value=true}{/if}
-    {* 部屋の販売ステータス判定($is_no_accept_room) *}
-    {assign var=is_no_accept_room value=false}
-    {if $room.accept_status == 1}{assign var=is_no_accept_room value=false}{else}{assign var=is_no_accept_room value=true}{/if}
-    {* 部屋画像が設定済みか判定($is_set_room_media) *}
-    {assign var=is_set_room_media value=false}
-    {if $room.room_media_cnt > 0}{assign var=is_set_room_media value=true}{else}{assign var=is_set_room_media value=false}{/if}
-    {* 部屋が紐づいているプランが存在するか判定($is_relation_plan) *}
-    {assign var=is_relation_plan value=false}
-    {if $room.rel_plan_cnt > 0}{assign var=is_relation_plan value=true}{else}{assign var=is_relation_plan value=false}{/if}
-    {*  ネット在庫・基幹在庫の部屋の販売/休止判定 *}
-    {assign var=is_edit_room_sales_state_relo value=true}
-    {if ($room.room_stock_type.is_basic_stock) and (!$v->user->operator->is_nta() and !$v->user->operator->is_staff())}{assign var=is_edit_room_sales_state_relo value=false}{/if}
-    {*  ネット在庫・基幹在庫の部屋の削除判定 *}
-    {assign var=is_delete_room_relo value=true}
-    {if $room.room_stock_type.is_basic_stock and !$v->user->operator->is_nta()}{assign var=is_delete_room_relo value=false}{/if}
-    {*  ネット在庫 or 基幹在庫のときは（ラベルコード or 部屋ID）を表示しない  *}
-    {assign var=is_disp_room_cd value=true}
-    {if $room.room_stock_type.is_basic_stock}{assign var=is_disp_room_cd value=false}{/if}
-    {* 在庫編集の可否判定 *}
-    {assign var=is_edit_rooms value=true}
-    {if $room.room_stock_type.is_basic_stock}
-      {if !$v->user->operator->is_nta()}
-        {assign var=is_edit_rooms value=false}
-      {/if}
-    {/if} -->
   </div>
     <hr class="bound-line" />
 </div>

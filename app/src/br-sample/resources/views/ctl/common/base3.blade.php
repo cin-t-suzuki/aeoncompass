@@ -297,12 +297,12 @@
                         【室数・料金・期間の調整】
                     </div>
                 @else
-                    {{!! Form::Open(['route' => ['ctl.htlsroomoffer.list'], 'method' => 'post']) !!}}
+                    {{ Form::Open(['route' => ['ctl.htlsroomoffer.list'], 'method' => 'post']) }}
                         <div class="elm-1st">
                             <input type="hidden" name="target_cd" value="{{ $v->user->hotel->hotel_cd }}" />
                             <input type="submit" value="室数・料金・期間の調整" />
                         </div>
-                    {{!! Form::close() !!}}
+                    {{ Form::close() }}
                 @endif
 
                 {{-- プランメンテナンス --}}
@@ -311,12 +311,12 @@
                         【プランメンテナンス】
                     </div>
                 @else
-                    {{!! Form::Open(['route' => ['ctl.htlsroomplan2.index'], 'method' => 'post']) !!}}
+                    {{ Form::Open(['route' => ['ctl.htlsroomplan2.index'], 'method' => 'post']) }}
                         <div class="elm">
                             <input type="hidden" name="target_cd" value="{{ $v->user->hotel->hotel_cd }}" />
                             <input type="submit" value="プランメンテナンス" />
                         </div>
-                    {{!! Form::close() !!}}
+                    {{ Form::close() }}
                 @endif
 
                 {{-- 予約情報の確認 --}}

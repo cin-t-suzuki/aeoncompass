@@ -31,19 +31,10 @@
       <div><span class="font-bold jqs-plan-nm">{{$plan->plan_nm}}</span></div>
       <!-- {* プランラベル *} -->
       <div class="font-normal">
-        @if(is_null($plan->partner_cd))
-          [<span class="label-cd-text">{{$plan->label_cd}}</span>]
-        @endif
-        @if($plan->partner_group_id != 0)
-          <span class="msg-text-success prev-text">※特定サイト限定販売の為プレビュー不可</span>
-        @else
-          <span class="prev-text"><a href="{$v->env.source_path}{$v->env.module}/redirect/rsvplan/?target_cd={$plan.plan_detail.hotel_cd}&amp;plan_id={$plan.plan_detail.plan_id}" target="_brank">プレビュー&nbsp;>>&nbsp;</a></span>
-        @endif
-      </div>
+        [<span class="label-cd-text">{{$plan->label_cd}}</span>]
+        <span class="prev-text"><a href="{$v->env.source_path}{$v->env.module}/redirect/rsvplan/?target_cd={$plan.plan_detail.hotel_cd}&amp;plan_id={$plan.plan_detail.plan_id}" target="_brank">プレビュー&nbsp;>>&nbsp;</a></span>
+        </div>
       <div>
-        @if(is_null($plan->partner_cd))
-          <span class="tag-text-info">リロ専用プラン</span>
-        @endif
         <!-- {*====================================================================*}
         {* 連泊                                                               *}
         {*====================================================================*} -->
@@ -94,7 +85,7 @@
           <span class="tag-text-success">ポイント利用不可</span>
         @endif
         <!-- {* キャンペーン対象 *} -->
-        @if(! is_null($plan->camp_cd))
+        @if(0 < $plan->camp_cnt)
           <span class="tag-text-success">キャンペーン</span>
         @endif
         <!-- {* BR提供 *} -->
@@ -104,18 +95,6 @@
         <!-- {* パワー *} -->
         @if($plan->stock_type == 1 && $plan->payment_way == 1)
           <span class="tag-text-success">パワー</span>
-        @endif
-        <!-- {* 販売チャンネル *} -->
-        @if($plan->partner_group_id == 0)
-          <span class="tag-text-success">全サイト共通販売</span>
-        @else
-          <!-- JRセットプランの提携先グループだった場合のデータを取得する分岐処理を記載する。 -->
-          @if(false)
-            <span class="tag-text-success">特定サイト限定販売</span>
-          @endif
-        @endif
-        @if(false)
-          <span class="tag-text-success">ＪＲコレクション</span>
         @endif
         <!-- {* チェックイン *} -->
         @if(! is_null($plan->check_in) || ! is_null($plan->check_in_end))
@@ -154,8 +133,13 @@
           <!-- /plan edit -->
           <td class="align-c plan-accept_ymd {if is_empty($plan.plan_detail.accept_s_ymd) or is_empty($plan.plan_detail.accept_e_ymd) or ((($smarty.now|date_format:'%Y-%m-%d'|strtotime) > $plan.plan_detail.accept_e_ymd)  and !is_empty($plan.plan_detail.accept_e_ymd) ) }bk-deactive{/if}">
             <!-- {* 販売期間の状態によって表示を制御 *} -->
+            @php
+              $plan_accept_ymd_status = 0;
+              $is_disp_guide = false;
+            @endphp
             @if(is_null($plan->accept_s_ymd) && is_null($plan->accept_e_ymd))
               <!-- {* 販売期間が未設定 *} -->
+              @php $plan_accept_ymd_status = 1 @endphp
               <div class="plan-sale-status-box">
                 <div class="plan-sale-status-msg" title="販売期間が未設定です。 クリックで販売期間の設定へ。">
                   <div class="align-c">
@@ -166,6 +150,7 @@
             @else
               @if(date('%Y-%m-%d') > $plan->accept_e_ymd && ! is_null($plan->accept_e_ymd))
                 <!-- {* 販売期間が経過 *} -->
+                @php $plan_accept_ymd_status = 2 @endphp
                 <div class="plan-sale-status-box">
                   <div class="plan-sale-status-msg" title="販売期間切れです。 クリックで販売期間の再設定へ。">
                     <div class="align-c">
@@ -176,15 +161,17 @@
               @else
                 <!-- {* 通常の販売期間表示 *} -->
                 @if(is_null($plan->accept_s_ymd))
+                  @php $is_disp_guide = true; @endphp
                   <span class="msg-text-error">未設定</span>
                 @else
-                  @include('ctl.common._date')
+                  {{ $plan->accept_s_ymd }}
                 @endif
                 ～
                 @if(is_null($plan->accept_e_ymd))
+                  @php $is_disp_guide = true; @endphp
                   <span class="msg-text-error">未設定</span>
                 @else
-                  @include('ctl.common._date')
+                  {{ $plan->accept_e_ymd }}
                 @endif
                 <!-- {* どちらかが未設定の場合はメッセージを表示 *} -->
                 @if(is_null($plan->accept_s_ymd) || is_null($plan->accept_e_ymd))
@@ -268,35 +255,13 @@
           <!-- /plan delete -->
         </tr>
       </table>
-      @php
-        $is_sale_cnt = 1;
-        $is_not_sale_cnt = 0;
-        $is_not_sale = false;
-
-        $plan->rooms = [
-          (object)[
-            'accept_status'            => 1,
-            'is_edit_room_accept'      => true,
-            'is_disp_guide'            => false,
-            'plan_accept_ymd_status'   => false,
-            'max_reg_rooms_ymd'        => false,
-            'max_reg_charge_ymd'       => null,
-            'accept_status_room_count' => 1,
-            'charge_accept_status'     => null,
-            'room_nm'                  => 'シングル',
-            'room_label_cd'            => '1',
-            'roomtype_cd'              => 1,
-            'setting_status'           => null,
-          ],
-        ];
-      @endphp
       <div class="plan-room-spacer"></div>
       <div class="plan-room-summary">
         <div class="align-l float-l"><a href="#noact">▼部屋タイプを展開</a></div>
         <div class="align-l float-l plan-room-summary-text">
           <!-- プラン単位で見た時の販売可能な状態の部屋数・販売不可能な状態の部屋数 -->
-          <span class="msg-text-info" >設定済：</span>{{$is_sale_cnt}}
-          <span class="msg-text-error">非販売：</span>{{$is_not_sale_cnt}}
+          <span class="msg-text-info" >設定済：</span>{{$plan->sale_cnt}}
+          <span class="msg-text-error">非販売：</span>{{$plan->non_sale_cnt}}
         </div>
         <div class="clear"></div>
       </div>
@@ -311,7 +276,7 @@
             </th>
             <th class="align-c">
               <!-- {* 部屋が複数紐づいているときは一括設定ボタンを表示 *} -->
-              @if(! is_null($plan->room_id))
+              @if(1 < count($plan->rooms))
                 <form action="{$v->env.source_path}{$v->env.module}/htlscharge2/" method="post">
                   <div>
                     <input type="hidden" name="target_cd"  value="{$plan.plan_detail.hotel_cd}" />
@@ -329,21 +294,13 @@
               <td class="plan-room-info">
                 <div title="{$room.room_detail.room_nl}">{{$room->room_nm}}</div>
                 <div>
-                  [<span class="label-cd-text">{{$room->room_label_cd}}</span>]
-                  @if(!is_null($room->roomtype_cd))
-                    &nbsp;[<span class="label-cd-text">{{$room->roomtype_cd}}</span>]
-                  @endif
+                  [<span class="label-cd-text">{{$room->label_cd}}</span>]
                 </div>
-                @if($plan->partner_group_id != 0)
-                  <div><span class="msg-text-success prev-text">※特定サイト限定販売の為プレビュー不可</span></div>
-                @else
-                  <div class="prev-text"><a href="{$v->env.source_path}{$v->env.module}/redirect/rsvcalender/?target_cd={$plan.plan_detail.hotel_cd}&amp;plan_id={$plan.plan_detail.plan_id}&amp;room_id={$room.room_detail.room_id}" target="_brank">プレビュー&nbsp;>>&nbsp;</a></div>
-                @endif
               </td>
               <td class="plan-room-sale-status {if $is_not_sale}bk-deactive{/if}">
-                {$smarty.capture.sale_status}
+                @php $is_not_sale = false; @endphp
                 @if($plan->accept_status != 1)
-                  {assign var=is_not_sale value=true}
+                  @php $is_not_sale = true; @endphp
                   <div class="plan-sale-status-box">
                     <div class="plan-sale-status-msg" title="プランが休止中です。 クリックでプラン休止を解除。">
                       <div class="plan-sale-st-msg-margin">
@@ -354,7 +311,7 @@
                 @endif
                 <!-- {* 部屋販売ステータス *} -->
                 @if($room->accept_status != 1)
-                  {assign var=is_not_sale value=true}
+                  @php $is_not_sale = true; @endphp
                   <div class="plan-sale-status-box">
                     <div class="plan-sale-status-msg" title="部屋が休止中です。 クリックで部屋休止を解除。">
                       <div class="plan-sale-st-msg-margin">
@@ -368,8 +325,8 @@
                   </div>
                 @endif
                 <!-- {* 販売期間が未設定 *} -->
-                @if($room->plan_accept_ymd_status == 1)
-                  {assign var=is_not_sale value=true}
+                @if(is_null($plan->accept_s_ymd) && is_null($plan->accept_e_ymd))
+                  @php $is_not_sale = true; @endphp
                   <div class="plan-sale-status-box">
                     <div class="plan-sale-status-msg" title="販売期間が未設定です。 クリックで販売期間の設定へ。">
                       <div class="plan-sale-st-msg-margin">
@@ -379,8 +336,8 @@
                   </div>
                 @else
                   <!-- {* 販売期間が経過 *} -->
-                  @if($room->plan_accept_ymd_status == 2)
-                    {assign var=is_not_sale value=true}
+                  @if($plan->accept_e_ymd < date('Y-m-d') && !is_null($plan->accept_e_ymd))
+                    @php $is_not_sale = true; @endphp
                     <div class="plan-sale-status-box">
                       <div class="plan-sale-status-msg" title="販売期間切れです。 クリックで販売期間の再設定へ。">
                         <div class="plan-sale-st-msg-margin">
@@ -389,7 +346,7 @@
                       </div>
                     </div>
                   @else
-                    @if($room->is_disp_guide)
+                    @if(is_null($plan->accept_s_ymd) || is_null($plan->accept_e_ymd))
                       <div class="plan-sale-status-box">
                         <div class="plan-sale-status-msg" title="販売期間が未設定です。 クリックで販売期間の設定へ。">
                           <div class="plan-sale-st-msg-margin">
@@ -402,24 +359,24 @@
                 @endif
                 <!-- {* 部屋在庫無し *} -->
                 @if(is_null($room->max_reg_rooms_ymd))
-                  {assign var=is_not_sale value=true}
+                  @php $is_not_sale = true; @endphp
                   <div class="plan-sale-status-box">
                     <div class="plan-sale-status-msg" title="部屋数の登録がありません。 クリックで部屋数の登録へ。">
                       <div class="plan-sale-st-msg-margin">
-                        {if $is_edit_rooms}
+                        @if(true)
                           <a href="{$v->env.source_path}{$v->env.module}/htlsroomoffer/edit/?target_cd={$plan.plan_detail.hotel_cd}&amp;room_id={$room.room_detail.room_id}&amp;ui_type=calender&amp;date_ym={$smarty.now}&amp;current_ymd={$smarty.now}"><span class="msg-text-error">部屋数登録無し</span>→</a>
-                        {else}
+                        @else
                           <span class="msg-text-error">部屋数登録無し</span>
-                        {/if}
+                        @endif
                       </div>
                     </div>
                   </div>
                 @elseif($room->accept_status_room_count != 1)
-                  {assign var=is_not_sale value=true}
+                  @php $is_not_sale = true; @endphp
                   <div class="plan-sale-status-box">
                     <div class="plan-sale-status-msg" title="登録中の在庫がすべて手仕舞です。">
                       <div class="plan-sale-st-msg-margin">
-                        @if($is_edit_rooms)
+                        @if(true)
                           <a href="{$v->env.source_path}{$v->env.module}/htlsroomoffer/edit/?target_cd={$plan.plan_detail.hotel_cd}&amp;room_id={$room.room_detail.room_id}&amp;ui_type=accept&amp;date_ymd={$smarty.now}&amp;current_ymd={$smarty.now}"><span class="msg-text-error">部屋手仕舞</span>→</a>
                         @else
                           <span class="msg-text-error">部屋手仕舞</span>
@@ -430,11 +387,11 @@
                 @endif
                 <!-- {* 料金登録無し *} -->
                 @if(is_null($room->max_reg_charge_ymd))
-                  {assign var=is_not_sale value=true}
+                  @php $is_not_sale = true; @endphp
                   <div class="plan-sale-status-box">
                     <div class="plan-sale-status-msg" title="{if $plan_accept_ymd_status == 0 and !$is_disp_guide}料金の登録がありません。クリックで料金登録画面へ。{else}販売期間を設定してください。{/if}">
                       <div class="plan-sale-st-msg-margin">
-                        @if($room->plan_accept_ymd_status == 0 and !$room->is_disp_guide)
+                        @if($plan_accept_ymd_status == 0 and !$is_disp_guide)
                           <a href="{$v->env.source_path}{$v->env.module}/htlscharge2/single/?target_cd={$plan.plan_detail.hotel_cd}&amp;plan_id={$plan.plan_detail.plan_id}&amp;room_id={$room.room_detail.room_id}&amp;partner_group_id={$plan.plan_detail.partner_group_id.0}"><span class="msg-text-error">料金登録無し</span>→</a>
                         @else
                           <span class="msg-text-error">料金登録無し</span>
@@ -446,8 +403,8 @@
                 <!-- {* 売止 *} -->
                 @if(!is_null($room->charge_accept_status)
                     && $room->charge_accept_status == 0
-                    && !$room->is_disp_guide)
-                  {assign var=is_not_sale value=true}
+                    && !$is_disp_guide)
+                  @php $is_not_sale = true; @endphp
                   <div class="plan-sale-status-box">
                     <div class="plan-sale-status-msg" title="登録中の料金が全て売止になっています。クリックで売止の変更へ。">
                       <div class="plan-sale-st-msg-margin">
@@ -462,7 +419,7 @@
                 @endif
                 <!-- {* 販売終了 *} -->
                 @if(!is_null($room->max_reg_charge_ymd) && $room->is_accept_e_dtm === 0)
-                  {assign var=is_not_sale value=true}
+                  @php $is_not_sale = true; @endphp
                   <div class="plan-sale-status-box">
                     <div class="plan-sale-st-msg-margin">
                       <div class="plan-sale-status-msg" title=""><span class="msg-text-error">販売終了</span></div>
@@ -471,11 +428,11 @@
                 @else
                   <!-- {* 販売開始前 *} -->
                   @if(!is_null($room->max_reg_charge_ymd) && $room->is_accept_s_dtm === 0)
-                    {assign var=is_not_sale value=true}
+                    @php $is_not_sale = true; @endphp
                     <div class="plan-sale-status-box">
                       <div class="plan-sale-st-msg-margin">
                           @if(!is_null($room->min_pre_accept_s_dtm))
-                            @include('ctl.common._date'){{date_format($room->min_pre_accept_s_dtm, '%H-%M')}}より販売開始
+                            {{date_format($room->min_pre_accept_s_dtm, '%H-%M')}}より販売開始
                           @endif
                           {assign var=pre_sale_title value=$smarty.capture.pre_sale_dtm|strip_tags:true|trim}
                         <div class="plan-sale-status-msg" title="{$pre_sale_title}">
@@ -498,7 +455,7 @@
                 @if(is_null($room->max_reg_charge_ymd))
                   <span class="msg-text-error">料金登録無し</span>
                 @else
-                  @include('ctl.common._date')まで登録済み
+                  {{$room->max_reg_charge_ymd}}まで登録済み
                 @endif
               </td>
               <td  class="align-c plan-room-charge-edit {if is_empty($room.room_detail.max_reg_charge_ymd)}bk-deactive{/if}">
@@ -513,10 +470,6 @@
                 </form>
               </td>
               <td class="plan-room-extend-status {if $room.room_detail.auto_extend.setting_status != 3}bk-deactive{/if}">
-                <!-- {* リロ専用プランでは自動延長は利用できない *} -->
-                <!-- {if $is_relo}
-                  <div class="msg-text-warning align-c">自動延長は利用できません</div>
-                {else} -->
                   @if($room->setting_status === 1)
                     <div class="plan-sale-status-msg" title="クリックで自動延長設定へ">
                       <div class="plan-sale-status-box align-c">

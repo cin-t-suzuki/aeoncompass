@@ -1,10 +1,6 @@
 <!-- <!-- {* 引数：$room, $display_row *} -->
 <!-- {assign var=room_icon_color_class value='warning'} -->
 <ul class="room-spec-list">
-  <!-- {* 連携在庫 *} -->
-  @if(!is_null($room->roomtype_cd))
-    <li><span class="tag-text-error">日本旅行連動在庫</span></li>
-  @endif
   <!-- {* 部屋タイプ *} -->
   <li>
     <span class="tag-text-warning">
@@ -37,26 +33,26 @@
   </li>
   <!-- {* 部屋スペック -風呂 *} -->
   <li>
-    @if($room->element_id === 1 && $room->element_value_id === 0)<span class="tag-text-warning">風呂なし</span>
-    @elseif($room->element_id === 1 && $room->element_value_id === 1)<span class="tag-text-warning">風呂付き</span>
-    @elseif($room->element_id === 1 && $room->element_value_id === 2)<span class="tag-text-warning">風呂共同</span>
-    @elseif($room->element_id === 1 && $room->element_value_id === 3)<span class="tag-text-warning">シャワーのみ</span>
+    @if($room->bathroom === 0)<span class="tag-text-warning">風呂なし</span>
+    @elseif($room->bathroom === 1)<span class="tag-text-warning">風呂付き</span>
+    @elseif($room->bathroom === 2)<span class="tag-text-warning">風呂共同</span>
+    @elseif($room->bathroom === 3)<span class="tag-text-warning">シャワーのみ</span>
     @endif
   </li>
   <!-- {* 部屋スペック -トイレ *} -->
   <li>
-    @if($room->element_id === 2 && $room->element_value_id === 0)<span class="tag-text-warning">トイレなし</span>
-    @elseif($room->element_id === 2 && $room->element_value_id === 1)<span class="tag-text-warning">トイレ付き</span>
-    @elseif($room->element_id === 2 && $room->element_value_id === 2)<span class="tag-text-warning">トイレ共同</span>
-    @elseif($room->element_id === 2 && $room->element_value_id === 3)<span class="tag-text-warning">トイレ不明</span>
+    @if($room->toilet === 0)<span class="tag-text-warning">トイレなし</span>
+    @elseif($room->toilet === 1)<span class="tag-text-warning">トイレ付き</span>
+    @elseif($room->toilet === 2)<span class="tag-text-warning">トイレ共同</span>
+    @elseif($room->toilet === 3)<span class="tag-text-warning">トイレ不明</span>
     @endif
   </li>
   <!-- {* 部屋スペック - 禁煙・喫煙 *} -->
   <li>
-    @if($room->element_id === 3 && $room->element_value_id === 0)<span class="tag-text-warning">禁煙&nbsp;/&nbsp;喫煙　設定なし</span>
-    @elseif($room->element_id === 3 && $room->element_value_id === 1)<span class="tag-text-warning">禁煙</span>
-    @elseif($room->element_id === 3 && $room->element_value_id === 2)<span class="tag-text-warning">喫煙</span>
-    @elseif($room->element_id === 3 && $room->element_value_id === 3)<span class="tag-text-warning">禁煙&nbsp;/&nbsp;喫煙　選択</span>
+    @if($room->smoking === 0)<span class="tag-text-warning">禁煙&nbsp;/&nbsp;喫煙　設定なし</span>
+    @elseif($room->smoking === 1)<span class="tag-text-warning">禁煙</span>
+    @elseif($room->smoking === 2)<span class="tag-text-warning">喫煙</span>
+    @elseif($room->smoking === 3)<span class="tag-text-warning">禁煙&nbsp;/&nbsp;喫煙　選択</span>
     @endif
   </li>
   <!-- {* 部屋ネットワーク環境 *} -->
