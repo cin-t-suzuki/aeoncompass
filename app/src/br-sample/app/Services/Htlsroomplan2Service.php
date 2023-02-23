@@ -16,6 +16,8 @@ class Htlsroomplan2Service
        $room_list_sql = <<<SQL
                             select 
                                 room2.*,
+                                ifnull(room2.label_cd, room2.room_id) as room_label_cd,
+                                room_akafu_relation.roomtype_cd,
                                 room_network2.network,
                                 room_network2.rental,
                                 room_network2.connector,
@@ -27,6 +29,11 @@ class Htlsroomplan2Service
                                 room_count2.last_registered_ymd as last_registered_ymd
                             from
                                 room2
+                            left join
+                                room_akafu_relation
+                            on
+                                room_akafu_relation.hotel_cd = room2.hotel_cd
+                                and room_akafu_relation.room_id = room2.room_id
                             left join
                                 room_network2
                             on
@@ -66,9 +73,20 @@ class Htlsroomplan2Service
                                 and room_media2.room_id = room2.room_id
                             left join
                                 (select
-                                    hotel_cd, room_id, count(plan_id) as relation_plan_count
-                                from room_plan_match
-                                group by hotel_cd, room_id) as room_plan_match
+                                    room_plan_match.hotel_cd,
+                                    room_plan_match.room_id,
+                                    count(plan.plan_id) as relation_plan_count
+                                 from
+                                    room_plan_match
+                                 left join
+                                    plan
+                                 on
+                                    room_plan_match.hotel_cd = plan.hotel_cd
+                                    and room_plan_match.plan_id = plan.plan_id
+                                 where
+                                    plan.display_status = 1
+                                    and plan.active_status = 1
+                                 group by hotel_cd, room_id) as room_plan_match
                             on
                                 room_plan_match.hotel_cd = room2.hotel_cd
                                 and room_plan_match.room_id = room2.room_id
@@ -98,12 +116,13 @@ class Htlsroomplan2Service
      * 
      * @param {string} $target_cd
      */
-    public function get_plan_list($target_cd)
+    public function get_plan_list($target_cd, $search_sale_status = null)
     {
         //プランの基本情報を主軸として、関連するキャンペーン数や仕入タイプを取得
         $plan_list_sql = <<<SQL
                             select
                                 plan.*,
+                                ifnull(plan.label_cd, plan.plan_id) as plan_label_cd,
                                 extend_switch_plan2.extend_status,
                                 plan_spec.element_value_id,
                                 plan_point.point_status,
@@ -151,8 +170,7 @@ class Htlsroomplan2Service
                                 plan.hotel_cd = $target_cd
                                 and plan.display_status = 1
                                 and plan.active_status = 1
-                         SQL;
-        
+                         SQL;        
         $plan_list = DB::select($plan_list_sql, []);
         
 
@@ -160,11 +178,19 @@ class Htlsroomplan2Service
         $relation_rooms_sql = <<<SQL
                                 select
                                     room2.*,
+                                    room_akafu_relation.roomtype_cd,
                                     room_plan_match.plan_id,
                                     room_count2.max_reg_rooms_ymd,
-                                    room_count2.accept_status_room_count
+                                    room_count2.accept_status_room_count,
+                                    extend_switch.extend_status,
+                                    extend_setting.after_months
                                 from
                                     room2
+                                left join
+                                    room_akafu_relation
+                                on
+                                    room_akafu_relation.hotel_cd = room2.hotel_cd
+                                    and room_akafu_relation.room_id = room2.room_id
                                 left join
                                     room_plan_match
                                 on
@@ -179,11 +205,18 @@ class Htlsroomplan2Service
                                 on
                                     room_count2.hotel_cd = room2.hotel_cd
                                     and room_count2.room_id = room2.room_id
+                                left join
+                                    extend_switch
+                                on
+                                    extend_switch.hotel_cd = room2.hotel_cd
+                                left join
+                                    extend_setting
+                                on
+                                    extend_setting.hotel_cd = room2.hotel_cd
                                 where
                                     room2.display_status = 1
                                     and room2.active_status = 1
-                              SQL;
-        
+                              SQL;        
         $plan_relation_rooms = DB::select($relation_rooms_sql, []);
         
 
@@ -195,15 +228,20 @@ class Htlsroomplan2Service
                                     plan_id,
                                     min(date_ymd) as min_reg_charge_ymd,
                                     max(date_ymd) as max_reg_charge_ymd,
-                                    max(accept_status) as charge_accept_status
+                                    max(accept_status) as charge_accept_status,
+                                    max(accept_s_dtm) as max_accept_s_dtm,
+                                    max(accept_e_dtm) as max_accept_e_dtm,
+                                    min(case
+                                            when now() < charge.accept_s_dtm and now() < charge.accept_e_dtm then charge.accept_s_dtm
+                                            else null 
+                                        end) as min_pre_accept_s_dtm
                                 from
                                     charge
                                 where
                                     date_ymd >= DATE_FORMAT(NOW(), '%Y-%m-01')
                                 group by
                                     hotel_cd, room_id, plan_id
-                            SQL;
-        
+                            SQL;        
         $rooms_charge = DB::select($rooms_charge_sql, []);
         
 
@@ -216,13 +254,24 @@ class Htlsroomplan2Service
             foreach($plan_relation_rooms as $room){
                 if($plan->hotel_cd === $room->hotel_cd
                    && $plan->plan_id === $room->plan_id){
-
                     $room->max_reg_charge_ymd = null;
                     $room->min_reg_charge_ymd = null;
                     $room->charge_accept_status = null;
                     $room->setting_status = null;
-                    $room->is_accept_s_dtm = null;
-                    $room->is_accept_e_dtm = null;
+                    $room->is_accept_s_dtm = 0;
+                    $room->is_accept_e_dtm = 0;
+
+                    if(is_null($room->extend_status) || $room->extend_status == 0){
+                        $room->setting_status = 1;
+                    }elseif($room->extend_status  != 1){
+                        $room->setting_status = 2;
+                    }elseif($room->extend_status == 1){
+                        $room->setting_status = 3;
+                        $room->setting_next = null;
+                        $room->execute_next = null;
+                    }else{
+                        $room->setting_status = 4;
+                    }
 
                     foreach($rooms_charge as $charge){
                         if($plan->hotel_cd === $charge->hotel_cd
@@ -232,8 +281,15 @@ class Htlsroomplan2Service
                             $room->max_reg_charge_ymd = $charge->max_reg_charge_ymd;
                             $room->min_reg_charge_ymd = $charge->min_reg_charge_ymd;
                             $room->charge_accept_status = $charge->charge_accept_status;
+                            $room->min_pre_accept_s_dtm = $charge->min_pre_accept_s_dtm;
                             $room->setting_status = null;
 
+                            if($charge->max_accept_s_dtm <= date('Y-m-d')){
+                                $room->is_accept_s_dtm = 1;
+                            }
+                            if($charge->max_accept_e_dtm > date('Y-m-d')){
+                                $room->is_accept_e_dtm = 1;
+                            }
                            }
                     }
 
@@ -244,6 +300,17 @@ class Htlsroomplan2Service
                         $plan->non_sale_cnt++;
                     }
 
+                }
+            }
+        }
+
+        // dd($plan_list);
+        if(! is_null($search_sale_status) && $search_sale_status != 9){
+            foreach($plan_list as $index => $plan){
+                if($search_sale_status == 1 && ! $plan->sale_cnt > 0){
+                    unset($plan_list[$index]);
+                }elseif($search_sale_status == 2 && ! $plan->non_sale_cnt > 0){
+                    unset($plan_list[$index]);
                 }
             }
         }
