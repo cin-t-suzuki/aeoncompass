@@ -66,9 +66,9 @@
         <div>
           <span class="align-l">
             <input type="hidden" name="target_cd" value="{{ $user['target_cd'] }}" />
-            <input type="radio" id="spfs_0" name="search_sale_status" value="9"/><label for="spfs_0">すべてのプラン</label>
-            <input type="radio" id="spfs_1" name="search_sale_status" value="1"/><label for="spfs_1">設定済のプラン</label>
-            <input type="radio" id="spfs_2" name="search_sale_status" value="2"/><label for="spfs_2">非販売のプラン</label>
+            <input type="radio" id="spfs_0" name="search_sale_status" value="9" {{ $search_sale_status == 9 ? 'checked' : '' }} /><label for="spfs_0">すべてのプラン</label>
+            <input type="radio" id="spfs_1" name="search_sale_status" value="1" {{ $search_sale_status == 1 ? 'checked' : '' }}/><label for="spfs_1">設定済のプラン</label>
+            <input type="radio" id="spfs_2" name="search_sale_status" value="2" {{ $search_sale_status == 2 ? 'checked' : '' }}/><label for="spfs_2">非販売のプラン</label>
           </span>
           <span class="display-btn align-r"><input type="submit" value="表示" /></span>
         </div>

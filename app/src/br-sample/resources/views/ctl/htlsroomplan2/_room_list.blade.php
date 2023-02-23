@@ -54,7 +54,7 @@
           <div><span class="font-bold jqs-room-nm">{{$room->room_nm}}</span></div>
           <!-- {* 部屋ラベル *} -->
           <div>
-            [<span class="label-cd-text">{{$room->label_cd}}</span>]
+            [<span class="label-cd-text">{{$room->room_label_cd}}</span>]
           </div>
           <div>
             <!-- {* 部屋スペック *} -->
@@ -162,38 +162,36 @@
                 <td class="align-c bk-deactive">
                   <!-- {* 部屋の販売ステータスで遷移先を制御($uri_act) *} -->
                   <span class="msg-text-error">部屋休止中</span><br />
-                  <form action="{$v->env.source_path}{$v->env.module}/htlsroomplan2/updateroomaccept/" method="post">
+                  {{ Form::open(['route' => ['ctl.htlsroomplan2.updateRoomAcceptStatus'], 'method' => 'post']) }}
                     <div>
-                      <input type="hidden" name="target_cd"          value="{$room.hotel_cd}" />
-                      <input type="hidden" name="room_id"            value="{$room.room_id}" />
-                      <input type="hidden" name="accept_status"      value="{if $is_no_accept_room}1{else}0{/if}" />
-                      <input type="hidden" name="search_sale_status" value="{$v->assign->form_params.search_sale_status}" />
-                      @if(!$is_edit_room_sales_state_relo)
+                      <input type="hidden" name="target_cd"          value="{{$room->hotel_cd}}" />
+                      <input type="hidden" name="room_id"            value="{{$room->room_id}}" />
+                      <input type="hidden" name="accept_status"      value="1" />
+                      @if(false)
                         <input type="submit" value="休止中を解除" disabled="disabled" />
                       @else
                         <input type="submit" value="休止中を解除"/>
                       @endif
                     </div>
-                  </form>
+                  {{ Form::close() }}
                 </td>
               @else
                 @php
                   $uri_act = 'roomstop';
                 @endphp
                 <td class="align-c">
-                  <form action="{$v->env.source_path}{$v->env.module}/htlsroomplan2/updateroomaccept/" method="post">
+                  {{ Form::open(['route' => ['ctl.htlsroomplan2.updateRoomAcceptStatus'], 'method' => 'post']) }}
                     <div>
-                      <input type="hidden" name="target_cd"          value="{$room.hotel_cd}" />
-                      <input type="hidden" name="room_id"            value="{$room.room_id}" />
-                      <input type="hidden" name="accept_status"      value="{if $is_no_accept_room}1{else}0{/if}" />
-                      <input type="hidden" name="search_sale_status" value="{$v->assign->form_params.search_sale_status}" />
-                      @if(true)
+                      <input type="hidden" name="target_cd"          value="{{$room->hotel_cd}}" />
+                      <input type="hidden" name="room_id"            value="{{$room->room_id}}" />
+                      <input type="hidden" name="accept_status"      value="0" />
+                      @if(false)
                         <input type="submit" value="休止中に変更" disabled="disabled" />
                       @else
                         <input type="submit" value="休止中に変更"/>
                       @endif
                     </div>
-                  </form>
+                  {{ Form::close() }}
                 </td>
               @endif
               <!-- /info-room-status -->
@@ -201,25 +199,23 @@
               <!-- 部屋が紐づいているプランが存在するか・ネット在庫・基幹在庫の部屋の削除判定によって分岐している -->
               @if($room->relation_plan_count > 0)
                 <td class="align-c bk-deactive">
-                  <form action="{$v->env.source_path}{$v->env.module}/htlsroomplan2/hiddenroom/" method="post">
+                  {{ Form::open(['route' => ['ctl.htlsroomplan2.changeRoomDisplayStatus'], 'method' => 'post']) }}
                     <div>
-                      <input type="hidden" name="target_cd"          value="{$room.hotel_cd}" />
-                      <input type="hidden" name="room_id"            value="{$room.room_id}" />
-                      <input type="hidden" name="search_sale_status" value="{$v->assign->form_params.search_sale_status}" />
+                      <input type="hidden" name="target_cd"          value="{{$room->hotel_cd}}" />
+                      <input type="hidden" name="room_id"            value="{{$room->room_id}}" />
                       <input type="submit" value="部屋の削除" class="jqs-btn-room-del" disabled="disabled" />
                     </div>
-                  </form>
+                  {{ Form::close() }}
                 </td>
               @else
                 <td class="align-c">
-                  <form action="{$v->env.source_path}{$v->env.module}/htlsroomplan2/hiddenroom/" method="post">
+                  {{ Form::open(['route' => ['ctl.htlsroomplan2.changeRoomDisplayStatus'], 'method' => 'post']) }}
                     <div>
-                      <input type="hidden" name="target_cd"          value="{$room.hotel_cd}" />
-                      <input type="hidden" name="room_id"            value="{$room.room_id}" />
-                      <input type="hidden" name="search_sale_status" value="{$v->assign->form_params.search_sale_status}" />
+                      <input type="hidden" name="target_cd"          value="{{$room->hotel_cd}}" />
+                      <input type="hidden" name="room_id"            value="{{$room->room_id}}" />
                       <input type="submit" value="部屋の削除" class="jqs-btn-room-del" />
                     </div>
-                  </form>
+                  {{ Form::close() }}
                 </td>
               @endif
               <!-- /button-room-delete -->

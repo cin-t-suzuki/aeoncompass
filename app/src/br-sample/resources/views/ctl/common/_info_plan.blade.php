@@ -1,29 +1,3 @@
-<!-- {* 引数 $plan *}
-{**}
-{*---リロ制御-------------------------------------------------------------------*}
-{assign var=is_relo_ctl value=false}
-{* リロ専用プラン *}
-{if $v->assign->sp_pgi.relo|@in_array:$plan.plan_detail.partner_group_id}
-  {* NTAログイン *}
-  {if $v->user->operator->is_nta()}
-    {assign var=is_relo_ctl value=true}
-  {/if}
-{/if}
-{*---/リロ制御------------------------------------------------------------------*}
-{**}
-{*---販売先制御-----------------------------------------------------------------*}
-{* JRコレクション *}
-{assign var=is_jrc value=false}
-{if $v->assign->sp_pgi.jrc|@in_array:$plan.plan_detail.partner_group_id}
-  {assign var=is_jrc value=true}
-{/if}
-{* リロクラブ *}
-{assign var=is_relo value=false}
-{if $v->assign->sp_pgi.relo|@in_array:$plan.plan_detail.partner_group_id}
-  {assign var=is_relo value=true}
-{/if}
-{*---/販売先制御----------------------------------------------------------------*}
-{**} -->
 <div class="info-plan-base">
   <div class="info-plan-base-back">
     <div class="info-plan-base-inline">
@@ -31,10 +5,17 @@
       <div><span class="font-bold jqs-plan-nm">{{$plan->plan_nm}}</span></div>
       <!-- {* プランラベル *} -->
       <div class="font-normal">
-        [<span class="label-cd-text">{{$plan->label_cd}}</span>]
-        <span class="prev-text"><a href="{$v->env.source_path}{$v->env.module}/redirect/rsvplan/?target_cd={$plan.plan_detail.hotel_cd}&amp;plan_id={$plan.plan_detail.plan_id}" target="_brank">プレビュー&nbsp;>>&nbsp;</a></span>
+        [<span class="label-cd-text">{{$plan->plan_label_cd}}</span>]
+        @if(false)
+          <span class="msg-text-success prev-text">※特定サイト限定販売の為プレビュー不可</span>
+        @else
+          <span class="prev-text"><a href="{$v->env.source_path}{$v->env.module}/redirect/rsvplan/?target_cd={$plan.plan_detail.hotel_cd}&amp;plan_id={$plan.plan_detail.plan_id}" target="_brank">プレビュー&nbsp;>>&nbsp;</a></span>
+        @endif
         </div>
       <div>
+        @if(false)
+          <span class="tag-text-info">リロ専用プラン</span>
+        @endif
         <!-- {*====================================================================*}
         {* 連泊                                                               *}
         {*====================================================================*} -->
@@ -216,12 +197,15 @@
             @if($plan->accept_status != 1)
               <span class="msg-text-error">プラン休止中</span><br />
             @endif
-            <form action="{$v->env.source_path}{$v->env.module}/htlsroomplan2/updateplanaccept/" method="post">
+            {{ Form::open(['route' => ['ctl.htlsroomplan2.updatePlanAcceptStatus'], 'method' => 'post']) }}
               <div>
-                <input type="hidden" name="target_cd"     value="{$plan.plan_detail.hotel_cd}" />
-                <input type="hidden" name="plan_id"       value="{$plan.plan_detail.plan_id}"  />
-                <input type="hidden" name="accept_status" value="{if $plan.plan_detail.plan_accept_status == 1}0{else}1{/if}"  />
-                <input type="hidden" name="search_sale_status" value="{$v->assign->form_params.search_sale_status}" />
+                <input type="hidden" name="target_cd"     value="{{$plan->hotel_cd}}" />
+                <input type="hidden" name="plan_id"       value="{{$plan->plan_id}}"  />
+                @if($plan->accept_status == 1)
+                  <input type="hidden" name="accept_status" value="0"  />
+                @else
+                  <input type="hidden" name="accept_status" value="1"  />
+                @endif
                 @if($plan->accept_status == 1)
                   <!-- ntaログインされているかどうかで分岐処理 -->
                   @if(false)
@@ -238,19 +222,22 @@
                   @endif
                 @endif
               </div>
-            </form>
+            {{ Form::close() }}
           </td>
           <!--/ plan accept status -->
           <!-- plan delete -->
           <td class="align-c plan-info-delete">
-            <form action="{$v->env.source_path}{$v->env.module}/htlsroomplan2/hiddenplan/" method="post">
+            {{ Form::open(['route' => ['ctl.htlsroomplan2.changePlanDisplayStatus'], 'method' => 'post']) }}
               <div>
-                <input type="hidden" name="target_cd"      value="{$plan.plan_detail.hotel_cd}" />
-                <input type="hidden" name="plan_id"        value="{$plan.plan_detail.plan_id}"  />
-                <input type="hidden" name="search_sale_status" value="{$v->assign->form_params.search_sale_status}" />
-                <input type="submit" class="jqs-btn-plan-del" value="プランの削除" {if $is_relo and !$is_relo_ctl}disabled="disabled"{/if} />
+                <input type="hidden" name="target_cd"      value="{{$plan->hotel_cd}}" />
+                <input type="hidden" name="plan_id"        value="{{$plan->plan_id}}"  />
+                @if(false)
+                  <input type="submit" class="jqs-btn-plan-del" value="プランの削除" disabled="disabled" />
+                @else
+                  <input type="submit" class="jqs-btn-plan-del" value="プランの削除" />
+                @endif
               </div>
-            </form>
+            {{ Form::close() }}
           </td>
           <!-- /plan delete -->
         </tr>
@@ -315,7 +302,7 @@
                   <div class="plan-sale-status-box">
                     <div class="plan-sale-status-msg" title="部屋が休止中です。 クリックで部屋休止を解除。">
                       <div class="plan-sale-st-msg-margin">
-                        @if($room->is_edit_room_accept)
+                        @if(false)
                           <a href="{$v->env.source_path}{$v->env.module}/htlsroomplan2/updateroomaccept/?target_cd={$plan.plan_detail.hotel_cd}&amp;room_id={$room.room_detail.room_id}&amp;accept_status=1&amp;search_sale_status={$v->assign->form_params.search_sale_status}"><span class="msg-text-error">部屋休止中</span>→</a>
                         @else
                           <span class="msg-text-error">部屋休止中</span>

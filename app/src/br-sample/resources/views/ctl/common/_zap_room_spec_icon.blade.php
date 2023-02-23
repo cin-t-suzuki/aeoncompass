@@ -1,6 +1,10 @@
 <!-- <!-- {* 引数：$room, $display_row *} -->
 <!-- {assign var=room_icon_color_class value='warning'} -->
 <ul class="room-spec-list">
+  <!-- {* 連携在庫 *} -->
+  @if(! is_null($room->roomtype_cd))
+    <li><span class="tag-text-error">日本旅行連動在庫</span></li>
+  @endif
   <!-- {* 部屋タイプ *} -->
   <li>
     <span class="tag-text-warning">
