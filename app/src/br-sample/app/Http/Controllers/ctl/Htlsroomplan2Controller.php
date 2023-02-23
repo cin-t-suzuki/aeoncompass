@@ -4,136 +4,120 @@ namespace App\Http\Controllers\ctl;
 
 use App\Http\Controllers\ctl\_commonController;
 use App\Services\Htlsroomplan2Service;
-
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Http\Request;
 
 class Htlsroomplan2Controller extends _commonController
-	{
+{
 		/**
 		 * Display a listening plan-maintenance
 		 */
-		public function index(Htlsroomplan2Service $service)
+		public function index(Htlsroomplan2Service $service, Request $request)
 		{
 			try{
-				$request = Request::all();
-
-				$room_list = $service->get_room_list($request['target_cd']);
-				$plan_list = $service->get_plan_list($request['target_cd']);
+				if(! isset($request->search_sale_status)){
+					$search_sale_status = 9;
+				}else{
+					$search_sale_status = $request->search_sale_status;
+				}
+				
+				$room_list = $service->get_room_list($request->target_cd);
+				$plan_list = $service->get_plan_list($request->target_cd, $search_sale_status);
 				
 				$user = array('akafu_status' => 0, 'target_cd' => $request['target_cd']);
 
-				return view('ctl.htlsroomplan2.index', compact('user', 'room_list', 'plan_list'));
+				return view('ctl.htlsroomplan2.index', compact('user', 'room_list', 'plan_list', 'search_sale_status'));
 				
 			} catch (Exception $e) {
 				throw $e;
 			}
 			
 		}
-		
-		//======================================================================
-		// 部屋休止状態更新
-		//======================================================================
-		public function updateroomacceptAction()
+
+		/**
+		 * update room's accept_status
+		 */
+		public function update_room_accept_status(Request $request)
 		{
-			try {
-				// トランザクション開始
-				$this->oracle->beginTransaction();
-				
-				// アクションの処理
-				if ( $this->updateroomacceptMethod() ) {
-					// 成功時
-					$this->oracle->commit();
-				} else {
-					// 失敗時
-					$this->oracle->rollback(); // ロールバック
-				}
-				
-				return $this->_forward('list');
-			} catch (Exception $e) {
+			try{
+				DB::table('room2')
+					->where('hotel_cd', '=', $request->target_cd)
+					->where('room_id', '=', $request->room_id)
+					->update(['accept_status' => $request->accept_status,
+							  'modify_cd' => 'admin',
+							  'modify_ts' => date('Y/m/d H:i;s')]);
+
+				return Redirect::route('ctl.htlsroomplan2.index')->withInput($request);
+			}catch(Exception $e){
 				throw $e;
-			}
+			}		
 		}
 		
-		//======================================================================
-		// 部屋削除(論理削除)
-		//======================================================================
-		public function hiddenroomAction()
+		/**
+		 * change room's display_status
+		 */
+		public function change_room_display_status(Request $request)
 		{
-			try {
-				// トランザクション開始
-				$this->oracle->beginTransaction();
-				
-				// アクションの処理
-				if ( $this->hiddenroomMethod() ) {
-					// 成功時
-					$this->oracle->commit();
-				} else {
-					// 失敗時
-					$this->oracle->rollback(); // ロールバック
-				}
-				
-				return $this->_forward('list');
-			} catch (Exception $e) {
+			try{
+				DB::table('room2')
+					->where('hotel_cd', '=', $request->target_cd)
+					->where('room_id', '=', $request->room_id)
+					->update(['display_status' => 0,
+							  'modify_cd' => 'admin',
+							  'modify_ts' => date('Y/m/d H:i;s')]);
+
+				return Redirect::route('ctl.htlsroomplan2.index')->withInput($request);
+			}catch(Exception $e){
 				throw $e;
-			}
+			}		
 		}
 		
-		//======================================================================
-		// プラン休止状態更新
-		//======================================================================
-		public function updateplanacceptAction()
+		/**
+		 * update plan's accept_status
+		 */
+		public function update_plan_accept_status(Request $request)
 		{
-			try {
-				// トランザクション開始
-				$this->oracle->beginTransaction();
-				
-				// アクションの処理
-				if ( $this->updateplanacceptMethod() ) {
-					// 成功時
-					$this->oracle->commit();
-				} else {
-					// 失敗時
-					$this->oracle->rollback(); // ロールバック
-				}
-				
-				return $this->_forward('list');
-			} catch (Exception $e) {
+			try{
+				DB::table('plan')
+					->where('hotel_cd', '=', $request->target_cd)
+					->where('plan_id', '=', $request->plan_id)
+					->update(['accept_status' => $request->accept_status,
+							  'modify_cd' => 'admin',
+							  'modify_ts' => date('Y/m/d H:i;s')]);
+
+				return Redirect::route('ctl.htlsroomplan2.index')->withInput($request);
+			}catch(Exception $e){
 				throw $e;
-			}
+			}		
 		}
 		
-		//======================================================================
-		// プラン削除(論理削除)
-		//======================================================================
-		public function hiddenplanAction()
+		/**
+		 * change room's display_status
+		 */
+		public function change_plan_display_status(Request $request)
 		{
-			try {
-				// トランザクション開始
-				$this->oracle->beginTransaction();
-				
-				// アクションの処理
-				if ( $this->hiddenplanMethod() ) {
-					// 成功時
-					$this->oracle->commit();
-				} else {
-					// 失敗時
-					$this->oracle->rollback(); // ロールバック
-				}
-				
-				return $this->_forward('list');
-			} catch (Exception $e) {
+			try{
+				DB::table('plan')
+					->where('hotel_cd', '=', $request->target_cd)
+					->where('plan_id', '=', $request->plan_id)
+					->update(['display_status' => 0,
+							  'modify_cd' => 'admin',
+							  'modify_ts' => date('Y/m/d H:i;s')]);
+
+				return Redirect::route('ctl.htlsroomplan2.index')->withInput($request);
+			}catch(Exception $e){
 				throw $e;
-			}
+			}		
 		}
 		
 		//======================================================================
 		// BR販売ページへの遷移
 		// ・プレビューリンクが踏まれたときに最安値更新プログラムを実行する為
 		//======================================================================
-		public function previewAction()
-		{
-			try {
+		// public function previewAction()
+		// {
+		// 	try {
 				
 				//------------------------------------------------------------
 				// RedirectControllerの処理を使用している為利用していませんが、
@@ -142,29 +126,29 @@ class Htlsroomplan2Controller extends _commonController
 				
 				
 				// 初期化
-				$o_models_charge_conditions = new Core_ChargeCondition();
+				// $o_models_charge_conditions = new Core_ChargeCondition();
 				
 				// リクエストの取得
-				$a_form_params = $this->params();
+				// $a_form_params = $this->params();
 				
-				$a_conditions = array();
-				$a_conditions['hotel_cd'] = $a_form_params['target_cd'];
-				$a_conditions['plan_id']  = $a_form_params['plan_id'];
+				// $a_conditions = array();
+				// $a_conditions['hotel_cd'] = $a_form_params['target_cd'];
+				// $a_conditions['plan_id']  = $a_form_params['plan_id'];
 				
-				$s_uri = '';
+				// $s_uri = '';
 				
 				// 最安値更新プログラム実行
-				$o_models_charge_conditions->set_charge($a_conditions);
+				// $o_models_charge_conditions->set_charge($a_conditions);
 				
 				// 販売ページへリダイレクト
-				$s_uri = 'http://' . $this->box->config->system->rsv_host_name . $this->box->info->env->source_path . 'plan/' . $a_form_params['target_cd'] . '/' . $a_form_params['plan_id'] . '/' . $a_form_params['room_id'] . '/?view=preview';
+				// $s_uri = 'http://' . $this->box->config->system->rsv_host_name . $this->box->info->env->source_path . 'plan/' . $a_form_params['target_cd'] . '/' . $a_form_params['plan_id'] . '/' . $a_form_params['room_id'] . '/?view=preview';
 				
-				return $this->_redirect($s_uri);
+				// return $this->_redirect($s_uri);
 				
-			} catch (Exception $e) {
-				throw $e;
-			}
-		}
+		// 	} catch (Exception $e) {
+		// 		throw $e;
+		// 	}
+		// }
 		
 	} //--->
 	

@@ -322,6 +322,11 @@ Route::get('/ctl/brdemandresult/list', [\App\Http\Controllers\ctl\BrDemandResult
 Route::match(['get', 'post'], '/ctl/htlsroomoffer/', [\App\Http\Controllers\ctl\HtlsroomofferController::class, 'index'])->name('ctl.htlsroomoffer.list');
 
 Route::match(['get', 'post'], '/ctl/htlsroomplan2/', [\App\Http\Controllers\ctl\Htlsroomplan2Controller::class, 'index'])->name('ctl.htlsroomplan2.index');
+Route::post('/ctl/htlsroomplan2/updateRoomAcceptStatus', [\App\Http\Controllers\ctl\Htlsroomplan2Controller::class, 'update_room_accept_status'])->name('ctl.htlsroomplan2.updateRoomAcceptStatus');
+Route::post('/ctl/htlsroomplan2/changeRoomDisplayStatus', [\App\Http\Controllers\ctl\Htlsroomplan2Controller::class, 'change_room_display_status'])->name('ctl.htlsroomplan2.changeRoomDisplayStatus');
+Route::post('/ctl/htlsroomplan2/updatePlanAcceptStatus', [\App\Http\Controllers\ctl\Htlsroomplan2Controller::class, 'update_plan_accept_status'])->name('ctl.htlsroomplan2.updatePlanAcceptStatus');
+Route::post('/ctl/htlsroomplan2/changePlanDisplayStatus', [\App\Http\Controllers\ctl\Htlsroomplan2Controller::class, 'change_plan_display_status'])->name('ctl.htlsroomplan2.changePlanDisplayStatus');
+
 Route::match(['get', 'post'], '/ctl/htlsplanoffer/', [\App\Http\Controllers\ctl\Htlsroomplan2Controller::class, 'index'])->name('ctl.htlsplanoffer');
 Route::match(['get', 'post'], '/ctl/htlschargeoffer/', [\App\Http\Controllers\ctl\Htlsroomplan2Controller::class, 'index'])->name('ctl.htlschargeoffer');
 Route::match(['get', 'post'], '/ctl/htlsextendoffer/', [\App\Http\Controllers\ctl\Htlsroomplan2Controller::class, 'index'])->name('ctl.htlsextendoffer');
