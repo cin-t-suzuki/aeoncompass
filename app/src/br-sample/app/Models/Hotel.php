@@ -296,37 +296,37 @@ class Hotel extends CommonDBModel
 		return true;
 	}
 
-	/**  表示順序番号などを求めます
-	*   現在登録されている最大値 + 1 を取得します。
-	*
-	*  CoreHotel->hotel_cd 施設コード
-	*  as_table_name       テーブル名称
-	*/
-	public function incrementCounter($as_table_name, $as_column_nm, $hotelCd, $aa_conditions = array()){
-		try {
+    /**  表示順序番号などを求めます
+     *   現在登録されている最大値 + 1 を取得します。
+     *
+     *  CoreHotel->hotel_cd 施設コード
+     *  as_table_name       テーブル名称
+     */
+    public function incrementCounter($as_table_name, $as_column_nm, $hotelCd, $aa_conditions = [])
+    {
+        try {
+            // テーブル名称
+            if (empty($as_table_name)) {
+                throw new \Exception('テーブルを設定してください。');
+            }
 
-			// テーブル名称
-			if ($this->is_empty($as_table_name)){
-				throw new \Exception('テーブルを設定してください。');
-			}
+            // カラム名称
+            if (empty($as_column_nm)) {
+                throw new \Exception('カラムを設定してください。');
+            }
 
-			// カラム名称
-			if ($this->is_empty($as_column_nm)){
-				throw new \Exception('カラムを設定してください。');
-			}
+            $a_conditions['hotel_cd'] = $hotelCd;
 
-			$a_conditions['hotel_cd'] = $hotelCd;
+            // 条件
+            $s_where = "";
+            if (!empty($aa_conditions)) {
+                foreach ($aa_conditions as $key => $value) {
+                    $s_where .= '	and	' . $key . ' = :' . $key;
+                    $a_conditions[$key] = $value;
+                }
+            }
 
-			// 条件
-			$s_where = "";
-			if (!($this->is_empty($aa_conditions))){
-				foreach ($aa_conditions as $key => $value){
-					$s_where .= '	and	' . $key . ' = :' . $key;
-					$a_conditions[$key] = $value;
-				}
-			}
-
-			$s_sql =<<< SQL
+            $s_sql = <<< SQL
 				select	max({$as_column_nm}) as value
 				from	{$as_table_name}
 				where	hotel_cd = :hotel_cd
@@ -807,4 +807,5 @@ SQL;
         }
         return self::$_o_instance;
     }
+
 }
