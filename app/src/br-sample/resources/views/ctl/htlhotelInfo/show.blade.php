@@ -1,16 +1,15 @@
+@extends('ctl.common._htl_base')
 @section('title', '施設情報')
-@include('ctl.common.base')
+@inject('service', 'App\Http\Controllers\ctl\HtlHotelInfoController')
 
-{{-- TODO  サブメニュー 
-<a href="{$v->env.source_path}{$v->env.module}/htltop/index/target_cd/{$v->assign->target_cd}">メインメニュー</a>&nbsp;&gt;&nbsp;<a href="{$v->env.source_path}{$v->env.module}/htlhotel/show/target_cd/{$views->hotelInfo.hotel_cd}">施設情報詳細</a>&nbsp;&gt;&nbsp;施設情報
---}}
-<a href="{{ route( 'ctl.htltop.index' , ['target_cd'=>$views->hotelInfo['hotel_cd'] ] ) }}">メインメニュー</a>&nbsp;&gt;&nbsp;
-<a href="{{--TODO route( 'ctl.htlhotel.show', ['target_cd'=>$views->hotelInfo['hotel_cd'] ] ) --}}">施設情報詳細（未）</a>&nbsp;&gt;&nbsp;施設情報
+@section('content')
 
+<a href="{{ route('ctl.htl_top.index', ['target_cd' =>$views->target_cd]) }}">メインメニュー</a>&nbsp;&gt;&nbsp;
+<a href="{{ route( 'ctl.htl_hotel.show' , ['target_cd'=>$views->hotelInfo['hotel_cd'] ] ) }}">施設情報詳細</a>&nbsp;&gt;&nbsp;
+施設情報
 
 <br>
 {{-- メッセージ --}}
-@section('message')
 @include('ctl.common.message', $messages)
 
 <br>
@@ -55,8 +54,15 @@
 </table>
 <br/>
 <input type="submit" value="編集">
-<input type="hidden" name="HotelInfo[hotel_cd]" value="{{strip_tags($views->hotelInfo["hotel_cd"])}}" >
-<input type="hidden" name="target_cd" value="{{strip_tags($views->hotelInfo["hotel_cd"])}}">
-{!! Form::close() !!}
 
-{{-- TODO include file=$v->env.module_root|cat:'/views/_common/_htl_footer.tpl' --}}
+<<<<<<< HEAD
+@if(isset(($views->hotelInfo["hotel_cd"])))
+	<input type="hidden" name="HotelInfo[hotel_cd]" value="{{strip_tags($views->hotelInfo["hotel_cd"])}}" >
+@endif
+<input type="hidden" name="target_cd" value="{{strip_tags($views->target_cd)}}">
+{!! Form::close() !!}
+@endsection
+=======
+{{-- include file=$v->env.module_root|cat:'/views/_common/_htl_footer.tpl' --}}
+@endsection
+>>>>>>> develop

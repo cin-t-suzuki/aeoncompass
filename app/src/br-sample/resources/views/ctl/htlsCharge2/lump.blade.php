@@ -158,18 +158,18 @@
                 {{-- ※初期表示では非表示 --}}
                 <div class="box-room-detail">
                   @foreach ($plan_has_rooms_detail as $detail_room )
-                  <div class="info-room-base-sht default-hide jqs-room-detail-{{ $detail_room['room_id'] }}">
+                  <div class="info-room-base-sht default-hide jqs-room-detail-{{ $detail_room->room_id }}">
                     <div class="info-room-base-sht-back">
                       <div class="info-room-base-sht-inline">
                         {{-- 部屋名称 --}}
-                        <p>{{ $detail_room['room_nm'] }}</p>{{$detail_room['room_id']}}
+                        <p>{{ $detail_room->room_nm }}</p>{{$detail_room->room_id}}
 
                         {{-- PMSコード（部屋） --}}
-                        <span>&nbsp;{{ $detail_room['pms_cd'] }}</span>
+                        <span>&nbsp;{{ $detail_room->pms_cd }}</span>
 
                         {{-- 連携在庫コード --}}
-                        @if ($detail_room['akafu_cd'])
-                        &nbsp;<span>{{ $detail_room['akafu_cd'] }}&nbsp;</span>
+                        @if ($detail_room->akafu_cd)
+                        &nbsp;<span>{{ $detail_room->akafu_cd }}&nbsp;</span>
                         @endif
                           {{-- 部屋スペック --}}
                         <div>@include('ctl.common._room_spec_icons', ['room' => $detail_room])</div>
@@ -189,17 +189,17 @@
                 {{-- assign var=detail_room value=$plan_has_rooms_detail.$room_id_selectable --}}
 
                 {{-- 連携在庫かどうかで処理を分岐 --}}
-                @if ($detail_room['akafu_cd'])
+                @if ($detail_room->akafu_cd)
                 {{-- 連携在庫 --}}
                   <p class="room-name-row" id="jqs-room-{{$room_id_selectable}}">
                     <input id="select_room_{{$room_id_selectable}}" type="checkbox" name="check_on[]" value="{{ $room_id_selectable }}" />
-                    <label for="select_room_{{$room_id_selectable}}" class="label-w100">{{ $detail_room['akafu_cd'] }}&nbsp;{{ $detail_room['room_nm'] }}&nbsp;{{ $detail_room['pms_cd'] }}</label>
+                    <label for="select_room_{{$room_id_selectable}}" class="label-w100">{{ $detail_room->akafu_cd }}&nbsp;{{ $detail_room->room_nm }}&nbsp;{{ $detail_room->pms_cd }}</label>
                   </p>
                 @else
                 {{-- 連携在庫以外 --}}
                   <p class="room-name-row" id="jqs-room-{{$room_id_selectable['selectable_rooms']}}">
                     <input id="select_room_{{ $room_id_selectable }}" type="checkbox" name="check_on[]"value="{{ $room_id_selectable }}" />
-                    <label for="select_room_{{ $room_id_selectable }}" class="label-w100">{{ $detail_room['room_nm'] }}&nbsp;{{ $detail_room['pms_cd'] }}</label>
+                    <label for="select_room_{{ $room_id_selectable }}" class="label-w100">{{ $detail_room->room_nm }}&nbsp;{{ $detail_room->pms_cd }}</label>
                   </p>
                 @endif
               @endforeach

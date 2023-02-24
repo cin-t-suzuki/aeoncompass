@@ -180,7 +180,7 @@ namespace App\Http\Controllers\ctl;
 			$plan_detail = $service->_make_plan_detail($targetCd, $planId);
 
 			//日付を取得
-			$accept_ymd = $service->_make_plan_accept_ymd($plan_detail[0]['accept_s_ymd'], $plan_detail[0]['accept_e_ymd'], $request);
+			$accept_ymd = $service->_make_plan_accept_ymd($plan_detail->accept_s_ymd, $plan_detail->accept_e_ymd, $request);
 
 			//部屋情報を取得
 			$a_detail_room = $service->_make_plan_has_rooms_detail($request);

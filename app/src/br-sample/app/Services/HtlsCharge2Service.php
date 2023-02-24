@@ -2052,16 +2052,16 @@ SQL;
 
 				$a_rows = DB::select($s_sql, $a_conditions);
 
-				$a_rows = json_decode(json_encode($a_rows),true);
+				// $a_rows = json_decode(json_encode($a_rows),true);
 				
 				// キャンペーン対象かどうかを設定
-				$a_rows[0]['is_camp'] = $this->is_campaign($targetCd,$planId);
+				$a_rows[0]->is_camp = $this->is_campaign($targetCd,$planId);
 				
 				// プランの販売先チャンネルIDを設定
-				$a_rows[0]['partner_groups'] = $this->get_plan_partner_groups($targetCd,$planId);
+				$a_rows[0]->partner_groups = $this->get_plan_partner_groups($targetCd,$planId);
 				
 				// プランの基礎情報を設定				
-				return $a_rows;
+				return $a_rows[0];
 				
 			} catch (Exception $e) {
 				throw $e;

@@ -163,9 +163,9 @@ SQL_WHERE;
 				// 配列のキーが部屋IDになるように整形
 				//--------------------------------------------------------------
 				foreach ( $a_rows ?? array() as $a_row ) {
-					$a_result[ $a_row->{'room_id'}] = $a_row;
+					$a_results[ $a_row->{'room_id'}] = $a_row;
 				}
-				$a_results = json_decode(json_encode($a_result),true);
+				// $a_results = json_decode(json_encode($a_result),true);
 				return $a_results;
 				
 			} catch (Exception $e) {

@@ -1,4 +1,3 @@
-{{-- strip --}}
 
   {{-- プラン情報コンテナ --}}
   <div class="gen-container">
@@ -11,15 +10,15 @@
       <div class="info-plan-base-back">
         <div class="info-plan-base-inline">
           {{-- プラン名称 --}}
-          <p>{{ $plan[0]['plan_nm'] }}</p>
+          <p>{{ $plan->plan_nm }}</p>
 
           {{-- PMSコード（プラン） --}}
-          @if  (!$is_nta && $plan[0]['is_relo'] != 1)
-          {{-- (!$v->env->controller->is_nta() && $plan[0]['is_relo'] != 1) 元ｺｰﾄﾞ--}}
-            <p>[{{ $plan[0]['pms_cd'] }}]</p>
-          @elseif ($is_nta && $plan[0]['is_relo'] == 1)
-          ($v->env->controller->is_nta() && $plan[0]['is_relo'] == 1)
-            <p>[{{ $plan[0]['pms_cd'] }}]</p>
+          @if  (!$is_nta && $plan->is_relo != 1)
+          {{-- (!$v->env->controller->is_nta() && $plan->is_relo != 1)  元ｺｰﾄﾞ--}}
+            <p>[{{ $plan->pms_cd }}]</p>
+          @elseif ($is_nta && $plan->is_relo == 1)
+          {{-- ($v->env->controller->is_nta() && $plan->is_relo == 1) 元ｺｰﾄﾞ--}}
+            <p>[{{ $plan->pms_cd }}]</p>
           @endif
 
           {{-- プランスペック --}}
@@ -30,4 +29,3 @@
       </div>
     </div>
   </div>
-{{-- /strip --}}
