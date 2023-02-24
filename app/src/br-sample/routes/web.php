@@ -17,6 +17,11 @@ Route::get('/', function () {
     return view('toppage-test');
 })->name('ctl.index');
 
+// ↓↓↓ TODO: to be deleted
+Route::get('/404', function () {abort('404'); });
+Route::get('/500', function () {abort('500'); });
+Route::get('/rsv/top', function () {return 'rsv.top'; })->name('rsv.top');
+// ↑↑↑ TODO: to be deleted
 
 /**
  * 宿泊予約
