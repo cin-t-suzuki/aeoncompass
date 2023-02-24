@@ -296,37 +296,37 @@ class Hotel extends CommonDBModel
 		return true;
 	}
 
-	/**  表示順序番号などを求めます
-	*   現在登録されている最大値 + 1 を取得します。
-	*
-	*  CoreHotel->hotel_cd 施設コード
-	*  as_table_name       テーブル名称
-	*/
-	public function incrementCounter($as_table_name, $as_column_nm, $hotelCd, $aa_conditions = array()){
-		try {
+    /**  表示順序番号などを求めます
+     *   現在登録されている最大値 + 1 を取得します。
+     *
+     *  CoreHotel->hotel_cd 施設コード
+     *  as_table_name       テーブル名称
+     */
+    public function incrementCounter($as_table_name, $as_column_nm, $hotelCd, $aa_conditions = [])
+    {
+        try {
+            // テーブル名称
+            if (empty($as_table_name)) {
+                throw new \Exception('テーブルを設定してください。');
+            }
 
-			// テーブル名称
-			if ($this->is_empty($as_table_name)){
-				throw new \Exception('テーブルを設定してください。');
-			}
+            // カラム名称
+            if (empty($as_column_nm)) {
+                throw new \Exception('カラムを設定してください。');
+            }
 
-			// カラム名称
-			if ($this->is_empty($as_column_nm)){
-				throw new \Exception('カラムを設定してください。');
-			}
+            $a_conditions['hotel_cd'] = $hotelCd;
 
-			$a_conditions['hotel_cd'] = $hotelCd;
+            // 条件
+            $s_where = "";
+            if (!empty($aa_conditions)) {
+                foreach ($aa_conditions as $key => $value) {
+                    $s_where .= '	and	' . $key . ' = :' . $key;
+                    $a_conditions[$key] = $value;
+                }
+            }
 
-			// 条件
-			$s_where = "";
-			if (!($this->is_empty($aa_conditions))){
-				foreach ($aa_conditions as $key => $value){
-					$s_where .= '	and	' . $key . ' = :' . $key;
-					$a_conditions[$key] = $value;
-				}
-			}
-
-			$s_sql =<<< SQL
+            $s_sql = <<< SQL
 				select	max({$as_column_nm}) as value
 				from	{$as_table_name}
 				where	hotel_cd = :hotel_cd
@@ -701,6 +701,57 @@ SQL;
             throw $e;
         }
     }
+	/**
+	 * 施設情報ページの更新依頼
+	 * 
+	 * aa_attributes     施設テーブルの登録データ内容
+	 * 
+	 * @return bool
+	 */
+	public function hotelModify($aa_attributes)
+	{
+		$hotel_status = new HotelStatus();
+		$a_hotel_status = $hotel_status->where(['hotel_cd' => $aa_attributes['hotel_cd']])->first();
+
+		// 解約状態の場合は必ず削除依頼
+		if ($a_hotel_status['entry_status'] == 2) {
+			$modify_status = 2;
+		} else {
+			$modify_status = 1;
+		}
+
+		// 施設情報ページを更新するに設定
+		$hotel_modify = new HotelModify();
+		$a_hotel_modify = $hotel_modify->where(['hotel_cd' => $aa_attributes['hotel_cd']])->first();
+
+		if (empty($a_hotel_modify)) {
+			$hotel_modify_create = $hotel_modify->insert([
+				'hotel_cd'      => $aa_attributes['hotel_cd'],
+				'modify_status' => $modify_status,
+				'entry_cd'      => $aa_attributes['entry_cd'],
+				'entry_ts'      => $aa_attributes['entry_ts'],
+				'modify_cd'     => $aa_attributes['modify_cd'],
+				'modify_ts'     => $aa_attributes['modify_ts'],
+			]);
+			if (!$hotel_modify_create) {
+				return false;
+			}
+
+			// 削除状態で無い場合に設定
+		} else {
+			$hotel_modify_upadte = $hotel_modify->where([
+				'hotel_cd'      => $aa_attributes['hotel_cd']
+			])->update([
+				'modify_status' => $modify_status,
+				'modify_cd'     => $aa_attributes['modify_cd'],
+				'modify_ts'     => $aa_attributes['modify_ts'],
+			]);
+
+			if ($hotel_modify_upadte == 0) {
+				return false;
+			}
+		}
+	}
 
     /**
      * お知らせ通知情報を取得
@@ -817,4 +868,5 @@ SQL;
         }
         return self::$_o_instance;
     }
+
 }
