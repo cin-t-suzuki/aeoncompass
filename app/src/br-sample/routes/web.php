@@ -307,6 +307,16 @@ Route::get('/ctl/brmoneyschedule/new', function (\Illuminate\Http\Request $reque
 Route::match(['get', 'post'], '/ctl/htlHotelCard/show/', [\App\Http\Controllers\ctl\HtlHotelCardController::class, 'show'])->name('ctl.htl_hotel_card.show');
 Route::match(['get', 'post'], '/ctl/htlHotelCard/update/', [\App\Http\Controllers\ctl\HtlHotelCardController::class, 'update'])->name('ctl.htl_hotel_card.update');
 
+// 口座振替　追加処理
+Route::get('/ctl/bradditionalzengin/', [\App\Http\Controllers\ctl\BrAdditonalZenginController::class, 'list'])->name('ctl.brAdditionalZengin.list');
+Route::get('/ctl/bradditionalzengin/search', [\App\Http\Controllers\ctl\BrAdditonalZenginController::class, 'search'])->name('ctl.brAdditionalZengin.search');
+Route::get('/ctl/bradditionalzengin/searchList', [\App\Http\Controllers\ctl\BrAdditonalZenginController::class, 'searchList'])->name('ctl.brAdditionalZengin.searchList');
+Route::get('/ctl/bradditionalzengin/searchhotel', [\App\Http\Controllers\ctl\BrAdditonalZenginController::class, 'searchhotel'])->name('ctl.brAdditionalZengin.searchHotel');
+Route::get('/ctl/bradditionalzengin/edit', [\App\Http\Controllers\ctl\BrAdditonalZenginController::class, 'edit'])->name('ctl.brAdditionalZengin.edit');
+Route::post('/ctl/bradditionalzengin/create', [\App\Http\Controllers\ctl\BrAdditonalZenginController::class, 'create'])->name('ctl.brAdditionalZengin.create');
+Route::get('/ctl/bradditionalzengin/detail', [\App\Http\Controllers\ctl\BrAdditonalZenginController::class, 'detail'])->name('ctl.brAdditionalZengin.detail');
+Route::post('/ctl/bradditionalzengin/update', [\App\Http\Controllers\ctl\BrAdditonalZenginController::class, 'update'])->name('ctl.brAdditionalZengin.update');
+Route::post('/ctl/bradditionalzengin/delete', [\App\Http\Controllers\ctl\BrAdditonalZenginController::class, 'delete'])->name('ctl.brAdditionalZengin.delete');
 // 施設連絡事項
 Route::match(['get', 'post'], '/ctl/htlHotelInform/list/', [\App\Http\Controllers\ctl\HtlHotelInformController::class, 'list'])->name('ctl.htl_hotel_inform.list');
 Route::match(['get', 'post'], '/ctl/htlHotelInform/new/', [\App\Http\Controllers\ctl\HtlHotelInformController::class, 'new'])->name('ctl.htl_hotel_inform.new');
