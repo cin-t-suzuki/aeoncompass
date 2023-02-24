@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Models\common\CommonDBModel;
+use App\Models\common\ValidationColumn;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
-class HotelLink extends Model
+class MastRoute extends CommonDBModel
 {
     use HasFactory;
 
@@ -14,8 +16,5 @@ class HotelLink extends Model
      *
      * @var string
      */
-    protected $table = 'hotel_link';
-
-    // プライマリキー設定
-    protected $primaryKey = ['hotel_cd', 'branch_no'];
+    protected $table = 'mast_routes';
 }
