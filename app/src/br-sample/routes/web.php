@@ -105,6 +105,7 @@ Route::match(['get', 'post'], '/htlHotelInfo/show/', [\App\Http\Controllers\ctl\
 Route::match(['get', 'post'], '/htlHotelInfo/create/', [\App\Http\Controllers\ctl\HtlhotelInfoController::class, 'create'])->name('ctl.htl_hotel_info.create');
 Route::match(['get', 'post'], '/ctl/htlHotelInform/list/'       , function(){ return 'TODO:'; })->name('ctl.htl_hotel_inform.list');
 Route::match(['get', 'post'], '/ctl/htlHotelLink/list/'         , function(){ return 'TODO:'; })->name('ctl.htl_hotel_link.list');
+Route::match(['get', 'post'], '/ctl/htlHotelStation/list/'      , function(){ return 'TODO:'; })->name('ctl.htl_hotel_station.list');
 Route::match(['get', 'post'], '/ctl/htlHotelAmenity/list/'      , function(){ return 'TODO:'; })->name('ctl.htl_hotel_amenity.list');
 Route::match(['get', 'post'], '/ctl/htlHotelService/list/'      , function(){ return 'TODO:'; })->name('ctl.htl_hotel_service.list');
 Route::match(['get', 'post'], '/ctl/htlHotelNearby/list/'       , function(){ return 'TODO:'; })->name('ctl.htl_hotel_nearby.list');
@@ -307,6 +308,9 @@ Route::post('/ctl/brCustomer/csv', function () {return 'TODO'; })->name('ctl.brC
 Route::match(['get', 'post'], '/ctl/htlHotelCard/show/', [\App\Http\Controllers\ctl\HtlHotelCardController::class, 'show'])->name('ctl.htl_hotel_card.show');
 Route::match(['get', 'post'], '/ctl/htlHotelCard/update/', [\App\Http\Controllers\ctl\HtlHotelCardController::class, 'update'])->name('ctl.htl_hotel_card.update');
 
+// アメニティ
+Route::match(['get', 'post'], '/ctl/htlHotelAmenity/list/', [\App\Http\Controllers\ctl\HtlHotelAmenityController::class, 'list'])->name('ctl.htl_hotel_amenity.list');
+Route::match(['get', 'post'], '/ctl/htlHotelAmenity/create/', [\App\Http\Controllers\ctl\HtlHotelAmenityController::class, 'create'])->name('ctl.htl_hotel_amenity.create');
 // 交通アクセス
 Route::match(['get', 'post'], '/ctl/htlHotelStation/list/', [\App\Http\Controllers\ctl\HtlHotelStationController::class, 'list'])->name('ctl.htl_hotel_station.list');
 Route::match(['get', 'post'], '/ctl/htlHotelStation/new/', [\App\Http\Controllers\ctl\HtlHotelStationController::class, 'new'])->name('ctl.htl_hotel_station.new');
