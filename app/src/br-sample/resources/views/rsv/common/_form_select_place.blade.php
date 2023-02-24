@@ -9,8 +9,13 @@
         </option>
     @endforeach
 </select>
-@if (is_null($search_condition['form']['cws']))
-    {{-- MEMO: ↑↑↑ もとは is_empty --}}
+{{--
+    MEMO: HACK: 工数次第で対応
+        移植元では、 $search_condition['form']['cws'] が unset されている。
+        何かしらの歴史的経緯があるものと思われる。
+        不要であれば、分岐削除できるか？
+--}}
+@if (!array_key_exists('cws', $search_condition['form']))
     <br />
     <span>
         <select name="place_ms" style="width:200px;" size="1">

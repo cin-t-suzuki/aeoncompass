@@ -45,7 +45,7 @@ Route::get('/guide/visitor', function () {return 'TODO: 初めての方へ'; })-
 Route::post('/auth/eplogin', function () {return 'TODO: EPARK ログイン'; })->name('rsv.auth.eplogin.authenticate');
 Route::get('/rsv/reminder', function () {return 'TODO: 会員コード・パスワードをお忘れの方'; })->name('rsv.reminder');
 Route::get('/member/withdraw4', function () {return 'TODO: 会員コード・パスワードをお忘れの方'; })->name('rsv.reminder.withdraw4'); // magic number
-Route::get('/keywords', function (\Illuminate\Http\Request  $request) {var_dump($request->input()); return 'TODO: キーワード検索結果'; })->name('rsv.keywords.search');
+Route::get('/rsv/keywords', function (\Illuminate\Http\Request  $request) {var_dump($request->input()); return 'TODO: キーワード検索結果'; })->name('rsv.keywords.search');
 Route::get('/rsv/hotelList/search', function () {return 'TODO: ホテル名検索結果'; })->name('rsv.hotel.list.search');
 Route::get('/area/{area_id}', function ($areaId) {return 'TODO: ホテルエリア検索画面: area_id -> ' . $areaId; })->name('rsv.area.search');
 Route::get('/station', function () {return 'TODO: 駅検索画面'; })->name('rsv.station.index');

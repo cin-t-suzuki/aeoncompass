@@ -5,6 +5,11 @@ namespace App\Common;
 use App\Models\MastHoliday;
 use App\Common\Traits;
 
+/**
+ * 日付関連のクラス
+ * MEMO: 移植元 lib\Br\Models\Date.php
+ * MEMO: 移植元 class name: Br_Models_Date
+ */
 class DateUtil
 {
     use Traits;
@@ -118,7 +123,6 @@ class DateUtil
      */
     public function is_date($as_date)
     {
-
         // 数値の場合正常
         if (gettype($as_date) == 'integer') {
             return true;

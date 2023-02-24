@@ -37,8 +37,8 @@
                         {{-- <a href="@if (!is_null($keyword['value'])) {$v->env.path_base}{$keyword.value} @else {$v->env.path_base}/keywords/?keywords={$keyword.word|urlencode} @endif ">
                             {{ $keyword['word'] }}
                         </a> --}}
-                        <a href="{{ $keyword['value'] ?? route('rsv.keywords.search', ['keywords' => $keyword['word']]) }}">
-                            {{ $keyword['word'] }}
+                        <a href="{{ $keyword->value ?? route('rsv.keywords.search', ['keywords' => $keyword->word]) }}">
+                            {{ $keyword->word }}
                         </a>
                     </li>
                 @endforeach

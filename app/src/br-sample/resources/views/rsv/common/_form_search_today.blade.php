@@ -72,8 +72,7 @@
                 </td>
             </tr>
             {{-- 地図 --}}
-            @if (is_null($search_condition['form']['hotel']['hotel_cd']) && is_null($search_condition['form']['hotel']['title']))
-                {{-- MEMO: ↑↑↑ もとは is_empty --}}
+            @if (!array_key_exists('hotel', $search_condition['form']) || !array_key_exists('hotel_cd', $search_condition['form']['hotel']) && !array_key_exists('hotel', $search_condition['form']) || !array_key_exists('title', $search_condition['form']['hotel']))
                 <tr>
                     <th>
                         <div class="div-h">地域</div>
@@ -84,8 +83,13 @@
                     </td>
                 </tr>
             @endif
-            @if (!is_null($search_condition['form']['type']))
-                {{-- MEMO: ↑↑↑ もとは is_empty --}}
+            {{--
+                MEMO: HACK: 工数次第で対応
+                    移植元では、 $search_condition['form']['type'] が unset されている。
+                    何かしらの歴史的経緯があるものと思われる。
+                    不要であれば、分岐削除できるか？
+            --}}
+            @if (array_key_exists('type', $search_condition['form']))
                 <tr>
                     <th>
                         <div>表示方法</div>
@@ -99,8 +103,7 @@
                 </tr>
             @endif
         </table>
-        @if (is_null($search_condition['form']['hotel']['hotel_cd']))
-            {{-- MEMO: ↑↑↑ もとは is_empty --}}
+        @if (!array_key_exists('hotel', $search_condition['form']) || !array_key_exists('hotel_cd', $search_condition['form']['hotel']))
             <div class="btn-b01-143-sb" style="margin:0 auto;">
                 <input class="btnimg collectBtn" src="{{ asset('img/btn/b01-search1.gif') }}" type="image" alt="空室検索" />
             </div>
@@ -112,17 +115,14 @@
         <input name="today" type="hidden" value="{{ date('Y-m-d') }}" />
 
         {{-- 施設・プラン --}}
-        @if (!is_null($search_condition['form']['hotel']['hotel_cd']))
+        @if (array_key_exists('hotel', $search_condition['form']) && array_key_exists('hotel_cd', $search_condition['form']['hotel']) )
             <input name="hotel_cd" type="hidden" value="{{ $search_condition['form']['hotel']['hotel_cd'] }}" />
         @endif
-        {{-- MEMO: ↑↑↑ もとは is_empty --}}
-        @if (!is_null($search_condition['form']['hotel']['plan_id']))
+        @if (array_key_exists('hotel', $search_condition['form']) && array_key_exists('plan_id', $search_condition['form']['hotel']) )
             <input name="plan_id" type="hidden" value="{{ $search_condition['form']['hotel']['plan_id'] }}" />
         @endif
-        {{-- MEMO: ↑↑↑ もとは is_empty --}}
-        @if (!is_null($search_condition['form']['hotel']['room_id']))
+        @if (array_key_exists('hotel', $search_condition['form']) && array_key_exists('room_id', $search_condition['form']['hotel']) )
             <input name="room_id" type="hidden" value="{{ $search_condition['form']['hotel']['room_id'] }}" />
         @endif
-        {{-- MEMO: ↑↑↑ もとは is_empty --}}
     </form>
 @endif

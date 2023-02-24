@@ -44,8 +44,7 @@
                         @endforeach
                     </select>
                     &nbsp;&nbsp;
-                    @if (is_null($search_condition['form']['hotel']['room_id']))
-                        {{-- MEMO: ↑↑↑ もとは is_empty --}}
+                    @if (!array_key_exists('hotel', $search_condition['form']) || !array_key_exists('room_id', $search_condition['form']['hotel']))
                         <input id="date_status" name="date_status" type="checkbox" value="on" {{ $search_condition['form']['date_status'] == 'on' ? 'checked' : '' }} />
                         <label class="checkbox" for="date_status">日程未定</label>
                     @endif
@@ -92,8 +91,8 @@
                     @endif
                 </td>
             </tr>
-            @if (is_null($search_condition['form']['hotel']['hotel_cd']))
-                {{-- MEMO: ↑↑↑ もとは is_empty --}}
+            {{-- @if (is_null($search_condition['form']['hotel']['hotel_cd'])) --}}
+            @if (!array_key_exists('hotel', $search_condition['form']) || !array_key_exists('hotel_cd', $search_condition['form']['hotel']))
                 <tr>
                     <th>
                         <div class="div-h">予算</div>
@@ -139,8 +138,8 @@
                 </tr>
             @endif
             {{-- 地図 --}}
-            @if (is_null($search_condition['form']['hotel']['hotel_cd']) && is_null($search_condition['form']['hotel']['title']))
-                {{-- MEMO: ↑↑↑ もとは is_empty --}}
+            {{-- @if (is_null($search_condition['form']['hotel']['hotel_cd']) && is_null($search_condition['form']['hotel']['title'])) --}}
+            @if ((!array_key_exists('hotel', $search_condition['form']) || !array_key_exists('hotel_cd', $search_condition['form']['hotel'])) && (!array_key_exists('hotel', $search_condition['form']) || !array_key_exists('title', $search_condition['form']['hotel'])))
                 <tr>
                     <th>
                         <div class="div-h">地域</div>
@@ -151,8 +150,7 @@
                     </td>
                 </tr>
             @endif
-            @if (!is_null($search_condition['form']['type']))
-                {{-- MEMO: ↑↑↑ もとは is_empty --}}
+            @if (array_key_exists('type', $search_condition['form']))
                 <tr>
                     <th>
                         <div>表示方法</div>
@@ -170,12 +168,11 @@
                     <div>GoToトラベル<br>キャンペーン</div>
                 </th>
                 <td>
-                    対象プランのみ表示<input id="goto" name="goto" type="checkbox" value="1" {{ $search_condition['form']['goto'] == '1' ? 'checked' : '' }}>
+                    対象プランのみ表示<input id="goto" name="goto" type="checkbox" value="1" {{ array_key_exists('goto', $search_condition['form']) && $search_condition['form']['goto'] == '1' ? 'checked' : '' }}>
                 </td>
             </tr>
         </table>
-        @if (is_null($search_condition['form']['hotel']['hotel_cd']))
-            {{-- MEMO: ↑↑↑ もとは is_empty --}}
+        @if (!array_key_exists('hotel', $search_condition['form']) || !array_key_exists('hotel_cd', $search_condition['form']['hotel']))
             <div class="btn-b01-143-sb" style="margin:0 auto;">
                 <input class="btnimg collectBtn" src="{{ asset('img/btn/b01-search1.gif') }}" type="image" alt="空室検索" />
             </div>
@@ -187,16 +184,13 @@
         <input name="today" type="hidden" value="{{ date('Y-m-d') }}" />
 
         {{-- 施設・プラン --}}
-        @if (!is_null($search_condition['form']['hotel']['hotel_cd']))
-            {{-- MEMO: ↑↑↑ もとは is_empty --}}
+        @if (array_key_exists('hotel', $search_condition['form']) && array_key_exists('hotel_cd', $search_condition['form']['hotel']))
             <input name="hotel_cd" type="hidden" value="{{ $search_condition['form']['hotel']['hotel_cd'] }}" />
         @endif
-        @if (!is_null($search_condition['form']['hotel']['plan_id']))
-            {{-- MEMO: ↑↑↑ もとは is_empty --}}
+        @if (array_key_exists('hotel', $search_condition['form']) && array_key_exists('plan_id', $search_condition['form']['hotel']))
             <input name="plan_id" type="hidden" value="{{ $search_condition['form']['hotel']['plan_id'] }}" />
         @endif
-        @if (!is_null($search_condition['form']['hotel']['room_id']))
-            {{-- MEMO: ↑↑↑ もとは is_empty --}}
+        @if (array_key_exists('hotel', $search_condition['form']) && array_key_exists('room_id', $search_condition['form']['hotel']))
             <input name="room_id" type="hidden" value="{{ $search_condition['form']['hotel']['room_id'] }}" />
         @endif
     </form>
