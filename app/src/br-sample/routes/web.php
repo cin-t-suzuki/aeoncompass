@@ -95,12 +95,16 @@ Route::get('/ctl/brfaxPr/show', [\App\Http\Controllers\ctl\BrfaxPrController::cl
 // TODO: 不要なルーティングか？ PR#20 が merge されたら確認
 Route::get('/ctl/htltop/index/target_cd/{hotel_cd}', function ($targetCd) {return 'TODO: htl top index : ' . $targetCd; })->name('ctl.htl_top.index');
 
-Route::get('/ctl/htlHotel/show', [\App\Http\Controllers\ctl\HtlHotelController::class, 'show'])->name('ctl.htl_hotel.show');
-Route::match(['get', 'post'], '/ctl/htlHotel/edit/'             , function(){ return 'TODO:'; })->name('ctl.htl_hotel.edit');
+// 施設情報登録内容の変更
+Route::match(['get', 'post'], '/ctl/htlHotel/show', [\App\Http\Controllers\ctl\HtlHotelController::class, 'show'])->name('ctl.htl_hotel.show');
+Route::match(['get', 'post'], '/ctl/htlHotel/edit/', [\App\Http\Controllers\ctl\HtlHotelController::class, 'edit'])->name('ctl.htl_hotel.edit');
+Route::match(['get', 'post'], '/ctl/htlHotel/update/', [\App\Http\Controllers\ctl\HtlHotelController::class, 'update'])->name('ctl.htl_hotel.update');
 Route::match(['get', 'post'], '/ctl/htlHotelCard/show/'         , function(){ return 'TODO:'; })->name('ctl.htl_hotel_card.show');
-Route::match(['get', 'post'], '/ctl/htlHotelInfo/'              , function(){ return 'TODO:'; })->name('ctl.htl_hotel_info.index');
+Route::match(['get', 'post'], '/htlHotelInfo/', [\App\Http\Controllers\ctl\HtlhotelInfoController::class, 'index'])->name('ctl.htl_hotel_info.index');
+Route::match(['get', 'post'], '/htlHotelInfo/new/', [\App\Http\Controllers\ctl\HtlhotelInfoController::class, 'new'])->name('ctl.htl_hotel_info.new');
+Route::match(['get', 'post'], '/htlHotelInfo/show/', [\App\Http\Controllers\ctl\HtlhotelInfoController::class, 'show'])->name('ctl.htl_hotel_info.show');
+Route::match(['get', 'post'], '/htlHotelInfo/create/', [\App\Http\Controllers\ctl\HtlhotelInfoController::class, 'create'])->name('ctl.htl_hotel_info.create');
 Route::match(['get', 'post'], '/ctl/htlHotelInform/list/'       , function(){ return 'TODO:'; })->name('ctl.htl_hotel_inform.list');
-Route::match(['get', 'post'], '/ctl/htlHotelLink/list/'         , function(){ return 'TODO:'; })->name('ctl.htl_hotel_link.list');
 Route::match(['get', 'post'], '/ctl/htlHotelStation/list/'      , function(){ return 'TODO:'; })->name('ctl.htl_hotel_station.list');
 Route::match(['get', 'post'], '/ctl/htlHotelAmenity/list/'      , function(){ return 'TODO:'; })->name('ctl.htl_hotel_amenity.list');
 Route::match(['get', 'post'], '/ctl/htlHotelService/list/'      , function(){ return 'TODO:'; })->name('ctl.htl_hotel_service.list');
@@ -302,3 +306,33 @@ Route::get('/ctl/brmoneyschedule/new', function (\Illuminate\Http\Request $reque
 Route::match(['get', 'post'], '/ctl/htlHotelCard/show/', [\App\Http\Controllers\ctl\HtlHotelCardController::class, 'show'])->name('ctl.htl_hotel_card.show');
 Route::match(['get', 'post'], '/ctl/htlHotelCard/update/', [\App\Http\Controllers\ctl\HtlHotelCardController::class, 'update'])->name('ctl.htl_hotel_card.update');
 
+// リンクページ
+Route::match(['get', 'post'], '/ctl/htlHotelLink/list/', [\App\Http\Controllers\ctl\HtlHotelLinkController::class, 'list'])->name('ctl.htl_hotel_link.list');
+Route::match(['get', 'post'], '/ctl/htlHotelLink/new/', [\App\Http\Controllers\ctl\HtlHotelLinkController::class, 'new'])->name('ctl.htl_hotel_link.new');
+Route::match(['get', 'post'], '/ctl/htlHotelLink/create/', [\App\Http\Controllers\ctl\HtlHotelLinkController::class, 'create'])->name('ctl.htl_hotel_link.create');
+Route::match(['get', 'post'], '/ctl/htlHotelLink/edit/', [\App\Http\Controllers\ctl\HtlHotelLinkController::class, 'edit'])->name('ctl.htl_hotel_link.edit');
+Route::match(['get', 'post'], '/ctl/htlHotelLink/update/', [\App\Http\Controllers\ctl\HtlHotelLinkController::class, 'update'])->name('ctl.htl_hotel_link.update');
+Route::match(['get', 'post'], '/ctl/htlHotelLink/delete/', [\App\Http\Controllers\ctl\HtlHotelLinkController::class, 'delete'])->name('ctl.htl_hotel_link.delete');
+Route::match(['get', 'post'], '/ctl/htlHotelLink/changeorderno/', [\App\Http\Controllers\ctl\HtlHotelLinkController::class, 'changeorderno'])->name('ctl.htl_hotel_link.changeorderno');
+// アメニティ
+Route::match(['get', 'post'], '/ctl/htlHotelAmenity/list/', [\App\Http\Controllers\ctl\HtlHotelAmenityController::class, 'list'])->name('ctl.htl_hotel_amenity.list');
+Route::match(['get', 'post'], '/ctl/htlHotelAmenity/create/', [\App\Http\Controllers\ctl\HtlHotelAmenityController::class, 'create'])->name('ctl.htl_hotel_amenity.create');
+// 交通アクセス
+Route::match(['get', 'post'], '/ctl/htlHotelStation/list/', [\App\Http\Controllers\ctl\HtlHotelStationController::class, 'list'])->name('ctl.htl_hotel_station.list');
+Route::match(['get', 'post'], '/ctl/htlHotelStation/new/', [\App\Http\Controllers\ctl\HtlHotelStationController::class, 'new'])->name('ctl.htl_hotel_station.new');
+Route::match(['get', 'post'], '/ctl/htlHotelStation/create/', [\App\Http\Controllers\ctl\HtlHotelStationController::class, 'create'])->name('ctl.htl_hotel_station.create');
+Route::match(['get', 'post'], '/ctl/htlHotelStation/edit/', [\App\Http\Controllers\ctl\HtlHotelStationController::class, 'edit'])->name('ctl.htl_hotel_station.edit');
+Route::match(['get', 'post'], '/ctl/htlHotelStation/update/', [\App\Http\Controllers\ctl\HtlHotelStationController::class, 'update'])->name('ctl.htl_hotel_station.update');
+Route::match(['get', 'post'], '/ctl/htlHotelStation/delete/', [\App\Http\Controllers\ctl\HtlHotelStationController::class, 'delete'])->name('ctl.htl_hotel_station.delete');
+Route::match(['get', 'post'], '/ctl/htlHotelStation/move/', [\App\Http\Controllers\ctl\HtlHotelStationController::class, 'move'])->name('ctl.htl_hotel_station.move');
+Route::match(['get', 'post'], '/ctl/htlHotelStation/defaultorder/', [\App\Http\Controllers\ctl\HtlHotelStationController::class, 'defaultorder'])->name('ctl.htl_hotel_station.defaultorder');
+
+// 送客実績・料金変更
+Route::get('/ctl/brreserveck/index', [\App\Http\Controllers\ctl\BrReserveCkController::class, 'index'])->name('ctl.brReserveCk.index');
+Route::get('/ctl/brreserveck/search', [\App\Http\Controllers\ctl\BrReserveCkController::class, 'search'])->name('ctl.brReserveCk.search');
+Route::post('/ctl/brreserveck/update', [\App\Http\Controllers\ctl\BrReserveCkController::class, 'update'])->name('ctl.brReserveCk.update');
+Route::get('/ctl/brreserveck/reserveck', [\App\Http\Controllers\ctl\BrReserveCkController::class, 'reserveck'])->name('ctl.brReserveCk.reserveck');
+Route::get('/dl/reserveck.csv', [\App\Http\Controllers\ctl\BrReserveCkController::class, 'csv'])->name('ctl.dl.reserveck'); //CSV　パス、URL合っている？
+
+// 送客請求実績確認
+Route::get('/ctl/brdemandresult/list', [\App\Http\Controllers\ctl\BrDemandResultController::class, 'list'])->name('ctl.BrDemandResult.list');

@@ -6,13 +6,16 @@ use App\Common\Traits;
 use App\Models\common\CommonDBModel;
 use App\Models\common\ValidationColumn;
 use Illuminate\Support\Facades\DB;
+use Exception;
 
-/** 
+/**
  * ホテル
  */
 class Hotel extends CommonDBModel
 {
     use Traits;
+
+    protected $s_hotel_cd   = null;  // 施設コード
 
     /**
      * モデルに関連付けるテーブル
@@ -151,7 +154,6 @@ class Hotel extends CommonDBModel
         $colCityId->setColumnName($this->COL_CITY_ID, "市")->require()->length(0, 20)->intOnly();
         $colWardId = new ValidationColumn();
         $colWardId->setColumnName($this->COL_WARD_ID, "区")->length(0, 20)->intOnly();
-
         $colAddress = new ValidationColumn();
         $colAddress->setColumnName($this->COL_ADDRESS, "住所")->require()->length(0, 100)->notHalfKana();
         $colTel = new ValidationColumn();
@@ -187,6 +189,15 @@ class Hotel extends CommonDBModel
             $colCheckInEnd  , $colCheckInInfo   , $colCheckOut      , $colMidnightStatus, $colAcceptStatus,
             $colAcceptAuto  , $colAcceptDtm
         ]);
+    }
+
+    /**
+     * 施設コードの設定
+     * @param string $as_hotel_cd
+     */
+    public function setHotelCd($as_hotel_cd)
+    {
+        $this->s_hotel_cd = $as_hotel_cd;
     }
 
     /**
@@ -285,114 +296,114 @@ class Hotel extends CommonDBModel
 		return true;
 	}
 
-	/**  表示順序番号などを求めます
-	*   現在登録されている最大値 + 1 を取得します。
-	*
-	*  CoreHotel->hotel_cd 施設コード
-	*  as_table_name       テーブル名称
-	*/
-	public function incrementCounter($as_table_name, $as_column_nm, $hotelCd, $aa_conditions = array()){
-		try {
+    /**  表示順序番号などを求めます
+     *   現在登録されている最大値 + 1 を取得します。
+     *
+     *  CoreHotel->hotel_cd 施設コード
+     *  as_table_name       テーブル名称
+     */
+    public function incrementCounter($as_table_name, $as_column_nm, $hotelCd, $aa_conditions = [])
+    {
+        try {
+            // テーブル名称
+            if (empty($as_table_name)) {
+                throw new \Exception('テーブルを設定してください。');
+            }
 
-			// テーブル名称
-			if ($this->is_empty($as_table_name)){
-				throw new \Exception('テーブルを設定してください。');
-			}
+            // カラム名称
+            if (empty($as_column_nm)) {
+                throw new \Exception('カラムを設定してください。');
+            }
 
-			// カラム名称
-			if ($this->is_empty($as_column_nm)){
-				throw new \Exception('カラムを設定してください。');
-			}
+            $a_conditions['hotel_cd'] = $hotelCd;
 
-			$a_conditions['hotel_cd'] = $hotelCd;
+            // 条件
+            $s_where = "";
+            if (!empty($aa_conditions)) {
+                foreach ($aa_conditions as $key => $value) {
+                    $s_where .= '	and	' . $key . ' = :' . $key;
+                    $a_conditions[$key] = $value;
+                }
+            }
 
-			// 条件
-			$s_where = "";
-			if (!($this->is_empty($aa_conditions))){
-				foreach ($aa_conditions as $key => $value){
-					$s_where .= '	and	' . $key . ' = :' . $key;
-					$a_conditions[$key] = $value;
-				}
-			}
-
-			$s_sql =<<< SQL
+            $s_sql = <<< SQL
 				select	max({$as_column_nm}) as value
 				from	{$as_table_name}
 				where	hotel_cd = :hotel_cd
 				{$s_where}
 				SQL;
 
-			$a_row = DB::select($s_sql, $a_conditions);
+            $a_row = DB::select($s_sql, $a_conditions);
 
-			if ($this->is_empty($a_row[0]->value)){
-				return 1;
-			}
+            if ($this->is_empty($a_row[0]->value)) {
+                return 1;
+            }
 
-			return intval($a_row[0]->value) + 1;
+            return intval($a_row[0]->value) + 1;
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
 
-		} catch (\Exception $e) {
-				throw $e;
-		}
-	}
+    /** 施設を検索
+     * ・keywordにより2種類の検索パターン
+     * ・施設管理を検索し、上記検索結果とマージ
+     *  aa_conditions
+     *    entry_status 登録状態
+     *    pref_id      都道府県ID
+     *    stock_type   仕入タイプ
+     *    keywords     キーワード
+     * @param [type] $errrorArr
+     * @param [type] $aa_conditions
+     * @return void
+     */
+    public function search(&$errrorArr, $aa_conditions)
+    {
 
-	/** 施設を検索
-	 * ・keywordにより2種類の検索パターン
-	 * ・施設管理を検索し、上記検索結果とマージ
-	 *	aa_conditions
-	 *    entry_status 登録状態
-	 *    pref_id      都道府県ID
-	 *    stock_type   仕入タイプ
-	 *    keywords     キーワード
-	 * @param [type] $errrorArr
-	 * @param [type] $aa_conditions
-	 * @return void
-	 */
-	public function search(&$errrorArr,  $aa_conditions){
-	
-		$resultArr[] = []; 
-		// 条件のキーをチェックしなければ定義
-		$s_pref_id = null;
-		$s_hotel_status = null;
-		$s_stock_type = null;
+        $resultArr[] = [];
+        // 条件のキーをチェックしなければ定義
+        $s_pref_id = null;
+        $s_hotel_status = null;
+        $s_stock_type = null;
 
-		// キーワード
-		if($this->is_empty($aa_conditions['keywords'])){
-			$errrorArr[] = 'キーワードを設定してください。';
-			return $resultArr;
-		}
+        // キーワード
+        if ($this->is_empty($aa_conditions['keywords'])) {
+            $errrorArr[] = 'キーワードを設定してください。';
+            return $resultArr;
+        }
 
-		// 検索条件の初期化
-		$a_conditions = array();
+        // 検索条件の初期化
+        $a_conditions = array();
 
-		// 登録状態
-		if (!($this->is_empty($aa_conditions['entry_status']))){
-			$s_hotel_status  = '	and	hotel_status.entry_status = :entry_status';
-			$a_conditions['entry_status'] = $aa_conditions['entry_status'];
-		}
+        // 登録状態
+        if (!($this->is_empty($aa_conditions['entry_status']))) {
+            $s_hotel_status  = '	and	hotel_status.entry_status = :entry_status';
+            $a_conditions['entry_status'] = $aa_conditions['entry_status'];
+        }
 
-		// 仕入タイプ  // TODO 使用機能があれば確認
-		if (!($this->is_empty($aa_conditions['stock_type']))){
-			$s_stock_type = '	and	hotel_control.stock_type = :stock_type';
-			$a_conditions['stock_type'] = $aa_conditions['stock_type'];
-		}
+        // 仕入タイプ  // TODO 使用機能があれば確認
+        if (!($this->is_empty($aa_conditions['stock_type']))) {
+            $s_stock_type = '	and	hotel_control.stock_type = :stock_type';
+            $a_conditions['stock_type'] = $aa_conditions['stock_type'];
+        }
 
-		// keywordsがemailアドレスだった場合、emailで検索
-		if ($this->is_mail(trim($aa_conditions['keywords']))){
-		/* TODO このケースになる機能を未実装
-			// 都道府県ID　※emailで検索の場合はandではなくwhereへ変更
-			if (!($this->is_empty($aa_conditions['pref_id']))){
-				$s_pref_id = '	where	hotel.pref_id = :pref_id';
-				$a_conditions['pref_id'] = $aa_conditions['pref_id'];
-			}
+        // keywordsがemailアドレスだった場合、emailで検索
+        if ($this->is_mail(trim($aa_conditions['keywords']))) {
+            /* TODO このケースになる機能を未実装
+            // 都道府県ID　※emailで検索の場合はandではなくwhereへ変更
+            if (!($this->is_empty($aa_conditions['pref_id']))) {
+                $s_pref_id = '	where	hotel.pref_id = :pref_id';
+                $a_conditions['pref_id'] = $aa_conditions['pref_id'];
+            }
 
-			// モデルの取得
-			$o_cipher = new Br_Models_Cipher((string)$this->box->config->environment->cipher->public->key);
+            // モデルの取得
+            $o_cipher = new Br_Models_Cipher((string)$this->box->config->environment->cipher->public->key);
 
-			// エンコード後、検索条件へ
-			$a_conditions['email'] = $o_cipher->encrypt(trim($aa_conditions['keywords']));
+            // エンコード後、検索条件へ
+            $a_conditions['email'] = $o_cipher->encrypt(trim($aa_conditions['keywords']));
 
-			// emailアドレスで検索された場合
-			$s_sql = <<< SQL
+            // emailアドレスで検索された場合
+            $s_sql = <<< SQL
 			select	q4.hotel_cd,
 					q4.hotel_nm,
 					q4.hotel_old_nm,
@@ -449,21 +460,21 @@ class Hotel extends CommonDBModel
 			order by q4.hotel_cd
 			SQL;
 		*/
-		} else {
-		// emailアドレスで検索されなかった場合、keywordsで検索
+        } else {
+            // emailアドレスで検索されなかった場合、keywordsで検索
 
-			// 都道府県ID
-			if (!($this->is_empty($aa_conditions['pref_id']))){
-				$s_pref_id = '	and	hotel.pref_id = :pref_id';
-				$a_conditions['pref_id'] = $aa_conditions['pref_id'];
-			}
+            // 都道府県ID
+            if (!($this->is_empty($aa_conditions['pref_id']))) {
+                $s_pref_id = '	and	hotel.pref_id = :pref_id';
+                $a_conditions['pref_id'] = $aa_conditions['pref_id'];
+            }
 
-			$keyword1 = '%' . trim($aa_conditions['keywords']) . '%';
-			$keyword1_kn = '%' . mb_convert_kana(trim($aa_conditions['keywords']), "KVC") . '%';
-			$keyword2 = '%' . trim(str_replace('-', '', $aa_conditions['keywords'])) . '%';
+            $keyword1 = '%' . trim($aa_conditions['keywords']) . '%';
+            $keyword1_kn = '%' . mb_convert_kana(trim($aa_conditions['keywords']), "KVC") . '%';
+            $keyword2 = '%' . trim(str_replace('-', '', $aa_conditions['keywords'])) . '%';
 
-			// keywordsで検索  sql文字列上限があるので注意
-			$s_sql = <<< SQL
+            // keywordsで検索  sql文字列上限があるので注意
+            $s_sql = <<< SQL
 select	q3.hotel_cd,
 		q3.hotel_nm,
 		q3.hotel_old_nm,
@@ -516,40 +527,40 @@ from	mast_pref,
 where	mast_pref.pref_id = q3.pref_id
 order by q3.hotel_cd
 SQL;
-		}
+        }
 
-		// 施設の情報を取得
-		$a_hotel = DB::select($s_sql, $a_conditions);
+        // 施設の情報を取得
+        $a_hotel = DB::select($s_sql, $a_conditions);
 
-		/* 施設統括 検索
-		*/
-		// 	検索条件の初期化
-		$a_conditions = array();
+        /* 施設統括 検索 */
+        // 検索条件の初期化
 
-		// 登録状態
-		if (!($this->is_empty($aa_conditions['entry_status']))){
-			$s_hotel_status  = '	and	hotel_status.entry_status = :entry_status';
-			$a_conditions['entry_status'] = $aa_conditions['entry_status'];
-		}
+        $a_conditions = array();
 
-		// 仕入タイプ
-		if (!($this->is_empty($aa_conditions['stock_type']))){
-			$s_stock_type = '	and	hotel_control.stock_type = :stock_type';
-			$a_conditions['stock_type'] = $aa_conditions['stock_type'];
-		}
+        // 登録状態
+        if (!($this->is_empty($aa_conditions['entry_status']))) {
+            $s_hotel_status  = '	and	hotel_status.entry_status = :entry_status';
+            $a_conditions['entry_status'] = $aa_conditions['entry_status'];
+        }
 
-		// キーワード
-		if (!($this->is_empty($aa_conditions['keywords']))){
-			$a_conditions['keyword'] = '%' . trim($aa_conditions['keywords']) . '%';
-		}
+        // 仕入タイプ
+        if (!($this->is_empty($aa_conditions['stock_type']))) {
+            $s_stock_type = '	and	hotel_control.stock_type = :stock_type';
+            $a_conditions['stock_type'] = $aa_conditions['stock_type'];
+        }
 
-		// 都道府県ID
-		if (!($this->is_empty($aa_conditions['pref_id']))){
-			$s_pref_id = '	and	hotel.pref_id = :pref_id';
-			$a_conditions['pref_id'] = $aa_conditions['pref_id'];
-		}
-		// 施設統括名称で検索
-		$s_sql = <<< SQL
+        // キーワード
+        if (!($this->is_empty($aa_conditions['keywords']))) {
+            $a_conditions['keyword'] = '%' . trim($aa_conditions['keywords']) . '%';
+        }
+
+        // 都道府県ID
+        if (!($this->is_empty($aa_conditions['pref_id']))) {
+            $s_pref_id = '	and	hotel.pref_id = :pref_id';
+            $a_conditions['pref_id'] = $aa_conditions['pref_id'];
+        }
+        // 施設統括名称で検索
+        $s_sql = <<< SQL
 select
 	q5.hotel_cd,
 	q5.hotel_nm,
@@ -618,27 +629,183 @@ from	mast_pref ,
 where	mast_pref.pref_id = q5.pref_id
 order by q5.hotel_cd
 SQL;
-		// 施設統括名称で検索した施設の情報を取得
-		$a_hotel_supervisor = DB::select($s_sql, $a_conditions);
+        // 施設統括名称で検索した施設の情報を取得
+        $a_hotel_supervisor = DB::select($s_sql, $a_conditions);
 
-		// 検索結果を結合
-		$a_result = array_merge($a_hotel, $a_hotel_supervisor);
+        // 検索結果を結合
+        $a_result = array_merge($a_hotel, $a_hotel_supervisor);
 
-		return array(
-			'values'    => $a_result
-		);
+        return array(
+            'values'    => $a_result
+        );
+    }
 
+	/**
+	 * 施設情報ページの更新依頼
+	 * 
+	 * aa_attributes     施設テーブルの登録データ内容
+	 * 
+	 * @return bool
+	 */
+	public function hotelModify($aa_attributes)
+	{
+		$hotel_status = new HotelStatus();
+		$a_hotel_status = $hotel_status->where(['hotel_cd' => $aa_attributes['hotel_cd']])->first();
+
+		// 解約状態の場合は必ず削除依頼
+		if ($a_hotel_status['entry_status'] == 2) {
+			$modify_status = 2;
+		} else {
+			$modify_status = 1;
+		}
+
+		// 施設情報ページを更新するに設定
+		$hotel_modify = new HotelModify();
+		$a_hotel_modify = $hotel_modify->where(['hotel_cd' => $aa_attributes['hotel_cd']])->first();
+
+		if (empty($a_hotel_modify)) {
+			$hotel_modify_create = $hotel_modify->insert([
+				'hotel_cd'      => $aa_attributes['hotel_cd'],
+				'modify_status' => $modify_status,
+				'entry_cd'      => $aa_attributes['entry_cd'],
+				'entry_ts'      => $aa_attributes['entry_ts'],
+				'modify_cd'     => $aa_attributes['modify_cd'],
+				'modify_ts'     => $aa_attributes['modify_ts'],
+			]);
+			if (!$hotel_modify_create) {
+				return false;
+			}
+
+			// 削除状態で無い場合に設定
+		} else {
+			$hotel_modify_upadte = $hotel_modify->where([
+				'hotel_cd'      => $aa_attributes['hotel_cd']
+			])->update([
+				'modify_status' => $modify_status,
+				'modify_cd'     => $aa_attributes['modify_cd'],
+				'modify_ts'     => $aa_attributes['modify_ts'],
+			]);
+
+			if ($hotel_modify_upadte == 0) {
+				return false;
+			}
+		}
 	}
 
+    /**
+     * お知らせ通知情報を取得
+     *
+     * this->_s_hotel_cd 施設コード
+     * @param string $target_cd 請求先・支払先ID
+     * @param array{
+     *  page: int, ページ
+     *  size: int　レコード数(1から) ページ数を指定した場合必須
+     * } $aa_offsets
+     * @return array
+     */
+    public function getTwitters($aa_offsets = ['page' => 1, 'size' => 5])
+    {
+        try {
+            $s_sql =
+            <<< SQL
+				select	q1.alert_system_cd,
+						alert_system.alert_system_nm,
+						q1.tag,
+						q1.title,
+						q1.description
+				from	alert_system,
+					(
+						select	twitter.alert_system_cd,
+								twitter.tag,
+								twitter.title,
+								twitter.description
+						from	twitter
+						where	twitter.hotel_cd  = :hotel_cd
+							and	twitter.status    = 1
+							and	twitter.limit_dtm > now()
+						order by twitter.entry_ts desc
+					) q1
+				where	alert_system.alert_system_cd = q1.alert_system_cd
+SQL;
 
-			// シングルトンインスタンスを実装 10/13追記
-			private static $_o_instance = null;
-			public static function getInstance()
-			{
-				if (null === self::$_o_instance)
-				 {self::$_o_instance = new self();}
-				return self::$_o_instance;
-			}
-	
+            // データの取得
+            $a_row = DB::select($s_sql, ['hotel_cd' => $this->s_hotel_cd], $aa_offsets);
+            // $this->_s_hotel_cdはtarget_cdを代入しているだけ？だと思うので、target_cdに変更して問題ない？
+            // $a_row = DB::select($s_sql, ['hotel_cd' => $target_cd], $aa_offsets);
+
+            return [
+                'values'     => $a_row
+            ];
+
+
+            // 各メソッドで Exception が投げられた場合
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
+    /**
+     * 管理画面公開延期施設判定
+     *
+     * @param string $as_hotel_cd
+     * @return bool
+     */
+    public function isOpenAdjournmentCtl($as_hotel_cd)
+    {
+        $a_target_hotels = []; //公開延期施設があればここに追記する
+
+        if (in_array($as_hotel_cd, ($a_target_hotels ?? []))) {
+            return true;
+        }
+    }
+
+    /**
+     * 施設注意事項情報の取得
+     *
+     * this->s_hotel_cd 施設コード
+     */
+    public function getHotelInformCancel()
+    {
+        try {
+            // キーが同じ場合キャッシュを利用
+            if ($this->s_hotel_cd == ($this->a_get_hotel_inform_cancel['hotel_cd'] ?? null)) { //??null追記でいいか？
+                return $this->a_get_hotel_inform_cancel['values'] ?? null;
+            }
+
+            $s_sql =
+            <<<SQL
+					select	hotel_inform.hotel_cd,
+							hotel_inform.branch_no,
+							hotel_inform.inform,
+							hotel_inform.order_no
+					from	hotel_inform
+					where	hotel_inform.hotel_cd = :hotel_cd
+						and	hotel_inform.inform_type = 0
+					order by hotel_inform.order_no
+SQL;
+
+            // データの取得
+            $this->a_get_hotel_inform_cancel['hotel_cd'] = $this->s_hotel_cd;
+            $this->a_get_hotel_inform_cancel['values'] = [
+                'values'     => DB::select($s_sql, ['hotel_cd' => $this->s_hotel_cd])
+            ];
+
+            return $this->a_get_hotel_inform_cancel['values'];
+
+            // 各メソッドで Exception が投げられた場合
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
+    // シングルトンインスタンスを実装 10/13追記
+    private static $_o_instance = null;
+    public static function getInstance()
+    {
+        if (null === self::$_o_instance) {
+            self::$_o_instance = new self();
+        }
+        return self::$_o_instance;
+    }
 
 }

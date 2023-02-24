@@ -96,6 +96,10 @@
 	{
         // y/m/d H:M:S  
 		$day = $dateUtil->to_format('Y/m/d H:i:s');
+	} elseif ( $format == 'ym分' )
+	{
+        // Y年m月分
+		$day = $dateUtil->to_format('Y年m月分');
 	}
      /* elseif ( $format == 'y' )
         // Y年
