@@ -16,4 +16,6 @@ class HotelLink extends Model
      */
     protected $table = 'hotel_link';
 
+    // プライマリキー設定
+    protected $primaryKey = ['hotel_cd', 'branch_no'];
 }

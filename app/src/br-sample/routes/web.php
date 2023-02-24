@@ -94,8 +94,10 @@ Route::get('/ctl/brfaxPr/show', [\App\Http\Controllers\ctl\BrfaxPrController::cl
 // TODO: 不要なルーティングか？ PR#20 が merge されたら確認
 Route::get('/ctl/htltop/index/target_cd/{hotel_cd}', function ($targetCd) {return 'TODO: htl top index : ' . $targetCd; })->name('ctl.htl_top.index');
 
-Route::get('/ctl/htlHotel/show', [\App\Http\Controllers\ctl\HtlHotelController::class, 'show'])->name('ctl.htl_hotel.show');
-Route::match(['get', 'post'], '/ctl/htlHotel/edit/'             , function(){ return 'TODO:'; })->name('ctl.htl_hotel.edit');
+// 施設情報登録内容の変更
+Route::match(['get', 'post'], '/ctl/htlHotel/show', [\App\Http\Controllers\ctl\HtlHotelController::class, 'show'])->name('ctl.htl_hotel.show');
+Route::match(['get', 'post'], '/ctl/htlHotel/edit/', [\App\Http\Controllers\ctl\HtlHotelController::class, 'edit'])->name('ctl.htl_hotel.edit');
+Route::match(['get', 'post'], '/ctl/htlHotel/update/', [\App\Http\Controllers\ctl\HtlHotelController::class, 'update'])->name('ctl.htl_hotel.update');
 Route::match(['get', 'post'], '/ctl/htlHotelCard/show/'         , function(){ return 'TODO:'; })->name('ctl.htl_hotel_card.show');
 Route::match(['get', 'post'], '/htlHotelInfo/', [\App\Http\Controllers\ctl\HtlhotelInfoController::class, 'index'])->name('ctl.htl_hotel_info.index');
 Route::match(['get', 'post'], '/htlHotelInfo/new/', [\App\Http\Controllers\ctl\HtlhotelInfoController::class, 'new'])->name('ctl.htl_hotel_info.new');
