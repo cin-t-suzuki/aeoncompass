@@ -526,6 +526,151 @@ class DateUtil
     }
 
     /**
+     * 経過数を返す。
+     *
+     * 基準日時と指定された日付との経過数を返す。
+     *
+     * @param string $as_interval
+     *      には 経過数を求める単位を設定します。
+     * @param string $at_date
+     *      には 経過数を調べたい日付を設定します。
+     *
+     *  time型は、現在時刻をUnix エポック (1970 年 1 月 1 日 00:00:00 GMT) から
+     *  の通算秒として返す。
+     *
+     * example
+     *   基準日を 1970/05/10とする
+     *
+     * diff('d',strtotime('2008/05/01'))
+     *
+     *   > 'Y'
+     *   > 2008/05/01
+     *     >> 38
+     *
+     *   > 'A'
+     *   > 2008/05/01
+     *     >> 37
+     *
+     *   > 'A'
+     *   > 2008/05/11
+     *     >> 38
+     *
+     *   > 'm'
+     *   > 2008/05/01
+     *     >> 456
+     *
+     *   > 'd'
+     *   > 2008/05/01
+     *     >> 13871
+     *
+     *   > 'H'
+     *   > 1970/05/10 01：00：00
+     *     >> 1
+     *
+     *   > 'i'
+     *   > 1970/05/10 00：01：00
+     *     >> 1
+     *
+     *   > 's'
+     *   > 1970/05/10 00：00：01
+     *     >> 1
+     *
+     *  単位($as_interval)
+     *   ・年         : Y
+     *   ・実年数     : A
+     *   ・月         : m
+     *   ・日         : d
+     *   ・時(24時間) : H
+     *   ・分         : i
+     *   ・秒         : s
+     */
+    public function diff($as_interval, $at_date)
+    {
+        $n_result  = 0;
+        // 文字列なら
+        if (gettype($at_date) == 'string') {
+            // Timeに変換してから、結果をかえす。
+            $at_date = strtotime($at_date);
+        }
+        // 年数
+        switch (strtolower($as_interval)) {
+            case 'y': //年
+                return date('Y', $at_date) - date('Y', $this->date);
+
+            case 'a': //実年
+                $n_result =  date('Y', $at_date) - date('Y', $this->date);
+                if ($n_result > 0) {
+                    if (date('md', $this->date) > date('md', $at_date)) {
+                        $n_result--;
+                    }
+                } elseif ($n_result < 0) {
+                    if (date('md', $this->date) < date('md', $at_date)) {
+                        $n_result++;
+                    }
+                }
+                return $n_result;
+
+            case 'm': //月
+                $n_result  = (date('Y', $at_date) - date('Y', $this->date)) * 12;
+                $n_result += date('m', $at_date) - date('m', $this->date);
+                return $n_result;
+
+            case 'd': //日
+                return ((mktime(
+                    0,                      // 時
+                    0,                      // 分
+                    0,                      // 秒
+                    date('m', $at_date),    // 月
+                    date('d', $at_date),    // 日
+                    date('Y', $at_date)     // 年
+                ) - mktime(
+                    0,                      // 時
+                    0,                      // 分
+                    0,                      // 秒
+                    date('m', $this->date), // 月
+                    date('d', $this->date), // 日
+                    date('Y', $this->date)  // 年
+                )) / 60 / 60 / 24);
+
+            case 'h': //時（２４）
+                return ((mktime(
+                    date('H', $at_date),    // 時
+                    0,                      // 分
+                    0,                      // 秒
+                    date('m', $at_date),    // 月
+                    date('d', $at_date),    // 日
+                    date('Y', $at_date)     // 年
+                ) - mktime(
+                    date('H', $this->date), // 時
+                    0,                      // 分
+                    0,                      // 秒
+                    date('m', $this->date), // 月
+                    date('d', $this->date), // 日
+                    date('Y', $this->date)  // 年
+                )) / 60 / 60);
+
+            case 'i': //分
+                return ((mktime(
+                    date('H', $at_date),    // 時
+                    date('i', $at_date),    // 分
+                    0,                      // 秒
+                    date('m', $at_date),    // 月
+                    date('d', $at_date),    // 日
+                    date('Y', $at_date)     // 年
+                ) - mktime(
+                    date('H', $this->date), // 時
+                    date('i', $this->date), // 分
+                    0,                      // 秒
+                    date('m', $this->date), // 月
+                    date('d', $this->date), // 日
+                    date('Y', $this->date)  // 年
+                )) / 60);
+            case 's': //秒
+                return ($at_date - $this->date);
+        }
+    }
+
+    /**
      * 曜日
      *
      * 基準日時を指定のスタイルで変換した値を文字列型でかえす。
@@ -564,4 +709,27 @@ class DateUtil
 
         return $a_week[$as_style][date('w', $this->date)];
     }
+	
+	/**
+	 * 現在設定されている日付をもとにある曜日の日付を取得
+	 * 
+	 * as_style  曜日を指定
+	 * 	1:日 2:月 3:火 4:水 5:木 6:金 7:土
+	 * ab_mon 週の開始を日曜日からとするのか月曜日からとするのかを設定します。
+	 * 	true:月曜を週の先頭 false:日曜を週の先頭
+	 * @return int
+	 * 
+	*/
+	public function week_day($as_style, $ab_mon = false){
+
+		// 月曜日が週の開始であった場合かつ日曜日の日付を求める場合
+		if ($ab_mon && $as_style == 1){
+			$as_style = 8;
+		}
+
+		$this->add('d', ($this->to_week('n') * -1) + $as_style);
+
+		return $this->date;
+
+	}
 }

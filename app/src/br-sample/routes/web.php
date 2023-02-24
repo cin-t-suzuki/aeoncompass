@@ -100,6 +100,18 @@ Route::post('/ctl/brbroadcastMessage/edit', [\App\Http\Controllers\ctl\Brbroadca
 Route::post('/ctl/brbroadcastMessage/update', [\App\Http\Controllers\ctl\BrbroadcastMessageController::class, 'update'])->name('ctl.brbroadcastMessage.update');
 Route::post('/ctl/brbroadcastMessage/destroy', [\App\Http\Controllers\ctl\BrbroadcastMessageController::class, 'destroy'])->name('ctl.brbroadcastMessage.destroy');
 
+// 施設統括
+Route::get('/ctl/brsupervisor/index', [\App\Http\Controllers\ctl\BrsupervisorController::class,'index'])->name('ctl.brsupervisor.index'); 
+Route::post('/ctl/brsupervisor/list',  [\App\Http\Controllers\ctl\BrsupervisorController::class,'list'])->name('ctl.brsupervisor.list'); 
+Route::post('/ctl/brsupervisor/update', [\App\Http\Controllers\ctl\BrsupervisorController::class,'update'])->name('ctl.brsupervisor.update'); 
+Route::post('/ctl/brsupervisor/new', [\App\Http\Controllers\ctl\BrsupervisorController::class,'new'])->name('ctl.brsupervisor.new'); 
+Route::post('/ctl/brsupervisor/create', [\App\Http\Controllers\ctl\BrsupervisorController::class,'create'])->name('ctl.brsupervisor.create'); 
+Route::post('/ctl/brsupervisor/listhotel',[\App\Http\Controllers\ctl\BrsupervisorController::class,'listhotel'])->name('ctl.brsupervisor.listhotel'); 
+Route::post('/ctl/brsupervisor/newhotel', [\App\Http\Controllers\ctl\BrsupervisorController::class,'newhotel'])->name('ctl.brsupervisor.newhotel'); 
+Route::post('/ctl/brsupervisor/cnfhotel', [\App\Http\Controllers\ctl\BrsupervisorController::class,'cnfhotel'])->name('ctl.brsupervisor.cnfhotel'); 
+Route::post('/ctl/brsupervisor/createhotel', [\App\Http\Controllers\ctl\BrsupervisorController::class,'createhotel'])->name('ctl.brsupervisor.createhotel'); 
+Route::post('/ctl/brsupervisor/deletehotel', [\App\Http\Controllers\ctl\BrsupervisorController::class,'deletehotel'])->name('ctl.brsupervisor.deletehotel'); 
+Route::post('/ctl/brsupervisor/edit', [\App\Http\Controllers\ctl\BrsupervisorController::class,'edit'])->name('ctl.brsupervisor.edit'); 
 
 // 予約通知ＦＡＸ広告 掲載文章
 Route::post('/ctl/brfaxPr/edit', [\App\Http\Controllers\ctl\BrfaxPrController::class, 'edit'])->name('ctl.brfaxPr.edit');
@@ -112,7 +124,10 @@ Route::get('/ctl/htltop/index/target_cd/{hotel_cd}', function ($targetCd) {retur
 Route::get('/ctl/htlHotel/show', [\App\Http\Controllers\ctl\HtlHotelController::class, 'show'])->name('ctl.htl_hotel.show');
 Route::match(['get', 'post'], '/ctl/htlHotel/edit/'             , function(){ return 'TODO:'; })->name('ctl.htl_hotel.edit');
 Route::match(['get', 'post'], '/ctl/htlHotelCard/show/'         , function(){ return 'TODO:'; })->name('ctl.htl_hotel_card.show');
-Route::match(['get', 'post'], '/ctl/htlHotelInfo/'              , function(){ return 'TODO:'; })->name('ctl.htl_hotel_info.index');
+Route::match(['get', 'post'], '/htlHotelInfo/', [\App\Http\Controllers\ctl\HtlhotelInfoController::class, 'index'])->name('ctl.htl_hotel_info.index');
+Route::match(['get', 'post'], '/htlHotelInfo/new/', [\App\Http\Controllers\ctl\HtlhotelInfoController::class, 'new'])->name('ctl.htl_hotel_info.new');
+Route::match(['get', 'post'], '/htlHotelInfo/show/', [\App\Http\Controllers\ctl\HtlhotelInfoController::class, 'show'])->name('ctl.htl_hotel_info.show');
+Route::match(['get', 'post'], '/htlHotelInfo/create/', [\App\Http\Controllers\ctl\HtlhotelInfoController::class, 'create'])->name('ctl.htl_hotel_info.create');
 Route::match(['get', 'post'], '/ctl/htlHotelInform/list/'       , function(){ return 'TODO:'; })->name('ctl.htl_hotel_inform.list');
 Route::match(['get', 'post'], '/ctl/htlHotelLink/list/'         , function(){ return 'TODO:'; })->name('ctl.htl_hotel_link.list');
 Route::match(['get', 'post'], '/ctl/htlHotelStation/list/'      , function(){ return 'TODO:'; })->name('ctl.htl_hotel_station.list');
@@ -126,6 +141,10 @@ Route::match(['get', 'post'], '/ctl/htlHotelCancel/index/'      , function(){ re
 Route::match(['get', 'post'], '/ctl/htlHotelReceipt/index/'     , function(){ return 'TODO:'; })->name('ctl.htl_hotel_receipt.index');
 Route::match(['get', 'post'], '/ctl/htlBathTax/'                , function(){ return 'TODO:'; })->name('ctl.htl_bath_tax.index');
 
+// 予約通知ＦＡＸ広告 掲載文章
+Route::post('/ctl/brfaxPr/edit', [\App\Http\Controllers\ctl\BrfaxPrController::class, 'edit'])->name('ctl.brfaxPr.edit');
+Route::post('/ctl/brfaxPr/update', [\App\Http\Controllers\ctl\BrfaxPrController::class, 'update'])->name('ctl.brfaxPr.update');
+Route::get('/ctl/brfaxPr/show', [\App\Http\Controllers\ctl\BrfaxPrController::class, 'show'])->name('ctl.brfaxPr.show');
 
 // 施設情報
 Route::match(['get','post'], '/ctl/brhotelInfo/show', [\App\Http\Controllers\ctl\HtlhotelInfoController::class, 'show'])->name('ctl.htlhotelInfo.show');
@@ -241,12 +260,35 @@ Route::post('/ctl/brhoteladvert2009000400/create', [\App\Http\Controllers\ctl\Br
 Route::post('/ctl/brhoteladvert2009000400/edit', [\App\Http\Controllers\ctl\BrhotelAdvert2009000400Controller::class, 'edit'])->name('ctl.brhoteladvert2009000400.edit'); //編集画面
 Route::post('/ctl/brhoteladvert2009000400/update', [\App\Http\Controllers\ctl\BrhotelAdvert2009000400Controller::class, 'update'])->name('ctl.brhoteladvert2009000400.update'); //更新
 
+// 注目文言管理
+Route::get('/ctl/brattention/index', [\App\Http\Controllers\ctl\BrAttentionController::class, 'list'])
+    ->name('ctl.brAttention.list');
+Route::get('/ctl/brattention/edit', [\App\Http\Controllers\ctl\BrAttentionController::class, 'edit'])
+    ->name('ctl.brAttention.edit');
+Route::post('/ctl/brattention/update', [\App\Http\Controllers\ctl\BrAttentionController::class, 'update'])
+    ->name('ctl.brAttention.update');
+Route::get('/ctl/brattention/new', [\App\Http\Controllers\ctl\BrAttentionController::class, 'new'])
+    ->name('ctl.brAttention.new');
+Route::post('/ctl/brattention/create', [\App\Http\Controllers\ctl\BrAttentionController::class, 'create'])
+    ->name('ctl.brAttention.create');
+Route::post('/ctl/brattention/change', [\App\Http\Controllers\ctl\BrAttentionController::class, 'change'])
+    ->name('ctl.brAttention.change');
+
 // お天気保証
 Route::get('/ctl/brinsuranceweather/', [\App\Http\Controllers\ctl\BrInsuranceWeatherController::class, 'index'])
     ->name('ctl.brInsuranceWeather.index');
 Route::post('/ctl/brinsuranceweather/updatecondition', [\App\Http\Controllers\ctl\BrInsuranceWeatherController::class, 'updatecondition'])
     ->name('ctl.brInsuranceWeather.updatecondition');
 
+// パートナー精算確認
+Route::get('/ctl/brbillpayptn/list', [\App\Http\Controllers\ctl\BrBillPayPtnController::class, 'list'])
+    ->name('ctl.brBillpayPtn.list');
+Route::get('/ctl/brbillpayptn/customer', [\App\Http\Controllers\ctl\BrBillPayPtnController::class, 'customer'])
+    ->name('ctl.brBillpayPtn.customer');
+Route::get('/ctl/brbillpayptn/detail', [\App\Http\Controllers\ctl\BrBillPayPtnController::class, 'detail'])
+    ->name('ctl.brBillpayPtn.detail');
+Route::get('/ctl/brbillpayptn/csv', [\App\Http\Controllers\ctl\BrBillPayPtnController::class, 'csv'])
+    ->name('ctl.brBillpayPtn.csv');
 
 // 参考として一応残す。
 // Route::namespace('App\Http\Controllers\ctl')->prefix('ctl')->group(function () {
@@ -287,3 +329,16 @@ Route::get('/ctl/brmoneyschedule/new', function (\Illuminate\Http\Request $reque
 Route::post('/ctl/brCustomer/list', function () {return 'TODO'; })->name('ctl.brCustomer.list');
 Route::post('/ctl/brCustomer/csv', function () {return 'TODO'; })->name('ctl.brCustomer.csv');
 
+// 利用可能カード
+Route::match(['get', 'post'], '/ctl/htlHotelCard/show/', [\App\Http\Controllers\ctl\HtlHotelCardController::class, 'show'])->name('ctl.htl_hotel_card.show');
+Route::match(['get', 'post'], '/ctl/htlHotelCard/update/', [\App\Http\Controllers\ctl\HtlHotelCardController::class, 'update'])->name('ctl.htl_hotel_card.update');
+
+// 送客実績・料金変更
+Route::get('/ctl/brreserveck/index', [\App\Http\Controllers\ctl\BrReserveCkController::class, 'index'])->name('ctl.brReserveCk.index');
+Route::get('/ctl/brreserveck/search', [\App\Http\Controllers\ctl\BrReserveCkController::class, 'search'])->name('ctl.brReserveCk.search');
+Route::post('/ctl/brreserveck/update', [\App\Http\Controllers\ctl\BrReserveCkController::class, 'update'])->name('ctl.brReserveCk.update');
+Route::get('/ctl/brreserveck/reserveck', [\App\Http\Controllers\ctl\BrReserveCkController::class, 'reserveck'])->name('ctl.brReserveCk.reserveck');
+Route::get('/dl/reserveck.csv', [\App\Http\Controllers\ctl\BrReserveCkController::class, 'csv'])->name('ctl.dl.reserveck'); //CSV　パス、URL合っている？
+
+// 送客請求実績確認
+Route::get('/ctl/brdemandresult/list', [\App\Http\Controllers\ctl\BrDemandResultController::class, 'list'])->name('ctl.BrDemandResult.list');
