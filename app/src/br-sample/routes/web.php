@@ -304,3 +304,9 @@ Route::get('/ctl/brmoneyschedule/new', function (\Illuminate\Http\Request $reque
     var_dump($request->input());
     return 'TODO: 未実装';
 })->name('ctl.br.money.schedule.new');
+
+//料金設定を行う部屋の選択
+Route::get('/ctl/htlscharge2/',[\App\Http\Controllers\ctl\HtlsCharge2Controller::class, 'index']);
+Route::get('/ctl/htlscharge2/',[\App\Http\Controllers\ctl\HtlsCharge2Controller::class, 'lump'])->name('ctl.htlsCharge2.lump');
+//lumpview内のForm送信先の画面未実装のため仮実装
+Route::get('/ctl/htlscharge2/edit/',[\App\Http\Controllers\ctl\HtlsCharge2Controller::class, 'edit'])->name('ctl.htlscharge2.edit');
