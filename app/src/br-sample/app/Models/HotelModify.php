@@ -71,8 +71,4 @@ class HotelModify extends CommonDBModel
 
         parent::setColumnDataArray([$colHotelCd, $colModifyStatus]);
     }
-
-
-
-
 }
