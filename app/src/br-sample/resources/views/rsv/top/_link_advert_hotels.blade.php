@@ -7,7 +7,9 @@
 {{--
     TODO: smarty -> blade の書き換え
         使用しない可能性があるので、保留
-        実装する場合、$advert_hotels 変数はコントローラから渡す
+        実装する場合
+            public\app\rsv\models\TopModel.php set_hotel_advert_2009000400() を実装
+            $advert_hotels 変数はコントローラから渡す
 --}}
 @php
     $advert_hotels = [

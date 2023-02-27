@@ -16,6 +16,9 @@ class TopController extends Controller
         // 空室検索の選択肢
         $searchCondition = $service->getSearchCondition($request);
 
+        // 注目文言取得
+        $topAttention = $service->getAttention();
+
         return view('rsv.top.index', [
             'keywords' => $keywords,
             'search_condition' => $searchCondition,
@@ -41,29 +44,7 @@ class TopController extends Controller
             ],
 
             // TODO: ビューに渡す変数
-            'top_attention' => (object)[
-                'display_status' => 2,
-                'display_attention' => [
-                    [
-                        'jwest_word' => '',
-                        'jwest_url' => '',
-                        'url' => '',
-                        'word' => 'テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト',
-                    ],
-                    [
-                        'jwest_word' => '',
-                        'jwest_url' => '',
-                        'url' => '',
-                        'word' => 'テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト',
-                    ],
-                    [
-                        'jwest_word' => '',
-                        'jwest_url' => '',
-                        'url' => '',
-                        'word' => 'テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト',
-                    ],
-                ],
-            ],
+            'top_attention' => $topAttention,
         ]);
     }
 }
