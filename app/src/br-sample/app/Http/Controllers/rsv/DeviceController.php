@@ -11,7 +11,9 @@ class DeviceController extends Controller
      * デバイスごとのサイトへリダイレクト
      *
      * /device/[サイト][リダイレクト先URL]
-     *      ex. http://xxx.com/rsv/device/?site=$1&url=$2?%{QUERY_STRING}
+     *      ex. http://xxx.com/rsv/device/?site=xxx&url=yyy
+     *
+     * TODO: 実際に呼び出しを行っている画面を実装する際に、動作を確認する
      *
      * @param Request $request
      * @return Illuminate\Http\Response
