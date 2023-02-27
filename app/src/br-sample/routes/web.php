@@ -321,6 +321,12 @@ Route::get('/contact/customer', [\App\Http\Controllers\rsv\ContactController::cl
 Route::get('/contact/customerconfirm', [\App\Http\Controllers\rsv\ContactController::class, 'customerConfirm'])->name('rsv.contact.customerConfirm');
 Route::post('/contact/customercomplete', [\App\Http\Controllers\rsv\ContactController::class, 'customerComplete'])->name('rsv.contact.customerComplete');
 
+// ご意見・ご要望
+ //↓検証環境のパスに合わせたが、.htmlも必要か？書き替えた方がいい？
+Route::get('/contact/customer/voice.html', [\App\Http\Controllers\rsv\ContactController::class, 'customerVoice'])->name('rsv.contact.customerVoice');
+Route::get('/rsv/contact/customervoiceconfirm', [\App\Http\Controllers\rsv\ContactController::class, 'customerVoiceConfirm'])->name('rsv.contact.customerVoiceConfirm');
+Route::post('/rsv/contact/customervoicecomplete', [\App\Http\Controllers\rsv\ContactController::class, 'customerVoiceComplete'])->name('rsv.contact.customerVoiceComplete');
+
 // TOP(お問い合わせの共通bladeを出力する用、追って削除)
 Route::get('/1', [\App\Http\Controllers\rsv\ContactController::class, 'customer'])->name('rsv.top');
 Route::get('/2', [\App\Http\Controllers\rsv\ContactController::class, 'customer'])->name('rsv.auth.login');

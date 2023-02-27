@@ -15,9 +15,6 @@ class CustomerContactRequest extends FormRequest
 {
     use Traits;
 
-    //エラー時の戻り先ページの指定
-    protected $redirect = '/contact/customer';
-
     /**
      * Determine if the user is authorized to make this request.
      *
