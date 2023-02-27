@@ -2,4 +2,10 @@
 
 return [
     'cipher_key' => env('CIPHER_KEY', ''),
+    'system' => [
+        'cookie' => [
+            'fcs' => 'FCS',
+            'path' => '/',
+        ],
+    ],
 ];
