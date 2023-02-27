@@ -1,16 +1,16 @@
+@extends('ctl.common.base')
 @section('title', '詳細変更')
-@include('ctl.common.base')
 
 @inject('service', 'App\Http\Controllers\ctl\BrbroadcastMessageController')
 
+@section('page_blade')
+
 {{-- メッセージ --}}
-@section('message')
 @include('ctl.common.message', $messages)
 
 <table border="0" cellspacing="0" cellpadding="4">
 	<td valign="top">
 		{{-- 施設情報詳細 --}}
-		@section('hotel_info')
 		@include('ctl.brhotel._hotel_info',
 			["hotel" => $views->hotel,
 			"mast_pref" => $views->mast_pref,
@@ -198,12 +198,12 @@
 				<td bgcolor="#EEFFEE">
 				請求先
 				</td>
-				<form action="{$v->env.source_path}{$v->env.module}/brcustomerhotel/list/" method="post">
+				{!! Form::open(['route' => ['ctl.brCustomerHotel.list'], 'method' => 'post']) !!}
 				<td>
 					<input type="submit" name="RateBtn" value="設定">
 				</td>
-				<input type="hidden" name="target_cd" value="{strip_tags($views->target_cd)}">
-				</form>
+				<input type="hidden" name="target_cd" value="{{strip_tags($views->target_cd)}}">
+				{!! Form::close() !!}
 				<td>
 					@if (!($service->is_empty($views->customer_hotel)))
 						{{$views->customer_hotel['customer_id']}}&nbsp;({{$views->customer_hotel['customer_nm']}})
@@ -298,5 +298,4 @@
 	</small>
 </div>
 
-@section('title', 'footer')
-@include('ctl.common.footer')
+@endsection

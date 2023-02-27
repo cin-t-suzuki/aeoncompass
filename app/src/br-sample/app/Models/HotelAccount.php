@@ -94,7 +94,7 @@ class HotelAccount extends CommonDBModel
 				$this->COL_ACCEPT_STATUS => $data[0]->accept_status
 			);
 		}
-		return null;
+		return [];  // TODO null→[]へ変更していいか？(count関数でnullだとエラーになる)
 	}
 
 }

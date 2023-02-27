@@ -136,7 +136,7 @@ class HotelNotify extends CommonDBModel
 				$this->COL_FAXPR_STATUS => $data[0]->faxpr_status
 			);
 		}
-		return null;
+		return [];  // TODO null→[]へ変更していいか？(count関数でnullだとエラーになる)
 	}
 
 }

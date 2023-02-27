@@ -23,6 +23,15 @@ class RedirectIfAuthenticated
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
+                if ($guard === 'staff') {
+                    return redirect()->route('ctl.br.top');
+                }
+
+                if ($guard === 'web') {
+                    return redirect()->route('rsv.top');
+                }
+                // TODO: ↑ 各ロールについて、認証済時に遷移するトップ画面を追加
+
                 return redirect(RouteServiceProvider::HOME);
             }
         }
