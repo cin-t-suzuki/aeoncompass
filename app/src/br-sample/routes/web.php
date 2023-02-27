@@ -25,6 +25,9 @@ Route::get('/rsv/auth', [\App\Http\Controllers\rsv\AuthController::class, 'index
 Route::post('/rsv/auth', [\App\Http\Controllers\rsv\AuthController::class, 'login'])->name('rsv.auth.login.authenticate');
 Route::get('/rsv/auth/logout', [\App\Http\Controllers\rsv\AuthController::class, 'logout'])->name('rsv.auth.logout');
 
+// 接続デバイス判定
+Route::get('/rsv/device', [\App\Http\Controllers\rsv\DeviceController::class, 'index'])->name('rsv.device');
+
 Route::get('/rsv/top', [\App\Http\Controllers\rsv\TopController::class, 'index'])->name('rsv.top');
 Route::namespace('App\Http\Controllers\rsv')->prefix('rsv')->group(function () {
     // 施設情報
@@ -60,17 +63,16 @@ Route::middleware(['guest:staff' /* TODO: 各ロールについて guest ミド�
     Route::post('ctl/brLogin/login', [\App\Http\Controllers\ctl\BrLoginController::class, 'login'])->name('ctl.br.login.authenticate');
     // TODO: 各種ロールのログインのルートを追加
 });
-Route::get('/rsv/device', [\App\Http\Controllers\rsv\DeviceController::class, 'index'])->name('rsv.device');
 
+/**
+ * 管理システム
+ */
 Route::get('ctl/logout', [\App\Http\Controllers\ctl\BrLoginController::class, 'logout'])->name('ctl.logout')->middleware('auth:staff');
 Route::get('ctl/brTop', [\App\Http\Controllers\ctl\BrTopController::class, 'index'])->name('ctl.br.top')->middleware('auth:staff');
 
 Route::get('/ctl/brChangePassword/', [\App\Http\Controllers\ctl\BrChangePasswordController::class, 'index'])->name('ctl.br.change.password')->middleware('auth:staff');
 Route::post('/ctl/brChangePassword/update', [\App\Http\Controllers\ctl\BrChangePasswordController::class, 'update'])->name('ctl.br.change.password.update')->middleware('auth:staff');
 
-/**
- * 管理システム
- */
 // 社内トップ
 Route::get('/ctl', [\App\Http\Controllers\ctl\BrtopController::class,'index'])->name('ctl.brtop.index');
 Route::get('/ctl/brtop', [\App\Http\Controllers\ctl\BrtopController::class, 'index'])->name('ctl.brtop.index');
