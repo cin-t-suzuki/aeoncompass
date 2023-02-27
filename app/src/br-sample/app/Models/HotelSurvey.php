@@ -169,6 +169,6 @@ class HotelSurvey extends CommonDBModel
                 self::COL_TD_LNG_D  => $data[0]->td_lng_d
             );
         }
-        return null;
+        return [];  // TODO null→[]へ変更していいか？(count関数でnullだとエラーになる)
     }
 }
