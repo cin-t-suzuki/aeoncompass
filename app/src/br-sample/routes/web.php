@@ -312,3 +312,21 @@ Route::get('/dl/reserveck.csv', [\App\Http\Controllers\ctl\BrReserveCkController
 
 // 送客請求実績確認
 Route::get('/ctl/brdemandresult/list', [\App\Http\Controllers\ctl\BrDemandResultController::class, 'list'])->name('ctl.BrDemandResult.list');
+
+
+
+// ユーザー画面
+// お問い合わせ
+Route::get('/contact/customer', [\App\Http\Controllers\rsv\ContactController::class, 'customer'])->name('rsv.contact.customer');
+Route::get('/contact/customerconfirm', [\App\Http\Controllers\rsv\ContactController::class, 'customerConfirm'])->name('rsv.contact.customerConfirm');
+Route::post('/contact/customercomplete', [\App\Http\Controllers\rsv\ContactController::class, 'customerComplete'])->name('rsv.contact.customerComplete');
+
+// TOP(お問い合わせの共通bladeを出力する用、追って削除)
+Route::get('/1', [\App\Http\Controllers\rsv\ContactController::class, 'customer'])->name('rsv.top');
+Route::get('/2', [\App\Http\Controllers\rsv\ContactController::class, 'customer'])->name('rsv.auth.login');
+Route::get('/3', [\App\Http\Controllers\rsv\ContactController::class, 'customer'])->name('rsv.subscribe.new');
+Route::get('/4', [\App\Http\Controllers\rsv\ContactController::class, 'customer'])->name('rsv.guide.visitor');
+Route::get('/5', [\App\Http\Controllers\rsv\ContactController::class, 'customer'])->name('rsv.point.index');
+Route::get('/6', [\App\Http\Controllers\rsv\ContactController::class, 'customer'])->name('rsv.reserve.index');
+Route::get('/7', [\App\Http\Controllers\rsv\ContactController::class, 'customer'])->name('rsv.help.index');
+Route::get('/8', [\App\Http\Controllers\rsv\ContactController::class, 'customer'])->name('rsv.point.index');
