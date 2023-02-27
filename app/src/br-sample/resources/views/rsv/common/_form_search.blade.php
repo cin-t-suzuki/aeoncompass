@@ -1,9 +1,12 @@
 {{-- MEMO: 移植元 public\app\rsv\view2\_common\_form_search.tpl --}}
 
-{{-- TODO: レイアウト崩れ --}}
+{{-- TODO: レイアウト崩れ。デザイン修正で対応 --}}
 @php
-    // TODO: 誤魔化し実装 to be deleted
-    $vhotel = ['jrc_hotel_cd' => null];
+    // MEMO: 未定義変数でエラーになるため。
+    $vhotel = [];
+    
+    // MEMO: トップページでは値がセットされていない変数。未定義変数エラー対策。
+    $bgcolor = '';
 @endphp
 @if (!is_null($piece['hotels'][0]['hotel_cd']))
     {{-- MEMO: ↑↑↑ もとは is_empty() --}}
@@ -45,79 +48,74 @@
 {{-- ローカル環境(PC)の時間を変更し深夜時間のデザインを確認、ラジオボタンを --}}
 {{-- クリックし、表示の切り替え確認、この2点を必ず確認してください。 --}}
 {{-- -------------------------------------------------------------------------- --}}
-@if (!is_null($piece['hotels'][0]['hotel_cd']))
+<div @if (!is_null($piece['hotels'][0]['hotel_cd'])) style="margin:0 auto;width:344px;" @endif>
     {{-- MEMO: ↑↑↑ もとは is_empty() --}}
-    <div style="margin:0 auto;width:344px;">
-@endif
-<div class="sfm-search">
-    <div class="sfm-cat-box">
-        <ul class="clearfix">
-            {{-- 国内宿泊 --}}
-            <li>
-                <input class="btnimg jqs-tab {{ 'tab-normal2' . $bgcolor . (!$search_condition['form']['midnight']['current_status'] ? 'current' : '') }}" id="sfm-radio01" name="search-cat" type="radio" value="normal" {{ !$search_condition['form']['midnight']['current_status'] ? 'checked' : '' }}>
-                <label for="sfm-radio01">国内宿泊</label>
-            </li>
-            {{-- 今すぐ泊まれる宿 --}}
-            @if ($search_condition['form']['midnight'])
+    <div class="sfm-search">
+        <div class="sfm-cat-box">
+            <ul class="clearfix">
+                {{-- 国内宿泊 --}}
                 <li>
-                    <input class="btnimg jqs-tab {{ 'tab-today' . $bgcolor . ($search_condition['form']['midnight']['current_status'] ? 'current' : '') }}" id="sfm-radio06" name="search-cat" type="radio" value="today" {{ $search_condition['form']['midnight']['current_status'] ? 'checked' : '' }} @if (!$search_condition['form']['midnight']['current_status']) style="display: none;" @endif>
-                    <label for="sfm-radio06" @if (!$search_condition['form']['midnight']['current_status']) style="display: none;" @endif>今すぐ泊まれる宿</label>
+                    <input class="btnimg jqs-tab {{ 'tab-normal2' . $bgcolor . (!$search_condition['form']['midnight']['current_status'] ? 'current' : '') }}" id="sfm-radio01" name="search-cat" type="radio" value="normal" {{ !$search_condition['form']['midnight']['current_status'] ? 'checked' : '' }}>
+                    <label for="sfm-radio01">国内宿泊</label>
                 </li>
-            @endif
-            {{-- JR＋宿泊 --}}
-            @if ($vhotel['jrc_hotel_cd'] || is_null($piece['hotels'][0]['hotel_cd']))
-                {{-- MEMO: ↑↑↑ もとは is_empty() --}}
-                <li class="jqs-jrc">
-                    <input class="btnimg jqs-tab {{ 'tab-jrc' . $bgcolor }}" id="sfm-radio02" name="search-cat" type="radio" value="jrc">
-                    <label name="search-cat" for="sfm-radio02">JR＋宿泊</label>
-                </li>
-            @endif
-            @if (!is_null($isTop) && $isTop && !$search_condition['form']['midnight']['current_status'])
-                {{-- MEMO: ↑↑↑ もとは is_empty() --}}
-                {{-- 高速バス予約 --}}
-                <li>
-                    <input class="jqs-tabLink" id="sfm-radio04" name="search-cat" type="radio" value="bus" onclick="window.open('/ro/tabiplaza-bus/')">
-                    <label for="sfm-radio04">高速バス予約</label>
-                </li>
-            @endif
-        </ul>
-    </div>
-    {{-- 国内宿泊 --}}
-    <div class="{{ 'sfm-normal2' . $bgcolor . (!is_null($piece['hotels'][0]['hotel_cd']) ? 's' : '') }} " name="search-cat_normal_box" @if ($search_condition['form']['midnight']['current_status']) style="display: none;" @endif>
-        {{-- MEMO: ↑↑↑ もとは is_empty() --}}
-        <div class="{{ 'sfm-normal2' . $bgcolor . (!is_null($piece['hotels'][0]['hotel_cd']) ? 's' : '') . '-inner' }}">
-            {{-- MEMO: ↑↑↑ もとは is_empty() --}}
-            {{-- {include file='../_common/_form_search_normal.tpl'} --}}
-            @include('rsv.common._form_search_normal')
+                {{-- 今すぐ泊まれる宿 --}}
+                @if ($search_condition['form']['midnight'])
+                    <li>
+                        <input class="btnimg jqs-tab {{ 'tab-today' . $bgcolor . ($search_condition['form']['midnight']['current_status'] ? 'current' : '') }}" id="sfm-radio06" name="search-cat" type="radio" value="today" {{ $search_condition['form']['midnight']['current_status'] ? 'checked' : '' }} @if (!$search_condition['form']['midnight']['current_status']) style="display: none;" @endif>
+                        <label for="sfm-radio06" @if (!$search_condition['form']['midnight']['current_status']) style="display: none;" @endif>今すぐ泊まれる宿</label>
+                    </li>
+                @endif
+                {{-- JR＋宿泊 --}}
+                @if ((array_key_exists('jrc_hotel_cd', $vhotel) && $vhotel['jrc_hotel_cd']) || is_null($piece['hotels'][0]['hotel_cd']))
+                    {{-- MEMO: ↑↑↑ もとは is_empty() --}}
+                    <li class="jqs-jrc">
+                        <input class="btnimg jqs-tab {{ 'tab-jrc' . $bgcolor }}" id="sfm-radio02" name="search-cat" type="radio" value="jrc">
+                        <label name="search-cat" for="sfm-radio02">JR＋宿泊</label>
+                    </li>
+                @endif
+                @if (!is_null($isTop) && $isTop && !$search_condition['form']['midnight']['current_status'])
+                    {{-- MEMO: ↑↑↑ もとは is_empty() --}}
+                    {{-- 高速バス予約 --}}
+                    <li>
+                        <input class="jqs-tabLink" id="sfm-radio04" name="search-cat" type="radio" value="bus" onclick="window.open('/ro/tabiplaza-bus/')">
+                        <label for="sfm-radio04">高速バス予約</label>
+                    </li>
+                @endif
+            </ul>
         </div>
-    </div>
-    {{-- 今すぐ泊まれる宿 --}}
-    @if ($search_condition['form']['midnight'])
-        <div class="{{ 'sfm-today' . $bgcolor . (!is_null($piece['hotels'][0]['hotel_cd']) ? 's' : '') }}" name="search-cat_today_box" @if (!$search_condition['form']['midnight']['current_status']) style="display: none;" @endif>
+        {{-- 国内宿泊 --}}
+        <div class="{{ 'sfm-normal2' . $bgcolor . (!is_null($piece['hotels'][0]['hotel_cd']) ? 's' : '') }} " name="search-cat_normal_box" @if ($search_condition['form']['midnight']['current_status']) style="display: none;" @endif>
             {{-- MEMO: ↑↑↑ もとは is_empty() --}}
-            <div class="{{ 'sfm-today' . $bgcolor . (!is_null($piece['hotels'][0]['hotel_cd']) ? 's' : '') . '-inner' }}">
+            <div class="{{ 'sfm-normal2' . $bgcolor . (!is_null($piece['hotels'][0]['hotel_cd']) ? 's' : '') . '-inner' }}">
                 {{-- MEMO: ↑↑↑ もとは is_empty() --}}
-                {{-- {include file='../_common/_form_search_today.tpl'} --}}
-                @include('rsv.common._form_search_today')
+                {{-- {include file='../_common/_form_search_normal.tpl'} --}}
+                @include('rsv.common._form_search_normal')
             </div>
         </div>
-    @endif
+        {{-- 今すぐ泊まれる宿 --}}
+        @if ($search_condition['form']['midnight'])
+            <div class="{{ 'sfm-today' . $bgcolor . (!is_null($piece['hotels'][0]['hotel_cd']) ? 's' : '') }}" name="search-cat_today_box" @if (!$search_condition['form']['midnight']['current_status']) style="display: none;" @endif>
+                {{-- MEMO: ↑↑↑ もとは is_empty() --}}
+                <div class="{{ 'sfm-today' . $bgcolor . (!is_null($piece['hotels'][0]['hotel_cd']) ? 's' : '') . '-inner' }}">
+                    {{-- MEMO: ↑↑↑ もとは is_empty() --}}
+                    {{-- {include file='../_common/_form_search_today.tpl'} --}}
+                    @include('rsv.common._form_search_today')
+                </div>
+            </div>
+        @endif
 
-    {{-- ＪＲ＋宿泊 --}}
-    {{-- TODO: ラジオボタンで表示が切り替わらない。 --}}
-    @if ($vhotel['jrc_hotel_cd'] || is_null($piece['hotels'][0]['hotel_cd']))
-        {{-- MEMO: ↑↑↑ もとは is_empty() --}}
-        <div class="{{ 'sfm-jrc' . $bgcolor . (!is_null($piece['hotels'][0]['hotel_cd']) ? 's' : '') }} " name="search-cat_jrc_box" style="display: none;">
+        {{-- ＪＲ＋宿泊 --}}
+        {{-- TODO: ラジオボタンで表示が切り替わらない。 --}}
+        @if ((array_key_exists('jrc_hotel_cd', $vhotel) && $vhotel['jrc_hotel_cd']) || is_null($piece['hotels'][0]['hotel_cd']))
             {{-- MEMO: ↑↑↑ もとは is_empty() --}}
-            <div class="{{ 'sfm-jrc' . $bgcolor . (!is_null($piece['hotels'][0]['hotel_cd']) ? 's' : '') . '-inner' }}">
+            <div class="{{ 'sfm-jrc' . $bgcolor . (!is_null($piece['hotels'][0]['hotel_cd']) ? 's' : '') }}" name="search-cat_jrc_box" style="display: none;">
                 {{-- MEMO: ↑↑↑ もとは is_empty() --}}
-                {{-- {include file='../_common/_form_search_jrc.tpl'} --}}
-                @include('rsv.common._form_search_jrc')
+                <div class="{{ 'sfm-jrc' . $bgcolor . (!is_null($piece['hotels'][0]['hotel_cd']) ? 's' : '') . '-inner' }}">
+                    {{-- MEMO: ↑↑↑ もとは is_empty() --}}
+                    {{-- {include file='../_common/_form_search_jrc.tpl'} --}}
+                    @include('rsv.common._form_search_jrc')
+                </div>
             </div>
-        </div>
-    @endif
-</div>
-@if (!is_null($piece['hotels'][0]['hotel_cd']))
-    {{-- MEMO: ↑↑↑ もとは is_empty() --}}
+        @endif
     </div>
-@endif
+</div>

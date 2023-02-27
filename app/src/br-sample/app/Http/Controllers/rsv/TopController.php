@@ -20,11 +20,7 @@ class TopController extends Controller
             'keywords' => $keywords,
             'search_condition' => $searchCondition,
 
-            // TODO: ビューに渡す変数
-            'senior' => 30,
-            'area_id' => 10,
-            'place_cd' => 10,
-            'pre_uri' => '',
+            // MEMO: 未定義変数でエラーになるため、影響の出ないであろう値をセット
             'piece' => [
                 'hotels' => [
                     [
@@ -32,15 +28,42 @@ class TopController extends Controller
                     ],
                 ],
             ],
-            'bgcolor' => '',
+            'senior' => null,
+            'area_id' => null,
+            'place_cd' => null,
+            'pre_uri' => null, // MEMO: 移植元で、値がセットされている箇所が見られない
             'params' => [
-                'child1' => 1,
-                'child2' => 1,
-                'child3' => 1,
-                'child4' => 1,
-                'child5' => 1,
+                'child1' => $request->input('child1', 0),
+                'child2' => $request->input('child2', 0),
+                'child3' => $request->input('child3', 0),
+                'child4' => $request->input('child4', 0),
+                'child5' => $request->input('child5', 0),
             ],
-            'top_attention' => (object)[],
+
+            // TODO: ビューに渡す変数
+            'top_attention' => (object)[
+                'display_status' => 2,
+                'display_attention' => [
+                    [
+                        'jwest_word' => '',
+                        'jwest_url' => '',
+                        'url' => '',
+                        'word' => 'テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト',
+                    ],
+                    [
+                        'jwest_word' => '',
+                        'jwest_url' => '',
+                        'url' => '',
+                        'word' => 'テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト',
+                    ],
+                    [
+                        'jwest_word' => '',
+                        'jwest_url' => '',
+                        'url' => '',
+                        'word' => 'テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト',
+                    ],
+                ],
+            ],
         ]);
     }
 }

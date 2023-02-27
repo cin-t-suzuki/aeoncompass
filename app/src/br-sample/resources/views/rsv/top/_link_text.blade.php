@@ -1,33 +1,5 @@
 {{-- MEMO: 移植元 public\app\rsv\view2\top\_link_text.tpl --}}
 
-{{-- TODO: コントローラから変数を渡す。 --}}
-@php
-    $top_attention = (object) [
-        'display_status' => 2,
-        'display_attention' => [
-            [
-                'jwest_word' => '',
-                'jwest_url' => '',
-                'url' => '',
-                'word' => 'テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト',
-            ],
-            [
-                'jwest_word' => '',
-                'jwest_url' => '',
-                'url' => '',
-                'word' => 'テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト',
-            ],
-            [
-                'jwest_word' => '',
-                'jwest_url' => '',
-                'url' => '',
-                'word' => 'テキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキストテキスト',
-            ],
-        ],
-    ];
-@endphp
-
-
 @if ($top_attention->display_status == 2)
     @foreach ($top_attention->display_attention as $keys => $item)
         <li class="f">

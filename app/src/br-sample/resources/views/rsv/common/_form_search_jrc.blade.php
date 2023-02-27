@@ -3,10 +3,10 @@
 {{-- MEMO: 移植元 public\app\rsv\view2\_common\_form_search_jrc.tpl --}}
 
 @php
-    // TODO: おそらく、会員情報から表示地域を取得している
+    // TODO: 会員情報から表示地域を取得している
     $pref_id = isset($v->user->member->pref_id) ?? null;
-    
-    // TODO:
+
+    // TODO: トップページでは値がセットされていない変数
     $hotel_cd = isset($v->hotel['hotel_cd']) ?? null;
     $jrc_hotel_cd = isset($v->hotel['jrc_hotel_cd']) ?? null;
 @endphp
@@ -168,7 +168,7 @@
             </div>
         </div>
         <div style="text-align:center;">この商品は株式会社日本旅行が企画・実施しております。</div>
-        <input name="hotel_cd" type="hidden" value=" {{ $jrc_hotel_cd }}" />
+        <input name="hotel_cd" type="hidden" value="{{ $jrc_hotel_cd }}" />
     @endif
     <input name="today" type="hidden" value="{{ date('Y-m-d') }}" />
 </form>
