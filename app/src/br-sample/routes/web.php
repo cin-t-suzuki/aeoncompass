@@ -315,3 +315,7 @@ Route::get('/dl/reserveck.csv', [\App\Http\Controllers\ctl\BrReserveCkController
 
 // 送客請求実績確認
 Route::get('/ctl/brdemandresult/list', [\App\Http\Controllers\ctl\BrDemandResultController::class, 'list'])->name('ctl.BrDemandResult.list');
+
+// プランメンテナンス画面 部屋追加・部屋編集
+Route::match(['get','post'], '/ctl/htlsroom2/new', [\App\Http\Controllers\ctl\Htlsroom2Controller::class, 'new'])->name('ctl.htlsroom2.new');
+Route::match(['get','post'], '/ctl/htlsroom2/create', [\App\Http\Controllers\ctl\Htlsroom2Controller::class, 'create'])->name('ctl.htlsroom2.create');
