@@ -3,7 +3,6 @@
 namespace App\Services\Rsv;
 
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use App\Common\DateUtil;
 
 class TopService
@@ -957,7 +956,6 @@ class TopService
 
         return $a_places;
     }
-
 
     /**
      * 注目文言取得

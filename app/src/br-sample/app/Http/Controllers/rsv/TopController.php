@@ -8,6 +8,13 @@ use Illuminate\Http\Request;
 
 class TopController extends Controller
 {
+    /**
+     * トップ画面表示
+     *
+     * @param Request $request
+     * @param Service $service
+     * @return Illuminate\Http\Response
+     */
     public function index(Request $request, Service $service)
     {
         // キーワード検索のおすすめキーワード
