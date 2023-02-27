@@ -958,4 +958,55 @@ class TopService
 
         return $a_places;
     }
+
+
+    // 注目文言取得
+    // MEMO: 移植元 public\app\rsv\models\TopModel.php set_attention()
+    protected function set_attention()
+    {
+        $s_sql =
+            <<<SQL
+				select attention_id,
+					   display_status
+				from (
+					select attention_id,
+					       start_date,
+						   display_flag,
+						   display_status
+					from top_attention
+					where display_flag = 1
+					and   start_date <= sysdate
+					order by start_date desc
+				)
+				where ROWNUM <= 1
+
+SQL;
+
+        $_oracle = _Oracle::getInstance();
+        $a_attention = $_oracle->find_by_sql($s_sql, array());
+        $attention_id = $a_attention[0]['attention_id'];
+        $display_status = $a_attention[0]['display_status'];
+        $send_param = array(
+            'attention_id' => $attention_id,
+            'display_status' => $display_status,
+        );
+
+        $s_sql =
+            <<<SQL
+				select attention_detail_id,
+				       order_no,
+					   word,
+					   url,
+					   jwest_word,
+					   jwest_url
+				from top_attention_detail
+				where attention_id = :attention_id
+				and	  order_no <= :display_status
+				order by  order_no asc
+SQL;
+        $_oracle = _Oracle::getInstance();
+        $a_attention_detail = $_oracle->find_by_sql($s_sql, $send_param);
+        $this->_assign->top_attention->display_attention = $a_attention_detail;
+        $this->_assign->top_attention->display_status = $display_status;
+    }
 }
