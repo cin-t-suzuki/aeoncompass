@@ -27,6 +27,7 @@ Route::namespace("App\Http\Controllers\rsv")->prefix("rsv")->group(function(){
 		Route::get('/{hotel_cd}', 'info')->name('rsv.hotel.info');
 	});
 });
+Route::get('/rsv/device', [\App\Http\Controllers\rsv\DeviceController::class, 'index'])->name('rsv.device');
 
 
 /**
