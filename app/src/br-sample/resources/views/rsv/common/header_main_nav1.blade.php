@@ -31,12 +31,12 @@
         <div class="pgh1-logo">
             <h1 class="logo">
                 @if (\Route::currentRouteName()=='rsv.top')<a href="{{-- $v->env.path_base --}}/">@endif
-                <img src="{{ asset('/img/pg/pgh-logo2.gif') }}" width="170" height="70" alt="旅館・ホテル予約のベストリザーブ・宿ぷらざ" title="旅館・ホテル予約のベストリザーブ・宿ぷらざ" />
+                <img src="{{ asset('/img/pg/pgh-logo2.gif') }}" width="170" height="70" alt="旅館・ホテル予約のイオンコンパスホテル" title="旅館・ホテル予約のイオンコンパスホテル" />
                 @if (\Route::currentRouteName()=='rsv.top')</a>@endif
             </h1>
         </div>
         <div class="pgh1-catch">
-            <h2 class="catch">レジャー・ビジネスに！国内の宿泊予約サイト。旅館・ホテルの予約はベストリザーブ・宿ぷらざで。</h2>
+            <h2 class="catch">レジャー・ビジネスに！国内の宿泊予約サイト。旅館・ホテルの予約はイオンコンパスホテルで。</h2>
             <div class="today"></div>
         </div>
         <div class="pgh1-usr pgh1-usr-guest" style="display:none;">

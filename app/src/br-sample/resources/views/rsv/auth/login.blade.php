@@ -39,21 +39,12 @@
                             <h2>会員認証</h2>
                             <div class="reserve_box reserve_stay_box clearfix">
                                 <div class="reserve_stay_box_inner" style="padding-bottom: 320px;">
-
-                                    {{ Form::open(['route' => 'rsv.auth.eplogin.authenticate', 'method' => 'post']) }}
-                                    <div style=" width: 50%; float: left;">
-                                        <h3>EPARK IDでログイン</h3>
-                                        <p>EPARKのアカウントでログインを行います。</p>
-                                        <button class="login_button_epk" name="login_button_epk" type="submit">EPARK IDでログイン</button>
-                                    </div>
-                                    {{ Form::close() }}
-
                                     {{ Form::open(['route' => 'rsv.auth.login.authenticate', 'method' => 'post']) }}
 
                                     <div style=" width: 50%; float: left;">
-                                        <h3>ベストリザーブ会員IDでログインする</h3>
+                                        <h3>イオンコンパス会員IDでログインする</h3>
                                         @if (!$errors->any())
-                                            <p>ベストリザーブのアカウントログインを行います。<br>
+                                            <p>イオンコンパスのアカウントログインを行います。<br>
                                             </p>
                                         @endif
                                         <dl>
@@ -67,7 +58,7 @@
                                             </dd>
                                         </dl>
 
-                                        <button class="login_button login_button_rsv" name="login_button_rsv" type="submit">ベストリザーブ IDでログイン</button>
+                                        <button class="login_button login_button_rsv" name="login_button_rsv" type="submit">イオンコンパス IDでログイン</button>
                                         <div style="margin: 13px 60px;">
                                             {{-- {include file='../_common/_message_login_auth.tpl' msg1_flg=true msg2_flg=false msg3_flg=false} --}}
                                             @include('rsv.common.message_login_auth', [

@@ -323,7 +323,7 @@
                     <div style="margin:0 0 10px 7px;text-align:right; border:2px solid #c00; width:176px;">
                         {{-- {include file="./_link_smartphone.tpl"} --}}
                         @php
-                            $alt = 'スマートフォン版ベストリザーブ・宿ぷらざ';
+                            $alt = 'スマートフォン版イオンコンパスホテル';
                             $uri = '/sp/';
                             $img = '/img/cnr/spqr/banner-176-144-spqr.gif';
                         @endphp
@@ -346,7 +346,7 @@
                         <div class="cont">
                             <div class="info">
                                 <h5>
-                                    <a href="https://www.facebook.com/bestrsv" target="_blank">ベストリザーブ・宿<br />ぷらざ運用ページ</a>
+                                    <a href="https://www.facebook.com/bestrsv" target="_blank">イオンコンパス運用ページ</a>
                                 </h5>
                                 <iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.bestrsv.com%2F&amp;send=false&amp;layout=button_count&amp;width=450&amp;show_faces=true&amp;font&amp;colorscheme=light&amp;action=like&amp;height=21" style="border:none; overflow:hidden; width:70px; height:21px;" scrolling="no" frameborder="0" allowTransparency="true">
                                 </iframe>
@@ -358,15 +358,15 @@
                 </div>
 
                 {{-- EPARKトラベルバナー ここから --}}
-                <div id="pgh2">
+                {{-- <div id="pgh2">
                     <div class="pg">
                         <a class="ept_banner" href="http://eparktravel.{{ config('app.env') != 'product' ? 'dev.' : '' }}bestrsv.com/lp/epark/" target="_blank">
                             <div class="pgh2-inner pgh2-top">
-                                2019年2月28日　EPARKとベストリザーブが連携し宿泊予約サイト『EPARKトラベル』をオープンしました！！　→　詳しくはこちらをクリック！
+                                2019年2月28日　EPARKとイオンコンパスが連携し宿泊予約サイト『EPARKトラベル』をオープンしました！！　→　詳しくはこちらをクリック！
                             </div>
                         </a>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>

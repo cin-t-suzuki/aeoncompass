@@ -20,12 +20,12 @@ pgh1_mnv : メインナビゲーション
         <div class="pgh1-logo">
             <h1 class="logo">
                 <a href="{{ route('rsv.top') }}">
-                    <img src="{{ asset('/img/pg/pgh-logo2.gif') }}" title="旅館・ホテル予約のベストリザーブ・宿ぷらざ" alt="旅館・ホテル予約のベストリザーブ・宿ぷらざ" width="170" height="70" />
+                    <img src="{{ asset('/img/pg/pgh-logo2.gif') }}" title="イオンコンパスホテル予約" alt="旅館・ホテル予約のイオンコンパスホテル" width="170" height="70" />
                 </a>
             </h1>
         </div>
         <div class="pgh1-catch">
-            <h2 class="catch">レジャー・ビジネスに！国内の宿泊予約サイト。旅館・ホテルの予約はベストリザーブ・宿ぷらざで。</h2>
+            <h2 class="catch">レジャー・ビジネスに！国内の宿泊予約サイト。旅館・ホテルの予約はイオンコンパスで。</h2>
             <div class="today">
             </div>
         </div>

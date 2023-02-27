@@ -1,13 +1,13 @@
 {{-- MEMO: ↓ public\app\rsv\view2\_common\_header.tpl --}}
 
 {{-- 説明、キーワード、タイトルの定型を設定 --}}
-{{-- @set($regdesc, '日本全国宿泊予約なら「ベストリザーブ・宿ぷらざ」、レンタカー予約もお得です。さらに新幹線とお宿がセットになったお得なプランが満載のＪＲコレクション。インターネットで楽々即時予約。便利でお得なポイント貯めて！使えちゃう！')
+{{-- @set($regdesc, '日本全国宿泊予約なら「イオンコンパスホテル」、レンタカー予約もお得です。さらに新幹線とお宿がセットになったお得なプランが満載のＪＲコレクション。インターネットで楽々即時予約。便利でお得なポイント貯めて！使えちゃう！')
 @set($regwords, '旅館,ホテル,ビジネスホテル,ホテル予約,予約,宿泊,格安,割引,レジャー,出張,宿泊予約')
-@set($regtitle, '旅館・ホテル・ビジネスホテルの予約はベストリザーブ') --}}
+@set($regtitle, '旅館・ホテル・ビジネスホテルの予約はイオンコンパスホテル') --}}
 @php
-    $regdesc = '日本全国宿泊予約なら「ベストリザーブ・宿ぷらざ」、レンタカー予約もお得です。さらに新幹線とお宿がセットになったお得なプランが満載のＪＲコレクション。インターネットで楽々即時予約。便利でお得なポイント貯めて！使えちゃう！';
+    $regdesc = '日本全国宿泊予約なら「イオンコンパスホテル」、レンタカー予約もお得です。さらに新幹線とお宿がセットになったお得なプランが満載のＪＲコレクション。インターネットで楽々即時予約。便利でお得なポイント貯めて！使えちゃう！';
     $regwords = '旅館,ホテル,ビジネスホテル,ホテル予約,予約,宿泊,格安,割引,レジャー,出張,宿泊予約';
-    $regtitle = '旅館・ホテル・ビジネスホテルの予約はベストリザーブ';
+    $regtitle = '旅館・ホテル・ビジネスホテルの予約はイオンコンパスホテル';
     $title = $title ?? '';
 @endphp
 
@@ -78,11 +78,11 @@
     <link type="image/x-icon" href="/favicon.ico" rel="shortcut icon">
     <link type="image/x-icon" href="/favicon.ico" rel="icon">
 
-    <meta property="og:title" content="ベストリザーブ・宿ぷらざ | 国内宿泊予約" />
+    <meta property="og:title" content="イオンコンパスホテル | 国内宿泊予約" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://www.bestrsv.com" />
     <meta property="og:image" content="https://www.bestrsv.com/ogp.png?1067820190123">
-    <meta property="og:site_name" content="ベストリザーブ・宿ぷらざ" />
+    <meta property="og:site_name" content="イオンコンパスホテル" />
     <meta property="og:description" content="{{ $regdesc }}" />
 
     {{-- スタイルシートの読み込み --}}

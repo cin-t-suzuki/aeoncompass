@@ -105,17 +105,13 @@
 
                             @if ($type == 'withdraw')
                                 <div>
-                                    <img src="/images/reserve/dot-sr5['gif']" alt="" width="11" height="11" />会員コード・パスワードを お忘れの方は → <a href="{{ config('app.url') }}/rsv/member/withdraw4/">こちら</a>
-                                    <img src="/images/reserve/dot-sr5['gif']" alt="" width="11" height="11" />
-                                    <br />
-                                    <br />※2011年11月28日まで旅ぷらざ会員だった方は会員コードにメールアドレスを入力してください。
+                                    <img src="/images/reserve/dot-sr5.gif" alt="" width="11" height="11" />会員コード・パスワードを お忘れの方は → <a href="{{ config('app.url') }}/rsv/member/withdraw4/">こちら</a>
+                                    <img src="/images/reserve/dot-sr5.gif" alt="" width="11" height="11" />
                                 </div>
                             @else
                                 <div>
-                                    <img src="/images/reserve/dot-sr5['gif']" alt="" width="11" height="11" />会員コード・パスワードを お忘れの方は → <a href="{{ config('app.url') }}/rsv/reminder/">こちら</a>
-                                    <img src="/images/reserve/dot-sr5['gif']" alt="" width="11" height="11" />
-                                    <br />
-                                    <br />※2011年11月28日まで旅ぷらざ会員だった方は会員コードにメールアドレスを入力してください。
+                                    <img src="/images/reserve/dot-sr5.gif" alt="" width="11" height="11" />会員コード・パスワードを お忘れの方は → <a href="{{ config('app.url') }}/rsv/reminder/">こちら</a>
+                                    <img src="/images/reserve/dot-sr5.gif" alt="" width="11" height="11" />
                                 </div>
                             @endif
 
