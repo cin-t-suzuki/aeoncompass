@@ -7,7 +7,6 @@
 @section('content')
     
 {{-- {include file='../_common/_pgh1.tpl' pgh1_mnv=1} --}}
-{{-- TODO: --}}
 @include('rsv.common._pgh1')
 
 @php

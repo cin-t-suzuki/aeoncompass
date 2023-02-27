@@ -1,9 +1,7 @@
-{{-- TODO: --}}
-
 {{-- MEMO: 移植元 public\app\rsv\view2\_common\_form_capacity.tpl --}}
 
 @php
-    // TODO: 移植元ソースで定義が見つからない変数
+    // MEMO: 移植元ソースで値がセットされていない変数
     $s_disabled = '';
 @endphp
 
@@ -25,12 +23,12 @@
             <tr>
                 <td class="text-center" style="width:100px;">
                     <div style="height:32px;">大人並の食事・<br />布団あり</div>
-                    @if (is_null($search_condition['form']['childs']['child1_capacities']))
+                    @if (is_null($search_condition['form']['children']['child1_capacities']))
                         {{-- MEMO: もとは is_empty --}}
                         受け入れなし
                     @else
                         <select class="text-right" name="child1" size="1" {{ $s_disabled }}>
-                            @foreach ($search_condition['form']['childs']['child1_capacities'] as $child)
+                            @foreach ($search_condition['form']['children']['child1_capacities'] as $child)
                                 <option value="{{ $child['capacity'] > 0 ? $child['capacity'] : '' }}" {{ $child['current_status'] ? 'selected' : '' }}>
                                     {{ $child['capacity'] }}名
                                 </option>
@@ -40,12 +38,12 @@
                 </td>
                 <td class="text-center" style="width:100px;">
                     <div style="height:32px;">子供食事・<br />布団あり</div>
-                    @if (is_null($search_condition['form']['childs']['child2_capacities']))
+                    @if (is_null($search_condition['form']['children']['child2_capacities']))
                         {{-- MEMO: もとは is_empty --}}
                         受け入れなし
                     @else
                         <select class="text-right" name="child2" size="1" {{ $s_disabled }}>
-                            @foreach ($search_condition['form']['childs']['child2_capacities'] as $child)
+                            @foreach ($search_condition['form']['children']['child2_capacities'] as $child)
                                 <option value="{{ $child['capacity'] > 0 ? $child['capacity'] : '' }}" {{ $child['current_status'] ? 'selected' : '' }}>
                                     {{ $child['capacity'] }}名
                                 </option>
@@ -55,12 +53,12 @@
                 </td>
                 <td class="text-center" style="width:100px;">
                     <div style="height:32px;">子供食事あり</div>
-                    @if (is_null($search_condition['form']['childs']['child4_capacities']))
+                    @if (is_null($search_condition['form']['children']['child4_capacities']))
                         {{-- MEMO: もとは is_empty --}}
                         受け入れなし
                     @else
                         <select class="text-right" name="child4" size="1" {{ $s_disabled }}>
-                            @foreach ($search_condition['form']['childs']['child4_capacities'] as $child)
+                            @foreach ($search_condition['form']['children']['child4_capacities'] as $child)
                                 <option value="{{ $child['capacity'] > 0 ? $child['capacity'] : '' }}" {{ $child['current_status'] ? 'selected' : '' }}>
                                     {{ $child['capacity'] }}名
                                 </option>
@@ -70,12 +68,12 @@
                 </td>
                 <td class="text-center" style="width:100px;">
                     <div style="height:32px;">布団あり</div>
-                    @if (is_null($search_condition['form']['childs']['child3_capacities']))
+                    @if (is_null($search_condition['form']['children']['child3_capacities']))
                         {{-- MEMO: もとは is_empty --}}
                         受け入れなし
                     @else
                         <select class="text-right" name="child3" size="1" {{ $s_disabled }}>
-                            @foreach ($search_condition['form']['childs']['child3_capacities'] as $child)
+                            @foreach ($search_condition['form']['children']['child3_capacities'] as $child)
                                 <option value="{{ $child['capacity'] > 0 ? $child['capacity'] : '' }}" {{ $child['current_status'] ? 'selected' : '' }}>
                                     {{ $child['capacity'] }}名
                                 </option>
@@ -85,12 +83,12 @@
                 </td>
                 <td class="text-center" style="width:100px;">
                     <div style="height:32px;">子供食事なし・<br />布団なし</div>
-                    @if (is_null($search_condition['form']['childs']['child5_capacities']))
+                    @if (is_null($search_condition['form']['children']['child5_capacities']))
                         {{-- MEMO: もとは is_empty --}}
                         受け入れなし
                     @else
                         <select class="text-right" name="child5" size="1" {{ $s_disabled }}>
-                            @foreach ($search_condition['form']['childs']['child5_capacities'] as $child)
+                            @foreach ($search_condition['form']['children']['child5_capacities'] as $child)
                                 <option value="{{ $child['capacity'] > 0 ? $child['capacity'] : '' }}" {{ $child['current_status'] ? 'selected' : '' }}>
                                     {{ $child['capacity'] }}名
                                 </option>

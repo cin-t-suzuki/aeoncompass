@@ -1,5 +1,3 @@
-{{-- TODO: --}}
-
 {{-- MEMO: 移植元: public\app\rsv\view2\top\_form_keyword.tpl --}}
 
 <div class="sfm-keyword">
@@ -15,12 +13,6 @@
         </div>
         {{ Form::close() }}
 
-        {{--
-            TODO: キーワードの実装
-            コントローラが継承した親クラスの init() メソッドの中で、変数に値を入れている。
-            public\app\rsv\lib\Controllers\Action2.php の L.730 行あたりで、駅、ランドマークとともに処理されている。
-         --}}
-        {{-- {foreach from=$v->user->partner->keyword_example.keyword item=keyword name=keyword} --}}
         @if (count($keywords) > 0)
             <ul>
                 <li class="title">☆彡 人気のおすすめキーワード</li>

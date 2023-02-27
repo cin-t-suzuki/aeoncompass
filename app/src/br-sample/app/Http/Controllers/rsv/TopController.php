@@ -22,6 +22,7 @@ class TopController extends Controller
         return view('rsv.top.index', [
             'keywords' => $keywords,
             'search_condition' => $searchCondition,
+            'top_attention' => $topAttention,
 
             // MEMO: 未定義変数でエラーになるため、影響の出ないであろう値をセット
             'piece' => [
@@ -42,9 +43,6 @@ class TopController extends Controller
                 'child4' => $request->input('child4', 0),
                 'child5' => $request->input('child5', 0),
             ],
-
-            // TODO: ビューに渡す変数
-            'top_attention' => $topAttention,
         ]);
     }
 }

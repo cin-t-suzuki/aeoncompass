@@ -52,7 +52,6 @@
 
                                     <div style=" width: 50%; float: left;">
                                         <h3>ベストリザーブ会員IDでログインする</h3>
-                                        {{-- MEMO: ↓ もとは is_empty() --}}
                                         @if (!$errors->any())
                                             <p>ベストリザーブのアカウントログインを行います。<br>
                                             </p>

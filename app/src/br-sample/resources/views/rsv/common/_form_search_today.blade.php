@@ -1,5 +1,3 @@
-{{-- TODO: --}}
-
 {{-- MEMO: 移植元 public\app\rsv\view2\_common\_form_search_today.tpl --}}
 
 @if (count($search_condition['form']['rooms']) == 0)
@@ -59,7 +57,7 @@
                             </option>
                         @endforeach
                     </select>
-                    @if ($search_condition['form']['childs']['accept_status'])
+                    @if ($search_condition['form']['children']['accept_status'])
                         <a class="panelsw" name="guests-normal" href="">子供
                             <span name="children">
                                 {{ $params['child1'] + $params['child2'] + $params['child3'] + $params['child4'] + $params['child5'] }}

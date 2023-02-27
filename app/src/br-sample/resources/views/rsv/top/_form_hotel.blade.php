@@ -1,5 +1,3 @@
-{{-- TODO: --}}
-
 {{-- MEMO: 移植元 public\app\rsv\view2\top\_form_hotel.tpl --}}
 
 <div class="sfm-keyword">

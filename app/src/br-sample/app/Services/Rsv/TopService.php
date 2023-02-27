@@ -265,23 +265,23 @@ class TopService
         }
 
         // 子供
-        $a_result['childs']['accept_status'] = true;
+        $a_result['children']['accept_status'] = true;
         if (is_null($a_control)) {
             // 施設・プラン・部屋が未指定で範囲がわからない場合は、受け入れあり
-            $a_result['childs']['accept_status'] = true;
+            $a_result['children']['accept_status'] = true;
         } else {
             // 全ての子供タイプで受け入れない場合は、うけいれない
             if (
                 $a_control->child1_accept + $a_control->child2_accept + $a_control->child3_accept
                 + $a_control->child4_accept + $a_control->child5_accept == 0
             ) {
-                $a_result['childs']['accept_status'] = false;
+                $a_result['children']['accept_status'] = false;
             }
         }
 
 
         if (
-            $a_result['childs']['accept_status']
+            $a_result['children']['accept_status']
             && (!is_null($a_control) && !is_null($a_control->capacity_max) ? $a_control->capacity_max : 10) > 1
         ) {
             for ($n_child = 1; $n_child <= 5; $n_child++) {
@@ -318,13 +318,13 @@ class TopService
                         break;
                     }
                     $b_current = false;
-                    if (!array_key_exists($child_n_capacities, $a_result['childs']) && $ao_request->missing($s_nm)) {
+                    if (!array_key_exists($child_n_capacities, $a_result['children']) && $ao_request->missing($s_nm)) {
                         $b_current = true;
                     } elseif ($n_cnt == $ao_request->input($s_nm)) {
                         $b_current = true;
                     }
-                    $a_result['childs'][$child_n_capacities][$n_cnt - 1]['capacity'] = $n_cnt;
-                    $a_result['childs'][$child_n_capacities][$n_cnt - 1]['current_status'] = $b_current;
+                    $a_result['children'][$child_n_capacities][$n_cnt - 1]['capacity'] = $n_cnt;
+                    $a_result['children'][$child_n_capacities][$n_cnt - 1]['current_status'] = $b_current;
                 }
             }
         }
@@ -597,7 +597,6 @@ class TopService
                 'area_id' => substr($s_place, 1),
             ];
         } else {
-            // TODO: sql
             $s_sql = <<<SQL
                 select *
                 from

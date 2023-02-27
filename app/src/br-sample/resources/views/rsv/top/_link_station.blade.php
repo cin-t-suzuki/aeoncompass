@@ -1,8 +1,6 @@
-{{-- TODO: --}}
-
 {{-- MEMO: 移植元 public\app\rsv\view2\top\_link_station.tpl --}}
 
-{{-- TODO: レイアウト崩れ --}}
+{{-- TODO: レイアウト崩れ。デザイン修正で対応 --}}
 
 <div class="sfm-station">
     <div class="sfm-station-inner">

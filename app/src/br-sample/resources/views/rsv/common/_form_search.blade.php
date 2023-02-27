@@ -9,7 +9,6 @@
     $bgcolor = '';
 @endphp
 @if (!is_null($piece['hotels'][0]['hotel_cd']))
-    {{-- MEMO: ↑↑↑ もとは is_empty() --}}
     @php
         $ihotel = $piece['hotels'][0];
         $vhotel = $values['hotels'][$ihotel['hotel_cd']];
@@ -23,7 +22,6 @@
             {{ $vhotel['hotel_nm'] }}
         </div>
         @if (!is_null($ihotel['plans'][0]['plan_id']))
-            {{-- MEMO: ↑↑↑ もとは is_empty() --}}
             @php
                 $iplan = $ihotel['plans'][0];
                 $iroom = $iplan['plan_rooms'][0];
@@ -33,7 +31,6 @@
             <div class="sfm-plan_nm" style="margin-top:0.5em;padding: 0 0 0 46px;background:url(/img/lhd/lhd-plan.gif) left top no-repeat;color:#005e8e">
                 {{ $vplan['plan_nm'] }}
                 @if (!is_null($vroom['room_nm']))
-                    {{-- MEMO: ↑↑↑ もとは is_empty() --}}
                     ［{{ $vroom['room_nm'] }}］
                 @endif
             </div>
@@ -49,7 +46,6 @@
 {{-- クリックし、表示の切り替え確認、この2点を必ず確認してください。 --}}
 {{-- -------------------------------------------------------------------------- --}}
 <div @if (!is_null($piece['hotels'][0]['hotel_cd'])) style="margin:0 auto;width:344px;" @endif>
-    {{-- MEMO: ↑↑↑ もとは is_empty() --}}
     <div class="sfm-search">
         <div class="sfm-cat-box">
             <ul class="clearfix">
@@ -67,14 +63,12 @@
                 @endif
                 {{-- JR＋宿泊 --}}
                 @if ((array_key_exists('jrc_hotel_cd', $vhotel) && $vhotel['jrc_hotel_cd']) || is_null($piece['hotels'][0]['hotel_cd']))
-                    {{-- MEMO: ↑↑↑ もとは is_empty() --}}
                     <li class="jqs-jrc">
                         <input class="btnimg jqs-tab {{ 'tab-jrc' . $bgcolor }}" id="sfm-radio02" name="search-cat" type="radio" value="jrc">
                         <label name="search-cat" for="sfm-radio02">JR＋宿泊</label>
                     </li>
                 @endif
                 @if (!is_null($isTop) && $isTop && !$search_condition['form']['midnight']['current_status'])
-                    {{-- MEMO: ↑↑↑ もとは is_empty() --}}
                     {{-- 高速バス予約 --}}
                     <li>
                         <input class="jqs-tabLink" id="sfm-radio04" name="search-cat" type="radio" value="bus" onclick="window.open('/ro/tabiplaza-bus/')">
@@ -85,9 +79,7 @@
         </div>
         {{-- 国内宿泊 --}}
         <div class="{{ 'sfm-normal2' . $bgcolor . (!is_null($piece['hotels'][0]['hotel_cd']) ? 's' : '') }} " name="search-cat_normal_box" @if ($search_condition['form']['midnight']['current_status']) style="display: none;" @endif>
-            {{-- MEMO: ↑↑↑ もとは is_empty() --}}
             <div class="{{ 'sfm-normal2' . $bgcolor . (!is_null($piece['hotels'][0]['hotel_cd']) ? 's' : '') . '-inner' }}">
-                {{-- MEMO: ↑↑↑ もとは is_empty() --}}
                 {{-- {include file='../_common/_form_search_normal.tpl'} --}}
                 @include('rsv.common._form_search_normal')
             </div>
@@ -95,9 +87,7 @@
         {{-- 今すぐ泊まれる宿 --}}
         @if ($search_condition['form']['midnight'])
             <div class="{{ 'sfm-today' . $bgcolor . (!is_null($piece['hotels'][0]['hotel_cd']) ? 's' : '') }}" name="search-cat_today_box" @if (!$search_condition['form']['midnight']['current_status']) style="display: none;" @endif>
-                {{-- MEMO: ↑↑↑ もとは is_empty() --}}
                 <div class="{{ 'sfm-today' . $bgcolor . (!is_null($piece['hotels'][0]['hotel_cd']) ? 's' : '') . '-inner' }}">
-                    {{-- MEMO: ↑↑↑ もとは is_empty() --}}
                     {{-- {include file='../_common/_form_search_today.tpl'} --}}
                     @include('rsv.common._form_search_today')
                 </div>
@@ -105,13 +95,10 @@
         @endif
 
         {{-- ＪＲ＋宿泊 --}}
-        {{-- TODO: ラジオボタンで表示が切り替わらない。 --}}
+        {{-- TODO: ラジオボタンで表示が切り替わらない。JR+宿泊 (日本旅行) を使用するか不確定なため保留 --}}
         @if ((array_key_exists('jrc_hotel_cd', $vhotel) && $vhotel['jrc_hotel_cd']) || is_null($piece['hotels'][0]['hotel_cd']))
-            {{-- MEMO: ↑↑↑ もとは is_empty() --}}
             <div class="{{ 'sfm-jrc' . $bgcolor . (!is_null($piece['hotels'][0]['hotel_cd']) ? 's' : '') }}" name="search-cat_jrc_box" style="display: none;">
-                {{-- MEMO: ↑↑↑ もとは is_empty() --}}
                 <div class="{{ 'sfm-jrc' . $bgcolor . (!is_null($piece['hotels'][0]['hotel_cd']) ? 's' : '') . '-inner' }}">
-                    {{-- MEMO: ↑↑↑ もとは is_empty() --}}
                     {{-- {include file='../_common/_form_search_jrc.tpl'} --}}
                     @include('rsv.common._form_search_jrc')
                 </div>

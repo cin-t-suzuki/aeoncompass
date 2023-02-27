@@ -1,12 +1,10 @@
-{{-- TODO: --}}
-
 {{-- MEMO: 移植元 public\app\rsv\view2\_common\_form_search_jrc.tpl --}}
 
 @php
-    // TODO: 会員情報から表示地域を取得している
+    // TODO: 会員情報から表示地域を取得している。他のページで読み込まれた時に確認。
     $pref_id = isset($v->user->member->pref_id) ?? null;
 
-    // TODO: トップページでは値がセットされていない変数
+    // TODO: トップページでは値がセットされていない変数。他のページで読み込まれた時に確認。
     $hotel_cd = isset($v->hotel['hotel_cd']) ?? null;
     $jrc_hotel_cd = isset($v->hotel['jrc_hotel_cd']) ?? null;
 @endphp

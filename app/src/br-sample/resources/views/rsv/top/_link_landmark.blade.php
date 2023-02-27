@@ -1,5 +1,3 @@
-{{-- TODO: --}}
-
 {{-- MEMO: 移植元 public\app\rsv\view2\top\_link_landmark.tpl --}}
 
 <div class="sfm-landmark">

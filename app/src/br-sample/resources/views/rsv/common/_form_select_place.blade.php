@@ -1,5 +1,3 @@
-{{-- TODO: --}}
-
 {{-- MEMO: 移植元 public\app\rsv\view2\_common\_form_select_place.tpl --}}
 
 <select name="place_p" size="1">

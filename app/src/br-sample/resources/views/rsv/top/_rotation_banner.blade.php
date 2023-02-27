@@ -1,5 +1,3 @@
-{{-- TODO: --}}
-
 {{-- MEMO: 移植元 public\app\rsv\view2\top\_rotation_banner.tpl --}}
 {{--
     MEMO: 日付を条件に表示・非表示を制御している箇所は、適宜削除している。
