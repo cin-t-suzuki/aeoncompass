@@ -315,3 +315,10 @@ Route::get('/dl/reserveck.csv', [\App\Http\Controllers\ctl\BrReserveCkController
 
 // 送客請求実績確認
 Route::get('/ctl/brdemandresult/list', [\App\Http\Controllers\ctl\BrDemandResultController::class, 'list'])->name('ctl.BrDemandResult.list');
+
+// プラン手仕舞の調整
+Route::match(['get', 'post'], '/ctl/htlsplanoffer/index', [\App\Http\Controllers\ctl\HtlsPlanOfferController::class, 'index'])->name('ctl.htlsplanoffer.index');
+Route::match(['get', 'post'], '/ctl/htlsplanoffer/list', [\App\Http\Controllers\ctl\HtlsPlanOfferController::class, 'list'])->name('ctl.htlsplanoffer.list');
+Route::match(['get', 'post'], '/ctl/htlsplanoffer/edit', [\App\Http\Controllers\ctl\HtlsPlanOfferController::class, 'edit'])->name('ctl.htlsplanoffer.edit');
+Route::match(['get', 'post'], '/ctl/htlsplanoffer/confirm', [\App\Http\Controllers\ctl\HtlsPlanOfferController::class, 'confirm'])->name('ctl.htlsplanoffer.confirm');
+Route::match(['get', 'post'], '/ctl/htlsplanoffer/update', [\App\Http\Controllers\ctl\HtlsPlanOfferController::class, 'update'])->name('ctl.htlsplanoffer.update');

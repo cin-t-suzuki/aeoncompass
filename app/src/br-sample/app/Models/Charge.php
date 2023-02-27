@@ -14,6 +14,53 @@ class Charge extends CommonDBModel
 {
     use Traits;
 
+    protected $table = "charge";
+
+    /**
+     * モデルのIDを自動増分するか
+     *
+     * @var bool
+     */
+    public $incrementing = false;
+
+    /**
+     * モデルにタイムスタンプを付けるか
+     *
+     * MEMO: 独自実装でタイムスタンプを設定しているため、Laravel 側では設定しない。
+     * HACK: (工数次第) Laravel の機能を使ったほうがよい気もする。
+     *
+     * @var bool
+     */
+    public $timestamps = false;
+    public const CREATED_AT = 'entry_ts';
+    public const UPDATED_AT = 'modify_ts';
+
+    /**
+     * 複数代入可能な属性
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'hotel_cd',
+        'room_id',
+        'plan_id',
+        'partner_group_id',
+        'capacity',
+        'date_ymd',
+        'usual_charge',
+        'usual_charge_revise',
+        'sales_charge',
+        'sales_charge_revise',
+        'accept_status',
+        'accept_s_dtm',
+        'accept_e_dtm',
+        'low_price_status',
+        'entry_cd',
+        'entry_ts',
+        'modify_cd',
+        'modify_ts',
+    ];
+
     public function __construct()
     {
         // カラム情報の設定

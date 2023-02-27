@@ -40,8 +40,8 @@
         【室数・料金・期間の調整】
       @else
         {!! Form::open(['route' => ['ctl.htlsroomoffer.index'], 'method' => 'post','style' => 'display:inline;']) !!}
-          <input type="hidden" name="target_cd"        value="{{$views->target_cd}}" />
-          <input type="hidden" name="partner_group_id" value="{{$views->partner_group_id}}" />
+          <input type="hidden" name="target_cd"        value="{{$target_cd}}" />
+          <input type="hidden" name="partner_group_id" value="{{$partner_group_id}}" />
           <input type="submit" value="室数・料金・期間の調整" />
         {!! Form::close() !!}
       @endif
@@ -51,16 +51,16 @@
         【プランメンテナンス】
       @else
         {!! Form::open(['route' => ['ctl.htlsroomplan2.list'], 'method' => 'post','style' => 'display:inline;']) !!}
-          <input type="hidden" name="target_cd"        value="{{$views->target_cd}}" />
-          <input type="hidden" name="partner_group_id" value="{{$views->partner_group_id}}" />
+          <input type="hidden" name="target_cd"        value="{{$target_cd}}" />
+          <input type="hidden" name="partner_group_id" value="{{$partner_group_id}}" />
           <input type="submit" value="プランメンテナンス" />
         {!! Form::close() !!}
       @endif
     </td>
     <td>
       {!! Form::open(['route' => ['ctl.htlreserve'], 'method' => 'post','style' => 'display:inline;']) !!}
-        <input type="hidden" name="target_cd"        value="{{$views->target_cd}}" />
-        <input type="hidden" name="partner_group_id" value="{{$views->partner_group_id}}" />
+        <input type="hidden" name="target_cd"        value="{{$target_cd}}" />
+        <input type="hidden" name="partner_group_id" value="{{$partner_group_id}}" />
         <input type="submit" value="予約情報の確認" />
       {!! Form::close() !!}
     </td>
@@ -84,7 +84,7 @@
     @if($is_edit_jrset)
     <td>
       {!! Form::open(['route' => ['ctl.htlsroomplandp'], 'method' => 'post','style' => 'display:inline;']) !!}
-        <input type="hidden" name="target_cd"        value="{{$views->target_cd}}" />
+        <input type="hidden" name="target_cd"        value="{{$target_cd}}" />
         <input type="submit" value="JRコレクション審査状況" />
       {!! Form::close() !!}
     </td>
@@ -95,8 +95,8 @@
       【PMSコード】
       @else
         {!! Form::open(['route' => ['ctl.pmscode'], 'method' => 'post','style' => 'display:inline;']) !!}
-          <input type="hidden" name="target_cd"        value="{{$views->target_cd}}" />
-          <input type="hidden" name="partner_group_id" value="{{$views->partner_group_id}}" />
+          <input type="hidden" name="target_cd"        value="{{$target_cd}}" />
+          <input type="hidden" name="partner_group_id" value="{{$partner_group_id}}" />
           <input type="submit" value="PMSコード" />
         {!! Form::close() !!}
       @endif
