@@ -27,7 +27,7 @@ class Htlsroom2Service
         'element_value_id[1]'       => 'integer',
         'element_value_id[2]'       => 'integer',
         'element_value_id[3]'       => 'integer',
-        'Room_NetWork.network'      => 'required|integer',
+        'Room_NetWork.network'      => 'integer',
         'Room_NetWork.rental'       => 'integer',
         'Room_NetWork.connector'    => 'integer',
         'Room_NetWork.network_note' => 'max:500',
@@ -177,9 +177,11 @@ class Htlsroom2Service
             }
 
             //部屋のネットワーク環境テーブルへの登録
-            if($request->Room_Network['network'] == 9 ||$request->Room_Network['network'] == 9){
-                $request->Room_Network['rental'] = null;
-                $request->Room_Network['connector'] = null;
+            if($request->Room_Network['network'] == 9 || $request->Room_Network['network'] == 0){
+                $Room_Network = $request->Room_Network;
+                $Room_Network['rental'] = null;
+                $Room_Network['connector'] = null;
+                $request->merge(['Room_Network' => $Room_Network]);
             }
             DB::table('room_network2')->insert(['hotel_cd'  => $request->target_cd,
                                                 'room_id'   => $max_order_no + 1,
@@ -277,7 +279,7 @@ class Htlsroom2Service
     }
 
     /**
-     * 
+     * get room status after registration hotel room
      */
     public function get_room_status($request, $room_id){
         $room = DB::table('room2')
@@ -319,6 +321,62 @@ class Htlsroom2Service
         $room->rooms_9 = $request->rooms_9;
 
         return $room;
+    }
+
+    /**
+     * update registered hotel room
+     */
+    public function update($request)
+    {
+        try{
+            DB::beginTransaction();
+
+            DB::table('room2')
+              ->where('hotel_cd', '=', $request->target_cd)
+              ->where('room_id', '=', $request->room_id)
+              ->update(['room_nm'       => $request->Room['room_nm'],
+                        'room_type'     => $request->Room['room_type'],
+                        'floorage_min'  => $request->Room['floorage_min'],
+                        'floorage_max'  => $request->Room['floorage_max'],
+                        'floor_unit'    => $request->Room['floor_unit'],
+                        'capacity_min'  => $request->Room['capacity_min'],
+                        'capacity_max'  => $request->Room['capacity_max'],
+                        'modify_cd'     => 'admin',
+                        'modify_ts'     => date('Y-m-d H:i:s')]);
+            
+            if($request->Room_Network['network'] == 9 ||$request->Room_Network['network'] == 0){
+                $Room_Network = $request->Room_Network;
+                $Room_Network['rental'] = null;
+                $Room_Network['connecter'] = null;
+                $request->merge(['Room_Network' => $Room_Network]);
+            }            
+            DB::table('room_network2')
+              ->where('hotel_cd', '=', $request->target_cd)
+              ->where('room_id', '=', $request->room_id)
+              ->update(['network'   => $request->Room_Network['network'],
+                        'rental'    => $request->Room_Network['rental'],
+                        'connector' => $request->Room_Network['connecter'],
+                        'modify_cd' => 'admin',
+                        'modify_ts' => date('Y-m-d H:i:s')]);
+
+            for($element_id = 1; $element_id <= 3; $element_id++){
+                DB::table('room_spec2')
+                  ->where('hotel_cd', '=', $request->target_cd)
+                  ->where('room_id', '=', $request->room_id)
+                  ->where('element_id', '=', $element_id)
+                  ->update(['element_value_id' => $request->element_value_id[$element_id],
+                            'modify_cd'        => 'admin',
+                            'modify_ts'        => date('Y-m-d H:i:s')]);
+            }
+
+            DB::commit();
+            return true;
+
+        }catch(\Exception $e){
+            DB::rollback();
+            Log::error('部屋編集失敗'.$e->getMessage());
+            return false;
+        }
     }
 
 }

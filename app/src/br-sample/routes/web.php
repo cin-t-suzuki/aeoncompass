@@ -319,3 +319,5 @@ Route::get('/ctl/brdemandresult/list', [\App\Http\Controllers\ctl\BrDemandResult
 // プランメンテナンス画面 部屋追加・部屋編集
 Route::match(['get','post'], '/ctl/htlsroom2/new', [\App\Http\Controllers\ctl\Htlsroom2Controller::class, 'new'])->name('ctl.htlsroom2.new');
 Route::match(['get','post'], '/ctl/htlsroom2/create', [\App\Http\Controllers\ctl\Htlsroom2Controller::class, 'create'])->name('ctl.htlsroom2.create');
+Route::match(['get','post'], '/ctl/htlsroom2/edit_display', [\App\Http\Controllers\ctl\Htlsroom2Controller::class, 'edit_display'])->name('ctl.htlsroom2.edit_display');
+Route::match(['get','post'], '/ctl/htlsroom2/update', [\App\Http\Controllers\ctl\Htlsroom2Controller::class, 'update'])->name('ctl.htlsroom2.update');
