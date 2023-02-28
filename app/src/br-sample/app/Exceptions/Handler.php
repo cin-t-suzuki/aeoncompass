@@ -2,6 +2,8 @@
 
 namespace App\Exceptions;
 
+use App\Exceptions\AccessesException;
+use App\Exceptions\NoInformationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
@@ -46,5 +48,28 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+    /**
+     * Render an exception into an HTTP response.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Throwable  $e
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @throws \Throwable
+     */
+    public function render($request, Throwable $e)
+    {
+        if ($e instanceof NoInformationException) {
+            // パラメータ不足エラーを表示します。
+            return response()->view('errors.no-information');
+        }
+        if ($e instanceof AccessesException) {
+            // 重複アクセスエラーを出力します。
+            return response()->view('errors.accesses');
+        }
+
+        return parent::render($request, $e);
     }
 }

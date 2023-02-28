@@ -20,6 +20,8 @@ Route::get('/', function () {
 // ↓↓↓ TODO: to be deleted
 Route::get('/404', function () {abort('404'); });
 Route::get('/500', function () {abort('500'); });
+Route::get('/no-information', function () {throw new \App\Exceptions\NoInformationException(); });
+Route::get('/accesses', function () {throw new \App\Exceptions\AccessesException(); });
 Route::get('/rsv/top', function () {return 'rsv.top'; })->name('rsv.top');
 // ↑↑↑ TODO: to be deleted
 
