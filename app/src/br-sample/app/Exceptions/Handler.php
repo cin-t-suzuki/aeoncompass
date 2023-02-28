@@ -63,11 +63,21 @@ class Handler extends ExceptionHandler
     {
         if ($e instanceof NoInformationException) {
             // パラメータ不足エラーを表示します。
-            return response()->view('errors.no-information');
+            return response()->view('errors.no-information', [
+                'errorMessages' => [
+                    'ページを表示するのに必要な情報が不足しています。',
+                    'トップページよりやり直してください。',
+                ],
+            ]);
         }
         if ($e instanceof AccessesException) {
             // 重複アクセスエラーを出力します。
-            return response()->view('errors.accesses');
+            return response()->view('errors.accesses', [
+                'errorMessages' => [
+                    '先に同様の手続きが行われ手続きが完了している可能性がございます。',
+                    '一覧ページなどでご確認の上、再度手続きください。',
+                ],
+            ]);
         }
 
         return parent::render($request, $e);
