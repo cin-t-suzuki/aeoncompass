@@ -61,4 +61,43 @@ class Staff extends Model
     {
         return $this->hasOne(StaffAccount::class, 'staff_id');
     }
+
+    // カラム
+    const COL_STAFF_ID  = "staff_id";
+    const COL_STAFF_NM  = "staff_nm";
+    const COL_STAFF_CD  = "staff_cd";
+    const COL_STAFF_STATUS  = "staff_status";
+    const COL_EMAIL  = "email";
+
+
+    /**
+     * コンストラクタ
+     */
+    public function __construct()
+    {
+        // カラム情報の設定
+    }
+
+
+    /**
+     * 主キーで取得
+     *
+     * @param string $customer_id
+     * @return array
+     */
+    public function selectByKey($staff_id)
+    {
+        $data = $this->where("staff_id", $staff_id)->get();
+        if (!is_null($data) && count($data) > 0) {
+            return [
+                self::COL_STAFF_ID  => $data[0]->staff_id,
+                self::COL_STAFF_NM  => $data[0]->staff_nm,
+                self::COL_STAFF_CD  => $data[0]->staff_cd,
+                self::COL_STAFF_STATUS  => $data[0]->staff_status,
+                self::COL_EMAIL  => $data[0]->email
+            ];
+        }
+        return null;
+    }
+
 }
