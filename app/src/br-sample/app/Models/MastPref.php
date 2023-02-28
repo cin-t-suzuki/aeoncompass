@@ -157,7 +157,7 @@ class MastPref extends CommonDBModel
                 mast_pref.{$as_order}
         SQL;
 
-        $data = DB::select($s_sql);
+        $data = DB::select($s_sql, $aa_conditions);
 
         $result = [];
         if (!is_null($data) && count($data) > 0) { //TODO 複数件

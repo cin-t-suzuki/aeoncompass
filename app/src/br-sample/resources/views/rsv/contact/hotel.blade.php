@@ -1,7 +1,11 @@
-{include file='../_common/_header.tpl' title='宿泊施設関係者の方へ・ベストリザーブ・宿ぷらざ 参画のご案内'}
-{include file='../_common/_pgh1.tpl' pgh1_mnv=1}
+@inject('service', 'App\Http\Controllers\rsv\ContactController')
 
-{literal}
+{{-- {include file='../_common/_header.tpl' title='宿泊施設関係者の方へ・ベストリザーブ・宿ぷらざ 参画のご案内'} --}}
+@extends('rsv.common.base', ['title' => '宿泊施設関係者の方へ・ベストリザーブ・宿ぷらざ 参画のご案内'])
+@include ('rsv.common._pgh1', ['pgh1_mnv' => 1])
+
+@section('page_blade')
+
 <script type="text/javascript">
 $(function() {
 $('#send_status').click(function() {
@@ -11,6 +15,19 @@ $('#send_status').click(function() {
     $('.style02').addClass('grayout');
   }
 });
+
+//旅館業登録の取得予定日欄のjs追加
+$('#travel_trade_2').click(function() {
+  if($(this).is(':checked')) {
+    $('#travel_trade_2_box').css('display','');
+  }
+});
+$('#travel_trade_1').click(function() {
+  if($(this).is(':checked')) {
+    $('#travel_trade_2_box').css('display','none');
+  }
+});
+
 });
 window.onload = function(){
 document.getElementById("send_status").onclick = function(){
@@ -26,12 +43,11 @@ document.getElementById("email2").disabled = !this.checked;
 }
 }
 </script>
-{/literal}
 
 <div id="pgh2v2">
   <div class="pg">
     <div class="pgh2-inner">
-{include file='../_common/_pgh2_inner.tpl'}
+@include ('rsv.common._pgh2_inner')
     </div>
   </div>
 </div>
@@ -39,8 +55,8 @@ document.getElementById("email2").disabled = !this.checked;
 <div id="pgc1v2">
   <div class="pg">
     <div class="pgc1-inner">
-{include file='./_pgc1_breadcrumbs.tpl'}
-{include file='./_snv_text.tpl' current='hotel'}
+@include ('rsv.contact._pgc1_breadcrumbs')
+@include ('rsv.contact._snv_text', ['current' => 'hotel'])
     </div>
   </div>
 </div>
@@ -56,7 +72,8 @@ document.getElementById("email2").disabled = !this.checked;
 
           <div id="contact_container" class="clearfix">
             <div id="contact_contents">
-              {if !$v->error->has()}
+              {{--書き換え以下であっているか？ {if !$v->error->has()} --}}
+              @if (!isset($errors))
               <div class="section">
                 <h3 class="title">ベストリザーブ・宿ぷらざとは</h3>
                 <ul class="guide1">
@@ -85,7 +102,7 @@ document.getElementById("email2").disabled = !this.checked;
 
               <div class="lp-img01"></div>
 
-              {/if}
+              @endif
 
               <div class="section">
                 <h3 class="title">資料請求</h3>
@@ -96,16 +113,20 @@ document.getElementById("email2").disabled = !this.checked;
                 <li class="step-3-1">お手続き完了</li>
                 </ul>
 
-                {if !$v->error->has()}
+                {{--書き換え以下であっているか？ {if !$v->error->has()} --}}
+                @if (!isset($errors))
                 <p class="caution">詳細資料・参画書類のご請求ご希望の場合は下記よりお申し込み下さい。</p>
-                <p>あらかじめ当社<a href="{$v->env.path_base}/about/policy/privacy/" target="_blank">プライバシーポリシー</a>に同意をお願いします。</p>
-                {else}
-                {* メッセージ *}
-                {include file='../_common/_message_org.tpl'}
+                <p>あらかじめ当社<a href="/about/policy/privacy/" target="_blank">プライバシーポリシー</a>に同意をお願いします。</p>
+                @else
+                {{-- メッセージ  --}}
+                {{-- {include file='../_common/_message_org.tpl'} --}}
+                {{-- ↑の書き換え、エラーメッセージの表示 --}}
+                {{-- ctl側に実装済の共通部品を埋め込む形でもいいか？デザイン違うが、そこまで問題ないかと思われる(幅はレスポンシブ対応時に要調整) --}}
+                @include('ctl.common.message')
 
-                {/if}
+                @endif
 
-                {include file='../contact/_form_hotel.tpl'}
+                @include('rsv.contact._form_hotel')
 
               </div>
 
@@ -120,4 +141,5 @@ document.getElementById("email2").disabled = !this.checked;
 </div>
 
 
-{include file='../_common/_footer.tpl'}
+{{-- {include file='../_common/_footer.tpl'} --}}
+@endsection

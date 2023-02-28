@@ -1,10 +1,11 @@
-{include file='../_common/_header.tpl' title='送信内容確認 - 宿泊施設関係者の方へ・ベストリザーブ・宿ぷらざ 参画のご案内'}
-{include file='../_common/_pgh1.tpl' pgh1_mnv=1}
+{{-- {include file='../_common/_header.tpl' title='送信内容確認 - 宿泊施設関係者の方へ・ベストリザーブ・宿ぷらざ 参画のご案内'} --}}
+@extends('rsv.common.base', ['title' => '宿泊施設関係者の方へ・ベストリザーブ・宿ぷらざ 参画のご案内'])
+@include ('rsv.common._pgh1', ['pgh1_mnv' => 1])
 
 <div id="pgh2v2">
   <div class="pg">
     <div class="pgh2-inner">
-{include file='../_common/_pgh2_inner.tpl'}
+@include ('rsv.common._pgh2_inner')
     </div>
   </div>
 </div>
@@ -12,8 +13,8 @@
 <div id="pgc1v2">
   <div class="pg">
     <div class="pgc1-inner">
-{include file='./_pgc1_breadcrumbs.tpl'}
-{include file='./_snv_text.tpl' current='hotel'}
+@include ('rsv.contact._pgc1_breadcrumbs')
+@include ('rsv.contact._snv_text', ['current' => 'hotel'])
     </div>
   </div>
 </div>
@@ -198,4 +199,5 @@
 </div>
 
 
-{include file='../_common/_footer.tpl'}
+{{-- {include file='../_common/_footer.tpl'} --}}
+@endsection

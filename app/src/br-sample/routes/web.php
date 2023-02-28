@@ -327,6 +327,12 @@ Route::get('/contact/customer/voice.html', [\App\Http\Controllers\rsv\ContactCon
 Route::get('/rsv/contact/customervoiceconfirm', [\App\Http\Controllers\rsv\ContactController::class, 'customerVoiceConfirm'])->name('rsv.contact.customerVoiceConfirm');
 Route::post('/rsv/contact/customervoicecomplete', [\App\Http\Controllers\rsv\ContactController::class, 'customerVoiceComplete'])->name('rsv.contact.customerVoiceComplete');
 
+//宿泊施設関係者様へ
+Route::get('/rsv/contact/hotel', [\App\Http\Controllers\rsv\ContactController::class, 'hotel'])->name('rsv.contact.hotel');
+Route::get('/rsv/contact/hotelconfirm', [\App\Http\Controllers\rsv\ContactController::class, 'hotelConfirm'])->name('rsv.contact.hotelConfirm');
+Route::get('/rsv/contact/hotelcomplete', [\App\Http\Controllers\rsv\ContactController::class, 'hotelComplete'])->name('rsv.contact.hotelComplete');
+
+
 // TOP(お問い合わせの共通bladeを出力する用、追って削除)
 Route::get('/1', [\App\Http\Controllers\rsv\ContactController::class, 'customer'])->name('rsv.top');
 Route::get('/2', [\App\Http\Controllers\rsv\ContactController::class, 'customer'])->name('rsv.auth.login');
