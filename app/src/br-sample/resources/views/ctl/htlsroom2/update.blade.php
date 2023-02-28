@@ -1,4 +1,3 @@
-<!-- {* header start *} -->
 @php
   $hotel = (object) [
     'hotel_nm' => 'ホテル',
@@ -52,7 +51,8 @@
   $service = new service;
   $staffName = 'admin';
 @endphp
-@include('ctl.common._htl_header', ['title' => '部屋登録',
+<!-- {* header start *} -->
+@include('ctl.common._htl_header', ['title' => '部屋メンテナンス',
                                     'print_flg' => 'false',
                                     'screen_type' => 'test',
                                     'no_print' => 'false',
@@ -73,7 +73,7 @@
 <!-- Hotel Information -->
 <br>
 
-<form action="{$v->env.source_path}{$v->env.module}/htlsplan/new/" method="post">
+<form action="{$v->env.source_path}{$v->env.module}/htlplan/new/" method="post">
   <!-- {* メッセージ *} -->
   @include('ctl.common.message')
 
@@ -94,33 +94,24 @@
 <!-- {* 共通確認 room_spec *} -->
 
 <!-- {* 共通確認 room_network *} -->
-  @include('ctl.htlsroom2._info_room_network')
-@if(! isset($room->roomtype_cd))
+	@include('ctl.htlsroom2._info_room_network')
 <!-- {* 共通確認 room_network *} -->
-  @include('ctl.htlsroom2._info_room_count')
-@endif
 
+<!-- {* 共通確認 room_media *} -->
+	@include('ctl.htlsroom2._info_room_media')
+<!-- {* 共通確認 room_media *} -->
 @if(isset($room->room_cd))
         <tr>
           <td nowrap  bgcolor="#EEEEFF" >部屋コード</td>
-        <td>{$v->helper->form->strip_tags($v->assign->room_cd)}</td>
-        <td><small>半角英数10文字（大文字に自動変換）</small></td>
-      </tr>
+          <td colspan="2">{{$room->room_cd}}<br /></td>
+        </tr>
 @endif
+   
   </tbody>
 </table>
-
-@if(isset($roomtype_cd))
-  <div style="text-align:right;">
-    <form action="{$v->env.source_path}{$v->env.module}/htlssettingakf/list/" method="post">
-      <input type="hidden" name="target_cd" value="{$v->assign->target_cd}" />
-      <input type="submit" value="連動在庫設定へ" />
-    </form>
-  </div>
-@endif
-
+   
 <!-- {* 部屋プランメンテナンスindexへのform *} -->
-  @include('ctl.htlsroom2._form_stock_index')
+	@include('ctl.htlsroom2._form_stock_index')
 <!-- {* 部屋プランメンテナンスindexへのform *} -->
 
 <br>
@@ -131,5 +122,5 @@
   $no_print = false;
 @endphp
 <!-- {* footer start *} -->
-@include('ctl.common._htl_footer')
+	@include('ctl.common._htl_footer')
 <!-- {* footer end *} -->
