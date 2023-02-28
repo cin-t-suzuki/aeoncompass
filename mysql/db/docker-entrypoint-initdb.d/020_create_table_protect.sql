@@ -129,3 +129,48 @@ CREATE TABLE `yho_test_token` (
     `modify_ts` datetime DEFAULT NULL,
     PRIMARY KEY (`test_token_key`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
+
+CREATE TABLE `users` (
+    `id` bigint unsigned NOT NULL AUTO_INCREMENT primary key,
+    `email` varchar(255) NOT NULL unique COMMENT 'メールアドレス',
+    `email_verified_at` timestamp NULL,
+    `password` varchar(255) NOT NULL COMMENT 'パスワード',
+    `remember_token` varchar(100) NULL,
+    `secret_question` int(1) NOT NULL COMMENT '秘密の質問',
+    `secret_answer` varchar(256) NOT NULL COMMENT '秘密の回答',
+
+    `surname_kanji` varchar(40) NOT NULL COMMENT '姓（漢字）',
+    `given_name_kanji` varchar(40) NOT NULL COMMENT '名（漢字）',
+    `surname_kana` varchar(40) NOT NULL COMMENT 'セイ（カナ）',
+    `given_name_kana` varchar(40) NOT NULL COMMENT 'メイ（カナ）',
+    `sex` int(1) NOT NULL COMMENT '性別',
+    `birth_date` date NOT NULL COMMENT '生年月日',
+    `occupation` int(2) DEFAULT NULL COMMENT 'ご職業',
+    `passport_surname` varchar(256) DEFAULT NULL COMMENT 'パスポート姓',
+    `passport_given_name` varchar(256) DEFAULT NULL COMMENT 'パスポート名',
+    `nationality` varchar(100) DEFAULT NULL COMMENT '国籍',
+    `passport_no` varchar(20) DEFAULT NULL COMMENT '旅券番号',
+    `issue_date` date DEFAULT NULL COMMENT '発行年月日',
+    `expire_date` date DEFAULT NULL COMMENT '有効期間満了日',
+    `phone_number` varchar(11) NOT NULL COMMENT '電話番号',
+    `phone_email` varchar(256) DEFAULT NULL COMMENT '携帯メール',
+    `postal_code` varchar(7) NOT NULL COMMENT '郵便番号',
+    `address1` varchar(100) NOT NULL COMMENT '住所１',
+    `address2` varchar(40) NOT NULL COMMENT '住所２',
+    `address3` varchar(40) NOT NULL COMMENT '住所３',
+    `address4` varchar(40) DEFAULT NULL COMMENT '住所４',
+    `contact_type` int(1) NOT NULL COMMENT 'ご連絡先',
+    `contact_name` varchar(100) DEFAULT NULL COMMENT 'ご連絡先名',
+    `contact_phone_number` varchar(11) DEFAULT NULL COMMENT 'ご連絡先 電話番号',
+    `contact_postal_number` varchar(7) DEFAULT NULL COMMENT 'ご連絡先 郵便番号',
+    `contact_address1` varchar(100) DEFAULT NULL COMMENT 'ご連絡先 住所1',
+    `contact_address2` varchar(40) DEFAULT NULL COMMENT 'ご連絡先 住所2',
+    `contact_address3` varchar(40) DEFAULT NULL COMMENT 'ご連絡先 住所3',
+    `contact_address4` varchar(40) DEFAULT NULL COMMENT 'ご連絡先 住所4',
+
+    `deleted_at` datetime NULL DEFAULT NULL,
+    `created_by` varchar(256) NOT NULL DEFAULT '',
+    `created_at` datetime NULL,
+    `updated_by` varchar(256) NOT NULL DEFAULT '',
+    `updated_at` datetime NULL DEFAULT NULL
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
