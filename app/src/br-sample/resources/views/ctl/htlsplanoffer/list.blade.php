@@ -934,7 +934,7 @@
                     @foreach($week_days as $day)
                         @if($day['ymd_mn_num'] < time())
                             <td class="md msg-text-deactive">
-                                @if(!empty($sale_state_plan_room[$day['ymd_num']]['plan'][$plan_id]['room'][$room_id]['accept_status_room_count']))
+                                @if(empty($sale_state_plan_room[$day['ymd_num']]['plan'][$plan_id]['room'][$room_id]['accept_status_room_count']))
                                     ×
                                 @elseif($sale_state_plan_room[$day['ymd_num']]['plan'][$plan_id]['room'][$room_id]['accept_status_room_count'] == 1)
                                     －
@@ -944,7 +944,7 @@
                             </td>
                         @elseif($day['dow_num'] == 6)
                             <td class="md wkd-sat">
-                                @if(!empty($sale_state_plan_room[$day['ymd_num']]['plan'][$plan_id]['room'][$room_id]['accept_status_room_count']))
+                                @if(empty($sale_state_plan_room[$day['ymd_num']]['plan'][$plan_id]['room'][$room_id]['accept_status_room_count']))
                                     ×
                                 @elseif($sale_state_plan_room[$day['ymd_num']]['plan'][$plan_id]['room'][$room_id]['accept_status_room_count'] == 1)
                                     －
@@ -954,7 +954,7 @@
                             </td>
                         @elseif(isset($day['is_bfo']))
                             <td class="md wkd-bfo">
-                                @if(!empty($sale_state_plan_room[$day['ymd_num']]['plan'][$plan_id]['room'][$room_id]['accept_status_room_count']))
+                                @if(empty($sale_state_plan_room[$day['ymd_num']]['plan'][$plan_id]['room'][$room_id]['accept_status_room_count']))
                                     ×
                                 @elseif($sale_state_plan_room[$day['ymd_num']]['plan'][$plan_id]['room'][$room_id]['accept_status_room_count'] == 1)
                                     －
@@ -964,7 +964,7 @@
                             </td>
                         @elseif(isset($day['is_hol']))
                             <td class="md wkd-hol">
-                                @if(!empty($sale_state_plan_room[$day['ymd_num']]['plan'][$plan_id]['room'][$room_id]['accept_status_room_count']))
+                                @if(empty($sale_state_plan_room[$day['ymd_num']]['plan'][$plan_id]['room'][$room_id]['accept_status_room_count']))
                                     ×
                                 @elseif($sale_state_plan_room[$day['ymd_num']]['plan'][$plan_id]['room'][$room_id]['accept_status_room_count'] == 1)
                                     －
@@ -974,7 +974,7 @@
                             </td>
                         @elseif($day['dow_num'] == 0)
                             <td class="md wkd-sun">
-                                @if(!empty($sale_state_plan_room[$day['ymd_num']]['plan'][$plan_id]['room'][$room_id]['accept_status_room_count']))
+                                @if(empty($sale_state_plan_room[$day['ymd_num']]['plan'][$plan_id]['room'][$room_id]['accept_status_room_count']))
                                     ×
                                 @elseif($sale_state_plan_room[$day['ymd_num']]['plan'][$plan_id]['room'][$room_id]['accept_status_room_count'] == 1)
                                     －
@@ -984,7 +984,7 @@
                             </td>
                         @else
                             <td class="md">
-                                @if(!empty($sale_state_plan_room[$day['ymd_num']]['plan'][$plan_id]['room'][$room_id]['accept_status_room_count']))
+                                @if(empty($sale_state_plan_room[$day['ymd_num']]['plan'][$plan_id]['room'][$room_id]['accept_status_room_count']))
                                     ×
                                 @elseif($sale_state_plan_room[$day['ymd_num']]['plan'][$plan_id]['room'][$room_id]['accept_status_room_count'] == 1)
                                     －
