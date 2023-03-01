@@ -19,6 +19,7 @@
 //           ------- ----------------------- ---------------
 //           ymd(w) : 2008年08月05日（火）  : Y年m月d日（j）
 //           ymd    : 2008年08月05日        : Y年m月d日
+//       y/m/d H:M:S: 2008/08/05 00:00:00   :y/m/d H:M:S
 //           y-m-d  : 2008-08-05　　        : Y-m-d
 //           y/m/d  : 2008-08-05　　        : Y/m/d
 //           ym     : 2008年08月            : Y年m月
@@ -91,6 +92,10 @@
     } elseif ( $format == 'y/m/d' ) {
 	    // Y/m/d 
 		$day = $dateUtil->to_format('Y/m/d');
+	} elseif ( $format == 'y/m/d H:M:S' )
+	{
+        // y/m/d H:M:S  
+		$day = $dateUtil->to_format('Y/m/d H:i:s');
 	} elseif ( $format == 'ym分' )
 	{
         // Y年m月分
