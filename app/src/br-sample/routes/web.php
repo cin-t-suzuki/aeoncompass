@@ -32,6 +32,10 @@ Route::namespace('App\Http\Controllers\rsv')->prefix('rsv')->group(function () {
         Route::get('/{hotel_cd}', 'info')->name('rsv.hotel.info');
     });
 });
+
+// メール送信処理後表示
+Route::get('/rsv/mail/subscribe', [\App\Http\Controllers\rsv\MailController::class, 'subscribe'])->name('rsv.mail.subscribe');
+
 /**
  * ↓↓↓ 宿泊予約 未実装の route
  */
