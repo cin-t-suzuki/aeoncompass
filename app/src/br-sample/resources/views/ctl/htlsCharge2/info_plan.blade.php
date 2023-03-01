@@ -1,3 +1,7 @@
+{{-- TODO:is_nta認証系のため追加恐らく要らない --}}
+@php
+$is_nta = false;
+@endphp
 
   {{-- プラン情報コンテナ --}}
   <div class="gen-container">

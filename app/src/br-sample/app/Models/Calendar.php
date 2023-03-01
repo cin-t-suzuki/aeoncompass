@@ -1,8 +1,14 @@
 <?php
 namespace App\Models;
+	use App\Models\common\CommonDBModel;
+	use App\Models\common\ValidationColumn;
+	use Illuminate\Support\Facades\DB;
+	use App\Common\Traits;
 
-	class Models_Calendar
+	class Calendar extends CommonDBModel
 	{
+		use Traits;
+
 		const SATDAY_NUM = 6; // 土曜日
 		
 		// メンバ変数定義
@@ -24,7 +30,8 @@ namespace App\Models;
 				$this->a_charge_calendar = array();
 				$this->a_define_day_of_week = array('日', '月', '火', '水', '木', '金', '土');
 				
-				$this->o_oracle = _Oracle::getInstance();
+				//Oracleではないので、無視？
+				// $this->o_oracle = _Oracle::getInstance();
 				
 			} catch (Exception $e) {
 				throw $e;
@@ -143,7 +150,7 @@ namespace App\Models;
 				//--------------------------------------------------------------
 				// 初期化
 				//--------------------------------------------------------------
-				$this->a_calendar = array();
+				$a_calendar = array();
 				$a_tmp_calendar   = array();
 				$a_conditions     = array();
 				$s_sql            = '';
@@ -164,26 +171,31 @@ namespace App\Models;
 				
 				$s_sql =
 <<< SQL
-					select	to_char(mc.date_ymd, 'YYYY-MM-DD') as date_ymd,
+					select	date_format(mc.date_ymd, '%Y-%m-%d') as date_ymd,
 							mc.ymd,
 							mc.holiday_nm
 					from	mast_calendar mc
-					where	mc.date_ymd between to_date(:from_ymd, 'YYYY-MM-DD') and to_date(:to_ymd, 'YYYY-MM-DD')
+					where	mc.date_ymd between str_to_date(:from_ymd, '%Y-%m-%d') and str_to_date(:to_ymd, '%Y-%m-%d')
 					order by	mc.date_ymd
 SQL;
-				$a_rows = $this->o_oracle->find_by_sql($s_sql, $a_conditions);
+				$a_rows = DB::select($s_sql, $a_conditions);
 				
 				//--------------------------------------------------------------
 				// 必要な情報を追加
 				//--------------------------------------------------------------
-				foreach ( nvl($a_rows, array()) as $n_idx => $a_row ) {
+				// foreach ( nvl($a_rows, array()) as $n_idx => $a_row ) {
+					foreach ( $a_rows ?? array() as $n_idx => $a_row ) {
+
 					$a_tmp_calendar[$n_idx]            = array();
-					$a_tmp_calendar[$n_idx]['ymd']     = $a_row['date_ymd'];
-					$a_tmp_calendar[$n_idx]['ymd_num'] = strtotime($a_row['date_ymd']);
+					$a_tmp_calendar[$n_idx]['ymd']   = $a_row->{'date_ymd'};
+					$a_tmp_calendar[$n_idx]['ymd_num'] = strtotime($a_row->{'date_ymd'});
 					$a_tmp_calendar[$n_idx]['ymd_str'] = date('Y', $a_tmp_calendar[$n_idx]['ymd_num']) . '年' . ltrim(date('m', $a_tmp_calendar[$n_idx]['ymd_num']), '0') . '月' . ltrim(date('d', $a_tmp_calendar[$n_idx]['ymd_num']), '0') . '日';
 					$a_tmp_calendar[$n_idx]['md_str']  = mb_substr($a_tmp_calendar[$n_idx]['ymd_str'], 5);
 					$a_tmp_calendar[$n_idx]['dow_num'] = (int)date('w', $a_tmp_calendar[$n_idx]['ymd_num']);
 					$a_tmp_calendar[$n_idx]['dow_str'] = $this->a_define_day_of_week[$a_tmp_calendar[$n_idx]['dow_num']];
+					
+
+
 					
 					// 対象日が編集範囲外
 					if ( !($n_from_ymd <= $a_tmp_calendar[$n_idx]['ymd_num'] and $a_tmp_calendar[$n_idx]['ymd_num'] <= $n_to_ymd) ) {
@@ -192,7 +204,7 @@ SQL;
 					}
 					
 					// 対象日が祝日の場合
-					if ( !is_empty($a_row['holiday_nm']) ) {
+					if ( !empty($a_row->{'holiday_nm'}) ) {
 						// 祝日フラグを設定
 						$a_tmp_calendar[$n_idx]['is_hol'] = true;
 						
@@ -213,19 +225,21 @@ SQL;
 				//--------------------------------------------------------------
 				// 整形
 				//--------------------------------------------------------------
-				foreach ( nvl($a_tmp_calendar, array()) as $n_idx => $a_row ) {
+				foreach ( $a_tmp_calendar ?? array() as $n_idx => $a_row ) {
 					
 					$n_key_ym = date('Ym', $a_row['ymd_num']);
 					
 					// 月ヘッダー表示用のデータを設定
-					$this->a_calendar[$n_week_idx]['header_month'][$n_key_ym]['col_count'] = nvl($this->a_calendar[$n_week_idx]['header_month'][$n_key_ym]['col_count'], 0) + 1;
-					
-					if ( is_empty($this->a_calendar[$n_week_idx]['header_month'][$n_key_ym]['col_value']) ) {
-						$this->a_calendar[$n_week_idx]['header_month'][$n_key_ym]['col_value'] = date('Y', $a_row['ymd_num']) . '年' . ltrim(date('m', $a_row['ymd_num']), '0') . '月';
+					$a_calendar[$n_week_idx]['header_month'][$n_key_ym]['col_count'] = ($a_calendar[$n_week_idx]['header_month'][$n_key_ym]['col_count'] ?? 0) + 1;
+					//移植前はcol_valueとなっていたが、col_valueのkeyが見つからないのでエラー
+					// $a_calendar[$n_week_idx]['header_month'][$n_key_ym]['col_value'] = ($a_calendar[$n_week_idx]['header_month'][$n_key_ym]['col_count'] ?? 0) + 1;
+
+					if (empty($a_calendar[$n_week_idx]['header_month'][$n_key_ym]['col_value'])) {
+						$a_calendar[$n_week_idx]['header_month'][$n_key_ym]['col_value'] = date('Y', $a_row['ymd_num']) . '年' . ltrim(date('m', $a_row['ymd_num']), '0') . '月';
 					}
 					
 					// 各日のデータ設定
-					$this->a_calendar[$n_week_idx]['values'][] = $a_row;
+					$a_calendar[$n_week_idx]['values'][] = $a_row;
 					
 					if ( $n_row_idx % 7 == 0 ) {
 					
@@ -236,6 +250,7 @@ SQL;
 					
 					$n_row_idx++;
 				}
+				return $a_calendar;
 				
 			} catch (Exception $e) {
 				throw $e;

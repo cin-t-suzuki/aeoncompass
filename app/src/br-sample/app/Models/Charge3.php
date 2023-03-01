@@ -1,10 +1,16 @@
 <?php
 namespace App\Models;
-	// require_once '../models/RecordObject.php';
+	use App\Common\Traits;
+	use App\Models\common\CommonDBModel;
+	use App\Models\common\ValidationColumn;
     use App\Models\RecordObject;
+	use Illuminate\Database\Eloquent\Model;
+	use Illuminate\Support\Facades\DB;
+	use Exception;
 	
-	class Models_Charge3
+	class Charge3 extends Model
 	{
+		use Traits;
 		// メンバ変数の定義
 		protected $o_box;
 		protected $o_oracle;
@@ -23,19 +29,19 @@ namespace App\Models;
 		//======================================================================
 		// コンストラクタ
 		//======================================================================
-		function __construct()
-		{
-			try {
-				// インスタンス生成
-				$this->o_oracle = _Oracle::getInstance();
-				$this->_o_models_record_object = new Models_Record_Object(Charge::getInstance());
-				$this->_o_models_date = new Br_Models_Date();
+		// function __construct()
+		// {
+		// 	try {
+		// 		// インスタンス生成
+		// 		$this->o_oracle = _Oracle::getInstance();
+		// 		$this->_o_models_record_object = new Models_Record_Object(Charge::getInstance());
+		// 		$this->_o_models_date = new Br_Models_Date();
 				
-				$this->o_box = Zend_Controller_Front::getInstance()->getPlugin('Box')->box;
-			} catch (Exception $e) {
-				throw $e;
-			}
-		}
+		// 		$this->o_box = Zend_Controller_Front::getInstance()->getPlugin('Box')->box;
+		// 	} catch (Exception $e) {
+		// 		throw $e;
+		// 	}
+		// }
 		
 		//======================================================================
 		// メンバ変数をクリアー
@@ -292,11 +298,11 @@ SQL;
 			}
 		}
 		
-		//======================================================================
+		// ======================================================================
 		// レコードの登録
-		//
-		//======================================================================
-		public function save()
+		
+		// ======================================================================
+		public function save(array $options = [])
 		{
 			try {
 				// 登録するデータを設定
@@ -320,7 +326,7 @@ SQL;
 		// レコードの更新
 		//
 		//======================================================================
-		public function update()
+		public function update(array $attributes = [], array $options = [])
 		{
 			try {
 				// 登録するデータを設定
@@ -344,7 +350,7 @@ SQL;
 		// レコードの削除
 		//
 		//======================================================================
-		public function destroy()
+		public static function destroy()
 		{
 			try {
 				

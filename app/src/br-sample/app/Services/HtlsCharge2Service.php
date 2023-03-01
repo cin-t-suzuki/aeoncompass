@@ -11,6 +11,8 @@ namespace App\Services;
 	// require_once '../models/Calendar.php';
 	use App\Models\MatchPlanRoom;
 
+	use App\Models\Room_plan_child;
+
 	use Illuminate\Support\Facades\DB;
 	// require_once '../models/MatchPlanRoom.php';
 	// class HtlsCharge2Model extends lib_Controllers_Action2
@@ -28,6 +30,7 @@ namespace App\Services;
 		protected $a_plan_has_rooms_detail;
 		protected $a_plan_detail;
 		protected $a_operation_status_rooms;
+		//a_range_capacity_roomsをpublicで利用したい。
 		protected $a_range_capacity_rooms;
 		protected $a_plan_partner_group_id;
 		protected $a_day_of_week;
@@ -904,7 +907,7 @@ namespace App\Services;
 		//======================================================================
 		// 処理対象（複数可）の部屋の最小～最大の定員数データを作成
 		//======================================================================
-		private function _make_range_capacity_rooms()
+		public function _make_range_capacity_rooms($plan_detail,$a_detail_room,$a_operation_status_rooms)
 		{
 			try {
 				// 初期化
@@ -913,39 +916,38 @@ namespace App\Services;
 				$b_is_success = true;
 				
 				// 料金の設定対象の部屋分ループ
-				foreach ( nvl($this->a_operation_status_rooms['target_rooms'], array()) as $s_target_room_id ) {
+				foreach ( $a_operation_status_rooms['target_rooms'] ?? array() as $s_target_room_id ) {
 					// 定員０は不正なデータでエラーとする
-					if ( $this->a_plan_has_rooms_detail[$s_target_room_id]['capacity_min'] < 0 or $this->a_plan_has_rooms_detail[ $s_target_room_id ]['capacity_max'] < 0 ) {
-						$this->box->item->error->add('「' . $this->a_plan_has_rooms_detail[ $s_target_room_id ]['room_nm'] . '」（'. $this->a_plan_has_rooms_detail[ $s_target_room_id ]['pms_cd'] . '）の定員数が入力されていません。');
+					if ( $a_detail_room[$s_target_room_id]->{'capacity_min'} < 0 or $a_detail_room[ $s_target_room_id ]->{'capacity_max'} < 0 ) {
+						$this->box->item->error->add('「' . $a_detail_room[ $s_target_room_id ]['room_nm'] . '」（'. $a_detail_room[ $s_target_room_id ]['pms_cd'] . '）の定員数が入力されていません。');
 						$this->box->item->error->add('部屋プランメンテナンス画面の部屋編集より修正を行ってください。');
 						$b_is_success = false;
 					}
 					
 					// 最小定員数・最大定員数が共に7名以上
-					if ( $this->a_plan_has_rooms_detail[$s_target_room_id]['capacity_min'] > 6 and $this->a_plan_has_rooms_detail[ $s_target_room_id ]['capacity_max'] > 6 ) {
+					if ( $a_detail_room[$s_target_room_id]->{'capacity_min'} > 6 and $a_detail_room[ $s_target_room_id ]->{'capacity_max'} > 6 ) {
 						$this->box->item->error->add('「' . $this->a_plan_has_rooms_detail[ $s_target_room_id ]['room_nm'] . '」（'. $this->a_plan_has_rooms_detail[ $s_target_room_id ]['pms_cd'] . '）の定員数が7名以上の為、料金を設定できません。');
 						$this->box->item->error->add('部屋プランメンテナンス画面の部屋編集より修正を行ってください。');
 						$b_is_success = false;
 					}
 					
-					$a_tmp_capacities_min[] = nvl($this->a_plan_has_rooms_detail[ $s_target_room_id ]['capacity_min'], 0);
+					$a_tmp_capacities_min[] = ($a_detail_room[ $s_target_room_id ]->{'capacity_min'} ?? 0);
 					
 					// 最大定員数だけが7名以上の場合、6名までの入力は受け入れるように補正する
-					if ( $this->a_plan_has_rooms_detail[ $s_target_room_id ]['capacity_max'] > 6 ) {
+					if ( $a_detail_room[ $s_target_room_id ]->{'capacity_max'} > 6 ) {
 						$a_tmp_capacities_max[] = 6;
 					} else {
-						$a_tmp_capacities_max[] = nvl($this->a_plan_has_rooms_detail[ $s_target_room_id ]['capacity_max'], 0);
+						$a_tmp_capacities_max[] = ($a_detail_room[ $s_target_room_id ]->{'capacity_max'} ?? 0);
 					}
 					
 				}
 				
-				$this->a_range_capacity_rooms = range(min($a_tmp_capacities_min), max($a_tmp_capacities_max));
+				$target_capacities = range(min($a_tmp_capacities_min), max($a_tmp_capacities_max));
 				
 				if ( !$b_is_success ) {
 					return false;
 				}
-				
-				return true;
+				return $target_capacities;
 				
 			} catch (Exception $e) {
 				throw $e;
@@ -955,26 +957,33 @@ namespace App\Services;
 		//======================================================================
 		// 取得した料金情報を整形してリクエストパラメータに設定する
 		//======================================================================
-		private function _set_charges_to_request_param()
+		public function _set_charges_to_request_param($a_charges,$request)
 		{
 			try {
 				// 初期化
 				$n_ymd = 0;
+				$a_low_price_setting = array();
 				
 				// 画面で使用可能な形式に整形
-				foreach ( $this->o_models_charge3->get_charges() as $a_charge ) {
-					$n_ymd = strtotime($a_charge['date_ymd']);
+				// foreach ( $this->o_models_charge3->get_charges() as $a_charge ) {
+				foreach ( $a_charges as $a_charge ) {
+
+					$n_ymd = strtotime($a_charge->{'date_ymd'});
 					
-					$this->a_request_params['sales_charge_' . $n_ymd . '_' . $a_charge['capacity']] = $a_charge['sales_charge'];
-					
+					// $this->a_request_params['sales_charge_' . $n_ymd . '_' . $a_charge['capacity']] = $a_charge['sales_charge'];
+					$request['sales_charge_' . $n_ymd . '_' . $a_charge->{'capacity'}] = $a_charge->{'sales_charge'};
+
 					// 1000円以下の時はフラグを設定する
-					if ( $a_charge['is_low_price'] == 1 ) {
-						$this->a_low_price_setting['ymdc'][$n_ymd . '_' . $a_charge['capacity']] = true;
+					if ( $a_charge->{'is_low_price'} == 1 ) {
+						$a_low_price_setting['ymdc'][$n_ymd . '_' . $a_charge['capacity']] = true;
 					}
 				}
 				
 				// カレンダーを消去
-				$this->o_models_charge3->clear();
+				// $this->o_models_charge3->clear();
+				$a_charges = array();
+
+				return array($request,$a_low_price_setting);
 				
 			} catch (Exception $e) {
 				throw $e;
@@ -1055,33 +1064,50 @@ SQL;
 		//======================================================================
 		// 子供料金情報を整形してリクエストパラメータに設定する
 		//======================================================================
-		private function _set_child_charge_to_request_param()
+		public function _set_child_charge_to_request_param($request)
 		{
+			$a_conditions = [];
+			$a_conditions['hotel_cd'] = $request->input('target_cd');
+			$a_conditions['plan_id'] = $request->input('plan_id');
+			$a_conditions['room_id'] = $request->input('room_id');
+			
+			//ここから取得データの処理判定は、
 			try {
 				// 子供料金情報を取得
-				$a_room_plan_child_find = $this->o_room_plan_child->find(
-					array(
-						'hotel_cd' => $this->a_request_params['target_cd'],
-						'plan_id'  => $this->a_request_params['plan_id'],
-						'room_id'  => $this->a_request_params['room_id']
-					)
-				);
-				
+				$s_sql  =
+            <<< SQL
+            select *
+            from room_plan_child
+            where hotel_cd =:hotel_cd
+            and room_id = :room_id
+            and plan_id = :plan_id
+            SQL;
+
+			$a_room_plan_child_find = DB::select($s_sql,$a_conditions);
+
+			if(is_null($a_room_plan_child_find)){
+				return array();
+			}
+			//ここまで
+			
 				// 整形してリクエストパラメータに設定
 				for ( $ii = 1; $ii <= 5; $ii++ ) {
-					$this->a_request_params['child' . $ii . '_accept']         = $a_room_plan_child_find['child' . $ii . '_accept'];
-					$this->a_request_params['child' . $ii . '_person']         = $a_room_plan_child_find['child' . $ii . '_person'];
-					$this->a_request_params['child' . $ii . '_charge_include'] = $a_room_plan_child_find['child' . $ii . '_charge_include'];
-					$this->a_request_params['child' . $ii . '_charge_unit']    = $a_room_plan_child_find['child' . $ii . '_charge_unit'];
+
+					$request['child' . $ii . '_accept'] = $a_room_plan_child_find[0]->{'child' . $ii . '_accept'};
+					$request['child' . $ii . '_person']         = $a_room_plan_child_find[0]->{'child' . $ii . '_person'};
+					$request['child' . $ii . '_charge_include'] = $a_room_plan_child_find[0]->{'child' . $ii . '_charge_include'};
+					$request['child' . $ii . '_charge_unit']    = $a_room_plan_child_find[0]->{'child' . $ii . '_charge_unit'};
 					
-					if ( $a_room_plan_child_find['child' . $ii . '_charge_unit'] > 0 ) {
-						$this->a_request_params['child' . $ii . '_charge'] = $a_room_plan_child_find['child' . $ii . '_charge'];
+					if ( $a_room_plan_child_find[0]->{'child' . $ii . '_charge_unit'} > 0 ) {
+						$request['child' . $ii . '_charge'] = $a_room_plan_child_find[0]->{'child' . $ii . '_charge'};
 					} else {
-						$this->a_request_params['child' . $ii . '_charge'] = $a_room_plan_child_find['child' . $ii . '_rate'];
+						$request['child' . $ii . '_charge'] = $a_room_plan_child_find[0]->{'child' . $ii . '_rate'};
 					}
 				}
 				
 				unset($a_room_plan_child_find);
+
+				return $request;
 				
 			} catch (Exception $e) {
 				throw $e;
@@ -2298,6 +2324,170 @@ SQL;
 		{
 			$this->s_plan_id = $as_plan_id;
 		}
+
+		//TODO:Charge3.phpより一部メソッドのみ移植
+	//======================================================================
+		// Setter：対象期間の開始日
+		//======================================================================
+		public function set_from_ymd($as_from_ymd)
+		{
+			try {
+				// エラーチェック
+				if ( !is_numeric($as_from_ymd) and !is_string($as_from_ymd) ) {
+					// エラーとする
+					// ※例外を投げてもメンテ画面が表示されるだけで
+					//   詳細がわからないので処理を停止するようにしています。
+					throw new Exception('開始日付に' . gettype($as_from_ymd) . 'が指定されています。数値または文字列(Y-m-d形式)で指定してください。');
+				}
+				
+				// 文字列の場合
+				if ( is_string($as_from_ymd) ) {
+					$as_from_ymd = strtotime($as_from_ymd);
+				}
+				
+				// 入力された日付が日付として正しくない場合はエラー
+				if ( !checkdate(date('m', $as_from_ymd), date('d', $as_from_ymd), date('Y', $as_from_ymd)) ) {
+					echo "開始日付が日付として正しくありません。";
+					exit;
+				}
+				
+				//指定された日付を返却
+				return $this->s_from_ymd = date('Y-m-d', $as_from_ymd);
+				// 指定された日付を設定
+				// $this->s_from_ymd = date('Y-m-d', $as_from_ymd);
+				
+			} catch (Exception $e) {
+				throw $e;
+			}
+		}
+
+		//======================================================================
+		// Setter：対象期間の終了日
+		//======================================================================
+		public function set_to_ymd($as_to_ymd)
+		{
+			try {
+				// エラーチェック
+				if ( !is_numeric($as_to_ymd) and !is_string($as_to_ymd) ) {
+					// エラーとする
+					// ※例外を投げてもメンテ画面が表示されるだけで
+					//   詳細がわからないので処理を停止するようにしています。
+					throw new Exception('開始日付に' . gettype($as_to_ymd) . 'が指定されています。数値または文字列(Y-m-d形式)で指定してください。');
+				}
+				
+				// 文字列の場合
+				if ( is_string($as_to_ymd) ) {
+					$as_to_ymd = strtotime($as_to_ymd);
+				}
+				
+				// 入力された日付が日付として正しくない場合はエラー
+				if ( !checkdate(date('m', $as_to_ymd), date('d', $as_to_ymd), date('Y', $as_to_ymd)) ) {
+					echo "開始日付が日付として正しくありません。";
+					exit;
+				}
+				//指定された日付を返却
+				return $this->s_to_ymd = date('Y-m-d', $as_to_ymd);
+				// 指定された日付を設定
+				// $this->s_to_ymd = date('Y-m-d', $as_to_ymd);
+				
+			} catch (Exception $e) {
+				throw $e;
+			}
+		}
+
+		//======================================================================
+		// 指定した期間の施設・プラン・部屋の料金を取得
+		//======================================================================
+		public function make_from_to_ymd_charges($set_from_ymd,$set_to_ymd,$targetCd,$planId,$roomId)
+		{
+			try {
+				//--------------------------------------------------------------
+				// 初期化
+				//--------------------------------------------------------------
+				//TODO：一旦パス料金アラートがだれか対応していないか確認してみる。
+				$a_charges = array();
+				// // シティホテル、旅館は5000円以下の料金登録でアラート、ビジネスホテル、カプセルホテルは1000円
+				// if ($this->o_box->user->hotel['hotel_category'] == 'c' or $this->o_box->user->hotel['hotel_category'] == 'j') {
+				// 	$n_alert_charge = 5000;
+				// } else {
+				// 	$n_alert_charge = 1000;
+				// }
+
+				//ひとまずここではローカルで定義
+				$n_alert_charge = 1000;
+				
+				//--------------------------------------------------------------
+				// データ取得
+				//--------------------------------------------------------------
+				$a_conditions = array(
+					'from_ymd'     => $set_from_ymd,
+					'to_ymd'       => $set_to_ymd,
+					'hotel_cd'     => $targetCd,
+					'plan_id'      => $planId,
+					'room_id'      => $roomId,
+					'alert_charge' => $n_alert_charge
+				);
+				
+				$s_sql =
+<<< SQL
+select	date_format(q3.date_ymd, '%Y-%m-%d') as date_ymd,
+							q3.capacity,
+							q3.sales_charge,
+							q3.is_low_price
+					from	(
+								select	c.date_ymd,
+										c.capacity,
+									case
+										when 0 < c.sales_charge and c.sales_charge < :alert_charge 
+										then 1
+										else 0
+									end as is_low_price,
+									case
+										when q2.charge_type = 0
+										then c.sales_charge * c.capacity + c.sales_charge_revise
+										else c.sales_charge
+									end as sales_charge
+								from	charge c
+								inner join(
+											select	p.hotel_cd,
+													p.plan_id,
+													p.charge_type,
+													q1.partner_group_id
+											from	plan p
+													inner join(
+														select	ppg.hotel_cd,
+																ppg.plan_id,
+																min(ppg.partner_group_id) as partner_group_id
+														from	plan_partner_group ppg
+														where	ppg.hotel_cd = :hotel_cd
+															and	ppg.plan_id  = :plan_id
+														group by	ppg.hotel_cd,
+																	ppg.plan_id
+													) q1
+											on	p.hotel_cd = q1.hotel_cd
+												and	p.plan_id  = q1.plan_id
+										) q2
+								on	c.hotel_cd = q2.hotel_cd
+									and	c.plan_id  = q2.plan_id
+									and	c.room_id  = :room_id
+									and	c.partner_group_id = q2.partner_group_id
+									and	c.date_ymd between date_format(:from_ymd, '%Y-%m-%d') and date_format(:to_ymd, '%Y-%m-%d')
+							) q3
+					order by	q3.date_ymd,
+								q3.capacity
+SQL;
+
+				$a_rows = DB::select($s_sql, $a_conditions);
+				
+				$a_charges = ($a_rows ?? array());
+
+				return $a_charges;
+
+			} catch (Exception $e) {
+				throw $e;
+			}
+		}
 		
 	}
+	
 ?>

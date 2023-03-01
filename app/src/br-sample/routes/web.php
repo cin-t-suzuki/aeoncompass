@@ -301,6 +301,8 @@ Route::get('/ctl/brmoneyschedule/new', function (\Illuminate\Http\Request $reque
 //料金設定を行う部屋の選択
 Route::get('/ctl/htlscharge2/',[\App\Http\Controllers\ctl\HtlsCharge2Controller::class, 'index']);
 Route::get('/ctl/htlscharge2/',[\App\Http\Controllers\ctl\HtlsCharge2Controller::class, 'lump'])->name('ctl.htlsCharge2.lump');
+//料金設定の編集
+Route::get('/ctl/htlscharge2/single',[\App\Http\Controllers\ctl\HtlsCharge2Controller::class, 'single'])->name('ctl.htlsCharge2.single');
 //lumpview内のForm送信先の画面未実装のため仮実装
 Route::get('/ctl/htlscharge2/edit/',[\App\Http\Controllers\ctl\HtlsCharge2Controller::class, 'edit'])->name('ctl.htlscharge2.edit');
 // TODO: pull request #25 (精算先、施設情報：請求関連（請求先）精算先（登録施設）) が merge されたら削除

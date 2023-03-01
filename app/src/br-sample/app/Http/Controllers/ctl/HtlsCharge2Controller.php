@@ -7,7 +7,9 @@ namespace App\Http\Controllers\ctl;
 	use App\Http\Controllers\Controller;
 	use App\Models\Room3;
 	use App\Models\Plan3;
+	use App\Models\Charge3;
 	use Illuminate\Http\Request;
+	use App\Models\Calendar;
 
 	class HtlsCharge2Controller extends Controller
 	{
@@ -163,6 +165,7 @@ namespace App\Http\Controllers\ctl;
 		{
 			$targetCd = $request->input('target_cd');
 			$planId = $request->input('plan_id');
+			$roomId = $request->input('room_id');
 			$pre_action = $request->input('pre_action');
 			$return_path = $request->input('return_path');
 			$current_ymd = $request->input('current_ymd');
@@ -210,6 +213,95 @@ namespace App\Http\Controllers\ctl;
 				"is_nta" => $is_nta
 			]);
 		}
+
+		public function single(Request $request ,Service $service)
+		{
+			//それぞれのModelにセットする処理が冗長なので、Controllerで定義
+				$targetCd = $request->input('target_cd');
+				$planId = $request->input('plan_id');
+				$roomId = $request->input('room_id');
+
+			//初期化
+				$a_temp_accept_s_ymd = array();
+				$a_temp_accept_e_ymd = array();
+				$a_room_detail       = array();
+			
+			//プラン詳細情報取得
+			$plan_detail = $service->_make_plan_detail($targetCd, $planId);
+
+			//部屋詳細データ取得
+			$a_detail_room = $service->_make_plan_has_rooms_detail($request);
+
+			// 部屋操作情報データを作成
+			$a_operation_status_rooms = array(
+				'selectable_rooms' => array(),
+				'target_rooms'     => array($roomId),
+				'complete_roos'    => array()
+			);
+
+			$range_capacity_rooms = array();
+
+			$range_capacity_rooms = $service->_make_range_capacity_rooms($plan_detail,$a_detail_room,$a_operation_status_rooms);
+			
+			// 料金登録対象の部屋の最小・最大定員数データを作成(元ソース)
+			// if ( $service->_make_range_capacity_rooms($plan_detail,$a_detail_room,$a_operation_status_rooms,$target_capacities) ) {
+			if($range_capacity_rooms) {
+				$b_is_error = true;
+			}
+
+			//プランの表示期間データ作成
+			$accept_ymd = $service->_make_plan_accept_ymd($plan_detail->accept_s_ymd, $plan_detail->accept_e_ymd, $request);
+
+			// 料金確認用のカレンダー表示期間を設定
+			$a_temp_accept_s_ymd = $accept_ymd['selected']['accept_s_ymd'];
+			$a_temp_accept_e_ymd = $accept_ymd['selected']['accept_e_ymd'];
+
+			// 作成の為の情報を設定
+			$Calendar = new Calendar();
+			$Calendar->set_from_ymd($a_temp_accept_s_ymd['year'] . '-' . $a_temp_accept_s_ymd['month'] . '-' . $a_temp_accept_s_ymd['day']);
+			$Calendar->set_to_ymd($a_temp_accept_e_ymd['year']   . '-' . $a_temp_accept_e_ymd['month'] . '-' . $a_temp_accept_e_ymd['day']);
+
+			//カレンダー作成
+			$a_calendar = $Calendar->make_calendar();
+
+			// 期間の料金を取得
+			// 取得の為の情報を設定
+			$set_from_ymd = $service->set_from_ymd($Calendar->get_from_ymd_week_first());
+			
+			$set_to_ymd = $service->set_to_ymd($Calendar->get_to_ymd_week_last());
+			
+			// 期間内の料金作成
+			$a_charges = $service->make_from_to_ymd_charges($set_from_ymd,$set_to_ymd,$targetCd,$planId,$roomId);
+			
+			//リクエストパラメータに料金を設定
+			$low_price_info = $service->_set_charges_to_request_param($a_charges,$request);
+			
+			//二つの変数を返却したため、料金を設定したrequestを再度代入する（low_price_infoも同じく)
+			//料金設定
+			$request = $low_price_info[0];
+
+			//低料金設定(1000円以下だと警告が出る)
+			$low_price_info = $low_price_info[1];
+
+			$query = $request->query();
+
+			//リクエストパラメータに子供の料金設定
+			$request = $service->_set_child_charge_to_request_param($request);
+			// $this->o_room_plan_child = Room_Plan_Child::getInstance(); // 子供料金
+
+
+			return view('ctl.htlsCharge2.single',[
+				'plan_detail' => $plan_detail,
+				'opration_status_rooms' => $a_operation_status_rooms,
+				'plan_has_rooms_detail' => $a_detail_room,
+				'request_params' => $request,
+				'plan_accept_ymd_selecter' => $accept_ymd,
+				'calendar' => $a_calendar,
+				'target_capacities' => $range_capacity_rooms,
+				'low_price_info' => $low_price_info
+			]);
+		}
+
 	}
 	
 ?>
