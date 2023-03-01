@@ -1,6 +1,10 @@
+{{-- ローカル作業中に対応 3/1 11:55最新 --}}
+
 {{-- {include file='../_common/_header.tpl' title='送信内容確認 - 宿泊施設関係者の方へ・ベストリザーブ・宿ぷらざ 参画のご案内'} --}}
 @extends('rsv.common.base', ['title' => '宿泊施設関係者の方へ・ベストリザーブ・宿ぷらざ 参画のご案内'])
 @include ('rsv.common._pgh1', ['pgh1_mnv' => 1])
+
+@section('page_blade')
 
 <div id="pgh2v2">
   <div class="pg">
@@ -124,7 +128,7 @@
 
             <div id="confirm_box">
               <p>上記内容で資料を発送させていただきます。よろしいですか？</p>
-              <form action="{$v->env.path_base_module}/contact/hotelcomplete/" method="post">
+              {!! Form::open(['route' => ['rsv.contact.hotelComplete'], 'method' => 'post']) !!}
                 <input type="hidden" name="hotel_nm" value="{      $v->helper->form->strip_tags($v->assign->hotel_nm)}" />
                 <input type="hidden" name="person_post" value="{   $v->helper->form->strip_tags($v->assign->person_post)}" />
                 <input type="hidden" name="person_nm" value="{     $v->helper->form->strip_tags($v->assign->person_nm)}" />
@@ -151,8 +155,8 @@
                 <input type="hidden" name="email2" value="{         $v->helper->form->strip_tags($v->assign->email2)}" />
                 <input type="hidden" name="note" value="{           $v->helper->form->strip_tags($v->assign->note)}" />
                 <input type="submit" title="はい" value="はい" class="btnimg form-btn-o" />
-              </form>
-              <form action="{$v->env.path_base_module}/contact/hotel/" method="post">
+              {!! Form::close() !!}
+              {!! Form::open(['route' => ['rsv.contact.hotel'], 'method' => 'get']) !!}
                 <input type="hidden" name="hotel_nm" value="{      $v->helper->form->strip_tags($v->assign->hotel_nm)}" />
                 <input type="hidden" name="person_post" value="{   $v->helper->form->strip_tags($v->assign->person_post)}" />
                 <input type="hidden" name="person_nm" value="{     $v->helper->form->strip_tags($v->assign->person_nm)}" />
@@ -179,7 +183,7 @@
                 <input type="hidden" name="email2" value="{         $v->helper->form->strip_tags($v->assign->email2)}" />
                 <input type="hidden" name="note" value="{           $v->helper->form->strip_tags($v->assign->note)}" />
                 <input type="submit" title="もどる" value="もどる" class="btnimg form-btn-n" />
-              </form>
+              {!! Form::close() !!}
             </div>
 
             <div class="spacer clearfix"></div>

@@ -152,6 +152,7 @@ class ContactController extends _commonController
         //     return $this->_forward('customer');
         // }
         //独自バリデーションにも見えるが、再現できそうなのでFormRequest利用でいいか？
+        //TODO この時のリダイレクト先がconfirmになる可能性アリ？
 
         //独自バリデーション内で以下だけ実装できていない
         // // 問い合わせ区分
@@ -333,6 +334,7 @@ class ContactController extends _commonController
         //     return $this->_forward('customervoice');
         // }
         //独自バリデーションにも見えるが、再現できそうなのでFormRequest利用でいいか？
+        //TODO この時のリダイレクト先がconfirmになる可能性アリ？
 
         //独自バリデーション内で以下だけ実装できていない
         // // 問い合わせ区分
@@ -438,6 +440,7 @@ class ContactController extends _commonController
         //         $this->_request->setParam($key, mb_convert_kana($value, 'a'));
         //     }
         // }
+        //↑FormRequestバリデーションの前に実装済。書き換え＆移行場所問題ないか？
 
         // // 入力チェック
         // $this->valid_hotel();
@@ -447,43 +450,19 @@ class ContactController extends _commonController
         //     // entry アクションに転送します
         //     return $this->_forward('hotel');
         // }
+        //独自バリデーションにも見えるが、再現できそうなのでFormRequest利用でいいか？
 
         // MastPrefモデルの取得
         $mastPrefModel = new MastPref();
 
-        // 都道府県の取得
         // 都道府県の取得
         $a_pref = $mastPrefModel->selectByKey($request->input('pref_id')); //find→selectByKeyでいいか？
         $a_pref2 = $mastPrefModel->selectByKey($request->input('pref_id2')); //find→selectByKeyでいいか？
 
         // // テンプレートにアサイン
         // $this->box->item->assign->hotel_nm         = $this->correct_params('hotel_nm');
-        // $this->box->item->assign->person_post      = $this->correct_params('person_post');
-        // $this->box->item->assign->person_nm        = $this->correct_params('person_nm');
-        // $this->box->item->assign->person_nm_kana   = $this->correct_params('person_nm_kana');
-        // $this->box->item->assign->postal_cd        = $this->correct_params('postal_cd');
-        // $this->box->item->assign->pref_id          = $this->correct_params('pref_id');
-        // $this->box->item->assign->pref_nm          = $a_pref['pref_nm'];
-        // $this->box->item->assign->address          = $this->correct_params('address');
-        // $this->box->item->assign->tel              = $this->correct_params('tel');
-        // $this->box->item->assign->fax              = $this->correct_params('fax');
-        // $this->box->item->assign->email            = $this->correct_params('email');
-        // $this->box->item->assign->url              = $this->correct_params('url');
-        // $this->box->item->assign->travel_trade     = $this->correct_params('travel_trade');
-        // $this->box->item->assign->estimate_dtm     = $this->correct_params('estimate_dtm');
-        // $this->box->item->assign->send_status      = $this->correct_params('send_status');
-        // $this->box->item->assign->postal_cd2       = $this->correct_params('postal_cd2');
-        // $this->box->item->assign->pref_id2         = $this->correct_params('pref_id2');
-        // $this->box->item->assign->pref_nm2         = $a_pref2['pref_nm'];
-        // $this->box->item->assign->address2         = $this->correct_params('address2');
-        // $this->box->item->assign->hotel_nm2        = $this->correct_params('hotel_nm2');
-        // $this->box->item->assign->person_post2     = $this->correct_params('person_post2');
-        // $this->box->item->assign->person_nm2       = $this->correct_params('person_nm2');
-        // $this->box->item->assign->person_nm_kana2  = $this->correct_params('person_nm_kana2');
-        // $this->box->item->assign->tel2             = $this->correct_params('tel2');
-        // $this->box->item->assign->email2           = $this->correct_params('email2');
-        // $this->box->item->assign->note             = $this->correct_params('note');
-
+        // 検証環境：半角カナでフォーム入力→全角カナに変換されたものが確認画面に出るので、変換されたものを出す＝correct_params？の理解
+        // correct_paramsの書き替えは↓でバリデーション前に変形したものが出ているので問題ない？
 
         // ビューを表示
         return view('rsv.contact.hotelConfirm', [
@@ -504,7 +483,7 @@ class ContactController extends _commonController
             'send_status' => $request->input('send_status'),
             'postal_cd2' => $request->input('postal_cd2'),
             'pref_id2' => $request->input('pref_id2'),
-            'pref_nm2' => $a_pref2['pref_nm'],
+            'pref_nm2' => $a_pref2['pref_nm'] ?? null, //任意宛先の選択がない場合nullが入る可能性アリ
             'address2' => $request->input('address2'),
             'hotel_nm2' => $request->input('hotel_nm2'),
             'person_post2' => $request->input('person_post2'),
@@ -514,5 +493,105 @@ class ContactController extends _commonController
             'email2' => $request->input('email2'),
             'note' => $request->input('note')
         ]);
+    }
+
+    /**
+     * ホテル関係者の方へ　完了
+     *
+     * @param App\Http\Requests\HotelContactRequest $request
+     * @return \Illuminate\Http\Response
+     */
+    public function hotelComplete(HotelContactRequest $request)
+    {
+
+        // // リクエストの取得
+        // $a_params = $this->_request->getParams();
+        //とっても渡していないようなので削除していいか？
+
+        // // 半角カナを全角カナに変換（配列はないので考慮しない）
+        // Confirm同様、バリデーション前に移行
+
+        // // 入力チェック
+        // $this->valid_hotel();
+
+        // // バリデート結果 （エラーがあった場合
+        // if ($this->box->item->error->has()) {
+        //     // entry アクションに転送します
+        //     return $this->_forward('hotel');
+        // }
+        //独自バリデーションにも見えるが、再現できそうなのでFormRequest利用でいいか？
+        //TODO FormRequestの場合、この時のリダイレクト先がconfirmになる可能性アリ？
+
+
+        //TODO メール機能は追って実装する
+
+        // // models_SendMail モデルの生成
+        // $mail = new models_SendMail();
+
+        // $a_attributes = [
+        //     'subject'   => 'Bestrsv Hotel Get',     // タイトル
+        //     'template'  => 'contacthotel'
+        // ];
+
+        // // MastPrefモデルの取得
+        // $mastPrefModel = new MastPref();
+
+        // // 都道府県の取得（ここは修正済）
+        // $a_pref = $mastPrefModel->selectByKey($request->input('pref_id')); //find→selectByKeyでいいか？
+        // $a_pref2 = $mastPrefModel->selectByKey($request->input('pref_id2')); //find→selectByKeyでいいか？
+
+        // // 備考欄の整形（改行なしで長い文字列だと文字化けが発生）
+        // $a_note = preg_split('/\n/', $this->params('note'));
+
+        // $s_note = null;
+        // for ($n_cnt = 0; $n_cnt < count($a_note); $n_cnt++) {
+        //     if (400 < mb_strlen($a_note[$n_cnt])) {
+
+        //         $s_note2 = null;
+        //         for ($n_cnt2 = 0; $n_cnt2 < (mb_strlen($a_note[$n_cnt]) / 213); $n_cnt2++) {
+        //             $s_note2 .= mb_substr($a_note[$n_cnt], $n_cnt2 * 213, 213) . "\n";
+        //         }
+        //         $a_note[$n_cnt] = $s_note2;
+        //     }
+
+        //     $s_note .= $a_note[$n_cnt] . "\n";
+        // }
+
+        // // メールテンプレートにアサイン
+        // $this->box->item->assign->mail      = [
+        //     'hotel_nm'        => $this->params('hotel_nm'),
+        //     'person_post'     => $this->params('person_post'),
+        //     'person_nm'       => $this->params('person_nm'),
+        //     'person_nm_kana'  => $this->params('person_nm_kana'),
+        //     'postal_cd'       => $this->params('postal_cd'),
+        //     'pref_nm'         => $a_pref['pref_nm'],
+        //     'address'         => $this->params('address'),
+        //     'tel'             => $this->params('tel'),
+        //     'fax'             => $this->params('fax'),
+        //     'email'           => $this->params('email'),
+        //     'url'             => $this->params('url'),
+        //     'travel_trade'    => $this->params('travel_trade'),
+        //     'estimate_dtm'    => $this->params('estimate_dtm'),
+        //     'send_status'     => $this->params('send_status'),
+        //     'postal_cd2'      => $this->params('postal_cd2'),
+        //     'pref_id2'        => $this->params('pref_id2'),
+        //     'pref_nm2'        => $a_pref2['pref_nm'],
+        //     'address2'        => $this->params('address2'),
+        //     'hotel_nm2'       => $this->params('hotel_nm2'),
+        //     'person_post2'    => $this->params('person_post2'),
+        //     'person_nm2'      => $this->params('person_nm2'),
+        //     'person_nm_kana2' => $this->params('person_nm_kana2'),
+        //     'tel2'            => $this->params('tel2'),
+        //     'email2'          => $this->params('email2'),
+        //     'note'            => $s_note
+        // ];
+
+        // // 送信
+        // $mail->contactHotel($a_attributes);
+
+        // $this->set_assign();
+
+        // ビューを表示
+        return view('rsv.contact.hotelComplete');
     }
 }

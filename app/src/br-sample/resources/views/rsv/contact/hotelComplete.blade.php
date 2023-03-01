@@ -1,3 +1,5 @@
+{{-- ローカル作業中に対応 3/1 11:55最新 --}}
+
 {include file='../_common/_header.tpl' title='送信完了 - 宿泊施設関係者の方へ・ベストリザーブ・宿ぷらざ 参画のご案内'}
 {include file='../_common/_pgh1.tpl' pgh1_mnv=1}
 

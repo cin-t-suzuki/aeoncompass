@@ -26,6 +26,35 @@ class HotelContactRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation()
+    {
+        // リクエストを取得
+        $input = $this->all();
+
+        // 半角カナを全角カナに変換（配列はないので考慮しない）
+        foreach ($input as $key => $value) {
+            if ($value == null) {
+                $request[$key] = null; //nullの時はnullをそのまま入れたいので分岐追加（ないと空文字）
+            } else {
+                $request[$key] = mb_convert_kana($value, 'KV');
+
+                // 全角を半角に変換
+                if (
+                    $key == 'postal_cd' || $key == 'postal_cd2' ||
+                    $key == 'tel'       || $key == 'tel2'       ||
+                    $key == 'fax'       ||
+                    $key == 'email'     || $key == 'email2'     ||
+                    $key == 'url'
+                ) {
+                    $request[$key] = mb_convert_kana($value, 'a');
+                }
+            }
+        }
+
+        // リクエストデータを上書き
+        $this->merge($request);
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -33,21 +62,18 @@ class HotelContactRequest extends FormRequest
      */
     public function rules()
     {
-
-        $inputAccountId = $this->input('account_id');
-        $inputRsvCd = $this->input('rsv_cd');
-
         return [
+            //メッセージはどこまで元ソースに合わせるべきか？伝わればいい？
             'hotel_nm'    => ['required', new WithoutHalfWidthKatakana()],
             'person_post'    => [new WithoutHalfWidthKatakana()],
             'person_nm'    => ['required', new WithoutHalfWidthKatakana()],
             'person_nm_kana'    => ['required', new WithoutHalfWidthKatakana()],
-            'postal_cd'    => ['required'], //郵便番号チェック　郵便番号を半角で正しく入力してください。（ 999-9999 ）
-            'pref_id'    => ['required'], //選択 //0のときだからrequiredではない
+            'postal_cd'    => ['required', new PostalCode()], //郵便番号を半角で正しく入力してください。（ 999-9999 ）
+            'pref_id'    => ['not_in:0'], //未選択（0）
             'address'    => ['required', new WithoutHalfWidthKatakana()],
-            'tel'    => ['required'], //TEL を半角で正しく入力してください。（ 9999-9999-9999 ）
-            'fax'    => [],//FAX を半角で正しく入力してください。（ 9999-9999-9999 ）
-            'email'    => [], //メールアドレスを半角で正しく入力してください。
+            'tel'    => ['required', new PhoneNumber()], //TEL を半角で正しく入力してください。（ 9999-9999-9999 ）
+            'fax'    => [new PhoneNumber()],//FAX を半角で正しく入力してください。（ 9999-9999-9999 ）
+            'email'    => [new EmailSingle()], //メールアドレスを半角で正しく入力してください。
             'travel_trade'    => ['required'],
             'estimate_dtm'    => ['required_if:travel_trade,2'],
             'note'    => ['max:3000', new WithoutHalfWidthKatakana()],
@@ -62,11 +88,11 @@ class HotelContactRequest extends FormRequest
         });
         $validator->sometimes('postal_cd2', new PostalCode(), function ($input) {
             return $input->send_status == 1;
-        });//else送付先 郵便番号を半角で正しく入力してください。（ 999-9999 ）
+        });//else 送付先 郵便番号を半角で正しく入力してください。（ 999-9999 ）
 
-        $validator->sometimes('pref_id2', 'required', function ($input) {
+        $validator->sometimes('pref_id2', 'not_in:0', function ($input) {
             return ($input->send_status == 1 && $input->pref_id2 == 0);
-        });//$a_params['pref_id2'] == 0
+        }); //未選択（0）
 
         $validator->sometimes('address2', 'required', function ($input) {
             return $input->send_status == 1;

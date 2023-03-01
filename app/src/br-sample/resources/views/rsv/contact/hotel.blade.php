@@ -57,6 +57,7 @@ document.getElementById("email2").disabled = !this.checked;
     <div class="pgc1-inner">
 @include ('rsv.contact._pgc1_breadcrumbs')
 @include ('rsv.contact._snv_text', ['current' => 'hotel'])
+{{-- 宿泊施設関係者様へ 以外はトラベルモールでは使用しないのでは？WBSに該当ページの項目なし、タブごと全て削除していい？ --}}
     </div>
   </div>
 </div>
