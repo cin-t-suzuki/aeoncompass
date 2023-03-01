@@ -293,3 +293,5 @@ Route::match(['get', 'post'], '/ctl/htlHotelCard/update/', [\App\Http\Controller
 
 // アフィリエイト管理
 Route::get('/ctl/braffiliate/', [\App\Http\Controllers\ctl\BrAffiliateController::class, 'list'])->name('ctl.brAffiliate.list');
+
+Route::get('/ctl/braffiliate/details', [\App\Http\Controllers\ctl\BrAffiliateController::class, 'details'])->name('ctl.brAffiliate.details');

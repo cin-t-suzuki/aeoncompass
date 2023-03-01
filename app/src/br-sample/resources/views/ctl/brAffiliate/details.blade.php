@@ -1,3 +1,5 @@
+{{-- ローカル作業中に対応 3/1 16:55最新 --}}
+
 {* header start *}
   {include file=$v->env.module_root|cat:'/views/_common/_br_header.tpl' title="アフィリエイター詳細"}
 {* header end *}

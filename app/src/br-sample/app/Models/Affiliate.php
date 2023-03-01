@@ -98,4 +98,61 @@ SQL;
             throw $e;
         }
     }
+
+    // アフィリエイトプログラム一覧の取得
+    //
+    //  aa_conditions
+    //    affiliater_cd アフィリエイトコード
+    //    program_nm    プログラム名称 like
+    public function getAffiliatePrograms($aa_conditions)
+    {
+        try {
+            $a_conditions = [];
+
+            // アフィリエイトコードを指定
+            $s_affiliater_cd = '';
+            if (!($this->is_empty($aa_conditions['affiliater_cd']))) {
+                $s_affiliater_cd = 'and	affiliater_cd = :affiliater_cd';
+                $a_conditions['affiliater_cd'] = $aa_conditions['affiliater_cd'];
+            }
+
+            // プログラム名称を指定
+            $s_program_nm = '';
+            if (!($this->is_empty($aa_conditions['program_nm'] ?? null))) { //BrAffiliateControllerでは指定しないのでnull追記
+                $s_program_nm = 'and	program_nm like :program_nm';
+                $a_conditions['program_nm'] = '%' . $aa_conditions['program_nm'] . '%';
+            }
+
+            $s_sql =
+            <<<SQL
+					select	affiliater_cd,
+							affiliate_cd,
+							reserve_system,
+							program_nm,
+						-- to_number(to_date(to_char(cast(SYS_EXTRACT_UTC(to_timestamp(to_char(accept_s_dtm, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')) as date), 'YYYY-MM-DD'), 'YYYY-MM-DD') - to_date('1970-01-01', 'YYYY-MM-DD')) * 24 * 60 * 60 + to_number(to_char(cast(SYS_EXTRACT_UTC(to_timestamp(to_char(accept_s_dtm, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')) as date), 'SSSSS')) as accept_s_dtm,
+						-- to_number(to_date(to_char(cast(SYS_EXTRACT_UTC(to_timestamp(to_char(accept_e_dtm, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')) as date), 'YYYY-MM-DD'), 'YYYY-MM-DD') - to_date('1970-01-01', 'YYYY-MM-DD')) * 24 * 60 * 60 + to_number(to_char(cast(SYS_EXTRACT_UTC(to_timestamp(to_char(accept_e_dtm, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')) as date), 'SSSSS')) as accept_e_dtm,
+                            accept_s_dtm as accept_s_dtm,
+                            accept_e_dtm as accept_e_dtm,
+							limit_cookie,
+							overwrite_status,
+							redirect,
+							tag,
+							password
+					from	affiliate_program
+					where	null is null
+						{$s_affiliater_cd}
+						{$s_program_nm}
+					order by affiliate_program.affiliater_cd,affiliate_program.affiliate_cd
+SQL;
+
+            // データの取得
+            return [
+                'values'     => DB::select($s_sql, $a_conditions)
+            ];
+
+            // 各メソッドで Exception が投げられた場合
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
 }
