@@ -16,6 +16,13 @@ class MastArea extends Model
      */
     protected $table = 'mast_area';
 
+    // カラム
+    const COL_AREA_ID              = "area_id";
+    const COL_PARENT_AREA_ID       = "parent_area_id";
+    const COL_AREA_NM              = "area_nm";
+    const COL_ORDER_NO             = "order_no";
+    const COL_AREA_TYPE              = "area_type";
+
     /**
      * テーブルに関連付ける主キー
      *
@@ -55,5 +62,20 @@ class MastArea extends Model
     const AREA_TYPE_PREF    = 2; // 都道府県 
     const AREA_TYPE_MIDDLE  = 3; // 中エリア 
     const AREA_TYPE_SMALL   = 4; // 小エリア
+
+    /**
+     * 主キーで取得
+     */
+    public function selectByKey($area_id)
+    {
+        $data = $this->where($this->COL_WARDZONE_ID, $area_id)->get();
+        if (!is_null($data) && count($data) > 0) {
+            return [
+                $this->COL_WARDZONE_ID => $data[0]->wardzone_id,
+                $this->COL_WARDZONE_NM => $data[0]->wardzone_nm
+            ];
+        }
+        return null;
+    }
 
 }

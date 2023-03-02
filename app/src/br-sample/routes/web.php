@@ -384,3 +384,8 @@ Route::get('/dl/reserveck.csv', [\App\Http\Controllers\ctl\BrReserveCkController
 
 // 送客請求実績確認
 Route::get('/ctl/brdemandresult/list', [\App\Http\Controllers\ctl\BrDemandResultController::class, 'list'])->name('ctl.BrDemandResult.list');
+
+// ユーザ画面
+// 検索
+Route::get('/query', [\App\Http\Controllers\rsv\QueryController::class, 'index'])->name('rsv.query.index');
+Route::get('/query/hotel', [\App\Http\Controllers\rsv\QueryController::class, 'hotel'])->name('rsv.query.hotel');
